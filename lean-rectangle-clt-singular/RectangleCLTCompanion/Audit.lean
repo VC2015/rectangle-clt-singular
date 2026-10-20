@@ -1,0 +1,189 @@
+import RectangleCLTCompanion
+
+/-! Original component inventory, retained alongside `CompleteAudit.lean`
+and the final unconditional theorem inspection in `MainAudit.lean`. -/
+
+#check RectangleCLT.Companion.UnrestrictedCLT
+#check RectangleCLT.Companion.GapSensitiveCLT
+#check RectangleCLT.Companion.ZeroSkewCLT
+#check RectangleCLT.Companion.rectangleError_le_coarse_bandwidth
+#check RectangleCLT.Companion.gapSensitiveCLT_of_variational
+#check RectangleCLT.Companion.zeroSkewCLT_of_variational
+
+-- Cancellation.lean
+#print axioms RectangleCLT.Companion.gamma3_eq_zero_iff
+#print axioms RectangleCLT.Companion.integral_triple_eq_zero_of_centrallySymmetric
+#print axioms RectangleCLT.Companion.thirdMomentCancellation_of_centrallySymmetric
+#print axioms RectangleCLT.Companion.gamma3_eq_zero_of_centrallySymmetric
+#print axioms RectangleCLT.Companion.integral_mulVec_triple
+#print axioms RectangleCLT.Companion.ThirdMomentCancellation.mulVec
+#print axioms RectangleCLT.Companion.gamma3_mulVec_eq_zero
+#print axioms RectangleCLT.Companion.AggregateThirdMomentsVanish.mulVec
+#print axioms RectangleCLT.Companion.aggregateThirdMomentsVanish_pairedObservation
+#print axioms RectangleCLT.Companion.integral_signPairLaw
+#print axioms RectangleCLT.Companion.mixedSignVector_centered
+#print axioms RectangleCLT.Companion.mixedSignVector_marginal_third_zero
+#print axioms RectangleCLT.Companion.mixedSignVector_mixed_third_one
+#print axioms RectangleCLT.Companion.mixedSignVector_abs_coordinate
+#print axioms RectangleCLT.Companion.mixedSignVector_norm_le_one
+#print axioms RectangleCLT.Companion.mixedSignVector_covariance
+#print axioms RectangleCLT.Companion.mixedSignObservation_boundedIndependentHypotheses
+#print axioms RectangleCLT.Companion.mixedSignVector_abs_integral_triple_le_one
+#print axioms RectangleCLT.Companion.mixedSignObservation_gamma3_eq_one
+#print axioms RectangleCLT.Companion.mixedSignObservation_not_cancellation
+#print axioms RectangleCLT.Companion.mixedSignObservation_gamma3_ne_zero
+#print axioms RectangleCLT.Companion.marginal_third_moments_insufficient
+
+-- CoarseBound.lean
+#print axioms RectangleCLT.FaceSmoother.integral_endpoint_error_le_integral_abs
+#print axioms RectangleCLT.FaceSmoother.probability_gap_le_smoother_gap_add_endpoint_errors
+#print axioms RectangleCLT.Companion.coarseComparisonConstant_nonneg
+#print axioms RectangleCLT.Companion.coarseBandwidthConstant_ge_one
+#print axioms RectangleCLT.Companion.rectangleError_le_coarse_bandwidth
+
+-- Concentration.lean
+#print axioms RectangleCLT.Companion.bounded_boundary_concentration
+#print axioms RectangleCLT.Companion.bounded_boundary_concentration_product
+
+-- CovarianceRestoration.lean
+#print axioms RectangleCLT.Companion.restoredCovariance_apply
+#print axioms RectangleCLT.Companion.jointCovariance_factor_exists
+#print axioms RectangleCLT.Companion.sumJointFactor_gram
+#print axioms RectangleCLT.Companion.jointCovariance_restoration_exists
+#print axioms RectangleCLT.Companion.restoredCovariance_posSemidef
+#print axioms RectangleCLT.Companion.ClippingCounterexample.signedVector_centered
+#print axioms RectangleCLT.Companion.ClippingCounterexample.twoPointCovariance_eq_outer
+#print axioms RectangleCLT.Companion.ClippingCounterexample.clipped_signedVector
+#print axioms RectangleCLT.Companion.ClippingCounterexample.originalCovariance_eq_twoPoint
+#print axioms RectangleCLT.Companion.ClippingCounterexample.clippedCovariance_eq_twoPoint
+#print axioms RectangleCLT.Companion.ClippingCounterexample.originalCovariance_posSemidef
+#print axioms RectangleCLT.Companion.ClippingCounterexample.clippedCovariance_posSemidef
+#print axioms RectangleCLT.Companion.ClippingCounterexample.covariance_difference_not_posSemidef
+#print axioms RectangleCLT.Companion.ClippingCounterexample.no_independent_covariance_restoration
+
+-- Endpoint.lean
+#print axioms RectangleCLT.Companion.endpointBoundedConstant_nonneg
+#print axioms RectangleCLT.Companion.endpointGaussianConstant_nonneg
+#print axioms RectangleCLT.Companion.endpointConstant_nonneg
+#print axioms RectangleCLT.FaceSmoother.shiftOffsets_zero
+#print axioms RectangleCLT.FaceSmoother.shiftOffsets_add
+#print axioms RectangleCLT.FaceSmoother.offsetVariance_nonneg
+#print axioms RectangleCLT.FaceSmoother.shiftOffsets_increment_le
+#print axioms RectangleCLT.FaceSmoother.shiftOffsets_F_nat_sub_le
+#print axioms RectangleCLT.FaceSmoother.half_le_shiftOffsets_F_inside
+#print axioms RectangleCLT.FaceSmoother.endpoint_error_le_offsetVariances
+#print axioms RectangleCLT.FaceSmoother.integrable_offsetVariance
+#print axioms RectangleCLT.FaceSmoother.integral_endpoint_error_le_of_offsetVariance
+#print axioms RectangleCLT.FaceSmoother.bounded_endpoint_error_le
+#print axioms RectangleCLT.FaceSmoother.gaussian_endpoint_error_le
+#print axioms RectangleCLT.FaceSmoother.bounded_gaussian_endpoint_error_le
+
+-- Examples.lean
+#print axioms RectangleCLT.Companion.Examples.gapFactor_gram
+#print axioms RectangleCLT.Companion.Examples.gapMatrix_posSemidef
+#print axioms RectangleCLT.Companion.Examples.gapMatrix_unit_diagonal
+#print axioms RectangleCLT.Companion.Examples.gapMatrix_maxOffDiagonal
+#print axioms RectangleCLT.Companion.Examples.gapMatrix_pairGap
+#print axioms RectangleCLT.Companion.Examples.gapMatrix_pairGap_pos
+#print axioms RectangleCLT.Companion.Examples.nullVector_ne_zero
+#print axioms RectangleCLT.Companion.Examples.gapMatrix_nullVector
+#print axioms RectangleCLT.Companion.Examples.nullVector_normSq
+#print axioms RectangleCLT.Companion.Examples.nullVector_quadratic
+#print axioms RectangleCLT.Companion.Examples.nullVector_support_card_le_three
+#print axioms RectangleCLT.Companion.Examples.gapMatrix_localEigenvalue_eq_zero
+#print axioms RectangleCLT.Companion.Examples.gapMatrix_a3
+#print axioms RectangleCLT.Companion.Examples.gapMatrix_a4
+#print axioms RectangleCLT.Companion.Examples.gapMatrix_not_localCovarianceHypotheses
+#print axioms RectangleCLT.Companion.Examples.positive_pairGap_not_local_nondegeneracy
+
+-- GaussianConcentration.lean
+#print axioms RectangleCLT.FaceSmoother.hasDerivAt_shiftOffsets_F
+#print axioms RectangleCLT.FaceSmoother.shiftOffsets_F_mono
+#print axioms RectangleCLT.FaceSmoother.hasDerivAt_integral_shiftOffsets_F
+#print axioms RectangleCLT.FaceSmoother.gaussian_integral_shiftOffsets_F_sub_le
+#print axioms RectangleCLT.FaceSmoother.gaussian_boundary_probability_le
+#print axioms RectangleCLT.FaceSmoother.gaussian_boundary_probability_independent_shift_le
+
+-- Integration.lean
+#print axioms RectangleCLT.Companion.switchTime_ge_derivative_cutoff
+#print axioms RectangleCLT.Companion.abs_sub_le_of_two_ranges
+#print axioms RectangleCLT.Companion.smoothed_gap_le_of_early_late
+#print axioms RectangleCLT.Companion.zero_cubic_gap_le_of_early_late
+
+-- MasterReduction.lean
+#print axioms RectangleCLT.Companion.saturate_rate
+#print axioms RectangleCLT.Companion.gapSensitiveCLT_of_variational
+#print axioms RectangleCLT.Companion.zeroSkewCLT_of_variational
+
+-- MatrixReduction.lean
+#print axioms RectangleCLT.Companion.trace_mul_gram_eq_sum_quadratic
+#print axioms RectangleCLT.Companion.trace_gram_eq_sum_normSq
+#print axioms RectangleCLT.Companion.abs_trace_mul_le_of_posSemidef
+#print axioms RectangleCLT.Companion.trace_rankOne
+#print axioms RectangleCLT.Companion.trace_mul_rankOne
+#print axioms RectangleCLT.Companion.trace_tiltScore
+#print axioms RectangleCLT.Companion.abs_trace_mul_tiltScore_le
+#print axioms RectangleCLT.Companion.abs_sum_trace_mul_tiltScore_le
+#print axioms RectangleCLT.Companion.weightCovariance_eq_centered
+#print axioms RectangleCLT.Companion.weightedScore_eq_tiltScore
+#print axioms RectangleCLT.Companion.abs_trace_mul_weightedScore_le
+#print axioms RectangleCLT.Companion.standardGaussian_integrable_bounded_weight
+#print axioms RectangleCLT.Companion.standardGaussian_integrable_weighted_coordinate
+#print axioms RectangleCLT.Companion.standardGaussian_integrable_weighted_product
+#print axioms RectangleCLT.Companion.standardGaussian_weightedScore_reduction
+
+-- Models.lean
+#print axioms RectangleCLT.Companion.Examples.gapObservation_centered
+#print axioms RectangleCLT.Companion.Examples.gapObservation_bounded
+#print axioms RectangleCLT.Companion.Examples.gapObservation_data
+#print axioms RectangleCLT.Companion.Examples.gapObservation_covariance
+#print axioms RectangleCLT.Companion.Examples.bounded_model_with_positive_gap_and_zero_local_minima
+
+-- Optimization.lean
+#print axioms RectangleCLT.Companion.optimalBandwidth_pos
+#print axioms RectangleCLT.Companion.optimalBandwidth_admissible
+#print axioms RectangleCLT.Companion.comparisonLog_optimalBandwidth_le
+#print axioms RectangleCLT.Companion.bandwidth_error_le
+#print axioms RectangleCLT.Companion.zeroSkew_rate_of_variational
+#print axioms RectangleCLT.Companion.gap_rate_of_variational
+
+-- Rates.lean
+#print axioms RectangleCLT.Companion.logPlus_nonneg
+#print axioms RectangleCLT.Companion.logPlus_mono
+#print axioms RectangleCLT.Companion.one_le_D_L
+#print axioms RectangleCLT.Companion.D_L_nonneg
+#print axioms RectangleCLT.Companion.one_le_gapLog
+#print axioms RectangleCLT.Companion.gapLog_nonneg
+#print axioms RectangleCLT.Companion.kappa_zero
+#print axioms RectangleCLT.Companion.kappa_le
+#print axioms RectangleCLT.Companion.kappa_nonneg
+#print axioms RectangleCLT.Companion.kappa_pos
+#print axioms RectangleCLT.Companion.one_le_kappa
+#print axioms RectangleCLT.Companion.kappa_le_inv
+#print axioms RectangleCLT.Companion.unrestrictedRate_nonneg
+#print axioms RectangleCLT.Companion.zeroSkewRate_nonneg
+#print axioms RectangleCLT.Companion.gapRate_nonneg
+#print axioms RectangleCLT.Companion.gapRate_eq_cubic_add_zeroSkewRate
+#print axioms RectangleCLT.Companion.gapLog_le_D_L
+#print axioms RectangleCLT.Companion.rpow_three_halves_eq_mul_sqrt
+#print axioms RectangleCLT.Companion.gapRate_le_two_unrestrictedRate
+#print axioms RectangleCLT.Companion.zeroSkewRate_le_gapRate
+#print axioms RectangleCLT.Companion.min_one_gapRate_le_two_min_one_unrestrictedRate
+#print axioms RectangleCLT.Companion.GapSensitiveCLT.toUnrestrictedCLT
+#print axioms RectangleCLT.Companion.unrestrictedCLTExists_of_gapSensitiveCLTExists
+
+-- Statement.lean
+
+-- TranslatedWeights.lean
+#print axioms RectangleCLT.Companion.translationZ_eq_denominator_difference
+#print axioms RectangleCLT.Companion.one_add_translationZ_eq_ratio
+#print axioms RectangleCLT.Companion.one_add_translationZ_pos
+#print axioms RectangleCLT.Companion.F_translation
+#print axioms RectangleCLT.Companion.pi_translation
+#print axioms RectangleCLT.Companion.F_mul_prod_pi_translation
+#print axioms RectangleCLT.Companion.abs_translationIncrement_le
+#print axioms RectangleCLT.Companion.abs_translationZ_le
+#print axioms RectangleCLT.Companion.abs_translationZ_lt_one
+#print axioms RectangleCLT.Companion.hasSum_translationZ_binomial
+#print axioms RectangleCLT.Companion.hasSum_abs_translationZ_binomial
+#print axioms RectangleCLT.Companion.tsum_abs_translationZ_binomial_le

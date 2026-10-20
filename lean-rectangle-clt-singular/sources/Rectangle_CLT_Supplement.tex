@@ -1,0 +1,1764 @@
+% Source: preamble
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,hypertexnames=false,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\hypersetup{pdftitle={High-Dimensional Gaussian Approximations over Rectangles without Covariance Restrictions},pdfsubject={Bounded independent summands; rates optimal up to logarithmic factors},pdfauthor={Human Collaborators: CCKK (Victor Chernozhukov, Denis Chetverikov, Kengo Kato, Yuta Koike); AI Collaborators: GPT-6 Sol and GPT-6 Astra}}
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0.12em}
+\emergencystretch=2em
+\allowdisplaybreaks[2]
+\raggedbottom
+\clubpenalty=10000
+\widowpenalty=10000
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Pp}{\mathbb P}
+\newcommand{\R}{\mathbb R}
+\newcommand{\cR}{\mathcal R}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\rh}{\rho_{\mathcal R}}
+\newcommand{\ind}{\mathbf 1}
+\newcommand{\dd}{\,d}
+\newcommand{\Hh}{H_2}
+\newcommand{\Ga}{\gamma_r}
+\newcommand{\ph}{\varphi_r}
+\newcommand{\surf}{\mathcal J}
+
+\newcommand{\logp}{\log_+}
+
+\hypersetup{pdftitle={Supplementary Material: High-Dimensional Gaussian Approximations over Rectangles without Covariance Restrictions}}
+\renewcommand{\thesection}{S.\arabic{section}}
+\renewcommand{\theequation}{S.\arabic{equation}}
+\renewcommand{\thetheorem}{S.\arabic{theorem}}
+\renewcommand{\theproposition}{S.\arabic{proposition}}
+\renewcommand{\thelemma}{S.\arabic{lemma}}
+\renewcommand{\thecorollary}{S.\arabic{corollary}}
+\renewcommand{\theremark}{S.\arabic{remark}}
+\makeatletter
+\renewcommand{\l@section}{\@dottedtocline{1}{0em}{2.4em}}
+\renewcommand{\l@subsection}{\@dottedtocline{2}{2.4em}{3.4em}}
+\makeatother
+
+
+% Source: setup
+
+\begin{document}
+\begin{center}
+{\Large Supplementary Material}\\[.4em]
+{\large High-Dimensional Gaussian Approximations\\
+over Rectangles without Covariance Restrictions}\\[.75em]
+{\normalsize\textbf{Human Collaborators: CCKK}}\\[.2em]
+{\normalsize Victor Chernozhukov, Denis Chetverikov, Kengo Kato, Yuta Koike}\\[.5em]
+{\normalsize\textbf{AI Collaborators:} GPT-6 Sol and GPT-6 Astra}\\[.6em]
+{\small Proposed editorial split, 20 October 2026}
+\end{center}
+\noindent
+This supplement contains lower-bound proofs, auxiliary reductions, and
+further calculations. All proofs of the main upper bounds are contained
+in Appendices A--E of the main document. Section S.2 recalls only the
+notation and estimates needed here. Sections S.3--S.5 give the
+zero-skewness tail calculations, lower-bound arguments, and coordinate
+reductions. Sections S.6--S.7 preserve optional calculations on the open
+logarithmic question. The separate investigations note develops the
+subsequent transport and rank-reduction calculations.
+\tableofcontents
+
+\section{Notation and statements used in the proofs}\label{sec:results}
+We repeat the standing assumptions and result statements needed below.
+This register makes the supplement independently readable; its numbering
+is local to this document. The main paper contains all proofs of its
+upper bounds, including the analytic estimates and their optimization.
+Let \(\mathcal R\) be the axis-aligned rectangles, and write
+\[
+ \rh(U,V)=\sup_{A\in\mathcal R}
+ |\Pp(U\in A)-\Pp(V\in A)|,\qquad
+ M_h=\sup_A|\E F_{A,h}(W)-\E F_{A,h}(Z)|,
+\]
+where the rational selector \(F_{A,h}\) is defined in
+Section~\ref{sec:smoothing}. The latter supremum also allows
+inconsistent signed-face threshold systems.
+\begin{equation}
+ \begin{gathered}
+ W=\sum_{i=1}^n\xi_i,\qquad
+ \xi_1,\ldots,\xi_n\text{ independent and centered},\qquad
+ \norm{\xi_i}_\infty\le\delta\quad\text{a.s.},\\
+ \Sigma=\Cov(W),\qquad \Sigma_{jj}=1\quad(j\le p),
+ \qquad Z\sim N(0,\Sigma).
+ \end{gathered}
+ \label{eq:setup}
+\end{equation}
+
+The rows are independent. Put
+\[
+L=\log(ep),\qquad c=1-\max_{j\ne k}|\Sigma_{jk}|,
+\qquad c=1\text{ if }p=1,\qquad
+D_L=1+\log_+\frac1{\delta\sqrt L},
+\]
+where \(\log_+x=\max\{0,\log x\}\), and define
+\begin{equation}
+ \kappa=\begin{cases}\min\{L,c^{-1}\},&c>0,\\L,&c=0,\end{cases}
+ \qquad E_\kappa=1+\log_+\frac{\sqrt\kappa}{\delta L},
+ \qquad \log_+x=\max\{0,\log x\}.
+ \label{eq:parameters}
+\end{equation}
+\begin{theorem}[General bound]\label{thm:optimized}
+Under \eqref{eq:setup},
+\begin{equation}
+ \rh(W,Z)\le C\min\!\left\{1,
+ \delta\left[L^{3/2}+L\sqrt{\kappa E_\kappa}\right]\right\}.
+ \tag{R*}\label{eq:optimized}
+\end{equation}
+\end{theorem}
+
+\begin{theorem}[Cancellation of third moments]\label{thm:zero-skew}
+Under \eqref{eq:setup}, suppose that
+\begin{equation}
+ \sum_i\E\xi_i^{\otimes3}=0,
+ \quad\text{that is,}\quad
+ \sum_i\E[\xi_{ij}\xi_{ik}\xi_{i\ell}]=0
+ \quad(j,k,\ell\le p).
+ \label{eq:zero-third}
+\end{equation}
+Then
+\begin{equation}
+ \rh(W,Z)\le C\min\{1,\delta L\sqrt{\kappa E_\kappa}\}.
+ \tag{ZS}\label{eq:zero-skew}
+\end{equation}
+\end{theorem}
+
+\begin{corollary}[Bounded observations]\label{cor:observations}
+Let \(X_1,\ldots,X_n\in\R^p\) be independent and centered, with
+\(\max_{i,j}|X_{ij}|\le K_n\) almost surely. Define
+\[
+ W_n=\frac1{\sqrt n}\sum_iX_i,\qquad
+ \sigma_j^2=\frac1n\sum_i\E X_{ij}^2,
+ \qquad \underline\sigma=\min_j\sigma_j>0,
+ \qquad Z_n\sim N(0,\Cov(W_n)).
+\]
+Put \(\delta_n=K_n/(\underline\sigma\sqrt n)\), and calculate
+\(c,\kappa,E_\kappa\) from \eqref{eq:parameters} using the correlation
+matrix of \(W_n\) and the envelope \(\delta_n\). With \(L=\log(ep)\),
+\begin{equation}
+ \rh(W_n,Z_n)\le C\min\!\left\{1,
+ \frac{K_n}{\underline\sigma\sqrt n}
+ \left[L^{3/2}+L\sqrt{\kappa E_\kappa}\right]\right\}.
+ \label{eq:observations}
+\end{equation}
+If \(\sum_i\E X_i^{\otimes3}=0\), the term \(L^{3/2}\) can be
+omitted. In covariance rank one, the scalar bound
+\(C\min\{1,\delta_n\}\) applies in either case.
+\end{corollary}
+
+\begin{corollary}[Dimension range under zero skewness]\label{cor:zero-threshold}
+In Corollary~\ref{cor:observations}, suppose that
+\(K_n/\underline\sigma\le B\), \(c\ge c_0>0\), and
+\(\sum_i\E X_i^{\otimes3}=0\), with \(B\ge1\) and \(c_0\) fixed.
+Then
+\begin{equation}
+ \rh(W_n,Z_n)\le C_{B,c_0}\min\!\left\{1,
+ \frac L{\sqrt n}\sqrt{1+\log_+\frac{\sqrt n}{L}}\right\}.
+ \label{eq:zero-fixed}
+\end{equation}
+Consequently, \(\log p=o(\sqrt n)\) guarantees convergence to zero.
+This dimension threshold is sharp for the worst-case error over the
+stated class, even when \(B=1\).
+\end{corollary}
+
+\begin{corollary}[Two simpler bounds]\label{cor:forms}
+Under \eqref{eq:setup},
+\begin{equation}
+ \rh(W,Z)\le C\min\{1,\delta L^{3/2}\sqrt{D_L}\}.
+ \label{eq:unrestricted}
+\end{equation}
+If \(c>0\), then also
+\begin{equation}
+ \rh(W,Z)\le C\min\!\left\{1,
+ \delta\left[L^{3/2}+L\sqrt{D_L/c}\right]\right\}.
+ \label{eq:gap-refined}
+\end{equation}
+\end{corollary}
+
+
+The optimizing scale used in the main paper is
+\begin{equation}
+h=A\delta\sqrt{LE_\kappa/\kappa},
+\label{eq:optimal-scale}
+\end{equation}
+with a sufficiently large absolute constant \(A\).
+
+
+% Source: recalled_inputs
+
+\section{Recalled notation and upper-bound estimates}
+\label{sup:recalled}\label{sec:smoothing}\label{sec:support}
+The statements in this section are recalled for the calculations below.
+Their proofs are in Appendices A--D of the main document; no proof of a
+main upper bound is deferred to this supplement.
+For a signed coordinate system with distinct normals
+\(\nu_\alpha\in\{\pm e_j\}\), the selector is
+\[
+F_{A,h}(x)=\left(1+\sum_\alpha
+e^{(\nu_\alpha\cdot x-a_\alpha)/h}\right)^{-1}.
+\]
+Factor \(\Sigma=BB^\top\) on its rank-\(r\) support. Then
+\begin{equation}
+ \xi_i=B\zeta_i^0,\qquad
+ \sum_i\E\zeta_i^0(\zeta_i^0)^\top=I_r,\qquad Z\stackrel d=BG,
+ \quad G\sim N(0,I_r),
+ \label{eq:support}
+\end{equation}
+and the support normals \(u_\alpha=B^\top\nu_\alpha\) have unit length.
+Write \(\|z\|_U=\max_\alpha|u_\alpha\cdot z|\), so
+\(\|\zeta_i^0\|_U\le\delta\). Below \(F\) denotes the selector on
+the support, with
+\(\pi_0=F\),
+\(\pi_\alpha=Fe^{(u_\alpha\cdot x-a_\alpha)/h}\), and
+\(\theta=1-F\).
+The endpoint estimate is
+\begin{equation}
+ \E|F_{A,h}(W)-\ind_A(W)|+
+ \E|F_{A,h}(Z)-\ind_A(Z)|\le Ch\sqrt L\,\kappa,
+ \qquad h\ge\delta.
+ \label{eq:endpoint-min}
+\end{equation}
+\subsection{The interpolation}
+\label{an:sec:path}
+
+We can now define the comparison path.  Bernoulli thinning removes the
+bounded rows while a Gaussian component supplies the lost covariance.
+The choice of amplitude below also makes the derivative of the cubic
+row coefficient vanish at the bounded endpoint; this will help control
+the start of the path.
+
+Use the independent support rows \(\zeta_i^0\) of
+\eqref{eq:support}, so
+\[
+ \E\zeta_i^0=0,\qquad
+ \sum_i\E\zeta_i^0(\zeta_i^0)^\top=I_r,
+ \qquad \norm{\zeta_i^0}_U\le\delta.
+\]
+For \(0\le\lambda\le1\), define
+\begin{equation}
+ \begin{gathered}
+ a=1+\lambda,\qquad q=\frac{1-\lambda}{(1+\lambda)^2},
+ \qquad B_{i,\lambda}\sim\operatorname{Bernoulli}(q),\\
+ T_i=aB_{i,\lambda}\zeta_i^0,\qquad V_\lambda=\sum_iT_i,
+ \qquad U_\lambda=V_\lambda+\sqrt\lambda G,
+ \end{gathered}
+ \label{an:path}
+\end{equation}
+where the Bernoulli variables, the source rows, and \(G\) are
+independent.  Only the law at each \(\lambda\) is used, so no
+coupling of Bernoulli variables across \(\lambda\) is required.
+The total covariance of \(U_\lambda\) is \(I_r\), since
+\(qa^2=1-\lambda\).  For a rectangle \(A\), fix its selector
+\(F=F_{A,h}\) on the support and put
+\[
+ P_A(\lambda)=\E F(U_\lambda),\qquad H_i=U_\lambda-T_i.
+\]
+Let \(\zeta_i,\widetilde\zeta_i\) be two independent fresh copies of
+\(\zeta_i^0\), independent of the actual path array and \(G\).
+
+\begin{lemma}[Exact fourth-order identity]\label{an:lem:identity}
+For \(0<\lambda<1\),
+\begin{equation}
+ P_A'(\lambda)
+ =-\frac\lambda3\sum_i\E D^3F(U_\lambda)
+                    [\zeta_i,\zeta_i,\zeta_i]
+       +\sum_i(\mathcal A_i+\mathcal B_i+\mathcal C_i),
+ \label{an:fourth-identity}
+\end{equation}
+where
+\begin{align}
+ \mathcal A_i
+ &=\int_0^1 k_\lambda(s)
+       \E D^4F(H_i+sa\zeta_i)
+                 [\zeta_i,\zeta_i,\zeta_i,\zeta_i]\dd s,
+ \label{an:A}\\
+ k_\lambda(s)
+ &=\frac a6(1-s)^2\{(3-\lambda)s-2\lambda\},
+ \label{an:kernel}\\
+ \mathcal B_i
+ &=\frac{1-\lambda}{2}\int_0^1(1-s)
+       \E D^4F(H_i+sa\widetilde\zeta_i)
+          [\zeta_i,\zeta_i,\widetilde\zeta_i,\widetilde\zeta_i]
+       \dd s,
+ \label{an:B}\\
+ \mathcal C_i
+ &=\frac{\lambda(1-\lambda)}{3a}\int_0^1
+       \E D^4F(H_i+sa\widetilde\zeta_i)
+          [\zeta_i,\zeta_i,\zeta_i,\widetilde\zeta_i]\dd s.
+ \label{an:C}
+\end{align}
+The three displayed fourth-order terms account for the entire remainder.
+\end{lemma}
+\begin{proposition}[Two bounds for the path derivative]
+\label{an:prop:derivative}
+There are sufficiently large absolute constants \(A,d_0\) such that,
+for \(h\ge A\delta\), uniformly over rectangles \(A\),
+\begin{equation}
+ |P_A'(\lambda)|
+ \le C\sqrt L\left(\frac{\lambda\delta}{h^2}
+                         +\frac{\delta^2}{h^3}\right),
+ \qquad 0<\lambda<1.
+ \label{an:early}
+\end{equation}
+For \(d_0\delta^2L\le\lambda<1\), one also has
+\begin{equation}
+ |P_A'(\lambda)|
+ \le CL^{3/2}\left(\delta+\frac{\delta^2}{\lambda h}\right).
+ \label{an:late}
+\end{equation}
+More specifically, for the fourth-order remainder
+\(R_{4,A,h}(\lambda)=\sum_i(\mathcal A_i+\mathcal B_i+\mathcal C_i)\),
+\begin{equation}
+ |R_{4,A,h}(\lambda)|\le\frac{C\delta^2}{\lambda h}L^{3/2},
+ \qquad
+ \left|\sum_i\mathcal C_i\right|
+       \le\frac{C\delta^2}{h}L^{3/2}.
+ \label{an:remainder}
+\end{equation}
+\end{proposition}
+
+The common-base cubic estimate used below is
+\begin{equation}
+\left|\frac\lambda3\sum_i\E D^3F(U_\lambda)
+[\zeta_i,\zeta_i,\zeta_i]\right|\le C\delta L^{3/2},
+\qquad \lambda\ge d_0\delta^2L.
+\label{an:cubic-bound}
+\end{equation}
+Appendix B of the main document proves the path identities and these
+estimates, including the restoration of the actual translated row bases.
+
+
+% Source: zero_skewness_tails
+\section{Zero-skewness dimension thresholds and tail calculations}\label{zs:section}
+
+For bounded observations and a fixed positive correlation gap, the
+upper bound gives convergence whenever \(\log p=o(\sqrt n)\).
+Independent Rademacher coordinates show why this condition is exact:
+at the level of a Gaussian maximum, the fourth-order tail correction
+has size \((\log p)^2/n\). We prove both statements below.
+
+\begin{proof}[Sufficiency in Corollary~\ref{cor:zero-threshold}]
+Use the standardized summands
+\(\xi_{ij}=X_{ij}/(\sigma_j\sqrt n)\) from
+Corollary~\ref{cor:observations}. We may take \(\delta=B/\sqrt n\),
+because \(K_n/\underline\sigma\le B\). Their sum has unit marginal
+variances and the same correlation matrix as \(W_n\). The diagonal
+map preserves both rectangle distance and the vanishing third tensor.
+Since \(c\ge c_0>0\), we have \(\kappa\le c_0^{-1}\), and
+Theorem~\ref{thm:zero-skew} gives
+\begin{equation}
+ \rh(W_n,Z_n)\le C_{B,c_0}\min\left\{1,
+ \frac L{\sqrt n}
+ \sqrt{1+\log_+\frac{\sqrt n}{L}}\right\}.
+ \label{zs:fixed-gap}
+\end{equation}
+Constants inside the positive logarithm are absorbed by
+\(C_{B,c_0}\). If \(L=o(\sqrt n)\), the right-hand side tends to zero:
+\(x\sqrt{1+\log(1/x)}\to0\) as \(x\downarrow0\).
+This is equivalent to \(\log p=o(\sqrt n)\).
+\end{proof}
+
+The next example prevents uniform convergence at the boundary
+\(\log p\asymp\sqrt n\). It settles the dimensional threshold;
+sharpness of the error rate in \eqref{zs:fixed-gap} is a separate
+question.
+
+\begin{proposition}[Rademacher boundary obstruction]
+\label{zs:rademacher-boundary}
+Let \(\varepsilon_{ij}\), \(i\le n,j\le p_n\), be independent
+Rademacher variables, and put
+\(W_{n,j}=n^{-1/2}\sum_i\varepsilon_{ij}\).
+Suppose \(\log p_n\sim a\sqrt n\) for some \(a>0\), and let
+\(x_n\) be determined by \(p_n\{1-\Phi(x_n)\}=1\). Then
+\begin{equation}
+ \Pp\!\left(\max_{j\le p_n}W_{n,j}\le x_n\right)
+ -\Pp\!\left(\max_{j\le p_n}Z_j\le x_n\right)
+ \longrightarrow e^{-\exp(-a^2/3)}-e^{-1}>0,
+ \label{zs:boundary-limit}
+\end{equation}
+where the \(Z_j\) are independent standard normals. These arrays have
+\(B=1\), \(c=1\), and rowwise central symmetry, hence satisfy
+\eqref{eq:zero-third}.
+\end{proposition}
+
+\begin{proof}
+Write \(S_n=\sum_{i=1}^n\varepsilon_{i1}\), and let \(k_n\) be the
+smallest integer with the same parity as \(n\) and
+\(k_n>\sqrt n\,x_n\). Set \(t_n=k_n/n\). Mills' ratio implies
+\[
+ x_n^2\sim2\log p_n\sim2a\sqrt n,
+ \qquad t_n=\frac{x_n}{\sqrt n}+O(n^{-1}).
+\]
+In particular \(t_n\to0\), \(nt_n^2\to\infty\), and
+\(nt_n^6\to0\). Stirling's formula, applied to the exact binomial
+mass \(b_n(k)=\Pp(S_n=k)\), gives
+\begin{equation}
+ b_n(k_n)=\sqrt{\frac2{\pi n}}(1-t_n^2)^{-1/2}
+              e^{-nI(t_n)}(1+o(1)),
+ \qquad
+ I(t)=\frac{(1+t)\log(1+t)+(1-t)\log(1-t)}2.
+ \label{zs:binomial-mass}
+\end{equation}
+The relative error is \(o(1)\), since both binomial cell counts are
+of order \(n\).
+
+To recover the tail from this mass, we must account for the spacing
+of the binomial lattice. Adjacent admissible masses satisfy
+\[
+ \frac{b_n(k_n+2j+2)}{b_n(k_n+2j)}
+ =\frac{n-k_n-2j}{n+k_n+2j+2}.
+\]
+Choose \(M_n\to\infty\) sufficiently slowly that
+\(M_nt_n^2\to0\) and \(M_n^2/(nt_n^2)\to0\).
+Uniformly for \(0\le j\le M_n/t_n\), expansion of the logarithms
+of these ratios yields
+\[
+ \log\frac{b_n(k_n+2j)}{b_n(k_n)}
+ =-2t_nj+O(t_n^3j+j/n+j^2/n)
+ =-2t_nj+o(1).
+\]
+The displayed error follows by summing
+\(\log(1-t_n-2\ell/n)-\log(1+t_n+(2\ell+2)/n)\)
+over \(0\le\ell<j\); throughout this range the arguments stay
+uniformly away from zero. For every larger admissible \(j\), each
+adjacent mass ratio is at most
+\((1-t_n)/(1+t_n+2/n)\le e^{-2t_n}\).
+The remainder of the sum, beyond \(M_n/t_n\), is consequently at
+most \(b_n(k_n)e^{-2M_n+O(t_n)}/(1-e^{-2t_n})\).
+The initial geometric sum and this negligible remainder give
+\begin{equation}
+ \Pp(S_n\ge k_n)
+ =\frac{b_n(k_n)}{2t_n}(1+o(1))
+ =\frac{e^{-nI(t_n)}}{x_n\sqrt{2\pi}}(1+o(1)).
+ \label{zs:binomial-tail}
+\end{equation}
+
+Now
+\[
+ I(t)=\frac{t^2}2+\frac{t^4}{12}+O(t^6),
+ \qquad
+ 1-\Phi(x_n)=\frac{e^{-x_n^2/2}}{x_n\sqrt{2\pi}}(1+o(1)).
+\]
+The parity rounding contributes only
+\(nt_n^2-x_n^2=O(x_n/\sqrt n)+O(n^{-1})=o(1)\), and
+\(nt_n^4-x_n^4/n=o(1)\). Therefore \eqref{zs:binomial-tail} implies
+\begin{equation}
+ \log\frac{\Pp(S_n/\sqrt n>x_n)}{1-\Phi(x_n)}
+ =-nI(t_n)+\frac{x_n^2}2+o(1)
+ =-\frac{x_n^4}{12n}+o(1)
+ \longrightarrow-\frac{a^2}3.
+ \label{zs:tail-ratio}
+\end{equation}
+Thus \(p_n\Pp(S_n/\sqrt n>x_n)\to e^{-a^2/3}\). Independence
+across coordinates gives
+\[
+ \Pp(\max_{j\le p_n}W_{n,j}\le x_n)
+ =\{1-\Pp(S_n/\sqrt n>x_n)\}^{p_n}
+ \longrightarrow e^{-\exp(-a^2/3)},
+\]
+whereas the corresponding normal probability is
+\((1-1/p_n)^{p_n}\to e^{-1}\). This proves the proposition.
+\end{proof}
+
+\begin{proof}[Necessity in Corollary~\ref{cor:zero-threshold}]
+If \(\log p_n=o(\sqrt n)\) fails, there is a subsequence on which
+\(\log p_n\ge b\sqrt n\) for some \(b>0\). Choose any \(0<a<b\)
+and restrict the rectangle to the first
+\(q_n=\lfloor e^{a\sqrt n}\rfloor\le p_n\) coordinates, leaving
+the other coordinate intervals unrestricted. The Rademacher arrays
+of Proposition~\ref{zs:rademacher-boundary} then give a positive limiting
+discrepancy along that subsequence. They belong to every class with
+envelope bound \(B\ge1\), correlation-gap lower bound
+\(0<c_0\le1\), and the aggregate zero-third-tensor assumption.
+Together with \eqref{zs:fixed-gap}, this proves that
+\(\log p_n=o(\sqrt n)\) is exactly the uniform convergence threshold
+for these fixed-\(B,c_0\) classes.
+\end{proof}
+
+\subsection{What remains between the upper and lower rates}
+
+Proposition~4.1 of Chernozhukov--Chetverikov--Koike~\cite{CCK}
+assumes independent identically distributed scalar entries with a
+finite exponential moment, unit variance, zero third moment, and
+nonzero fourth cumulant. If
+\[
+ (\log p)^2/n\longrightarrow0,
+ \qquad (\log p)^3/n\longrightarrow\infty,
+\]
+it states a positive limit superior for the maximum-distribution
+error multiplied by \(n/(\log p)^2\). This gives \(L^2/n\) as a
+lower-bound scale in this range. Rademacher entries meet these
+assumptions, so the obstruction applies directly to the bounded
+symmetric class considered here. The upper bound \eqref{zs:fixed-gap}
+exceeds \(L^2/n\) by the factor
+\[
+ \frac{\sqrt n}{L}
+ \sqrt{1+\log\frac{\sqrt n}{L}}
+\]
+when \(n^{1/3}\ll L\ll\sqrt n\). Consequently the zero-skewness
+theorem settles the dimensional convergence threshold, while an
+error-rate gap remains.
+
+There is also a lattice obstruction in fixed dimension: a normalized
+Rademacher sum has a central atom of order \(n^{-1/2}\), and the
+Gaussian probability of an interval shrinking to that atom tends
+to zero. Hence its rectangle distance is at least a constant times
+\(n^{-1/2}\). A uniform unsmoothed \(L^2/n\) upper bound would
+contradict this example. Theorem~4.2 of~\cite{CCK} obtains the faster
+zero-skewness rate for a random vector with an independent
+nondegenerate Gaussian component, under a rowwise mixed-third-moment
+condition. That additional Gaussian smoothing is absent from the
+bounded-row setting here. Its rate and optimality conclusions therefore
+require assumptions beyond those imposed here.
+
+The aggregate cancellation condition used in
+Theorem~\ref{thm:zero-skew} is weaker than rowwise zero third tensors.
+The fourth-order estimates used here leave room for improvement.
+An optimal unsmoothed error bound must account for both the
+fourth-cumulant correction and the lattice obstruction. Its precise
+form remains open.
+
+
+% Source: lower_bounds
+\section{Lower bounds and optimality}
+\label{opt:section}
+
+Without a condition on third moments, the scale
+\(\delta L^{3/2}\) is unavoidable even for independent coordinates. A small skewness correction in each coordinate is amplified
+at the level of the maximum, where the relevant normal threshold is
+about \(\sqrt{2\log p}\). We first make this argument precise, then
+compare it with the upper bound to identify matching rates and sharp
+convergence thresholds.
+
+The lower bounds concern the worst error over a class of distributions;
+a particular distribution can have a smaller error. Throughout this
+section, \(\Phi\) and \(\varphi\) denote the standard normal distribution
+function and density.
+
+\subsection{A lower bound from skewness}
+\label{opt:published}
+
+In our notation, Proposition~2.1 of \cite{CCK} assumes \(B_n\ge2\) and
+all three conditions
+\begin{equation}
+ r_n:=\frac{B_n(\log p_n)^{3/2}}{\sqrt n}\longrightarrow0,
+ \qquad \frac{B_n^4}{\sqrt{\log p_n}}\longrightarrow0,
+ \qquad \frac1{p_nr_n}\longrightarrow0.
+ \label{opt:cck-hypotheses}
+\end{equation}
+It constructs independent scalar entries, identical in distribution
+across rows and columns, with mean zero, variance one, and envelope
+\(B_n\), for which \(\liminf_n\rh(W_n,Z_n)/r_n>0\). The resulting
+covariance is \(I_{p_n}\), so the correlation gap is \(c=1\).
+The discrepancy already occurs on common-threshold lower orthants,
+which are rectangles.
+
+The next theorem removes the last two restrictions in
+\eqref{opt:cck-hypotheses}. Only the vanishing-rate condition and
+\(p_n\to\infty\) remain. The proof uses the same two-point construction,
+but controls its scalar tails uniformly in the envelope and compares
+the coordinate products exactly.
+
+\begin{theorem}[Skewness lower bound]
+\label{opt:skew-lower}
+Suppose \(p_n\to\infty\), \(B_n\ge2\), and
+\[r_n=B_n(\log p_n)^{3/2}/\sqrt n\longrightarrow0.\]
+There are i.i.d. centered vectors \(X_{n,1},\ldots,X_{n,n}\) with
+independent coordinates, \(\Cov(X_{n,i})=I_{p_n}\), and
+\(\norm{X_{n,i}}_\infty\le B_n\) almost surely. Put
+\[W_n=n^{-1/2}\sum_iX_{n,i},\qquad Z_n\sim N(0,I_{p_n}).\]
+Then
+\begin{equation}
+ \liminf_{n\to\infty}\frac{\rh(W_n,Z_n)}{r_n}
+ \ge\frac{\sqrt2}{4e}>0.
+ \label{opt:lower-constant}
+\end{equation}
+The envelope \(B_n\) is attained by the construction.
+\end{theorem}
+
+The scalar estimate below isolates the effect of skewness on a tail.
+Its strict inequality matters because the lower example is a lattice
+law. In particular, the estimate must remain valid as the threshold
+passes through an atom.
+
+\begin{lemma}[Uniform scalar moderate-tail estimate]
+\label{opt:moderate-tail}
+Let \(S=\sum_{i=1}^n\eta_i\), where the real variables \(\eta_i\) are
+independent and centered, \(|\eta_i|\le\delta\) almost surely, and
+\(\sum_i\E\eta_i^2=1\). Write
+\(\gamma=\sum_i\E\eta_i^3\). There are absolute constants \(a,C>0\)
+such that, whenever \(x\ge0\) and \(\delta(1+x)\le a\),
+\begin{equation}
+ \left|\log\frac{\Pp(S>x)}{1-\Phi(x)}
+       -\frac{\gamma x^3}{6}\right|
+ \le C\{\delta(1+x)+\delta^2x^4\}.
+ \label{opt:moderate-tail-formula}
+\end{equation}
+The tail is strict. The conclusion includes lattice distributions and
+has constants independent of the lattice spacing or the position of
+\(x\) relative to its atoms.
+\end{lemma}
+
+\begin{proof}
+Put \(K(t)=\sum_i\log\E e^{t\eta_i}\). For each summand, its
+exponential tilt at \(t\ge0\) has likelihood ratio between
+\(e^{-2\delta t}\) and \(e^{2\delta t}\). If \(\Var_t\) denotes variance
+under this tilt, the independent-copy formula for variance gives
+\[
+ e^{-4\delta t}\Var(\eta_i)
+ \le\Var_t(\eta_i)\le e^{4\delta t}\Var(\eta_i).
+\]
+Consequently, for a fixed small absolute \(a_0>0\),
+\(e^{-4a_0}\le K''(t)\le e^{4a_0}\) on
+\(0\le t\le a_0/\delta\). The centered tilted variable is bounded by
+\(2\delta\), and \(\Var_t(\eta_i)\le\delta^2\). Its fourth cumulant
+therefore has absolute value at most
+\(7\delta^2\Var_t(\eta_i)\). Summing gives
+\(\sup_{0\le t\le a_0/\delta}|K^{(4)}(t)|\le C\delta^2\).
+Also \(|\gamma|\le\delta\). Taylor's theorem now yields, uniformly in
+this local range,
+\begin{align}
+ K(t)&=t^2/2+\gamma t^3/6+O(\delta^2t^4),\notag\\
+ K'(t)&=t+\gamma t^2/2+O(\delta^2t^3),\notag\\
+ K''(t)&=1+\gamma t+O(\delta^2t^2).
+ \label{opt:cumulant-expansions}
+\end{align}
+
+We choose the tilt so that its mean equals \(x\). To see that this
+choice lies in the range just controlled, put \(t_0=a_0/\delta\).
+Then
+\[
+ K'(t_0)=\int_0^{t_0}K''(u)\,du
+ \ge e^{-4a_0}a_0/\delta.
+\]
+Choose \(a<e^{-4a_0}a_0/2\). The condition in the lemma implies
+\(x<K'(t_0)\). Since \(K'(0)=0\) and \(K''>0\), there is a unique
+\(t\in[0,t_0)\) with \(K'(t)=x\), including \(t=0\) when \(x=0\).
+The bounds on \(K''\) show \(t\asymp x\) for \(x>0\).
+Inverting \eqref{opt:cumulant-expansions}, and decreasing \(a\) if
+necessary, gives
+\begin{equation}
+ t=x-\gamma x^2/2+O(\delta^2x^3),\qquad
+ K(t)-tx=-x^2/2+\gamma x^3/6+O(\delta^2x^4).
+ \label{opt:tilt-root}
+\end{equation}
+Let \(v^2=K''(t)\) and \(s=tv\). Expanding the square root in
+\eqref{opt:cumulant-expansions} gives
+\(v=1+\gamma x/2+O(\delta^2x^2)\), and hence
+\begin{equation}
+ s=x+O(\delta^2x^3).
+ \label{opt:tilted-scale}
+\end{equation}
+
+Under the joint tilt
+\(d\Pp_t=e^{tS-K(t)}d\Pp\), the summands remain independent and
+\(T=(S-x)/v\) has mean zero and variance one. Furthermore,
+\[
+ \sum_i\E_t|\eta_i-\E_t\eta_i|^3
+ \le2\delta\sum_i\Var_t(\eta_i)=2\delta v^2.
+\]
+Scalar Berry--Esseen and the upper and lower bounds on \(v\) imply
+\(\sup_y|\Pp_t(T\le y)-\Phi(y)|\le C\delta\).
+To keep track of any atom at the threshold, use the identity
+\[
+ \E_t[e^{-sT}\ind_{\{T>0\}}]
+ =\Pp_t(T>0)-s\int_0^\infty e^{-sy}\Pp_t(T>y)\,dy,
+\]
+valid for \(s\ge0\), with the second term interpreted as zero when
+\(s=0\). Comparison with
+the same identity for a standard normal variable shows that
+\begin{equation}
+ \E_t[e^{-sT}\ind_{\{T>0\}}]=J(s)+O(\delta),\qquad
+ J(u)=\int_0^\infty e^{-uy}\varphi(y)\,dy.
+ \label{opt:strict-tail}
+\end{equation}
+The same \(O(\delta)\) estimate therefore covers an atom at \(T=0\).
+The integral gives \(J(u)\asymp(1+u)^{-1}\) and
+\(|(\log J)'(u)|\le C/(1+u)\) for \(u\ge0\).
+The error in \eqref{opt:strict-tail} is thus relative
+\(O(\delta(1+s))\); choosing \(a\) small makes it less than \(1/2\).
+Also \eqref{opt:tilted-scale} gives
+\(\log J(s)-\log J(x)=O(\delta^2x^2)\).
+Finally,
+\[
+ \Pp(S>x)=e^{K(t)-tx}\E_t[e^{-sT}\ind_{\{T>0\}}],\qquad
+ 1-\Phi(x)=e^{-x^2/2}J(x).
+\]
+Taking logarithms and using \eqref{opt:tilt-root} proves
+\eqref{opt:moderate-tail-formula}; the smaller
+\(O(\delta^2x^2)\) term is absorbed into its stated remainder.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{opt:skew-lower}]
+Use mutually independent coordinates and rows with the two-point law
+\begin{equation}
+ \Pp(X=B_n)=\frac1{B_n^2+1},\qquad
+ \Pp(X=-B_n^{-1})=\frac{B_n^2}{B_n^2+1}.
+ \label{opt:two-point-law}
+\end{equation}
+It has mean zero, variance one, and third moment
+\(\mu_{3,n}=B_n-B_n^{-1}\ge3B_n/4\). Put
+\[
+ \delta_n=B_n/\sqrt n,\qquad
+ x_n=\Phi^{-1}(e^{-1/p_n}),\qquad
+ t_n=1-\Phi(x_n),\qquad q_n=\Pp(W_{n,1}>x_n).
+\]
+Then \(x_n\sim\sqrt{2\log p_n}\), \(p_nt_n\to1\), and
+\(\delta_nx_n^3\to0\). Lemma~\ref{opt:moderate-tail} gives
+\begin{equation}
+ q_n=t_n\{1+s_n+o(r_n)\},\qquad
+ s_n=\frac{\mu_{3,n}x_n^3}{6\sqrt n}.
+ \label{opt:tail-linearization}
+\end{equation}
+Indeed its remainder divided by \(r_n\) is
+\(O(x_n^{-2}+\delta_nx_n)=o(1)\), and exponentiating introduces only
+\(O(r_n^2)=o(r_n)\). Moreover
+\(\liminf s_n/r_n\ge\sqrt2/4\).
+By exact independence, the discrepancy on the common-threshold orthant is
+\[
+ \Pp(\max_jW_{n,j}\le x_n)-\Pp(\max_jZ_{n,j}\le x_n)
+ =(1-q_n)^{p_n}-(1-t_n)^{p_n}.
+\]
+The mean value theorem makes this
+\(-p_nt_n(1-u_n)^{p_n-1}\{s_n+o(r_n)\}\), for \(u_n\) between
+\(q_n\) and \(t_n\). Since \(q_n/t_n\to1\), the leading prefactor
+converges to \(e^{-1}\). Thus, more precisely,
+\begin{equation}
+ \Pp(\max_jW_{n,j}\le x_n)-e^{-1}
+ =-\frac{\mu_{3,n}x_n^3}{6e\sqrt n}(1+o(1)).
+ \label{opt:exact-product-asymptotic}
+\end{equation}
+The choice of \(x_n\) makes \((1-t_n)^{p_n}=e^{-1}\) exactly.
+This avoids an additive \(O(p_n^{-1})\) error and hence a restriction
+on \(p_nr_n\). The uniform scalar estimate removes the separate growth
+restriction on \(B_n\). These two observations give the enlarged regime
+in the theorem, and \eqref{opt:lower-constant} follows.
+\end{proof}
+
+\begin{remark}[The minimal envelope]
+\label{opt:envelope-one}
+The same construction works for \(B_n\ge b_0>1\), with lower constant
+\(\sqrt2(1-b_0^{-2})/(3e)\). At \(B_n=1\), a centered unit-variance
+marginal bounded by one is necessarily Rademacher, so its third moment
+vanishes. The theorem does not assert this skewness lower bound at the
+minimal envelope. Even at this envelope, symmetric marginals need not
+imply the mixed-tensor cancellation required by Theorem~\ref{thm:zero-skew}; see
+the example at the start of Section~\ref{zs:section}.
+\end{remark}
+
+\subsection{Matching rates at a fixed correlation gap}
+\label{opt:matching}
+
+To compare the upper bound with the scale forced by skewness,
+divide it by \(\delta L^{3/2}\). Before truncation at one, the ratio is
+\[
+ 1+\sqrt{\kappa E_\kappa/L}.
+\]
+Thus the upper bound has baseline order whenever
+\(\kappa E_\kappa=O(L)\). For \(cL\ge1\), this condition reads
+\[
+ 1+\log_+\frac1{\delta L\sqrt c}=O(cL).
+\]
+These are sufficient conditions for the second term to be absorbed
+by the first. For a fixed gap \(c\ge c_0>0\), it suffices that
+\begin{equation}
+ 1+\log_+(1/\delta)\le K L
+ \label{opt:dimension-absorbs-log}
+\end{equation}
+for a fixed \(K\).
+
+To make the worst-case statements precise, fix \(c_0\in(0,1]\), and let
+\(M_n(c_0;B,p)\) be the supremum of \(\rh(W,Z)\) over independent
+centered observations \(X_1,\ldots,X_n\in\R^p\) satisfying
+\begin{equation}
+ \begin{gathered}
+ \max_i\norm{X_i}_\infty\le B\quad\text{a.s.},\qquad
+ W=n^{-1/2}\sum_iX_i,\qquad
+ \Sigma=n^{-1}\sum_i\E X_iX_i^{\mathsf T},\qquad
+ \Sigma_{jj}=1,\\
+ 1-\max_{j\ne k}|\Sigma_{jk}|\ge c_0,
+ \qquad Z\sim N(0,\Sigma),
+ \end{gathered}
+ \label{opt:minimax-class}
+\end{equation}
+with the usual convention for the gap when \(p=1\). This class allows
+nonidentically distributed rows. Its lower examples can nevertheless
+be chosen identically distributed.
+
+\begin{corollary}[Matching fixed-gap minimax rate]
+\label{opt:fixed-gap-minimax}
+Fix \(c_0\in(0,1]\). Suppose \(p_n\to\infty\), \(B_n\ge2\),
+\(r_n=B_n(\log p_n)^{3/2}/\sqrt n\to0\), and, for a fixed \(K\),
+\[
+ 1+\log_+(\sqrt n/B_n)\le K\log(ep_n).
+\]
+There are constants \(a_1>0\) absolute and
+\(a_2=a_2(c_0,K)<\infty\) such that, eventually,
+\begin{equation}
+ a_1r_n\le M_n(c_0;B_n,p_n)\le a_2r_n.
+ \label{opt:matching-minimax}
+\end{equation}
+In particular, for every fixed \(a>0\), if \(p_n\asymp n^a\) and
+\(B_n\ge2\) with \(B_n(\log n)^{3/2}/\sqrt n\to0\), then
+\begin{equation}
+ M_n(c_0;B_n,p_n)\asymp_{c_0,a}
+ \frac{B_n(\log n)^{3/2}}{\sqrt n}.
+ \label{opt:polynomial-dimension}
+\end{equation}
+The envelope may grow subject only to this vanishing-rate condition.
+\end{corollary}
+
+\begin{proof}
+Apply Theorem~\ref{thm:optimized} with \(\delta_n=B_n/\sqrt n\).
+On the class \eqref{opt:minimax-class}, \(\kappa\le c_0^{-1}\) and
+\(E_\kappa\le C(c_0)+\log_+(1/\delta_n)\). The stated condition
+therefore implies \(\kappa E_\kappa\le C(c_0,K)L_n\), giving the upper
+bound. The identity-covariance examples in
+Theorem~\ref{opt:skew-lower} belong to every such class and give the
+lower bound, since \(\log(ep_n)\sim\log p_n\). For polynomial dimension,
+\(\log_+(\sqrt n/B_n)\le\tfrac12\log n\), whereas
+\(\log(ep_n)\sim a\log n\), so the required logarithmic condition holds
+for every permitted growing envelope.
+\end{proof}
+
+\begin{remark}[A varying lower bound on the gap]
+\label{opt:varying-gap-class}
+More generally, replace the fixed \(c_0\) in the class definition by
+any sequence \(c_n\in(0,1]\). Set
+\[
+ \kappa_n^0=\min\{L_n,c_n^{-1}\},\qquad
+ E_n^0=1+\log_+\frac{\sqrt{\kappa_n^0}}{\delta_nL_n}.
+\]
+Under \(p_n\to\infty\), \(B_n\ge2\), \(r_n\to0\), and
+\(\kappa_n^0E_n^0\le K L_n\), one has
+\(M_n(c_n;B_n,p_n)\asymp_K r_n\). For the upper bound,
+\(\kappa E_\kappa\) is nondecreasing in \(\kappa\), and every covariance
+in the class has \(\kappa\le\kappa_n^0\). For the lower bound, the
+identity covariance belongs to every class. Thus the worst error over
+the covariance class has this rate; the argument does not determine the error at each prescribed covariance.
+\end{remark}
+
+The logarithmic condition \eqref{opt:dimension-absorbs-log} is needed
+above to compare rates, but the convergence threshold has a simpler
+form. To identify it, we first examine the two-point example at the
+critical scale \(r_n\asymp1\).
+
+\begin{proposition}[Critical maximum distribution]
+\label{opt:critical}
+For the independent coordinates \eqref{opt:two-point-law}, suppose
+\(p_n\to\infty\), \(B_n\ge2\),
+\[
+ r_n=\frac{B_n(\log p_n)^{3/2}}{\sqrt n}\longrightarrow r\in(0,\infty),
+ \qquad 1-B_n^{-2}\longrightarrow\alpha\in[3/4,1].
+\]
+At \(x_n=\Phi^{-1}(e^{-1/p_n})\),
+\begin{equation}
+ \Pp(\max_jW_{n,j}\le x_n)
+ \longrightarrow
+ \exp\!\left\{-\exp\!\left(\frac{\sqrt2}{3}\alpha r\right)\right\},
+ \qquad \Pp(\max_jZ_{n,j}\le x_n)=e^{-1}.
+ \label{opt:critical-maxcdf}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Put \(\delta_n=B_n/\sqrt n\), \(q_n=\Pp(W_{n,1}>x_n)\), and
+\(t_n=1-\Phi(x_n)\). Here \(\delta_nx_n^3=O(1)\), while
+\(\delta_n(1+x_n)+\delta_n^2x_n^4\to0\).
+Lemma~\ref{opt:moderate-tail} gives
+\(q_n/t_n\to\exp(\sqrt2\alpha r/3)\). Since \(p_nt_n\to1\), exact
+independence gives
+\((1-q_n)^{p_n}\to\exp\{-\exp(\sqrt2\alpha r/3)\}\).
+\end{proof}
+
+\begin{theorem}[Exact uniform consistency threshold at a fixed gap]
+\label{opt:consistency}
+For every fixed \(c_0\in(0,1]\), every integer dimension sequence
+\(p_n\ge1\), and every envelope sequence \(B_n\ge2\), put
+\(\delta_n=B_n/\sqrt n\) and \(L_n=\log(ep_n)\). Then
+\begin{equation}
+ M_n(c_0;B_n,p_n)\longrightarrow0
+ \quad\Longleftrightarrow\quad
+ \delta_nL_n^{3/2}\longrightarrow0.
+ \label{opt:consistency-iff}
+\end{equation}
+For a uniformly bounded envelope \(B_n\ge2\), this is equivalently
+\(\log p_n=o(n^{1/3})\).
+\end{theorem}
+
+\begin{proof}
+For sufficiency, Theorem~\ref{thm:optimized} bounds the error by a
+constant depending only on \(c_0\) times
+\[
+ \delta_nL_n^{3/2}
+ +t_n\sqrt{1+\log_+(C(c_0)/t_n)},\qquad t_n=\delta_nL_n.
+\]
+If the first term tends to zero, then \(t_n\to0\), so the second term
+also tends to zero. No condition such as
+\eqref{opt:dimension-absorbs-log} is needed for consistency.
+
+For necessity, first suppose \(\delta_n\) does not tend to zero.
+The binomial-atom argument in
+Proposition~\ref{opt:rank-one-minimax} below, used in one coordinate
+and independently in the others, gives an identity-covariance example
+with error at least \(a_0\min\{1,\delta_n\}\). Thus the worst-case error
+cannot tend to zero. Otherwise \(\delta_n\to0\). If
+\(\delta_nL_n^{3/2}\) fails to tend to zero, pass to a subsequence on
+which it is at least \(\varepsilon>0\). Then \(p_n\to\infty\), and
+\[
+ \log p_n\ge\tfrac12\varepsilon^{2/3}\delta_n^{-2/3}
+\]
+eventually. Set \(a=\varepsilon^{2/3}/4\) and
+\(m_n=\lfloor\exp(a\delta_n^{-2/3})\rfloor\le p_n\).
+Use \eqref{opt:two-point-law} independently in all \(p_n\) coordinates,
+and consider a rectangle constraining only the first \(m_n\).
+Pass, if needed, to a further subsequence on which
+\(1-B_n^{-2}\to\alpha\in[3/4,1]\). For these \(m_n\) coordinates,
+\(\delta_n(\log m_n)^{3/2}\to a^{3/2}>0\), so
+Proposition~\ref{opt:critical} gives a strictly positive limiting
+orthant discrepancy. The unconstrained coordinates do not change it.
+This contradicts convergence of the worst-case error to zero and proves
+necessity.
+\end{proof}
+
+\subsection{Rank-one optimality and singular embeddings}
+\label{opt:rank-and-singularity}
+
+\begin{proposition}[Nonasymptotic rank-one minimax rate]
+\label{opt:rank-one-minimax}
+For every \(n\ge1\), \(B\ge1\), and dimension \(p\ge1\), let
+\(M_n^{(1)}(B,p)\) be the supremum of rectangle error over independent
+centered observations with envelope \(B\), unit average marginal
+variances, and covariance rank one. There are absolute constants
+\(a_0,A_0>0\) such that
+\begin{equation}
+ a_0\min\{1,B/\sqrt n\}
+ \le M_n^{(1)}(B,p)
+ \le A_0\min\{1,B/\sqrt n\}.
+ \label{opt:rank-one-minimax-rate}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The upper bound is Proposition~\ref{red:rank-one}. For the lower bound,
+let \(X_1,\ldots,X_n\) be independent with law
+\eqref{opt:two-point-law}, replacing \(B_n\) by \(B\), and repeat the
+same scalar in each coordinate, with any fixed choice of signs.
+The normalized covariance has rank one and unit diagonal. The scalar
+sum is an affine function of \(N\sim\operatorname{Bin}(n,\pi)\), where
+\(\pi=(B^2+1)^{-1}\). Its binomial variance satisfies
+\(v=n\pi(1-\pi)\le n/B^2\). Chebyshev's inequality gives probability
+at least \(3/4\) to an interval of radius \(2\sqrt v\), which contains
+at most \(4\sqrt v+2\) integers. Hence
+\[
+ \max_k\Pp(N=k)\ge\frac{3/4}{4\sqrt v+2}
+ \ge a_0\min\{1,B/\sqrt n\}.
+\]
+Intervals shrinking around an atom of this size have Gaussian
+probability tending to zero. Constrain one observed coordinate to such
+an interval and leave the others unrestricted. The rectangle distance
+is therefore at least this atom size. The argument includes \(B=1\),
+all parities of \(n\), and the nonvanishing-error range \(B\gtrsim\sqrt n\).
+\end{proof}
+
+\begin{proposition}[A singular lower example with a small gap]
+\label{opt:singular-embedding}
+The leading lower rate in Theorem~\ref{opt:skew-lower} persists for
+singular covariance with no equal or opposite coordinate pairs, and
+with arbitrarily small positive correlation gap. The lower rate has no
+additional factor depending on the gap.
+\end{proposition}
+
+\begin{proof}
+Start with \(d\ge2\) independent coordinates of the construction in
+Theorem~\ref{opt:skew-lower}. For any \(0<\epsilon\le1\), append the
+coordinate
+\[
+ Y_i=\left(X_{i1},\ldots,X_{id},
+       \frac{X_{i1}+\epsilon X_{i2}}{\sqrt{1+\epsilon^2}}\right).
+\]
+The covariance has rank \(d\) in dimension \(d+1\) and unit diagonal.
+Its only nonzero off-diagonal correlations are
+\(1/\sqrt{1+\epsilon^2}\) and
+\(\epsilon/\sqrt{1+\epsilon^2}\), between the last coordinate and
+the first and second, respectively. In particular no pair is equal or
+opposite, and
+\[
+ c_\epsilon=1-\frac1{\sqrt{1+\epsilon^2}}>0,
+ \qquad c_\epsilon\sim\epsilon^2/2\quad(\epsilon\downarrow0).
+\]
+The row envelope is
+\(B_Y=B(1+\epsilon)/\sqrt{1+\epsilon^2}\in[B,\sqrt2B]\).
+Rectangles ignoring the last coordinate reproduce every rectangle in
+the original \(d\) coordinates, so
+\(\rh(W_Y,Z_Y)\ge\rh(W_X,Z_X)\). Thus, along the vanishing-rate
+sequences of Theorem~\ref{opt:skew-lower}, the lower rate is still an
+absolute constant times
+\((B_Y/\sqrt n)\{\log(d+1)\}^{3/2}\). One may choose
+\(\epsilon=\epsilon_n\downarrow0\) arbitrarily fast. No coordinates
+are removed by the reduction in Section~\ref{sec:coordinate-reduction}.
+\end{proof}
+
+\subsection{The remaining gaps}
+\label{opt:remaining}
+
+The matching regimes now have sharp dependence on sample size,
+dimension, and envelope: Theorem~\ref{opt:skew-lower} supplies the
+lower bound, and Corollary~\ref{opt:fixed-gap-minimax} supplies the upper
+bound. Theorem~\ref{opt:consistency} identifies the fixed-gap convergence
+threshold even outside those regimes. Rank one is also settled, for
+all \(n,p,B\), by Proposition~\ref{opt:rank-one-minimax}.
+
+The unrestricted factor \(\sqrt{D_L}\) and the additional dependence
+on the correlation gap remain unresolved. The singular example above
+forces \(\delta L^{3/2}\), but gives no factor involving
+\(c^{-1/2}\), \(\sqrt{E_\kappa}\), or \(\sqrt{D_L}\). The
+identity-covariance example likewise leaves open the optimal rate at a
+prescribed covariance matrix or a prescribed nontrivial rank.
+Proposition~\ref{red:coordinate-reduction} allows repeated or opposite
+coordinates to be removed without changing rectangle distance.
+This expresses the lower logarithm in the number of distinct coordinate
+directions; it does not justify replacing that number by covariance
+rank.
+
+There is also an error-rate gap when the dimension grows too slowly
+to satisfy \eqref{opt:dimension-absorbs-log}. The issue is uniformity
+as dimension and covariance vary. For fixed \(p\) and fixed positive
+definite \(\Sigma\), whitening and the classical convex-set
+Berry--Esseen inequality give
+\(\rh(W,Z)\le C_{p,\Sigma}\delta\). Indeed
+\[
+ \sum_i\E\norm{\Sigma^{-1/2}\xi_i}_2^3
+ \le \sqrt p\,\norm{\Sigma^{-1/2}}_{\op}\delta
+       \sum_i\E\norm{\Sigma^{-1/2}\xi_i}_2^2
+ =p^{3/2}\norm{\Sigma^{-1/2}}_{\op}\delta.
+\]
+The constant here may depend on both \(p\) and the smallest
+eigenvalue of \(\Sigma\), so it does not resolve the uniform question.
+
+Finally, the discussion of near-optimal rates for unrestricted covariance
+in the introduction of \cite{CCK} is a conjecture. Lower bounds for
+strong sup-norm coupling, including the empirical-process comparison
+mentioned there, do not by themselves give lower bounds for
+rectangle-probability distance.
+
+
+% Source: coordinate_reductions
+\section{Exact coordinate reduction and the rank-one case}
+\label{sec:coordinate-reduction}
+
+A covariance matrix may have a zero correlation gap simply because two
+coordinates are copies, with the same or opposite signs. Removing those
+copies reduces the dimension in the bounds and leaves rectangle distance
+unchanged. We prove this assertion first, then record the reduced bounds
+and the scalar exception at rank one.
+
+\begin{proposition}[Exact reduction of equal or opposite coordinates]
+\label{red:coordinate-reduction}
+Under \eqref{eq:setup}, define a relation on \(\{1,\ldots,p\}\) by
+\[
+ j\sim k\quad\Longleftrightarrow\quad |\Sigma_{jk}|=1.
+\]
+This is an equivalence relation.  Let \(C_1,\ldots,C_q\) be its classes,
+choose \(j_a\in C_a\), and put
+\[
+ \begin{gathered}
+ \varepsilon_j=\Sigma_{j,j_a}\in\{-1,1\}\quad(j\in C_a),
+ \qquad \bar\Sigma=\Cov(\bar W),\\
+ \bar\xi_i=(\xi_{i,j_a})_{a=1}^q,\quad
+ \bar W=(W_{j_a})_{a=1}^q,\quad
+ \bar Z=(Z_{j_a})_{a=1}^q.
+ \end{gathered}
+\]
+Then, simultaneously for all applicable indices,
+\begin{equation}
+ \xi_{ij}=\varepsilon_j\xi_{i,j_a},\qquad
+ W_j=\varepsilon_j W_{j_a},\qquad
+ Z_j=\varepsilon_j Z_{j_a}
+ \quad\text{a.s.}\quad(j\in C_a).
+ \label{red:relations}
+\end{equation}
+The reduced summands satisfy the same normalized assumptions with the
+same \(\delta\), and
+\begin{equation}
+ \operatorname{rank}(\bar\Sigma)=\operatorname{rank}(\Sigma),
+ \qquad
+ \rh(W,Z)=\rh(\bar W,\bar Z).
+ \label{red:rank-distance}
+\end{equation}
+Consequently the relevant dimension and correlation gap after reduction
+are
+\begin{equation}
+ L_* =\log(eq),\qquad
+ c_*=
+ \begin{cases}
+  1-\displaystyle\max_{a\ne b}|\bar\Sigma_{ab}|,&q>1,\\[0.4em]
+  1,&q=1,
+ \end{cases}
+ \qquad c_*>0.
+ \label{red:parameters}
+\end{equation}
+Every rectangle bound proved under the normalized assumptions can
+therefore be applied in dimension \(q\), with \(L_*\) and \(c_*\), and
+then transferred to \((W,Z)\) without any loss.
+\end{proposition}
+
+\begin{proof}
+For any \(j,k\) with \(|\Sigma_{jk}|=1\), write
+\(\varepsilon=\Sigma_{jk}\).  Independence of the centered summands gives
+\[
+ 0=\Var(W_j-\varepsilon W_k)
+  =\sum_{i=1}^n\E(\xi_{ij}-\varepsilon\xi_{ik})^2.
+\]
+Every term is nonnegative, so
+\(\xi_{ij}=\varepsilon\xi_{ik}\) almost surely for each \(i\).
+In particular \(W_j=\varepsilon W_k\) almost surely.  Reflexivity and
+symmetry of \(\sim\) are immediate.  If \(j\sim k\) and \(k\sim\ell\),
+these identities imply
+\(W_j=(\Sigma_{jk}\Sigma_{k\ell})W_\ell\), whence
+\(|\Sigma_{j\ell}|=1\).  Thus \(\sim\) is transitive.  The same
+zero-variance argument applied to \(Z_j-\varepsilon Z_k\) proves the
+Gaussian identity in \eqref{red:relations}.  There are only finitely many
+indices, so all the identities hold on common probability-one events.
+
+The vectors \(\bar\xi_i\) retain independence, centering and the bound
+\(\norm{\bar\xi_i}_\infty\le\delta\).  Also
+\(\bar\Sigma_{aa}=1\).  Let \(T\) be the \(p\times q\) matrix defined by
+\((Tx)_j=\varepsilon_j x_a\) for \(j\in C_a\), and let \(P\) select
+the representative coordinates, so that \(PT=I_q\).  Then
+\[
+ \Sigma=T\bar\Sigma T^{\mathsf T},\qquad
+ \bar\Sigma=P\Sigma P^{\mathsf T}.
+\]
+The two elementary rank inequalities prove rank equality.  Distinct
+representatives belong to different equivalence classes, so
+\(|\bar\Sigma_{ab}|<1\) for \(a\ne b\); this proves \(c_*>0\).
+
+For completeness, the rectangle identity is exact even with unbounded
+intervals and arbitrary choices of included endpoints.  Write
+\(A=\prod_{j=1}^p I_j\), where each \(I_j\) is an interval, and define
+\[
+ B_A=\prod_{a=1}^q
+       \left(\bigcap_{j\in C_a}\varepsilon_j I_j\right),
+ \qquad
+ \varepsilon I=\{\varepsilon x:x\in I\}.
+\]
+Each factor is an interval, possibly empty or a singleton; reflection
+transports endpoint inclusion exactly and interchanges infinite
+endpoints when the sign is negative.  Since \(T^{-1}A=B_A\),
+\eqref{red:relations} yields
+\[
+ \Pp(W\in A)=\Pp(\bar W\in B_A),\qquad
+ \Pp(Z\in A)=\Pp(\bar Z\in B_A).
+\]
+An empty factor makes both probabilities zero.  This proves
+\(\rh(W,Z)\le\rh(\bar W,\bar Z)\).  Conversely, for any reduced rectangle
+\(B=\prod_a J_a\), take \(I_{j_a}=J_a\) and \(I_j=\R\) at all other
+coordinates.  Then \(T^{-1}A=B\), proving the reverse inequality.
+If rectangles are initially defined using only finite closed intervals,
+the same conclusion follows by monotone approximation: every interval
+with any endpoint convention is an increasing union of finite closed
+intervals (and empty intervals give zero discrepancy).  Continuity of
+probability from below preserves the supremum in the definition of
+rectangle distance.
+\end{proof}
+
+\begin{proposition}[Sharp scalar reduction at rank one]
+\label{red:rank-one}
+Under the assumptions of Proposition~\ref{red:coordinate-reduction},
+\(\operatorname{rank}(\Sigma)=1\) if and only if \(q=1\).  In this case,
+\begin{equation}
+ \rh(W,Z)\le C\min\{1,\delta\}.
+ \label{red:scalar-rate}
+\end{equation}
+Thus no dimension logarithm or smoothing logarithm is needed at rank
+one, irrespective of the original number of coordinates.
+\end{proposition}
+
+\begin{proof}
+If \(q=1\), rank preservation and \(\bar\Sigma=(1)\) give
+\(\operatorname{rank}(\Sigma)=1\).  Conversely, a positive semidefinite
+rank-one matrix with unit diagonal has the form
+\(\Sigma=ss^{\mathsf T}\), where every \(s_j\in\{-1,1\}\).
+Hence every pair of coordinates lies in the same equivalence class.
+
+When \(q=1\), write \(S=\bar W=\sum_i\eta_i\), with
+\(\eta_i=\xi_{i,j_1}\).  Then
+\[
+ \sum_i\E\eta_i^2=1,\qquad
+ \sum_i\E|\eta_i|^3
+ \le\delta\sum_i\E\eta_i^2=\delta.
+\]
+The scalar Berry--Esseen inequality gives
+\[
+ \sup_{t\in\R}|\Pp(S\le t)-\Phi(t)|\le C\delta,
+\]
+where \(\Phi\) is the standard normal distribution function.  The same
+bound holds for strict inequalities by taking limits and using
+continuity of \(\Phi\).  Subtracting the two endpoint distribution
+functions bounds the discrepancy on every interval by \(2C\delta\),
+including singleton intervals and arbitrary endpoint conventions.
+Infinite endpoints are obtained by limits.  Now use
+\eqref{red:rank-distance} and the trivial bound \(\rh\le1\).
+\end{proof}
+
+\begin{corollary}[Bounds in the reduced coordinates]\label{cor:reduced}
+In the notation of Proposition~\ref{red:coordinate-reduction}, define
+\[
+ L_*=\log(eq),\qquad
+ c_*=\begin{cases}
+ 1-\max_{a\ne b}|\bar\Sigma_{ab}|,&q>1,\\
+ 1,&q=1,
+ \end{cases}
+ \qquad \kappa_*=\min\{L_*,c_*^{-1}\}.
+\]
+Then \(c_*>0\), and
+\begin{equation}
+ \rh(W,Z)\le C\min\!\left\{1,
+ \delta\left[L_*^{3/2}+L_*\sqrt{\kappa_*E_*}\right]\right\},
+ \qquad E_*=1+\log_+\frac{\sqrt{\kappa_*}}{\delta L_*}.
+ \label{eq:reduced-bound}
+\end{equation}
+The conclusions of Corollary~\ref{cor:forms} likewise hold with
+\(L,c,D_L\) replaced by \(L_*,c_*,D_*\), where
+\(D_*=1+\log_+(1/(\delta\sqrt{L_*}))\).
+When \(q=1\), Proposition~\ref{red:rank-one} improves these bounds to
+\(C\min\{1,\delta\}\).
+Under \eqref{eq:zero-third}, the term \(L_*^{3/2}\) can be omitted
+from \eqref{eq:reduced-bound} by Theorem~\ref{thm:zero-skew}.
+\end{corollary}
+
+\begin{proof}[Proof of Corollary~\ref{cor:reduced}]
+Proposition~\ref{red:coordinate-reduction} gives independent centered
+reduced rows bounded by \(\delta\), unit diagonal covariance, a positive
+reduced correlation gap, and the exact distance equality
+\eqref{red:rank-distance}. Apply Theorem~\ref{thm:optimized} and
+Corollary~\ref{cor:forms} in dimension \(q\).
+The rank-one improvement is Proposition~\ref{red:rank-one}.
+If \eqref{eq:zero-third} holds, its reduced tensor is zero as well;
+apply Theorem~\ref{thm:zero-skew} to omit the baseline term.
+\end{proof}
+
+
+
+% Source: further_calculations
+\section{The signed remainder and the remaining logarithm}
+\label{sup:status}
+
+The remaining question is whether the logarithmic loss in
+Theorem~\ref{thm:optimized} can be removed. The proposed bound is
+\begin{equation}
+ \rh(W,Z)\le C\min\{1,\delta L^{3/2}\}.
+ \tag{T}\label{sup:target}
+\end{equation}
+The interpolation formula gives a precise way to state the missing
+estimate. As we shall see, that estimate is equivalent to
+\eqref{sup:target}, up to an error of the desired order; the reduction
+alone supplies no further cancellation. Dimensions and normals may be
+taken after the coordinate reduction in
+Section~\ref{sec:coordinate-reduction}.
+
+Choose sufficiently large absolute constants \(a_*,d_0\), and set
+\[
+ h=a_*\delta,\qquad \tau=d_0\delta^2L<\frac12.
+\]
+For a rectangle \(A\), let \(F\) be its selector on the covariance
+support, and write \(P_A(\lambda)=\E F(U_\lambda)\). Keep the three
+remainder terms from \eqref{an:A}, \eqref{an:B}, and \eqref{an:C}, and put
+\begin{equation}
+ R_{4,A,h}(\lambda)=\sum_i
+       \{\mathcal A_i(\lambda)+\mathcal B_i(\lambda)+\mathcal C_i(\lambda)\},
+ \qquad I_A=\int_\tau^1 R_{4,A,h}(\lambda)\dd\lambda.
+ \label{sup:I}
+\end{equation}
+At this fixed smoothing scale, the missing estimate is
+\begin{equation}
+ \sup_{A\in\cR}|I_A|\le C\delta L^{3/2}.
+ \tag{M}\label{sup:M}
+\end{equation}
+The absolute value is taken after integration in time. This order
+matters: the pointwise absolute bound from the main proof loses a
+logarithm.
+
+\begin{proposition}[Reduction to the signed remainder]
+\label{sup:reduction}
+Uniformly over rectangles \(A\),
+\begin{equation}
+ I_A=\Pp(Z\in A)-\Pp(W\in A)+E_A,
+ \qquad |E_A|\le C\delta L^{3/2}.
+ \label{sup:exact-reduction}
+\end{equation}
+Consequently,
+\begin{equation}
+ \left|\sup_{A\in\cR}|I_A|-\rh(W,Z)\right|
+ \le C\delta L^{3/2}.
+ \label{sup:distance-reduction}
+\end{equation}
+Up to changes in its absolute constant, \eqref{sup:M} is equivalent to
+\begin{equation}
+ \sup_{A\in\cR}
+ \left|\int_\tau^1\sum_i
+       \{\mathcal A_i(\lambda)+\mathcal B_i(\lambda)\}\dd\lambda\right|
+ \le C\delta L^{3/2}.
+ \tag{$M_{AB}$}\label{sup:MAB}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Integrating the exact identity \eqref{an:fourth-identity} gives
+\begin{equation}
+ I_A=P_A(1)-P_A(\tau)
+       +\frac13\int_\tau^1\lambda
+          \sum_i\E D^3F(U_\lambda)[\zeta_i,\zeta_i,\zeta_i]
+          \dd\lambda.
+ \label{sup:integrated-identity}
+\end{equation}
+The cubic estimate \eqref{an:cubic-bound} is
+\[
+ \left|\frac\lambda3
+       \sum_i\E D^3F(U_\lambda)[\zeta_i,\zeta_i,\zeta_i]\right|
+ \le C\delta L^{3/2},\qquad \lambda\ge\tau.
+\]
+Thus the last term of \eqref{sup:integrated-identity} has absolute
+value at most \(C\delta L^{3/2}\). The early estimate
+\eqref{an:early}, at \(h=a_*\delta\), gives
+\[
+ |P_A(\tau)-P_A(0)|
+ \le C\sqrt L\left\{\frac{\delta\tau^2}{h^2}
+                        +\frac{\delta^2\tau}{h^3}\right\}
+ \le C\delta L^{3/2}(1+\delta^2L)
+ \le C\delta L^{3/2}.
+\]
+The endpoint errors in \eqref{eq:endpoint-min} are also
+\(O(\delta L^{3/2})\), since \(\kappa\le L\).
+The path endpoints are \(BU_0\overset d=W\) and
+\(BU_1\overset d=Z\), so these estimates prove
+\eqref{sup:exact-reduction}. The inequality
+\(\big||x|-|y|\big|\le|x-y|\), followed by a supremum, proves
+\eqref{sup:distance-reduction}.
+
+It remains to remove \(\mathcal C_i\). Its coefficient in
+\eqref{an:C} contains an extra factor \(\lambda\), so the shifted-base estimate
+that proves \eqref{an:remainder} yields
+\begin{equation}
+ \left|\sum_i\mathcal C_i(\lambda)\right|
+ \le\frac{C\delta^2}{h}L^{3/2},\qquad \lambda\ge\tau.
+ \label{sup:C-bound}
+\end{equation}
+At \(h=a_*\delta\), its time integral, even with an absolute value
+at each time, is at most \(C\delta L^{3/2}\). Removing this controlled
+term proves the equivalence with \eqref{sup:MAB}.
+\end{proof}
+
+When \(d_0\delta^2L\ge1/2\), the target follows from the trivial
+bound \(\rh\le1\): indeed, \(L\ge1\) gives
+\(\delta L^{3/2}\ge1/\sqrt{2d_0}\).
+Thus proving \eqref{sup:M} in the stated range would prove the global
+bound \eqref{sup:target}, and conversely. In rank one,
+Proposition~\ref{red:rank-one} in
+Section~\ref{sec:coordinate-reduction} already gives the stronger scalar
+bound, so \eqref{sup:M} holds there.
+
+What the present theorem gives is
+\[
+ \sup_A|I_A|
+ \le C\delta\left[L^{3/2}+L\sqrt{\kappa E_\kappa}\right].
+\]
+This follows by combining Theorem~\ref{thm:optimized} with
+Proposition~\ref{sup:reduction}. Improving it to \eqref{sup:MAB} requires
+a new estimate for the signed integral.
+
+\subsection{A time primitive and the derivative of the law}
+\label{sup:primitive}
+
+At \(\lambda=0\), the unresolved scalar kernels are
+\[
+ k_0(s)=\frac12s(1-s)^2,
+ \qquad \frac12(1-s),\qquad 0\le s\le1.
+\]
+Both are nonnegative, so the scalar kernels alone do not cancel the
+small-time singularity. Any such cancellation must also use the
+averaged fourth derivatives.
+
+An exact primitive for the \(\mathcal A_i\) kernel suggests an integration
+by parts. It also shows why the resulting boundary term is not the
+whole answer.
+Put \(a_\lambda=1+\lambda\) and
+\(q_\lambda=(1-\lambda)/a_\lambda^2\), and change variables
+\(\vartheta=a_\lambda s\) in \eqref{an:A}. Then
+\begin{equation}
+ \mathcal A_i(\lambda)=\int_0^{a_\lambda}
+  \partial_\lambda\left\{
+    \frac{q_\lambda(a_\lambda-\vartheta)^3}{6}\right\}
+  \E D^4F(H_{i,\lambda}+\vartheta\zeta_i)
+       [\zeta_i,\zeta_i,\zeta_i,\zeta_i]\dd\vartheta.
+ \label{sup:primitive-identity}
+\end{equation}
+The partial derivative holds \(\vartheta\) fixed. Indeed,
+\[
+ \left.\partial_\lambda
+   \frac{q_\lambda(a_\lambda-\vartheta)^3}{6}
+ \right|_{\vartheta=a_\lambda s}
+ =\frac{k_\lambda(s)}{a_\lambda},
+\]
+where \(k_\lambda\) is \eqref{an:kernel}.
+
+To carry out this integration by parts, define
+\[
+ g_i(\lambda,\vartheta)
+ =\E D^4F(H_{i,\lambda}+\vartheta\zeta_i)
+        [\zeta_i,\zeta_i,\zeta_i,\zeta_i],
+ \qquad
+ J_i(\lambda)=\int_0^{a_\lambda}
+     \frac{q_\lambda(a_\lambda-\vartheta)^3}{6}
+     g_i(\lambda,\vartheta)\dd\vartheta.
+\]
+The kernel vanishes at the moving upper endpoint, so
+\begin{equation}
+ \int_\tau^1\mathcal A_i(\lambda)\dd\lambda
+ =J_i(1)-J_i(\tau)
+ -\int_\tau^1\int_0^{a_\lambda}
+   \frac{q_\lambda(a_\lambda-\vartheta)^3}{6}
+   \partial_\lambda g_i(\lambda,\vartheta)
+   \dd\vartheta\dd\lambda.
+ \label{sup:primitive-correction}
+\end{equation}
+Here \(J_i(1)=0\), but the last term remains. It differentiates the law
+of the deleted-row base \(H_{i,\lambda}\). If
+\(M_i=\E\zeta_i\zeta_i^\top\), then
+\(\Cov(H_{i,\lambda})=I_r-(1-\lambda)M_i\) and its covariance
+derivative is \(M_i\). Differentiating the non-Gaussian rows also
+produces mixed terms. Thus one cannot replace the integral of
+\(\mathcal A_i\) by its boundary terms without controlling this change
+of law. We have not bounded the additional signed contribution at the
+scale required by \eqref{sup:MAB}.
+
+\subsection{Where an early absolute value loses a logarithm}
+\label{sup:conditional-example}
+
+The next example isolates the effect of taking an absolute value
+before averaging over the base variable. The total law will be
+Gaussian at every time, yet the conditional absolute value will
+produce a logarithm. Put
+\[
+ \beta(t)=\frac{e^t}{(1+e^t)^2},\qquad
+ V_\lambda\sim N(0,1-\lambda),\qquad G\sim N(0,1),
+\]
+independently, and define
+\[
+ M_{\lambda,h}(v)=\E_G\left[(G^2-1)
+       \beta\left(\frac{v+\sqrt\lambda G}{h}\right)\right].
+\]
+There exist absolute constants \(c,C,M>0\) such that, for all
+sufficiently small \(h\),
+\begin{equation}
+ ch\log(1/h)
+ \le\int_{Mh^2}^{1/2}
+      \frac{\E|M_{\lambda,h}(V_\lambda)|}{\lambda}\dd\lambda
+ \le Ch\log(1/h).
+ \label{sup:conditional-log}
+\end{equation}
+
+To verify this, set \(\sigma=\sqrt\lambda\), let \(\varphi_1\)
+be the standard normal density, and put
+\(f(x)=(x^2-1)\varphi_1(x)\). A change of variables gives
+\begin{equation}
+ M_{\lambda,h}(v)
+ =\frac h\sigma\int_\R
+       f\left(\frac{hs-v}{\sigma}\right)\beta(s)\dd s.
+ \label{sup:conditional-convolution}
+\end{equation}
+The function \(f\) is Lipschitz,
+\(\int\beta=1\), and \(\int|s|\beta(s)\dd s<\infty\).
+Uniformly for \(|v|\le\sigma/4\), the integral in
+\eqref{sup:conditional-convolution} differs from \(f(-v/\sigma)\)
+by at most \(Ch/\sigma\). The latter function is bounded above by
+a negative absolute constant on this range. Choosing \(M\) large
+therefore gives
+\[
+ M_{\lambda,h}(v)\le-\frac{ch}{\sigma},
+ \qquad |v|\le\sigma/4,\quad \lambda\ge Mh^2.
+\]
+For \(\lambda\le1/2\),
+\(\Pp(|V_\lambda|\le\sigma/4)\ge c\sigma\), proving
+\(\E|M_{\lambda,h}(V_\lambda)|\ge ch\).
+Conversely, the density of \(V_\lambda\) is bounded above by an
+absolute constant for \(\lambda\le1/2\). Integrating the absolute
+value in \eqref{sup:conditional-convolution} with respect to \(v\)
+and using \(\int|f|<\infty\) gives
+\(\E|M_{\lambda,h}(V_\lambda)|\le Ch\).
+Integration of \(\dd\lambda/\lambda\) proves
+\eqref{sup:conditional-log}.
+
+Yet \(U=V_\lambda+\sqrt\lambda G\) is exactly standard Gaussian
+for every \(\lambda\). Gaussian conditioning gives
+\[
+ \E[G^2-1\mid U]=\lambda(U^2-1),\qquad
+ \E M_{\lambda,h}(V_\lambda)
+ =\lambda\E[(U^2-1)\beta(U/h)].
+\]
+The expectation on the right is \(O(h)\), by the substitution
+\(U=hs\) and integrability of \(\beta\). Hence
+\begin{equation}
+ \int_{Mh^2}^{1/2}
+ \frac{|\E M_{\lambda,h}(V_\lambda)|}{\lambda}\dd\lambda
+ \le Ch.
+ \label{sup:signed-no-log}
+\end{equation}
+Thus the logarithm in \eqref{sup:conditional-log} disappears when
+averaging precedes the absolute value. The example does not contradict
+\eqref{sup:M} or \eqref{sup:target}; it identifies cancellation that a
+bound on the conditional absolute value cannot retain.
+
+\section{Two-face curvature in dimension two}
+\label{sup:curvature}
+
+A second approach keeps track of the angle between two faces. The
+angle factor can be bounded by a positive curvature quantity, and in
+dimension two we can bound its expectation uniformly. We give that
+estimate here to record what the positive curvature argument supplies.
+The later transport argument in the companion investigations~\cite{Cancellation}
+controls the planar signed remainder; its extension to growing rank
+remains open.
+
+Let \(u_1,\ldots,u_m\in\R^r\) be unit vectors and let
+\(a_1,\ldots,a_m\) be arbitrary thresholds. Define
+\[
+ \Psi(x)=h\log\left(1+\sum_{\alpha=1}^m
+                    e^{(u_\alpha\cdot x-a_\alpha)/h}\right),
+ \qquad H(x)=\nabla^2\Psi(x).
+\]
+Use the selector probabilities
+\(\pi_0=F\),
+\(\pi_\alpha=Fe^{(u_\alpha\cdot x-a_\alpha)/h}\), and set
+\(u_0=0\). With
+\[
+ v=\sum_{\alpha=0}^m\pi_\alpha u_\alpha,\qquad
+ C_\pi=\sum_{\alpha=0}^m\pi_\alpha
+             (u_\alpha-v)(u_\alpha-v)^\top,
+\]
+we have \(C_\pi=hH\). For a symmetric matrix \(B\), put
+\[
+ \sigma_2(B)=\frac{(\tr B)^2-\tr(B^2)}2,
+ \qquad
+ \norm{z\wedge w}^2=\norm z^2\norm w^2-(z\cdot w)^2.
+\]
+The weighted-simplex identity is
+\begin{equation}
+ \sigma_2(C_\pi)
+ =\sum_{0\le i<j<k\le m}
+     \pi_i\pi_j\pi_k
+       \norm{(u_j-u_i)\wedge(u_k-u_i)}^2.
+ \label{sup:simplex}
+\end{equation}
+Indeed, each principal two-dimensional covariance determinant equals
+the determinant of the augmented moment matrix of
+\((1,u_{\alpha,s},u_{\alpha,t})\). The Cauchy--Binet formula expands
+this determinant into weighted squared triangle determinants.
+Summing over \(s<t\) gives \eqref{sup:simplex}. Retaining the
+terms with \(i=0\) yields, in every support dimension,
+\begin{equation}
+ F\sum_{\alpha,\beta=1}^m
+    \pi_\alpha\pi_\beta\{1-(u_\alpha\cdot u_\beta)^2\}
+ \le 2\sigma_2(C_\pi)=2h^2\sigma_2(H).
+ \label{sup:angle-curvature}
+\end{equation}
+
+\begin{proposition}[Rank-two curvature]
+\label{sup:rank-two}
+Let \(r=2\), and suppose
+\[
+ S=\sum_i\eta_i+G_0,\qquad \Cov(S)=I_2,
+ \qquad \max_\alpha|u_\alpha\cdot\eta_i|\le\delta
+ \quad\text{a.s.},
+\]
+where the \(\eta_i\) are independent and centered, and \(G_0\)
+is an independent centered Gaussian vector. The Gaussian term is
+optional and may be degenerate. If \(h\ge C\delta\), then,
+uniformly over all thresholds and normal angles,
+\begin{equation}
+ \E\det H(S)\le C,
+ \qquad
+ \E\left[F(S)\sum_{\alpha,\beta=1}^m
+   \pi_\alpha(S)\pi_\beta(S)
+       \{1-(u_\alpha\cdot u_\beta)^2\}\right]\le Ch^2.
+ \label{sup:rank-two-bound}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+We use a small-ball estimate to compare the expectation with a
+Lebesgue integral, then bound that integral by the area of a gradient
+image.
+
+For the small-ball estimate, suppose
+\(T=\sum_iZ_i+G\), where the centered rows are independent,
+\(\norm{Z_i}_\infty\le\delta\), \(G\) is an independent centered
+Gaussian vector, and \(V=\Cov(T)\) is positive definite. For every
+square \(Q\) of side \(h\ge C\delta\),
+\begin{equation}
+ \Pp(T\in Q)\le\frac{Ch^2}{\sqrt{\det V}}.
+ \label{sup:small-ball}
+\end{equation}
+To see this, use a product of squared sinc functions scaled by \(h\).
+It gives a nonnegative integrable kernel bounded below on the square
+centered at zero, with Fourier transform supported in
+\(\{|t_j|\le C_0/h\}\) and bounded by \(C_1h^2\).
+On this frequency box, \(|t\cdot Z_i|\) is smaller than an absolute
+constant when \(h/\delta\) is sufficiently large. If \(Z_i'\)
+is an independent copy, the local inequality
+\(\cos x\le1-cx^2\) gives
+\[
+ |\varphi_{Z_i}(t)|^2
+ =\E\cos\{t\cdot(Z_i-Z_i')\}
+ \le1-c\,t^\top\Cov(Z_i)t.
+\]
+Independence and the Gaussian characteristic function imply
+\( |\varphi_T(t)|\le e^{-c't^\top Vt}\) on this box.
+Fourier inversion of the translated kernel therefore bounds the
+probability by
+\[
+ Ch^2\int_{\R^2}e^{-c't^\top Vt}\dd t
+ =\frac{Ch^2}{\sqrt{\det V}},
+\]
+proving \eqref{sup:small-ball}.
+
+We now apply \eqref{sup:small-ball} in coordinates chosen from the
+normals. If all the normals are collinear, \(\det H=0\), so both
+conclusions are immediate. Otherwise choose \(u_a,u_b\) maximizing
+\(d=|\det(u_a,u_b)|>0\). Cramer's rule and maximality show that
+every normal has the representation
+\[
+ u_\alpha=A_\alpha u_a+B_\alpha u_b,
+ \qquad |A_\alpha|,|B_\alpha|\le1.
+\]
+Tile the coordinates \((u_a\cdot x,u_b\cdot x)\) by half-open
+\(h\)-squares, and denote their inverse images by \(Q_\ell\).
+Each has area \(|Q_\ell|=h^2/d\). The transformed rows
+\((u_a\cdot\eta_i,u_b\cdot\eta_i)\) have maximum norm at most
+\(\delta\), and the covariance determinant of
+\((u_a\cdot S,u_b\cdot S)\) is \(d^2\). Thus
+\eqref{sup:small-ball} gives
+\begin{equation}
+ \Pp(S\in Q_\ell)\le C|Q_\ell|.
+ \label{sup:cell-probability}
+\end{equation}
+
+If \(x,y\in Q_\ell\), then
+\(|u_\alpha\cdot(x-y)|\le2h\) for every \(\alpha\).
+All selector probabilities at \(x\) and \(y\) are consequently
+within a fixed multiplicative factor. In two dimensions,
+\eqref{sup:simplex} is a positive expansion of \(h^2\det H\).
+The product of three probabilities in each term changes by only a
+fixed factor, whence
+\(\sup_{Q_\ell}\det H\le C\inf_{Q_\ell}\det H\).
+Together with \eqref{sup:cell-probability}, this implies
+\begin{equation}
+ \E\det H(S)
+ \le C\sum_\ell |Q_\ell|\inf_{Q_\ell}\det H
+ \le C\int_{\R^2}\det H(x)\dd x.
+ \label{sup:curvature-integral}
+\end{equation}
+
+It remains to bound the integral. The vectors \(0,u_a,u_b\) affinely
+span \(\R^2\), and all selector probabilities are positive. Therefore
+\(H\) is positive
+definite everywhere. In particular \(\nabla\Psi\) is injective:
+the integral of the Hessian along the line between two distinct points
+has a strictly positive quadratic form in their difference.
+The image of \(\nabla\Psi\) lies in
+\(\operatorname{conv}\{0,u_1,\ldots,u_m\}\), a subset of the unit
+disk. The area formula gives
+\[
+ \int_{\R^2}\det H(x)\dd x
+ =|\nabla\Psi(\R^2)|\le\pi.
+\]
+This and \eqref{sup:curvature-integral} prove the first assertion.
+The second follows from \eqref{sup:angle-curvature}, since
+\(\sigma_2(H)=\det H\) in dimension two.
+\end{proof}
+
+Proposition~\ref{sup:rank-two} alone does not bound the signed
+\(\mathcal A+\mathcal B\) remainder by a positive curvature quantity.
+The later facewise transport argument in~\cite{Cancellation} supplies
+a planar signed-remainder estimate through additional identities.
+A uniform extension to growing rank remains open.
+In higher rank, applying the grid argument to two-dimensional slices
+would require small-ball control conditional on the complementary
+coordinates. Independence of the original rows does not supply that
+conditional estimate.
+
+
+% Source: references
+\begin{thebibliography}{9}
+\bibitem{Cancellation}
+\emph{Cancellation and rank reduction in rectangle CLTs:
+transport identities, planar bounds, and rank-three tests}.
+Companion research note, 20 October 2026.
+
+\bibitem{AL}
+P.~M. Aronow and P. Lopatto (2026).
+\emph{Optimal central limit theorem for bounded random variables in high dimensions}.
+Manuscript, arXiv:2609.07067v1.
+\url{https://arxiv.org/abs/2609.07067v1}.
+
+\bibitem{Bounded}
+\emph{A rectangle CLT for bounded summands: correlation gaps and
+unrestricted covariance}.
+Preceding research note, October 19, 2026.
+\texttt{Rectangle\_CLT\_Bounded\_Covariance.pdf}.
+
+\bibitem{Integrated}
+\emph{On the integrated remainder (M): a rank-free square-root
+logarithmic bound}.
+Preceding research note, October 19, 2026.
+\texttt{Rectangle\_CLT\_Integrated\_Remainder.pdf}.
+
+\bibitem{Gumbel}
+\emph{The rational rectangle smoother and the Gumbel trick}.
+Companion note.
+\texttt{Rational\_Smoother\_and\_Gumbel\_Trick.pdf}.
+
+\bibitem{Kane}
+D. Kane (2014).
+The average sensitivity of an intersection of half spaces.
+\emph{Research in the Mathematical Sciences} \textbf{1}, Article 13.
+\href{https://doi.org/10.1186/s40687-014-0013-6}{doi:10.1186/s40687-014-0013-6}.
+
+\bibitem{CCK}
+V. Chernozhukov, D. Chetverikov, and Y. Koike (2021).
+\emph{Nearly optimal central limit theorem and bootstrap approximations
+in high dimensions}.
+arXiv:2012.09513v2, May 12, 2021.
+\url{https://arxiv.org/abs/2012.09513v2}.
+
+\bibitem{Local}
+V. Chernozhukov, D. Chetverikov, K. Kato, and Y. Koike,
+with AI collaborators (2026).
+\emph{High-dimensional Gaussian approximation over rectangles under
+local nondegeneracy}. Companion working manuscript supplied
+20 October 2026.
+
+\end{thebibliography}
+\end{document}
+
+

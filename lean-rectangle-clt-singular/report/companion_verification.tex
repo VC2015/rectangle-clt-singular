@@ -1,0 +1,279 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm,booktabs,array,xurl}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prob}{\mathbb P}
+\title{Lean Verification of the\\Unrestricted-Covariance Rectangle CLTs}
+\author{}
+\date{20 October 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The separate Lean package \path{lean-rectangle-clt-singular/} proves the three
+bounded-observation upper bounds in the supplied unrestricted-covariance
+companion manuscript: the general, gap-sensitive, and full-third-tensor
+cancellation rectangle CLTs. The proofs use the actual probability laws
+and permit singular covariance and every coordinate-rectangle endpoint
+convention. The final theorem has no unproved analytic estimate as a
+premise. A direct smooth Gaussian integration-by-parts and tube argument
+supplies the signed-trace estimate; a general Hausdorff surface and
+first-variation theorem is not claimed. The sub-exponential extension
+and the supplement's lower bounds remain outside the verified scope.
+\end{abstract}
+
+\section{The proved statements}
+Let $p,n\ge1$, and let $\xi_1,\ldots,\xi_n$ be independent centered
+$\R^p$-valued observations on a probability space, with
+$\|\xi_i\|_\infty\le\delta$ almost surely. The observations need not
+have identical laws; their coordinates may be dependent. Put
+\[
+ W=\sum_i\xi_i,\qquad \Sigma=\operatorname{Cov}(W),\qquad
+ \Sigma_{jj}=1,\qquad Z\sim N(0,\Sigma).
+\]
+In Lean the Gaussian is the concrete pushforward \path{gaussianLaw A},
+where $AA^{\mathsf T}=\Sigma$. An actual factor exists for every such
+bounded array, including singular covariance, by
+\path{gaussian_factor_exists_of_boundedIndependent}.
+
+Write $\log_+x=\max\{0,\log x\}$ and
+\[
+ L=\log(ep),\qquad D_L=1+\log_+\frac1{\delta\sqrt L},\qquad
+ c=1-\max_{j\ne k}|\Sigma_{jk}|,
+\]
+where the empty maximum is zero, giving $c=1$ for $p=1$. Define
+\[
+ \kappa=\begin{cases}\min\{L,c^{-1}\},&c>0,\\L,&c=0,\end{cases}
+ \qquad E_\kappa=1+\log_+\frac{\sqrt\kappa}{\delta L}.
+\]
+For a measurable coordinate rectangle $R$, let
+$\Delta_R=|\Prob(W\in R)-\Prob(Z\in R)|$.
+
+\begin{theorem}[The three bounded CLTs]
+There is one constant $C\ge1$, chosen before all dimensions, probability
+spaces, distributions, and envelope parameters, such that for every $R$,
+\begin{align}
+ \Delta_R&\le C\min\{1,\delta L^{3/2}\sqrt{D_L}\},\label{eq:general}\\
+ \Delta_R&\le C\min\{1,\delta[L^{3/2}+L\sqrt{\kappa E_\kappa}]\}.
+ \label{eq:gap}
+\end{align}
+If the full signed aggregate third-moment tensor vanishes, that is,
+\begin{equation}
+ \sum_i\E[\xi_{ij}\xi_{ik}\xi_{i\ell}]=0
+ \quad\text{for every }j,k,\ell,\label{eq:cancellation}
+\end{equation}
+then also
+\begin{equation}
+ \Delta_R\le C\min\{1,\delta L\sqrt{\kappa E_\kappa}\}.
+ \label{eq:zero}
+\end{equation}
+\end{theorem}
+
+The formal bounds quantify over every \path{Rect p}: open, closed,
+mixed, unbounded, and empty coordinate intervals are included. Atomic
+observations are allowed. There is no positive eigenvalue, local
+determinant, covariance-rank, or positive-gap assumption. Condition
+\eqref{eq:cancellation} allows cancellation between observations and
+includes mixed entries. Marginal third moments alone do not suffice.
+
+\section{Public API and universal constants}
+The main entry point is \path{RectangleCLTCompanion/SharpMain.lean},
+in namespace \path{RectangleCLT.Companion}. Its principal APIs are
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Lean declaration & Result\\
+\midrule
+\texttt{unrestrictedCLT} & \eqref{eq:general}\\
+\texttt{gapSensitiveCLT} & \eqref{eq:gap}\\
+\texttt{zeroSkewCLT} & \eqref{eq:zero}, assuming \eqref{eq:cancellation}\\
+\texttt{companionCLTExists\_common} & One constant for all three\\
+\bottomrule
+\end{tabular}
+\end{center}
+There are also individual \texttt{Exists} theorems. To specify the
+constant exactly, let $B$ denote \path{sharpSplitMatrixConstant}, put
+\begin{gather*}
+ b=\texttt{sharpBandwidthConstant}(B),\qquad
+ M=\texttt{sharpMasterConstant}(B),\\
+ K=\max\{1,M(b+3/b)\}.
+\end{gather*}
+Then $K=\texttt{companionUniversalConstant}$ is the constant in the
+gap-sensitive and cancellation theorems; the unrestricted theorem uses
+$2K$. The common-constant theorem uses $C=2K$. Every quantity here is
+an explicit real expression in the checked source, independent of the
+model and dimensions. These constants are not numerically optimized.
+
+The generic variational and matrix estimates remain reusable conditional
+APIs. Their premises are proved and instantiated by the final main
+theorem; they are not additional assumptions on the observations.
+
+\section{The analytic proof in Lean}
+\paragraph{Concentration, selectors, and singular support.}
+The Kane sensitivity formalization supplies bounded-sum rectangle
+boundary concentration with constant $2^{30}$. The actual Gaussian
+version has constant $12e^{3/2}$. Both allow arbitrary independent
+measurable shifts, without moment assumptions on those shifts, and
+permit singular covariance. The proof uses the smooth rectangle selector
+\[
+ F_s(x)=\left(1+\sum_{f\in\mathcal F}
+       e^{(\langle n_f,x\rangle-b_f)/h}\right)^{-1},
+ \qquad \theta_s=1-F_s,
+\]
+where $\mathcal F$ is a finite set of signed coordinate faces and $h>0$.
+Actual entropy and log-sum inequalities bound the averaged selector means.
+Pr\'ekopa--Leindler proves covariance contraction of the genuine Gaussian
+selector tilt, including rectangular factors and repeated or omitted
+faces. Support-coordinate constructions reconstruct the observations
+almost surely for singular factors. Their covariance is a projection
+$P\le I$; no inverse-eigenvalue factor enters the observable row bounds.
+
+\paragraph{A signed Gaussian trace estimate.}
+For a probability law $\nu$ of the base $V$, independent standard
+$G\in\R^p$, a unit-row factor $A$, and $a\in\mathbb N$, the code uses
+the actual power trace
+\[
+ T_a=\E\left[(\|G\|_2^2-p)
+   F_s(V+\sigma AG)^{a+1}\theta_s(V+\sigma AG)\right].
+\]
+The quantitative input is the actual property
+\path{UniformBoundaryConcentration}, with $C_0,\eta\ge0$, which bounds every translated
+rectangle shell of width $d>0$ by
+$C_0(d+\eta)\sqrt{L/v}$ under $\nu$. The checked theorem
+\path{abs_averagedGaussianPowerTrace_le_concentration} gives, when
+$v\ge1/4$, $\sigma>0$, and $\eta\sqrt L\le\sigma$,
+\begin{equation}
+ |T_a|\le
+ C_{\rm surface}(C_0)\frac{hL\sqrt L}{a+1},\qquad
+ C_{\rm surface}(C_0)=160e^{3/2}C_0(8e^{80}+16e^{136}).
+ \label{eq:surface}
+\end{equation}
+This displays the true linear dependence on the input concentration
+constant. The actual interpolation base supplies the fixed absolute
+value $C_0=2^{30}+12e^{3/2}$, $\eta=2\delta$, and $v=1/4$.
+
+The proof of \eqref{eq:surface} is a direct smooth proof. Gaussian
+integration by parts produces facet and paired ridge contributions.
+Gamma-clock random rectangles give exact rising-factorial factors
+$(a+q)!/a!$ for $q=1,2$. Actual tube change-of-variables identities,
+physical displacement bounds, and disjoint image events control the
+contributions by boundary probabilities while retaining their Gaussian
+tail factor. Genuine dyadic \texttt{HasSum} decompositions and concrete
+Gaussian projection moments sum these bounds. The base law needs no
+moment condition. This proves the required selector estimate without
+asserting a full Hausdorff surface or first-variation theorem for
+arbitrary polyhedra.
+
+\paragraph{Common-base restoration and the actual path.}
+Finite binomial expansion converts \eqref{eq:surface} to the signed
+selector trace bound. Together with the actual mean and covariance
+contraction estimates, it closes the averaged matrix estimate on the
+full retained-array and split-Gaussian law. The translated selector
+series converges under an explicit bandwidth condition. It permits
+common-base restoration with genuine second moments and the support
+covariance budget $P\le I$; it does not assume concentration conditional
+on each mask.
+
+The Bernoulli/Gaussian interpolation is an actual probability law.
+Its derivative is computed, rather than posited as an analytic bound.
+The exact fourth-order identity has a signed cubic term and three
+remainder integrals with genuine product-law fresh copies. Measurability,
+domination, Gaussian differentiation, and Fubini exchanges are checked.
+Condition \eqref{eq:cancellation} removes the signed aggregate cubic
+term before taking absolute values.
+
+\paragraph{Time integration, endpoints, and optimization.}
+The actual interpolation expectation is continuous through both
+endpoints. Early and late derivative estimates are integrated with
+switching time $\tau=Lh^2$; the inverse-time integral generates
+\[
+ \ell_h=\max\left\{0,\log\frac1{Lh^2}\right\}.
+\]
+The case $\tau\ge1$ is also covered. Sharp bounded/Gaussian endpoint
+smoothing combines the covariance-free bound with the optional pair-gap
+improvement. For every rectangle, the resulting checked estimates are
+\begin{align}
+ \Delta_R&\le M\left[\delta L\sqrt L+
+       \frac{\delta^2L\sqrt L}{h}\ell_h+h\sqrt L\,\kappa\right],
+       \label{eq:variational}\\
+ \Delta_R&\le M\left[
+       \frac{\delta^2L\sqrt L}{h}(1+\ell_h)+h\sqrt L\,\kappa\right]
+       \quad\text{under \eqref{eq:cancellation}},\label{eq:variational-zero}
+\end{align}
+for $h\ge b\delta$. The proof transfers finite closed-box bounds to
+all rectangle endpoints without requiring the bounded law to have a
+density. Choosing
+\[
+ h=b\delta\sqrt{LE_\kappa/\kappa}
+\]
+is admissible and controls $\ell_h$. Scalar optimization gives
+\eqref{eq:gap} and \eqref{eq:zero}, and $\kappa\le L$ and
+$E_\kappa\le D_L$ give \eqref{eq:general}. Probability saturation
+supplies the displayed $\min\{1,\cdot\}$ bounds.
+
+\section{Scope and semantic checks}
+The verified scope is the three bounded-observation main upper bounds.
+Separate normalized-observation and positive diagonal-scaling corollary
+APIs, the complete sub-exponential clipping and probabilistic coupling
+argument, and the supplement's lower bounds and consistency thresholds
+are not formalized here. Joint block-covariance restoration is proved
+as supporting matrix algebra, with both cross blocks retained; it does
+not by itself establish the sub-exponential extension. A checked clipping
+example shows that original covariance minus clipped covariance need
+not be positive semidefinite.
+
+Two finite probability examples distinguish the hypotheses. Independent
+symmetric signs $X,Y$ give a bounded vector
+$(X,Y,(3X+4Y)/5)$ with covariance
+\[
+ \begin{pmatrix}1&0&3/5\\0&1&4/5\\3/5&4/5&1\end{pmatrix},
+ \qquad c=1/5,\qquad a_3=a_4=0.
+\]
+The nonzero null vector is $(-3/5,-4/5,1)$. This model is covered by
+the companion but fails the positive local four-coordinate eigenvalue
+assumption of the earlier local theorem. Separately, $(X,Y,XY)$ has
+zero marginal third moments but $\E[X\,Y\,(XY)]=1$, so it does not
+satisfy full tensor cancellation.
+
+\section{Provenance and reproducibility}
+The research source is the supplied 20 October 2026 split main manuscript
+and supplement. Their four \texttt{.tex}/\texttt{.pdf} files are preserved
+byte for byte in \path{sources/}, with SHA-256 hashes in
+\path{sources/MANIFEST.json}. Their original credits are retained in
+those documents; their broader claims are distinct from the formalized
+scope stated above.
+
+The full Pr\'ekopa--Leindler proof adapts Jonathan Ho's
+\href{https://github.com/hojonathanho/isoperimetric/tree/29768f8beeaf17295cdf3853d37da35d7e2b0a5f}{\texttt{isoperimetric}}
+formalization at commit
+\path{29768f8beeaf17295cdf3853d37da35d7e2b0a5f}, under Apache License
+2.0. The upstream license, toolchain, revision, and backport changes are
+recorded in \path{third_party/isoperimetric/README.md}. No Pr\'ekopa or
+covariance-contraction axiom was introduced.
+
+The package pins Lean 4.19.0 and mathlib v4.19.0. Keep the sibling
+\path{lean-kane/}, \path{lean-rectangle-clt-local/}, and \path{lean-rectangle-clt-singular/}
+packages together. From the last folder, run
+\begin{verbatim}
+lake build
+lake env lean RectangleCLTCompanion/Audit.lean
+lake env lean RectangleCLTCompanion/MainAudit.lean
+lake env lean RectangleCLTCompanion/CompleteAudit.lean
+(cd ../lean-rectangle-clt-local && lake env lean RectangleCLT/Audit.lean)
+\end{verbatim}
+The audit checks transitive dependencies and permits only Lean's standard axioms:
+\[
+ \texttt{propext},\qquad\texttt{Classical.choice},\qquad\texttt{Quot.sound}.
+\]
+No custom mathematical axiom or unfinished proof
+supplies the main theorem. Saved verification outcomes, exact counts,
+and source hashes are recorded in \path{VERIFICATION.json}; this report
+does not replace that machine-readable record with estimated counts.
+
+\medskip
+\noindent Formalization and review used AI assistance.
+\end{document}

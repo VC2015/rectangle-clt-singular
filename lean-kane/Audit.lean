@@ -1,0 +1,31 @@
+import Kane
+
+#check Kane.unate_union_averageSensitivity_le
+#check Kane.halfspaces_averageSensitivity_le
+#check Kane.unate_union_averageSensitivity_le_log
+#check Kane.halfspaces_averageSensitivity_le_log
+#check Kane.halfspaces_noiseSensitivity_le
+#check Kane.halfspaces_noiseSensitivity_le_log
+#check Kane.lowerBoundConstant_pos
+#check Kane.halfspaces_averageSensitivity_lower_bound_explicit
+#check Kane.halfspaces_averageSensitivity_lower_bound
+
+#print axioms Kane.unate_union_averageSensitivity_le
+#print axioms Kane.halfspaces_averageSensitivity_le
+#print axioms Kane.unate_union_averageSensitivity_le_log
+#print axioms Kane.halfspaces_averageSensitivity_le_log
+#print axioms Kane.halfspaces_noiseSensitivity_le
+#print axioms Kane.halfspaces_noiseSensitivity_le_log
+#print axioms Kane.maskWeight_sum
+#print axioms Kane.blockRestriction_uniformOneBlockDisagreement_le
+#print axioms Kane.weightedBlockConstruction_eq_noiseSensitivity
+#print axioms Kane.halfspaces_noiseSensitivity_reciprocal_le
+#print axioms Kane.lowerBoundConstant_pos
+#print axioms Kane.halfspaces_averageSensitivity_lower_bound_explicit
+#print axioms Kane.halfspaces_averageSensitivity_lower_bound
+#print axioms Kane.Lower.paley_zygmund
+#print axioms Kane.Lower.large_halfspace_witness
+#print axioms Kane.Lower.small_halfspace_witness
+#print axioms Kane.translatedUnion_expected_sensitivity_ge
+#print axioms Kane.Halfspace.exists_cubeComplement
+#print axioms Kane.Lower.exists_parity_intersection
