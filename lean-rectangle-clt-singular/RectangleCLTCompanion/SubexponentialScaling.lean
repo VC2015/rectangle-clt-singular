@@ -133,7 +133,7 @@ theorem covariance_standardize_diagonal {Ω : Type*} [MeasurableSpace Ω]
     (hd : ∀ j, d j ≠ 0) (hvar : ∀ j, covariance μ W j j = (d j) ^ 2) (j : Fin p) :
     covariance μ (fun ω => diagonalScale (fun k => (d k)⁻¹) (W ω)) j j = 1 := by
   rw [covariance_diagonalScale, hvar]
-  field_simp [hd j]
+  field_simp [hd j] <;> ring
 
 end
 
@@ -175,7 +175,6 @@ theorem rectangleError_diagonalScale {Ω : Type*} [MeasurableSpace Ω]
   rw [← gaussianLaw_map_diagonalScale d A]
   simp only [Measure.real,
     Measure.map_apply (measurable_diagonalScale d) R.measurableSet_carrier]
-  rfl
 
 /-- A uniform rectangle comparison transfers under every nonnegative
 coordinate scaling. In particular it transfers under the positive

@@ -1,15 +1,15 @@
 import RectangleCLT.GaussianMoments
 import RectangleCLTCompanion.CovarianceRestoration
 import Mathlib.MeasureTheory.Measure.CharacteristicFunction
+import Mathlib.MeasureTheory.Integral.Pi
 import Mathlib.Probability.Moments.SubGaussian
-import Mathlib.LinearAlgebra.Matrix.BilinearForm
 
 /-! Rectangular Gaussian factors and the dependent covariance-restoration
 coupling used for sub-exponential observations. No inverse covariance or
 independence between the two restored blocks is assumed. -/
 
-open MeasureTheory ProbabilityTheory BoundedContinuousFunction
-open scoped BigOperators Matrix
+open MeasureTheory ProbabilityTheory BoundedContinuousFunction Real
+open scoped BigOperators Matrix NNReal
 
 namespace RectangleCLT.Companion
 
@@ -32,16 +32,21 @@ private def coordinateDotBilin (p : ℕ) : Vector p →ₗ[ℝ] Vector p →ₗ[
       map_add' := by intro y z; simp [mul_add, Finset.sum_add_distrib]
       map_smul' := by
         intro a y
-        simp only [Pi.smul_apply, smul_eq_mul, Finset.mul_sum]
+        change (∑ j, x j * (a * y j)) = a * (∑ j, x j * y j)
+        rw [Finset.mul_sum]
         exact Finset.sum_congr rfl (fun j _ => by ring) }
   map_add' := by
     intro x y
-    ext z
+    apply LinearMap.ext
+    intro z
+    change (∑ j, (x j + y j) * z j) = (∑ j, x j * z j) + ∑ j, y j * z j
     simp [add_mul, Finset.sum_add_distrib]
   map_smul' := by
     intro a x
-    ext y
-    simp only [LinearMap.smul_apply, Pi.smul_apply, smul_eq_mul, Finset.mul_sum]
+    apply LinearMap.ext
+    intro y
+    change (∑ j, (a * x j) * y j) = a * (∑ j, x j * y j)
+    rw [Finset.mul_sum]
     exact Finset.sum_congr rfl (fun j _ => by ring)
 
 private theorem coordinateDotBilin_nondegenerate {p : ℕ}
@@ -56,8 +61,9 @@ private theorem coordinateDotBilin_nondegenerate {p : ℕ}
   exact hj he'
 
 private theorem coordinateDotBilin_continuous (p : ℕ) :
-    Continuous (fun z : Vector p × Vector p => coordinateDotBilin p z.1 z.2) :=
-  continuous_finset_sum _ (fun j _ =>
+    Continuous (fun z : Vector p × Vector p => coordinateDotBilin p z.1 z.2) := by
+  change Continuous (fun z : Vector p × Vector p => ∑ j, z.1 j * z.2 j)
+  exact continuous_finset_sum Finset.univ (fun j _ =>
     (continuous_apply j).comp continuous_fst |>.mul
       ((continuous_apply j).comp continuous_snd))
 
@@ -78,14 +84,14 @@ theorem standardGaussian_integral_complex_projection {q : ℕ} (a : Vector q) :
       (∫ x : ℝ, Complex.exp (((a j * x : ℝ) : ℂ) * Complex.I)
         ∂gaussianReal 0 1) = Complex.exp (-((a j ^ 2 : ℝ) : ℂ) / 2) := by
     have h := charFun_gaussianReal (μ := 0) (v := 1) (a j)
-    simpa only [charFun_apply_real, mul_comm (a j), Complex.ofReal_mul,
-      Complex.ofReal_zero, Complex.ofReal_one, mul_zero, zero_mul, one_mul,
-      zero_sub, Complex.ofReal_pow] using h
+    simpa [charFun_apply_real, Complex.ofReal_mul, Complex.ofReal_pow] using h
   letI : MeasureSpace ℝ := ⟨gaussianReal 0 1⟩
+  have hpi := integral_fintype_prod_eq_prod (𝕜 := ℂ) (Fin q)
+    (fun (j : Fin q) (x : ℝ) => Complex.exp (((a j * x : ℝ) : ℂ) * Complex.I))
   change (∫ z : Vector q, ∏ j, Complex.exp (((a j * z j : ℝ) : ℂ) * Complex.I)
-    ∂Measure.pi (fun _ => gaussianReal 0 1)) = _
-  rw [show Measure.pi (fun _ : Fin q => gaussianReal 0 1) = volume from rfl,
-    integral_fintype_prod_eq_prod]
+      ∂standardGaussian q) =
+    ∏ j, ∫ x : ℝ, Complex.exp (((a j * x : ℝ) : ℂ) * Complex.I) ∂gaussianReal 0 1 at hpi
+  rw [hpi]
   simp_rw [hscalar]
   rw [← Complex.exp_sum]
   congr 1
@@ -95,7 +101,7 @@ private theorem projected_normSq_eq_gram {p q : ℕ}
     (B : Matrix (Fin p) (Fin q) ℝ) (t : Vector p) :
     (∑ i, (∑ j, t j * B j i) ^ 2) =
       dotProduct t ((B * B.transpose).mulVec t) := by
-  rw [Matrix.mulVec_mulVec, Matrix.dotProduct_mulVec, Matrix.mulVec_transpose]
+  rw [← Matrix.mulVec_mulVec, Matrix.dotProduct_mulVec, Matrix.mulVec_transpose]
   simp only [dotProduct, Matrix.vecMul, pow_two]
 
 /-- The pushforward law of a rectangular Gaussian factor depends only on
@@ -114,11 +120,14 @@ theorem rectangularGaussianLaw_eq_of_gram {p q r : ℕ}
   have hfun {s : ℕ} (D : Matrix (Fin p) (Fin s) ℝ) (z : Vector s) :
       char continuous_probChar (coordinateDotBilin_continuous p) t (D.mulVec z) =
         Complex.exp (((∑ i, (∑ j, t j * D j i) * z i : ℝ) : ℂ) * Complex.I) := by
+    have hdot : (∑ j, (∑ i, D j i * z i) * t j) =
+        ∑ i, (∑ j, t j * D j i) * z i := by
+      simp only [Finset.sum_mul]
+      rw [Finset.sum_comm]
+      exact Finset.sum_congr rfl (fun i _ =>
+        Finset.sum_congr rfl (fun j _ => by ring))
     simp only [char_apply, probChar_apply, coordinateDotBilin, Matrix.mulVec,
-      dotProduct, Finset.mul_sum, Finset.sum_mul]
-    congr 2
-    rw [Finset.sum_comm]
-    exact Finset.sum_congr rfl (fun i _ => Finset.sum_congr rfl (fun j _ => by ring))
+      dotProduct, hdot]
   simp_rw [hfun, standardGaussian_integral_complex_projection,
     projected_normSq_eq_gram, hgram]
 
@@ -215,7 +224,7 @@ theorem standardGaussian_rectangular_norm_tail {p q : ℕ}
       have hsq := (Finset.single_le_sum (fun i _ => sq_nonneg (B j i))
         (Finset.mem_univ k)).trans (hrows j)
       simpa only [zero_pow (by norm_num : (2 : ℕ) ≠ 0)] using
-        (sq_nonpos_iff.mp (by simpa using hsq))
+        ((sq_nonpos_iff (B j k)).mp (by simpa using hsq))
     simp only [hB, Matrix.zero_mulVec, norm_zero, zero_mul, lt_self_iff_false,
       Set.setOf_false, measureReal_empty]
     positivity
@@ -251,9 +260,11 @@ theorem standardGaussian_rectangular_norm_tail {p q : ℕ}
       linarith)
   have hsub : {z : Vector q | r < ‖B.mulVec z‖} ⊆ ⋃ j, E j := by
     intro z hz
-    by_contra h
+    by_cases hm : z ∈ ⋃ j, E j
+    · exact hm
+    exfalso
     have hsmall (j : Fin p) : |B.mulVec z j| ≤ r := by
-      have hj : z ∉ E j := fun hj => h (Set.mem_iUnion.mpr ⟨j, hj⟩)
+      have hj : z ∉ E j := fun hj => hm (Set.mem_iUnion.mpr ⟨j, hj⟩)
       have hp : ¬r ≤ B.mulVec z j := fun hh => hj (Or.inl hh)
       have hn : ¬r ≤ -(B.mulVec z j) := fun hh => hj (Or.inr hh)
       exact abs_le.mpr ⟨by linarith, le_of_not_ge hp⟩
@@ -266,6 +277,27 @@ theorem standardGaussian_rectangular_norm_tail {p q : ℕ}
       Finset.sum_le_sum (fun j _ => hcoord j)
     _ = _ := by simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin,
         nsmul_eq_mul]; ring
+
+theorem standardGaussian_rectangular_norm_tail_log {p q n : ℕ}
+    (B : Matrix (Fin p) (Fin q) ℝ) (hp : 1 ≤ p) (hn : 1 ≤ n)
+    {τ : ℝ} (hτ : 0 ≤ τ) (hrows : ∀ j, (∑ k, (B j k) ^ 2) ≤ τ ^ 2) :
+    (standardGaussian q).real
+      {z | τ * Real.sqrt (2 * Real.log (4 * (n : ℝ) * (p : ℝ))) < ‖B.mulVec z‖} ≤
+      1 / (2 * (n : ℝ)) := by
+  have hpR : (1 : ℝ) ≤ p := by exact_mod_cast hp
+  have hnR : (1 : ℝ) ≤ n := by exact_mod_cast hn
+  have hn0 : (n : ℝ) ≠ 0 := ne_of_gt (by linarith)
+  have hp0 : (p : ℝ) ≠ 0 := ne_of_gt (by linarith)
+  have harg : 0 < 4 * (n : ℝ) * (p : ℝ) := by positivity
+  have harg1 : 1 ≤ 4 * (n : ℝ) * (p : ℝ) := by nlinarith
+  have hlog : 0 ≤ Real.log (4 * (n : ℝ) * (p : ℝ)) := Real.log_nonneg harg1
+  have ht := standardGaussian_rectangular_norm_tail B hτ hlog hrows
+  have hexp : Real.exp (-Real.log (4 * (n : ℝ) * (p : ℝ))) =
+      (4 * (n : ℝ) * (p : ℝ))⁻¹ := by rw [Real.exp_neg, Real.exp_log harg]
+  rw [hexp] at ht
+  apply ht.trans_eq
+  field_simp [hn0, hp0]
+  <;> ring
 
 /-- The joint coordinates on the original probability space. -/
 def jointValue {Ω : Type*} {p : ℕ} (U V : Ω → Vector p) (ω : Ω) :
@@ -374,8 +406,11 @@ theorem jointSecondMoment_restoredCovariance
     simp only [Pi.add_apply]
     ring
   simp_rw [hpoint]
-  rw [integral_add ((hUU.add hUV).add hVU) hVV,
-    integral_add (hUU.add hUV) hVU, integral_add hUU hUV]
+  have hi1 := integral_add ((hUU.add hUV).add hVU) hVV
+  have hi2 := integral_add (hUU.add hUV) hVU
+  have hi3 := integral_add hUU hUV
+  simp only [Pi.add_apply] at hi1 hi2 hi3
+  rw [hi1, hi2, hi3]
 
 end
 end RectangleCLT.Companion

@@ -60,6 +60,31 @@ theorem min_one_unrestrictedRate_mul_le {a b L : ℝ}
     min 1 (unrestrictedRate (a * b) L) ≤ a * min 1 (unrestrictedRate b L) :=
   min_one_le_mul_min_one ha (unrestrictedRate_mul_le ha hb hL)
 
+theorem subexponentialScale_mul (n : ℕ) (a K : ℝ) :
+    subexponentialScale n (a * K) = a * subexponentialScale n K := by
+  unfold subexponentialScale
+  ring
+
+theorem fixedGapSubexponentialRate_mul_le {a b L : ℝ}
+    (ha : 1 ≤ a) (hb : 0 < b) (hL : 0 < L) :
+    fixedGapSubexponentialRate (a * b) L ≤ a * fixedGapSubexponentialRate b L := by
+  have hbL : 0 < b * L := mul_pos hb hL
+  have hden : b * L ≤ (a * b) * L := by
+    nlinarith [mul_nonneg (sub_nonneg.mpr ha) hbL.le]
+  have hlog := logPlus_mono (one_div_pos.mpr (hbL.trans_le hden))
+    (one_div_le_one_div_of_le hbL hden)
+  have hs := Real.sqrt_le_sqrt (add_le_add_left hlog 1)
+  have hi := add_le_add_left (mul_le_mul_of_nonneg_left hs hL.le) (L ^ (3 / 2 : ℝ))
+  have hh := mul_le_mul_of_nonneg_left hi (mul_nonneg (zero_le_one.trans ha) hb.le)
+  unfold fixedGapSubexponentialRate
+  convert hh using 1 <;> ring
+
+theorem min_one_fixedGapSubexponentialRate_mul_le {a b L : ℝ}
+    (ha : 1 ≤ a) (hb : 0 < b) (hL : 0 < L) :
+    min 1 (fixedGapSubexponentialRate (a * b) L) ≤
+      a * min 1 (fixedGapSubexponentialRate b L) :=
+  min_one_le_mul_min_one ha (fixedGapSubexponentialRate_mul_le ha hb hL)
+
 theorem base_le_unrestrictedRate {b L : ℝ} (hb : 0 ≤ b) (hL : 1 ≤ L) :
     b ≤ unrestrictedRate b L := by
   have hLp : 0 < L := zero_lt_one.trans_le hL

@@ -48,8 +48,9 @@ theorem abs_clipResidual (T x : ℝ) (hT : 0 ≤ T) :
     by_cases hl : x ≤ -T
     · have hx0 : x ≤ 0 := hl.trans (by linarith)
       rw [abs_of_nonpos hx0, max_eq_right (by linarith : 0 ≤ -x - T)]
-      simp [clipResidual, clipAt, min_eq_right hxT, max_eq_left hl,
-        abs_of_nonpos (by linarith : x - -T ≤ 0)]
+      simp only [clipResidual, clipAt, min_eq_right hxT, max_eq_left hl]
+      rw [abs_of_nonpos (by linarith : x - -T ≤ 0)]
+      ring
     · have hlow : -T ≤ x := (lt_of_not_ge hl).le
       have habs : |x| ≤ T := abs_le.mpr ⟨hlow, hxT⟩
       rw [clipResidual_eq_zero habs, abs_zero, max_eq_left (sub_nonpos.mpr habs)]
@@ -63,9 +64,42 @@ theorem abs_clipResidual_eq_sub {T x : ℝ} (hT : 0 ≤ T) (hx : T < |x|) :
     |clipResidual T x| = |x| - T := by
   rw [abs_clipResidual T x hT, max_eq_right (sub_nonneg.mpr hx.le)]
 
+theorem abs_clipResidual_le_exp {K u : ℝ} (hK : 0 < K) (hu : 0 ≤ u) (x : ℝ) :
+    |clipResidual (K * u) x| ≤ K * Real.exp (-u) * Real.exp (|x| / K) := by
+  by_cases hx : |x| ≤ K * u
+  · rw [clipResidual_eq_zero hx, abs_zero]
+    positivity
+  · have hre := abs_clipResidual_eq_sub (mul_nonneg hK.le hu) (lt_of_not_ge hx)
+    have hy : 0 ≤ |clipResidual (K * u) x| / K := div_nonneg (abs_nonneg _) hK.le
+    have hh : |clipResidual (K * u) x| / K ≤ Real.exp (|clipResidual (K * u) x| / K) := by
+      linarith [Real.add_one_le_exp (|clipResidual (K * u) x| / K)]
+    have he : Real.exp (|clipResidual (K * u) x| / K) =
+        Real.exp (-u) * Real.exp (|x| / K) := by
+      rw [hre, sub_div, mul_div_cancel_left₀ u hK.ne', Real.exp_sub, Real.exp_neg]
+      ring
+    have hmul := mul_le_mul_of_nonneg_left hh hK.le
+    have hc : K * (|clipResidual (K * u) x| / K) = |clipResidual (K * u) x| := by
+      field_simp [hK.ne']
+    rw [hc, he] at hmul
+    nlinarith
+
+theorem exp_abs_clipResidual_le {K u : ℝ} (hK : 0 < K) (hu : 0 ≤ u) (x : ℝ) :
+    Real.exp (|clipResidual (K * u) x| / K) ≤
+      1 + Real.exp (-u) * Real.exp (|x| / K) := by
+  by_cases hx : |x| ≤ K * u
+  · rw [clipResidual_eq_zero hx, abs_zero, zero_div, Real.exp_zero]
+    exact le_add_of_nonneg_right (by positivity)
+  · have hre := abs_clipResidual_eq_sub (mul_nonneg hK.le hu) (lt_of_not_ge hx)
+    have he : Real.exp (|clipResidual (K * u) x| / K) =
+        Real.exp (-u) * Real.exp (|x| / K) := by
+      rw [hre, sub_div, mul_div_cancel_left₀ u hK.ne', Real.exp_sub, Real.exp_neg]
+      ring
+    rw [he]
+    linarith
+
 private theorem square_le_two_mul_exp {y : ℝ} (hy : 0 ≤ y) :
     y ^ 2 ≤ 2 * Real.exp y := by
-  have h := Real.pow_div_factorial_le_exp hy 2
+  have h := Real.pow_div_factorial_le_exp y hy 2
   norm_num at h
   linarith
 
@@ -76,6 +110,7 @@ theorem clipResidual_sq_le_exp {K u : ℝ} (hK : 0 < K) (hu : 0 ≤ u) (x : ℝ)
   have hT : 0 ≤ K * u := mul_nonneg hK.le hu
   by_cases hx : |x| ≤ K * u
   · rw [clipResidual_eq_zero hx]
+    simp only [zero_pow (by norm_num : (2 : ℕ) ≠ 0)]
     positivity
   · have hx' : K * u < |x| := lt_of_not_ge hx
     let r := |clipResidual (K * u) x|
@@ -83,7 +118,7 @@ theorem clipResidual_sq_le_exp {K u : ℝ} (hK : 0 < K) (hu : 0 ≤ u) (x : ℝ)
     have hre : r = |x| - K * u := abs_clipResidual_eq_sub hT hx'
     have hsq := square_le_two_mul_exp (div_nonneg hr hK.le)
     have hmul := mul_le_mul_of_nonneg_right hsq (sq_nonneg K)
-    have hpow : (r / K) ^ 2 * K ^ 2 = r ^ 2 := by field_simp [hK.ne']; ring
+    have hpow : (r / K) ^ 2 * K ^ 2 = r ^ 2 := by field_simp [hK.ne']
     rw [hpow] at hmul
     have he : Real.exp (r / K) = Real.exp (-u) * Real.exp (|x| / K) := by
       rw [hre, sub_div, mul_div_cancel_left₀ u hK.ne', Real.exp_sub,
@@ -93,42 +128,6 @@ theorem clipResidual_sq_le_exp {K u : ℝ} (hK : 0 < K) (hu : 0 ≤ u) (x : ℝ)
     dsimp only [r] at hmul
     rw [sq_abs] at hmul
     nlinarith
-
-/-- A residual-weighted exponential majorant. The restriction on the
-Laplace parameter is the sole source of the linear Bernstein scale. -/
-theorem clipResidual_sq_exp_le {K u t : ℝ} (hK : 0 < K) (hu : 0 ≤ u)
-    (ht : |t| ≤ 1 / (2 * K)) (x : ℝ) :
-    clipResidual (K * u) x ^ 2 * Real.exp (|t * clipResidual (K * u) x|) ≤
-      8 * K ^ 2 * Real.exp (-u) * Real.exp (|x| / K) := by
-  have hT : 0 ≤ K * u := mul_nonneg hK.le hu
-  by_cases hx : |x| ≤ K * u
-  · rw [clipResidual_eq_zero hx]
-    positivity
-  · have hx' : K * u < |x| := lt_of_not_ge hx
-    let r := |clipResidual (K * u) x|
-    have hr : 0 ≤ r := abs_nonneg _
-    have hre : r = |x| - K * u := abs_clipResidual_eq_sub hT hx'
-    have hsq := square_le_two_mul_exp (div_nonneg hr (by positivity : 0 ≤ 2 * K))
-    have hmul := mul_le_mul_of_nonneg_right hsq (sq_nonneg (2 * K))
-    have hpow : (r / (2 * K)) ^ 2 * (2 * K) ^ 2 = r ^ 2 := by field_simp [hK.ne']; ring
-    rw [hpow] at hmul
-    have hs : r ^ 2 ≤ 8 * K ^ 2 * Real.exp (r / (2 * K)) := by nlinarith
-    have ht' : |t * clipResidual (K * u) x| ≤ r / (2 * K) := by
-      rw [abs_mul]
-      change |t| * r ≤ r / (2 * K)
-      nlinarith [mul_le_mul_of_nonneg_right ht hr]
-    have he : Real.exp (r / (2 * K)) * Real.exp (r / (2 * K)) =
-        Real.exp (-u) * Real.exp (|x| / K) := by
-      rw [← Real.exp_add, ← Real.exp_add]
-      congr 1
-      rw [hre]
-      field_simp [hK.ne']
-      ring
-    calc
-      _ = r ^ 2 * Real.exp (|t * clipResidual (K * u) x|) := by rw [r, sq_abs]
-      _ ≤ (8 * K ^ 2 * Real.exp (r / (2 * K))) * Real.exp (r / (2 * K)) :=
-        mul_le_mul hs (Real.exp_le_exp.mpr ht') (Real.exp_nonneg _) (by positivity)
-      _ = _ := by rw [mul_assoc, he]; ring
 
 /-- Integrability is included explicitly: Bochner integrals are totalized,
 so a numerical exponential-moment bound alone would be insufficient. -/
@@ -144,16 +143,57 @@ variable {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
 theorem ExponentialMomentBound.integrable_residual {X : Ω → ℝ} {K u : ℝ}
     (h : ExponentialMomentBound μ X K) (hu : 0 ≤ u) :
     Integrable (fun ω => clipResidual (K * u) (X ω)) μ := by
+  have hK : 0 < K := h.scale_pos
   have hm : Measurable (fun ω => clipResidual (K * u) (X ω)) :=
     (clipResidual_continuous _).measurable.comp h.measurable
   refine (h.integrable_exp.const_mul K).mono hm.aestronglyMeasurable (ae_of_all _ fun ω => ?_)
-  rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_of_nonneg (by positivity)]
+  simp only [Real.norm_eq_abs]
+  rw [abs_of_nonneg (mul_nonneg hK.le (Real.exp_nonneg (|X ω| / K)))]
   calc
     |clipResidual (K * u) (X ω)| ≤ |X ω| :=
       abs_clipResidual_le (mul_nonneg h.scale_pos.le hu) _
     _ = K * (|X ω| / K) := by field_simp [h.scale_pos.ne']
     _ ≤ K * Real.exp (|X ω| / K) :=
       mul_le_mul_of_nonneg_left (by linarith [Real.add_one_le_exp (|X ω| / K)]) h.scale_pos.le
+
+theorem ExponentialMomentBound.integral_abs_residual_le {X : Ω → ℝ} {K u : ℝ}
+    (h : ExponentialMomentBound μ X K) (hu : 0 ≤ u) :
+    (∫ ω, |clipResidual (K * u) (X ω)| ∂μ) ≤ 2 * K * Real.exp (-u) := by
+  have hK : 0 < K := h.scale_pos
+  calc
+    _ ≤ ∫ ω, K * Real.exp (-u) * Real.exp (|X ω| / K) ∂μ :=
+      integral_mono (h.integrable_residual hu).abs (h.integrable_exp.const_mul _)
+        (fun ω => abs_clipResidual_le_exp hK hu _)
+    _ = (K * Real.exp (-u)) * (∫ ω, Real.exp (|X ω| / K) ∂μ) := integral_const_mul _ _
+    _ ≤ (K * Real.exp (-u)) * 2 :=
+      mul_le_mul_of_nonneg_left h.integral_exp_le (by positivity)
+    _ = _ := by ring
+
+theorem ExponentialMomentBound.integrable_exp_abs_residual [IsFiniteMeasure μ]
+    {X : Ω → ℝ} {K u : ℝ} (h : ExponentialMomentBound μ X K) (hu : 0 ≤ u) :
+    Integrable (fun ω => Real.exp (|clipResidual (K * u) (X ω)| / K)) μ := by
+  have hm : Measurable (fun ω => Real.exp (|clipResidual (K * u) (X ω)| / K)) :=
+    ((((clipResidual_continuous _).measurable.comp h.measurable).abs).div_const K).exp
+  refine ((integrable_const 1).add (h.integrable_exp.const_mul (Real.exp (-u)))).mono
+    hm.aestronglyMeasurable (ae_of_all _ fun ω => ?_)
+  simp only [Real.norm_eq_abs, Real.abs_exp,
+    abs_of_nonneg (show 0 ≤ 1 + Real.exp (-u) * Real.exp (|X ω| / K) by positivity)]
+  exact exp_abs_clipResidual_le h.scale_pos hu _
+
+theorem ExponentialMomentBound.integral_exp_abs_residual_le [IsProbabilityMeasure μ]
+    {X : Ω → ℝ} {K u : ℝ} (h : ExponentialMomentBound μ X K) (hu : 0 ≤ u) :
+    (∫ ω, Real.exp (|clipResidual (K * u) (X ω)| / K) ∂μ) ≤ 1 + 2 * Real.exp (-u) := by
+  calc
+    _ ≤ ∫ ω, 1 + Real.exp (-u) * Real.exp (|X ω| / K) ∂μ :=
+      integral_mono (h.integrable_exp_abs_residual hu)
+        ((integrable_const 1).add (h.integrable_exp.const_mul _))
+        (fun ω => exp_abs_clipResidual_le h.scale_pos hu _)
+    _ = 1 + Real.exp (-u) * (∫ ω, Real.exp (|X ω| / K) ∂μ) := by
+      rw [integral_add (integrable_const 1) (h.integrable_exp.const_mul _), integral_const_mul]
+      simp
+    _ ≤ 1 + Real.exp (-u) * 2 :=
+      add_le_add_left (mul_le_mul_of_nonneg_left h.integral_exp_le (Real.exp_nonneg _)) 1
+    _ = _ := by ring
 
 theorem ExponentialMomentBound.integrable_residual_sq {X : Ω → ℝ} {K u : ℝ}
     (h : ExponentialMomentBound μ X K) (hu : 0 ≤ u) :
@@ -162,7 +202,7 @@ theorem ExponentialMomentBound.integrable_residual_sq {X : Ω → ℝ} {K u : �
     ((clipResidual_continuous _).measurable.comp h.measurable).pow_const 2
   refine (h.integrable_exp.const_mul (2 * K ^ 2 * Real.exp (-u))).mono
     hm.aestronglyMeasurable (ae_of_all _ fun ω => ?_)
-  simp only [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _),
+  simp only [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg (clipResidual (K * u) (X ω))),
     abs_of_nonneg (show 0 ≤ 2 * K ^ 2 * Real.exp (-u) * Real.exp (|X ω| / K) by positivity)]
   exact clipResidual_sq_le_exp h.scale_pos hu _
 

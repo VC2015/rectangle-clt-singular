@@ -1,8 +1,9 @@
-import RectangleCLTCompanion.SubexponentialClipping
+import RectangleCLTCompanion.SubexponentialArray
+import RectangleCLTCompanion.SubexponentialScales
 
-/-! A direct Bernstein-type estimate for clipped sub-exponential residuals.
-The proof uses the exponential remainder bound and Chernoff's inequality;
-it does not assume a separate concentration theorem. -/
+/-! Exponentially rare clipping residuals are controlled by a positive-sum
+Laplace bound. The cutoff is large enough that their absolute means can be
+paid directly, avoiding any separate Bernstein theorem. -/
 
 open MeasureTheory ProbabilityTheory Real
 open scoped BigOperators
@@ -11,317 +12,215 @@ namespace RectangleCLT.Companion
 
 noncomputable section
 
-private theorem exp_le_one_add_add_sq (z : ℝ) :
-    Real.exp z ≤ 1 + z + z ^ 2 * Real.exp |z| := by
-  by_cases hz : |z| ≤ 1
-  · have hr := (le_abs_self (Real.exp z - 1 - z)).trans
-      (Real.abs_exp_sub_one_sub_id_le hz)
-    have he : 1 ≤ Real.exp |z| := Real.one_le_exp (abs_nonneg z)
-    have hs := mul_le_mul_of_nonneg_left he (sq_nonneg z)
-    nlinarith
-  · have hz' : 1 ≤ |z| := (lt_of_not_ge hz).le
-    have hs : 1 ≤ z ^ 2 := by nlinarith [sq_abs z]
-    by_cases hpos : 0 ≤ z
-    · have he := mul_le_mul_of_nonneg_right hs (Real.exp_nonneg z)
-      rw [abs_of_nonneg hpos]
-      nlinarith
-    · have hneg : z ≤ 0 := (lt_of_not_ge hpos).le
-      have he : Real.exp z ≤ 1 := Real.exp_le_one_iff.mpr hneg
-      have hs' : -z ≤ z ^ 2 := by rw [abs_of_nonpos hneg] at hz'; nlinarith
-      have hem := mul_le_mul_of_nonneg_left
-        (Real.one_le_exp (abs_nonneg z)) (sq_nonneg z)
-      nlinarith
+variable {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω} [IsProbabilityMeasure μ]
 
-def centeredClipResidual {Ω : Type*} [MeasurableSpace Ω]
-    (μ : Measure Ω) (X : Ω → ℝ) (K u : ℝ) : Ω → ℝ :=
+def centeredClipResidual (μ : Measure Ω) (X : Ω → ℝ) (K u : ℝ) : Ω → ℝ :=
   fun ω => clipResidual (K * u) (X ω) - ∫ a, clipResidual (K * u) (X a) ∂μ
 
-variable {Ω : Type*} [MeasurableSpace Ω] {μ : Measure Ω}
-  [IsProbabilityMeasure μ] {X : Ω → ℝ} {K u t : ℝ}
-
-theorem ExponentialMomentBound.integrable_exp_residual
-    (h : ExponentialMomentBound μ X K) (hu : 0 ≤ u) (ht : |t| ≤ 1 / (2 * K)) :
-    Integrable (fun ω => Real.exp (t * clipResidual (K * u) (X ω))) μ := by
-  have hm : Measurable (fun ω => Real.exp (t * clipResidual (K * u) (X ω))) :=
-    (((clipResidual_continuous _).measurable.comp h.measurable).const_mul t).exp
-  refine h.integrable_exp.mono hm.aestronglyMeasurable (ae_of_all _ fun ω => ?_)
-  simp only [Real.norm_eq_abs, Real.abs_exp]
-  apply Real.exp_le_exp.mpr
-  have hr := abs_clipResidual_le (mul_nonneg h.scale_pos.le hu) (X ω)
-  have ht' : |t| ≤ 1 / K := ht.trans (by
-    apply one_div_le_one_div_of_le h.scale_pos
-    linarith [h.scale_pos])
-  calc
-    t * clipResidual (K * u) (X ω) ≤ |t * clipResidual (K * u) (X ω)| := le_abs_self _
-    _ = |t| * |clipResidual (K * u) (X ω)| := abs_mul _ _
-    _ ≤ (1 / K) * |X ω| :=
-      mul_le_mul ht' hr (abs_nonneg _) (by positivity)
-    _ = |X ω| / K := by ring
-
-theorem ExponentialMomentBound.integrable_residual_sq_exp
-    (h : ExponentialMomentBound μ X K) (hu : 0 ≤ u) (ht : |t| ≤ 1 / (2 * K)) :
-    Integrable (fun ω => clipResidual (K * u) (X ω) ^ 2 *
-      Real.exp (|t * clipResidual (K * u) (X ω)|)) μ := by
-  have hm : Measurable (fun ω => clipResidual (K * u) (X ω) ^ 2 *
-      Real.exp (|t * clipResidual (K * u) (X ω)|)) := by
-    have hr := (clipResidual_continuous (K * u)).measurable.comp h.measurable
-    exact (hr.pow_const 2).mul ((hr.const_mul t).abs.exp)
-  refine (h.integrable_exp.const_mul (8 * K ^ 2 * Real.exp (-u))).mono
-    hm.aestronglyMeasurable (ae_of_all _ fun ω => ?_)
-  simp only [Real.norm_eq_abs,
-    abs_of_nonneg (show 0 ≤ clipResidual (K * u) (X ω) ^ 2 *
-      Real.exp (|t * clipResidual (K * u) (X ω)|) by positivity),
-    abs_of_nonneg (show 0 ≤ 8 * K ^ 2 * Real.exp (-u) * Real.exp (|X ω| / K) by positivity)]
-  exact clipResidual_sq_exp_le h.scale_pos hu ht _
-
-theorem ExponentialMomentBound.integral_residual_sq_exp_le
-    (h : ExponentialMomentBound μ X K) (hu : 0 ≤ u) (ht : |t| ≤ 1 / (2 * K)) :
-    (∫ ω, clipResidual (K * u) (X ω) ^ 2 *
-      Real.exp (|t * clipResidual (K * u) (X ω)|) ∂μ) ≤
-      16 * K ^ 2 * Real.exp (-u) := by
-  calc
-    _ ≤ ∫ ω, 8 * K ^ 2 * Real.exp (-u) * Real.exp (|X ω| / K) ∂μ :=
-      integral_mono (h.integrable_residual_sq_exp hu ht) (h.integrable_exp.const_mul _)
-        (fun ω => clipResidual_sq_exp_le h.scale_pos hu ht _)
-    _ = (8 * K ^ 2 * Real.exp (-u)) * (∫ ω, Real.exp (|X ω| / K) ∂μ) :=
-      integral_const_mul _ _
-    _ ≤ (8 * K ^ 2 * Real.exp (-u)) * 2 :=
-      mul_le_mul_of_nonneg_left h.integral_exp_le (by positivity)
-    _ = _ := by ring
-
-theorem ExponentialMomentBound.integrable_exp_centered_residual
-    (h : ExponentialMomentBound μ X K) (hu : 0 ≤ u) (ht : |t| ≤ 1 / (2 * K)) :
-    Integrable (fun ω => Real.exp (t * centeredClipResidual μ X K u ω)) μ := by
-  have heq : (fun ω => Real.exp (t * centeredClipResidual μ X K u ω)) =
-      (fun ω => Real.exp (-(t * ∫ a, clipResidual (K * u) (X a) ∂μ)) *
-        Real.exp (t * clipResidual (K * u) (X ω))) := by
-    funext ω
-    simp only [centeredClipResidual, mul_sub, Real.exp_sub, Real.exp_neg]
-    ring
-  rw [heq]
-  exact (h.integrable_exp_residual hu ht).const_mul _
-
-/-- A small-variance Laplace bound for the genuinely centered residual. -/
-theorem ExponentialMomentBound.mgf_centered_residual_le
-    (h : ExponentialMomentBound μ X K) (hu : 0 ≤ u) (ht : |t| ≤ 1 / (2 * K)) :
-    mgf (centeredClipResidual μ X K u) μ t ≤
-      Real.exp (16 * K ^ 2 * Real.exp (-u) * t ^ 2) := by
-  let R : Ω → ℝ := fun ω => clipResidual (K * u) (X ω)
-  let m : ℝ := ∫ a, R a ∂μ
-  have hR : Integrable R μ := h.integrable_residual hu
-  have hE : Integrable (fun ω => Real.exp (t * R ω)) μ :=
-    h.integrable_exp_residual hu ht
-  have hB : Integrable (fun ω => R ω ^ 2 * Real.exp (|t * R ω|)) μ :=
-    h.integrable_residual_sq_exp hu ht
-  have hpoint (ω : Ω) : Real.exp (t * R ω) ≤
-      1 + t * R ω + t ^ 2 * (R ω ^ 2 * Real.exp (|t * R ω|)) := by
-    convert exp_le_one_add_add_sq (t * R ω) using 1 <;> ring
-  have hint := integral_mono hE
-    (((integrable_const 1).add (hR.const_mul t)).add (hB.const_mul (t ^ 2))) hpoint
-  have hid : (∫ ω, 1 + t * R ω + t ^ 2 * (R ω ^ 2 * Real.exp (|t * R ω|)) ∂μ) =
-      1 + t * m + t ^ 2 * (∫ ω, R ω ^ 2 * Real.exp (|t * R ω|) ∂μ) := by
-    rw [integral_add ((integrable_const 1).add (hR.const_mul t)) (hB.const_mul _),
-      integral_add (integrable_const 1) (hR.const_mul t)]
-    simp only [integral_const, measureReal_univ_eq_one, smul_eq_mul, one_mul, integral_const_mul]
-    rfl
-  rw [hid] at hint
-  have hbound : mgf R μ t ≤ 1 + t * m + 16 * K ^ 2 * Real.exp (-u) * t ^ 2 := by
-    have hh := mul_le_mul_of_nonneg_left (h.integral_residual_sq_exp_le hu ht) (sq_nonneg t)
-    change (∫ ω, Real.exp (t * R ω) ∂μ) ≤ _
-    nlinarith
-  have heq : mgf (centeredClipResidual μ X K u) μ t = Real.exp (-(t * m)) * mgf R μ t := by
-    unfold mgf
-    rw [← integral_const_mul]
-    congr 1
-    funext ω
-    change Real.exp (t * (R ω - m)) = Real.exp (-(t * m)) * Real.exp (t * R ω)
-    rw [← Real.exp_add]
-    congr 1
-    ring
-  rw [heq]
-  calc
-    _ ≤ Real.exp (-(t * m)) *
-        (1 + (t * m + 16 * K ^ 2 * Real.exp (-u) * t ^ 2)) := by
-      apply mul_le_mul_of_nonneg_left _ (Real.exp_nonneg _)
-      linarith
-    _ ≤ Real.exp (-(t * m)) * Real.exp (t * m + 16 * K ^ 2 * Real.exp (-u) * t ^ 2) :=
-      mul_le_mul_of_nonneg_left (Real.add_one_le_exp _) (Real.exp_nonneg _)
-    _ = _ := by rw [← Real.exp_add]; congr 1; ring
-
-/-- Optimized Chernoff bound for a Laplace estimate available on a bounded
-interval. The larger constants keep the optimization elementary. -/
-theorem bernstein_upper_tail_of_mgf {Y : Ω → ℝ} {a c s : ℝ}
-    (ha : 0 < a) (hc : 0 < c) (hs : 0 ≤ s)
-    (hint : ∀ t : ℝ, 0 ≤ t → t ≤ 1 / c →
-      Integrable (fun ω => Real.exp (t * Y ω)) μ)
-    (hmgf : ∀ t : ℝ, 0 ≤ t → t ≤ 1 / c → mgf Y μ t ≤ Real.exp (a * t ^ 2)) :
-    μ.real {ω | 2 * Real.sqrt a * Real.sqrt s + 2 * c * s ≤ Y ω} ≤ Real.exp (-s) := by
-  let v := Real.sqrt a
-  let q := Real.sqrt s
-  let d := v + c * q
-  let t := q / d
-  have hv : 0 < v := Real.sqrt_pos.mpr ha
-  have hq : 0 ≤ q := Real.sqrt_nonneg _
-  have hd : 0 < d := add_pos_of_pos_of_nonneg hv (mul_nonneg hc.le hq)
-  have ht : 0 ≤ t := div_nonneg hq hd.le
-  have htc : t ≤ 1 / c := by
-    apply (div_le_div_iff₀ hd hc).mpr
-    dsimp only [d]
-    nlinarith [hv.le]
-  have htv : t * v ≤ q := by
-    dsimp only [t]
-    rw [div_mul_eq_mul_div]
-    apply (div_le_iff₀ hd).mpr
-    dsimp only [d]
-    nlinarith [mul_nonneg hc.le hq]
-  have hsq : a * t ^ 2 ≤ s := by
-    have hv2 : v ^ 2 = a := Real.sq_sqrt ha.le
-    have hq2 : q ^ 2 = s := Real.sq_sqrt hs
-    have htv0 : 0 ≤ t * v := mul_nonneg ht hv.le
+/-- The exponential moment of the actual sum of absolute residuals. -/
+theorem absolute_residual_sum_mgf_le {n : ℕ} (X : Fin n → Ω → ℝ) {K u : ℝ}
+    (hX : ∀ i, ExponentialMomentBound μ (X i) K)
+    (hind : iIndepFun X μ) (hu : 0 ≤ u) :
+    Integrable (fun ω => Real.exp ((1 / K) * ∑ i, |clipResidual (K * u) (X i ω)|)) μ ∧
+    mgf (fun ω => ∑ i, |clipResidual (K * u) (X i ω)|) μ (1 / K) ≤
+      Real.exp (2 * (n : ℝ) * Real.exp (-u)) := by
+  let Y : Fin n → Ω → ℝ := fun i ω => |clipResidual (K * u) (X i ω)|
+  have hmeas : ∀ i, Measurable (Y i) := fun i =>
+    ((clipResidual_continuous _).measurable.comp (hX i).measurable).abs
+  have hi : iIndepFun Y μ :=
+    hind.comp (fun _ x => |clipResidual (K * u) x|)
+      (fun _ => (clipResidual_continuous _).measurable.abs)
+  have hint (i : Fin n) : Integrable (fun ω => Real.exp ((1 / K) * Y i ω)) μ := by
+    simpa only [Y, one_div_mul_eq_div] using (hX i).integrable_exp_abs_residual hu
+  have hsum := hi.integrable_exp_mul_sum hmeas (s := Finset.univ) (fun i _ => hint i)
+  refine ⟨?_, ?_⟩
+  · simpa only [Finset.sum_apply] using hsum
+  · have heq : (fun ω => ∑ i, |clipResidual (K * u) (X i ω)|) =
+        ∑ i ∈ (Finset.univ : Finset (Fin n)), Y i := by ext ω; simp [Y]
+    rw [heq, hi.mgf_sum hmeas Finset.univ]
     calc
-      _ = (t * v) ^ 2 := by rw [← hv2]; ring
-      _ ≤ q ^ 2 := (sq_le_sq₀ htv0 hq).mpr htv
-      _ = _ := hq2
-  have htr : t * (2 * v * q + 2 * c * s) = 2 * s := by
-    have hq2 : q ^ 2 = s := Real.sq_sqrt hs
-    dsimp only [t, d]
-    rw [div_mul_eq_mul_div]
-    apply (div_eq_iff hd.ne').mpr
-    rw [← hq2]
-    ring
-  have hh := measure_ge_le_exp_mul_mgf
-    (X := Y) (t := t) (2 * v * q + 2 * c * s) ht (hint t ht htc)
-  apply hh.trans
-  calc
-    _ ≤ Real.exp (-t * (2 * v * q + 2 * c * s)) * Real.exp (a * t ^ 2) :=
-      mul_le_mul_of_nonneg_left (hmgf t ht htc) (Real.exp_nonneg _)
-    _ = Real.exp (-(2 * s) + a * t ^ 2) := by rw [← Real.exp_add]; congr 1; nlinarith [htr]
-    _ ≤ Real.exp (-s) := Real.exp_le_exp.mpr (by linarith)
+      _ ≤ ∏ _i : Fin n, Real.exp (2 * Real.exp (-u)) := by
+        apply Finset.prod_le_prod (fun _ _ => mgf_nonneg)
+        intro i _
+        have hm : mgf (Y i) μ (1 / K) ≤ 1 + 2 * Real.exp (-u) := by
+          simpa only [mgf, Y, one_div_mul_eq_div] using (hX i).integral_exp_abs_residual_le hu
+        exact hm.trans (by linarith [Real.add_one_le_exp (2 * Real.exp (-u))])
+      _ = _ := by
+        rw [Finset.prod_const, Finset.card_univ, Fintype.card_fin, ← Real.exp_nat_mul]
+        congr 1
+        ring
 
-theorem ExponentialMomentBound.measurable_centered_residual
-    (h : ExponentialMomentBound μ X K) : Measurable (centeredClipResidual μ X K u) :=
-  ((clipResidual_continuous _).measurable.comp h.measurable).sub_const _
-
-/-- The Laplace bound tensorizes over the actual independent residuals. -/
-theorem residual_sum_mgf_le {n : ℕ} (X : Fin n → Ω → ℝ) {K u t : ℝ}
-    (hX : ∀ i, ExponentialMomentBound μ (X i) K)
-    (hind : iIndepFun X μ) (hu : 0 ≤ u) (ht : |t| ≤ 1 / (2 * K)) :
-    mgf (fun ω => ∑ i, centeredClipResidual μ (X i) K u ω) μ t ≤
-      Real.exp ((n : ℝ) * 16 * K ^ 2 * Real.exp (-u) * t ^ 2) := by
-  let Y := fun i => centeredClipResidual μ (X i) K u
-  have hmeas : ∀ i, Measurable (Y i) := fun i => (hX i).measurable_centered_residual
-  have hi : iIndepFun Y μ := by
-    exact hind.comp (fun i x => clipResidual (K * u) x - ∫ a, clipResidual (K * u) (X i a) ∂μ)
-      (fun i => (clipResidual_continuous _).measurable.sub_const _)
-  have heq : (fun ω => ∑ i, centeredClipResidual μ (X i) K u ω) =
-      ∑ i ∈ (Finset.univ : Finset (Fin n)), Y i := by ext ω; simp [Y]
-  rw [heq, hi.mgf_sum hmeas Finset.univ]
-  calc
-    _ ≤ ∏ _i : Fin n, Real.exp (16 * K ^ 2 * Real.exp (-u) * t ^ 2) := by
-      apply Finset.prod_le_prod (fun _ _ => mgf_nonneg)
-      intro i _
-      exact (hX i).mgf_centered_residual_le hu ht
-    _ = _ := by rw [Finset.prod_const, Finset.card_univ, Fintype.card_fin, ← Real.exp_nat_mul]; congr 1; ring
-
-theorem residual_sum_integrable_exp {n : ℕ} (X : Fin n → Ω → ℝ) {K u t : ℝ}
-    (hX : ∀ i, ExponentialMomentBound μ (X i) K)
-    (hind : iIndepFun X μ) (hu : 0 ≤ u) (ht : |t| ≤ 1 / (2 * K)) :
-    Integrable (fun ω => Real.exp (t * ∑ i, centeredClipResidual μ (X i) K u ω)) μ := by
-  let Y := fun i => centeredClipResidual μ (X i) K u
-  have hmeas : ∀ i, Measurable (Y i) := fun i => (hX i).measurable_centered_residual
-  have hi : iIndepFun Y μ := by
-    exact hind.comp (fun i x => clipResidual (K * u) x - ∫ a, clipResidual (K * u) (X i a) ∂μ)
-      (fun i => (clipResidual_continuous _).measurable.sub_const _)
-  have hh := hi.integrable_exp_mul_sum hmeas (s := Finset.univ)
-    (fun i _ => (hX i).integrable_exp_centered_residual hu ht)
-  simpa only [Finset.sum_apply] using hh
-
-/-- Actual one-sided concentration of the unnormalized sum. -/
-theorem residual_sum_upper_tail {n : ℕ} (hn : 1 ≤ n) (X : Fin n → Ω → ℝ)
-    {K u s : ℝ} (hK : 0 < K) (hX : ∀ i, ExponentialMomentBound μ (X i) K)
-    (hind : iIndepFun X μ) (hu : 0 ≤ u) (hs : 0 ≤ s) :
-    μ.real {ω | 2 * Real.sqrt ((n : ℝ) * 16 * K ^ 2 * Real.exp (-u)) * Real.sqrt s +
-      4 * K * s ≤ ∑ i, centeredClipResidual μ (X i) K u ω} ≤ Real.exp (-s) := by
-  have hn0 : 0 < (n : ℝ) := by exact_mod_cast hn
-  apply bernstein_upper_tail_of_mgf (a := (n : ℝ) * 16 * K ^ 2 * Real.exp (-u))
-    (c := 2 * K) (by positivity) (by positivity) hs
-  · intro t ht htc
-    exact residual_sum_integrable_exp X hX hind hu (by simpa [abs_of_nonneg ht] using htc)
-  · intro t ht htc
-    exact residual_sum_mgf_le X hX hind hu (by simpa [abs_of_nonneg ht] using htc)
-
-/-- Two-sided form of the bounded-parameter Laplace estimate. -/
-theorem bernstein_abs_tail_of_mgf {Y : Ω → ℝ} {a c s : ℝ}
-    (ha : 0 < a) (hc : 0 < c) (hs : 0 ≤ s)
-    (hint : ∀ t : ℝ, |t| ≤ 1 / c → Integrable (fun ω => Real.exp (t * Y ω)) μ)
-    (hmgf : ∀ t : ℝ, |t| ≤ 1 / c → mgf Y μ t ≤ Real.exp (a * t ^ 2)) :
-    μ.real {ω | 2 * Real.sqrt a * Real.sqrt s + 2 * c * s ≤ |Y ω|} ≤
-      2 * Real.exp (-s) := by
-  let r := 2 * Real.sqrt a * Real.sqrt s + 2 * c * s
-  have hup : μ.real {ω | r ≤ Y ω} ≤ Real.exp (-s) :=
-    bernstein_upper_tail_of_mgf ha hc hs
-      (fun t ht htc => hint t (by simpa [abs_of_nonneg ht] using htc))
-      (fun t ht htc => hmgf t (by simpa [abs_of_nonneg ht] using htc))
-  have hlo : μ.real {ω | r ≤ -Y ω} ≤ Real.exp (-s) := by
-    apply bernstein_upper_tail_of_mgf (Y := fun ω => -Y ω) ha hc hs
-    · intro t ht htc
-      have hi := hint (-t) (by simpa [abs_neg, abs_of_nonneg ht] using htc)
-      simpa only [mul_neg, neg_mul] using hi
-    · intro t ht htc
-      have hi := hmgf (-t) (by simpa [abs_neg, abs_of_nonneg ht] using htc)
-      simpa only [mgf, mul_neg, neg_mul, neg_sq] using hi
-  have hsub : {ω | r ≤ |Y ω|} ⊆ {ω | r ≤ Y ω} ∪ {ω | r ≤ -Y ω} := by
+/-- A direct scalar residual tail with its absolute-mean cost explicit. -/
+theorem residual_sum_abs_tail {n : ℕ} (X : Fin n → Ω → ℝ) {K u s : ℝ}
+    (hK : 0 < K) (hX : ∀ i, ExponentialMomentBound μ (X i) K)
+    (hind : iIndepFun X μ) (hu : 0 ≤ u) :
+    μ.real {ω | K * (s + 4 * (n : ℝ) * Real.exp (-u)) ≤
+      |∑ i, centeredClipResidual μ (X i) K u ω|} ≤ Real.exp (-s) := by
+  let S : Ω → ℝ := fun ω => ∑ i, |clipResidual (K * u) (X i ω)|
+  have hm (i : Fin n) : |∫ a, clipResidual (K * u) (X i a) ∂μ| ≤ 2 * K * Real.exp (-u) := by
+    have hh := norm_integral_le_integral_norm (μ := μ) (fun a => clipResidual (K * u) (X i a))
+    simp only [Real.norm_eq_abs] at hh
+    exact hh.trans ((hX i).integral_abs_residual_le hu)
+  have hmean : (∑ i, |∫ a, clipResidual (K * u) (X i a) ∂μ|) ≤
+      2 * (n : ℝ) * K * Real.exp (-u) := by
+    exact (Finset.sum_le_sum (fun i _ => hm i)).trans_eq (by simp; ring)
+  have hcenter (ω : Ω) : |∑ i, centeredClipResidual μ (X i) K u ω| ≤
+      S ω + 2 * (n : ℝ) * K * Real.exp (-u) := by
+    simp only [centeredClipResidual, Finset.sum_sub_distrib]
+    have h₁ := Finset.abs_sum_le_sum_abs (fun i : Fin n => clipResidual (K * u) (X i ω)) Finset.univ
+    have h₂ := Finset.abs_sum_le_sum_abs (fun i : Fin n => ∫ a, clipResidual (K * u) (X i a) ∂μ) Finset.univ
+    exact (abs_sub _ _).trans (add_le_add h₁ (h₂.trans hmean))
+  have hsub : {ω | K * (s + 4 * (n : ℝ) * Real.exp (-u)) ≤
+      |∑ i, centeredClipResidual μ (X i) K u ω|} ⊆
+      {ω | K * (s + 2 * (n : ℝ) * Real.exp (-u)) ≤ S ω} := by
     intro ω hω
-    by_cases hy : 0 ≤ Y ω
-    · exact Or.inl (by simpa [abs_of_nonneg hy] using hω)
-    · exact Or.inr (by simpa [abs_of_nonpos (le_of_lt (lt_of_not_ge hy))] using hω)
+    have hh := hcenter ω
+    dsimp only [Set.mem_setOf_eq] at hω ⊢
+    nlinarith
+  have hbound := absolute_residual_sum_mgf_le X hX hind hu
+  have hchernoff := measure_ge_le_exp_mul_mgf (X := S) (t := 1 / K)
+    (K * (s + 2 * (n : ℝ) * Real.exp (-u))) (by positivity) hbound.1
+  apply (measureReal_mono hsub).trans (hchernoff.trans _)
   calc
-    _ ≤ μ.real ({ω | r ≤ Y ω} ∪ {ω | r ≤ -Y ω}) := measureReal_mono hsub
-    _ ≤ μ.real {ω | r ≤ Y ω} + μ.real {ω | r ≤ -Y ω} := measureReal_union_le _ _
-    _ ≤ Real.exp (-s) + Real.exp (-s) := add_le_add hup hlo
-    _ = _ := by ring
+    _ ≤ Real.exp (-(1 / K) * (K * (s + 2 * (n : ℝ) * Real.exp (-u)))) *
+        Real.exp (2 * (n : ℝ) * Real.exp (-u)) :=
+      mul_le_mul_of_nonneg_left hbound.2 (Real.exp_nonneg _)
+    _ = _ := by rw [← Real.exp_add]; congr 1; field_simp [hK.ne'] <;> ring
 
-/-- Actual two-sided concentration of the unnormalized residual sum. -/
-theorem residual_sum_abs_tail {n : ℕ} (hn : 1 ≤ n) (X : Fin n → Ω → ℝ)
-    {K u s : ℝ} (hK : 0 < K) (hX : ∀ i, ExponentialMomentBound μ (X i) K)
-    (hind : iIndepFun X μ) (hu : 0 ≤ u) (hs : 0 ≤ s) :
-    μ.real {ω | 2 * Real.sqrt ((n : ℝ) * 16 * K ^ 2 * Real.exp (-u)) * Real.sqrt s +
-      4 * K * s ≤ |∑ i, centeredClipResidual μ (X i) K u ω|} ≤ 2 * Real.exp (-s) := by
-  have hn0 : 0 < (n : ℝ) := by exact_mod_cast hn
-  apply bernstein_abs_tail_of_mgf (a := (n : ℝ) * 16 * K ^ 2 * Real.exp (-u))
-    (c := 2 * K) (by positivity) (by positivity) hs
-  · intro t ht
-    exact residual_sum_integrable_exp X hX hind hu ht
-  · intro t ht
-    exact residual_sum_mgf_le X hX hind hu ht
-
-/-- Coordinate union bound. Only independence across observations is used;
-the coordinates of each observation may be dependent. -/
-theorem residual_array_tail {n p : ℕ} (hn : 1 ≤ n)
-    (X : Fin n → Ω → Fin p → ℝ) {K u s : ℝ} (hK : 0 < K)
-    (hX : ∀ i j, ExponentialMomentBound μ (fun ω => X i ω j) K)
-    (hind : iIndepFun X μ) (hu : 0 ≤ u) (hs : 0 ≤ s) :
-    μ.real {ω | ∃ j : Fin p,
-      2 * Real.sqrt ((n : ℝ) * 16 * K ^ 2 * Real.exp (-u)) * Real.sqrt s + 4 * K * s ≤
-        |∑ i, centeredClipResidual μ (fun a => X i a j) K u ω|} ≤
-      2 * (p : ℝ) * Real.exp (-s) := by
-  let r := 2 * Real.sqrt ((n : ℝ) * 16 * K ^ 2 * Real.exp (-u)) * Real.sqrt s + 4 * K * s
-  have hcoord (j : Fin p) : iIndepFun (fun i ω => X i ω j) μ :=
-    hind.comp (fun _ x => x j) (fun _ => measurable_pi_apply j)
+/-- A union bound preserves arbitrary dependence within each row. -/
+theorem residual_array_tail {n p : ℕ} (X : Fin n → Ω → Fin p → ℝ) {K u s : ℝ}
+    (hK : 0 < K) (hX : ∀ i j, ExponentialMomentBound μ (fun ω => X i ω j) K)
+    (hind : iIndepFun X μ) (hu : 0 ≤ u) :
+    μ.real {ω | ∃ j : Fin p, K * (s + 4 * (n : ℝ) * Real.exp (-u)) ≤
+      |∑ i, centeredClipResidual μ (fun a => X i a j) K u ω|} ≤
+      (p : ℝ) * Real.exp (-s) := by
+  let r := K * (s + 4 * (n : ℝ) * Real.exp (-u))
   have htail (j : Fin p) :
-      μ.real {ω | r ≤ |∑ i, centeredClipResidual μ (fun a => X i a j) K u ω|} ≤
-        2 * Real.exp (-s) :=
-    residual_sum_abs_tail hn (fun i ω => X i ω j) hK (fun i => hX i j) (hcoord j) hu hs
+      μ.real {ω | r ≤ |∑ i, centeredClipResidual μ (fun a => X i a j) K u ω|} ≤ Real.exp (-s) :=
+    residual_sum_abs_tail (fun i ω => X i ω j) hK (fun i => hX i j)
+      (hind.comp (fun _ x => x j) (fun _ => measurable_pi_apply j)) hu
   have heq : {ω | ∃ j : Fin p, r ≤ |∑ i, centeredClipResidual μ (fun a => X i a j) K u ω|} =
-      ⋃ j : Fin p, {ω | r ≤ |∑ i, centeredClipResidual μ (fun a => X i a j) K u ω|} := by
-    ext ω
-    simp
+      ⋃ j : Fin p, {ω | r ≤ |∑ i, centeredClipResidual μ (fun a => X i a j) K u ω|} := by ext ω; simp
   rw [heq]
   calc
     _ ≤ ∑ j : Fin p, μ.real {ω | r ≤ |∑ i, centeredClipResidual μ (fun a => X i a j) K u ω|} :=
       measureReal_iUnion_fintype_le _
-    _ ≤ ∑ _j : Fin p, 2 * Real.exp (-s) := Finset.sum_le_sum (fun j _ => htail j)
-    _ = _ := by simp; ring
+    _ ≤ ∑ _j : Fin p, Real.exp (-s) := Finset.sum_le_sum (fun j _ => htail j)
+    _ = _ := by simp
+
+/-- Normalized residual coupling at an arbitrary nonnegative cutoff. -/
+theorem normalized_exp_residual_tail {n p : ℕ} (hn : 1 ≤ n)
+    {X : Fin n → Ω → Vector p} {K u s : ℝ}
+    (h : SubexponentialIndependentHypotheses μ X K) (hu : 0 ≤ u) (hs : 0 ≤ s) :
+    μ.real {ω | K * (s + 4 * (n : ℝ) * Real.exp (-u)) / Real.sqrt (n : ℝ) <
+      ‖sumVector (normalizedResidualRows μ X (K * u)) ω‖} ≤
+      (p : ℝ) * Real.exp (-s) := by
+  classical
+  have hK : 0 < K := lt_of_lt_of_le zero_lt_one h.one_le_scale
+  have hnpos : 0 < (n : ℝ) := by exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hn)
+  have hv : 0 < Real.sqrt (n : ℝ) := Real.sqrt_pos.mpr hnpos
+  let r := K * (s + 4 * (n : ℝ) * Real.exp (-u)) / Real.sqrt (n : ℝ)
+  have hr : 0 ≤ r := by dsimp [r]; positivity
+  have hscale : K * (s + 4 * (n : ℝ) * Real.exp (-u)) = Real.sqrt (n : ℝ) * r := by
+    dsimp only [r]
+    field_simp [hv.ne']
+  have hsub : {ω | r < ‖sumVector (normalizedResidualRows μ X (K * u)) ω‖} ⊆
+      {ω | ∃ j : Fin p, K * (s + 4 * (n : ℝ) * Real.exp (-u)) ≤
+        |∑ i, centeredClipResidual μ (fun a => X i a j) K u ω|} := by
+    intro ω hω
+    have hexists : ∃ j : Fin p, r < ‖sumVector (normalizedResidualRows μ X (K * u)) ω j‖ := by
+      by_contra hnex
+      have hcoord : ∀ j : Fin p, ‖sumVector (normalizedResidualRows μ X (K * u)) ω j‖ ≤ r := by
+        intro j
+        exact le_of_not_gt (fun hj => hnex ⟨j, hj⟩)
+      exact (not_le_of_gt hω) ((pi_norm_le_iff_of_nonneg hr).mpr hcoord)
+    obtain ⟨j, hj⟩ := hexists
+    refine ⟨j, ?_⟩
+    have heq : sumVector (normalizedResidualRows μ X (K * u)) ω j =
+        (Real.sqrt (n : ℝ))⁻¹ * ∑ i, centeredClipResidual μ (fun a => X i a j) K u ω := by
+      simp only [sumVector, normalizedResidualRows, centeredResidualRows,
+        centeredClipResidual, Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Finset.mul_sum]
+    rw [heq, Real.norm_eq_abs, abs_mul, abs_of_nonneg (inv_nonneg.mpr hv.le)] at hj
+    rw [hscale]
+    have hh := mul_lt_mul_of_pos_left hj hv
+    simpa only [← mul_assoc, mul_inv_cancel₀ hv.ne', one_mul] using hh.le
+  exact (measureReal_mono hsub).trans
+    (residual_array_tail X hK (fun i j => h.coordinate_exponentialMomentBound i j) h.independent hu)
+
+/-- The cutoff used in the corollary makes the total residual mean negligible. -/
+private theorem four_n_tail_le_one {n : ℕ} (hn : 1 ≤ n) :
+    4 * (n : ℝ) * Real.exp (-(4 * dimensionLog n)) ≤ 1 := by
+  have hnR : (1 : ℝ) ≤ n := by exact_mod_cast hn
+  have hnpos : 0 < (n : ℝ) := zero_lt_one.trans_le hnR
+  let f := subexponentialTailFactor n
+  have hf : 0 ≤ f := subexponentialTailFactor_nonneg n
+  have ht : f ≤ 1 / (2 * (n : ℝ)) := subexponentialTailFactor_le_inv_two_mul hn
+  have ht' : 2 * (n : ℝ) * f ≤ 1 := by
+    have hh := (le_div_iff₀ (show 0 < 2 * (n : ℝ) by positivity)).mp ht
+    nlinarith
+  have hfhalf : 2 * f ≤ 1 := by
+    have hh := mul_nonneg (sub_nonneg.mpr hnR) hf
+    nlinarith
+  have hsq := mul_le_mul_of_nonneg_right ht' (show 0 ≤ 2 * f by positivity)
+  have hexp : Real.exp (-(4 * dimensionLog n)) = f ^ 2 := by
+    dsimp only [f, subexponentialTailFactor]
+    rw [← Real.exp_nat_mul]
+    congr 1
+    ring
+  rw [hexp]
+  nlinarith
+
+/-- Ready-to-use row residual coupling with the manuscript's original radius. -/
+theorem normalized_residual_tail_log {n p : ℕ} {X : Fin n → Ω → Vector p} {K : ℝ}
+    (h : SubexponentialIndependentHypotheses μ X K) (hn : 1 ≤ n) (hp : 1 ≤ p) :
+    μ.real {ω | subexponentialResidualRadius n p K <
+      ‖sumVector (normalizedResidualRows μ X (K * (4 * dimensionLog n))) ω‖} ≤
+      1 / (2 * (n : ℝ)) := by
+  have hnR : (1 : ℝ) ≤ n := by exact_mod_cast hn
+  have hpR : (1 : ℝ) ≤ p := by exact_mod_cast hp
+  have hnpos : 0 < (n : ℝ) := zero_lt_one.trans_le hnR
+  have hppos : 0 < (p : ℝ) := zero_lt_one.trans_le hpR
+  have hK : 0 < K := lt_of_lt_of_le zero_lt_one h.one_le_scale
+  let s := subexponentialUnionLog n p
+  have hs : 0 ≤ s := (subexponentialUnionLog_pos hn hp).le
+  have hf : 0 ≤ subexponentialTailFactor n := subexponentialTailFactor_nonneg n
+  have hslo : (3 / 4 : ℝ) ≤ s := by
+    have hnp : (1 : ℝ) ≤ (n : ℝ) * (p : ℝ) := one_le_mul_of_one_le_of_one_le hnR hpR
+    have hlog := Real.log_le_log (by norm_num : (0 : ℝ) < 4)
+      (show (4 : ℝ) ≤ 4 * (n : ℝ) * (p : ℝ) by nlinarith)
+    have hlo := Real.one_sub_inv_le_log_of_pos (by norm_num : (0 : ℝ) < 4)
+    norm_num at hlo
+    exact hlo.trans hlog
+  have hu : 0 ≤ 4 * dimensionLog n := by
+    have hh := log_exp_mul_nat_ge_one hn
+    linarith
+  have hsmall := four_n_tail_le_one hn
+  have hnum : s + 4 * (n : ℝ) * Real.exp (-(4 * dimensionLog n)) ≤ 4 * s := by linarith
+  have hrad : K * (s + 4 * (n : ℝ) * Real.exp (-(4 * dimensionLog n))) /
+      Real.sqrt (n : ℝ) ≤ subexponentialResidualRadius n p K := by
+    calc
+      _ ≤ 4 * K * s / Real.sqrt (n : ℝ) :=
+        div_le_div_of_nonneg_right (by nlinarith [mul_le_mul_of_nonneg_left hnum hK.le])
+          (Real.sqrt_nonneg _)
+      _ ≤ _ := by
+        unfold subexponentialResidualRadius
+        dsimp only [s]
+        exact le_add_of_nonneg_left (by positivity)
+  have ht := normalized_exp_residual_tail hn h hu hs
+  have hsub : {ω | subexponentialResidualRadius n p K <
+      ‖sumVector (normalizedResidualRows μ X (K * (4 * dimensionLog n))) ω‖} ⊆
+      {ω | K * (s + 4 * (n : ℝ) * Real.exp (-(4 * dimensionLog n))) /
+        Real.sqrt (n : ℝ) <
+        ‖sumVector (normalizedResidualRows μ X (K * (4 * dimensionLog n))) ω‖} := by
+    intro ω hω
+    exact lt_of_le_of_lt hrad hω
+  apply (measureReal_mono hsub).trans (ht.trans _)
+  have heq : (p : ℝ) * Real.exp (-s) = 1 / (4 * (n : ℝ)) := by
+    dsimp only [s, subexponentialUnionLog]
+    rw [Real.exp_neg, Real.exp_log (by positivity)]
+    field_simp [hnpos.ne', hppos.ne']
+  rw [heq]
+  exact one_div_le_one_div_of_le (show 0 < 2 * (n : ℝ) by positivity) (by nlinarith)
 
 end
 end RectangleCLT.Companion

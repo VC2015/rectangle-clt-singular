@@ -47,11 +47,11 @@ theorem shiftedBox_eq_outerSet {p : ℕ} (lo hi : Vector p) (t : ℝ) :
   · intro hx f
     rcases f with ⟨j, b⟩
     have hj := hx j
-    cases b <;> simp only [normalDot, Bool.false_eq_true, ↓reduceIte] <;> linarith
+    cases b <;> simp only [FaceSmoother.normalDot, Bool.false_eq_true, ↓reduceIte] <;> linarith
   · intro hx j
     have hl := hx (j, false)
     have hh := hx (j, true)
-    simp only [normalDot, Bool.false_eq_true, ↓reduceIte] at hl hh
+    simp only [FaceSmoother.normalDot, Bool.false_eq_true, ↓reduceIte] at hl hh
     constructor <;> linarith
 
 /-- Deterministic maximum-norm control expands every face by the same
