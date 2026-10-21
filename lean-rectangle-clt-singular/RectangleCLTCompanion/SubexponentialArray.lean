@@ -54,7 +54,8 @@ theorem abs_integral_clipped_coordinate [IsProbabilityMeasure μ]
     (i : Fin n) (j : Fin p) :
     |∫ ω, clipAt T (X i ω j) ∂μ| ≤ T := by
   have hh := norm_integral_le_of_norm_le_const
-    (μ := μ) (ae_of_all _ (fun ω => by
+    (μ := μ) (f := fun ω => clipAt T (X i ω j)) (C := T)
+    (ae_of_all _ (fun ω => by
       simpa only [Real.norm_eq_abs] using abs_clipAt_le hT (X i ω j)))
   simpa only [Real.norm_eq_abs, measureReal_univ_eq_one, mul_one] using hh
 
@@ -145,7 +146,7 @@ theorem centeredClippedRows_add_centeredResidualRows [IsProbabilityMeasure μ]
     centeredClippedRows μ X (K * u) i ω + centeredResidualRows μ X (K * u) i ω = X i ω := by
   ext j
   have hi := (h.coordinate_exponentialMomentBound i j).integrable
-  have hc := integrable_clipped_coordinate h.measurable
+  have hc := integrable_clipped_coordinate (μ := μ) h.measurable
     (mul_nonneg (zero_le_one.trans h.one_le_scale) hu) i j
   have hm : (∫ a, clipResidual (K * u) (X i a j) ∂μ) =
       -(∫ a, clipAt (K * u) (X i a j) ∂μ) := by
@@ -160,11 +161,15 @@ theorem normalizedObservationSum_eq_clipped_add_residual [IsProbabilityMeasure �
     normalizedObservationSum X ω =
       sumVector (normalizedClippedRows μ X (K * u)) ω +
       sumVector (normalizedResidualRows μ X (K * u)) ω := by
+  ext j
   simp only [normalizedObservationSum, normalizedClippedRows, normalizedResidualRows,
-    sumVector_smul, ← smul_add]
-  congr 1
-  simp only [sumVector, ← Finset.sum_add_distrib,
-    centeredClippedRows_add_centeredResidualRows h hu]
+    sumVector, Pi.smul_apply, smul_eq_mul, Finset.sum_apply, Pi.add_apply]
+  rw [Finset.mul_sum, ← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro i _
+  have hh := congrFun (centeredClippedRows_add_centeredResidualRows h hu i ω) j
+  simp only [Pi.add_apply] at hh
+  rw [← mul_add, hh]
 
 end
 end RectangleCLT.Companion

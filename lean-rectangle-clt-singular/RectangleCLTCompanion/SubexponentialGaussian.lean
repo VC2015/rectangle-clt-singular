@@ -131,8 +131,9 @@ theorem rectangularGaussianLaw_eq_of_gram {p q r : ℕ}
       rw [Finset.sum_comm]
       exact Finset.sum_congr rfl (fun i _ =>
         Finset.sum_congr rfl (fun j _ => by ring))
-    simp only [char_apply, probChar_apply, coordinateDotBilin, Matrix.mulVec,
-      dotProduct, hdot]
+    simp only [char_apply, probChar_apply]
+    change Complex.exp (((∑ j, (∑ i, D j i * z i) * t j : ℝ) : ℂ) * Complex.I) = _
+    rw [hdot]
   simp_rw [hfun, standardGaussian_integral_complex_projection,
     projected_normSq_eq_gram, hgram]
 

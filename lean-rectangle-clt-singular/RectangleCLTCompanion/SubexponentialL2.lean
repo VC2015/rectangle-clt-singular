@@ -122,7 +122,8 @@ theorem normalizedResidualRows_sum_covariance_diagonal_le [IsProbabilityMeasure 
   have hfun : (fun ω => sumVector (normalizedResidualRows μ X (K * u)) ω j) =
       (fun ω => (Real.sqrt (n : ℝ))⁻¹ * sumVector U ω j) := by
     funext ω
-    simp only [normalizedResidualRows, sumVector_smul, Pi.smul_apply, smul_eq_mul, U]
+    simp only [sumVector, Finset.sum_apply, normalizedResidualRows,
+      Pi.smul_apply, smul_eq_mul, U, Finset.mul_sum]
   rw [hfun, variance_mul]
   have hnp : (0 : ℝ) < n := by exact_mod_cast (lt_of_lt_of_le (by decide : 0 < 1) hn)
   have hscale : ((Real.sqrt (n : ℝ))⁻¹) ^ 2 * (n : ℝ) = 1 := by
@@ -345,6 +346,7 @@ theorem clipped_coordinate_L2_distance_le [IsProbabilityMeasure μ]
       (sumVector (normalizedClippedRows μ X (K * u)) ω j -
         normalizedObservationSum X ω j) ^ 2 ∂μ) ≤
       2 * K * Real.exp (-u / 2) := by
+  have hK : 0 ≤ K := zero_le_one.trans h.one_le_scale
   let C := sumVector (normalizedClippedRows μ X (K * u))
   let V := sumVector (normalizedResidualRows μ X (K * u))
   have hv0 := normalizedResidualSum_coordinate_centered h hu j

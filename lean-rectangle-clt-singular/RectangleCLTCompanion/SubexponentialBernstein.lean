@@ -1,5 +1,6 @@
 import RectangleCLTCompanion.SubexponentialArray
 import RectangleCLTCompanion.SubexponentialScales
+import Mathlib.Probability.Moments.Basic
 
 /-! Exponentially rare clipping residuals are controlled by a positive-sum
 Laplace bound. The cutoff is large enough that their absolute means can be
@@ -123,7 +124,7 @@ theorem normalized_exp_residual_tail {n p : ℕ} (hn : 1 ≤ n)
   have hr : 0 ≤ r := by dsimp [r]; positivity
   have hscale : K * (s + 4 * (n : ℝ) * Real.exp (-u)) = Real.sqrt (n : ℝ) * r := by
     dsimp only [r]
-    field_simp [hv.ne']
+    field_simp [hv.ne'] <;> ring
   have hsub : {ω | r < ‖sumVector (normalizedResidualRows μ X (K * u)) ω‖} ⊆
       {ω | ∃ j : Fin p, K * (s + 4 * (n : ℝ) * Real.exp (-u)) ≤
         |∑ i, centeredClipResidual μ (fun a => X i a j) K u ω|} := by
@@ -218,7 +219,7 @@ theorem normalized_residual_tail_log {n p : ℕ} {X : Fin n → Ω → Vector p}
   have heq : (p : ℝ) * Real.exp (-s) = 1 / (4 * (n : ℝ)) := by
     dsimp only [s, subexponentialUnionLog]
     rw [Real.exp_neg, Real.exp_log (by positivity)]
-    field_simp [hnpos.ne', hppos.ne']
+    field_simp [hnpos.ne', hppos.ne'] <;> ring
   rw [heq]
   exact one_div_le_one_div_of_le (show 0 < 2 * (n : ℝ) by positivity) (by nlinarith)
 

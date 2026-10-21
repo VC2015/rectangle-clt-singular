@@ -1,5 +1,5 @@
-import Mathlib.Probability.Moments.Basic
 import Mathlib.MeasureTheory.Function.L2Space
+import Mathlib.MeasureTheory.Function.SpecialFunctions.Basic
 import Mathlib.Data.Complex.Exponential
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Linarith
@@ -12,7 +12,7 @@ import Mathlib.Tactic.FunProp
 sub-exponential extension. All bounds refer to the actual residual random
 variable, and no tail or concentration assertion is assumed as a premise. -/
 
-open MeasureTheory ProbabilityTheory Real
+open MeasureTheory Real
 
 namespace RectangleCLT.Companion
 

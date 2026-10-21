@@ -146,6 +146,7 @@ theorem standardizedClipped_pairGap_lower [IsProbabilityMeasure μ]
     let S := fun ω => diagonalScale (fun j => (d j)⁻¹) (C ω)
     pairGap (covariance μ (normalizedObservationSum X)) -
       8 * K * Real.exp (-u / 2) ≤ pairGap (covariance μ S) := by
+  have hK : 0 ≤ K := zero_le_one.trans h.one_le_scale
   let C := sumVector (normalizedClippedRows μ X (K * u))
   let d := fun j => Real.sqrt (covariance μ C j j)
   let S := fun ω => diagonalScale (fun j => (d j)⁻¹) (C ω)

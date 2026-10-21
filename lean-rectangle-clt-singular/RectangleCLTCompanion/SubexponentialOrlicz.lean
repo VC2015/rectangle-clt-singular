@@ -8,6 +8,7 @@ integrable exponential moments. The empty set of admissible scales has norm
 finite-tail hypothesis. A factor two avoids any endpoint-closedness premise. -/
 
 open MeasureTheory ProbabilityTheory Set
+open scoped ENNReal
 
 universe u
 
@@ -45,7 +46,7 @@ theorem psi1Scales_mono (hX : Measurable X) {s t : ℝ}
   have hpoint (ω : Ω) : Real.exp (|X ω| / t) ≤ Real.exp (|X ω| / s) := by
     exact Real.exp_le_exp.mpr (div_le_div_of_nonneg_left (abs_nonneg _) hs.1 hst)
   have hm : Measurable (fun ω => Real.exp (|X ω| / t)) :=
-    (hX.abs.div_const t).exp
+    ((continuous_abs.measurable.comp hX).div_const t).exp
   have hi : Integrable (fun ω => Real.exp (|X ω| / t)) μ :=
     hs.2.1.mono' hm.aestronglyMeasurable (ae_of_all _ fun ω => by
       simpa only [Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)] using hpoint ω)
@@ -62,7 +63,8 @@ theorem psi1Norm_le_iff {K : ℝ} (hK : 0 ≤ K) :
       (psi1Scales μ X).Nonempty ∧ sInf (psi1Scales μ X) ≤ K := by
   classical
   by_cases hs : (psi1Scales μ X).Nonempty
-  · simp only [psi1Norm, if_pos hs, ENNReal.ofReal_le_ofReal_iff hK, hs, true_and]
+  · rw [psi1Norm, if_pos hs]
+    simp only [ENNReal.ofReal_le_ofReal_iff hK, hs, true_and]
   · rw [psi1Norm, if_neg hs]
     constructor
     · intro hle
@@ -76,7 +78,7 @@ attainment of the Orlicz infimum. -/
 theorem two_mul_mem_psi1Scales_of_norm_le (hX : Measurable X) {K : ℝ}
     (hK : 0 < K) (hnorm : psi1Norm μ X ≤ ENNReal.ofReal K) :
     2 * K ∈ psi1Scales μ X := by
-  obtain ⟨hne, hle⟩ := (psi1Norm_le_iff hK.le).mp hnorm
+  obtain ⟨hne, hle⟩ := (psi1Norm_le_iff (μ := μ) (X := X) hK.le).mp hnorm
   have hlt : sInf (psi1Scales μ X) < 2 * K := hle.trans_lt (by linarith)
   obtain ⟨s, hs, hst⟩ :=
     (csInf_lt_iff (psi1Scales_bddBelow μ X) hne).mp hlt
