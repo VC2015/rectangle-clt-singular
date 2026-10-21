@@ -114,7 +114,7 @@ theorem standardizedClipped_coordinate_L2_distance_le [IsProbabilityMeasure μ]
   let W := normalizedObservationSum X
   have hc := normalizedClippedSum_coordinate_memLp_two h hu j
   have hw := normalizedObservationSum_coordinate_memLp_two h j
-  have hm := normalizedClippedSum_coordinate_centered h hu j
+  have hm : (∫ ω, C ω j ∂μ) = 0 := normalizedClippedSum_coordinate_centered h hu j
   have hnc : ‖hc.toLp (fun ω => C ω j)‖ = d := by
     have he : covariance μ C j j = ∫ ω, C ω j ^ 2 ∂μ := by
       simp only [covariance, hm, zero_mul, sub_zero, pow_two]
@@ -130,7 +130,8 @@ theorem standardizedClipped_coordinate_L2_distance_le [IsProbabilityMeasure μ]
   have hh := norm_normalized_sub_le hdp hnc hdist hd1
   change Real.sqrt (∫ ω, (d⁻¹ * C ω j - W ω j) ^ 2 ∂μ) ≤ _
   rw [sqrt_integral_const_mul_sub_sq_eq_norm_toLp hc hw d⁻¹]
-  convert hh using 1 <;> ring
+  convert hh using 1
+  ring
 
 /-- The standardized clipped covariance loses at most four times the
 residual standard-deviation bound in its pairwise correlation gap. -/
@@ -179,7 +180,8 @@ theorem standardizedClipped_pairGap_lower [IsProbabilityMeasure μ]
     (by positivity)
   intro j k _
   have hh := covariance_difference_le_two_error hW hS hmW hmS hunit huS hdist j k
-  convert hh using 1 <;> ring
+  convert hh using 1
+  ring
 
 end
 end RectangleCLT.Companion

@@ -305,7 +305,7 @@ theorem gaussian_factor_exists_of_subexponential
   have hL2 (a : JointIndex p) : MemLp (fun ω => jointValue W V ω a) 2 μ := by
     cases a with
     | inl j => exact normalizedObservationSum_coordinate_memLp_two h j
-    | inr j => exact memLp_zero
+    | inr j => exact MemLp.zero'
   have hmean (a : JointIndex p) : (∫ ω, jointValue W V ω a ∂μ) = 0 := by
     cases a with
     | inl j => exact normalizedObservationSum_coordinate_centered h j
@@ -342,7 +342,9 @@ theorem subexponentialCLT_psi1
     (subexponentialScale_pos hn h.one_le_scale)
     (zero_lt_one.trans_le (log_exp_mul_nat_ge_one hp))
   have hC := zero_le_one.trans one_le_subexponentialUniversalConstant
-  exact (hh.trans (mul_le_mul_of_nonneg_left hscale hC)).trans_eq (by ring)
+  exact (hh.trans (mul_le_mul_of_nonneg_left hscale hC)).trans_eq (by
+    dsimp only [dimensionLog]
+    ring)
 
 /-- The fixed-gap Orlicz version of the paper's sub-exponential corollary. -/
 theorem fixedGapSubexponentialCLT_psi1
@@ -364,7 +366,9 @@ theorem fixedGapSubexponentialCLT_psi1
     (subexponentialScale_pos hn h.one_le_scale)
     (zero_lt_one.trans_le (log_exp_mul_nat_ge_one hp))
   have hC := zero_le_one.trans (one_le_subexponentialGapConstant hc₀)
-  exact (hh.trans (mul_le_mul_of_nonneg_left hscale hC)).trans_eq (by ring)
+  exact (hh.trans (mul_le_mul_of_nonneg_left hscale hC)).trans_eq (by
+    dsimp only [dimensionLog]
+    ring)
 
 theorem subexponentialCLTExists : ∃ C : ℝ, 1 ≤ C ∧ SubexponentialCLT.{u} C :=
   ⟨subexponentialUniversalConstant, one_le_subexponentialUniversalConstant, subexponentialCLT⟩
