@@ -7,6 +7,9 @@ import RectangleCLT.CombinedMain
 import RectangleCLT.UnequalMasterMain
 import RectangleCLT.GeneralMain
 import RectangleCLT.GeneralGaussianComponentMain
+import RectangleCLT.GeneralProxyMain
+import RectangleCLT.RefinedProxyConsequences
+import RectangleCLT.RefinedSubexponentialCoordinates
 
 /-! Public theorem entry points for the local-covariance rectangle CLT
 and its Gaussian-comparison, covariance-proxy, sub-exponential, and combined

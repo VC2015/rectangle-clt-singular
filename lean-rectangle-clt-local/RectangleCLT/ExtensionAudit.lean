@@ -9,6 +9,13 @@ Every list must contain only propext, Classical.choice, and Quot.sound. -/
 #print axioms RectangleCLT.unequalMasterEstimate
 #print axioms RectangleCLT.generalRectangleCLT
 #print axioms RectangleCLT.generalGaussianRectangleCLT
+#print axioms RectangleCLT.generalCovarianceProxyCLT
+#print axioms RectangleCLT.refinedCovarianceProxyCLT
+#print axioms RectangleCLT.proxyEigenvalueRectangleCLT
+#print axioms RectangleCLT.refinedSubexponentialProxyRectangleCLT
+#print axioms RectangleCLT.refinedSubexponentialBothTargets
+#print axioms RectangleCLT.refinedSubexponentialRectangleCLT
+#print axioms RectangleCLT.refinedSubexponentialCoordinatesRectangleCLT
 #print axioms RectangleCLT.localCovarianceProxyCLT
 #print axioms RectangleCLT.localCovarianceProxyCLTExists
 #print axioms RectangleCLT.subexponentialProxyRectangleCLT

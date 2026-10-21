@@ -1,0 +1,35 @@
+import RectangleCLT.RefinedProxyConsequences
+import RectangleCLT.RefinedSubexponentialCoordinates
+
+/-! Actual proxy and tail contracts, including both Gaussian targets,
+the covariance discrepancy coefficient, and original coordinate units. -/
+
+set_option pp.proofs false
+
+#print RectangleCLT.generalCovarianceProxyCLT
+#print RectangleCLT.refinedCovarianceProxyCLT
+#print RectangleCLT.proxyEigenvalueRectangleCLT
+#print RectangleCLT.GeneralCovarianceProxyCLT
+#print RectangleCLT.RefinedCovarianceProxyCLT
+#print RectangleCLT.generalProxyCoefficientRate
+#print RectangleCLT.refinedProxyCoefficientRate
+#print RectangleCLT.generalProxyRate
+#print RectangleCLT.refinedProxyRate
+#print RectangleCLT.refinedSubexponentialProxyRectangleCLT
+#print RectangleCLT.refinedSubexponentialBothTargets
+#print RectangleCLT.refinedSubexponentialRectangleCLT
+#print RectangleCLT.refinedSubexponentialCoordinatesRectangleCLT
+#print RectangleCLT.refinedSubexponentialRate
+#print RectangleCLT.SubexponentialHypotheses
+#print RectangleCLT.gaussianComparisonCoefficient
+#print axioms RectangleCLT.generalCovarianceProxyCLT
+#print axioms RectangleCLT.generalCovarianceProxyCLTExists
+#print axioms RectangleCLT.refinedCovarianceProxyCLT
+#print axioms RectangleCLT.refinedCovarianceProxyCLTExists
+#print axioms RectangleCLT.proxyEigenvalueRectangleCLT
+#print axioms RectangleCLT.refinedSubexponentialProxyRectangleCLT
+#print axioms RectangleCLT.refinedSubexponentialBothTargets
+#print axioms RectangleCLT.refinedSubexponentialRectangleCLT
+#print axioms RectangleCLT.refinedSubexponentialCoordinatesRectangleCLT
+#print axioms RectangleCLT.generalCovarianceProxyCLT_of_bounded
+#print axioms RectangleCLT.normalized_truncation_refinedProxyRate_le
