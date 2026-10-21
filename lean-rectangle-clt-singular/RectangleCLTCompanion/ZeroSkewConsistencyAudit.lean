@@ -1,0 +1,19 @@
+import RectangleCLTCompanion.ZeroSkewConsistency
+
+/-! Expanded exact contract and transitive audits for the zero-skew
+assertion of the fixed-envelope consistency theorem. The general-skew
+assertion and the quantitative lower-bound theorem have separate scope. -/
+
+set_option pp.proofs false
+
+#print RectangleCLT.Companion.zeroSkewFixedGapUniformConsistency_iff
+#print RectangleCLT.Companion.ZeroSkewFixedGapUniformConsistency
+#print axioms RectangleCLT.Companion.zeroSkewFixedGapUniformConsistency_iff
+#print axioms RectangleCLT.Companion.zeroSkewFixedGapUniformConsistency_necessary
+#print axioms RectangleCLT.Companion.zeroSkew_uniformConsistency_eventually_le_critical
+#print axioms RectangleCLT.Companion.tendsto_rademacherCritical_tail_ratio
+#print axioms RectangleCLT.Companion.tendsto_rademacherCritical_tail_count
+#print axioms RectangleCLT.Companion.tendsto_rademacherCritical_maximum_discrepancy
+#print axioms RectangleCLT.Companion.rademacherCriticalDiscrepancy_pos
+#print axioms RectangleCLT.Companion.tendsto_log_rademacherCriticalDimension_div_sqrt
+#print axioms RectangleCLT.Companion.tendsto_log_dimension_div_sqrt_of_eventually_le_critical
