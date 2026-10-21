@@ -59,6 +59,7 @@ theorem interpolation_smoother_gap_le_proxy_timeIntegrals
       gamma3 μ ξ / 3 * (∫ t in (0 : ℝ)..1, t * s.sharpThirdAverage μ ξ A t) +
       6 * gamma4 μ ξ * (∫ t in (0 : ℝ)..1, s.sharpFourthAverage μ ξ A δ t) := by
   let Δ := proxyCovarianceDiscrepancy (covariance μ (sumVector ξ)) (A * A.transpose)
+  have hΔ0 : 0 ≤ Δ := proxyCovarianceDiscrepancy_nonneg _ _
   let B := proxySecondConstant * dimensionLog p / pairGap (A * A.transpose)
   let f : ℝ → ℝ := fun t => t ^ (-(1 / 2 : ℝ))
   let g : ℝ → ℝ := fun t => Δ / 2 * B * f t +
@@ -88,8 +89,7 @@ theorem interpolation_smoother_gap_le_proxy_timeIntegrals
     (fun t ht => by
       have hh := s.abs_selectorHeatDerivative_le_proxy_sharpAverages μ ξ h A ht.1.le ht.2.le
       have hm := mul_le_mul_of_nonneg_left (hsecond t ht)
-        (mul_nonneg (by norm_num : (0 : ℝ) ≤ 1 / 2)
-          (proxyCovarianceDiscrepancy_nonneg _ _))
+        (mul_nonneg (by norm_num : (0 : ℝ) ≤ 1 / 2) hΔ0)
       exact hh.trans (by
         dsimp [g, Δ]
         nlinarith only [hm]))

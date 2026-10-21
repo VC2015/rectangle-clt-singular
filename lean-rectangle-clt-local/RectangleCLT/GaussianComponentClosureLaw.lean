@@ -132,15 +132,25 @@ theorem gaussianComponentRawOriginalSum_law
   let A := gaussianComponentRestorationFactor B ((k : ℝ) ^ 2)
   let ν₁ : Fin (k ^ 6) ⊕ Fin p → Measure (Vector p) :=
     Sum.elim (fun _ => gaussianLaw B) (restorationColumnMarginal A)
-  letI (i : Fin n) : IsProbabilityMeasure (ν₀ i) :=
+  letI hν₀ (i : Fin n) : IsProbabilityMeasure (ν₀ i) :=
     isProbabilityMeasure_map (hξ i).aemeasurable
-  letI (i : Fin n ⊕ (Fin (k ^ 6) ⊕ Fin p)) :
+  letI hνraw (i : Fin n ⊕ (Fin (k ^ 6) ⊕ Fin p)) :
       IsProbabilityMeasure (gaussianComponentRawMarginal μ ξ B k i) :=
     gaussianComponentRawMarginal_isProbability μ ξ hξ B k i
-  letI (i : Fin (k ^ 6) ⊕ Fin p) : IsProbabilityMeasure (ν₁ i) := by
+  letI hν₁ (i : Fin (k ^ 6) ⊕ Fin p) : IsProbabilityMeasure (ν₁ i) := by
     cases i with
     | inl i => exact gaussianLaw_isProbability B
     | inr i => exact restorationColumnMarginal_isProbability A i
+  letI hμ₀ : IsProbabilityMeasure (Measure.pi ν₀) :=
+    Measure.pi.instIsProbabilityMeasure ν₀
+  letI hμ₁ : IsProbabilityMeasure (Measure.pi ν₁) :=
+    Measure.pi.instIsProbabilityMeasure ν₁
+  letI hfinite₀ : IsFiniteMeasure (Measure.pi ν₀) := ⟨by
+    rw [measure_univ]
+    exact ENNReal.one_lt_top⟩
+  letI hSigma₀ : SigmaFinite (Measure.pi ν₀) := IsFiniteMeasure.toSigmaFinite _
+  letI hσ₀ : SFinite (Measure.pi ν₀) := inferInstance
+  letI hσ₁ : SFinite (Measure.pi ν₁) := inferInstance
   let E₀ := MeasurableEquiv.sumPiEquivProdPi
     (fun _ : Fin n ⊕ (Fin (k ^ 6) ⊕ Fin p) => Vector p)
   let E₁ := MeasurableEquiv.sumPiEquivProdPi
@@ -149,6 +159,9 @@ theorem gaussianComponentRawOriginalSum_law
     (gaussianComponentRawMarginal μ ξ B k)
   have hsplit₁ := measurePreserving_sumPiEquivProdPi ν₁
   have hsplit := ((MeasurePreserving.id (Measure.pi ν₀)).prod hsplit₁).comp hsplit₀
+  change MeasurePreserving _ _ ((Measure.pi ν₀).prod
+    ((gaussianComponentArrayLaw B (k ^ 6)).prod
+      (Measure.pi (restorationColumnMarginal A)))) at hsplit
   let F : (Fin n → Vector p) ×
       ((Fin (k ^ 6) → Vector p) × (Fin p → Vector p)) → Vector p :=
     fun z => (∑ i, z.1 i) + gaussianComponentSum ((k : ℝ) ^ 3)⁻¹ z.2.1

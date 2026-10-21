@@ -217,7 +217,10 @@ theorem integral_sharpFourthAverage_le_proxy
       dimensionLog p * Real.sqrt (dimensionLog p) := by
     rw [show (3 / 2 : ℝ) = 1 + 1 / 2 by norm_num, Real.rpow_add hL,
       Real.rpow_one, ← Real.sqrt_eq_rpow]
+  change (∫ t in (0 : ℝ)..1, s.sharpFourthAverage μ ξ A δ t) ≤
+    3 * gaussianFourthConstant * (dimensionLog p) ^ (3 / 2 : ℝ) /
+      (s.bandwidth * cost ^ (2 / 3 : ℝ)) at hh
   rw [hLpow] at hh
-  convert hh using 1 <;> dsimp [cost, Q] <;> ring
+  convert hh using 1 <;> simp only [Real.rpow_eq_pow] <;> dsimp [cost, Q] <;> ring
 
 end RectangleCLT.FaceSmoother

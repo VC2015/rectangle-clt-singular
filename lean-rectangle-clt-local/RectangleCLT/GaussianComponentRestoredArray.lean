@@ -53,11 +53,14 @@ theorem gaussianComponentRestoredMarginal_isProbability
     (i : Fin n ⊕ (Fin (k ^ 6) ⊕ Fin p)) :
     IsProbabilityMeasure (gaussianComponentRestoredMarginal μ ξ B k i) := by
   cases i with
-  | inl i => exact isProbabilityMeasure_map (hξ i).aemeasurable
+  | inl i =>
+      change IsProbabilityMeasure (μ.map (ξ i))
+      exact isProbabilityMeasure_map (hξ i).aemeasurable
   | inr i =>
       cases i with
-      | inl i => exact isProbabilityMeasure_map
-          (measurable_gaussianComponentIncrement k).aemeasurable
+      | inl i =>
+          change IsProbabilityMeasure ((gaussianLaw B).map (gaussianComponentIncrement k))
+          exact isProbabilityMeasure_map (measurable_gaussianComponentIncrement k).aemeasurable
       | inr i => exact restorationColumnMarginal_isProbability _ _
 
 theorem gaussianComponentRestoredFactor_diagonal_le {p : ℕ}
@@ -150,7 +153,8 @@ theorem gaussianComponentRestoredArray_integral_sum
     exact hm.symm
   change (∑ i, ∫ z, f (z (gaussianComponentRestoredIndex p n k i)) ∂Measure.pi ν) = _
   simp_rw [hrow]
-  rw [(gaussianComponentRestoredIndex p n k).sum_comp,
+  rw [(gaussianComponentRestoredIndex p n k).sum_comp
+    (fun i : Fin n ⊕ (Fin (k ^ 6) ⊕ Fin p) => ∫ x, f x ∂ν i),
     Fintype.sum_sum_type, Fintype.sum_sum_type]
   change (∑ i : Fin n, ∫ x, f x ∂μ.map (ξ i)) +
     ((∑ _i : Fin (k ^ 6), ∫ x, f x
@@ -247,7 +251,7 @@ theorem gaussianComponentRestoredArray_gamma4_le
   apply (gaussianComponentRestoredArray_fourth_sum_le μ ξ hξ hp B hk j).trans
   apply add_le_add_right
   apply add_le_add_right
-  exact (Finset.le_fold_max (0 : ℝ)).mpr
+  exact (Finset.le_fold_max (∑ i, ∫ ω, ξ i ω j ^ 4 ∂μ)).mpr
     (Or.inr ⟨j, Finset.mem_univ _, le_rfl⟩)
 
 theorem gaussianComponentRestoredArray_covariance

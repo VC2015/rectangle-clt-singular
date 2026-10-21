@@ -51,7 +51,9 @@ theorem gaussianComponentIncrement_fourth_le {p : ℕ} (hp : 1 ≤ p)
         integral_const_mul]
     _ ≤ (((k : ℝ) ^ 3)⁻¹) ^ 4 * gaussianComponentFourthMoment B :=
       mul_le_mul_of_nonneg_left hcut (by positivity)
-    _ = _ := by field_simp [hk']; ring
+    _ = _ := by
+      simp only [inv_pow, ← pow_mul, Nat.reduceMul, div_eq_mul_inv]
+      ring
 
 /-- Actual fourth moments of the whole finite independent increment array. -/
 theorem gaussianComponentIncrement_array_fourth_le {p : ℕ} (hp : 1 ≤ p)
@@ -69,6 +71,7 @@ theorem gaussianComponentIncrement_array_fourth_le {p : ℕ} (hp : 1 ≤ p)
       ((((measurable_pi_apply j).comp
         (measurable_gaussianComponentIncrement k)).pow_const 4).aestronglyMeasurable)
     rw [gaussianComponentArrayLaw_map_eval B] at hmap
+    simp only [Function.comp_def] at hmap
     rw [← hmap]
     exact gaussianComponentIncrement_fourth_le hp B hk j
   calc
@@ -94,7 +97,8 @@ theorem gaussianComponent_any_cutoff_probability_le
       measurableSet_lt measurable_const measurable_norm
     have heq : μ.real {ω | (k : ℝ) ^ 2 < ‖Z i ω‖} =
         (gaussianLaw B).real {x | (k : ℝ) ^ 2 < ‖x‖} := by
-      rw [← hlaw i, Measure.real, Measure.map_apply (hZ i) hset]
+      rw [← hlaw i]
+      simp only [Measure.real, Measure.map_apply (hZ i) hset]
       rfl
     rw [heq]
     convert gaussianComponent_norm_tail_le hp B (pow_pos hk' 2) using 1 <;>
@@ -126,7 +130,8 @@ theorem gaussianComponent_rectangle_coupling_le
   let A : Set Ω := {ω | W ω + ((k : ℝ) ^ 3)⁻¹ • (∑ i, Z i ω) ∈ R.carrier}
   let D : Set Ω := {ω | W ω + (∑ i, gaussianComponentIncrement k (Z i ω)) ∈ R.carrier}
   have hA : MeasurableSet A := R.measurableSet_carrier.preimage
-    (hW.add ((Finset.measurable_sum Finset.univ fun i _ => hZ i).const_smul _))
+    (hW.add (measurable_const.smul
+      (Finset.measurable_sum Finset.univ fun i _ => hZ i)))
   have hD : MeasurableSet D := R.measurableSet_carrier.preimage
     (hW.add (Finset.measurable_sum Finset.univ fun i _ =>
       (measurable_gaussianComponentIncrement k).comp (hZ i)))
@@ -139,7 +144,7 @@ theorem gaussianComponent_rectangle_coupling_le
     have heq : (∑ i, gaussianComponentIncrement k (Z i ω)) =
         ((k : ℝ) ^ 3)⁻¹ • ∑ i, Z i ω := by
       simp only [gaussianComponentIncrement, truncateVector, if_pos (hgood _)]
-      exact (Finset.smul_sum _ _ _).symm
+      simp only [Finset.smul_sum]
     have hmem : ω ∈ A ↔ ω ∈ D := by dsimp [A, D]; rw [heq]
     exact (Set.mem_symmDiff.mp hω).elim
       (fun h => h.2 (hmem.mp h.1)) (fun h => h.2 (hmem.mpr h.1))

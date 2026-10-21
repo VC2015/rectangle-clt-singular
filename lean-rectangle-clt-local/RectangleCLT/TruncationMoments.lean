@@ -1,4 +1,4 @@
-import RectangleCLT.Statement
+import Mathlib.MeasureTheory.Integral.Bochner.Set
 import Mathlib.Analysis.Convex.Integral
 import Mathlib.Analysis.Convex.Mul
 import Mathlib.Tactic.Linarith
@@ -11,7 +11,7 @@ These are integral estimates for real random variables.  No identical-law
 assumption, covariance certificate, or Gaussian approximation is an input.
 -/
 
-open MeasureTheory ProbabilityTheory
+open MeasureTheory
 open scoped BigOperators
 
 namespace RectangleCLT
@@ -100,7 +100,7 @@ theorem centered_indicator_fourth_integral_le [IsProbabilityMeasure μ]
 /-- The bound is summed over observations before the maximum over coordinates.
 In particular, the fourth-moment scale here is independent of the tail scale. -/
 theorem centered_indicator_fourth_sum_le [IsProbabilityMeasure μ]
-    {p n : ℕ} {Y : Fin n → Ω → Vector p} {A : Fin n → Set Ω} {B4 : ℝ}
+    {p n : ℕ} {Y : Fin n → Ω → (Fin p → ℝ)} {A : Fin n → Set Ω} {B4 : ℝ}
     (hA : ∀ i, MeasurableSet (A i))
     (hY : ∀ i j, Integrable (fun ω => Y i ω j) μ)
     (hY4 : ∀ i j, Integrable (fun ω => Y i ω j ^ 4) μ)

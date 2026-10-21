@@ -82,9 +82,12 @@ theorem gaussianComponentJoinedMarginal_isProbability
     (B : Matrix (Fin p) (Fin p) ℝ) (k : ℕ) (i : Fin n ⊕ Fin (k ^ 6)) :
     IsProbabilityMeasure (gaussianComponentJoinedMarginal μ ξ B k i) := by
   cases i with
-  | inl i => exact isProbabilityMeasure_map (hξ i).aemeasurable
-  | inr i => exact isProbabilityMeasure_map
-      (measurable_gaussianComponentIncrement k).aemeasurable
+  | inl i =>
+      change IsProbabilityMeasure (μ.map (ξ i))
+      exact isProbabilityMeasure_map (hξ i).aemeasurable
+  | inr i =>
+      change IsProbabilityMeasure ((gaussianLaw B).map (gaussianComponentIncrement k))
+      exact isProbabilityMeasure_map (measurable_gaussianComponentIncrement k).aemeasurable
 
 /-- The original and Gaussian increment observations are all genuine
 independent bounded observations in one finite product experiment. -/

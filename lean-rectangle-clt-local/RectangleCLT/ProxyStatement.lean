@@ -42,15 +42,15 @@ def LocalCovarianceProxyCLT (C : ℝ) : Prop :=
   ∀ {Ω : Type u} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
     (p n : ℕ), 1 ≤ p → 1 ≤ n →
     ∀ (ξ : Fin n → Ω → Vector p) (G : Ω → Vector p) (δ : ℝ)
-      (B A_S A_Σ : Matrix (Fin p) (Fin p) ℝ),
+      (B A_S A_Q : Matrix (Fin p) (Fin p) ℝ),
       ProxyHypotheses μ ξ G δ B →
       (∀ j, covariance μ (sumWithGaussian ξ G) j j = 1) →
-      LocalCovarianceHypotheses (A_Σ * A_Σ.transpose) →
+      LocalCovarianceHypotheses (A_Q * A_Q.transpose) →
       A_S * A_S.transpose = covariance μ (sumWithGaussian ξ G) →
       ∀ R : Rect p,
         max (rectangleError μ (sumWithGaussian ξ G) A_S R)
-          (rectangleError μ (sumWithGaussian ξ G) A_Σ R) ≤
-        C * min 1 (proxyLocalRate μ ξ G δ (A_Σ * A_Σ.transpose))
+          (rectangleError μ (sumWithGaussian ξ G) A_Q R) ≤
+        C * min 1 (proxyLocalRate μ ξ G δ (A_Q * A_Q.transpose))
 
 def LocalCovarianceProxyCLTExists : Prop :=
   ∃ C : ℝ, 1 ≤ C ∧ LocalCovarianceProxyCLT.{u} C

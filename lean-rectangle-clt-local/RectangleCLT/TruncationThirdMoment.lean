@@ -23,7 +23,8 @@ theorem gamma3_le_sqrt_gamma4 (h : BoundedIndependentHypotheses μ ξ δ)
     integrable_coordinate_pow_of_bounded h.measurable h.abs_coordinate_le i j m
   have hcoord (j : Fin p) :
       (∑ i, ∫ ω, ξ i ω j ^ 4 ∂μ) ≤ gamma4 μ ξ := by
-    exact (Finset.le_fold_max (0 : ℝ)).mpr
+    unfold gamma4
+    exact (Finset.le_fold_max _).mpr
       (Or.inr ⟨j, Finset.mem_univ _, le_rfl⟩)
   have htriple (j k l : Fin p) :
       |∑ i, ∫ ω, ξ i ω j * ξ i ω k * ξ i ω l ∂μ| ≤ Real.sqrt (gamma4 μ ξ) := by
@@ -34,8 +35,9 @@ theorem gamma3_le_sqrt_gamma4 (h : BoundedIndependentHypotheses μ ξ δ)
         (((((measurable_pi_apply k).comp (h.measurable i)).mul
           ((measurable_pi_apply l).comp (h.measurable i))).pow_const 2).aestronglyMeasurable)
       exact ae_of_all _ fun ω => by
-        simpa only [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _)] using
-          hpoint (ξ i ω k) (ξ i ω l)
+        change ‖(ξ i ω k * ξ i ω l) ^ 2‖ ≤ (ξ i ω k ^ 4 + ξ i ω l ^ 4) / 2
+        rw [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _)]
+        exact hpoint (ξ i ω k) (ξ i ω l)
     have hfg (i : Fin n) :
         Integrable (fun ω => ξ i ω j * (ξ i ω k * ξ i ω l)) μ := by
       simpa only [mul_assoc] using

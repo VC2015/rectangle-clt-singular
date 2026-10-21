@@ -157,6 +157,78 @@ theorem dualImageEvent_disjoint {p q k : ℕ}
     exact (dualImageEvent_violates_iff S s A hd r hS width hzS f hface).mp
       ((dualImageEvent_violates_iff T s A hd r hT width hzT f hface).mpr hf)
 
+theorem dualImageEvent_mem_boundaryLayer {p q : ℕ}
+    (S : CompatibleFaceTuple p q) (s : FaceSmoother p)
+    (A : Matrix (Fin p) (Fin p) ℝ) (hd : IsUnit (A * A.transpose).det)
+    (r : Vector p) (hactive : ∀ i, S.face i ∈ s.faces) (hq : 0 < q)
+    {width : ℝ} (hw0 : 0 ≤ width) {ze : CommonSamples p}
+    (hze : ze ∈ dualImageEvent S s A r width) :
+    A.mulVec ze.1 + r ∈ (s.randomRectangle ze.2).boundaryLayer ((q : ℝ) * width) := by
+  obtain ⟨h0, he, w, hw, hmap⟩ := hze
+  have hb : base w + (fullDualMatrix S A).mulVec (tube w) = ze.1 :=
+    congrArg base hmap
+  have ht (i : Fin q) :
+      tube (map (normalMatrix S A) s.bandwidth ze.2.1 (activeOffsets S s r) w) i =
+        ze.2.2 (S.face i) := congrFun (congrArg tube hmap) i
+  have hsource := source_base_exactActiveFace S s A r hactive ze.2 h0 he width w hw ht
+  have hphysical (f : Face p) :
+      FaceSmoother.normalDot f (A.mulVec ze.1 + r) =
+        faceDot (signedRowNormal A f) ze.1 + FaceSmoother.normalDot f r := by
+    rw [faceDot_signedRow_eq_normalDot]
+    cases hf : f.2 <;> simp [FaceSmoother.normalDot, hf, add_comm]
+  have hstep (f : Face p) :
+      faceDot (signedRowNormal A f) ((fullDualMatrix S A).mulVec (tube w)) ≤
+        (q : ℝ) * width := by
+    rw [faceDot_fullDual_displacement]
+    calc
+      _ ≤ ∑ i, |faceDot (signedRowNormal A f) (fun j => fullDualMatrix S A j i)| *
+          |tube w i| := Finset.sum_le_sum (fun i _ => by
+        simpa only [abs_mul] using le_abs_self
+          (faceDot (signedRowNormal A f) (fun j => fullDualMatrix S A j i) * tube w i))
+      _ ≤ ∑ _i : Fin q, (1 : ℝ) * width := by
+        apply Finset.sum_le_sum
+        intro i _
+        have hcol : |faceDot (signedRowNormal A f)
+            (fun j => fullDualMatrix S A j i)| ≤ 1 := by
+          rw [faceDot_signedRow_eq_normalDot]
+          exact abs_normalDot_fullDualMatrix_factor_column_le_one S A hd i f
+        exact mul_le_mul hcol (by simpa only [abs_of_pos (hw.1 i).1] using (hw.1 i).2.le)
+          (abs_nonneg _) zero_le_one
+      _ = _ := by simp
+  have hqwidth : 0 ≤ (q : ℝ) * width := mul_nonneg (Nat.cast_nonneg q) hw0
+  change (∀ f ∈ s.faces, FaceSmoother.normalDot f (A.mulVec ze.1 + r) ≤
+      s.offsets f + s.bandwidth * Real.log (ze.2.2 f / ze.2.1) + (q : ℝ) * width) ∧
+    ¬ (∀ f ∈ s.faces, FaceSmoother.normalDot f (A.mulVec ze.1 + r) ≤
+      s.offsets f + s.bandwidth * Real.log (ze.2.2 f / ze.2.1) + -((q : ℝ) * width))
+  constructor
+  · intro f hf
+    have hbase := hsource.1 f hf
+    have hout : faceDot (signedRowNormal A f) ze.1 ≤
+        commonOffsets s r ze.2 f + (q : ℝ) * width := by
+      rw [← hb]
+      have hadd : faceDot (signedRowNormal A f)
+          (base w + (fullDualMatrix S A).mulVec (tube w)) =
+          faceDot (signedRowNormal A f) (base w) +
+            faceDot (signedRowNormal A f) ((fullDualMatrix S A).mulVec (tube w)) := by
+        simp only [faceDot, Pi.add_apply, mul_add, Finset.sum_add_distrib]
+      rw [hadd]
+      exact add_le_add hbase (hstep f)
+    rw [hphysical]
+    dsimp only [commonOffsets] at hout
+    linarith
+  · intro hinner
+    let i : Fin q := ⟨0, hq⟩
+    have hmem : S.face i ∈ activeFaces S :=
+      Finset.mem_image.mpr ⟨i, Finset.mem_univ _, rfl⟩
+    have hviol := (fullDual_displacement_violates_iff S s A hd
+      (commonOffsets s r ze.2) (base w) (tube w) hsource
+      (fun j => (hw.1 j).1) (S.face i) (hactive i)).mpr hmem
+    rw [hb] at hviol
+    have hi := hinner (S.face i) (hactive i)
+    rw [hphysical] at hi
+    dsimp only [commonOffsets] at hviol
+    linarith
+
 end
 
 end RectangleCLT.GaussianTube

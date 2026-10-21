@@ -1,4 +1,4 @@
-import RectangleCLT.Optimization
+import RectangleCLT.LocalOptimization
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Tactic.FieldSimp
 
@@ -18,9 +18,6 @@ namespace RectangleCLT
 
 noncomputable section
 
-def localFourthScale (c a₃ a₄ : ℝ) : ℝ :=
-  Real.rpow (c * a₃ * a₄) (1 / 3 : ℝ)
-
 def combinedThirdCoefficient (b c a₃ : ℝ) : ℝ :=
   if 0 < b then min (1 / b ^ 2) (1 / (c * a₃)) else 1 / (c * a₃)
 
@@ -33,11 +30,6 @@ def combinedCoefficientRate (δ γ₃ γ₄ L b c a₃ a₄ : ℝ) : ℝ :=
   γ₃ * L * Real.sqrt L * combinedThirdCoefficient b c a₃ +
     Real.sqrt γ₄ * L / Real.sqrt c * combinedFourthCoefficient b c a₃ a₄ +
     δ * Real.sqrt L / c
-
-theorem localFourthScale_pos {c a₃ a₄ : ℝ}
-    (hc : 0 < c) (ha₃ : 0 < a₃) (ha₄ : 0 < a₄) :
-    0 < localFourthScale c a₃ a₄ :=
-  Real.rpow_pos_of_pos (mul_pos (mul_pos hc ha₃) ha₄) _
 
 theorem combinedThirdCoefficient_nonneg {b c a₃ : ℝ}
     (hc : 0 < c) (ha₃ : 0 < a₃) : 0 ≤ combinedThirdCoefficient b c a₃ := by
@@ -110,19 +102,6 @@ theorem combinedFourthCoefficient_div_sqrt_le_inv_sq {b c : ℝ}
       (combinedFourthCoefficient_le_global hb c a₃ a₄) (Real.sqrt_nonneg c)
     _ = 1 / (b * Real.sqrt c) := by rw [div_div]
     _ ≤ 1 / b ^ 2 := globalFourthCoefficient_le_inv_sq hb hbc
-
-/-- The local fourth-order branch has exactly the denominator in the local
-theorem; the local eigenvalues are not square roots. -/
-theorem sqrt_mul_localFourthScale {c a₃ a₄ : ℝ}
-    (hc : 0 < c) (ha₃ : 0 < a₃) (ha₄ : 0 < a₄) :
-    Real.sqrt c * localFourthScale c a₃ a₄ =
-      Real.rpow c (5 / 6 : ℝ) * Real.rpow (a₃ * a₄) (1 / 3 : ℝ) := by
-  unfold localFourthScale
-  simp only [Real.rpow_eq_pow]
-  rw [show c * a₃ * a₄ = c * (a₃ * a₄) by ring,
-    Real.mul_rpow hc.le (mul_pos ha₃ ha₄).le, Real.sqrt_eq_rpow,
-    ← mul_assoc, ← Real.rpow_add hc]
-  norm_num
 
 /-- At a singular full covariance, the combined scalar rate reduces exactly
 to the already certified local expression. -/

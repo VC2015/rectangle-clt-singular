@@ -1,6 +1,8 @@
 import RectangleCLT.ProxyStatement
 import RectangleCLT.InterpolationCovariance
 import RectangleCLT.BoundedMaximum
+import RectangleCLT.IndependentCovariance
+import Mathlib.Data.Real.StarOrdered
 
 /-! Actual law and covariance of the bounded sum plus its independent
 Gaussian component. -/
@@ -96,5 +98,110 @@ theorem covariance_sumWithGaussian (h : ProxyHypotheses μ ξ G δ B) :
         hmean (gaussianLaw_integral_coordinate B)
     _ = _ := by
       rw [covariance_map μ V h.boundedIndependent.measurable_sum, covariance_gaussianLaw]
+
+end RectangleCLT.ProxyHypotheses
+
+namespace RectangleCLT.BoundedIndependentHypotheses
+
+/-- Positivity of the actual bounded-sum covariance, with no spectral or
+local nondegeneracy hypothesis. -/
+theorem covariance_posSemidef
+    {Ω : Type*} [MeasurableSpace Ω] {p n : ℕ}
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {ξ : Fin n → Ω → Vector p} {δ : ℝ}
+    (h : BoundedIndependentHypotheses μ ξ δ) :
+    (covariance μ (sumVector ξ)).PosSemidef := by
+  constructor
+  · rw [Matrix.IsHermitian, Matrix.conjTranspose_eq_transpose_of_trivial]
+    exact covariance_transpose μ (sumVector ξ)
+  · intro v
+    have hp (i : Fin n) (j k : Fin p) :
+        Integrable (fun ω => ξ i ω j * ξ i ω k) μ := by
+      apply (integrable_const (δ ^ 2)).mono'
+        ((((measurable_pi_apply j).comp (h.measurable i)).mul
+          ((measurable_pi_apply k).comp (h.measurable i))).aestronglyMeasurable)
+      filter_upwards [h.abs_coordinate_le i j, h.abs_coordinate_le i k] with ω hj hk
+      simpa only [Real.norm_eq_abs, abs_mul, pow_two] using
+        mul_le_mul hj hk (abs_nonneg _) h.delta_nonneg
+    have hcontract (M : Fin n → Fin p → Fin p → ℝ) :
+        (∑ i, ∑ j, ∑ k, M i j k * v j * v k) =
+          ∑ j, ∑ k, (∑ i, M i j k) * v j * v k := by
+      simp only [Finset.sum_mul]
+      rw [Finset.sum_comm]
+      apply Finset.sum_congr rfl
+      intro j _
+      rw [Finset.sum_comm]
+    have hquad : matrixQuadratic (covariance μ (sumVector ξ)) v =
+        ∑ i, ∫ ω, (∑ j, v j * ξ i ω j) ^ 2 ∂μ := by
+      calc
+        _ = ∑ j, ∑ k, (∑ i, ∫ ω, ξ i ω j * ξ i ω k ∂μ) * v j * v k := by
+          unfold matrixQuadratic
+          apply Finset.sum_congr rfl
+          intro j _
+          apply Finset.sum_congr rfl
+          intro k _
+          rw [h.covariance_sum]
+          ring
+        _ = ∑ i, ∑ j, ∑ k, (∫ ω, ξ i ω j * ξ i ω k ∂μ) * v j * v k :=
+          (hcontract _).symm
+        _ = ∑ i, ∫ ω, (∑ j, v j * ξ i ω j) ^ 2 ∂μ := by
+          apply Finset.sum_congr rfl
+          intro i _
+          have hi (j k : Fin p) := ((hp i j k).mul_const (v j)).mul_const (v k)
+          calc
+            _ = ∑ j, ∑ k, ∫ ω, ξ i ω j * ξ i ω k * v j * v k ∂μ := by
+              simp only [integral_mul_const]
+            _ = ∫ ω, ∑ j, ∑ k, ξ i ω j * ξ i ω k * v j * v k ∂μ := by
+              rw [integral_finset_sum Finset.univ (fun j _ =>
+                integrable_finset_sum Finset.univ (fun k _ => hi j k))]
+              apply Finset.sum_congr rfl
+              intro j _
+              rw [integral_finset_sum Finset.univ (fun k _ => hi j k)]
+            _ = _ := by
+              apply integral_congr_ae
+              exact ae_of_all _ (fun ω => by
+                change (∑ j, ∑ k, ξ i ω j * ξ i ω k * v j * v k) =
+                  (∑ j, v j * ξ i ω j) ^ 2
+                rw [pow_two, Finset.sum_mul]
+                simp only [Finset.mul_sum]
+                apply Finset.sum_congr rfl
+                intro j _
+                apply Finset.sum_congr rfl
+                intro k _
+                ring)
+    have hnon : 0 ≤ matrixQuadratic (covariance μ (sumVector ξ)) v := by
+      rw [hquad]
+      exact Finset.sum_nonneg (fun i _ => integral_nonneg (fun ω => sq_nonneg _))
+    simpa [matrixQuadratic, Matrix.mulVec, dotProduct, Finset.mul_sum, mul_assoc] using hnon
+
+end RectangleCLT.BoundedIndependentHypotheses
+
+namespace RectangleCLT.ProxyHypotheses
+
+variable {Ω : Type*} [MeasurableSpace Ω] {p n : ℕ}
+  {μ : Measure Ω} [IsProbabilityMeasure μ]
+  {ξ : Fin n → Ω → Vector p} {G : Ω → Vector p} {δ : ℝ}
+  {B : Matrix (Fin p) (Fin p) ℝ}
+
+theorem covariance_posSemidef (h : ProxyHypotheses μ ξ G δ B) :
+    (covariance μ (sumWithGaussian ξ G)).PosSemidef := by
+  rw [h.covariance_sumWithGaussian]
+  have hB : (B * B.transpose).PosSemidef := by
+    simpa only [Matrix.conjTranspose_eq_transpose_of_trivial] using
+      Matrix.posSemidef_self_mul_conjTranspose B
+  exact h.boundedIndependent.covariance_posSemidef.add hB
+
+/-- The actual-covariance Gaussian target always exists, including when the
+full covariance is singular. The public target quantifier is nonvacuous. -/
+theorem gaussian_factor_exists (h : ProxyHypotheses μ ξ G δ B) :
+    ∃ A : Matrix (Fin p) (Fin p) ℝ,
+      A * A.transpose = covariance μ (sumWithGaussian ξ G) := by
+  let hCov := h.covariance_posSemidef
+  refine ⟨hCov.sqrt, ?_⟩
+  have hsymmetric : hCov.sqrt.transpose = hCov.sqrt := by
+    simpa only [Matrix.IsHermitian, Matrix.conjTranspose_eq_transpose_of_trivial]
+      using hCov.posSemidef_sqrt.isHermitian
+  rw [hsymmetric]
+  exact hCov.sqrt_mul_self
 
 end RectangleCLT.ProxyHypotheses

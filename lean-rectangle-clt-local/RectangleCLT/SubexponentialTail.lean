@@ -1,4 +1,7 @@
-import RectangleCLT.Statement
+import Mathlib.Analysis.Normed.Group.Constructions
+import Mathlib.MeasureTheory.Measure.Real
+import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
+import Mathlib.MeasureTheory.Order.Group.Lattice
 import Mathlib.Probability.Moments.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Ring
@@ -105,7 +108,7 @@ theorem ExponentialMomentBound.tail [IsFiniteMeasure μ]
 
 /-- A whole-vector truncation discards at most the sum of coordinate tails. -/
 theorem vector_subexponential_tail [IsFiniteMeasure μ]
-    {p : ℕ} {Y : Ω → Vector p} {K : ℝ}
+    {p : ℕ} {Y : Ω → (Fin p → ℝ)} {K : ℝ}
     (h : ∀ j, ExponentialMomentBound μ (fun ω => Y ω j) K) (u : ℝ) :
     μ.real {ω | ∃ j, u ≤ |Y ω j|} ≤ (2 * p : ℝ) * Real.exp (-u / K) := by
   have hset : {ω | ∃ j, u ≤ |Y ω j|} = ⋃ j, {ω | u ≤ |Y ω j|} := by
@@ -123,7 +126,7 @@ theorem vector_subexponential_tail [IsFiniteMeasure μ]
 /-- The probability that any observation is discarded.  Independence is
 not needed for this finite union estimate. -/
 theorem observations_subexponential_tail [IsFiniteMeasure μ]
-    {p n : ℕ} {Y : Fin n → Ω → Vector p} {K : ℝ}
+    {p n : ℕ} {Y : Fin n → Ω → (Fin p → ℝ)} {K : ℝ}
     (h : ∀ i j, ExponentialMomentBound μ (fun ω => Y i ω j) K) (u : ℝ) :
     μ.real {ω | ∃ i j, u ≤ |Y i ω j|} ≤
       (2 * n * p : ℝ) * Real.exp (-u / K) := by
@@ -143,7 +146,7 @@ theorem observations_subexponential_tail [IsFiniteMeasure μ]
 /-- The finite-product norm is the coordinate maximum, so the same bound
 applies to the whole-observation discard event. -/
 theorem observations_norm_subexponential_tail [IsFiniteMeasure μ]
-    {p n : ℕ} {Y : Fin n → Ω → Vector p} {K u : ℝ} (hu : 0 ≤ u)
+    {p n : ℕ} {Y : Fin n → Ω → (Fin p → ℝ)} {K u : ℝ} (hu : 0 ≤ u)
     (h : ∀ i j, ExponentialMomentBound μ (fun ω => Y i ω j) K) :
     μ.real {ω | ∃ i, u < ‖Y i ω‖} ≤
       (2 * n * p : ℝ) * Real.exp (-u / K) := by

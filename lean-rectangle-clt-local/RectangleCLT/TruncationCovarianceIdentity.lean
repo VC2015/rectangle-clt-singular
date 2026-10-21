@@ -36,11 +36,17 @@ theorem covariance_sub_const [IsProbabilityMeasure μ]
         apply integral_congr_ae
         exact ae_of_all _ fun ω => by simp only [Pi.sub_apply]; ring
       _ = _ := by
-        rw [integral_add (((hYY j k).sub ((hY k).const_mul _)).sub
-          ((hY j).const_mul _)) (integrable_const _),
-          integral_sub ((hYY j k).sub ((hY k).const_mul _)) ((hY j).const_mul _),
-          integral_sub (hYY j k) ((hY k).const_mul _)]
-        simp
+        rw [integral_add
+          (f := fun ω => Y ω j * Y ω k - c j * Y ω k - c k * Y ω j)
+          (g := fun _ => c j * c k)
+          (((hYY j k).sub ((hY k).const_mul (c j))).sub
+            ((hY j).const_mul (c k))) (integrable_const _),
+          integral_sub (f := fun ω => Y ω j * Y ω k - c j * Y ω k)
+            (g := fun ω => c k * Y ω j)
+            ((hYY j k).sub ((hY k).const_mul (c j))) ((hY j).const_mul (c k)),
+          integral_sub (f := fun ω => Y ω j * Y ω k) (g := fun ω => c j * Y ω k)
+            (hYY j k) ((hY k).const_mul (c j))]
+        simp [integral_const_mul]
   ext j k
   simp only [covariance, hp, hm]
   ring

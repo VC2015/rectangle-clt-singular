@@ -48,8 +48,7 @@ theorem normalMatrix_transpose_mul_fullDualMatrix {p q : ℕ}
   rw [hentry, fullDualMatrix_factor_column S A hd]
   by_cases hij : i = j
   · subst j
-    simp only [Pi.smul_apply, smul_eq_mul, FaceSmoother.coordinateDirection,
-      if_pos rfl, mul_one, Matrix.one_apply, if_pos rfl, ← pow_two, faceSign_sq]
+    simp [FaceSmoother.coordinateDirection, ← mul_assoc, ← pow_two, faceSign_sq]
   · have hcoord : (S.face i).1 ≠ (S.face j).1 := fun h => hij (S.coordinate_injective h)
     simp [Pi.smul_apply, smul_eq_mul, FaceSmoother.coordinateDirection, hcoord, hij]
 

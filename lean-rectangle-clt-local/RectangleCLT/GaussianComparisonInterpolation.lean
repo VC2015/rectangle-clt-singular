@@ -313,8 +313,10 @@ theorem hasDerivAt_gaussianComparisonExpectation
         ((B * B.transpose) j k - (A * A.transpose) j k) *
           s.gaussianComparisonSecond A B t j k := by
     simp_rw [hsplit]
-    rw [integral_finset_sum Finset.univ
-      (fun j _ => ((hiX j).const_mul (-u)).add ((hiY j).const_mul v))]
+    have hfinite := integral_finset_sum Finset.univ
+      (fun j _ => ((hiX j).const_mul (-u)).add ((hiY j).const_mul v))
+    simp only [Pi.add_apply] at hfinite
+    rw [hfinite]
     rw [Finset.mul_sum]
     apply Finset.sum_congr rfl
     intro j _

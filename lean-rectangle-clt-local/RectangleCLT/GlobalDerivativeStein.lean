@@ -1,5 +1,6 @@
 import RectangleCLT.GaussianHeat
 import RectangleCLT.GaussianDualBounds
+import Mathlib.Data.Real.StarOrdered
 
 /-!
 # Full-covariance Gaussian score identities
@@ -17,6 +18,8 @@ open scoped BigOperators
 namespace RectangleCLT
 
 noncomputable section
+
+set_option maxHeartbeats 800000
 
 /-- The inverse covariance score, with the sign convention for the Stein
 identity `E[score_j g] = E[∂_j g]`. -/
@@ -197,7 +200,7 @@ theorem integral_exp_scaled_normalizedFullGaussianScoreFamily_le {p : ℕ}
       ‖normalizedFullGaussianScoreFamily A ν z‖) ∂standardGaussian p) ≤
         Real.exp (2 + t ^ 2 / 2) := by
   letI : Nonempty (Fin p) := ⟨⟨0, hp⟩⟩
-  have hL := log_exp_mul_nat_ge_one hp
+  have hL : 1 ≤ dimensionLog p := log_exp_mul_nat_ge_one hp
   have hp₀ : (0 : ℝ) < p := by exact_mod_cast (show 0 < p from hp)
   have hcard : 2 * (p : ℝ) ≤ Real.exp (2 * dimensionLog p) := by
     have he : (2 : ℝ) ≤ Real.exp 1 := by
@@ -209,8 +212,10 @@ theorem integral_exp_scaled_normalizedFullGaussianScoreFamily_le {p : ℕ}
       _ ≤ Real.exp (2 * dimensionLog p) := Real.exp_le_exp.mpr (by linarith)
   simpa only [normalizedFullGaussianScoreFamily, Fintype.card_fin] using
     integral_exp_projectionMaximum_scaled_le
+      (L := dimensionLog p) (C := 2)
       (fun j k => Real.sqrt ν * fullGaussianDual A j k)
-      (normalized_fullGaussianDual_normSq_le_one A hν hlower) hL hcard t
+      (normalized_fullGaussianDual_normSq_le_one A hν hlower) hL
+      (by simpa only [Fintype.card_fin] using hcard) t
 
 namespace FaceSmoother
 
@@ -227,8 +232,15 @@ theorem gaussian_convolutionFirstDerivative_score
   rw [s.convolutionFirstDerivative_eq_integral]
   symm
   apply gaussianLaw_inverse_stein A hd j
+    (g := fun z => s.F (r + z))
+    (dg := fun z k => s.coordinateDerivativeF (r + z) k)
   · intro z a
-    simpa only [line, zero_smul, add_zero, add_assoc] using
+    have hline (t : ℝ) : FaceSmoother.line (r + z) (fun k => A k a) t =
+        r + (z + t • (fun k => A k a)) := by
+      ext i
+      simp only [FaceSmoother.line, Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+      ring
+    simpa only [hline, zero_smul, add_zero] using
       s.hasDerivAt_F_line_sum (r + z) (fun k => A k a) 0
   · exact (s.continuous_F.comp (continuous_const.add continuous_id)).measurable
   · intro k
@@ -250,8 +262,15 @@ theorem gaussian_convolutionSecondDerivative_score
   rw [s.convolutionSecondDerivative_eq_integral]
   symm
   apply gaussianLaw_inverse_stein A hd k
+    (g := fun z => s.coordinateDerivativeF (r + z) j)
+    (dg := fun z l => s.mixedSecondDerivativeF (r + z) j l)
   · intro z a
-    simpa only [line, zero_smul, add_zero, add_assoc] using
+    have hline (t : ℝ) : FaceSmoother.line (r + z) (fun l => A l a) t =
+        r + (z + t • (fun l => A l a)) := by
+      ext i
+      simp only [FaceSmoother.line, Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+      ring
+    simpa only [hline, zero_smul, add_zero] using
       s.hasDerivAt_firstDerivative_line_sum (r + z) (fun l => A l a) j 0
   · exact ((s.continuous_firstDerivative j).comp
       (continuous_const.add continuous_id)).measurable

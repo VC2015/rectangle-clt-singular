@@ -22,7 +22,7 @@ theorem mixedSecondDerivativeF_distinct_soft_faces (x : Vector p) {j k : Fin p}
   classical
   simp only [s.mixedSecondDerivativeF_eq, FaceWeights.diagonalMass, if_neg hjk, sub_zero]
   simp_rw [s.softFaceWeight_pair x hjk]
-  simp only [Fintype.sum_bool, faceSign, ↓reduceIte, FaceWeights.v]
+  simp only [Fintype.sum_bool, faceSign, Bool.false_eq_true, ↓reduceIte, FaceWeights.v]
   ring
 
 theorem mixedSecondDerivativeF_diagonal_soft_faces (x : Vector p) (j : Fin p) :

@@ -15,7 +15,7 @@ normalizing the original coordinates.
 -/
 
 open MeasureTheory ProbabilityTheory Set
-open scoped BigOperators
+open scoped BigOperators ENNReal
 
 namespace RectangleCLT
 
@@ -124,7 +124,7 @@ theorem factor_entry_sq_le_diagonal {p : ℕ}
 
 theorem factor_column_norm_le_sqrt_diagonal_bound {p : ℕ}
     (A : Matrix (Fin p) (Fin p) ℝ) {ε : ℝ}
-    (hε : 0 ≤ ε) (hdiag : ∀ j, (A * A.transpose) j j ≤ ε) (k : Fin p) :
+    (_hε : 0 ≤ ε) (hdiag : ∀ j, (A * A.transpose) j j ≤ ε) (k : Fin p) :
     ‖fun j => A j k‖ ≤ Real.sqrt ε := by
   apply (pi_norm_le_iff_of_nonneg (Real.sqrt_nonneg ε)).mpr
   intro j
@@ -156,7 +156,7 @@ def symmetricColumnLaw {p : ℕ} (c : Vector p) : Measure (Vector p) :=
 
 instance symmetricColumnLaw_isProbability {p : ℕ} (c : Vector p) :
     IsProbabilityMeasure (symmetricColumnLaw c) where
-  measure_univ := by simp [symmetricColumnLaw]; norm_num
+  measure_univ := by simpa [symmetricColumnLaw] using ENNReal.inv_two_add_inv_two
 
 theorem integrable_symmetricColumnLaw {p : ℕ} (c : Vector p) (f : Vector p → ℝ) :
     Integrable f (symmetricColumnLaw c) := by
@@ -200,11 +200,11 @@ theorem symmetricColumnLaw_bounded {p : ℕ} {c : Vector p} {δ : ℝ}
     (hc : ‖c‖ ≤ δ) : ∀ᵐ x ∂symmetricColumnLaw c, ‖x‖ ≤ δ := by
   rw [symmetricColumnLaw, ae_add_measure_iff]
   constructor
-  · apply ae_smul_measure
+  · apply Measure.ae_smul_measure
     filter_upwards [ae_eq_dirac (id : Vector p → Vector p)] with x hx
     change x = c at hx
     simpa only [hx] using hc
-  · apply ae_smul_measure
+  · apply Measure.ae_smul_measure
     filter_upwards [ae_eq_dirac (id : Vector p → Vector p)] with x hx
     change x = -c at hx
     simpa only [hx, norm_neg] using hc

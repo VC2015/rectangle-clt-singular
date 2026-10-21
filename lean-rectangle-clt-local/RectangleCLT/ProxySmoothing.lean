@@ -41,6 +41,7 @@ theorem smoother_rectangle_error_le_proxy
   simp only [add_zero] at hg
   dsimp only [id_eq] at hh
   have hn : 0 ≤ (4 * Real.exp 4) * s.bandwidth * Real.sqrt (dimensionLog p) := by
+    have hs := s.bandwidth_pos
     positivity
   have hden : 1 / pairGap S ≤ 2 / pairGap Q := by
     apply (div_le_div_iff₀ hcS hc).mpr
@@ -53,7 +54,15 @@ theorem smoother_rectangle_error_le_proxy
   change |μ.real {ω | s.Inside (sumVector ξ ω)} - (gaussianLaw A).real {z | s.Inside z}| ≤
     |(∫ ω, s.F (sumVector ξ ω) ∂μ) - (∫ z, s.F z ∂gaussianLaw A)| +
       (16 * Real.exp 4 + 4) * s.bandwidth * Real.sqrt (dimensionLog p) / pairGap Q
-  linarith
+  calc
+    _ ≤ |(∫ ω, s.F (sumVector ξ ω) ∂μ) - (∫ z, s.F z ∂gaussianLaw A)| +
+        2 * ((∫ ω, s.kappa (sumVector ξ ω) ∂μ) +
+          (∫ z, s.kappa z ∂gaussianLaw A)) := hh
+    _ ≤ |(∫ ω, s.F (sumVector ξ ω) ∂μ) - (∫ z, s.F z ∂gaussianLaw A)| +
+        2 * (8 * Real.exp 4 * s.bandwidth * Real.sqrt (dimensionLog p) / pairGap Q +
+          2 * s.bandwidth * Real.sqrt (dimensionLog p) / pairGap Q) := by
+      exact add_le_add_left (mul_le_mul_of_nonneg_left (add_le_add hb' hg) (by norm_num)) _
+    _ = _ := by ring
 
 theorem closedBox_error_le_smoother_gap_proxy
     {Ω : Type*} [MeasurableSpace Ω] {p n : ℕ}

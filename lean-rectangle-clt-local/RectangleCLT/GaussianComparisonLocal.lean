@@ -5,6 +5,7 @@ import RectangleCLT.GaussianComparisonHessian
 import RectangleCLT.RectangleSmoothing
 import RectangleCLT.InterpolationIntegration
 import RectangleCLT.Optimization
+import Mathlib.Data.Real.StarOrdered
 
 /-!
 # Local pair-gap Gaussian comparison
@@ -36,11 +37,11 @@ theorem gaussianComparisonSecond_eq_convolution
     rw [Real.sq_sqrt (sub_nonneg.mpr ht1), Real.sq_sqrt ht0]
     exact hC
   have hmap := gaussianLaw_scaled_sum A B C (Real.sqrt (1 - t)) (Real.sqrt t) hcov
-  rw [s.convolutionSecondDerivative_eq_integral, ← hmap,
-    integral_map (measurable_gaussianScaledSum _ _).aemeasurable
-      (((s.continuous_secondDerivative j k).comp
-        (continuous_const.add continuous_id)).aestronglyMeasurable)]
+  rw [s.convolutionSecondDerivative_eq_integral]
   simp only [zero_add]
+  rw [← hmap,
+    integral_map (measurable_gaussianScaledSum _ _).aemeasurable
+      (s.continuous_secondDerivative j k).aestronglyMeasurable]
   rfl
 
 /-- Uniform Hessian control along the actual two-Gaussian path. -/
@@ -200,7 +201,11 @@ theorem gaussianComparison_closedBox_le_small {p : ℕ} (hp : 1 ≤ p)
     ring
   change (∫ x, s.kappa x ∂gaussianLaw B) ≤
     2 * h * Real.sqrt (dimensionLog p) / pairGap (B * B.transpose) at hKB
-  linarith
+  have hsum := add_le_add hsmooth
+    (mul_le_mul_of_nonneg_left (add_le_add hKA' hKB) (by norm_num : (0 : ℝ) ≤ 2))
+  apply (hprob.trans hsum).trans_eq
+  rw [← hεeq]
+  ring
 
 /-- The small-discrepancy bound extends to every endpoint convention,
 including unbounded or empty coordinate intervals. -/

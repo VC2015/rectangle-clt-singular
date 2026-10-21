@@ -1,5 +1,8 @@
-import RectangleCLT.TruncationMoments
+import Mathlib.MeasureTheory.Integral.Bochner.Set
+import Mathlib.Data.Real.Sqrt
 import Mathlib.Algebra.QuadraticDiscriminant
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Ring
 
 /-!
 # Discarded moments and covariance loss

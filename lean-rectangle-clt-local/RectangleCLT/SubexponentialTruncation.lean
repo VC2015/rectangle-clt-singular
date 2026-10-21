@@ -120,8 +120,13 @@ theorem truncated_sample_memLp (h : SubexponentialHypotheses μ Y B4 K)
         (norm_le_pi_norm (centeredTruncateVector μ (Y i) u ω) j).trans
           (norm_centeredTruncateVector_le (Y i) hu ω)
     simpa only [div_eq_mul_inv, mul_comm] using hU.const_mul ((Real.sqrt (n : ℝ))⁻¹)
-  simpa only [sumVector, sampleNormalizedObservations, Finset.sum_apply] using
-    memLp_finset_sum' Finset.univ (fun i _ => hi i)
+  have hsum := memLp_finset_sum' Finset.univ (fun i _ => hi i)
+  have heq : (∑ i : Fin n, fun ω => centeredTruncateVector μ (Y i) u ω j / Real.sqrt (n : ℝ)) =
+      (fun ω => ∑ i : Fin n, centeredTruncateVector μ (Y i) u ω j / Real.sqrt (n : ℝ)) := by
+    funext ω
+    simp only [Finset.sum_apply]
+  rw [heq] at hsum
+  simpa only [sumVector, sampleNormalizedObservations, Finset.sum_apply] using hsum
 
 /-- The normalized truncated covariance is compared to the unchanged
 proxy, paying only the covariance discrepancy and twice the variance loss. -/

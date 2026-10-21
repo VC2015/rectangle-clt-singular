@@ -1,4 +1,5 @@
 import RectangleCLT.GaussianComparisonLaw
+import Mathlib.MeasureTheory.Integral.Pi
 import Mathlib.Tactic.Ring
 
 /-!
@@ -26,8 +27,8 @@ def gaussianComponentArrayLaw {p : ℕ}
 instance gaussianComponentArrayLaw_isProbability {p : ℕ}
     (B : Matrix (Fin p) (Fin p) ℝ) (N : ℕ) :
     IsProbabilityMeasure (gaussianComponentArrayLaw B N) := by
-  unfold gaussianComponentArrayLaw
-  infer_instance
+  refine ⟨?_⟩
+  simp only [gaussianComponentArrayLaw, Measure.pi_univ, measure_univ, Finset.prod_const_one]
 
 theorem gaussianComponentArrayLaw_map_eval {p N : ℕ}
     (B : Matrix (Fin p) (Fin p) ℝ) (i : Fin N) :
@@ -80,11 +81,14 @@ theorem vectorFourier_gaussianComponentSum {p N : ℕ}
         dotProduct t ((B * B.transpose).mulVec t) : ℝ) : ℂ) / 2) := by
   classical
   letI : MeasureSpace (Vector p) := ⟨gaussianLaw B⟩
+  letI : IsProbabilityMeasure (volume : Measure (Vector p)) := by
+    change IsProbabilityMeasure (gaussianLaw B)
+    infer_instance
   have hkernel (z : Fin N → Vector p) :
       vectorFourierKernel t (gaussianComponentSum a z) =
         ∏ i, vectorFourierKernel (a • t) (z i) := by
-    rw [← Complex.exp_sum]
     unfold vectorFourierKernel gaussianComponentSum
+    rw [← Complex.exp_sum]
     congr 1
     have hdot : dotProduct (∑ i, z i) t = ∑ i, dotProduct (z i) t := by
       simp only [dotProduct, Finset.sum_apply, Finset.sum_mul]
@@ -92,9 +96,6 @@ theorem vectorFourier_gaussianComponentSum {p N : ℕ}
     simp only [smul_dotProduct, dotProduct_smul, hdot,
       Complex.ofReal_sum, Complex.ofReal_mul, smul_eq_mul,
       Finset.mul_sum, Finset.sum_mul]
-    apply Finset.sum_congr rfl
-    intro i _
-    ring
   unfold vectorFourier
   rw [integral_map (measurable_gaussianComponentSum a).aemeasurable
     (measurable_vectorFourierKernel t).aestronglyMeasurable]
@@ -102,6 +103,7 @@ theorem vectorFourier_gaussianComponentSum {p N : ℕ}
   change (∫ z : Fin N → Vector p,
     ∏ i, vectorFourierKernel (a • t) (z i)) = _
   rw [integral_fintype_prod_eq_pow]
+  simp only [Fintype.card_fin]
   change vectorFourier (gaussianLaw B) (a • t) ^ N = _
   rw [vectorFourier_gaussianLaw, ← Complex.exp_nat_mul]
   congr 1

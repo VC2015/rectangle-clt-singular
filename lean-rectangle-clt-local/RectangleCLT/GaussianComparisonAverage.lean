@@ -33,6 +33,8 @@ theorem convolutionSecondDerivative_gaussian_scaleDown
     (s.scaleDown a ha).convolutionSecondDerivative_eq_standardGaussian, ← integral_div]
   apply integral_congr_ae
   exact ae_of_all _ (fun z => by
+    change s.mixedSecondDerivativeF ((a • A).mulVec z + x) j k =
+      (s.scaleDown a ha).mixedSecondDerivativeF (A.mulVec z + a⁻¹ • x) j k / a ^ 2
     rw [s.mixedSecondDerivativeF_scaleDown a ha,
       Matrix.smul_mulVec_assoc, smul_add, smul_smul,
       inv_mul_cancel₀ (ne_of_gt ha), one_smul])
@@ -286,7 +288,7 @@ theorem integral_sum_abs_second_bernoulli_largeTime_le
       _ ≤ (gaussianSecondConstant * dimensionLog p / pairGap (A * A.transpose)) / t := hb'
       _ ≤ (gaussianSecondConstant * dimensionLog p / pairGap (A * A.transpose)) *
           (2 / Real.sqrt t) := by
-        simpa only [mul_one, div_eq_mul_inv] using mul_le_mul_of_nonneg_left htime hnon
+        simpa only [mul_one, one_mul, div_eq_mul_inv] using mul_le_mul_of_nonneg_left htime hnon
       _ ≤ (gaussianSecondConstant * dimensionLog p / pairGap (A * A.transpose)) *
           (8 * 1073741824 / Real.sqrt t) :=
         mul_le_mul_of_nonneg_left (div_le_div_of_nonneg_right (by norm_num) hroot.le) hnon

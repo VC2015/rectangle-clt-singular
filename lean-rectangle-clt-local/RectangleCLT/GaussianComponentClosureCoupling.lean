@@ -22,6 +22,7 @@ theorem rectangleError_eq_of_map_eq
   simp only [Measure.real, Measure.map_apply hW R.measurableSet_carrier,
     Measure.map_apply hV R.measurableSet_carrier] at hreal
   unfold rectangleError
+  simp only [Measure.real]
   rw [hreal]
 
 theorem gaussianComponentRaw_correction_bound
@@ -84,7 +85,7 @@ theorem gaussianComponentRaw_norm_coupling
     have hmiddle : (∑ i : Fin (k ^ 6), gaussianComponentIncrement k (Z i z)) =
         ((k : ℝ) ^ 3)⁻¹ • ∑ i : Fin (k ^ 6), Z i z := by
       simp only [gaussianComponentIncrement, truncateVector, if_pos (hgood _)]
-      exact (Finset.smul_sum _ _ _).symm
+      simp only [Finset.smul_sum]
     have hdiff : gaussianComponentRawOriginalSum (p := p) (n := n) k z -
         gaussianComponentRawRestoredSum k z = -∑ r : Fin p, z (.inr (.inr r)) := by
       rw [gaussianComponentRawRestoredSum, sumVector_gaussianComponentRestoredArray]
@@ -103,7 +104,7 @@ theorem gaussianComponentRaw_norm_coupling
         _ ≤ ∑ _r : Fin p, Real.sqrt (gaussianComponentRestorationError B k) :=
           Finset.sum_le_sum fun r _ => hz r
         _ = _ := by simp [nsmul_eq_mul]
-    exact hbad.not_ge hnorm
+    exact not_le_of_gt hbad hnorm
   exact (ENNReal.toReal_mono (measure_ne_top νraw _)
     (measure_mono_ae hsub)).trans htail
 

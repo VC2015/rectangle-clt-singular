@@ -225,15 +225,15 @@ theorem boundedProxyBothTargets
     (ξ : Fin n → Ω → Vector p) (δ : ℝ)
     (hdata : BoundedIndependentHypotheses μ ξ δ) (hp : 1 ≤ p)
     (hunit : ∀ j, covariance μ (sumVector ξ) j j = 1)
-    (A_S A_Σ : Matrix (Fin p) (Fin p) ℝ)
-    (hproxy : LocalCovarianceHypotheses (A_Σ * A_Σ.transpose))
+    (A_S A_Q : Matrix (Fin p) (Fin p) ℝ)
+    (hproxy : LocalCovarianceHypotheses (A_Q * A_Q.transpose))
     (hfactor : A_S * A_S.transpose = covariance μ (sumVector ξ)) (R : Rect p) :
-    max (rectangleError μ (sumVector ξ) A_S R) (rectangleError μ (sumVector ξ) A_Σ R) ≤
+    max (rectangleError μ (sumVector ξ) A_S R) (rectangleError μ (sumVector ξ) A_Q R) ≤
       boundedProxyBothTargetsConstant *
-        min 1 (boundedProxyLocalRate μ ξ δ (A_Σ * A_Σ.transpose)) := by
-  let rate := boundedProxyLocalRate μ ξ δ (A_Σ * A_Σ.transpose)
-  let d := proxyCovarianceDiscrepancy (covariance μ (sumVector ξ)) (A_Σ * A_Σ.transpose) *
-    dimensionLog p / pairGap (A_Σ * A_Σ.transpose)
+        min 1 (boundedProxyLocalRate μ ξ δ (A_Q * A_Q.transpose)) := by
+  let rate := boundedProxyLocalRate μ ξ δ (A_Q * A_Q.transpose)
+  let d := proxyCovarianceDiscrepancy (covariance μ (sumVector ξ)) (A_Q * A_Q.transpose) *
+    dimensionLog p / pairGap (A_Q * A_Q.transpose)
   have hd : 0 ≤ d := div_nonneg
     (mul_nonneg (proxyCovarianceDiscrepancy_nonneg _ _) (zero_le_one.trans (log_exp_mul_nat_ge_one hp)))
     (hproxy.pairGap_pos hp).le
@@ -247,31 +247,31 @@ theorem boundedProxyBothTargets
   have hB0 : 0 ≤ boundedProxyConstant := le_trans (by norm_num) boundedProxyConstant_ge_two
   have hG0 : 0 ≤ gaussianComparisonLocalConstant :=
     le_trans (by norm_num) gaussianComparisonLocalConstant_ge_two
-  have hproxyBound := boundedProxyRectangleCLT μ ξ δ hdata hp hunit A_Σ hproxy R
-  have hproxyLinear : rectangleError μ (sumVector ξ) A_Σ R ≤ boundedProxyConstant * rate :=
+  have hproxyBound := boundedProxyRectangleCLT μ ξ δ hdata hp hunit A_Q hproxy R
+  have hproxyLinear : rectangleError μ (sumVector ξ) A_Q R ≤ boundedProxyConstant * rate :=
     hproxyBound.trans (mul_le_mul_of_nonneg_left (min_le_right 1 rate) hB0)
-  have hcomparison := gaussianComparisonLocal hp A_S A_Σ
+  have hcomparison := gaussianComparisonLocal hp A_S A_Q
     (fun j => by rw [hfactor]; exact hunit j) hproxy.unit_diagonal (hproxy.pairGap_pos hp) R
   rw [hfactor] at hcomparison
-  have hcomparisonLinear : |(gaussianLaw A_S).real R.carrier - (gaussianLaw A_Σ).real R.carrier| ≤
+  have hcomparisonLinear : |(gaussianLaw A_S).real R.carrier - (gaussianLaw A_Q).real R.carrier| ≤
       gaussianComparisonLocalConstant * rate :=
     hcomparison.trans ((mul_le_mul_of_nonneg_left (min_le_right 1 d) hG0).trans
       (mul_le_mul_of_nonneg_left hdr hG0))
   have htrueLinear : rectangleError μ (sumVector ξ) A_S R ≤
       boundedProxyBothTargetsConstant * rate := by
     have htri := abs_sub_le
-      (μ.real (sumVector ξ ⁻¹' R.carrier)) ((gaussianLaw A_Σ).real R.carrier)
+      (μ.real (sumVector ξ ⁻¹' R.carrier)) ((gaussianLaw A_Q).real R.carrier)
       ((gaussianLaw A_S).real R.carrier)
-    rw [abs_sub_comm ((gaussianLaw A_Σ).real R.carrier)] at htri
+    rw [abs_sub_comm ((gaussianLaw A_Q).real R.carrier)] at htri
     change rectangleError μ (sumVector ξ) A_S R ≤
-      rectangleError μ (sumVector ξ) A_Σ R + _ at htri
+      rectangleError μ (sumVector ξ) A_Q R + _ at htri
     have hh := htri.trans (add_le_add hproxyLinear hcomparisonLinear)
     exact hh.trans_eq (by unfold boundedProxyBothTargetsConstant; ring)
-  have hproxyLinear' : rectangleError μ (sumVector ξ) A_Σ R ≤
+  have hproxyLinear' : rectangleError μ (sumVector ξ) A_Q R ≤
       boundedProxyBothTargetsConstant * rate := hproxyLinear.trans
     (mul_le_mul_of_nonneg_right (by unfold boundedProxyBothTargetsConstant; linarith) hr)
-  have hone : max (rectangleError μ (sumVector ξ) A_S R) (rectangleError μ (sumVector ξ) A_Σ R) ≤ 1 :=
-    max_le (rectangleError_le_one μ (sumVector ξ) A_S R) (rectangleError_le_one μ (sumVector ξ) A_Σ R)
+  have hone : max (rectangleError μ (sumVector ξ) A_S R) (rectangleError μ (sumVector ξ) A_Q R) ≤ 1 :=
+    max_le (rectangleError_le_one μ (sumVector ξ) A_S R) (rectangleError_le_one μ (sumVector ξ) A_Q R)
   have hh := le_max_mul_min_of_le_one hr hone (max_le htrueLinear hproxyLinear')
   have hC : 1 ≤ boundedProxyBothTargetsConstant := by
     unfold boundedProxyBothTargetsConstant

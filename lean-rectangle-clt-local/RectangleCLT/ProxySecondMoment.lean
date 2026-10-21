@@ -21,7 +21,8 @@ theorem sum_abs_second_le_bandwidth_sq_fourth (x : Vector p) :
     nlinarith [pow_nonneg hθ 4, pow_nonneg hθ 3, sq_nonneg θ]
   have he : 1 ≤ (Real.exp 2) ^ 5 := one_le_pow₀ (Real.one_le_exp (by norm_num))
   have hP : 0 ≤ 24 * θ ^ 4 + 36 * θ ^ 3 + 14 * θ ^ 2 + θ := by positivity
-  have hc : 0 ≤ 3 * s.F x / s.bandwidth ^ 2 := by positivity
+  have hc : 0 ≤ 3 * s.F x / s.bandwidth ^ 2 :=
+    div_nonneg (mul_nonneg (by norm_num) (s.F_pos x).le) (sq_nonneg _)
   have hmass : (∑ j, ∑ k, ∑ l, ∑ m, s.fourthLocalMajorant x j k l m) =
       (Real.exp 2) ^ 5 * (s.F x / s.bandwidth ^ 4) *
         (24 * θ ^ 4 + 36 * θ ^ 3 + 14 * θ ^ 2 + θ) := by
@@ -34,7 +35,7 @@ theorem sum_abs_second_le_bandwidth_sq_fourth (x : Vector p) :
     hpoly.trans (by nlinarith [mul_le_mul_of_nonneg_right he hP])
   have hh := mul_le_mul_of_nonneg_left hscalar hc
   convert hh using 1 <;>
-    dsimp [θ, FaceWeights.theta] <;>
+    dsimp [θ, FaceWeights.theta, FaceSmoother.F] <;>
     field_simp [ne_of_gt s.bandwidth_pos] <;> ring
 
 theorem sum_abs_convolutionSecond_le_bandwidth_sq_fourth
@@ -70,7 +71,7 @@ theorem sum_abs_convolutionSecond_le_bandwidth_sq_fourth
       exact integral_mono
         (integrable_finset_sum Finset.univ (fun j _ =>
           integrable_finset_sum Finset.univ (fun k _ => (hi j k).abs)))
-        (hi4.const_mul _) (s.sum_abs_second_le_bandwidth_sq_fourth ∘ (fun z => x + z))
+        (hi4.const_mul _) (fun z => s.sum_abs_second_le_bandwidth_sq_fourth (x + z))
     _ = _ := by rw [integral_const_mul, s.sum_convolutionFourthLocalMajorant_eq_integral]
 
 noncomputable def selectorSecondExpectedAbsolute
@@ -116,8 +117,7 @@ theorem selectorSecondExpectedAbsolute_eq_integral_bernoulliArrayLaw
   rw [integral_map (measurable_retainedArray ξ hξ t mask).aemeasurable hm.aestronglyMeasurable]
   exact integral_congr_ae (ae_of_all _ (fun ω => by
     change G (x + arraySum (retainedArray ξ t mask ω)) = _
-    rw [arraySum_retainedArray_eq_maskObservationSum]
-    rfl))
+    rw [arraySum_retainedArray_eq_maskObservationSum]))
 
 theorem selectorSecondAbsoluteSum_le_expected
     (ν : Measure (Vector p)) [IsProbabilityMeasure ν]

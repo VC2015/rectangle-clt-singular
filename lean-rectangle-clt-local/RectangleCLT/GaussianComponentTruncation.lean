@@ -12,7 +12,7 @@ finite fourth moments are needed for the error estimates.
 -/
 
 open MeasureTheory ProbabilityTheory
-open scoped BigOperators
+open scoped BigOperators NNReal
 
 namespace RectangleCLT
 
@@ -28,7 +28,9 @@ theorem gaussianComponent_truncated_integral_zero {p : ℕ}
   apply gaussianComponent_integral_odd B
     ((measurable_pi_apply j).comp (measurable_truncateVector u))
   intro x
-  simp only [truncateVector_neg, Pi.neg_apply]
+  change truncateVector u (-x) j = -(truncateVector u x j)
+  rw [truncateVector_neg]
+  rfl
 
 theorem gaussianComponent_truncated_third_integral_zero {p : ℕ}
     (B : Matrix (Fin p) (Fin p) ℝ) (u : ℝ) (j k l : Fin p) :
@@ -39,7 +41,11 @@ theorem gaussianComponent_truncated_third_integral_zero {p : ℕ}
       ((measurable_pi_apply k).comp (measurable_truncateVector u))).mul
       ((measurable_pi_apply l).comp (measurable_truncateVector u)))
   intro x
-  simp only [truncateVector_neg, Pi.neg_apply]
+  change truncateVector u (-x) j * truncateVector u (-x) k *
+    truncateVector u (-x) l = -(truncateVector u x j * truncateVector u x k *
+      truncateVector u x l)
+  rw [truncateVector_neg]
+  simp only [Pi.neg_apply]
   ring
 
 theorem gaussianComponent_truncationMean_eq_zero {p : ℕ}
@@ -59,7 +65,7 @@ theorem gaussianComponent_integrable_coordinate_fourth {p : ℕ}
     (B : Matrix (Fin p) (Fin p) ℝ) (j : Fin p) :
     Integrable (fun x : Vector p => x j ^ 4) (gaussianLaw B) := by
   have hLp : MemLp (fun x : Vector p => B.mulVec x j)
-      (4 : ℝ≥0∞) (standardGaussian p) := by
+      (4 : ENNReal) (standardGaussian p) := by
     simpa using standardGaussian_memLp_mulVec_coordinate B j 4
   have hi := hLp.integrable_norm_pow (by norm_num : (4 : ℕ) ≠ 0)
   have hi' : Integrable (fun x : Vector p => B.mulVec x j ^ 4)
@@ -83,7 +89,8 @@ theorem vector_norm_fourth_le_sum {p : ℕ} (hp : 1 ≤ p) (x : Vector p) :
         by simpa only [Real.norm_eq_abs] using hmax i (Finset.mem_univ i)
     · simpa only [Real.norm_eq_abs] using norm_le_pi_norm x j
   rw [heq, ← abs_pow, abs_of_nonneg (by positivity : 0 ≤ x j ^ 4)]
-  exact Finset.single_le_sum (fun i _ => by positivity) hj
+  exact Finset.single_le_sum (f := fun i : Fin p => x i ^ 4)
+    (fun i _ => by positivity) hj
 
 theorem gaussianComponent_integrable_norm_fourth {p : ℕ} (hp : 1 ≤ p)
     (B : Matrix (Fin p) (Fin p) ℝ) :
@@ -146,7 +153,7 @@ theorem gaussianComponent_covariance_deficit_le {p : ℕ} (hp : 1 ≤ p)
     (gaussianLaw_integrable_coordinate_product B)
     (gaussianLaw_integral_coordinate B) u j k
   rw [covariance_gaussianLaw, gaussianComponent_truncationMean_eq_zero] at hid
-  simp only [Pi.zero_apply, zero_mul, add_zero] at hid
+  simp only [id_eq, Pi.zero_apply, zero_mul, add_zero] at hid
   change |(B * B.transpose) j k -
     covariance (gaussianLaw B) (fun x => truncateVector u x) j k| ≤ _
   rw [hid]
@@ -159,9 +166,9 @@ theorem gaussianComponent_covariance_deficit_le {p : ℕ} (hp : 1 ≤ p)
     _ ≤ ∫ x : Vector p, ‖x‖ ^ 4 / u ^ 2 ∂gaussianLaw B := by
       apply integral_mono hi.abs hdom
       intro x
+      dsimp only
       by_cases hx : x ∈ A
-      · simp only [Set.mem_compl_iff, hx, not_true_eq_false,
-          Set.indicator_of_not_mem, abs_zero]
+      · rw [Set.indicator_of_not_mem (show x ∉ Aᶜ from fun h => h hx), abs_zero]
         positivity
       · have hux : u ≤ ‖x‖ := (lt_of_not_ge hx).le
         have hj : |x j| ≤ ‖x‖ := by simpa only [Real.norm_eq_abs] using norm_le_pi_norm x j
@@ -182,8 +189,10 @@ def gaussianComponentIncrement {p : ℕ} (k : ℕ) (x : Vector p) : Vector p :=
   ((k : ℝ) ^ 3)⁻¹ • truncateVector ((k : ℝ) ^ 2) x
 
 theorem measurable_gaussianComponentIncrement {p : ℕ} (k : ℕ) :
-    Measurable (gaussianComponentIncrement (p := p) k) :=
-  (measurable_truncateVector ((k : ℝ) ^ 2)).const_smul _
+    Measurable (gaussianComponentIncrement (p := p) k) := by
+  unfold gaussianComponentIncrement
+  exact (measurable_truncateVector (p := p) ((k : ℝ) ^ 2)).const_smul
+    (((k : ℝ) ^ 3)⁻¹)
 
 theorem norm_gaussianComponentIncrement_le {p : ℕ} {k : ℕ} (hk : k ≠ 0)
     (x : Vector p) : ‖gaussianComponentIncrement k x‖ ≤ (k : ℝ)⁻¹ := by

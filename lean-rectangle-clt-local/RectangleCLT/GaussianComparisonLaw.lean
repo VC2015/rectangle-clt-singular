@@ -13,7 +13,7 @@ All covariance matrices may be singular.
 -/
 
 open MeasureTheory ProbabilityTheory
-open scoped BigOperators
+open scoped BigOperators NNReal
 
 namespace RectangleCLT
 
@@ -45,21 +45,25 @@ def vectorFourier {p : ℕ} (μ : Measure (Vector p)) (t : Vector p) : ℂ :=
 theorem measure_eq_of_vectorFourier_eq {p : ℕ} {μ ν : Measure (Vector p)}
     [IsFiniteMeasure μ] [IsFiniteMeasure ν]
     (h : ∀ t, vectorFourier μ t = vectorFourier ν t) : μ = ν := by
-  apply ext_of_integral_char_eq Real.continuous_probChar Real.probChar_ne_one
-    (L := vectorDotPairing p) ?_ (vectorDotPairing_continuous p)
-  · intro v hv hzero
+  have hsep : ∀ v : Vector p, v ≠ 0 → vectorDotPairing p v ≠ 0 := by
+    intro v hv hzero
     have hself := LinearMap.congr_fun hzero v
     change dotProduct v v = 0 at hself
     exact hv (dotProduct_self_eq_zero.mp hself)
-  · intro t
-    simpa only [BoundedContinuousFunction.char_apply, Real.probChar_apply,
-      vectorDotPairing, LinearMap.mk₂_apply, vectorFourier, vectorFourierKernel] using h t
+  apply ext_of_integral_char_eq Real.continuous_probChar Real.probChar_ne_one
+    (L := vectorDotPairing p) hsep (vectorDotPairing_continuous p)
+  intro t
+  simpa only [BoundedContinuousFunction.char_apply, Real.probChar_apply,
+    vectorDotPairing, LinearMap.mk₂_apply, vectorFourier, vectorFourierKernel] using h t
 
 theorem vectorFourier_standardGaussian {p : ℕ} (t : Vector p) :
     vectorFourier (standardGaussian p) t =
       Complex.exp (-((∑ j, t j ^ 2 : ℝ) : ℂ) / 2) := by
   classical
   letI : MeasureSpace ℝ := ⟨gaussianReal 0 1⟩
+  letI : SigmaFinite (volume : Measure ℝ) := by
+    change SigmaFinite (gaussianReal 0 1)
+    infer_instance
   have hprod (x : Vector p) : vectorFourierKernel t x =
       ∏ j, Complex.exp (((t j * x j : ℝ) : ℂ) * Complex.I) := by
     rw [← Complex.exp_sum]
@@ -72,20 +76,21 @@ theorem vectorFourier_standardGaussian {p : ℕ} (t : Vector p) :
   have hscalar (j : Fin p) :
       (∫ x : ℝ, Complex.exp (((t j * x : ℝ) : ℂ) * Complex.I)
         ∂gaussianReal 0 1) = Complex.exp (-((t j : ℂ) ^ 2) / 2) := by
-    simpa [charFun_apply_real] using
+    simpa [charFun_apply_real, neg_div] using
       (charFun_gaussianReal (μ := 0) (v := 1) (t j))
   unfold vectorFourier
   simp_rw [hprod]
   change (∫ x : Fin p → ℝ, ∏ j,
     Complex.exp (((t j * x j : ℝ) : ℂ) * Complex.I)) = _
-  rw [integral_fintype_prod_eq_prod]
+  rw [integral_fintype_prod_eq_prod (Fin p) (E := fun _ => ℝ)
+    (fun j (x : ℝ) => Complex.exp (((t j * x : ℝ) : ℂ) * Complex.I))]
   change (∏ j, ∫ x : ℝ, Complex.exp (((t j * x : ℝ) : ℂ) * Complex.I)
     ∂gaussianReal 0 1) = _
   simp_rw [hscalar]
   rw [← Complex.exp_sum]
   congr 1
-  simp only [Complex.ofReal_sum, Complex.ofReal_pow, Finset.sum_neg_distrib,
-    Finset.sum_div]
+  simp only [Complex.ofReal_sum, Complex.ofReal_pow]
+  rw [← Finset.sum_div, Finset.sum_neg_distrib]
 
 theorem vectorFourier_gaussianLaw {p : ℕ}
     (A : Matrix (Fin p) (Fin p) ℝ) (t : Vector p) :
@@ -129,21 +134,23 @@ theorem gaussianLaw_map_eval_eq_gaussianReal {p : ℕ}
   classical
   apply Measure.ext_of_charFun
   funext t
-  have hdot (x : Vector p) : dotProduct x (t • Pi.single j (1 : ℝ)) = t * x j := by
+  have hdot (x : Vector p) : dotProduct x (t • (Pi.single j (1 : ℝ) : Vector p)) = t * x j := by
     simp [dotProduct, Pi.single_apply, mul_ite, ite_mul, mul_comm]
-  have hquadratic : dotProduct (t • Pi.single j (1 : ℝ))
-      ((A * A.transpose).mulVec (t • Pi.single j (1 : ℝ))) = t ^ 2 * (v : ℝ) := by
+  have hquadratic : dotProduct (t • (Pi.single j (1 : ℝ) : Vector p))
+      ((A * A.transpose).mulVec (t • (Pi.single j (1 : ℝ) : Vector p))) = t ^ 2 * (v : ℝ) := by
     simp [dotProduct, Matrix.mulVec, Pi.single_apply, mul_ite, ite_mul,
       Finset.mul_sum, Finset.sum_mul, hdiag]
     ring
+  have hmeas : Measurable (fun x : ℝ => Complex.exp ((t : ℂ) * (x : ℂ) * Complex.I)) := by
+    fun_prop
   calc
     charFun ((gaussianLaw A).map (fun x => x j)) t =
-        vectorFourier (gaussianLaw A) (t • Pi.single j (1 : ℝ)) := by
+        vectorFourier (gaussianLaw A) (t • (Pi.single j (1 : ℝ) : Vector p)) := by
       rw [charFun_apply_real,
-        integral_map (measurable_pi_apply j).aemeasurable (by fun_prop)]
+        integral_map (measurable_pi_apply j).aemeasurable hmeas.aestronglyMeasurable]
       unfold vectorFourier vectorFourierKernel
       simp_rw [hdot]
-      rfl
+      simp only [Complex.ofReal_mul]
     _ = Complex.exp (-((t ^ 2 * (v : ℝ) : ℝ) : ℂ) / 2) := by
       rw [vectorFourier_gaussianLaw, hquadratic]
     _ = charFun (gaussianReal 0 v) t := by

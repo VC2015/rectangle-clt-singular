@@ -33,7 +33,14 @@ theorem subexponentialRate_nonneg (h : SubexponentialHypotheses μ Y B4 K)
   have ha3 := hQ.a3_pos h.dimension_pos
   have ha4 := hQ.a4_pos
   unfold subexponentialRate
-  positivity
+  refine add_nonneg (add_nonneg ?_ ?_) ?_
+  · exact div_nonneg (mul_nonneg (mul_nonneg hB hL) (Real.sqrt_nonneg _))
+      (mul_nonneg (mul_nonneg hc.le ha3.le) (Real.sqrt_nonneg _))
+  · exact div_nonneg (mul_nonneg hB hL)
+      (mul_nonneg (mul_nonneg (Real.rpow_pos_of_pos hc _).le
+        (Real.rpow_pos_of_pos (mul_pos ha3 ha4) _).le) (Real.sqrt_nonneg _))
+  · exact div_nonneg (mul_nonneg (mul_nonneg hK hH) (Real.sqrt_nonneg _))
+      (mul_nonneg hc.le (Real.sqrt_nonneg _))
 
 /-- Quantitative substitution of the actual normalized moments and fixed
 proxy discrepancy into the bounded theorem's rate. -/
@@ -89,7 +96,7 @@ theorem normalized_truncation_boundedProxyRate_le (h : SubexponentialHypotheses 
           (Δ + 4 * B4 * Real.sqrt q) * L / c := by
     unfold boundedProxyLocalRate localRateWithParameters
     change _ ≤ _
-    gcongr
+    gcongr <;> assumption
   have heq : (8 * B4 / sn) * L * Real.sqrt L / (c * a) +
       (8 * B4 / sn) * L / D + (4 * u / sn) * Real.sqrt L / c +
         (Δ + 4 * B4 * Real.sqrt q) * L / c =
@@ -149,7 +156,9 @@ theorem subexponentialProxyRectangleCLT (h : SubexponentialHypotheses μ Y B4 K)
   have ha3 := hQ.a3_pos h.dimension_pos
   have ha4 := hQ.a4_pos
   have hE : 0 ≤ E := subexponentialRate_nonneg h Q hQ
-  have hD : 0 ≤ D := by dsimp [D]; positivity
+  have hD : 0 ≤ D :=
+    div_nonneg (mul_nonneg (proxyCovarianceDiscrepancy_nonneg _ _)
+      (zero_le_one.trans hL)) hc.le
   have hC : 1 ≤ boundedProxyConstant := le_trans (by norm_num) boundedProxyConstant_ge_two
   have hC0 : 0 ≤ boundedProxyConstant := zero_le_one.trans hC
   have hCfinal : 1 ≤ subexponentialProxyConstant := subexponentialProxyConstant_ge_one
@@ -198,8 +207,9 @@ theorem subexponentialProxyRectangleCLT (h : SubexponentialHypotheses μ Y B4 K)
       have hW : Measurable (sumVector (sampleNormalizedObservations Y)) := by
         apply measurable_pi_lambda
         intro j
-        exact Finset.measurable_sum Finset.univ fun i _ =>
-          ((measurable_pi_apply j).comp (h.measurable i)).div_const _
+        simpa only [sumVector, sampleNormalizedObservations, Finset.sum_apply] using
+          (Finset.measurable_sum Finset.univ fun i _ =>
+            ((measurable_pi_apply j).comp (h.measurable i)).div_const (Real.sqrt (n : ℝ)))
       have hb := rectangleError_le_of_gaussian_norm_coupling μ h.dimension_pos
         (sumVector (sampleNormalizedObservations Y)) (sumVector ξ) hW A hQ.unit_diagonal
         hr hcoupling hbase R
@@ -212,8 +222,13 @@ theorem subexponentialProxyRectangleCLT (h : SubexponentialHypotheses μ Y B4 K)
         have h3 : 0 ≤ B4 * L * Real.sqrt L / (c * a3 Q * Real.sqrt (n : ℝ)) := by positivity
         have h4 : 0 ≤ B4 * L /
             (Real.rpow c (5 / 6 : ℝ) * Real.rpow (a3 Q * a4 Q) (1 / 3 : ℝ) *
-              Real.sqrt (n : ℝ)) := by positivity
-        dsimp [E, subexponentialRate, T0]
+              Real.sqrt (n : ℝ)) :=
+          div_nonneg (mul_nonneg hB (zero_le_one.trans hL))
+            (mul_nonneg (mul_nonneg (Real.rpow_pos_of_pos hc _).le
+              (Real.rpow_pos_of_pos (mul_pos ha3 ha4) _).le) (Real.sqrt_nonneg _))
+        change T0 ≤ B4 * L * Real.sqrt L / (c * a3 Q * Real.sqrt (n : ℝ)) +
+          B4 * L / (Real.rpow c (5 / 6 : ℝ) * Real.rpow (a3 Q * a4 Q) (1 / 3 : ℝ) *
+            Real.sqrt (n : ℝ)) + T0
         linarith only [h3, h4]
       have hrest0 : 0 ≤ q + 4 * p * r := by positivity
       have hweight : q + 4 * p * r ≤ boundedProxyConstant * (q + 4 * p * r) := by

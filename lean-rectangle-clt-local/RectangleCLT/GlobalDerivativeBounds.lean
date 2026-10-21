@@ -40,10 +40,8 @@ theorem integrable_fullGaussianScorePolynomial {p : ℕ}
       normalizedFullGaussianScoreFamily, one_mul])) le_rfl k
   apply hh.1.mono' ((measurable_const.add hRm).pow_const k).aestronglyMeasurable
   exact ae_of_all _ fun z => by
-    rw [Real.norm_eq_abs, abs_of_nonneg (pow_nonneg (by linarith [norm_nonneg
-      (normalizedFullGaussianScoreFamily A ν z)]) k)]
-    exact le_mul_of_one_le_left (pow_nonneg (by linarith [norm_nonneg
-      (normalizedFullGaussianScoreFamily A ν z)]) k)
+    rw [Real.norm_eq_abs, abs_of_nonneg (pow_nonneg (by positivity) k)]
+    exact le_mul_of_one_le_left (pow_nonneg (by positivity) k)
       (Real.one_le_exp_iff.mpr (div_nonneg (norm_nonneg _)
         (Real.sqrt_nonneg _)))
 
@@ -94,9 +92,8 @@ theorem fullDualGaussianSoftFaceMoment_mono (hp : 1 ≤ p)
     (s.integrable_fullDualGaussianSoftFaceMoment hp A hν hlower x S k)
   intro z
   exact mul_le_mul_of_nonneg_right
-    (pow_le_pow_right₀ (by linarith [norm_nonneg
-      (normalizedFullGaussianScoreFamily A ν z)] :
-      1 ≤ 1 + ‖normalizedFullGaussianScoreFamily A ν z‖) hjk)
+    (pow_le_pow_right₀ (le_add_of_nonneg_right
+      (norm_nonneg (normalizedFullGaussianScoreFamily A ν z))) hjk)
     (s.softFaceWeight_nonneg S _)
 
 theorem fullDualGaussianSoftFaceMoment_shift_le_exp_nine (hp : 1 ≤ p)
@@ -145,7 +142,7 @@ theorem abs_fullDual_score_product_integral_le (hp : 1 ≤ p)
           rw [div_eq_mul_inv, mul_comm _ (Real.sqrt ν)⁻¹]
           exact mul_le_mul_of_nonneg_left (by linarith) hD
     rw [abs_mul, Finset.abs_prod, abs_of_nonneg (s.softFaceWeight_nonneg S _)]
-    have hh := Finset.prod_le_prod (fun i _ => abs_nonneg
+    have hh := Finset.prod_le_prod (s := Finset.univ) (fun i _ => abs_nonneg
       (faceDot (fullGaussianDual A (j i)) z)) (fun i _ => hrow i)
     have heq : (∏ _i : Fin k, D * (1 + ‖normalizedFullGaussianScoreFamily A ν z‖)) =
         D ^ k * (1 + ‖normalizedFullGaussianScoreFamily A ν z‖) ^ k := by
@@ -165,6 +162,141 @@ theorem abs_fullDual_score_product_integral_le (hp : 1 ≤ p)
       apply integral_mono_of_nonneg (ae_of_all _ (fun _ => abs_nonneg _)) hmajor
       exact ae_of_all _ hpoint
     _ = _ := by rw [integral_const_mul]; rfl
+
+theorem abs_softFaceDirectional_fullDual_le_moment (hp : 1 ≤ p)
+    (A : Matrix (Fin p) (Fin p) ℝ) {ν : ℝ} (hν : 0 < ν)
+    (hlower : ∀ v, ν * vectorNormSq v ≤ matrixQuadratic (A * A.transpose) v)
+    (x : Vector p) (S : Finset (Face p)) (j : Fin p) :
+    |∫ z, s.softFaceDirectional S (coordinateDirection j) (A.mulVec z + x)
+      ∂standardGaussian p| ≤
+      (Real.sqrt ν)⁻¹ * s.fullDualGaussianSoftFaceMoment A ν x S 1 := by
+  have hd := factor_covariance_det_isUnit_of_full_lower A hν hlower
+  rw [s.softFaceDirectional_gaussian_fullDual A hd S j x]
+  have hh := s.abs_fullDual_score_product_integral_le hp A hν hlower x S 1
+    (fun _ => j)
+  simpa only [Fin.prod_univ_succ, Fin.prod_univ_zero, mul_one, pow_one] using hh
+
+theorem abs_softFaceCoordinateSecond_fullDual_le_moment (hp : 1 ≤ p)
+    (A : Matrix (Fin p) (Fin p) ℝ) {ν : ℝ} (hν : 0 < ν)
+    (hlower : ∀ v, ν * vectorNormSq v ≤ matrixQuadratic (A * A.transpose) v)
+    (x : Vector p) (S : Finset (Face p)) (j : Fin p)
+    (hj : j ∈ S.image Prod.fst) :
+    |∫ z, s.softFaceCoordinateSecond S j (A.mulVec z + x) ∂standardGaussian p| ≤
+      2 * (Real.sqrt ν)⁻¹ ^ 2 * s.fullDualGaussianSoftFaceMoment A ν x S 2 := by
+  have hd := factor_covariance_det_isUnit_of_full_lower A hν hlower
+  have hD2 : (Real.sqrt ν)⁻¹ ^ 2 = 1 / ν := by
+    rw [inv_pow, Real.sq_sqrt hν.le, one_div]
+  have hI := s.abs_fullDual_score_product_integral_le hp A hν hlower x S 2
+    (fun _ => j)
+  simp only [Fin.prod_univ_succ, Fin.prod_univ_zero, mul_one] at hI
+  have hI' : |∫ z, faceDot (fullGaussianDual A j) z *
+      (faceDot (fullGaussianDual A j) z * s.softFaceWeight S (A.mulVec z + x))
+      ∂standardGaussian p| ≤
+        (Real.sqrt ν)⁻¹ ^ 2 * s.fullDualGaussianSoftFaceMoment A ν x S 2 := by
+    simpa only [mul_assoc] using hI
+  have hcov := abs_faceDot_fullGaussianDual_le_inv A hν hlower j j
+  have hM0 := s.fullDualGaussianSoftFaceMoment_mono hp A hν hlower x S
+    (by decide : 0 ≤ 2)
+  have hM0non := s.fullDualGaussianSoftFaceMoment_nonneg A ν x S 0
+  have hterm : |faceDot (fullGaussianDual A j) (fullGaussianDual A j)| *
+      s.fullDualGaussianSoftFaceMoment A ν x S 0 ≤
+        (Real.sqrt ν)⁻¹ ^ 2 * s.fullDualGaussianSoftFaceMoment A ν x S 2 := by
+    rw [hD2]
+    exact mul_le_mul hcov hM0 hM0non (one_div_nonneg.mpr hν.le)
+  rw [s.softFaceCoordinateSecond_gaussian_fullDual A hd S j hj x]
+  refine (abs_sub _ _).trans ?_
+  rw [abs_mul, ← s.fullDualGaussianSoftFaceMoment_zero A ν x S,
+    abs_of_nonneg hM0non]
+  calc
+    _ ≤ (Real.sqrt ν)⁻¹ ^ 2 * s.fullDualGaussianSoftFaceMoment A ν x S 2 +
+        (Real.sqrt ν)⁻¹ ^ 2 * s.fullDualGaussianSoftFaceMoment A ν x S 2 :=
+      add_le_add hI' hterm
+    _ = _ := by ring
+
+theorem abs_softFaceMixedSecond_fullDual_le_moment (hp : 1 ≤ p)
+    (A : Matrix (Fin p) (Fin p) ℝ) {ν : ℝ} (hν : 0 < ν)
+    (hlower : ∀ v, ν * vectorNormSq v ≤ matrixQuadratic (A * A.transpose) v)
+    (x : Vector p) (S : Finset (Face p)) (j k : Fin p)
+    (hj : j ∈ S.image Prod.fst) (hk : k ∈ S.image Prod.fst) :
+    |∫ z, s.softFaceMixedSecond S j k (A.mulVec z + x) ∂standardGaussian p| ≤
+      2 * (Real.sqrt ν)⁻¹ ^ 2 * s.fullDualGaussianSoftFaceMoment A ν x S 2 := by
+  have hd := factor_covariance_det_isUnit_of_full_lower A hν hlower
+  have hD2 : (Real.sqrt ν)⁻¹ ^ 2 = 1 / ν := by
+    rw [inv_pow, Real.sq_sqrt hν.le, one_div]
+  have hI := s.abs_fullDual_score_product_integral_le hp A hν hlower x S 2 ![k, j]
+  simp only [Fin.prod_univ_succ, Fin.prod_univ_zero, Matrix.cons_val_zero,
+    Matrix.cons_val_succ, mul_one] at hI
+  have hI' : |∫ z, faceDot (fullGaussianDual A k) z *
+      (faceDot (fullGaussianDual A j) z * s.softFaceWeight S (A.mulVec z + x))
+      ∂standardGaussian p| ≤
+        (Real.sqrt ν)⁻¹ ^ 2 * s.fullDualGaussianSoftFaceMoment A ν x S 2 := by
+    simpa only [mul_assoc] using hI
+  have hcov := abs_faceDot_fullGaussianDual_le_inv A hν hlower k j
+  have hM0 := s.fullDualGaussianSoftFaceMoment_mono hp A hν hlower x S
+    (by decide : 0 ≤ 2)
+  have hM0non := s.fullDualGaussianSoftFaceMoment_nonneg A ν x S 0
+  have hterm : |faceDot (fullGaussianDual A k) (fullGaussianDual A j)| *
+      s.fullDualGaussianSoftFaceMoment A ν x S 0 ≤
+        (Real.sqrt ν)⁻¹ ^ 2 * s.fullDualGaussianSoftFaceMoment A ν x S 2 := by
+    rw [hD2]
+    exact mul_le_mul hcov hM0 hM0non (one_div_nonneg.mpr hν.le)
+  rw [s.softFaceMixedSecond_gaussian_fullDual A hd S j k hj hk x]
+  refine (abs_sub _ _).trans ?_
+  rw [abs_mul, ← s.fullDualGaussianSoftFaceMoment_zero A ν x S,
+    abs_of_nonneg hM0non]
+  calc
+    _ ≤ (Real.sqrt ν)⁻¹ ^ 2 * s.fullDualGaussianSoftFaceMoment A ν x S 2 +
+        (Real.sqrt ν)⁻¹ ^ 2 * s.fullDualGaussianSoftFaceMoment A ν x S 2 :=
+      add_le_add hI' hterm
+    _ = _ := by ring
+
+theorem abs_softFaceCoordinateThird_fullDual_le_moment (hp : 1 ≤ p)
+    (A : Matrix (Fin p) (Fin p) ℝ) {ν : ℝ} (hν : 0 < ν)
+    (hlower : ∀ v, ν * vectorNormSq v ≤ matrixQuadratic (A * A.transpose) v)
+    (x : Vector p) (S : Finset (Face p)) (j : Fin p)
+    (hj : j ∈ S.image Prod.fst) :
+    |∫ z, s.softFaceCoordinateThird S j (A.mulVec z + x) ∂standardGaussian p| ≤
+      4 * (Real.sqrt ν)⁻¹ ^ 3 * s.fullDualGaussianSoftFaceMoment A ν x S 3 := by
+  have hd := factor_covariance_det_isUnit_of_full_lower A hν hlower
+  have hD2 : (Real.sqrt ν)⁻¹ ^ 2 = 1 / ν := by
+    rw [inv_pow, Real.sq_sqrt hν.le, one_div]
+  have hI := s.abs_fullDual_score_product_integral_le hp A hν hlower x S 3
+    (fun _ => j)
+  simp only [Fin.prod_univ_succ, Fin.prod_univ_zero, mul_one] at hI
+  have hI' : |∫ z, faceDot (fullGaussianDual A j) z *
+      (faceDot (fullGaussianDual A j) z * (faceDot (fullGaussianDual A j) z *
+        s.softFaceWeight S (A.mulVec z + x))) ∂standardGaussian p| ≤
+      (Real.sqrt ν)⁻¹ ^ 3 * s.fullDualGaussianSoftFaceMoment A ν x S 3 := by
+    simpa only [mul_assoc] using hI
+  have hI1 := s.abs_fullDual_score_product_integral_le hp A hν hlower x S 1
+    (fun _ => j)
+  simp only [Fin.prod_univ_succ, Fin.prod_univ_zero, mul_one, pow_one] at hI1
+  have hcov := abs_faceDot_fullGaussianDual_le_inv A hν hlower j j
+  have hM1 := s.fullDualGaussianSoftFaceMoment_mono hp A hν hlower x S
+    (by decide : 1 ≤ 3)
+  have hM1non := s.fullDualGaussianSoftFaceMoment_nonneg A ν x S 1
+  have hterm : 3 * |faceDot (fullGaussianDual A j) (fullGaussianDual A j)| *
+      |∫ z, faceDot (fullGaussianDual A j) z * s.softFaceWeight S (A.mulVec z + x)
+        ∂standardGaussian p| ≤
+      3 * (Real.sqrt ν)⁻¹ ^ 3 * s.fullDualGaussianSoftFaceMoment A ν x S 3 := by
+    calc
+      _ ≤ 3 * (Real.sqrt ν)⁻¹ ^ 2 * ((Real.sqrt ν)⁻¹ *
+          s.fullDualGaussianSoftFaceMoment A ν x S 1) := by
+        apply mul_le_mul
+        · exact mul_le_mul_of_nonneg_left (by simpa only [hD2] using hcov) (by norm_num)
+        · exact hI1
+        · exact abs_nonneg _
+        · positivity
+      _ = 3 * (Real.sqrt ν)⁻¹ ^ 3 * s.fullDualGaussianSoftFaceMoment A ν x S 1 := by ring
+      _ ≤ _ := mul_le_mul_of_nonneg_left hM1 (by positivity)
+  rw [s.softFaceCoordinateThird_gaussian_fullDual A hd S j hj x]
+  refine (abs_sub _ _).trans ?_
+  rw [abs_mul, abs_mul, abs_of_nonneg (by norm_num : (0 : ℝ) ≤ 3)]
+  calc
+    _ ≤ (Real.sqrt ν)⁻¹ ^ 3 * s.fullDualGaussianSoftFaceMoment A ν x S 3 +
+        3 * (Real.sqrt ν)⁻¹ ^ 3 * s.fullDualGaussianSoftFaceMoment A ν x S 3 :=
+      add_le_add hI' hterm
+    _ = _ := by ring
 
 end FaceSmoother
 

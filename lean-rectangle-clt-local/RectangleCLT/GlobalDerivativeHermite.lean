@@ -1,5 +1,6 @@
 import RectangleCLT.GlobalDerivativeStein
 import RectangleCLT.GaussianFourthHermite
+import RectangleCLT.GaussianTubeEvents
 
 /-!
 # Actual higher soft-face derivatives in full Gaussian dual directions

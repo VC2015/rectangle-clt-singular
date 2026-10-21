@@ -1,5 +1,6 @@
 import RectangleCLT.ProxyCovariance
-import RectangleCLT.Statement
+import Mathlib.Data.Real.Basic
+import Mathlib.Data.Matrix.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 
@@ -16,11 +17,11 @@ noncomputable section
 
 /-- Coordinate normalization of a covariance matrix by standard deviations. -/
 def normalizeCovariance {p : ℕ} (C : Matrix (Fin p) (Fin p) ℝ)
-    (d : Vector p) : Matrix (Fin p) (Fin p) ℝ :=
+    (d : (Fin p → ℝ)) : Matrix (Fin p) (Fin p) ℝ :=
   fun j k => C j k / (d j * d k)
 
 theorem normalizeCovariance_unit_diagonal {p : ℕ}
-    (C : Matrix (Fin p) (Fin p) ℝ) (d : Vector p)
+    (C : Matrix (Fin p) (Fin p) ℝ) (d : (Fin p → ℝ))
     (hd : ∀ j, 0 < d j) (hdiag : ∀ j, d j ^ 2 = C j j) :
     ∀ j, normalizeCovariance C d j j = 1 := by
   intro j
@@ -84,7 +85,7 @@ theorem normalized_entry_sub_le {ε d e x : ℝ}
 /-- The normalized truncated covariance differs from the original fixed
 proxy by `Δ+2ε`.  This statement does not change the proxy. -/
 theorem normalized_covariance_fixed_proxy_discrepancy {p : ℕ}
-    (S C Q : Matrix (Fin p) (Fin p) ℝ) (d : Vector p) {ε : ℝ}
+    (S C Q : Matrix (Fin p) (Fin p) ℝ) (d : (Fin p → ℝ)) {ε : ℝ}
     (hε : 0 ≤ ε) (hε1 : ε < 1)
     (hd : ∀ j, 0 < d j)
     (hdlo : ∀ j, 1 - ε ≤ d j ^ 2) (hdhi : ∀ j, d j ^ 2 ≤ 1)

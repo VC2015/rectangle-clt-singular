@@ -44,8 +44,8 @@ theorem truncationMean_sq_le_discarded_second [IsProbabilityMeasure μ]
     intro ω
     by_cases hω : ω ∈ {x | ‖Y x‖ ≤ u}ᶜ <;> simp [hω, sq_nonneg]
   rw [truncationMean_eq_neg_discarded hY hY1 hcenter u j, neg_sq]
-  exact hc.trans (by nlinarith [mul_le_mul_of_nonneg_left
-    (measureReal_le_one (μ := μ) (s := {ω | ‖Y ω‖ ≤ u}ᶜ)) hs])
+  have hprob1 : μ.real {ω | ‖Y ω‖ ≤ u}ᶜ ≤ 1 := measureReal_le_one
+  exact hc.trans (by simpa only [mul_one] using mul_le_mul_of_nonneg_left hprob1 hs)
 
 /-- The coordinate removed-mean error after sample normalization. -/
 theorem truncationMean_normalized_sum_bound [IsFiniteMeasure μ]

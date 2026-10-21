@@ -39,7 +39,8 @@ theorem gaussianComponentJoinedArray_integral_sum
     exact hm.symm
   change (∑ i, ∫ z, f (z (finSumFinEquiv.symm i)) ∂Measure.pi ν) = _
   simp_rw [hrow]
-  rw [finSumFinEquiv.symm.sum_comp, Fintype.sum_sum_type]
+  rw [finSumFinEquiv.symm.sum_comp (fun i : Fin n ⊕ Fin (k ^ 6) =>
+    ∫ x, f x ∂ν i), Fintype.sum_sum_type]
   change (∑ i : Fin n, ∫ x, f x ∂μ.map (ξ i)) +
     (∑ _i : Fin (k ^ 6), ∫ x, f x
       ∂(gaussianLaw B).map (gaussianComponentIncrement k)) = _
@@ -114,7 +115,7 @@ theorem gaussianComponentJoinedArray_gamma4_le
   intro j _
   apply (gaussianComponentJoinedArray_fourth_sum_le μ ξ hξ hp B hk j).trans
   apply add_le_add_right
-  exact (Finset.le_fold_max (0 : ℝ)).mpr
+  exact (Finset.le_fold_max (∑ i, ∫ ω, ξ i ω j ^ 4 ∂μ)).mpr
     (Or.inr ⟨j, Finset.mem_univ _, le_rfl⟩)
 
 /-- The Gaussian part of the joined covariance is exactly the truncated
