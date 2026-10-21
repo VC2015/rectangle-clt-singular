@@ -359,20 +359,37 @@ These use the Orlicz norm bound and variance normalization of the
 manuscript. The formalization includes clipping, the residual-sum bound,
 joint Gaussian covariance restoration, and transfer to rectangles.
 
-The current verified source revision is
-\href{https://github.com/VC2015/HDCLTs/commit/d56f9b3b26c86d9a00211401e277a996ef0fa348}{\texttt{d56f9b3b26c8}},
-checked with Lean~4.19.0 and mathlib~v4.19.0.\footnote{Full Git SHA:
-\nolinkurl{d56f9b3b26c86d9a00211401e277a996ef0fa348}. The
-\href{https://github.com/VC2015/HDCLTs/blob/5a18ad4f909f272dedcf97645f6b65cc166e7820/verification/2026-10-21-d56f9b3/README.md}{verification record}
-contains the build and axiom-audit results, reproduction commands, and
-earlier certification archives.}
-The transitive axiom audit covers 258 sub-exponential theorem declarations,
-including private helpers, and reports only \texttt{propext},
-\texttt{Classical.choice}, and \texttt{Quot.sound}.
-The final theorems have no unproved analytic estimates as premises.
+The lower bound in Theorem~\ref{opt:skew-lower} and both equivalences in
+Theorem~\ref{opt:consistency} were first certified on 21~October~2026.
+The Lean statements are
+\nolinkurl{RectangleCLT.Companion.skewedTwoPointLowerScale} and
+\nolinkurl{RectangleCLT.Companion.uniformConsistencyTheorem}.
+The first constructs the independent two-point arrays, proves that their
+envelopes are attained, and retains the stated lower constant.
+The second uses the numerical suprema over the full probability classes,
+formed before taking the limit. It retains arbitrary envelope sequences
+\(B_n\ge2\) in the general case and each fixed \(B\ge1\) under
+aggregate third-moment cancellation.
 
-The supplementary lower bounds and consistency thresholds are outside
-these certifications.
+The current verified source revision is
+\href{https://github.com/VC2015/HDCLTs/commit/6548201a5c5d9c132a53f1d504f7ef70346aa782}{\texttt{6548201a5c5d}},
+checked with Lean~4.19.0 and mathlib~v4.19.0.\footnote{Full Git SHA:
+\nolinkurl{6548201a5c5d9c132a53f1d504f7ef70346aa782}. The
+\href{https://github.com/VC2015/HDCLTs/blob/bbf1ab99c733a398c181ca8c9f5a243a41f258c6/verification/2026-10-21-companion-results/README.md}{verification record}
+contains the successful complete-package build and CI results,
+the expanded theorem statements, transitive axiom audits, and
+reproduction commands. It preserves the earlier certification archives.}
+The separate \nolinkurl{LowerResultsAudit} checks 12 named declarations,
+including the final statements and their construction and supremum bridges.
+The count includes intermediate bridges supporting the same main results.
+The audits report only \texttt{propext}, \texttt{Classical.choice}, and
+\texttt{Quot.sound}. The strict sub-exponential audit still covers
+258 theorem declarations, including private helpers. The final theorems
+have no unproved analytic estimates as premises.
+
+These certifications cover the five main theorems and the two bounds in
+Corollary~\ref{cor:subexponential}. Further results in the Supplement
+remain outside this certification.
 
 % Source: proof_interface
 \section{Smoothing and covariance-preserving comparison}

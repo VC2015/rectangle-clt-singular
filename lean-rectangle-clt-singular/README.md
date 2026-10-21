@@ -15,8 +15,8 @@ results, exact counts, and source hashes are recorded in
 
 The two sub-exponential upper bounds are proved in
 [`SubexponentialMain.lean`](RectangleCLTCompanion/SubexponentialMain.lean)
-and were first certified on **21 October 2026**. The exact checked proof
-revision is [`d0131c0f3399`](https://github.com/VC2015/HDCLTs/commit/d0131c0f3399ed116ccae144e56a0d8edee9d62d).
+and were first certified on **21 October 2026**. Its original checked proof
+revision was [`d0131c0f3399`](https://github.com/VC2015/HDCLTs/commit/d0131c0f3399ed116ccae144e56a0d8edee9d62d).
 The complete package build and strict transitive axiom audit passed;
 all **258** new theorem declarations depend only on `propext`,
 `Classical.choice`, and `Quot.sound`. Exact contracts, source hashes,
@@ -228,14 +228,55 @@ The license, upstream toolchain/revision, and compatibility changes are
 recorded in [the attribution file](third_party/isoperimetric/README.md).
 No Prékopa or covariance-contraction axiom was added.
 
+## Lower scale and uniform consistency
+
+Theorems 4 and 5 were first certified on **21 October 2026**. Their
+current source revision, complete package build, exact theorem contracts,
+CI results, and transitive audits are recorded in
+[`LOWER_RESULTS_VERIFICATION.json`](LOWER_RESULTS_VERIFICATION.json).
+
+Theorem 4 is proved by `RectangleCLT.Companion.skewedTwoPointLowerScale`
+in [`LowerScaleMain.lean`](RectangleCLTCompanion/LowerScaleMain.lean).
+For arbitrary `B_n ≥ 2`, `p_n → ∞`, and
+`r_n = B_n (log p_n)^(3/2) / sqrt n → 0`, it supplies the actual iid,
+independent-coordinate two-point arrays. Their covariance is identity,
+the envelope `B_n` is attained, and their full rectangle distance satisfies
+`liminf ρ/r_n ≥ sqrt(2)/(4e)`. The proof includes the actual tilted-law
+Gaussian approximation, tail comparison, maximum probabilities, and
+supremum rectangle distance.
+
+Theorem 5 is proved by `RectangleCLT.Companion.uniformConsistencyTheorem`
+in [`ConsistencyMain.lean`](RectangleCLTCompanion/ConsistencyMain.lean).
+For each fixed `c₀ ∈ (0,1]`, it states both numerical supremum-error
+criteria:
+
+- For arbitrary `B_n ≥ 2` and `p_n ≥ 1`, `M_n → 0` exactly when
+  `B_n log(e p_n)^(3/2) / sqrt n → 0`.
+- For each fixed `B ≥ 1` and arbitrary `p_n ≥ 1`, `M_n^0 → 0` exactly when
+  `log p_n / sqrt n → 0`.
+
+The suprema range over the full independent centered probability class,
+before taking the limit. The zero-skew class requires cancellation of
+every aggregate mixed third moment. No identical-law, coordinate
+independence, covariance rank, or positive eigenvalue condition is added
+to either full class.
+
+[`LowerResultsAudit.lean`](RectangleCLTCompanion/LowerResultsAudit.lean)
+prints the expanded contracts and audits 12 named declarations, including
+supporting construction and supremum-equivalence statements. The strict
+258-declaration sub-exponential audit is retained. The counts describe
+audit scopes with overlapping dependencies; exact counts and logs are in
+the verification record. Every reported transitive axiom is one of
+`propext`, `Classical.choice`, and `Quot.sound`.
+
 ## Remaining scope
 
 The sub-exponential APIs do not assert a zero-skewness improvement.
 Clipping need not preserve cancellation of aggregate third tensors across
 different rows, and the transfer bound includes a `b L^(3/2)` contribution.
 The bounded full-tensor cancellation theorem remains as stated above.
-The supplement's lower bounds and consistency thresholds are outside the
-formalized scope.
+Further Supplement statements beyond the main lower-scale and consistency
+results remain outside the formalized scope.
 
 The checked [finite model](RectangleCLTCompanion/Models.lean) with
 covariance
@@ -286,6 +327,21 @@ The permitted dependencies are Lean's standard `propext`,
 counts, and hashes; the report does not substitute guessed counts for
 that record.
 
+For the exact lower and consistency endpoints, run:
+
+```sh
+lake build RectangleCLTCompanion RectangleCLTCompanion.LowerResultsAudit RectangleCLTCompanion.ZeroSkewConsistencyAudit
+lake env lean RectangleCLTCompanion/CompleteAudit.lean
+```
+
+`LowerResultsAudit.lean` prints the actual construction, supremum, and
+limit contracts. The pinned CI workflow checks that all 12 printed
+transitive axiom lists stay within the standard allowlist. The separate
+zero-skew audit prints nine supporting entries; these overlap the final
+result audit and are not added to it. `CompleteAudit.lean` separately
+checks the unique theorem declarations in the imported companion
+modules, including private helpers.
+
 ## Research sources
 
 The user's **20 October 2026** split package is preserved byte for byte:
@@ -299,5 +355,5 @@ The user's **20 October 2026** split package is preserved byte for byte:
 The original documents retain their credits and research claims. This is
 the preserved historical source snapshot; the current research manuscript
 is in [the sibling paper folder](../research-rectangle-clt-singular/).
-Its supplementary lower bounds and consistency thresholds remain beyond
-the certification scope described above.
+The main lower-scale and consistency results are now certified as recorded
+above. Further Supplement results remain outside that scope.
