@@ -115,11 +115,15 @@ import RectangleCLT.GaussianFourthSelectorBounds
 import RectangleCLT.GaussianSelectorFaceMoments
 import RectangleCLT.GaussianFourthSupCounting
 import RectangleCLT.Main
+import RectangleCLT.CertifiedExtensions
 
 /-!
 The updated bounded main theorem is `RectangleCLT.localRectangleCLT` in
 `Main.lean`, with an explicit universal constant and singular full covariance
 allowed. `RectangleCLT.localRectangleCLTExists` proves the corresponding
 absolute-constant assertion. See `BLUEPRINT.md` for the checked dependency
-chain. The earlier globally nondegenerate statement remains a separate target.
+chain. The Gaussian comparison, full covariance-proxy theorem, sub-exponential
+corollaries, and combined local/global refinements are imported through
+`CertifiedExtensions.lean`. Their public declarations and exact scope are
+recorded in `CERTIFICATION_EXTENSIONS.md`.
 -/

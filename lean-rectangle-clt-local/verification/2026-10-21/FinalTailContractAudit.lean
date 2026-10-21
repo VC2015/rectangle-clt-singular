@@ -1,0 +1,18 @@
+import RectangleCLT.SubexponentialCoordinates
+
+#check RectangleCLT.subexponentialProxyConstant
+#check RectangleCLT.subexponentialBothTargetsConstant
+#check RectangleCLT.subexponentialProxyRectangleCLT
+#check RectangleCLT.subexponentialBothTargets
+#check RectangleCLT.subexponentialRectangleCLT
+#check RectangleCLT.subexponentialCoordinatesRectangleCLT
+#check RectangleCLT.SubexponentialHypotheses.original_covariance_diagonal
+#print RectangleCLT.SubexponentialHypotheses
+#print RectangleCLT.subexponentialRate
+#print RectangleCLT.psiOneNorm
+#print RectangleCLT.ExponentialMomentBound
+#print axioms RectangleCLT.subexponentialProxyRectangleCLT
+#print axioms RectangleCLT.subexponentialBothTargets
+#print axioms RectangleCLT.subexponentialRectangleCLT
+#print axioms RectangleCLT.subexponentialCoordinatesRectangleCLT
+#print axioms RectangleCLT.SubexponentialHypotheses.original_covariance_diagonal
