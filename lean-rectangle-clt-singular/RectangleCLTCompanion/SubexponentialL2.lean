@@ -33,18 +33,8 @@ theorem centeredResidualRows_coordinate_memLp_two [IsFiniteMeasure μ]
 theorem integral_centered_sq_le [IsProbabilityMeasure μ]
     {R : Ω → ℝ} (hR : MemLp R 2 μ) :
     (∫ ω, (R ω - ∫ a, R a ∂μ) ^ 2 ∂μ) ≤ ∫ ω, R ω ^ 2 ∂μ := by
-  have hi := hR.integrable one_le_two
-  have he : (∫ ω, (R ω - ∫ a, R a ∂μ) ^ 2 ∂μ) =
-      (∫ ω, R ω ^ 2 ∂μ) - (∫ ω, R ω ∂μ) ^ 2 := by
-    simp only [sub_sq]
-    rw [integral_add
-      (hR.integrable_sq.sub ((hi.const_mul 2).mul_const _)) (integrable_const _),
-      integral_sub hR.integrable_sq ((hi.const_mul 2).mul_const _),
-      integral_mul_const, integral_const_mul]
-    simp only [integral_const, measureReal_univ_eq_one, smul_eq_mul, one_mul]
-    ring
-  rw [he]
-  exact sub_le_self _ (sq_nonneg _)
+  rw [← variance_eq_integral hR.aestronglyMeasurable.aemeasurable]
+  exact variance_le_expectation_sq hR.aestronglyMeasurable
 
 theorem centeredResidualRows_integral_sq_le [IsProbabilityMeasure μ]
     {X : Fin n → Ω → Vector p} {K u : ℝ}
@@ -60,8 +50,11 @@ theorem memLp_sumVector_coordinate
     {ξ : Fin n → Ω → Vector p}
     (hξ : ∀ i j, MemLp (fun ω => ξ i ω j) 2 μ) (j : Fin p) :
     MemLp (fun ω => sumVector ξ ω j) 2 μ := by
-  simpa only [sumVector, Finset.sum_apply] using
-    (memLp_finset_sum' Finset.univ (fun i _ => hξ i j))
+  have he : (fun ω => sumVector ξ ω j) = (∑ i : Fin n, fun ω => ξ i ω j) := by
+    funext ω
+    simp only [sumVector, Finset.sum_apply]
+  rw [he]
+  exact memLp_finset_sum' Finset.univ (fun i _ => hξ i j)
 
 theorem integral_sumVector_coordinate_zero
     {ξ : Fin n → Ω → Vector p}
@@ -154,6 +147,19 @@ theorem sqrt_integral_sq_eq_norm_toLp {f : Ω → ℝ} (hf : MemLp f 2 μ) :
   rw [integral_sq_eq_norm_toLp_sq hf, Real.sqrt_sq_eq_abs,
     abs_of_nonneg (norm_nonneg _)]
 
+theorem sqrt_integral_sub_sq_eq_norm_toLp {f g : Ω → ℝ}
+    (hf : MemLp f 2 μ) (hg : MemLp g 2 μ) :
+    Real.sqrt (∫ ω, (f ω - g ω) ^ 2 ∂μ) = ‖hf.toLp f - hg.toLp g‖ := by
+  change Real.sqrt (∫ ω, (f - g) ω ^ 2 ∂μ) = _
+  rw [sqrt_integral_sq_eq_norm_toLp (hf.sub hg), MemLp.toLp_sub]
+
+theorem sqrt_integral_const_mul_sub_sq_eq_norm_toLp {f g : Ω → ℝ}
+    (hf : MemLp f 2 μ) (hg : MemLp g 2 μ) (a : ℝ) :
+    Real.sqrt (∫ ω, (a * f ω - g ω) ^ 2 ∂μ) = ‖a • hf.toLp f - hg.toLp g‖ := by
+  change Real.sqrt (∫ ω, (a • f - g) ω ^ 2 ∂μ) = _
+  rw [sqrt_integral_sq_eq_norm_toLp ((hf.const_smul a).sub hg),
+    MemLp.toLp_sub, MemLp.toLp_const_smul]
+
 /-- The reverse triangle inequality in `L²`, stated for actual scalar
 functions, including arbitrary dependence between the two functions. -/
 theorem abs_sqrt_integral_sq_sub_le
@@ -161,7 +167,7 @@ theorem abs_sqrt_integral_sq_sub_le
     |Real.sqrt (∫ ω, f ω ^ 2 ∂μ) - Real.sqrt (∫ ω, g ω ^ 2 ∂μ)| ≤
       Real.sqrt (∫ ω, (f ω - g ω) ^ 2 ∂μ) := by
   rw [sqrt_integral_sq_eq_norm_toLp hf, sqrt_integral_sq_eq_norm_toLp hg,
-    sqrt_integral_sq_eq_norm_toLp (hf.sub hg), MemLp.toLp_sub]
+    sqrt_integral_sub_sq_eq_norm_toLp hf hg]
   exact abs_norm_sub_norm_le _ _
 
 theorem normalizedObservationSum_coordinate_memLp_two [IsFiniteMeasure μ]
@@ -271,6 +277,7 @@ theorem clipped_standardDeviation_sub_one_le [IsProbabilityMeasure μ]
     exact ae_of_all _ (fun ω => by
       have hsum := congrFun (normalizedObservationSum_eq_clipped_add_residual h hu ω) j
       change W ω j = C ω j + V ω j at hsum
+      change (C ω j - W ω j) ^ 2 = V ω j ^ 2
       rw [hsum]
       ring)
   have htriangle := abs_sqrt_integral_sq_sub_le hC hW
@@ -349,7 +356,7 @@ theorem clipped_coordinate_L2_distance_le [IsProbabilityMeasure μ]
   have hK : 0 ≤ K := zero_le_one.trans h.one_le_scale
   let C := sumVector (normalizedClippedRows μ X (K * u))
   let V := sumVector (normalizedResidualRows μ X (K * u))
-  have hv0 := normalizedResidualSum_coordinate_centered h hu j
+  have hv0 : (∫ ω, V ω j ∂μ) = 0 := normalizedResidualSum_coordinate_centered h hu j
   have hveq : covariance μ V j j = ∫ ω, V ω j ^ 2 ∂μ := by
     simp only [covariance, hv0, zero_mul, sub_zero, pow_two]
   have heq : (∫ ω, (C ω j - normalizedObservationSum X ω j) ^ 2 ∂μ) =
@@ -358,6 +365,7 @@ theorem clipped_coordinate_L2_distance_le [IsProbabilityMeasure μ]
     exact ae_of_all _ (fun ω => by
       have hh := congrFun (normalizedObservationSum_eq_clipped_add_residual h hu ω) j
       change normalizedObservationSum X ω j = C ω j + V ω j at hh
+      change (C ω j - normalizedObservationSum X ω j) ^ 2 = V ω j ^ 2
       rw [hh]
       ring)
   change Real.sqrt (∫ ω, (C ω j - normalizedObservationSum X ω j) ^ 2 ∂μ) ≤ _

@@ -81,7 +81,7 @@ theorem residual_sum_abs_tail {n : ℕ} (X : Fin n → Ω → ℝ) {K u s : ℝ}
     _ ≤ Real.exp (-(1 / K) * (K * (s + 2 * (n : ℝ) * Real.exp (-u)))) *
         Real.exp (2 * (n : ℝ) * Real.exp (-u)) :=
       mul_le_mul_of_nonneg_left hbound.2 (Real.exp_nonneg _)
-    _ = _ := by rw [← Real.exp_add]; congr 1; field_simp [hK.ne'] <;> ring
+    _ = _ := by rw [← Real.exp_add]; congr 1; field_simp [hK.ne']; ring
 
 /-- A union bound preserves arbitrary dependence within each row. -/
 theorem residual_array_tail {n p : ℕ} (X : Fin n → Ω → Fin p → ℝ) {K u s : ℝ}

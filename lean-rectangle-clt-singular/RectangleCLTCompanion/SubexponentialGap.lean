@@ -80,7 +80,7 @@ theorem covariance_difference_le_two_error
   have hnorms (j : Fin p) : ‖s j‖ = 1 := norm_toLp_coordinate_eq_one hS hmS huS j
   have hdist' (j : Fin p) : ‖s j - w j‖ ≤ η := by
     have hh := hdist j
-    rwa [sqrt_integral_sq_eq_norm_toLp ((hS j).sub (hW j)), MemLp.toLp_sub] at hh
+    rwa [sqrt_integral_sub_sq_eq_norm_toLp (hS j) (hW j)] at hh
   rw [covariance_eq_inner_toLp hS hmS, covariance_eq_inner_toLp hW hmW]
   change |@inner ℝ (Lp ℝ 2 μ) _ (s j) (s k) -
     @inner ℝ (Lp ℝ 2 μ) _ (w j) (w k)| ≤ _
@@ -124,13 +124,12 @@ theorem standardizedClipped_coordinate_L2_distance_le [IsProbabilityMeasure μ]
   have hdist : ‖hc.toLp (fun ω => C ω j) - hw.toLp (fun ω => W ω j)‖ ≤
       2 * K * Real.exp (-u / 2) := by
     have hh := clipped_coordinate_L2_distance_le h hu hn j
-    rwa [sqrt_integral_sq_eq_norm_toLp (hc.sub hw), MemLp.toLp_sub] at hh
+    rwa [sqrt_integral_sub_sq_eq_norm_toLp hc hw] at hh
   have hd1 : |d - 1| ≤ 2 * K * Real.exp (-u / 2) :=
     clipped_standardDeviation_sub_one_le h hu hn hunit j
   have hh := norm_normalized_sub_le hdp hnc hdist hd1
   change Real.sqrt (∫ ω, (d⁻¹ * C ω j - W ω j) ^ 2 ∂μ) ≤ _
-  rw [sqrt_integral_sq_eq_norm_toLp ((hc.const_smul d⁻¹).sub hw),
-    MemLp.toLp_sub, MemLp.toLp_const_smul]
+  rw [sqrt_integral_const_mul_sub_sq_eq_norm_toLp hc hw d⁻¹]
   convert hh using 1 <;> ring
 
 /-- The standardized clipped covariance loses at most four times the

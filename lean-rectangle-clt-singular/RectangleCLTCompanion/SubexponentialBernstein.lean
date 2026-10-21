@@ -26,7 +26,7 @@ theorem normalized_exp_residual_tail {n p : ℕ} (hn : 1 ≤ n)
   have hr : 0 ≤ r := by dsimp [r]; positivity
   have hscale : K * (s + 4 * (n : ℝ) * Real.exp (-u)) = Real.sqrt (n : ℝ) * r := by
     dsimp only [r]
-    field_simp [hv.ne'] <;> ring
+    field_simp [hv.ne']
   have hsub : {ω | r < ‖sumVector (normalizedResidualRows μ X (K * u)) ω‖} ⊆
       {ω | ∃ j : Fin p, K * (s + 4 * (n : ℝ) * Real.exp (-u)) ≤
         |∑ i, centeredClipResidual μ (fun a => X i a j) K u ω|} := by
@@ -95,8 +95,8 @@ theorem normalized_residual_tail_log {n p : ℕ} {X : Fin n → Ω → Vector p}
     norm_num at hlo
     exact hlo.trans hlog
   have hu : 0 ≤ 4 * dimensionLog n := by
-    have hh := log_exp_mul_nat_ge_one hn
-    linarith
+    have hh : 1 ≤ dimensionLog n := log_exp_mul_nat_ge_one hn
+    exact mul_nonneg (by norm_num) (zero_le_one.trans hh)
   have hsmall := four_n_tail_le_one hn
   have hnum : s + 4 * (n : ℝ) * Real.exp (-(4 * dimensionLog n)) ≤ 4 * s := by linarith
   have hrad : K * (s + 4 * (n : ℝ) * Real.exp (-(4 * dimensionLog n))) /
