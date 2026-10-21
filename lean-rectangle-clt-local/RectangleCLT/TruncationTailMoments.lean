@@ -168,6 +168,29 @@ theorem discarded_mean_sum_abs_le [IsFiniteMeasure μ]
     _ ≤ (n : ℝ) * (n * q) := mul_le_mul hsecond hp hp0 (Nat.cast_nonneg _)
     _ = ((n : ℝ) * Real.sqrt q) ^ 2 := by rw [mul_pow, Real.sq_sqrt hq]; ring
 
+/-- Discarded pair moments are bounded by the mean of the two discarded
+coordinate second moments. -/
+theorem indicator_pair_integral_abs_le_second_mean
+    {f g : Ω → ℝ} {A : Set Ω} (hA : MeasurableSet A)
+    (hf2 : Integrable (fun ω => f ω ^ 2) μ)
+    (hg2 : Integrable (fun ω => g ω ^ 2) μ)
+    (hfg : Integrable (fun ω => f ω * g ω) μ) :
+    |∫ ω, A.indicator (fun x => f x * g x) ω ∂μ| ≤
+      ((∫ ω, A.indicator (fun x => f x ^ 2) ω ∂μ) +
+        (∫ ω, A.indicator (fun x => g x ^ 2) ω ∂μ)) / 2 := by
+  have hi := (hf2.indicator hA).add (hg2.indicator hA)
+  have hbound : (∫ ω, |A.indicator (fun x => f x * g x) ω| ∂μ) ≤
+      ∫ ω, (A.indicator (fun x => f x ^ 2) ω +
+        A.indicator (fun x => g x ^ 2) ω) / 2 ∂μ := by
+    apply integral_mono ((hfg.indicator hA).abs) (hi.div_const 2)
+    intro ω
+    by_cases hω : ω ∈ A
+    · simp only [Set.indicator_of_mem hω, abs_mul]
+      nlinarith [sq_nonneg (|f ω| - |g ω|), sq_abs (f ω), sq_abs (g ω)]
+    · simp [hω]
+  rw [integral_div, integral_add (hf2.indicator hA) (hg2.indicator hA)] at hbound
+  exact abs_integral_le_integral_abs.trans hbound
+
 /-- Squared discarded second moment is controlled by the fourth moment
 times the probability of the discarded event. -/
 theorem discarded_second_sq_le_fourth_mul_probability [IsFiniteMeasure μ]

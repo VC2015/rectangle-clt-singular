@@ -1,4 +1,5 @@
 import RectangleCLT.ProxyCovariance
+import RectangleCLT.Statement
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 

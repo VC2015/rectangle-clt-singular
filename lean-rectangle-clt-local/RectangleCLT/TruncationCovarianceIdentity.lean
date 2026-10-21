@@ -85,6 +85,40 @@ theorem covariance_centeredTruncateVector [IsProbabilityMeasure μ]
         (norm_le_pi_norm (truncateVector u (Y ω)) k).trans (norm_truncateVector_le hu _))
       (abs_nonneg _) hu
 
+/-- Cauchy--Schwarz for entries of the actual covariance matrix, including
+singular covariance matrices. -/
+theorem covariance_entry_le_standard_deviations [IsProbabilityMeasure μ]
+    {p : ℕ} {Y : Ω → Vector p}
+    (hLp : ∀ j, MemLp (fun ω => Y ω j) 2 μ) (j k : Fin p) :
+    |covariance μ Y j k| ≤
+      Real.sqrt (covariance μ Y j j) * Real.sqrt (covariance μ Y k k) := by
+  let m : Vector p := fun j => ∫ ω, Y ω j ∂μ
+  let Z : Ω → Vector p := fun ω => Y ω - m
+  have hZLp (j : Fin p) : MemLp (fun ω => Z ω j) 2 μ :=
+    (hLp j).sub (memLp_const _)
+  have hZmean (j : Fin p) : (∫ ω, Z ω j ∂μ) = 0 := by
+    change (∫ ω, Y ω j - m j ∂μ) = 0
+    rw [integral_sub ((hLp j).integrable (by norm_num)) (integrable_const _)]
+    simp [m]
+  have hmat : covariance μ Z = covariance μ Y :=
+    covariance_sub_const (fun j => (hLp j).integrable (by norm_num))
+      (fun j k => (hLp j).integrable_mul (hLp k)) m
+  have heq (j k : Fin p) : covariance μ Y j k = ∫ ω, Z ω j * Z ω k ∂μ := by
+    rw [← hmat]
+    simp only [covariance, hZmean, zero_mul, sub_zero]
+  have hZ2 (j : Fin p) : Integrable (fun ω => Z ω j ^ 2) μ :=
+    (memLp_two_iff_integrable_sq (hZLp j).aestronglyMeasurable).mp (hZLp j)
+  have hnonneg (j : Fin p) : 0 ≤ covariance μ Y j j := by
+    rw [heq]
+    exact integral_nonneg fun ω => mul_self_nonneg _
+  have hc := integral_product_sq_le (hZ2 j) (hZ2 k)
+    ((hZLp j).integrable_mul (hZLp k))
+  apply (sq_le_sq₀ (abs_nonneg _)
+    (mul_nonneg (Real.sqrt_nonneg _) (Real.sqrt_nonneg _))).mp
+  rw [sq_abs, mul_pow, Real.sq_sqrt (hnonneg j), Real.sq_sqrt (hnonneg k), heq j k,
+    heq j j, heq k k]
+  simpa only [pow_two] using hc
+
 end
 
 end RectangleCLT

@@ -125,7 +125,10 @@ theorem gaussianComponent_truncated_fourth_le {p : ℕ}
     (B : Matrix (Fin p) (Fin p) ℝ) (u : ℝ) (j : Fin p) :
     (∫ x, truncateVector u x j ^ 4 ∂gaussianLaw B) ≤
       ∫ x : Vector p, x j ^ 4 ∂gaussianLaw B := by
-  rw [truncateVector_coordinate_eq_indicator id u j]
+  have heq (x : Vector p) : truncateVector u x j =
+      {y : Vector p | ‖y‖ ≤ u}.indicator (fun y => y j) x := by
+    by_cases hx : ‖x‖ ≤ u <;> simp [truncateVector, hx]
+  simp_rw [heq]
   exact indicator_fourth_integral_le
     (measurableSet_le measurable_norm measurable_const)
     (gaussianComponent_integrable_coordinate_fourth B j)

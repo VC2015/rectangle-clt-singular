@@ -111,8 +111,10 @@ theorem normalized_truncation_coupling_probability [IsProbabilityMeasure μ]
     (observations_norm_subexponential_tail hu htail)
   intro ω hω
   by_contra hnot
+  change ¬ ∃ i, u < ‖Y i ω‖ at hnot
   push_neg at hnot
-  exact hω.not_ge (normalized_truncation_coupling_on_good Y hu hn hr he d hd hmean hinv ω hnot)
+  exact (not_le_of_gt hω)
+    (normalized_truncation_coupling_on_good Y hu hn hr he d hd hmean hinv ω hnot)
 
 end
 

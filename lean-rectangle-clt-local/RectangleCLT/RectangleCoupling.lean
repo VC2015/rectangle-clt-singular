@@ -37,7 +37,9 @@ theorem expanded_box_subset_union_collar {p : ℕ}
     change lo j - r ≤ x j ∧ x j ≤ hi j + r at hbounds
     by_cases hlow : x j < lo j
     · exact Or.inl (mem_iUnion.mpr ⟨j, hbounds.1, by linarith⟩)
-    · exact Or.inr (mem_iUnion.mpr ⟨j, by constructor <;> linarith⟩)
+    · have hupper : hi j < x j :=
+        lt_of_not_ge (fun hhi => hj ⟨le_of_not_gt hlow, hhi⟩)
+      exact Or.inr (mem_iUnion.mpr ⟨j, by constructor <;> linarith⟩)
 
 theorem box_subset_shrunken_union_collar {p : ℕ}
     (lo hi : Vector p) {r : ℝ} (hr : 0 ≤ r) :
@@ -58,7 +60,9 @@ theorem box_subset_shrunken_union_collar {p : ℕ}
     change lo j ≤ x j ∧ x j ≤ hi j at hbounds
     by_cases hlow : x j < lo j + r
     · exact Or.inl (mem_iUnion.mpr ⟨j, by constructor <;> linarith⟩)
-    · exact Or.inr (mem_iUnion.mpr ⟨j, by constructor <;> linarith⟩)
+    · have hupper : hi j - r < x j :=
+        lt_of_not_ge (fun hhi => hj ⟨le_of_not_gt hlow, hhi⟩)
+      exact Or.inr (mem_iUnion.mpr ⟨j, by constructor <;> linarith⟩)
 
 /-- A coarse marginal strip estimate suffices when the coupling error
 vanishes faster than any dimensional factor in a truncation argument. -/

@@ -109,6 +109,7 @@ theorem sqrt_mul_localFourthScale {c a₃ a₄ : ℝ}
     Real.sqrt c * localFourthScale c a₃ a₄ =
       Real.rpow c (5 / 6 : ℝ) * Real.rpow (a₃ * a₄) (1 / 3 : ℝ) := by
   unfold localFourthScale
+  simp only [Real.rpow_eq_pow]
   rw [show c * a₃ * a₄ = c * (a₃ * a₄) by ring,
     Real.mul_rpow hc.le (mul_pos ha₃ ha₄).le, Real.sqrt_eq_rpow,
     ← mul_assoc, ← Real.rpow_add hc]
@@ -176,6 +177,20 @@ theorem combinedCoefficientRate_le_aronowLopattoRate {δ γ₃ γ₄ L b c a₃ 
     _ ≤ (3 * δ * L * Real.sqrt L) / b ^ 2 :=
       div_le_div_of_nonneg_right
         (rate_numerator_le_three_delta_log_sqrt hδ hγ₃ hγ₄ hL) (sq_nonneg b)
+    _ = _ := by ring
+
+/-- Aggregate third-moment cancellation saves the factor `sqrt L` in the
+scalar eigenvalue recovery. -/
+theorem combinedCoefficientRate_le_cancellationRate {δ γ₃ γ₄ L b c a₃ a₄ : ℝ}
+    (hδ : 0 ≤ δ) (hγ₃ : γ₃ = 0) (hγ₄ : γ₄ ≤ δ ^ 2)
+    (hL : 1 ≤ L) (hb : 0 < b) (hbc : b ^ 2 ≤ c) :
+    combinedCoefficientRate δ γ₃ γ₄ L b c a₃ a₄ ≤
+      2 * (δ * L / b ^ 2) := by
+  calc
+    _ ≤ (γ₃ * L * Real.sqrt L + Real.sqrt γ₄ * L + δ * Real.sqrt L) / b ^ 2 :=
+      combinedCoefficientRate_le_eigenvalueRate hδ (by simp [hγ₃]) (by linarith) hb hbc
+    _ ≤ (2 * δ * L) / b ^ 2 := div_le_div_of_nonneg_right
+      (rate_numerator_le_two_delta_log_of_third_eq_zero hδ hγ₃ hγ₄ hL) (sq_nonneg b)
     _ = _ := by ring
 
 end

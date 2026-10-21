@@ -137,6 +137,42 @@ def normalizedFullGaussianScoreFamily {p : ℕ}
     (A : Matrix (Fin p) (Fin p) ℝ) (ν : ℝ) (z : Vector p) : Vector p :=
   linearProjectionFamily (fun j k => Real.sqrt ν * fullGaussianDual A j k) z
 
+theorem normalizedFullGaussianScoreFamily_apply {p : ℕ}
+    (A : Matrix (Fin p) (Fin p) ℝ) (ν : ℝ) (z : Vector p) (j : Fin p) :
+    normalizedFullGaussianScoreFamily A ν z j =
+      Real.sqrt ν * faceDot (fullGaussianDual A j) z := by
+  simp only [normalizedFullGaussianScoreFamily, linearProjectionFamily, faceDot,
+    Finset.mul_sum, mul_assoc]
+
+theorem abs_faceDot_fullGaussianDual_le_scoreMaximum {p : ℕ}
+    (A : Matrix (Fin p) (Fin p) ℝ) {ν : ℝ} (hν : 0 < ν)
+    (z : Vector p) (j : Fin p) :
+    |faceDot (fullGaussianDual A j) z| ≤
+      ‖normalizedFullGaussianScoreFamily A ν z‖ / Real.sqrt ν := by
+  have hh := norm_le_pi_norm (normalizedFullGaussianScoreFamily A ν z) j
+  rw [Real.norm_eq_abs, normalizedFullGaussianScoreFamily_apply, abs_mul,
+    abs_of_pos (Real.sqrt_pos.mpr hν)] at hh
+  apply (le_div_iff₀ (Real.sqrt_pos.mpr hν)).mpr
+  simpa only [mul_comm] using hh
+
+theorem abs_faceDot_fullGaussianDual_le_inv {p : ℕ}
+    (A : Matrix (Fin p) (Fin p) ℝ) {ν : ℝ} (hν : 0 < ν)
+    (hlower : ∀ v, ν * vectorNormSq v ≤ matrixQuadratic (A * A.transpose) v)
+    (j k : Fin p) :
+    |faceDot (fullGaussianDual A j) (fullGaussianDual A k)| ≤ 1 / ν := by
+  have hd := factor_covariance_det_isUnit_of_full_lower A hν hlower
+  have hj := fullGaussianDual_normSq_le_inv A hd hν hlower j
+  have hk := fullGaussianDual_normSq_le_inv A hd hν hlower k
+  have hcs := Finset.sum_mul_sq_le_sq_mul_sq (Finset.univ : Finset (Fin p))
+    (fullGaussianDual A j) (fullGaussianDual A k)
+  change faceDot (fullGaussianDual A j) (fullGaussianDual A k) ^ 2 ≤
+    vectorNormSq (fullGaussianDual A j) * vectorNormSq (fullGaussianDual A k) at hcs
+  have hprod := mul_le_mul hj hk (vectorNormSq_nonneg _) (one_div_nonneg.mpr hν.le)
+  have hsq := hcs.trans hprod
+  have habs := abs_nonneg (faceDot (fullGaussianDual A j) (fullGaussianDual A k))
+  have hinv : 0 ≤ 1 / ν := one_div_nonneg.mpr hν.le
+  nlinarith [sq_abs (faceDot (fullGaussianDual A j) (fullGaussianDual A k))]
+
 /-- A threshold-independent maximum of all full coordinate score directions
 has the usual Gaussian maximum exponential bound. The directions may be
 dependent; only their proved variance bounds are used. -/

@@ -257,9 +257,11 @@ theorem selectorSecondAbsoluteSum_time_le_proxy
   · have hs := s.selectorSecondAbsoluteSum_shortScale_le_proxy μ ξ h hp hunit A hA
       hband ht.le ht1.le
     have htime : Real.sqrt t ≤ s.bandwidth * Real.sqrt (dimensionLog p) := by
-      have hh := le_of_lt (lt_of_not_ge hlarge)
-      have hnon : 0 ≤ s.bandwidth * Real.sqrt (dimensionLog p) := by positivity
-      nlinarith [Real.sq_sqrt ht.le, Real.sq_sqrt hL.le]
+      calc
+        _ ≤ Real.sqrt (s.bandwidth ^ 2 * dimensionLog p) :=
+          Real.sqrt_le_sqrt (le_of_lt (lt_of_not_ge hlarge))
+        _ = _ := by
+          rw [Real.sqrt_mul (sq_nonneg _), Real.sqrt_sq s.bandwidth_pos.le]
     have hct : pairGap (A * A.transpose) * Real.sqrt t ≤
         s.bandwidth * Real.sqrt (dimensionLog p) :=
       (mul_le_of_le_one_left hroot.le (pairGap_le_one _)).trans htime
@@ -271,7 +273,8 @@ theorem selectorSecondAbsoluteSum_time_le_proxy
       calc
         _ ≤ (K * Real.sqrt (dimensionLog p)) *
             (s.bandwidth * Real.sqrt (dimensionLog p)) := hm
-        _ = _ := by nlinarith [Real.sq_sqrt hL.le]
+        _ = K * s.bandwidth * (Real.sqrt (dimensionLog p)) ^ 2 := by ring
+        _ = _ := by rw [Real.sq_sqrt hL.le]; ring
     exact hs.trans (hsmall.trans
       (div_le_div_of_nonneg_right (mul_le_mul_of_nonneg_right hLK hL.le)
         (mul_nonneg hc.le hroot.le)))

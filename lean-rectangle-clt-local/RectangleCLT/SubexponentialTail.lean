@@ -14,7 +14,7 @@ the specified scale, including integrability of the exponential.
 -/
 
 open MeasureTheory ProbabilityTheory
-open scoped BigOperators
+open scoped BigOperators ENNReal
 
 namespace RectangleCLT
 
@@ -72,7 +72,7 @@ theorem ExponentialMomentBound.integrable_pow
   apply (h.integrable_exp.const_mul (K ^ m * m.factorial)).mono'
     (hX.pow_const m).aestronglyMeasurable
   exact ae_of_all _ fun ω => by
-    have he := Real.pow_div_factorial_le_exp
+    have he := Real.pow_div_factorial_le_exp (|X ω| / K)
       (div_nonneg (abs_nonneg (X ω)) h.scale_pos.le) m
     have he' : (|X ω| / K) ^ m ≤
         (m.factorial : ℝ) * Real.exp (|X ω| / K) := by
@@ -152,10 +152,11 @@ theorem observations_norm_subexponential_tail [IsFiniteMeasure μ]
   intro ω hω
   obtain ⟨i, hi⟩ := hω
   by_contra hnot
+  change ¬ ∃ i j, u ≤ |Y i ω j| at hnot
   push_neg at hnot
   have hcoord : ∀ j, ‖Y i ω j‖ ≤ u := fun j => by
     simpa only [Real.norm_eq_abs] using (hnot i j).le
-  exact hi.not_ge ((pi_norm_le_iff_of_nonneg hu).mpr hcoord)
+  exact (not_le_of_gt hi) ((pi_norm_le_iff_of_nonneg hu).mpr hcoord)
 
 end
 

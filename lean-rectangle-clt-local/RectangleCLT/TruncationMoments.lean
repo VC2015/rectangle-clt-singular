@@ -49,9 +49,10 @@ theorem centered_fourth_integral_le [IsProbabilityMeasure μ]
   have hc : Integrable (fun ω => (X ω - m) ^ 4) μ := by
     apply hdom.mono' ((hX.aestronglyMeasurable.sub aestronglyMeasurable_const).pow 4)
     exact ae_of_all _ fun ω => by
-      simpa only [Real.norm_eq_abs,
+      change ‖(X ω - m) ^ 4‖ ≤ 8 * (X ω ^ 4 + m ^ 4)
+      rw [Real.norm_eq_abs,
         abs_of_nonneg ((show Even 4 from by decide).pow_nonneg (X ω - m))]
-        using sub_fourth_le_eight (X ω) m
+      exact sub_fourth_le_eight (X ω) m
   have hbound : (∫ ω, (X ω - m) ^ 4 ∂μ) ≤
       ∫ ω, 8 * (X ω ^ 4 + m ^ 4) ∂μ :=
     integral_mono hc hdom fun ω => sub_fourth_le_eight (X ω) m

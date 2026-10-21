@@ -1,5 +1,6 @@
 import RectangleCLT.LocalStatement
 import RectangleCLT.SubexponentialTail
+import RectangleCLT.Normalization
 
 /-!
 # Probability data and scales for the sub-exponential corollaries
@@ -71,6 +72,12 @@ theorem integrable_coordinate_pow (h : SubexponentialHypotheses μ Y B4 K)
   (h.exponential_moment i j).integrable_pow
     ((measurable_pi_apply j).comp (h.measurable i)) m
 
+theorem memLp_coordinate (h : SubexponentialHypotheses μ Y B4 K)
+    (i : Fin n) (j : Fin p) : MemLp (fun ω => Y i ω j) 2 μ :=
+  (memLp_two_iff_integrable_sq
+    (((measurable_pi_apply j).comp (h.measurable i)).aestronglyMeasurable)).mpr
+      (h.integrable_coordinate_pow i j 2)
+
 /-- The paper's average fourth-moment condition in summed form. -/
 theorem fourth_moment_sum (h : SubexponentialHypotheses μ Y B4 K)
     (j : Fin p) : (∑ i, ∫ ω, Y i ω j ^ 4 ∂μ) ≤ n * B4 ^ 2 := by
@@ -81,6 +88,31 @@ theorem fourth_moment_sum (h : SubexponentialHypotheses μ Y B4 K)
     exact (show Even 4 from by decide).pow_abs _
   simp_rw [heq] at hfour
   nlinarith only [hfour]
+
+/-- Independence and the actual unit diagonal imply that the raw summed
+coordinate second moments equal the sample size. -/
+theorem second_moment_sum [IsProbabilityMeasure μ]
+    (h : SubexponentialHypotheses μ Y B4 K) (j : Fin p) :
+    (∑ i, ∫ ω, Y i ω j ^ 2 ∂μ) = n := by
+  have hnR : (0 : ℝ) < n := by exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one h.sample_size_pos)
+  have hind : iIndepFun (sampleNormalizedObservations Y) μ := by
+    exact h.independent.comp (fun _ (x : Vector p) => fun j => x j / Real.sqrt (n : ℝ))
+      (fun _ => measurable_pi_lambda _ fun j => (measurable_pi_apply j).div_const _)
+  have hcenter : ∀ i j, (∫ ω, sampleNormalizedObservations Y i ω j ∂μ) = 0 := by
+    intro i j
+    simp only [sampleNormalizedObservations, integral_div, h.centered, zero_div]
+  have hLp (i : Fin n) (j : Fin p) :
+      MemLp (fun ω => sampleNormalizedObservations Y i ω j) 2 μ := by
+    have hm : MemLp (fun ω => Y i ω j) 2 μ :=
+      (memLp_two_iff_integrable_sq
+        (((measurable_pi_apply j).comp (h.measurable i)).aestronglyMeasurable)).mpr
+          (h.integrable_coordinate_pow i j 2)
+    simpa only [sampleNormalizedObservations, div_eq_mul_inv, mul_comm] using
+      hm.const_mul ((Real.sqrt (n : ℝ))⁻¹)
+  have hs := coordinate_second_moments_eq hind hcenter hLp h.unit_diagonal j
+  simp only [sampleNormalizedObservations, div_pow, integral_div, Real.sq_sqrt hnR.le] at hs
+  rw [← Finset.sum_div] at hs
+  simpa only [one_mul] using (div_eq_iff (ne_of_gt hnR)).mp hs
 
 end SubexponentialHypotheses
 
