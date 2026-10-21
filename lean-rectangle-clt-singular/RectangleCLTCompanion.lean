@@ -105,6 +105,7 @@ import RectangleCLTCompanion.SignedSurfaceTubes
 import RectangleCLTCompanion.SignedSurfaceUnion
 import RectangleCLTCompanion.SignedSurfaceWeightedDomination
 import RectangleCLTCompanion.Statement
+import RectangleCLTCompanion.SubexponentialMain
 import RectangleCLTCompanion.SupportCoordinates
 import RectangleCLTCompanion.SupportPseudoinverse
 import RectangleCLTCompanion.SupportRows
@@ -126,6 +127,12 @@ gap-sensitive, and full-third-tensor-cancellation bounded CLTs. The
 proof includes actual signed Gaussian trace estimates, selector entropy
 and covariance contraction, translated-base restoration, exact fourth-order
 interpolation, sharp endpoint transfer, and bandwidth optimization.
+
+`RectangleCLTCompanion.SubexponentialMain` extends the unrestricted and
+fixed-positive-gap upper bounds to the manuscript's Orlicz `ψ₁` class.
+The clipping, residual concentration, positive marginal scaling, dependent
+Gaussian covariance restoration, and rectangle coupling are all supplied
+by the corresponding `Subexponential*` modules.
 
 The Prékopa--Leindler backport retains its Apache-2.0 license and attribution.
 See `README.md`, `third_party/isoperimetric/README.md`, and `VERIFICATION.json`.

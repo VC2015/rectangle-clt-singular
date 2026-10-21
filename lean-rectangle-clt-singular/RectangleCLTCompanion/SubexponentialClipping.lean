@@ -173,10 +173,11 @@ theorem ExponentialMomentBound.integrable_exp_abs_residual [IsFiniteMeasure μ]
     {X : Ω → ℝ} {K u : ℝ} (h : ExponentialMomentBound μ X K) (hu : 0 ≤ u) :
     Integrable (fun ω => Real.exp (|clipResidual (K * u) (X ω)| / K)) μ := by
   have hm : Measurable (fun ω => Real.exp (|clipResidual (K * u) (X ω)| / K)) :=
-    ((((clipResidual_continuous _).measurable.comp h.measurable).abs).div_const K).exp
+    ((continuous_abs.measurable.comp
+      ((clipResidual_continuous _).measurable.comp h.measurable)).div_const K).exp
   refine ((integrable_const 1).add (h.integrable_exp.const_mul (Real.exp (-u)))).mono
     hm.aestronglyMeasurable (ae_of_all _ fun ω => ?_)
-  simp only [Real.norm_eq_abs, Real.abs_exp,
+  simp only [Pi.add_apply, Real.norm_eq_abs, Real.abs_exp,
     abs_of_nonneg (show 0 ≤ 1 + Real.exp (-u) * Real.exp (|X ω| / K) by positivity)]
   exact exp_abs_clipResidual_le h.scale_pos hu _
 

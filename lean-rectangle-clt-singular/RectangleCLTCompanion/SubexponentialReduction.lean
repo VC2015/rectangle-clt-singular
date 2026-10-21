@@ -104,6 +104,14 @@ theorem subexponential_clipping_reduction
   have hbadW : μ.real {ω | r₁ < ‖W ω - WT ω‖} ≤ 1 / (2 * (n : ℝ)) := by
     have hd (ω : Ω) : W ω - WT ω = V ω := by rw [hdecompose]; abel
     simp_rw [hd]
+    have he : Real.exp (-u / 2) = subexponentialTailFactor n := by
+      dsimp only [u, subexponentialTailFactor]
+      congr 1
+      ring
+    have hrad : r₁ = subexponentialResidualRadius n p K := by
+      simp only [r₁, residualCouplingRadius, he, subexponentialResidualRadius,
+        subexponentialUnionLog]
+    rw [hrad]
     exact normalized_residual_tail_log h hn hp
   have hτsq : τ ^ 2 = 4 * K ^ 2 * Real.exp (-u) := by
     have he : Real.exp (-u / 2) ^ 2 = Real.exp (-u) := by

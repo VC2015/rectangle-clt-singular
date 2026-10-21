@@ -26,10 +26,10 @@ theorem absolute_residual_sum_mgf_le {n : ℕ} (X : Fin n → Ω → ℝ) {K u :
       Real.exp (2 * (n : ℝ) * Real.exp (-u)) := by
   let Y : Fin n → Ω → ℝ := fun i ω => |clipResidual (K * u) (X i ω)|
   have hmeas : ∀ i, Measurable (Y i) := fun i =>
-    ((clipResidual_continuous _).measurable.comp (hX i).measurable).abs
+    continuous_abs.measurable.comp ((clipResidual_continuous _).measurable.comp (hX i).measurable)
   have hi : iIndepFun Y μ :=
     hind.comp (fun _ x => |clipResidual (K * u) x|)
-      (fun _ => (clipResidual_continuous _).measurable.abs)
+      (fun _ => continuous_abs.measurable.comp (clipResidual_continuous _).measurable)
   have hint (i : Fin n) : Integrable (fun ω => Real.exp ((1 / K) * Y i ω)) μ := by
     simpa only [Y, one_div_mul_eq_div] using (hX i).integrable_exp_abs_residual hu
   have hsum := hi.integrable_exp_mul_sum hmeas (s := Finset.univ) (fun i _ => hint i)

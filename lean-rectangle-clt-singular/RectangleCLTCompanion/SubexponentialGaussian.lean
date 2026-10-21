@@ -84,8 +84,11 @@ theorem standardGaussian_integral_complex_projection {q : ℕ} (a : Vector q) :
       (∫ x : ℝ, Complex.exp (((a j * x : ℝ) : ℂ) * Complex.I)
         ∂gaussianReal 0 1) = Complex.exp (-((a j ^ 2 : ℝ) : ℂ) / 2) := by
     have h := charFun_gaussianReal (μ := 0) (v := 1) (a j)
-    simpa [charFun_apply_real, Complex.ofReal_mul, Complex.ofReal_pow] using h
+    simpa [charFun_apply_real, Complex.ofReal_mul, Complex.ofReal_pow, neg_div] using h
   letI : MeasureSpace ℝ := ⟨gaussianReal 0 1⟩
+  letI : IsProbabilityMeasure (volume : Measure ℝ) := by
+    change IsProbabilityMeasure (gaussianReal 0 1)
+    infer_instance
   have hpi := integral_fintype_prod_eq_prod (𝕜 := ℂ) (Fin q)
     (fun (j : Fin q) (x : ℝ) => Complex.exp (((a j * x : ℝ) : ℂ) * Complex.I))
   change (∫ z : Vector q, ∏ j, Complex.exp (((a j * z j : ℝ) : ℂ) * Complex.I)
@@ -95,7 +98,8 @@ theorem standardGaussian_integral_complex_projection {q : ℕ} (a : Vector q) :
   simp_rw [hscalar]
   rw [← Complex.exp_sum]
   congr 1
-  simp only [Complex.ofReal_sum, Finset.sum_neg_distrib, Finset.sum_div]
+  simp only [Complex.ofReal_sum]
+  rw [← Finset.sum_div, Finset.sum_neg_distrib]
 
 private theorem projected_normSq_eq_gram {p q : ℕ}
     (B : Matrix (Fin p) (Fin q) ℝ) (t : Vector p) :
@@ -113,6 +117,7 @@ theorem rectangularGaussianLaw_eq_of_gram {p q r : ℕ}
   apply ext_of_integral_char_eq continuous_probChar probChar_ne_one
     coordinateDotBilin_nondegenerate (coordinateDotBilin_continuous p)
   intro t
+  unfold rectangularGaussianLaw
   rw [integral_map (measurable_rectangular_mulVec B).aemeasurable
       (char continuous_probChar (coordinateDotBilin_continuous p) t).continuous.measurable.aestronglyMeasurable,
     integral_map (measurable_rectangular_mulVec C).aemeasurable

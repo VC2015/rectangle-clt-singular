@@ -47,7 +47,9 @@ theorem subexponentialUnionLog_le {n p : ℕ} (hn : 1 ≤ n) (hp : 1 ≤ p) :
   have hln : 0 ≤ Real.log (n : ℝ) := Real.log_nonneg (by exact_mod_cast hn)
   have hlp : 0 ≤ Real.log (p : ℝ) := Real.log_nonneg (by exact_mod_cast hp)
   have hfour : Real.log (4 : ℝ) ≤ 3 := by
-    simpa using Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 4)
+    have hh := Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 4)
+    norm_num at hh
+    exact hh
   have heq : subexponentialUnionLog n p =
       Real.log (4 : ℝ) + Real.log (n : ℝ) + Real.log (p : ℝ) := by
     rw [subexponentialUnionLog,
@@ -125,7 +127,8 @@ theorem subexponentialResidualSD_le_scale {n : ℕ} {K : ℝ}
   have ht := mul_le_mul_of_nonneg_left (subexponentialTailFactor_le_inv_two_mul hn)
     (show 0 ≤ 2 * K by positivity)
   have heq : (2 * K) * (1 / (2 * (n : ℝ))) = K / (n : ℝ) := by
-    field_simp [hnR.ne'] <;> ring
+    field_simp [hnR.ne']
+    ring
   exact ht.trans (heq.symm ▸ quotient_le_subexponentialScale hn hK)
 
 theorem subexponentialResidualSD_le_half {n : ℕ} {K : ℝ}
