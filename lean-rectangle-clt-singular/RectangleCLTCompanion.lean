@@ -107,6 +107,8 @@ import RectangleCLTCompanion.SignedSurfaceWeightedDomination
 import RectangleCLTCompanion.Statement
 import RectangleCLTCompanion.SubexponentialMain
 import RectangleCLTCompanion.ZeroSkewConsistency
+import RectangleCLTCompanion.LowerScaleMain
+import RectangleCLTCompanion.ConsistencyMain
 import RectangleCLTCompanion.SupportCoordinates
 import RectangleCLTCompanion.SupportPseudoinverse
 import RectangleCLTCompanion.SupportRows

@@ -1,0 +1,35 @@
+import RectangleCLTCompanion.LowerScaleMain
+import RectangleCLTCompanion.ConsistencyMain
+
+/-! Expanded manuscript contracts and transitive axioms for the complete
+companion lower-bound and uniform-consistency targets. -/
+
+set_option pp.proofs false
+#print RectangleCLT.Companion.SkewedTwoPointLowerScale
+#print RectangleCLT.Companion.LowerConstructionProperties
+#print RectangleCLT.Companion.rectangleDistance
+#print RectangleCLT.Companion.lowerConstructionDistance
+#print RectangleCLT.Companion.lowerSkewRate
+#print RectangleCLT.Companion.skewLowerScaleConstant
+#print RectangleCLT.Companion.uniformClassErrors
+#print RectangleCLT.Companion.uniformWorstError
+#print RectangleCLT.Companion.fixedGapWorstError
+#print RectangleCLT.Companion.zeroSkewFixedGapWorstError
+#print RectangleCLT.Companion.UniformConsistencyTheorem
+#print RectangleCLT.Companion.skewedTwoPointLowerScale
+#print RectangleCLT.Companion.lowerScaleRectangleDistance_liminf
+#print RectangleCLT.Companion.fixedGapWorstError_iff_rate
+#print RectangleCLT.Companion.zeroSkewWorstError_iff_log_rate
+#print RectangleCLT.Companion.uniformConsistencyTheorem
+#print axioms RectangleCLT.Companion.skewedTwoPointLowerScale
+#print axioms RectangleCLT.Companion.lowerScaleRectangleDistance_liminf
+#print axioms RectangleCLT.Companion.fixedGapWorstError_iff_rate
+#print axioms RectangleCLT.Companion.zeroSkewWorstError_iff_log_rate
+#print axioms RectangleCLT.Companion.uniformConsistencyTheorem
+#print axioms RectangleCLT.Companion.lowerConstructionProperties
+#print axioms RectangleCLT.Companion.lowerSkewTail_sharp_facts
+#print axioms RectangleCLT.Companion.lowerScaleRectangle_liminf
+#print axioms RectangleCLT.Companion.fixedGapUniformConsistency_iff
+#print axioms RectangleCLT.Companion.zeroSkewFixedGapUniformConsistency_iff
+#print axioms RectangleCLT.Companion.fixedGapWorstError_tendsto_zero_iff
+#print axioms RectangleCLT.Companion.zeroSkewFixedGapWorstError_tendsto_zero_iff
