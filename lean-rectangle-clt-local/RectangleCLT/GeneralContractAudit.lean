@@ -1,0 +1,29 @@
+import RectangleCLT.GeneralGaussianComponentMain
+
+/-! Expanded manuscript contracts and transitive axiom audits for the
+unequal-coefficient master estimate and its optimized bounded and
+Gaussian-component consequences. -/
+
+#print RectangleCLT.unequalMasterEstimate
+#print RectangleCLT.generalRectangleCLT
+#print RectangleCLT.generalGaussianRectangleCLT
+#print RectangleCLT.UnequalMasterEstimate
+#print RectangleCLT.GeneralRectangleCLT
+#print RectangleCLT.GeneralGaussianRectangleCLT
+#print RectangleCLT.unequalMasterDataRate
+#print RectangleCLT.masterSecondCoefficient
+#print RectangleCLT.masterThirdCoefficient
+#print RectangleCLT.masterFourthCoefficient
+#print RectangleCLT.generalCoefficientRate
+#print RectangleCLT.generalThirdRate
+#print RectangleCLT.generalFourthRate
+#print axioms RectangleCLT.unequalMasterEstimate
+#print axioms RectangleCLT.unequalMasterEstimateExists
+#print axioms RectangleCLT.generalRectangleCLT
+#print axioms RectangleCLT.generalRectangleCLTExists
+#print axioms RectangleCLT.generalGaussianRectangleCLT
+#print axioms RectangleCLT.generalGaussianRectangleCLTExists
+#print axioms RectangleCLT.FaceSmoother.interpolation_smoother_gap_le_unequal_integrals
+#print axioms RectangleCLT.FaceSmoother.integral_time_mul_sharpThirdAverage_le_unequal_min
+#print axioms RectangleCLT.FaceSmoother.integral_sharpFourthAverage_le_unequal_min
+#print axioms RectangleCLT.FaceSmoother.selectorSecondAbsoluteSum_time_le_unequal_min

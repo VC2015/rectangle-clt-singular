@@ -6,6 +6,9 @@ Every list must contain only propext, Classical.choice, and Quot.sound. -/
 #print axioms RectangleCLT.localRectangleCLTExists
 #print axioms RectangleCLT.gaussianComparisonLocal
 #print axioms RectangleCLT.gaussianComparisonFull
+#print axioms RectangleCLT.unequalMasterEstimate
+#print axioms RectangleCLT.generalRectangleCLT
+#print axioms RectangleCLT.generalGaussianRectangleCLT
 #print axioms RectangleCLT.localCovarianceProxyCLT
 #print axioms RectangleCLT.localCovarianceProxyCLTExists
 #print axioms RectangleCLT.subexponentialProxyRectangleCLT
