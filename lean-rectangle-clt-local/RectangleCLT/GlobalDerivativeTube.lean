@@ -159,6 +159,33 @@ theorem dualMap_injective {p q : ℕ}
     Function.Injective (dualMap N U h E₀ a) :=
   Function.LeftInverse.injective (dualInverse_dualMap N U hdual hh hE₀ a)
 
+theorem dualMap_dualInverse {p q : ℕ}
+    (N U : Matrix (Fin p) (Fin q) ℝ) (hdual : N.transpose * U = 1)
+    {h E₀ : ℝ} (hh : h ≠ 0) (hE₀ : 0 < E₀)
+    (a : Fin q → ℝ) (y : Coordinates p q) (hE : ∀ i, 0 < tube y i) :
+    dualMap N U h E₀ a (dualInverse N U h E₀ a y) = y := by
+  have hscores : N.transpose.mulVec (base (dualInverse N U h E₀ a y)) =
+      activeThreshold h E₀ a (tube y) := by
+    change N.transpose.mulVec (base y - U.mulVec (dualRecoveredTube N h E₀ a y)) = _
+    rw [Matrix.mulVec_sub, Matrix.mulVec_mulVec, hdual, Matrix.one_mulVec]
+    unfold dualRecoveredTube
+    rw [sub_sub_cancel]
+  ext j
+  cases j with
+  | inl j =>
+    change (base y - U.mulVec (dualRecoveredTube N h E₀ a y) +
+      U.mulVec (dualRecoveredTube N h E₀ a y)) j = y (.inl j)
+    rw [sub_add_cancel]
+    rfl
+  | inr i =>
+    change E₀ * Real.exp ((N.transpose.mulVec (base (dualInverse N U h E₀ a y)) i - a i) / h) = _
+    rw [hscores]
+    have he : (activeThreshold h E₀ a (tube y) i - a i) / h = Real.log (tube y i / E₀) := by
+      dsimp [activeThreshold]
+      field_simp
+    rw [he, Real.exp_log (div_pos (hE i) hE₀), mul_div_cancel₀ _ hE₀.ne']
+    rfl
+
 def dualTubeJacobian {p q : ℕ} (N U : Matrix (Fin p) (Fin q) ℝ)
     (d : Fin q → ℝ) : Matrix (Fin p ⊕ Fin q) (Fin p ⊕ Fin q) ℝ :=
   Matrix.fromBlocks 1 U ((Matrix.diagonal d) * N.transpose) 0

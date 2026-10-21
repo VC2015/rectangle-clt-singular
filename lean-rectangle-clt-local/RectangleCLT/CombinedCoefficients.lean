@@ -51,6 +51,15 @@ theorem combinedFourthCoefficient_nonneg {b c a₃ a₄ : ℝ}
   unfold combinedFourthCoefficient
   split_ifs <;> positivity
 
+theorem combinedCoefficientRate_nonneg {δ γ₃ γ₄ L b c a₃ a₄ : ℝ}
+    (hδ : 0 ≤ δ) (hγ₃ : 0 ≤ γ₃) (hL : 0 ≤ L)
+    (hc : 0 < c) (ha₃ : 0 < a₃) (ha₄ : 0 < a₄) :
+    0 ≤ combinedCoefficientRate δ γ₃ γ₄ L b c a₃ a₄ := by
+  have hβ₃ := combinedThirdCoefficient_nonneg (b := b) hc ha₃
+  have hβ₄ := combinedFourthCoefficient_nonneg (b := b) hc ha₃ ha₄
+  unfold combinedCoefficientRate
+  positivity
+
 theorem combinedThirdCoefficient_le_local (b c a₃ : ℝ) :
     combinedThirdCoefficient b c a₃ ≤ 1 / (c * a₃) := by
   unfold combinedThirdCoefficient

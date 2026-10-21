@@ -72,6 +72,7 @@ theorem ExponentialMomentBound.integrable_pow
   apply (h.integrable_exp.const_mul (K ^ m * m.factorial)).mono'
     (hX.pow_const m).aestronglyMeasurable
   exact ae_of_all _ fun ω => by
+    change ‖X ω ^ m‖ ≤ (K ^ m * m.factorial) * Real.exp (|X ω| / K)
     have he := Real.pow_div_factorial_le_exp (|X ω| / K)
       (div_nonneg (abs_nonneg (X ω)) h.scale_pos.le) m
     have he' : (|X ω| / K) ^ m ≤

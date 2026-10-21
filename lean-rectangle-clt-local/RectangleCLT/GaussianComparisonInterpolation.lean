@@ -103,6 +103,7 @@ theorem hasDerivAt_gaussianComparisonExpectation_raw
       (∫ z, ∑ j, gaussianComparisonVelocity t z j *
         s.coordinateDerivativeF (gaussianComparisonPoint t z) j
         ∂(gaussianLaw A).prod (gaussianLaw B)) t := by
+  have htcomp : 0 < 1 - t := by linarith
   let ε := min t (1 - t) / 2
   let a := 1 / (2 * Real.sqrt ((1 - t) / 2))
   let b := 1 / (2 * Real.sqrt (t / 2))

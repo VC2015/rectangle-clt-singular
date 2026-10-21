@@ -38,8 +38,13 @@ theorem integral_product_sq_le {f g : Ω → ℝ}
           apply integral_congr_ae
           exact ae_of_all _ fun ω => by ring
         _ = _ := by
-          rw [integral_add ((hg.const_mul _).add (hfg.const_mul _)) hf,
-            integral_add (hg.const_mul _) (hfg.const_mul _)]
+          rw [integral_add
+            (f := fun ω => (t * t) * g ω ^ 2 + (-2 * t) * (f ω * g ω))
+            (g := fun ω => f ω ^ 2)
+            ((hg.const_mul (t * t)).add (hfg.const_mul (-2 * t))) hf,
+            integral_add (f := fun ω => (t * t) * g ω ^ 2)
+              (g := fun ω => (-2 * t) * (f ω * g ω))
+              (hg.const_mul (t * t)) (hfg.const_mul (-2 * t))]
           simp only [integral_const_mul]
           ring
     rw [← heq]
@@ -69,8 +74,13 @@ theorem sum_integral_product_sq_le {n : ℕ} {f g : Fin n → Ω → ℝ}
           apply integral_congr_ae
           exact ae_of_all _ fun ω => by ring
         _ = _ := by
-          rw [integral_add (((hg i).const_mul _).add ((hfg i).const_mul _)) (hf i),
-            integral_add ((hg i).const_mul _) ((hfg i).const_mul _)]
+          rw [integral_add
+            (f := fun ω => (t * t) * g i ω ^ 2 + (-2 * t) * (f i ω * g i ω))
+            (g := fun ω => f i ω ^ 2)
+            (((hg i).const_mul (t * t)).add ((hfg i).const_mul (-2 * t))) (hf i),
+            integral_add (f := fun ω => (t * t) * g i ω ^ 2)
+              (g := fun ω => (-2 * t) * (f i ω * g i ω))
+              ((hg i).const_mul (t * t)) ((hfg i).const_mul (-2 * t))]
           simp only [integral_const_mul]
     simp_rw [heq, Finset.sum_add_distrib, ← Finset.mul_sum] at hnonneg
     nlinarith only [hnonneg]
@@ -184,6 +194,8 @@ theorem indicator_pair_integral_abs_le_second_mean
         A.indicator (fun x => g x ^ 2) ω) / 2 ∂μ := by
     apply integral_mono ((hfg.indicator hA).abs) (hi.div_const 2)
     intro ω
+    change |A.indicator (fun x => f x * g x) ω| ≤
+      (A.indicator (fun x => f x ^ 2) ω + A.indicator (fun x => g x ^ 2) ω) / 2
     by_cases hω : ω ∈ A
     · simp only [Set.indicator_of_mem hω, abs_mul]
       nlinarith [sq_nonneg (|f ω| - |g ω|), sq_abs (f ω), sq_abs (g ω)]

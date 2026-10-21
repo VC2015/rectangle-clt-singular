@@ -118,8 +118,11 @@ theorem centeredTruncateVector_fourth_integral_le [IsProbabilityMeasure μ]
       16 * ∫ ω, Y ω j ^ 4 ∂μ := by
   have hA : MeasurableSet {ω | ‖Y ω‖ ≤ u} :=
     measurableSet_le hY.norm measurable_const
+  have heq (ω : Ω) : truncateVector u (Y ω) j =
+      {x | ‖Y x‖ ≤ u}.indicator (fun x => Y x j) ω :=
+    congrFun (truncateVector_coordinate_eq_indicator Y u j) ω
   simpa only [centeredTruncateVector, Pi.sub_apply, truncationMean,
-    truncateVector_coordinate_eq_indicator] using
+    heq] using
       centered_indicator_fourth_integral_le hA (hY1 j) (hY4 j)
 
 end

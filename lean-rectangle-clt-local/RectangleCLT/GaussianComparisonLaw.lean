@@ -188,7 +188,7 @@ theorem vectorFourier_gaussianScaledSum {p : ℕ}
   change vectorFourier (gaussianLaw A) (a • t) * vectorFourier (gaussianLaw B) (b • t) = _
   rw [vectorFourier_gaussianLaw, vectorFourier_gaussianLaw, ← Complex.exp_add]
   congr 1
-  simp only [Matrix.add_mulVec, Matrix.smul_mulVec, Matrix.mulVec_smul,
+  simp only [Matrix.add_mulVec, Matrix.smul_mulVec_assoc, Matrix.mulVec_smul,
     dotProduct_add, dotProduct_smul, smul_dotProduct, smul_eq_mul,
     Complex.ofReal_add, Complex.ofReal_mul, Complex.ofReal_pow]
   ring

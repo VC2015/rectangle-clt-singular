@@ -26,7 +26,7 @@ theorem normalDot_inactive_coordinateDirection_eq_zero
     normalDot f (coordinateDirection j) = 0 := by
   have hnot : f.1 ∉ S.image Prod.fst := (Finset.mem_filter.mp hf).2
   have hne : f.1 ≠ j := fun h => hnot (h.symm ▸ hj)
-  simp [normalDot_eq_faceSign_mul, coordinateDirection, hne]
+  simp [GaussianTube.normalDot_eq_faceSign_mul, coordinateDirection, hne]
 
 theorem sum_inactive_fullGaussianDual_eq_zero
     (S : Finset (Face p)) (j : Fin p) (hj : j ∈ S.image Prod.fst)

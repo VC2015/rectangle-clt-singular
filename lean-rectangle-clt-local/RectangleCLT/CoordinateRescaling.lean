@@ -122,7 +122,11 @@ theorem rectangleError_coordinateNormalize
   have hh := rectangleError_coordinateScale μ
     (fun ω => scaleCoordinates (fun j => (σ j)⁻¹) (W ω))
     (rowScaledFactor (fun j => (σ j)⁻¹) A) σ hσ R
-  simp only [scaleCoordinates_inverse_cancel σ _ hσ, rowScaledFactor_inverse_cancel σ hσ] at hh
+  have hW : (fun ω => scaleCoordinates σ
+      (scaleCoordinates (fun j => (σ j)⁻¹) (W ω))) = W := by
+    funext ω
+    exact scaleCoordinates_inverse_cancel σ (W ω) hσ
+  rw [hW, rowScaledFactor_inverse_cancel σ hσ A] at hh
   exact hh
 
 end

@@ -52,7 +52,7 @@ theorem weighted_rate_of_master {error δ T F K C : ℝ}
       F = Real.sqrt F ^ 2 := (Real.sq_sqrt hF).symm
       _ = (Real.sqrt F * Real.sqrt K) * (Real.sqrt F / Real.sqrt K) := by
         field_simp [hsK.ne']
-        ring
+        nlinarith only [congrArg (fun u : ℝ => Real.sqrt K * u) (Real.sq_sqrt hF)]
   have hbalance : K * (Real.sqrt F / Real.sqrt K) = Real.sqrt (F * K) := by
     rw [Real.sqrt_mul hF, ← mul_div_assoc]
     apply (div_eq_iff hsK.ne').mpr

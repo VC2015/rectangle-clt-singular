@@ -134,6 +134,9 @@ theorem gaussianComponentRawOriginalSum_law
     Sum.elim (fun _ => gaussianLaw B) (restorationColumnMarginal A)
   letI (i : Fin n) : IsProbabilityMeasure (ν₀ i) :=
     isProbabilityMeasure_map (hξ i).aemeasurable
+  letI (i : Fin n ⊕ (Fin (k ^ 6) ⊕ Fin p)) :
+      IsProbabilityMeasure (gaussianComponentRawMarginal μ ξ B k i) :=
+    gaussianComponentRawMarginal_isProbability μ ξ hξ B k i
   letI (i : Fin (k ^ 6) ⊕ Fin p) : IsProbabilityMeasure (ν₁ i) := by
     cases i with
     | inl i => exact gaussianLaw_isProbability B
@@ -166,12 +169,15 @@ theorem gaussianComponentRawOriginalSum_law
   have hgaussian : ((gaussianComponentArrayLaw B (k ^ 6)).prod
       (Measure.pi (restorationColumnMarginal A))).map
       (fun z => gaussianComponentSum ((k : ℝ) ^ 3)⁻¹ z.1) = gaussianLaw B := by
-    rw [← gaussianComponentSum_law_sixth B hk,
-      ← Measure.map_fst_prod (μ := gaussianComponentArrayLaw B (k ^ 6))
-        (ν := Measure.pi (restorationColumnMarginal A)),
-      Measure.map_map (measurable_gaussianComponentSum _) measurable_fst]
-    simp only [measure_univ, one_smul]
-    rfl
+    calc
+      _ = (((gaussianComponentArrayLaw B (k ^ 6)).prod
+          (Measure.pi (restorationColumnMarginal A))).map Prod.fst).map
+          (gaussianComponentSum ((k : ℝ) ^ 3)⁻¹) := by
+        rw [Measure.map_map (measurable_gaussianComponentSum _) measurable_fst]
+        rfl
+      _ = (gaussianComponentArrayLaw B (k ^ 6)).map
+          (gaussianComponentSum ((k : ℝ) ^ 3)⁻¹) := by simp
+      _ = gaussianLaw B := gaussianComponentSum_law_sixth B hk
   let H : ((Fin (k ^ 6) → Vector p) × (Fin p → Vector p)) → Vector p :=
     fun z => gaussianComponentSum ((k : ℝ) ^ 3)⁻¹ z.1
   have hH : Measurable H :=

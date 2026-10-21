@@ -85,7 +85,7 @@ theorem truncated_covariance_diagonal_bounds (h : SubexponentialHypotheses μ Y 
   change 1 - truncatedSampleCovariance μ Y u j j = _ at hdef
   rw [← hdef] at hnonneg
   constructor
-  · linarith [(abs_le.mp herr).1]
+  · linarith [(abs_le.mp herr).2]
   · linarith
 
 theorem truncationStandardDeviations_pos (h : SubexponentialHypotheses μ Y B4 K)
@@ -203,6 +203,23 @@ theorem normalized_truncation_gamma3 (h : SubexponentialHypotheses μ Y B4 K)
   have hsmall' : 2 * B4 * Real.sqrt q < 1 := by linarith
   refine (hdata.gamma3_le_sqrt_gamma4
     (h.normalized_truncation_unit_diagonal hq hu hprob hsmall')).trans ?_
+  have hnR : (0 : ℝ) < n := by exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one h.sample_size_pos)
+  apply (sq_le_sq₀ (Real.sqrt_nonneg _)
+    (div_nonneg (mul_nonneg (by norm_num) (le_trans (by norm_num) h.fourth_scale_ge_one))
+      (Real.sqrt_nonneg _))).mp
+  rw [Real.sq_sqrt (gamma4_nonneg μ _)]
+  calc
+    _ ≤ 64 * B4 ^ 2 / n := h.normalized_truncation_gamma4 hq hu hprob hsmall
+    _ = (8 * B4 / Real.sqrt (n : ℝ)) ^ 2 := by
+      rw [div_pow, Real.sq_sqrt hnR.le]
+      ring
+
+theorem normalized_truncation_sqrt_gamma4 (h : SubexponentialHypotheses μ Y B4 K)
+    {q u : ℝ} (hq : 0 ≤ q) (hu : 0 ≤ u)
+    (hprob : ∀ i, μ.real {ω | ‖Y i ω‖ ≤ u}ᶜ ≤ q)
+    (hsmall : 2 * B4 * Real.sqrt q < 1 / 2) :
+    Real.sqrt (gamma4 μ (normalizedCenteredTruncation μ Y u
+      (truncationStandardDeviations μ Y u))) ≤ 8 * B4 / Real.sqrt (n : ℝ) := by
   have hnR : (0 : ℝ) < n := by exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one h.sample_size_pos)
   apply (sq_le_sq₀ (Real.sqrt_nonneg _)
     (div_nonneg (mul_nonneg (by norm_num) (le_trans (by norm_num) h.fourth_scale_ge_one))
