@@ -1,5 +1,6 @@
 import RectangleCLT.Main
 import RectangleCLT.GaussianComparisonLocal
+import RectangleCLT.GaussianComparisonFull
 import RectangleCLT.GaussianComponentClosure
 import RectangleCLT.SubexponentialCoordinates
 import RectangleCLT.CombinedMain
