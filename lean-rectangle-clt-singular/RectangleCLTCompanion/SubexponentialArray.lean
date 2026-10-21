@@ -152,7 +152,9 @@ theorem centeredClippedRows_add_centeredResidualRows [IsProbabilityMeasure μ]
       -(∫ a, clipAt (K * u) (X i a j) ∂μ) := by
     simp only [clipResidual]
     rw [integral_sub hi hc, h.centered i j, zero_sub]
-  simp only [Pi.add_apply, centeredClippedRows, centeredResidualRows, hm, clipResidual]
+  simp only [Pi.add_apply, centeredClippedRows, centeredResidualRows]
+  rw [hm]
+  simp only [clipResidual]
   ring
 
 theorem normalizedObservationSum_eq_clipped_add_residual [IsProbabilityMeasure μ]
