@@ -10,8 +10,8 @@ scalar implication behind its eigenvalue corollary. A denominator containing
 the full scale is omitted when that scale is zero. In particular the local
 branch remains finite for a singular full covariance.
 
-These are algebraic results. They do not establish the missing analytic
-full-eigenvalue derivative alternative or assert the combined CLT.
+These are algebraic results. The analytic full-eigenvalue alternatives
+and the actual combined CLT are assembled in `CombinedMain.lean`.
 -/
 
 namespace RectangleCLT

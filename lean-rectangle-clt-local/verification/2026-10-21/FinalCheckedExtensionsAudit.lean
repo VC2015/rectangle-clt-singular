@@ -1,0 +1,17 @@
+import RectangleCLT.Main
+import RectangleCLT.GaussianComparisonLocal
+import RectangleCLT.ProxyBounded
+
+set_option pp.universes true in
+#check RectangleCLT.localRectangleCLTExists
+#check RectangleCLT.gaussianComparisonLocalConstant
+#check RectangleCLT.gaussianComparisonLocal
+#check RectangleCLT.boundedProxyBothTargetsConstant
+#check RectangleCLT.boundedProxyRectangleCLT
+#check RectangleCLT.boundedProxyBothTargets
+#print RectangleCLT.boundedProxyLocalRate
+#print RectangleCLT.LocalCovarianceHypotheses
+#print axioms RectangleCLT.localRectangleCLTExists
+#print axioms RectangleCLT.gaussianComparisonLocal
+#print axioms RectangleCLT.boundedProxyRectangleCLT
+#print axioms RectangleCLT.boundedProxyBothTargets

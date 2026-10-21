@@ -436,6 +436,181 @@ theorem sharpFourthAverage_global_early_le
     _ ≤ _ := by
       gcongr
 
+private theorem half_base_boundary_le
+    (hp : 1 ≤ p) (A : Matrix (Fin p) (Fin p) ℝ)
+    (hA : ∀ j, (A * A.transpose) j j = 1) {ν : ℝ} (hν : 0 < ν)
+    (x : Vector p) {q : ℕ} (hq : 0 < q) (hq4 : q ≤ 4)
+    (R : FaceSmoother p) (r : Vector p) :
+    (gaussianLaw (gaussianHalfFactor A)).real
+      {v | (x + v) + r ∈ R.boundaryLayer
+        ((q : ℝ) * (Real.sqrt (ν / 2) / (4 * Real.sqrt (dimensionLog p))))} ≤
+      1073741824 * Real.sqrt (ν / 2) * Real.sqrt 2 := by
+  have hL : 0 < dimensionLog p :=
+    lt_of_lt_of_le (by norm_num) (log_exp_mul_nat_ge_one hp)
+  have hw : 0 < (q : ℝ) * (Real.sqrt (ν / 2) / (4 * Real.sqrt (dimensionLog p))) :=
+    mul_pos (by exact_mod_cast hq) (div_pos (Real.sqrt_pos.mpr (by positivity)) (by positivity))
+  have hh := R.gaussian_boundary_probability_le_of_variance hp (gaussianHalfFactor A)
+    (by norm_num : (0 : ℝ) < 1 / 2) (half_factor_diagonal A hA) (x + r) hw
+  have heq : {v : Vector p | (x + v) + r ∈ R.boundaryLayer
+      ((q : ℝ) * (Real.sqrt (ν / 2) / (4 * Real.sqrt (dimensionLog p))))} =
+      {v | v + (x + r) ∈ R.boundaryLayer
+        ((q : ℝ) * (Real.sqrt (ν / 2) / (4 * Real.sqrt (dimensionLog p))))} := by
+    ext v
+    simp only [Set.mem_setOf_eq]
+    rw [show (x + v) + r = v + (x + r) by abel]
+  rw [heq]
+  exact hh.trans (common_half_boundary_scale_le hL (Real.sqrt_nonneg _) hq4)
+
+/-- Uniform full-spectral third-derivative cap.  The second Gaussian half
+is an independent base for the score of the first half. -/
+theorem sum_abs_convolutionThird_global_le
+    (hp : 1 ≤ p) (A : Matrix (Fin p) (Fin p) ℝ)
+    (hA : ∀ j, (A * A.transpose) j j = 1) {ν : ℝ} (hν : 0 < ν)
+    (hlower : ∀ v, ν * vectorNormSq v ≤ matrixQuadratic (A * A.transpose) v)
+    (x : Vector p) :
+    (∑ j, ∑ k, ∑ l, |s.convolutionThirdDerivative (gaussianLaw A) x j k l|) ≤
+      globalThirdAverageConstant * (dimensionLog p * Real.sqrt (dimensionLog p)) / ν := by
+  let H := gaussianHalfFactor A
+  have hhalf : 0 < ν / 2 := by positivity
+  have hsplit := s.sum_abs_convolutionThird_gaussian_sum_le H H A (by
+    simp only [H, gaussianHalfFactor_covariance, ← add_smul]
+    norm_num) x
+  have hbound := s.integral_sum_abs_convolutionThird_fullDual_le_of_boundary
+    (gaussianLaw H) hp H hhalf (half_factor_full_lower A hlower)
+    (fun v => x + v) (measurable_const.add measurable_id)
+    (show 0 ≤ (1073741824 : ℝ) * Real.sqrt (ν / 2) * Real.sqrt 2 by positivity)
+    (fun q hq hq3 R r => half_base_boundary_le hp A hA hν x hq (by omega) R r)
+  exact (hsplit.trans hbound).trans (by
+    simpa only [globalThirdAverageConstant] using
+      (global_half_third_scale_le hν (by norm_num : (0 : ℝ) ≤ 1073741824)
+        (zero_le_one.trans (log_exp_mul_nat_ge_one hp))))
+
+/-- A uniform fourth cap with each local coordinate supremum taken before
+the tensor sum. Independent Gaussian splitting supplies the boundary law. -/
+theorem sum_localConvolutionFourthSup_global_le
+    (hp : 1 ≤ p) (A : Matrix (Fin p) (Fin p) ℝ)
+    (hA : ∀ j, (A * A.transpose) j j = 1) {ν : ℝ} (hν : 0 < ν)
+    (hlower : ∀ v, ν * vectorNormSq v ≤ matrixQuadratic (A * A.transpose) v)
+    (x : Vector p) {r : ℝ} (hr0 : 0 ≤ r) (hr : r ≤ s.bandwidth) :
+    (∑ j, ∑ k, ∑ l, ∑ m, s.localConvolutionFourthSup A r x 1 j k l m) ≤
+      (65536 * 1073741824 * Real.exp 19) * (1 / Real.sqrt ν) ^ 3 * (dimensionLog p) ^ 2 := by
+  let H := gaussianHalfFactor A
+  have hhalf : 0 < ν / 2 := by positivity
+  have hsplit := s.sum_localConvolutionFourthSup_gaussian_halves_le A hr0 x
+  have hbound := s.integral_sum_localConvolutionFourthSup_fullDual_le_of_boundary
+    (gaussianLaw H) hp H hhalf (half_factor_full_lower A hlower)
+    (fun v => x + v) (measurable_const.add measurable_id) hr0 hr
+    (show 0 ≤ (1073741824 : ℝ) * Real.sqrt (ν / 2) * Real.sqrt 2 by positivity)
+    (fun q hq hq4 R r => half_base_boundary_le hp A hA hν x hq hq4 R r)
+  exact (hsplit.trans hbound).trans
+    (global_half_fourth_scale_le hν (by norm_num : (0 : ℝ) ≤ 1073741824)
+      (zero_le_one.trans (log_exp_mul_nat_ge_one hp)))
+
+/-- The concrete Bernoulli third tensor satisfies the full-spectral bound
+at every positive Gaussian time, including unequal observation laws. -/
+theorem sharpThirdAverage_global_le
+    {Ω : Type*} [MeasurableSpace Ω] {n : ℕ}
+    (μ : Measure Ω) [IsProbabilityMeasure μ]
+    (ξ : Fin n → Ω → Vector p) (hξ : ∀ i, Measurable (ξ i))
+    (hp : 1 ≤ p) (A : Matrix (Fin p) (Fin p) ℝ)
+    (hA : ∀ j, (A * A.transpose) j j = 1) {ν : ℝ} (hν : 0 < ν)
+    (hlower : ∀ v, ν * vectorNormSq v ≤ matrixQuadratic (A * A.transpose) v)
+    {t : ℝ} (ht : 0 < t) (ht1 : t ≤ 1) :
+    s.sharpThirdAverage μ ξ A t ≤
+      globalThirdAverageConstant * (dimensionLog p * Real.sqrt (dimensionLog p)) / ν *
+        t ^ (-(3 / 2 : ℝ)) := by
+  let B := globalThirdAverageConstant * (dimensionLog p * Real.sqrt (dimensionLog p)) / ν *
+    t ^ (-(3 / 2 : ℝ))
+  have hpoint (x : Vector p) :
+      (∑ j, ∑ k, ∑ l,
+        |s.convolutionThirdDerivative (gaussianLaw (Real.sqrt t • A)) x j k l|) ≤ B := by
+    have hh := (s.scaleDown (Real.sqrt t) (Real.sqrt_pos.mpr ht)).sum_abs_convolutionThird_global_le
+      hp A hA hν hlower ((Real.sqrt t)⁻¹ • x)
+    rw [s.sum_abs_convolutionThirdDerivative_gaussian_scaleDown (Real.sqrt t)
+      (Real.sqrt_pos.mpr ht)]
+    have he : (Real.sqrt t) ^ 3 = t ^ (3 / 2 : ℝ) := by
+      rw [Real.sqrt_eq_rpow, ← Real.rpow_mul_natCast ht.le (1 / 2 : ℝ) 3]
+      norm_num
+    rw [he]
+    apply (div_le_div_of_nonneg_right hh (Real.rpow_nonneg ht.le _)).trans_eq
+    dsimp [B]
+    rw [Real.rpow_neg ht.le]
+    ring
+  have hi (mask : Kane.Cube n) := integrable_finset_sum Finset.univ (fun j _ =>
+    integrable_finset_sum Finset.univ (fun k _ =>
+      integrable_finset_sum Finset.univ (fun l _ =>
+        (s.integrable_convolutionThirdDerivative_mask (gaussianLaw (Real.sqrt t • A))
+          μ ξ hξ 0 (thinningScale t) mask j k l).abs)))
+  have hm (mask : Kane.Cube n) :
+      (∫ ω, ∑ j, ∑ k, ∑ l,
+        |s.convolutionThirdDerivative (gaussianLaw (Real.sqrt t • A))
+          (0 + thinningScale t • maskObservationSum ξ mask ω) j k l| ∂μ) ≤ B := by
+    have hh := integral_mono (hi mask) (integrable_const B) (fun ω => hpoint _)
+    simpa only [integral_const, measureReal_univ_eq_one, one_smul] using hh
+  unfold sharpThirdAverage selectorThirdAbsoluteAverage
+  calc
+    _ ≤ ∑ mask : Kane.Cube n, Kane.maskWeight (thinningProbability t) mask * B :=
+      Finset.sum_le_sum (fun mask _ => mul_le_mul_of_nonneg_left (hm mask)
+        (Kane.maskWeight_nonneg (thinningProbability_nonneg ht1) (thinningProbability_le_one ht.le) mask))
+    _ = B := by rw [← Finset.sum_mul, Kane.maskWeight_sum, one_mul]
+
+/-- The late Gaussian-time fourth cap uses actual independent halves,
+then averages the uniform bound over the Bernoulli law. -/
+theorem sharpFourthAverage_global_late_le
+    {Ω : Type*} [MeasurableSpace Ω] {n : ℕ}
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {ξ : Fin n → Ω → Vector p} {δ : ℝ}
+    (h : BoundedIndependentHypotheses μ ξ δ) (hp : 1 ≤ p)
+    (A : Matrix (Fin p) (Fin p) ℝ) (hA : ∀ j, (A * A.transpose) j j = 1)
+    {ν : ℝ} (hν : 0 < ν)
+    (hlower : ∀ v, ν * vectorNormSq v ≤ matrixQuadratic (A * A.transpose) v)
+    (hband : 12 * δ ≤ s.bandwidth) {t : ℝ} (ht2 : 1 / 2 ≤ t) (ht1 : t ≤ 1) :
+    s.sharpFourthAverage μ ξ A δ t ≤
+      globalFourthAverageConstant * (1 / Real.sqrt ν) ^ 3 *
+        (dimensionLog p) ^ 2 * t ^ (-(3 / 2 : ℝ)) := by
+  have ht : 0 < t := by linarith
+  let sn := s.scaleDown (Real.sqrt t) (Real.sqrt_pos.mpr ht)
+  let a := (65536 * 1073741824 * Real.exp 19) * (1 / Real.sqrt ν) ^ 3 * (dimensionLog p) ^ 2
+  have hr0 : 0 ≤ 4 * δ / Real.sqrt t :=
+    div_nonneg (mul_nonneg (by norm_num) h.delta_nonneg) (Real.sqrt_nonneg t)
+  have hr : 4 * δ / Real.sqrt t ≤ sn.bandwidth :=
+    div_le_div_of_nonneg_right (by linarith [h.delta_nonneg]) (Real.sqrt_nonneg t)
+  have hpoint (x : Vector p) := sn.sum_localConvolutionFourthSup_global_le hp A hA hν hlower x hr0 hr
+  have hnorm := s.normalizedFourthSupAverage_le_of_uniform μ ξ A h.delta_nonneg ht hpoint h.measurable ht1
+  have hscale := s.sharpFourthAverage_le_normalizedFourthSupAverage μ ξ h.measurable A h.delta_nonneg ht ht1
+  have ha0 : 0 ≤ a := by dsimp [a]; positivity
+  have htime := inverse_square_le_four_mul_neg_three_halves ht2 ht1
+  have hC : 262144 * 1073741824 * Real.exp 19 ≤ globalFourthAverageConstant := by
+    unfold globalFourthAverageConstant
+    linarith [gaussianFourthConstant_pos]
+  calc
+    _ ≤ a / t ^ 2 := hscale.trans (div_le_div_of_nonneg_right hnorm (sq_nonneg t))
+    _ = a * (1 / t ^ 2) := by ring
+    _ ≤ a * (4 * t ^ (-(3 / 2 : ℝ))) := mul_le_mul_of_nonneg_left htime ha0
+    _ = (262144 * 1073741824 * Real.exp 19) * (1 / Real.sqrt ν) ^ 3 *
+        (dimensionLog p) ^ 2 * t ^ (-(3 / 2 : ℝ)) := by dsimp [a]; ring
+    _ ≤ _ := by gcongr
+
+/-- The genuine full-spectral large-time derivative cap, with the exact
+threshold used in the scalar time integration. -/
+theorem sharpFourthAverage_global_largeTime_le
+    {Ω : Type*} [MeasurableSpace Ω] {n : ℕ}
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {ξ : Fin n → Ω → Vector p} {δ : ℝ}
+    (h : BoundedIndependentHypotheses μ ξ δ) (hp : 1 ≤ p)
+    (hunit : ∀ j, covariance μ (sumVector ξ) j j = 1)
+    (A : Matrix (Fin p) (Fin p) ℝ) (hA : ∀ j, (A * A.transpose) j j = 1)
+    {ν : ℝ} (hν : 0 < ν)
+    (hlower : ∀ v, ν * vectorNormSq v ≤ matrixQuadratic (A * A.transpose) v)
+    (hband : 12 * δ ≤ s.bandwidth) {t : ℝ} (ht : 0 < t) (ht1 : t < 1)
+    (hlarge : (1 / ν) * dimensionLog p * s.bandwidth ^ 2 ≤ t) :
+    s.sharpFourthAverage μ ξ A δ t ≤
+      globalFourthAverageConstant * (1 / Real.sqrt ν) ^ 3 *
+        (dimensionLog p) ^ 2 * t ^ (-(3 / 2 : ℝ)) := by
+  by_cases ht2 : t ≤ 1 / 2
+  · exact s.sharpFourthAverage_global_early_le h hp hunit A hν hlower hband ht ht2 hlarge
+  · exact s.sharpFourthAverage_global_late_le h hp A hA hν hlower hband (by linarith) ht1.le
+
 end FaceSmoother
 
 end

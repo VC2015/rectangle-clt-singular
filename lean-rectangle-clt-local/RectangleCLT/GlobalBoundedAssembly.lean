@@ -5,8 +5,8 @@ import RectangleCLT.GlobalDerivativeIntegration
 
 /-! Assembly for the combined covariance alternatives. The generic bridges
 in this file keep their concrete derivative-integral premise visible. The
-full-dual averaged caps must discharge that premise before a combined CLT
-can be concluded. -/
+full-dual averaged caps discharge that premise in `CombinedMain.lean`,
+which proves the public combined CLT. -/
 
 open MeasureTheory Set
 open scoped BigOperators

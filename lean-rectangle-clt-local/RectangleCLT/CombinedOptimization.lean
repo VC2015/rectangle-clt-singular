@@ -5,8 +5,8 @@ import RectangleCLT.CombinedCoefficients
 
 The analytic master estimate is an explicit hypothesis of the optimization
 lemmas below. None of these implications proves that estimate for a random
-vector. The actual Gaussian derivative alternatives remain a separate
-analytic obligation.
+vector. `CombinedMain.lean` supplies the actual analytic master estimate
+and applies these scalar results.
 -/
 
 namespace RectangleCLT

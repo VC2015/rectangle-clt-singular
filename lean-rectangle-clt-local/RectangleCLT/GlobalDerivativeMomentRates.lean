@@ -105,6 +105,31 @@ theorem global_early_fourth_time_scale_le
       mul_le_mul_of_nonneg_right hinv (by positivity)
     _ = _ := by ring
 
+theorem global_early_fourth_moment_scale {a v L C : ℝ}
+    (ha : 0 < a) (hv : 0 < v) (hL : 0 ≤ L) :
+    12672 * Real.exp 19 * (2 * C * a / v) * (Real.sqrt L) ^ 4 / a ^ 4 =
+      (25344 * C * Real.exp 19 * (1 / a) ^ 3 * L ^ 2) / v := by
+  have hLfour : (Real.sqrt L) ^ 4 = L ^ 2 := by
+    calc
+      _ = ((Real.sqrt L) ^ 2) ^ 2 := by ring
+      _ = _ := by rw [Real.sq_sqrt hL]
+  rw [hLfour]
+  field_simp [ha.ne', hv.ne']
+  <;> ring
+
+theorem global_late_fourth_time_scale_le
+    {A t : ℝ} (hA : 0 ≤ A) (ht : 0 < t) (ht2 : 1 / 2 ≤ t) :
+    A / t ^ 2 ≤ 2 * A * t ^ (-(3 / 2 : ℝ)) := by
+  have hs := Real.sqrt_pos.mpr ht
+  have hsHalf : (1 : ℝ) / 2 ≤ Real.sqrt t := by
+    nlinarith [Real.sq_sqrt ht.le, Real.sqrt_nonneg t]
+  have hpow : t ^ (-(3 / 2 : ℝ)) = Real.sqrt t / t ^ 2 := by
+    rw [show -(3 / 2 : ℝ) = (1 / 2 : ℝ) - 2 by norm_num,
+      Real.rpow_sub ht, ← Real.sqrt_eq_rpow, Real.rpow_two]
+  rw [hpow, ← mul_div_assoc]
+  apply (div_le_div_iff_of_pos_right (sq_pos_of_pos ht)).mpr
+  nlinarith [mul_le_mul_of_nonneg_left hsHalf hA]
+
 theorem global_half_boundary_scale {ν C : ℝ} (hν : 0 ≤ ν) :
     C * Real.sqrt (ν / 2) * Real.sqrt 2 = C * Real.sqrt ν := by
   rw [Real.sqrt_div hν]

@@ -9,8 +9,8 @@ The local proof moves in the covariance-normal directions. For a full
 covariance alternative one can move instead in dual directions `U`, where
 `Nᵀ U = I`. The augmented map then has no Gram determinant in its Jacobian.
 This file proves that map's inverse, injectivity, actual differential, and
-change-of-variables formula. The averaged fourth-derivative cap is not yet
-assembled from these facts.
+change-of-variables formula. `GlobalDerivativeAveragedCaps.lean` assembles
+the actual averaged derivative caps from these facts.
 -/
 
 open scoped BigOperators NNReal ENNReal

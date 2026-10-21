@@ -33,8 +33,8 @@ theorem fullGaussianIntegralCaps : FullGaussianIntegralCaps.{u}
           (by norm_num)
     have hh := integral_time_mul_third_le
       (B := globalThirdAverageConstant * L * Real.sqrt L / ν) hD (fun t ht => by
-        have hb := s.sharpThirdAverage_global_le μ ξ hdata.measurable hp A hν hlower
-          hdiag ht.1 ht.2.le
+        have hb := s.sharpThirdAverage_global_le μ ξ hdata.measurable hp A hdiag hν hlower
+          ht.1 ht.2.le
         convert hb using 1 <;> ring)
     convert hh using 1 <;> ring
   · have hC : 0 ≤ globalFourthAverageConstant := globalFourthAverageConstant_pos.le
@@ -42,8 +42,8 @@ theorem fullGaussianIntegralCaps : FullGaussianIntegralCaps.{u}
         globalFourthAverageConstant :=
       gaussianFourthConstant_ge_short.trans globalFourthAverageConstant_ge_short
     have hD : IntervalIntegrable (s.sharpFourthAverage μ ξ A δ) volume 0 1 :=
-      (s.continuousOn_sharpFourthAverage μ ξ hdata.measurable A hdata.delta_nonneg).
-        intervalIntegrable_of_Icc (by norm_num)
+      (s.continuousOn_sharpFourthAverage μ ξ hdata.measurable A hdata.delta_nonneg).intervalIntegrable_of_Icc
+        (by norm_num)
     have hsmallCap (t : ℝ) (ht : t ∈ Ioo (0 : ℝ) 1) :
         s.sharpFourthAverage μ ξ A δ t ≤
           globalFourthAverageConstant * Real.sqrt L / s.bandwidth ^ 3 :=
@@ -55,17 +55,20 @@ theorem fullGaussianIntegralCaps : FullGaussianIntegralCaps.{u}
     exact integral_fourth_time_le_full_eigenvalue hC hν (log_exp_mul_nat_ge_one hp)
       s.bandwidth_pos hD hsmallCap (fun t ht htime =>
         s.sharpFourthAverage_global_largeTime_le hdata hp hlocal.unit_diagonal
-          A hA hν hlower hband ht.1 ht.2 htime)
+          A hdiag hν hlower hband ht.1 ht.2 htime)
 
 def combinedCLTIntegralConstant : ℝ :=
   combinedIntegralAssemblyConstant (2 * globalThirdAverageConstant) (3 * globalFourthAverageConstant)
 
 theorem combinedCLTIntegralConstant_pos : 0 < combinedCLTIntegralConstant :=
-  combinedIntegralAssemblyConstant_pos (by positivity) (by positivity)
+  combinedIntegralAssemblyConstant_pos
+    (mul_nonneg (by norm_num) globalThirdAverageConstant_pos.le)
+    (mul_nonneg (by norm_num) globalFourthAverageConstant_pos.le)
 
 theorem combinedGaussianIntegralCaps : CombinedGaussianIntegralCaps.{u} combinedCLTIntegralConstant :=
   combinedGaussianIntegralCaps_of_full_integralCaps
-    (by positivity) (by positivity) fullGaussianIntegralCaps
+    (mul_nonneg (by norm_num) globalThirdAverageConstant_pos.le)
+    (mul_nonneg (by norm_num) globalFourthAverageConstant_pos.le) fullGaussianIntegralCaps
 
 def combinedCLTMasterConstant : ℝ := combinedMasterAssemblyConstant combinedCLTIntegralConstant
 
@@ -92,6 +95,56 @@ theorem boundedRectangleCLT : BoundedRectangleCLT.{u} combinedCLTConstant :=
 
 theorem boundedRectangleCLTExists : BoundedRectangleCLTExists.{u} :=
   ⟨combinedCLTConstant, combinedCLTConstant_ge_one, boundedRectangleCLT⟩
+
+/-- The eigenvalue corollary uses the full eigenvalue itself in the
+denominator, equivalently the square of the manuscript's full scale. -/
+theorem eigenvalueRectangleCLT
+    {Ω : Type u} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
+    {p n : ℕ} (hp : 1 ≤ p) (hn : 1 ≤ n) (ξ : Fin n → Ω → Vector p) {δ : ℝ}
+    (hdata : BoundedIndependentHypotheses μ ξ δ)
+    (hunit : ∀ j, covariance μ (sumVector ξ) j j = 1)
+    (A : Matrix (Fin p) (Fin p) ℝ)
+    (hA : A * A.transpose = covariance μ (sumVector ξ))
+    (hν : 0 < fullEigenvalue (covariance μ (sumVector ξ))) (R : Rect p) :
+    rectangleError μ (sumVector ξ) A R ≤ combinedCLTConstant * min 1
+      ((gamma3 μ ξ * dimensionLog p * Real.sqrt (dimensionLog p) +
+        Real.sqrt (gamma4 μ ξ) * dimensionLog p + δ * Real.sqrt (dimensionLog p)) /
+          fullEigenvalue (covariance μ (sumVector ξ))) :=
+  rectangleError_le_eigenvalueRate_of_combined
+    (zero_le_one.trans combinedCLTConstant_ge_one) combinedRectangleCLT
+    μ hp hn ξ hdata hunit A hA hν R
+
+/-- Bounded observations recover the Aronow--Lopatto envelope rate. -/
+theorem aronowLopattoRectangleCLT
+    {Ω : Type u} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
+    {p n : ℕ} (hp : 1 ≤ p) (hn : 1 ≤ n) (ξ : Fin n → Ω → Vector p) {δ : ℝ}
+    (hdata : BoundedIndependentHypotheses μ ξ δ)
+    (hunit : ∀ j, covariance μ (sumVector ξ) j j = 1)
+    (A : Matrix (Fin p) (Fin p) ℝ)
+    (hA : A * A.transpose = covariance μ (sumVector ξ))
+    (hν : 0 < fullEigenvalue (covariance μ (sumVector ξ))) (R : Rect p) :
+    rectangleError μ (sumVector ξ) A R ≤ (3 * combinedCLTConstant) * min 1
+      (δ * dimensionLog p * Real.sqrt (dimensionLog p) /
+        fullEigenvalue (covariance μ (sumVector ξ))) :=
+  rectangleError_le_AronowLopattoRate_of_combined
+    (zero_le_one.trans combinedCLTConstant_ge_one) combinedRectangleCLT
+    μ hp hn ξ hdata hunit A hA hν R
+
+/-- Aggregate signed third-moment cancellation retains the improved `L`
+rate with the same full spectral denominator. -/
+theorem cancelledEigenvalueRectangleCLT
+    {Ω : Type u} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
+    {p n : ℕ} (hp : 1 ≤ p) (hn : 1 ≤ n) (ξ : Fin n → Ω → Vector p) {δ : ℝ}
+    (hdata : BoundedIndependentHypotheses μ ξ δ)
+    (hunit : ∀ j, covariance μ (sumVector ξ) j j = 1)
+    (hthird : gamma3 μ ξ = 0) (A : Matrix (Fin p) (Fin p) ℝ)
+    (hA : A * A.transpose = covariance μ (sumVector ξ))
+    (hν : 0 < fullEigenvalue (covariance μ (sumVector ξ))) (R : Rect p) :
+    rectangleError μ (sumVector ξ) A R ≤ (2 * combinedCLTConstant) * min 1
+      (δ * dimensionLog p / fullEigenvalue (covariance μ (sumVector ξ))) :=
+  rectangleError_le_cancelledEigenvalueRate_of_combined
+    (zero_le_one.trans combinedCLTConstant_ge_one) combinedRectangleCLT
+    μ hp hn ξ hdata hunit hthird A hA hν R
 
 end
 
