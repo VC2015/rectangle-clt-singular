@@ -359,9 +359,25 @@ theorems have no unproved analytic estimates as premises.\footnote{Full Git SHA:
 \href{https://github.com/VC2015/HDCLTs/blob/3804008bc7ee4bbde244f8f46e9d4e8a58103185/rectangle-clt-singular/VERIFICATION.json}{verification record}
 identifies the toolchain, source hashes, and successful
 build and audit commands.}
-The certification covers these three bounded-observation upper bounds;
-the sub-exponential extension and the supplementary lower bounds and
-consistency thresholds are outside its scope.
+
+The two bounds in Corollary~\ref{cor:subexponential} were first certified
+on 21 October 2026 using the same toolchain. The certified Git
+revision is
+\href{https://github.com/VC2015/HDCLTs/commit/d0131c0f3399ed116ccae144e56a0d8edee9d62d}{\texttt{d0131c0f3399}};
+the Lean statements are
+\nolinkurl{RectangleCLT.Companion.subexponentialCLT_psi1} and
+\nolinkurl{RectangleCLT.Companion.fixedGapSubexponentialCLT_psi1}.
+These use the Orlicz norm bound and variance normalization of the
+manuscript. The check includes clipping, the residual-sum bound,
+joint Gaussian covariance restoration, and transfer to rectangles.
+The final statements have no unproved concentration or coupling estimate
+as a premise, and their transitive axiom audit reports only Lean's
+standard axioms.\footnote{Full Git SHA: \nolinkurl{d0131c0f3399ed116ccae144e56a0d8edee9d62d}.
+The \href{https://github.com/VC2015/HDCLTs/blob/0efaf5137e02893dfa3510701f2c51ed2f0f5e96/lean-rectangle-clt-singular/SUBEXPONENTIAL_VERIFICATION.json}{verification record} contains the
+successful build and axiom-audit results.}
+
+The supplementary lower bounds and consistency thresholds are outside
+these certifications.
 
 % Source: proof_interface
 \section{Smoothing and covariance-preserving comparison}
@@ -2172,8 +2188,17 @@ Taking the minimum with one proves \eqref{eq:zero-skew}.
 We clip each coordinate, apply the bounded theorem after marginal
 standardization, and transfer the result back to \(W_n\). This requires
 control of both the discarded sum and the Gaussian covariance change.
-Write \(\ell=\log(en)\) and \(b=K\ell/\sqrt n\). The unrestricted
-bound follows from the bound by one, after adjusting its absolute
+Write \(\ell=\log(en)\) and \(b=K\ell/\sqrt n\).
+
+We first prove the bounds under \(\E e^{|X_{ij}|/K}\le2\) for every
+coordinate. The stated norm condition gives this exponential-moment
+bound at scale \(2K\): the defining infimum supplies an admissible
+scale below \(2K\) for each coordinate, and increasing the scale
+decreases its exponential moment. Replacing \(K\) by \(2K\) doubles
+\(b\), while the positive logarithms in both asserted rates decrease.
+Each rate therefore increases by at most a factor two.
+
+The unrestricted bound follows from the bound by one, after adjusting its absolute
 constant, when \(b\ge1/16\), so assume \(b<1/16\).
 
 \emph{Step 1: Clip the rows and bound the residual sum.}
@@ -2193,26 +2218,38 @@ The exponential-moment assumption gives, for \(t\ge0\),
  \Pp(|R_{ij}|>t)\le2e^{-u-t/K},\qquad
  \E|R_{ij}|^k\le2k!K^ke^{-u}\quad(k\ge1).
 \]
-Consequently,
+In particular, independence of the rows implies
 \begin{equation}
- \max_j\Var(V_j)\le4K^2e^{-u},\qquad
- \E|R_{ij}-\E R_{ij}|^k
- \le\frac{k!}{2}(16K^2e^{-u})(2K)^{k-2}
- \quad(k\ge2).
+ \max_j\Var(V_j)\le4K^2e^{-u}.
  \label{tail:residual-moments}
 \end{equation}
-For the second estimate use
-\(\E|R-\E R|^k\le2^k\E|R|^k\).
-Thus Bernstein's inequality applies to each coordinate of \(V\) with
-variance parameter \(16K^2e^{-u}\) and scale \(2K/\sqrt n\).
-With \(s=\log(4np)\), a coordinate union bound yields
+The pointwise bound \(e^{|R_{ij}|/K}\le1+e^{-u}e^{|X_{ij}|/K}\)
+gives \(\E e^{|R_{ij}|/K}\le1+2e^{-u}\). Together with
+\(\E|R_{ij}|\le2Ke^{-u}\), independence and the triangle inequality
+therefore yield
+\begin{align*}
+ \E\exp\!\left(\frac{\sqrt n\,|V_j|}{K}\right)
+ &\le\exp\!\left(\frac1K\sum_i\E|R_{ij}|\right)
+          \prod_i\E e^{|R_{ij}|/K}\\
+ &\le e^{2ne^{-u}}(1+2e^{-u})^n
+ \le e^{4ne^{-u}}.
+\end{align*}
+For \(s=\log(4np)\), Markov's inequality gives
+\[
+ \Pp\!\left(\sqrt n\,|V_j|\ge K[s+4ne^{-u}]\right)\le e^{-s}.
+\]
+Since \(n,p\ge1\),
+\[
+ 4ne^{-u}=4e^{-4}n^{-3}\le\frac14\le\log4\le s.
+\]
+A coordinate union bound now yields
 \begin{equation}
- \Pp(\|V\|_\infty>r_1)\le\frac1{2n},\qquad
- r_1=\sqrt{32}\,Ke^{-u/2}\sqrt s+\frac{2Ks}{\sqrt n}.
+ \Pp(\|V\|_\infty>r_1)\le\frac1{4n}\le\frac1{2n},\qquad
+ r_1=\frac{2Ks}{\sqrt n}.
  \label{tail:sum-coupling}
 \end{equation}
-We control the discarded sum rather than requiring all \(np\) entries
-to lie below \(T\). This is why the cutoff needs only \(\log n\).
+The union bound is applied to the residual sums. The clipping level can
+therefore depend only on \(\log n\).
 
 \emph{Step 2: Apply the bounded comparison.}
 Set \(d_j=\sqrt{\Var(W_{T,j})}\) and \(\tau=2Ke^{-u/2}\).
