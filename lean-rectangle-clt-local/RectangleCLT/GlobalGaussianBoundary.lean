@@ -155,7 +155,7 @@ theorem gaussian_boundary_probability_le_of_variance
     exact hfinite k hk
   simpa only [add_zero] using ge_of_tendsto (hlim.add hqlim) heventual
 
-theorem gaussian_boundary_probability_le
+theorem gaussian_boundary_probability_le_of_unit_variance
     (hp : 1 ≤ p) (A : Matrix (Fin p) (Fin p) ℝ)
     (hdiag : ∀ j, (A * A.transpose) j j = 1)
     (r : Vector p) {d : ℝ} (hd : 0 < d) :
