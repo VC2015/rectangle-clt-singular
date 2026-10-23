@@ -7,11 +7,13 @@ covariance bound, the gap-sensitive bound, and the sharper bound under
 full aggregate third-moment cancellation. The final theorems have no
 unproved analytic estimate as a premise.
 
-The bounded-observation verification report is available as a
+The verification report is available as a
 [PDF](report/companion_verification.pdf) and
-[LaTeX source](report/companion_verification.tex). Build and axiom-audit
-results, exact counts, and source hashes are recorded in
-[`VERIFICATION.json`](VERIFICATION.json).
+[LaTeX source](report/companion_verification.tex). It covers the five main
+theorems, both sub-exponential bounds, the checked proof components, and
+the remaining scope. The original bounded verification is recorded in
+[`VERIFICATION.json`](VERIFICATION.json); the later tail and lower-result
+records below retain their own source revisions, builds, and audits.
 
 The two sub-exponential upper bounds are proved in
 [`SubexponentialMain.lean`](RectangleCLTCompanion/SubexponentialMain.lean)
@@ -22,7 +24,8 @@ all **258** new theorem declarations depend only on `propext`,
 `Classical.choice`, and `Quot.sound`. Exact contracts, source hashes,
 commands, and logs are recorded in
 [`SUBEXPONENTIAL_VERIFICATION.json`](SUBEXPONENTIAL_VERIFICATION.json).
-The original bounded verification record and report remain unchanged.
+The original bounded verification record is retained. The report now
+incorporates the later certifications as well.
 
 This is a separate Lake package. Keep these sibling folders together:
 
@@ -304,7 +307,7 @@ lake env lean RectangleCLTCompanion/CompleteAudit.lean
 (cd ../lean-rectangle-clt-local && lake env lean RectangleCLT/Audit.lean)
 ```
 
-For the staged sub-exponential extension, build and inspect the actual
+For the sub-exponential results, build and inspect the actual
 end-to-end theorem types and their dependency closure:
 
 ```sh
