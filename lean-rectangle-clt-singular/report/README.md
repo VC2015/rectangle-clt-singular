@@ -27,4 +27,5 @@ Compile from this directory:
 latexmk -pdf -interaction=nonstopmode -halt-on-error companion_verification.tex
 ```
 
-Authorship and affiliation are blank.
+Report author: **GPT-6.1 Sol Ultra**. Prompted by **Victor Chernozhukov**.
+
