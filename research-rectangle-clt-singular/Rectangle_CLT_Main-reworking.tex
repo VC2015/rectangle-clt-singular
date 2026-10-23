@@ -483,10 +483,13 @@ Let \(S=\sum_i\zeta_i\) have independent centered summands with
 For a centered Gaussian base with equal coordinate variances \(v\),
 the same bound holds with \(\eta=0\), including singular covariance.
 \end{lemma}
-Appendix~\ref{appx-app:concentration} derives the bounded-sum assertion
-from the Rademacher anti-concentration inequality in
-\cite[Lemma~J.4]{CCKK2022} by conditioning. The Gaussian assertion is
-Nazarov's inequality; see~\cite[Lemma~A.1]{CCK2017}.
+\polish{Appendix~\ref{appx-app:concentration} gives two proofs of the
+bounded-sum assertion: a conditioning argument using the Rademacher
+anti-concentration inequality in~\cite[Lemma~J.4]{CCKK2022}, and
+Aronow--Lopatto's resampling proof~\cite[Lemma~2.1]{AL}, based on
+Kane's noise-sensitivity bound~\cite{Kane}. The Gaussian assertion is
+Nazarov's inequality; see~\cite[Lemma~A.1]{CCK2017}. The second proof
+also recovers it by a finite-dimensional Gaussian limit.}
 
 \begin{lemma}[Smoothing error]\label{lem:endpoint}
 Under~\eqref{eq:setup}, for \(h\ge\delta\),
@@ -795,9 +798,9 @@ have no unproved analytic estimates as premises.
 These certifications cover the five main theorems and the two bounds in
 Corollary~\ref{cor:subexponential}. Further results in the Supplement
 remain outside this certification.
-The conditioning proof in Appendix~\ref{appx-app:concentration} is an
-alternative written argument; the certification refers to the recorded
-Lean proofs of the same statements.
+\polish{Appendix~\ref{appx-app:concentration} presents two written proofs
+of the concentration statement. The certification refers to the recorded
+Lean proofs of that statement, rather than to each displayed derivation.}
 
 % Source: references
 \begin{thebibliography}{99}
@@ -893,6 +896,14 @@ with AI collaborators (2026).
 over rectangles without covariance restrictions}.
 Working manuscript, 20 October 2026, revision \texttt{bbf1ab99c733}.
 \href{https://github.com/VC2015/HDCLTs/blob/bbf1ab99c733a398c181ca8c9f5a243a41f258c6/research-rectangle-clt-singular/Rectangle_CLT_Supplement.pdf}{Supplement}.}
+
+\bibitem{Kane}
+\polish{D.~M. Kane (2014).
+\emph{The average sensitivity of an intersection of half spaces}.
+Research in the Mathematical Sciences \textbf{1}, Article~13.
+\href{https://doi.org/10.1186/s40687-014-0013-6}{doi:10.1186/s40687-014-0013-6}.
+Working version: arXiv:1309.2987v3.
+\url{https://arxiv.org/abs/1309.2987v3}.}
 
 \end{thebibliography}
 
@@ -2077,6 +2088,18 @@ identity to both endpoints.
 % Source: concentration_proof
 \section{Proof of the concentration bound}\label{appx-app:concentration}
 
+\polish{We give two proofs of Lemma~\ref{appx-lem:concentration}. The first
+uses the Rademacher anti-concentration inequality recorded in CCKK.
+The second is Aronow--Lopatto's resampling argument, with Kane's
+noise-sensitivity inequality as its external input. Both quoted
+inequalities are used as established results.}
+
+\begingroup
+\ifshowpolish\color{magenta}\fi
+\subsection{Conditioning and Rademacher anti-concentration}
+\label{appx-conc:conditioning}
+\endgroup
+
 We prove Lemma~\ref{appx-lem:concentration} by representing each summand
 as a random choice between two independent copies. Conditional on these
 copies, the sum becomes a translated Rademacher sum, to which we can
@@ -2152,6 +2175,145 @@ It requires only positive marginal variances and therefore permits
 singular covariance. Conditioning on the independent shift and taking
 the minimum with one completes the proof.
 
+
+% Restored from the repository's original manuscript, with explicit attribution.
+\begingroup
+\ifshowpolish
+\color{magenta}
+\hypersetup{linkcolor=magenta,citecolor=magenta,urlcolor=magenta}
+\fi
+\subsection{Aronow--Lopatto's resampling proof}
+\label{appx-conc:resampling}
+
+This is the resampling proof of Aronow and Lopatto~\cite[Lemma~2.1]{AL}.
+It compares two ways of measuring a boundary layer. Resampling a small
+proportion of the rows gives a point near a face a fixed positive chance
+of leaving the rectangle, apart from a tail event. Kane's noise-sensitivity
+bound controls the total probability of this change in membership.
+Specifically, \cite[Corollary~4 in the arXiv version]{Kane} states that,
+if \(f\) is the indicator of an intersection
+of \(k\) affine halfspaces on a uniform Boolean cube, and
+\(\varepsilon^\theta\) is obtained by independently flipping signs
+with probability \(\theta\in(0,1/2]\), then
+\begin{equation}
+ \Pp\{f(\varepsilon)\ne f(\varepsilon^\theta)\}
+ \le C\sqrt{\theta\log(ek)}.
+ \label{appx-eq:kane}
+\end{equation}
+
+First normalize to \(v=1\) and omit the independent shift. Thus
+\(S=\sum_i\zeta_i\) has independent centered rows,
+\(\norm{\zeta_i}_\infty\le\eta\), and \(\Var(S_j)=1\) for every \(j\).
+Independently replace each row by a fresh copy with probability
+\(\theta\), obtaining \(S^\theta\).
+To apply \eqref{appx-eq:kane}, generate two independent candidate copies
+\(\zeta_i^+,\zeta_i^-\), and choose between them using a uniform sign.
+Conditional on all candidate pairs, membership in a rectangle is an
+intersection of at most \(2p\) affine halfspaces in these signs.
+A sign flip selects the other independent candidate, so averaging
+\eqref{appx-eq:kane} gives
+\begin{equation}
+ \Pp\{\ind_Q(S)\ne\ind_Q(S^\theta)\}
+ \le C\sqrt{\theta L}
+ \label{appx-eq:resampling}
+\end{equation}
+for every rectangle \(Q\). Open or closed faces cause no difficulty on
+a finite Boolean cube, since thresholds can be perturbed without changing
+the Boolean function.
+
+To show that points near a face can leave the rectangle, condition on
+the original rows. Use the equivalent representation
+\(S^\theta=\sum_i[(1-B_i)\zeta_i+B_i\zeta_i']\), where the
+\(B_i\sim\operatorname{Bernoulli}(\theta)\) and the fresh rows are
+independent of \(\mathcal F=\sigma(\zeta_1,\ldots,\zeta_n)\).
+For \(D=S^\theta-S\), each coordinate obeys
+\[
+ D_j+\theta S_j=\sum_iY_{ij},\qquad
+ Y_{ij}=B_i(\zeta_{ij}'-\zeta_{ij})+\theta\zeta_{ij}.
+\]
+The \(Y_{ij}\) are conditionally independent and centered,
+\(|Y_{ij}|\le2\eta\), and
+\[
+ v_j:=\sum_i\E(Y_{ij}^2\mid\mathcal F)
+ =\theta+\theta(1-\theta)\sum_i\zeta_{ij}^2\ge\theta.
+\]
+Also, \(\sum_i\E(|Y_{ij}|^3\mid\mathcal F)\le2\eta v_j\).
+Let \(\Phi\) denote the standard normal distribution function.
+The scalar Berry--Esseen inequality therefore yields, almost surely,
+\begin{equation}
+ \sup_x\left|
+ \Pp\left\{\frac{D_j+\theta S_j}{\sqrt{v_j}}\le x
+ \,\middle|\,\mathcal F\right\}-\Phi(x)\right|
+ \le C\eta/\sqrt\theta.
+ \label{appx-eq:conditional-be}
+\end{equation}
+
+Choose the resampling variance large enough to cross a layer of width
+\(d\), while keeping the Berry--Esseen error small. Let \(\partial_d Q\)
+be the points in \(Q\) within distance \(d\) of a finite face. Put
+\(q=d+\eta\) and \(\theta=Kq^2\), with \(K\) a large absolute
+constant. We may assume \(q\sqrt L\) is sufficiently small, since
+otherwise the desired estimate follows from the bound by one. This
+assumption also ensures \(\theta\le1/2\).
+On
+\(\{S\in\partial_d Q,\ \norm S_\infty\le1/(4\sqrt\theta)\}\),
+select the first face within distance \(d\). This choice is
+\(\mathcal F\)-measurable, so \eqref{appx-eq:conditional-be} applies to
+its coordinate and outward direction. Conditional on \(\mathcal F\), the standardized displacement needed to cross that
+face outward is at most
+\[
+ d/\sqrt\theta+\sqrt\theta|S_j|
+ \le K^{-1/2}+1/4.
+\]
+The error in \eqref{appx-eq:conditional-be} is at most \(C K^{-1/2}\).
+Choose \(K\) large enough that the conditional outward-crossing
+probability is bounded below by an absolute positive constant.
+Crossing forces \(S^\theta\notin Q\). Equation~\eqref{appx-eq:resampling}
+then gives
+\[
+ \Pp(S\in\partial_d Q)
+ \le Cq\sqrt L
+ +\Pp\{\norm S_\infty>1/(4\sqrt\theta)\}.
+\]
+Bernstein's inequality and a union bound imply
+\[
+ \Pp\{\norm S_\infty>1/(4\sqrt\theta)\}
+ \le2\exp(L-c_1/\theta).
+\]
+Here \(\eta/\sqrt\theta\le K^{-1/2}\) controls the bounded-summand
+term in Bernstein's denominator. Decreasing the smallness threshold for
+\(q\sqrt L\) ensures \(L\le c_1/(2\theta)\), and therefore this
+tail is at most \(Cq\sqrt L\). We have proved
+\begin{equation}
+ \Pp(S\in\partial_d Q)\le C(d+\eta)\sqrt L.
+ \label{appx-eq:inner-layer}
+\end{equation}
+
+If \(A^a\) is empty, the desired bound is immediate. Otherwise every
+point of \(A^a\setminus A^{-a}\) lies within distance \(2a\)
+of a finite face of \(A^a\). If an interval of \(A^{-a}\) is empty,
+the corresponding interval of \(A^a\) has length at most \(4a\), so
+the same assertion holds. Apply \eqref{appx-eq:inner-layer} with
+\(Q=A^a\) and \(d=2a\). An independent shift is handled by
+conditioning, and equal coordinate variances \(v\) by dividing by
+\(\sqrt v\). This proves the bounded-sum part of
+Lemma~\ref{appx-lem:concentration}.
+
+For the Gaussian assertion, factor its covariance as
+\(\Sigma=\sum_{k=1}^r v_kv_k^\top\), and approximate the Gaussian by
+\[
+ G_m=\frac1{\sqrt m}\sum_{k=1}^r\sum_{l=1}^m v_k\varepsilon_{kl},
+\]
+where the \(\varepsilon_{kl}\) are independent uniform signs.
+The covariance remains \(\Sigma\), while the maximum summand norm
+tends to zero. Every coordinate has variance \(v>0\), so each finite coordinate face
+has Gaussian probability zero, even if \(\Sigma\) is singular. Each
+fixed rectangle boundary layer is therefore a continuity set for the
+Gaussian law. The finite-dimensional CLT passes the bounded-sum estimate
+to the limit. Conditioning again permits independent shifts.
+
+
+\endgroup
 
 % Source: complete_integration_proofs
 \section{Integrating the comparison}\label{sec:main-proof}
