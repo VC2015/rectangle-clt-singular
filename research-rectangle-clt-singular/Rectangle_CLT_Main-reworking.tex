@@ -28,6 +28,13 @@
 \newenvironment{revblock}{\ifshowrev\color{revblue}%
 \hypersetup{linkcolor=revblue,citecolor=revblue,urlcolor=revblue}\fi}{}
 \newcommand{\Ac}{\rs{\mathsf A}}
+% Pass of 25 October 2026 against main (commit 1635fc3): every change of
+% this pass is shown in blue; set \showpassfalse for a clean copy.
+\newif\ifshowpass
+\showpasstrue
+\newcommand{\pass}[1]{\ifshowpass{\color{revblue}%
+\hypersetup{linkcolor=revblue,citecolor=revblue,urlcolor=revblue}#1}\else#1\fi}
+\newcommand{\ps}[1]{\ifshowpass{\color{revblue}#1}\else#1\fi}
 \definecolor{paperlink}{RGB}{0,0,114}
 \usepackage[colorlinks=true,hypertexnames=false,linktoc=all,linkcolor=paperlink,citecolor=paperlink,urlcolor=paperlink]{hyperref}
 \usepackage{fancyhdr}
@@ -109,10 +116,15 @@ value, the bound improves to
 \]
 When \(p\) grows polynomially in~\(n\), these rates are
 \(n^{-1/2}(\log n)^2\) and \(n^{-1/2}(\log n)^{3/2}\). The power
-\(n^{-1/2}\) cannot be improved even when \(p=1\), and the first rate is
-optimal up to logarithmic factors. If the third moments cancel in
+\(n^{-1/2}\) cannot be improved even when \(p=1\), and \pass{the two-point
+lower bound of Chernozhukov, Chetverikov, and Koike (Ann.\ Appl.\
+Probab., 2023) shows that the factor \(L^{3/2}\) cannot be improved
+either. The
+second rate is therefore optimal, and the first is optimal up to the
+factor \((\log n)^{1/2}\).} If the third moments cancel in
 aggregate, that is, if \(\sum_i\E[X_{ij}X_{ik}X_{i\ell}]=0\) for all
-coordinates \(j,k,\ell\), the term \(L^{3/2}\) may be dropped from the
+coordinates \(j,k,\ell\)\pass{, where \(X_{ij}\) denotes the \(j\)th
+coordinate of~\(X_i\)}, the term \(L^{3/2}\) may be dropped from the
 second bound. For fixed \(c_0\) and a fixed bound \(B\) (at least~\(2\),
 or at least~\(1\) under cancellation), the worst-case error over these
 classes tends to zero exactly when \(\log p=o(n^{1/3})\), and, under
@@ -208,11 +220,19 @@ Let \(X_1,\ldots,X_n\in\R^p\) be independent and centered. Suppose
 \end{corollary}
 
 \rev{Corollary~\ref{cor:observations} is Theorem~\ref{thm:unrestricted}
-with \(\xi_i=X_i/\sqrt n\). For fixed \(B\) and polynomial
-dimension \(p\asymp n^a\), where \(a>0\) is fixed, the bound has
+with \(\xi_i=X_i/\sqrt n\)\pass{, and for} fixed \(B\) and polynomial
+dimension \(p\asymp n^a\), where \(a>0\) is fixed, \pass{its} bound has
 order \(n^{-1/2}(\log n)^2\), so the usual power \(n^{-1/2}\) of the
 sample size is kept up to logarithmic factors, however small the
-covariance eigenvalues are.}
+covariance eigenvalues are.} \pass{The factor \(BL^{3/2}\) cannot be
+improved, because Chernozhukov, Chetverikov, and
+Koike~\cite[Proposition~2.1]{CCK} construct i.i.d.\ observations with
+independent coordinates whose error is at least of order
+\(BL^{3/2}/\sqrt n\); Theorem~\ref{opt:skew-lower} gives a version of
+their example with the envelope attained. The bound
+\eqref{eq:observations-unrestricted} is thus optimal up to the factor
+\(\sqrt{1+\log_+(\sqrt n/(B\sqrt L))}\), which is of order
+\((\log n)^{1/2}\) in polynomial dimension.}
 
 For unequal marginal variances, define
 \[
@@ -252,8 +272,9 @@ Under~\eqref{eq:setup},
 \end{theorem}
 
 \rev{Since \(\kappa\le L\) and \(E_\kappa\le D_L\),
-Theorem~\ref{thm:optimized} implies Theorem~\ref{thm:unrestricted}. The
-term \(\delta L^{3/2}\) comes from the cubic part of the comparison,
+Theorem~\ref{thm:optimized} implies Theorem~\ref{thm:unrestricted}\pass{;
+the} term \(\delta L^{3/2}\) \pass{in~\eqref{eq:optimized}} comes from the
+cubic part of the comparison,
 and it disappears when the full third-moment tensor cancels.}
 
 \begin{theorem}[Cancellation of third moments]\label{thm:zero-skew}
@@ -290,8 +311,12 @@ bounds become
  \quad\text{under~\eqref{eq:zero-third}}.
  \label{eq:zero-fixed}
 \end{align}
-These bounds give uniform convergence at a fixed positive gap when
-\(\log p=o(n^{1/3})\) in general and \(\log p=o(\sqrt n)\)
+\pass{In polynomial dimension the bound~\eqref{eq:observations-fixed}
+has order \(n^{-1/2}(\log n)^{3/2}\), and it is optimal there, since the
+lower-bound examples of~\cite[Proposition~2.1]{CCK} and
+Theorem~\ref{opt:skew-lower} have independent coordinates and hence
+correlation gap one.} These bounds give uniform convergence at a fixed
+positive gap when \(\log p=o(n^{1/3})\) in general and \(\log p=o(\sqrt n)\)
 under cancellation. Theorem~\ref{opt:consistency} shows that these
 conditions are sharp over fixed-envelope classes, with envelope at least
 two for the first assertion and at least one for the second. \rev{In
@@ -336,7 +361,8 @@ imposing the tail condition on \(X_{ij}/\sigma_j\), as in the
 standardization following Corollary~\ref{cor:observations}.
 \end{corollary}
 
-For fixed \(K\) and \(p\asymp n^a\), \(a>0\), these rates are
+For fixed \(K\) and \(p\asymp n^a\), \pass{where} \(a>0\) \pass{is
+fixed}, these rates are
 \(n^{-1/2}(\log n)^3\) and
 \(n^{-1/2}(\log n)^{5/2}\), respectively\rev{, so the power of the
 sample size is again optimal up to logarithmic factors}. In particular,
@@ -383,7 +409,8 @@ and Koike~\cite[Corollary~2.1]{CCK}, and prove
  \frac{BL^{3/2}}{\lambda_{\min}(\Sigma)\sqrt n}\right\}.
 \end{equation*}
 A fixed positive minimum eigenvalue therefore gives the sharp
-\(BL^{3/2}/\sqrt n\) scale in the regimes of matching lower bounds.
+\(BL^{3/2}/\sqrt n\) scale in the regimes of matching lower
+bounds\pass{~\cite[Proposition~2.1]{CCK}}.
 \rev{Our unrestricted bound does not involve \(\lambda_{\min}(\Sigma)\),
 and it exceeds this scale only by the factor \(\sqrt{D_L}\).}
 
@@ -531,8 +558,7 @@ logistic form, with one score for each coordinate bound and a baseline
 score of zero. McFadden~\cite[p.~1001]{McFadden1989} uses this form
 to smooth indicators of simultaneous inequalities.
 \rev{Gao and Zhang~\cite[eq.~(5)]{GaoZhang} use the same multinomial
-logistic (softmax) form, with a baseline score, for maxima of high-dimensional sums, and the
-companion paper~\cite[Section~3]{Local} uses the present form.}
+logistic (softmax) form, with a baseline score, for maxima of high-dimensional sums.}
 The quantity \(\nu_\alpha\cdot x-a_\alpha\) is positive exactly
 when the corresponding bound is violated. The exponential terms
 therefore make \(F_{A,h}\) small outside the rectangle; as \(h\)
@@ -606,7 +632,7 @@ The expected largest threshold displacement is \(O(hL)\), and
 Lemma~\ref{lem:concentration} supplies the factor \(\sqrt L\).
 When \(c>0\), a Hessian estimate for
 \(h\log(1+\sum_\alpha e^{(\nu_\alpha\cdot x-a_\alpha)/h})\)
-gives the alternative error \(Ch\sqrt L/c\)\rev{, as in~\cite[Section~3]{Local}}. \rev{The parameter \(\kappa\) records the smaller of the two
+gives the alternative error \(Ch\sqrt L/c\). \rev{The parameter \(\kappa\) records the smaller of the two
 estimates.} Lemmas~\ref{appx-lem:endpoint-free}
 and~\ref{appx-lem:endpoint-gap} prove the two endpoint bounds.
 
@@ -657,8 +683,8 @@ uniform bound \(h^{-q}\).
 \polish{For the smooth comparison,} \rev{we use the Bernoulli-thinning
 path of Aronow and Lopatto~\cite[eq.~(16)]{AL}, which removes the bounded
 summands at random while a Gaussian vector supplies the lost covariance.}
-\polish{The amplitude \(1+\lambda\) is chosen so that the cubic
-\rs{summand} coefficient has zero derivative at the bounded
+\polish{The amplitude \(1+\lambda\) is chosen so that the
+\pass{coefficient of the cubic term} has zero derivative at the bounded
 endpoint\rev{~\cite[eq.~(17)]{AL}}. Let \(Z\) be independent of the \rs{summands}
 and, for \(\lambda\in[0,1]\), set}
 \begin{equation}
@@ -693,13 +719,15 @@ creates fourth-order terms, \rev{which are part of}
 \(R_{4,A,h}(\lambda)\).
 \begin{revblock}
 These terms come from differentiating the law of one summand at a time.
-With \(M_i=\E\xi_i\xi_i^\top\) and \(T_i=\E\xi_i^{\otimes3}\), Taylor's
+With \(M_i=\E\xi_i\xi_i^\top\) and \(\ps{K_i^{(3)}}=\E\xi_i^{\otimes3}\), Taylor's
 formula and the relations \((q\gamma^2)'=-1\) and
 \((q\gamma^3)'=-2\lambda\) give the terms
-\(-\frac12M_i:D^2F-\frac\lambda3T_i:D^3F\), together with a fourth-order
+\(-\frac12M_i:D^2F-\frac\lambda3\ps{K_i^{(3)}}:D^3F\), together with a fourth-order
 remainder, at the base \(U_\lambda-\gamma B_{i,\lambda}\xi_i\) from which
 summand~\(i\) is deleted. The Gaussian component contributes
-\(\frac12\Sigma:D^2F\) by the heat equation, and \(\sum_iM_i=\Sigma\), so
+\(\frac12\Sigma:D^2F\) by the heat equation\pass{
+\(\frac d{d\lambda}\E f(x+\sqrt\lambda Z)
+=\frac12\E\,\Sigma:D^2f(x+\sqrt\lambda Z)\)}, and \(\sum_iM_i=\Sigma\), so
 the second-order terms cancel up to the difference of the Hessians at the
 full and the leave-one-out bases, which is of fourth order because the
 deleted summand is centered and independent of the other terms. Moving the
@@ -738,8 +766,8 @@ bound, this justifies integration up to \(0\) and \(1\).
 The early bounds \eqref{an:early} and~\eqref{eq:remainder-early} combine
 the derivative envelope with the moment bounds
 \[
- \sum_i\E|\xi_{ij}\xi_{ik}\xi_{i\ell}|\le\delta,\qquad
- \sum_i\E|\xi_{ij}\xi_{ik}\xi_{i\ell}\xi_{iq}|\le\delta^2,
+ \sum_i\E|\xi_{i\ps{j_1}}\xi_{i\ps{j_2}}\xi_{i\ps{j_3}}|\le\delta,\qquad
+ \sum_i\E|\xi_{i\ps{j_1}}\ps{\cdots}\xi_{i\ps{j_4}}|\le\delta^2,
 \]
 which hold for all coordinate indices by the envelope
 \(\norm{\xi_i}_\infty\le\delta\), the Cauchy--Schwarz inequality, and the
@@ -844,13 +872,14 @@ is a linear function minus \((k+1)\log N\), and \(\log N\) is convex.
 Pr\'ekopa's theorem, which says that Gaussian convolution preserves
 log-concavity, then shows that the \emph{tilted} Gaussian law, with
 density proportional to \(w\) times the standard Gaussian density, has
-covariance \(K\preceq I_r\). With \(p=\E w(G)\) and tilted mean \(\mu\), it
+covariance \(K\preceq I_r\)\pass{, that is, \(I_r-K\) is positive
+semidefinite}. With \(\ps{p_w}=\E w(G)\) and tilted mean \(\mu\), it
 follows that
 \[
  \norm{\E[(GG^\top-I_r)w(G)]}_*
- =\norm{p(K-I_r+\mu\mu^\top)}_*
- \le2p\norm\mu^2-\E[\Hh(G)w(G)],
- \qquad \Hh(g)=\norm g^2-r.
+ =\norm{\ps{p_w}(K-I_r+\mu\mu^\top)}_*
+ \le2\ps{p_w}\norm\mu^2-\E[\Hh(G)w(G)],
+ \quad \Hh(g)=\norm g^2-r.
 \]
 An entropy inequality for tilted means, taken relative to one face at a
 time (Lemma~\ref{appx-an:lem:mean}), and the averaged bound on
@@ -871,7 +900,8 @@ concentrated base gains the factor \(\sigma\), in the sense that
  \le C\bigl(\sigma L^{3/2}+\delta L^2\bigr)\le C\sigma L^{3/2},
  \qquad \sigma\ge\delta\sqrt L.
 \]
-Its proof uses the Gauss--Green formula within each facet, a face of
+Its proof uses the Gauss--Green formula\pass{, that is, the divergence
+theorem,} within each facet, a face of
 dimension \(r-1\), to write \(\surf\) as a sum of facet terms and paired
 terms on the ridges, the faces of dimension \(r-2\) where two facets
 meet. It then bounds each term by the Gaussian mass of a thin outward
@@ -957,7 +987,11 @@ shrinking to this atom tends to zero. This obstruction already occurs
 in one dimension and survives zero skewness.
 
 Dimension introduces another obstruction, already visible when the
-coordinates are independent.
+coordinates are independent. \pass{Chernozhukov, Chetverikov, and
+Koike~\cite[Proposition~2.1]{CCK} showed with i.i.d.\ two-point
+coordinates that the factor \((\log p)^{3/2}\) in the rate cannot be
+improved, under further growth conditions on \(B_n\) and \(p_n\) that the
+following theorem does not need.}
 \begin{theorem}[Lower scale]\label{opt:skew-lower}
 Suppose \(p_n\to\infty\), \(B_n\ge2\), and
 \(r_n=B_n(\log p_n)^{3/2}/\sqrt n\to0\). There are i.i.d.
@@ -990,7 +1024,7 @@ let \(M_n(c_0;B,p)\) be the supremum of rectangle error over the
 independent centered observations with envelope at most \(B\), unit
 average marginal variances, and correlation gap at least \(c_0\).
 Write \(M_n^0(c_0;B,p)\) for the same supremum restricted to
-aggregate zero third-moment tensor.
+\pass{observations whose aggregate third-moment tensor vanishes}.
 For fixed \(c_0\in(0,1]\), Theorem~\ref{thm:optimized} and the lower
 example give
 \begin{equation}
@@ -1069,7 +1103,7 @@ assumptions and rates in detail.}
 \rev{Lean is a proof assistant, a program that checks each step of a
 formal proof against a small set of logical rules. Its library mathlib
 contains the formalized background mathematics used below.}
-The bounded upper bounds in Theorems~\ref{thm:unrestricted}--\ref{thm:zero-skew}
+The upper bounds \pass{for bounded summands} in Theorems~\ref{thm:unrestricted}--\ref{thm:zero-skew}
 were first certified on 20~October~2026. The combined Lean theorem is
 \nolinkurl{RectangleCLT.Companion.companionCLTExists_common}.
 
@@ -1328,9 +1362,9 @@ the same variance and summand bound. The intersection
 \(\{\nu_\alpha\cdot x\le a_\alpha\}_{\alpha\le m}\) is the inverse
 image of the lower orthant \(\prod_{\alpha\le m}(-\infty,a_\alpha]\)
 in \(\R^m\); comparing thresholds increased and decreased by \(\rs t\)
-gives the shell in the concentration estimate. The orthant remains nonempty even when
+gives the shell in the concentration estimate. The orthant \pass{is} nonempty even when
 its inverse image is empty, so inconsistent threshold systems are
-covered. Since \(m\le2p\), \(\log(em)\le CL\).
+covered. Since \(m\le2p\), \pass{we have} \(\log(em)\le CL\).
 
 \subsection{The logistic approximation and its derivatives}
 
@@ -1354,7 +1388,8 @@ where the normals are distinct members of
 We use this formula for arbitrary coordinate thresholds, including those
 with an empty intersection, because the shifts below need not preserve
 the ordering of the endpoints. In such cases, \(F_{A,h}\) refers to
-the specified inequalities; its denominator remains positive.
+the specified inequalities\pass{, and} its denominator \pass{is}
+positive.
 If \(m=0\), the logistic approximation is identically one and all comparisons are
 trivial; the analytic arguments below take \(m\ge1\).
 We usually suppress \(A,h\) and write
@@ -1433,7 +1468,8 @@ The same positive majorant, using \(\norm{\nu_\alpha}_1=1\), gives
  \le C_qh^{-q}F(x)(1-F(x)),\qquad 0\le\rs\varrho\le h.
  \label{appx-eq:local-envelope}
 \end{equation}
-To see the local stability, each \(w_\alpha\) changes by a factor in
+To see the local stability, \pass{observe that} each \(w_\alpha\)
+changes by a factor in
 \([e^{-\rs\varrho/h},e^{\rs\varrho/h}]\), and \(1+T\) obeys the same comparison.
 After summing over coordinate tuples and face indices, the terms with
 \(k\) blocks are bounded by a constant times
@@ -1471,7 +1507,8 @@ In the mixture representation~\eqref{appx-eq:exp-mixture},
 \(\ind_{A_{\rs\omega}^h}-\ind_{A_{\rs\omega}^{-h}}\), with shifts interpreted in the
 signed face coordinates. Conditional on the exponentials and the
 independent shift, Lemma~\rev{\ref{lem:concentration}} bounds the expectation
-by \(C(h+\delta)\sqrt L\): the base has equal coordinate variances
+by \(C(h+\delta)\sqrt L\)\pass{, since} the base has equal coordinate
+variances
 at least \(1/2\) and summand bound at most \(2\delta\), or is
 Gaussian. Since \(h\ge4\delta\), this proves
 \eqref{appx-eq:small-envelope}. Combining it with
@@ -1538,7 +1575,7 @@ Thus, with \(\pi_* =\max_\alpha\pi_\alpha\),
 \(\chi\ge\theta(1-\theta)\) and
 \(\chi\ge\theta(1-\pi_*)\).
 On \(A\), every \(w_\alpha\le1\), so \(\pi_*\le1/2\).
-Off \(A\), \(T>1\), so \(\theta>1/2\). On \(A\), the second
+Off \(A\) \pass{we have} \(T>1\), so \(\theta>1/2\). On \(A\), the second
 lower bound gives \(\chi\ge\theta/2\); off \(A\), the first gives
 \(\chi\ge F/2\). The indicator error is \(\theta\) and \(F\)
 in the two cases, respectively, so
@@ -1826,18 +1863,18 @@ bounded, and \(F\) and its derivatives are bounded.
 \emph{Step 1: the summand operators.} For a smooth function \(f\), the
 \(i\)th summand acts through
 \[
- Q_if(x)=(1-q)f(x)+q\E f(x+\gamma\zeta_i).
+ \ps{\mathcal S_i}f(x)=(1-q)f(x)+q\E f(x+\gamma\zeta_i).
 \]
 Since \(\gamma'=1\), differentiation in \(\lambda\) gives
 \[
- \dot Q_if(x)=q'\{\E f(x+\gamma\zeta_i)-f(x)\}
+ \ps{\dot{\mathcal S}_i}f(x)=q'\{\E f(x+\gamma\zeta_i)-f(x)\}
                   +q\E Df(x+\gamma\zeta_i)[\zeta_i].
 \]
 Expand the difference by Taylor's formula through degree three, and the
 derivative through degree two. Centering removes the linear terms. Since
 \((q\gamma^2)'=-1\) and \((q\gamma^3)'=-2\lambda\), the result is
 \[
- \dot Q_if
+ \ps{\dot{\mathcal S}_i}f
  =-\tfrac12 M_i:D^2f
    -\tfrac\lambda3 K_i^{(3)}:D^3f
    +\int_0^1k_\lambda(s)
@@ -1850,7 +1887,7 @@ kernel is exactly
  =\frac\gamma6(1-s)^2\{(3-\lambda)s-2\lambda\},
 \]
 because \(q'=-(3-\lambda)/\gamma^3\) and \(q\gamma^3=(1-\lambda)\gamma\).
-The derivative of \(P_A\) collects \(\dot Q_i\) applied with the other
+The derivative of \(P_A\) collects \(\ps{\dot{\mathcal S}_i}\) applied with the other
 summands and the Gaussian vector held fixed, that is, at the base~\(H_i\).
 The fourth-order part of this expansion gives \(\mathcal A_i\).
 
@@ -2247,7 +2284,7 @@ write
  w_\alpha(g)=F(V_0+\sigma g)
                   \prod_{a=1}^k\pi_{\alpha_a}(V_0+\sigma g),
  \qquad p_\alpha=\E_Gw_\alpha(G),
- \qquad q(g)=\sum_\alpha w_\alpha(g)=F(U)\theta(U)^k.
+ \qquad \ps{\bar w}(g)=\sum_\alpha w_\alpha(g)=F(U)\theta(U)^k.
 \]
 
 \emph{Step 1: the tilt and the trace reduction.} The logarithm of
@@ -2265,7 +2302,8 @@ function of \((z,g)\) under the integral, it shows that the function
 is log-concave. The Hessian of its logarithm at zero is
 \(K_\alpha-I_r\), so \(K_\alpha\preceq I_r\). \rev{For indicators of
 convex cells, Gao and Zhang~\cite[Lemma~11]{GaoZhang} obtain the same
-bound from the Brascamp--Lieb inequality.} Now
+bound from the Brascamp--Lieb inequality\pass{, a variance bound for log-concave
+laws}.} Now
 \(\E_G[(GG^\top-I_r)w_\alpha(G)]=p_\alpha(K_\alpha-I_r+\mu_\alpha\mu_\alpha^\top)\).
 Since \(I_r-K_\alpha\succeq0\), the nuclear norm of the right side is at
 most \(p_\alpha\{\tr(I_r-K_\alpha)+\norm{\mu_\alpha}^2\}\), and its trace is
@@ -2291,21 +2329,21 @@ This function depends only on \(u_j\cdot g\), and
 \(|u_j\cdot G|\le\norm G_U\), Lemma~\ref{appx-an:lem:mean} gives
 \begin{equation}
  \sum_\alpha p_\alpha\norm{\mu_\alpha}^2
- \le\E_G[q(G)\norm G_U^2]
+ \le\E_G[\ps{\bar w}(G)\norm G_U^2]
        +2\sum_\alpha p_\alpha\log(p_{b_{\alpha_1}}/p_\alpha).
  \label{appx-an:entropy-sum}
 \end{equation}
-Conditionally on \(G\), the bound \(q\le F\theta\)
+Conditionally on \(G\), the bound \(\ps{\bar w}\le F\theta\)
 and~\eqref{appx-an:weight-concentration} show that the first term has
 expectation at most \(Ch\sqrt L\,\E\norm G_U^2\le ChL^{3/2}\).
 
 \emph{Step 3: the entropy term.} Since there are \(m^{k-1}\) tuples with
 a given first face, the log-sum inequality
-\(\sum_ja_j\log(b_j/a_j)\le a\log(b/a)\), for positive \(a_j,b_j\) with
-sums \(a\) and~\(b\), lets us add their reference masses before
+\(\sum_j\ps{y_j\log(z_j/y_j)\le y\log(z/y)}\), for positive
+\(\ps{y_j,z_j}\) with sums \(\ps y\) and~\(\ps z\), lets us add their reference masses before
 estimating the logarithm. Put
 \[
- \bar p=\E_{V_0,G}q(G),\qquad
+ \bar p=\E_{V_0,G}\ps{\bar w}(G),\qquad
  \bar b=m^{k-1}\sum_j\E_{V_0,G}b_j(G).
 \]
 The log-sum inequality, followed by the joint concavity of
@@ -2488,7 +2526,8 @@ polyhedra: every ridge lies in exactly two facets, and the normal cone at
 a relative-interior point of the ridge shared by facets \(j\) and \(k\) is
 the cone spanned by \(u_j\) and~\(u_k\). All the tubes lie in
 \((Q')^{\varepsilon_R}\setminus Q'\). These assertions concern the actual
-faces of the polyhedron, so they remain valid when the original threshold
+faces of the polyhedron, so they \pass{hold also} when the original
+threshold
 system contains redundant inequalities.
 
 \emph{Step 3: dyadic summation.} Divide the facet and ridge offsets into
@@ -2574,9 +2613,10 @@ asserted bound.
 % Source: concentration_proof
 \section{Proof of the concentration bound}\label{appx-app:concentration}
 
-\polish{We give two proofs of Lemma~\rev{\ref{lem:concentration}}. The first
-uses the Rademacher anti-concentration inequality recorded in CCKK.
-The second is Aronow--Lopatto's resampling argument, with Kane's
+\polish{We give two proofs of Lemma~\rev{\ref{lem:concentration}}\pass{,
+the first by} the Rademacher anti-concentration inequality recorded
+in~\pass{\cite[Lemma~J.4]{CCKK2022}}\pass{, and the second by}
+Aronow--Lopatto's resampling argument, with Kane's
 noise-sensitivity inequality as its external input. Both quoted
 inequalities are used as established results.}
 
@@ -2797,8 +2837,8 @@ For the Gaussian assertion, factor its covariance as
  G_m=\frac1{\sqrt m}\sum_{k=1}^r\sum_{l=1}^m \rs{f_k}\varepsilon_{kl},
 \]
 where the \(\varepsilon_{kl}\) are independent uniform signs.
-The covariance remains \(\Sigma\), while the maximum summand norm
-tends to zero. Every coordinate has variance \(v>0\), so each finite coordinate face
+\pass{Each \(G_m\) has} covariance \(\Sigma\), while the maximum
+summand norm tends to zero\pass{ as \(m\to\infty\)}. Every coordinate has variance \(v>0\), so each finite coordinate face
 has Gaussian probability zero, even if \(\Sigma\) is singular. Each
 fixed rectangle boundary layer is therefore a continuity set for the
 Gaussian law\rev{, a set whose boundary has Gaussian probability zero, so
@@ -3131,7 +3171,7 @@ The transfer error in \eqref{tail:transfer} is bounded by the
 \end{proof}
 
 Coordinatewise odd clipping preserves central symmetry of each \rs{summand},
-but need not preserve cancellation of third tensors across \rs{summands}.
+but need not preserve cancellation of third\pass{-moment} tensors across \rs{summands}.
 Moreover the transfer cost above contains \(bL^{3/2}\), so the
 zero-skewness refinement cannot simply be read off by deleting the
 cubic term from the displayed sub-exponential bound.
@@ -3146,7 +3186,8 @@ When these principal-submatrix eigenvalues are bounded below by \(a>0\), its bou
  \frac{C_a}{\sqrt n}\left[B_4L^{3/2}
                    +K\log(enp)\sqrt L\right],
 \]
-capped at one. For fixed \(K,B_4,a\) and \(p\asymp n^q\), \(q>0\),
+capped at one. For fixed \(K,B_4,a\) and \(p\asymp n^q\), \pass{where} \(q>0\)
+\pass{is fixed},
 this is \(O(n^{-1/2}(\log n)^{3/2})\), whereas
 \eqref{eq:subexponential} is \(O(n^{-1/2}(\log n)^3)\).
 The latter requires neither a fourth-moment hypothesis in addition to
