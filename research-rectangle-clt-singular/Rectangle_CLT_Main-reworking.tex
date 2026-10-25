@@ -39,13 +39,37 @@
 % Removal of definitions that the appendices repeated from the main text,
 % and the restructuring for readability that followed (25 October 2026,
 % against commit ab809b7): new text is shown in blue, deleted text is not
-% shown, and the appendices were reordered without other changes. Set
-% \showtrimfalse for a clean copy.
+% shown, and the appendices were reordered without other changes. The
+% marks are off; \showtrimtrue shows them.
 \newif\ifshowtrim
-\showtrimtrue
+\showtrimfalse
 \newcommand{\trim}[1]{\ifshowtrim{\color{revblue}%
 \hypersetup{linkcolor=revblue,citecolor=revblue,urlcolor=revblue}#1}\else#1\fi}
 \newcommand{\trs}[1]{\ifshowtrim{\color{revblue}#1}\else#1\fi}
+% Define-before-use pass (25 October 2026, against commit 6cc00d3): text
+% that was added or moved so that every notion is defined at or before
+% its first use is shown in blue when \showlintrue is set; the marks are
+% off.
+\newif\ifshowlin
+\showlinfalse
+\newcommand{\lin}[1]{\ifshowlin{\color{revblue}%
+\hypersetup{linkcolor=revblue,citecolor=revblue,urlcolor=revblue}#1}\else#1\fi}
+\newcommand{\lns}[1]{\ifshowlin{\color{revblue}#1}\else#1\fi}
+% Precision pass after the rerun of the revision skill (25 October 2026,
+% against commit 43d2670): the changes of the pass (the regime of the
+% optimality claim, the description of the remainder, of the tube width and
+% of the two ranges of \lambda in Section 2, the exponents, the citation of
+% McFadden and the wording about Gao and Zhang in Subsection 2.6, the titles,
+% the citations, the footnote on the AI collaborators, the shortened Lean
+% section, the shortened abstract, and the renamed symbols) are shown in
+% blue when \showskilltrue is set; the marks are off.
+\newif\ifshowskill
+\showskillfalse
+\newcommand{\skl}[1]{\ifshowskill{\color{revblue}%
+\hypersetup{linkcolor=revblue,citecolor=revblue,urlcolor=revblue}#1}\else#1\fi}
+\newcommand{\sks}[1]{\ifshowskill{\color{revblue}#1}\else#1\fi}
+\newenvironment{skillblock}{\ifshowskill\color{revblue}%
+\hypersetup{linkcolor=revblue,citecolor=revblue,urlcolor=revblue}\fi}{}
 \definecolor{paperlink}{RGB}{0,0,114}
 \usepackage[colorlinks=true,hypertexnames=false,linktoc=all,linkcolor=paperlink,citecolor=paperlink,urlcolor=paperlink]{hyperref}
 \usepackage{fancyhdr}
@@ -54,7 +78,7 @@
 \fancyhead[L]{\small Gaussian approximation over rectangles}
 \fancyhead[R]{\small\thepage}
 \setlength{\headheight}{14pt}
-\hypersetup{pdftitle={High-Dimensional Gaussian Approximations over Rectangles without Covariance Restrictions},pdfsubject={Bounded independent summands; rates optimal up to logarithmic factors},pdfauthor={Human Collaborators: CCKK (Victor Chernozhukov, Denis Chetverikov, Kengo Kato, Yuta Koike); AI Collaborators: GPT-6 Sol and GPT-6 Astra}}
+\hypersetup{pdftitle={High-Dimensional Gaussian Approximations over Rectangles without Covariance Restrictions},pdfsubject={Bounded independent summands; rates optimal up to logarithmic factors},pdfauthor={Victor Chernozhukov, Denis Chetverikov, Kengo Kato, Yuta Koike}}
 \setlength{\parindent}{1.25em}
 \setlength{\parskip}{0pt}
 \emergencystretch=2em
@@ -94,65 +118,50 @@
 \begin{center}
 {\Large High-Dimensional Gaussian Approximations\\[0.15em]
 over Rectangles without Covariance Restrictions}\\[0.85em]
-{\normalsize\textbf{Human Collaborators: CCKK}}\\[0.25em]
-{\normalsize Victor Chernozhukov, Denis Chetverikov, Kengo Kato, Yuta Koike}\\[0.65em]
-{\normalsize\textbf{AI Collaborators:} GPT-6 Sol and GPT-6 Astra}\\[0.45em]
+{\normalsize Victor Chernozhukov, Denis Chetverikov, Kengo Kato, Yuta
+Koike\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnote{\skl{The paper
+was developed through collaboration with the AI systems GPT-6 Astra,
+GPT-6 Sol, and Claude Opus.}}}\\[0.65em]
 {\normalsize 21 October 2026}
 \end{center}
+\setcounter{footnote}{0}
 \thispagestyle{plain}
 
 \begin{abstract}
-\begin{revblock}
+\begin{skillblock}
 We study the Gaussian approximation of sums of independent bounded random
-vectors over rectangles, without any nondegeneracy assumption on the
-covariance matrix, which may be singular. Let \(X_1,\ldots,X_n\) be
-independent, centered random vectors in \(\R^p\) whose coordinates are
-bounded in absolute value by a constant~\(B\), and assume that each
-coordinate of \(W_n=n^{-1/2}(X_1+\cdots+X_n)\) has unit variance. Let
-\(Z_n\) be a centered Gaussian vector with the same covariance matrix as
-\(W_n\). We bound the largest difference between \(\Pp(W_n\in A)\) and
-\(\Pp(Z_n\in A)\) over all rectangles \(A=\prod_{j=1}^p[\ell_j,u_j]\),
-with constants that do not depend on the rank or the eigenvalues of the
-covariance matrix. With \(L=\log(ep)\) and \(\log_+x=\max\{0,\log x\}\),
-this difference is at most
+vectors over rectangles, with no assumption on the covariance matrix,
+which may be singular. Let \(X_1,\ldots,X_n\) be independent centered
+random vectors in \(\R^p\) whose coordinates \(X_{ij}\) are bounded in
+absolute value by a constant~\(B\), and suppose that each coordinate of
+\(W_n=n^{-1/2}(X_1+\cdots+X_n)\) has unit variance. Let \(Z_n\) be a
+centered Gaussian vector with the covariance matrix of \(W_n\), and put
+\(L=\log(ep)\) and \(\log_+x=\max\{0,\log x\}\). The largest difference
+between \(\Pp(W_n\in A)\) and \(\Pp(Z_n\in A)\) over rectangles \(A\) is
+at most
 \[
  \frac{C_BL^{3/2}}{\sqrt n}\sqrt{1+\log_+\sqrt{n/L}},
 \]
 where \(C_B\) depends only on~\(B\). If, for a fixed \(c_0>0\), no two
-distinct coordinates have correlation larger than \(1-c_0\) in absolute
-value, the bound improves to
-\[
- \frac{C_{B,c_0}}{\sqrt n}
- \left[L^{3/2}+L\sqrt{1+\log_+\frac{\sqrt n}{L}}\right].
-\]
-When \(p\) grows polynomially in~\(n\), these rates are
-\(n^{-1/2}(\log n)^2\) and \(n^{-1/2}(\log n)^{3/2}\). The power
-\(n^{-1/2}\) cannot be improved even when \(p=1\), and \pass{the two-point
-lower bound of Chernozhukov, Chetverikov, and Koike (Ann.\ Appl.\
-Probab., 2023) shows that the factor \(L^{3/2}\) cannot be improved
-either. The
-second rate is therefore optimal, and the first is optimal up to the
-factor \((\log n)^{1/2}\).} If the third moments cancel in
-aggregate, that is, if \(\sum_i\E[X_{ij}X_{ik}X_{i\ell}]=0\) for all
-coordinates \(j,k,\ell\)\pass{, where \(X_{ij}\) denotes the \(j\)th
-coordinate of~\(X_i\)}, the term \(L^{3/2}\) may be dropped from the
-second bound. For fixed \(c_0\) and a fixed bound \(B\) (at least~\(2\),
-or at least~\(1\) under cancellation), the worst-case error over these
-classes tends to zero exactly when \(\log p=o(n^{1/3})\), and, under
-cancellation, exactly when \(\log p=o(\sqrt n)\). Whether the factor
-\(\sqrt{1+\log_+\sqrt{n/L}}\) is needed in the first bound is open.
-Truncating each coordinate extends the bounds to observations with
-sub-exponential tails, at the cost of a further factor \(\log(en)\).
-The three main bounds for bounded observations were verified in the
-Lean proof assistant on 20 October 2026.
-\end{revblock}
+coordinates have correlation larger than \(1-c_0\) in absolute value, the
+bound improves slightly, by a logarithmic factor. When \(p\) grows
+polynomially in~\(n\), the two bounds are of order \(n^{-1/2}(\log n)^2\) and
+\(n^{-1/2}(\log n)^{3/2}\), respectively. A further improvement holds if the
+third moments cancel in aggregate, that is, if
+\(\sum_i\E[X_{ij}X_{ik}X_{i\ell}]=0\) for all coordinates \(j,k,\ell\).
+The power
+\(n^{-1/2}\) cannot be improved even when \(p=1\), and a two-point lower
+bound shows that the factor \(L^{3/2}\) cannot be improved either, so the
+second rate is then optimal and the first is optimal up to the factor
+\((\log n)^{1/2}\).
+\end{skillblock}
 \end{abstract}
 
 \clearpage
 \tableofcontents
 \clearpage
 
-\section{Main result}\label{sec:results}
+\section{\texorpdfstring{\sks{Introduction and main results}}{Introduction and main results}}\label{sec:results}
 Gaussian approximation over rectangles provides a common foundation for
 approximating maxima and constructing simultaneous confidence regions.
 \rev{In these problems the coordinates may satisfy exact linear relations,
@@ -243,7 +252,8 @@ independent coordinates whose error is at least of order
 their example with the envelope attained. The bound
 \eqref{eq:observations-unrestricted} is thus optimal up to the factor
 \(\sqrt{1+\log_+(\sqrt n/(B\sqrt L))}\), which is of order
-\((\log n)^{1/2}\) in polynomial dimension.}
+\((\log n)^{1/2}\) in polynomial dimension.} \skl{Whether this factor is
+needed is open.}
 
 For unequal marginal variances, define
 \[
@@ -285,7 +295,7 @@ Under~\eqref{eq:setup},
 \rev{Since \(\kappa\le L\) and \(E_\kappa\le D_L\),
 Theorem~\ref{thm:optimized} implies Theorem~\ref{thm:unrestricted}\pass{;
 the} term \(\delta L^{3/2}\) \pass{in~\eqref{eq:optimized}} comes from the
-cubic part of the comparison,
+\lin{third moments of the summands},
 and it disappears when the full third-moment tensor cancels.}
 
 \begin{theorem}[Cancellation of third moments]\label{thm:zero-skew}
@@ -381,7 +391,7 @@ sample size is again optimal up to logarithmic factors}. In particular,
 \(\log p=o(n^{1/3}/\log(en))\). \rev{We do not claim that these
 dimension ranges are sharp for the sub-exponential class.}
 Appendix~\ref{app:subexponential} controls the discarded sum directly,
-which allows the cutoff to depend only on \(\log n\), and restores
+which allows the \lin{truncation level} to depend only on \(\log n\), and restores
 covariance through a joint Gaussian coupling.
 
 \subsection{Relation to recent work}\label{sec:literature}
@@ -427,7 +437,7 @@ and it exceeds this scale only by the factor \(\sqrt{D_L}\).}
 
 \rev{Other results replace full nondegeneracy by conditions on small
 groups of coordinates.} Fang, Koike, Liu, and Zhao~\cite[Theorem~1.1]{FKLZ} obtain nearly
-\(n^{-1/2}\) rates under moment or tail assumptions and quantitative
+\(n^{-1/2}\) rates under \skl{sub-exponential tails} and quantitative
 two- and three-coordinate covariance conditions, allowing the full
 covariance matrix to be singular. The companion paper~\cite{Local}
 assumes uniformly positive eigenvalues for principal submatrices of
@@ -438,126 +448,69 @@ three- and four-coordinate submatrices. \rev{The two papers therefore
 complement each other, and without the local condition the bound loses
 only the factor \(\sqrt{D_L}\).}
 
-\begin{revblock}
-\paragraph{Sources of the argument.}
-The interpolation in our proof is the Bernoulli-thinning path of Aronow
-and Lopatto~\cite[eq.~(16)]{AL}, and the boundary concentration estimate
-that controls it near the bounded endpoint is their Lemma~2.1
-(Lemma~\ref{lem:concentration} below), which
-Appendix~\ref{appx-app:concentration} proves both by their argument and
-by a second one. The first two steps of our exact fourth-order identity
-(Lemma~\ref{appx-an:lem:identity}) and the early derivative bounds follow
-their proof of Lemma~4.1. The reduction to the support
-of~\(\Sigma\), that is, to its column space, with each summand bounded only
-through its projections on the normals of the faces of the rectangle,
-follows Gao and Zhang~\cite[Section~2.3]{GaoZhang}. Along a different
-path, their derivative identity~\cite[Lemma~22]{GaoZhang} has the same
-form as ours, a cubic term at the full path plus three fourth-order
-corrections, and our bound for the corrections
-(Lemma~\ref{appx-an:lem:restoration}) follows their proof of Lemma~23,
-which integrates by parts twice in a Gaussian direction, sums over the summands
-\trim{against their total covariance}, and applies a matrix estimate. Our matrix and surface
-estimates, Lemmas~\ref{appx-an:lem:matrix} and~\ref{appx-an:lem:surface},
-adapt their Lemma~12 and Proposition~4, with the same covariance bound
-for reweighted Gaussian laws and the same pairing of the boundary terms on
-each ridge, where two faces of a polyhedron meet. The logistic
-approximation~\eqref{eq:selector} is the multinomial logistic (softmax)
-probability of a \trim{baseline category} with score zero, as used by Gao and
-Zhang~\cite[eq.~(5)]{GaoZhang}, and its derivative formula and Gumbel
-representation are their Lemmas~13 and~14.
-
-\paragraph{What is new.}
-Aronow and Lopatto reach the power \(n^{-1/2}\), but their Gaussian
-derivative bounds carry negative powers of \(\lambda_{\min}(\Sigma)\).
-Gao and Zhang avoid the eigenvalues and obtain the power \(n^{-1/3}\).
-\trim{The derivatives of the logistic approximation are large only in a
-layer of width of order \(h\) around the boundary of the rectangle, whose
-probability is of order \(h\sqrt L\), and
-Subsection~\ref{sec:why-rate} shows that their power of \(n\) comes from
-fourth-order bounds that do not gain this factor once the derivatives
-are moved onto the Gaussian density. We keep the factor at all times.
-For this purpose} we average the Gaussian
-surface integral of the whole polyhedron\trim{, that is, of an
-intersection of finitely many halfspaces,} the integral over its boundary
-of the Gaussian density weighted by \(\norm g^2-r\), over a
-translation that satisfies the boundary concentration of
-Lemma~\ref{lem:concentration}. \trim{The bound of Gao and Zhang for
-this integral, which is uniform over polyhedra and of order
-\(\{\log(2m)\}^{3/2}\) for \(m\) faces,} then improves to
-\(C(\sigma L^{3/2}+\delta L^2)\), where \(\sigma^2\) is the Gaussian
-variance available on the path, and \trim{the gain of the factor
-\(\sigma\) keeps the late fourth-order bound proportional to
-\(1/\lambda\), so that its integral costs only a logarithm}. A second new
-step is an exact expansion of the logistic weights at translated points
-(Lemma~\ref{appx-an:lem:restoration}), in place of the independent
-copies and high-order Taylor expansion of Gao and
-Zhang~\cite[Lemmas~19 and~23]{GaoZhang}. It returns every derivative
-from a leave-one-out base, in which one summand is deleted, to the full path as an
-absolutely convergent series, with no remainder term. Because the exact
-identity places the cubic term at the full path, aggregate third-moment
-cancellation removes it before any estimate is taken
-(Theorem~\ref{thm:zero-skew}), and only the fourth-order corrections
-remain to be bounded.
-Finally, the early and late derivative bounds are integrated over their
-own time ranges, which meet at \(\lambda=Lh^2\); the late bound,
-integrated from this time to one, produces the logarithm behind the
-factor \(\sqrt{D_L}\). Appendix~\ref{appx-sec:support}
-proves the estimates, and Appendix~\ref{sec:main-proof} carries out the
-integration.
-\end{revblock}
+\skl{Our bounds reach the rate \(n^{-1/2}\), up to logarithmic factors, with
+no condition on the covariance matrix, and they lose only the factor
+\(\sqrt{D_L}\) against the sharp bounds under nondegeneracy. They come
+from an interpolation between the sum and its Gaussian counterpart along
+which the derivative of a smoothed rectangle probability is bounded
+without reference to the eigenvalues of the covariance matrix.}
 
 \rev{Section~\ref{sec:smoothing} outlines the proof\trim{, derives
 the rates from its main estimates, and explains why they reach the
-power \(n^{-1/2}\); it also} introduces the
+power \(n^{-1/2}\)\lin{, comparing the argument with those of Aronow and
+Lopatto and of Gao and Zhang}; it also} introduces the
 notation used in the appendices\trim{. Section~\ref{opt:section}
-discusses sharpness}, and Section~\ref{sec:lean-certification}
-records the formal verification.}
+discusses sharpness}, and \skl{Subsection~\ref{sec:lean-certification}}
+records the formal verification\skl{ in Lean}.}
 Appendices~\trs{\ref{sec:main-proof}}--\ref{app:subexponential}
 contain all proofs of the upper bounds. \polish{The Supplement~\cite{Supplement} collects the lower-bound calculations,
 exact coordinate reductions, and further investigations.}
 
+\subsection{\texorpdfstring{\sks{Formal verification in Lean}}{Formal verification in Lean}}\label{sec:lean-certification}
+\leavevmode\skl{Theorems~\ref{thm:unrestricted}--\ref{opt:consistency} and the two bounds of
+Corollary~\ref{cor:subexponential} were certified on 20 and 21~October 2026
+in Lean~4.19.0, a proof assistant that checks formal proofs by computer,
+with its library mathlib~v4.19.0, and the proofs use only Lean's standard
+axioms. The Lean sources, the axiom audits, and the reviews that compare the
+formal statements with this manuscript are in the
+\href{https://github.com/VC2015/HDCLTs/blob/bbf1ab99c733a398c181ca8c9f5a243a41f258c6/verification/2026-10-21-companion-results/README.md}{verification record}
+of the repository, for source revision
+\href{https://github.com/VC2015/HDCLTs/commit/6548201a5c5d9c132a53f1d504f7ef70346aa782}{\texttt{6548201a5c5d}}.
+The certification refers to these Lean proofs, not to the written
+derivations, and the results of the Supplement are not certified.}
+
 
 % Source: proof_interface
 \section{\texorpdfstring{\rs{Outline of the proof}}{Outline of the proof}}
-\label{sec:smoothing}\label{sec:support}
+\label{sec:smoothing}
 
 \polish{We first replace each rectangle indicator by a logistic approximation
 and then compare its expectations along a path that preserves covariance.
 \rev{The smoothing scale balances two errors, since a coarser approximation
 costs more at the endpoints but makes the comparison along the path easier.}}
-\trim{In outline, the proof is the chain of inequalities
-\begin{equation}
- \rh(W,Z)\le M_h+Ch\sqrt L\,\kappa,
- \qquad
- M_h\le\sup_A\int_0^1|P_A'(\lambda)|\dd\lambda,
- \label{eq:roadmap}
-\end{equation}
-followed by bounds for \(|P_A'(\lambda)|\) and a choice of the
-scale~\(h\). Here \(F_{A,h}\) is a smooth approximation, at scale \(h\),
-to the indicator of the rectangle~\(A\); \(M_h\) is the largest
-difference between its expectations under \(W\) and~\(Z\);
-\(P_A(\lambda)\) is its expectation along a path \(U_\lambda\) from
-\(U_0\stackrel d=W\) to \(U_1\stackrel d=Z\); and \(\kappa\le L\) is the
-correlation parameter of~\eqref{eq:parameters}.
-Subsection~\ref{sec:outline-smoothing} constructs \(F_{A,h}\) and states
-the first inequality as Lemma~\ref{lem:endpoint}, whose proof uses the
-anti-concentration inequality of Lemma~\ref{lem:concentration}.
-Subsection~\ref{sec:outline-path} introduces the path and a formula for
-\(P_A'\), and Proposition~\ref{an:prop:derivative} bounds
-\(|P_A'(\lambda)|\) in two ranges of~\(\lambda\), early and late, which
-Subsections~\ref{sec:outline-early} and~\ref{sec:outline-late} explain.
-Subsection~\ref{sec:rate} integrates the two bounds, which gives
-Proposition~\ref{prop:moving-cutoff}, and chooses \(h\) to balance the
-two errors in~\eqref{eq:roadmap}; this proves the theorems.
-Subsection~\ref{sec:why-rate} explains why the resulting power of the
-sample size is \(n^{-1/2}\).
+\lin{Subsection~\ref{sec:outline-smoothing} constructs the logistic
+approximation at a smoothing scale \(h>0\) and bounds the error of the
+replacement (Lemma~\ref{lem:endpoint}), using a bound for the probability
+that a sum of independent vectors falls near the boundary of a rectangle
+(Lemma~\ref{lem:concentration}). Subsection~\ref{sec:outline-path}
+introduces the path, whose parameter \(\lambda\) runs from \(0\) at \(W\)
+to \(1\) at~\(Z\), and reduces the theorems to bounds for the derivative
+in \(\lambda\) of the smoothed expectations along it.
+Proposition~\ref{an:prop:derivative} bounds this derivative \skl{for
+\(\lambda\) near \(0\) and for \(\lambda\) away from \(0\)}, and Subsections~\ref{sec:outline-early}
+and~\ref{sec:outline-late} explain the two bounds.
+Subsection~\ref{sec:rate} integrates them and chooses~\(h\), which proves
+the theorems, and Subsection~\ref{sec:why-rate} compares the argument
+with those of Aronow and Lopatto and of Gao and Zhang and explains why it
+reaches the power \(n^{-1/2}\).
 
 The appendices give the proofs in the same order, from the top down.
 Appendix~\ref{sec:main-proof} derives Proposition~\ref{prop:moving-cutoff}
 and the theorems from Lemma~\ref{lem:endpoint} and
 Proposition~\ref{an:prop:derivative}. Appendix~\ref{appx-sec:smoothing}
-proves Lemma~\ref{lem:endpoint} and the properties of \(F_{A,h}\) that
-the later proofs use, and Appendix~\ref{appx-sec:support} proves
+proves Lemma~\ref{lem:endpoint} and the properties of the logistic
+approximation that the later proofs use, and
+Appendix~\ref{appx-sec:support} proves
 Proposition~\ref{an:prop:derivative}.
 Appendix~\ref{appx-app:concentration} proves
 Lemma~\ref{lem:concentration}, and Appendix~\ref{app:subexponential}
@@ -629,9 +582,12 @@ cutoff with the same scale \(h\) as the smooth maximum; the
 construction in~\cite{CCK2013} allows a separate cutoff and a
 separate scale at each step.
 
-The following \trim{anti-concentration inequality}, stated
-in~\cite[Lemma~2.1]{AL}, controls both the smoothing error and the
-derivatives near the boundary. For
+\lin{An anti-concentration inequality bounds the probability that a
+random vector falls in \skl{a boundary layer, that is, within a given
+distance of the boundary} of a set. The
+following one}, stated
+in~\cite[Lemma~2.1]{AL}, controls both the \lin{error of the logistic
+approximation and its} derivatives near the boundary. For
 \(A=\prod_j[\ell_j,u_j]\), write
 \(A^{\rs t}=\prod_j[\ell_j-\rs t,u_j+\rs t]\), with reversed intervals empty.
 \begin{lemma}[Rectangle concentration]\label{lem:concentration}
@@ -650,14 +606,12 @@ the same bound holds with \(\eta=0\), including singular covariance.
 bounded-sum assertion: a conditioning argument using the Rademacher
 anti-concentration inequality in~\cite[Lemma~J.4]{CCKK2022}, and
 Aronow--Lopatto's resampling proof~\cite[Lemma~2.1]{AL}, based on
-Kane's noise-sensitivity bound~\cite{Kane}. \rev{An anti-concentration
-inequality bounds the probability that a random vector falls in a thin
-shell around the boundary of a set\trim{; the name of
-Lemma~\ref{lem:concentration} refers to L\'evy's concentration function,
-the largest probability of a set of given width, which such inequalities
-bound}; a noise-sensitivity bound controls
-how often the indicator of a set changes when a small random fraction of
-its inputs is changed.} The Gaussian assertion is
+Kane's noise-sensitivity bound~\cite{Kane}\lin{, which controls how
+often the indicator of a set changes when a small random fraction of its
+inputs is changed}. \rev{\lin{The name of Lemma~\ref{lem:concentration}
+refers to L\'evy's concentration function, the largest probability of a
+set of given width, which anti-concentration inequalities bound.}} The
+Gaussian assertion is
 Nazarov's inequality; see~\cite[Lemma~A.1]{CCK2017}. The second proof
 also recovers it by a finite-dimensional Gaussian limit.}
 
@@ -689,7 +643,8 @@ When \(c>0\), a Hessian estimate for
 \(h\log(1+\sum_\alpha e^{(\nu_\alpha\cdot x-a_\alpha)/h})\)
 gives the alternative error \(Ch\sqrt L/c\). \rev{The parameter \(\kappa\) records the smaller of the two
 estimates.} Lemmas~\ref{appx-lem:endpoint-free}
-and~\ref{appx-lem:endpoint-gap} prove the two endpoint bounds.
+and~\ref{appx-lem:endpoint-gap} prove the two bounds \lin{for the
+smoothing error}.
 
 \begin{revblock}
 The comparison along the path uses derivatives of \(F_{A,h}\) of orders
@@ -720,7 +675,7 @@ Appendix~\ref{appx-sec:smoothing}. The product \(F\theta\) is at most
 boundary. Moving every threshold outward and inward by \(h\) gives
 \(F\theta\le\frac e2(F_{A^h,h}-F_{A^{-h},h})\), and by the mixture
 representation the right side is an average of indicators of boundary
-shells of width \(2h\). Lemma~\ref{lem:concentration} therefore gives
+\skl{layers} of width \(2h\). Lemma~\ref{lem:concentration} therefore gives
 \[
  \E F(U)\theta(U)\le Ch\sqrt L
 \]
@@ -736,31 +691,48 @@ uniform bound \(h^{-q}\).
 \label{sec:outline-path}
 
 \polish{For the smooth comparison,} \rev{we use the Bernoulli-thinning
-path of Aronow and Lopatto~\cite[eq.~(16)]{AL}, which removes the bounded
+path of Aronow and Lopatto~\cite[\skl{Section~4, the display after eq.~(16)}]{AL}, which removes the bounded
 summands at random while a Gaussian vector supplies the lost covariance.}
-\polish{The amplitude \(1+\lambda\) is chosen so that the
-\pass{coefficient of the cubic term} has zero derivative at the bounded
-endpoint\rev{~\cite[eq.~(17)]{AL}}. Let \(Z\) be independent of the \rs{summands}
+\polish{Let \(Z\) be independent of the \rs{summands}
 and, for \(\lambda\in[0,1]\), set}
 \begin{equation}
- \rs\gamma=1+\lambda,\qquad q=\frac{1-\lambda}{(1+\lambda)^2},\qquad
- U_\lambda=\rs\gamma\sum_i B_{i,\lambda}\xi_i+\sqrt\lambda Z,
- \qquad B_{i,\lambda}\sim\operatorname{Bernoulli}(q),
+ \rs\gamma=1+\lambda,\qquad \sks{\varpi}=\frac{1-\lambda}{(1+\lambda)^2},\qquad
+ U_\lambda=\rs\gamma\sum_i \sks{\mathbb B}_{i,\lambda}\xi_i+\sqrt\lambda Z,
+ \qquad \sks{\mathbb B}_{i,\lambda}\sim\operatorname{Bernoulli}(\sks{\varpi}),
  \label{eq:path}
 \end{equation}
 with independent Bernoulli variables, \rs{summands}, and Gaussian vector.
-Since \(q\rs\gamma^2=1-\lambda\), this path has covariance \(\Sigma\),
+Since \(\sks{\varpi}\rs\gamma^2=1-\lambda\), this path has covariance \(\Sigma\),
 with \(U_0\stackrel d=W\) and \(U_1\stackrel d=Z\).
+\lin{The amplitude \(\gamma=1+\lambda\) is chosen so that the coefficient
+\(\sks{\varpi}\gamma^3=1-\lambda^2\) of the third moments of the summands has zero
+derivative at the bounded endpoint \(\lambda=0\)~\cite[eq.~(17)]{AL}.}
 \rev{Unlike Aronow and Lopatto, we add no Gaussian smoothing at the
 bounded endpoint; the logistic approximation takes its place.}
-For \(P_A(\lambda)=\E F_{A,h}(U_\lambda)\), a fourth-order expansion gives
+\lin{Put \(P_A(\lambda)=\E F_{A,h}(U_\lambda)\). The largest difference
+\(M_h\) of smoothed expectations, defined in~\eqref{eq:selector}, is then
+\(\sup_A|P_A(1)-P_A(0)|\), and together with Lemma~\ref{lem:endpoint}
+this gives the chain of inequalities
+\begin{equation}
+ \rh(W,Z)\le M_h+Ch\sqrt L\,\kappa,
+ \qquad
+ M_h\le\sup_A\int_0^1|P_A'(\lambda)|\dd\lambda,
+ \label{eq:roadmap}
+\end{equation}
+which the proof follows. \skl{We bound} the derivative
+\(P_A'(\lambda)\), as Proposition~\ref{an:prop:derivative} below does in
+two ranges of~\(\lambda\), and \skl{integrate} the bounds, as
+Subsection~\ref{sec:rate} does. For this derivative,} a fourth-order
+expansion gives
 \begin{equation}
  P_A'(\lambda)=-\frac\lambda3\,
  \E D^3F_{A,h}(U_\lambda):\sum_i\E\xi_i^{\otimes3}
  +R_{4,A,h}(\lambda).
  \label{eq:path-summary}
 \end{equation}
-\rev{Here the colon denotes contraction of all three indices, and every
+\rev{Here the colon denotes contraction of all three indices,
+\skl{\(R_{4,A,h}(\lambda)\) collects the fourth-order terms described
+below,} and every
 cubic tensor is evaluated against the same derivative tensor at
 \(U_\lambda\). Under \eqref{eq:zero-third} the cubic terms therefore
 cancel before any absolute value is taken, and}
@@ -768,17 +740,18 @@ cancel before any absolute value is taken, and}
  P_A'(\lambda)=R_{4,A,h}(\lambda).
  \label{zs:identity}
 \end{equation}
-Moving derivatives from \rev{leave-one-out} bases back
-to \(U_\lambda\)
+Moving derivatives from \rev{leave-one-out} bases\lin{, from which one
+summand is deleted,} back
+to \lin{the full path} \(U_\lambda\)
 creates fourth-order terms, \rev{which are part of}
 \(R_{4,A,h}(\lambda)\).
 \begin{revblock}
 These terms come from differentiating the law of one summand at a time.
-With \(M_i=\E\xi_i\xi_i^\top\) and \(\ps{K_i^{(3)}}=\E\xi_i^{\otimes3}\), Taylor's
-formula and the relations \((q\gamma^2)'=-1\) and
-\((q\gamma^3)'=-2\lambda\) give the terms
-\(-\frac12M_i:D^2F-\frac\lambda3\ps{K_i^{(3)}}:D^3F\), together with a fourth-order
-remainder, at the base \(U_\lambda-\gamma B_{i,\lambda}\xi_i\) from which
+With \(M_i=\E\xi_i\xi_i^\top\) and \(\sks{M_i^{(3)}}=\E\xi_i^{\otimes3}\), Taylor's
+formula and the relations \((\sks{\varpi}\gamma^2)'=-1\) and
+\((\sks{\varpi}\gamma^3)'=-2\lambda\) give the terms
+\(-\frac12M_i:D^2F-\frac\lambda3\sks{M_i^{(3)}}:D^3F\), together with a fourth-order
+remainder, at the base \(U_\lambda-\gamma \sks{\mathbb B}_{i,\lambda}\xi_i\) from which
 summand~\(i\) is deleted. The Gaussian component contributes
 \(\frac12\Sigma:D^2F\) by the heat equation\pass{
 \(\frac d{d\lambda}\E f(x+\sqrt\lambda Z)
@@ -890,8 +863,8 @@ For a fixed translation, the Gaussian part
 alone would bound the probability of a boundary layer of width \(h\)
 only by \(Ch\sqrt L/\sigma\), since its scale is \(\sigma\), whereas
 Lemma~\ref{lem:concentration} bounds it by \(C(h+\delta)\sqrt L\) for
-\(V_0+\sigma G\); the same average gains the factor \(\sigma\) in the
-surface estimate below.} A derivative in a direction \(z\) is
+\(V_0+\sigma G\); the same average gains \lin{a further factor
+\(\sigma\) later in this subsection}.} A derivative in a direction \(z\) is
 \(\sigma^{-1}\) times a derivative in \(G\), so two integrations by parts
 give, for an independent copy \(\zeta_i\) of \(\zeta_i^0\) and directions
 \(z_1,\ldots,z_s\),
@@ -954,8 +927,8 @@ follows that
 that \(\E[\Hh(G)w(G)]=p_w\tr(K-I_r+\mu\mu^\top)\), and the inequality
 follows because \(I_r-K\) is positive semidefinite. This trace term may
 have either sign. If the weights, summed over the tuples of faces,
-formed a partition of unity, as the indicators of convex cells do in
-Gao and Zhang's argument~\cite[Lemma~12]{GaoZhang}, the trace terms would
+formed a partition of unity, as \lin{the indicators of the cells of a
+partition of~\(\R^r\)} do, the trace terms would
 add up to \(\E\Hh(G)=0\). The logistic weights add up to \(F\theta^k\)
 instead, and the trace term is where the geometry of the polyhedron
 enters.} An entropy inequality for tilted means, taken relative to one face at a
@@ -985,8 +958,11 @@ theorem,} within each facet, a face of
 dimension \(r-1\), to write \(\surf\) as a sum of facet terms and paired
 terms on the ridges, the faces of dimension \(r-2\) where two facets
 meet. It then bounds each term by the Gaussian mass of a thin outward
-tube; a tube of width \(1/R\) around the rescaled polyhedron is a boundary
-shell of width \(\sigma/R\) for \(V_0+\sigma G\), whose probability
+tube\skl{ of width \(1/R\) for a facet or ridge at distance at most \(R\)
+from the origin, the sizes \(R\) being summed over dyadic scales in
+Subsection~\ref{appx-an:sec:surface}. Such a tube} around the rescaled
+polyhedron is a boundary
+\skl{layer} of width \(\sigma/R\) for \(V_0+\sigma G\), whose probability
 Lemma~\ref{lem:concentration} controls.
 
 In the resulting bound, the integration by parts contributes the factor
@@ -1017,6 +993,10 @@ difference \(M_h=\sup_A|\E F_{A,h}(W)-\E F_{A,h}(Z)|\) of smoothed
 expectations, defined in~\eqref{eq:selector}, since
 \(M_h\le\sup_A\int_0^1|P_A'(\lambda)|\dd\lambda\)
 by~\eqref{eq:roadmap}}. Its proof is in Appendix~\ref{sec:main-proof}.}
+\lin{We call a finite system of coordinate inequalities
+\(\nu_\alpha\cdot x\le a_\alpha\) a threshold system, and call it
+inconsistent if its inequalities have no common solution; such systems
+arise in the proofs when thresholds are shifted.}
 
 \begin{revblock}
 \begin{proposition}[Smoothed comparison]\label{prop:moving-cutoff}
@@ -1065,26 +1045,62 @@ error and the fourth-order comparison error are at most
 This yields Theorems~\ref{thm:optimized} and~\ref{thm:zero-skew};
 Theorem~\ref{thm:unrestricted} follows from \(\kappa\le L\) and
 \(E_\kappa\le D_L\). Appendix~\ref{sec:main-proof} gives the complete proof, including
-the two cutoff regimes and the admissibility of the smoothing scale.
+\lin{the case \(Lh^2\ge1\), in which the late range is empty,} and the
+admissibility of the smoothing scale.
 
-\subsection{\texorpdfstring{\trs{Where the power \(n^{-1/2}\) comes from}}{Where the power n to the -1/2 comes from}}
-\label{sec:why-rate}
-\trim{The bound of Theorem~\ref{thm:optimized} is the sum of three errors: the
+\subsection{\texorpdfstring{\lns{Sources of the argument and the power \(n^{-1/2}\)}}{Sources of the argument and the power n to the -1/2}}
+\label{sec:why-rate}\label{sec:sources}
+\lin{The interpolation path~\eqref{eq:path} is the Bernoulli-thinning
+path of Aronow and Lopatto~\cite[\skl{Section~4, the display after eq.~(16)}]{AL}, and
+Lemma~\ref{lem:concentration}, which controls the path near its bounded
+endpoint, is their Lemma~2.1; Appendix~\ref{appx-app:concentration}
+proves it both by their argument and by a second one. The first two
+steps of our exact fourth-order identity
+(Lemma~\ref{appx-an:lem:identity}) and the early bounds of
+Subsection~\ref{sec:outline-early} follow their proof of Lemma~4.1.
+Aronow and Lopatto reach the power \(n^{-1/2}\), but their Gaussian
+derivative bounds carry negative powers of \(\lambda_{\min}(\Sigma)\).
+The support coordinates of Subsection~\ref{sec:outline-late} follow Gao
+and Zhang~\cite[Section~2.3]{GaoZhang}. Along a different path, their
+derivative identity~\cite[Lemma~22]{GaoZhang} has the same form as ours,
+a cubic term at the full path plus three fourth-order corrections, and
+our bound for the corrections (Lemma~\ref{appx-an:lem:restoration})
+follows their proof of Lemma~23, which integrates by parts twice in a
+Gaussian direction, sums over the summands against their total
+covariance, and applies a matrix estimate. Our matrix and surface
+estimates, Lemmas~\ref{appx-an:lem:matrix}
+and~\ref{appx-an:lem:surface}, adapt their Lemma~12 and Proposition~4,
+with the same covariance bound for tilted Gaussian laws and the same
+pairing of the boundary terms on each ridge. The logistic
+approximation~\eqref{eq:selector} is the multinomial logistic (softmax)
+probability of a baseline category with score zero, as used by
+\skl{McFadden~\cite[p.~1001]{McFadden1989} and} Gao and
+Zhang~\cite[eq.~(5)]{GaoZhang}, and its derivative formula and
+\skl{mixture representation~\eqref{eq:mixture}, proved in
+Subsection~\ref{appx-sec:mixture}, correspond to} their Lemmas~13 and~14.
+Gao and Zhang avoid the
+eigenvalues of \(\Sigma\) and obtain the power~\(n^{-1/3}\).}
+
+\trim{The bound of Theorem~\ref{thm:optimized} is the sum of the
 smoothing error \(Ch\sqrt L\,\kappa\) of Lemma~\ref{lem:endpoint}, the
 cubic contribution \(C\delta L^{3/2}\), which does not depend on~\(h\),
 and the integrated fourth-order terms. The power of \(n\) is decided by
-the balance between the first and the last. The argument of Gao and
-Zhang, which improved the power \(n^{-1/4}\) of~\cite{CCKK2022} to
-\(n^{-1/3}\), has the same three errors~\cite[eq.~(20)]{GaoZhang}, and
-the comparison with it shows where the improvement comes from. In our
-notation, with \(h\) in place of their \(1/\beta\) and \(\delta\) in
-place of their envelope \(b_{d,n}\), the fourth-order terms on their
-first path are bounded at late times, in the proof of their
-Proposition~2~\cite{GaoZhang}, by a constant times
+the balance between the first and the last. \lin{Gao and Zhang, who
+improved the power \(n^{-1/4}\) of~\cite{CCKK2022} to \(n^{-1/3}\),
+interpolate in two stages, first from the sum to an intermediate vector
+that has a fixed Gaussian component and the same moments through order
+three, and then from that vector to the Gaussian
+limit~\cite[Section~4]{GaoZhang}. Their bound has the same three
+errors~\cite[eq.~(20)]{GaoZhang}. In our notation, with \(h\) in place
+of their \(1/\beta\) and \(\delta\) in place of their envelope
+\(b_{d,n}\), the fourth-order terms of their first stage are bounded,
+when that stage carries Gaussian variance \(\lambda/2\), in the proof of
+their Proposition~2, by a constant times}
 \[
  \frac{\delta^2L}{\lambda h^2}.
 \]
-Integrated over the late times, this gives \(\delta^2L/h^2\) times a logarithm, which balances the
+\lin{Integrated from a small time \(\tau\) to one}, this gives
+\(\delta^2L/h^2\) times \lns{\(\log(1/\tau)\)}, which balances the
 smoothing error \(h\sqrt L\) when \(h\) is of order \(\delta^{2/3}\), up
 to logarithmic factors. This is their choice of~\(\beta\)
 in~\cite[eq.~(21)]{GaoZhang}, and with \(\delta=B/\sqrt n\) it gives the
@@ -1094,10 +1110,10 @@ logarithm, balances the smoothing error when \(h\) is of order
 \(\delta\), up to logarithmic factors, as in~\eqref{eq:optimal-scale},
 and this gives the power \(n^{-1/2}\).
 
-The factor \(h\sqrt L\) is the probability of a boundary layer. The
-derivatives of \(F_{A,h}\) are large only within distance of order \(h\)
-of the boundary of the rectangle, and the anti-concentration inequality
-of Lemma~\ref{lem:concentration} bounds the probability of this layer by
+\skl{The derivatives of \(F_{A,h}\) are large only within distance of order \(h\)
+of the boundary of the rectangle, and the factor \(h\sqrt L\) is the
+probability of that boundary layer, which the} anti-concentration inequality
+of Lemma~\ref{lem:concentration} bounds \skl{by}
 \(Ch\sqrt L\); this is the bound \(\E F\theta(U)\le Ch\sqrt L\) of
 Subsection~\ref{sec:outline-smoothing}. In the early range the derivative
 envelope gives the factor directly (Subsection~\ref{sec:outline-early}).
@@ -1107,35 +1123,42 @@ of logistic weights that remain after the integrations by parts as
 probabilities of convex cells that partition the
 space~\cite[Lemmas~13 and~14]{GaoZhang}, and their bound for the sum over
 the cells~\cite[Lemma~12]{GaoZhang} is of order \(L\), uniformly over
-partitions. A partition has total probability one, so this bound does
-not see the boundary layer.
+partitions. A partition has total probability one, so this bound\skl{,
+being uniform over partitions, does not carry the factor \(h\sqrt L\), and
+we see no way to recover the factor from it}.
 
-Two steps keep the factor in our argument. First, the matrix estimate is
-applied to the logistic weights themselves, whose total mass satisfies
-\(\E F\theta^k(U)\le Ch\sqrt L\), and the term of its proof that involves
-the tilted means inherits this factor directly. Second, the trace term
+\skl{The factor survives in our argument because the matrix estimate is
+applied to the logistic weights themselves and because the trace term,
+which does not cancel, is averaged over the concentrated base. The total
+mass of the weights satisfies} \(\E F\theta^k(U)\le Ch\sqrt L\), and the term of \skl{the
+proof of the matrix estimate} that involves
+the tilted means inherits this factor directly. \skl{The} trace term
 \(\E[\Hh(G)w(G)]\) does not cancel, because the weights do not form a
 partition, and it is bounded by \(h/\sigma\) times an average of Gaussian
 surface integrals of translated polyhedra. The uniform bound
 \(C\{\log(2m)\}^{3/2}\) of Gao and Zhang~\cite[Proposition~4]{GaoZhang}
 for these integrals would leave the factor \(h/\sigma\), and the late
 bound would become \(C\delta^2L^{3/2}/(\lambda^{3/2}h)\). The integral of
-this bound is not logarithmic, and in the present argument the balance
-with the smoothing error would give only the power \(n^{-3/8}\). The
-averaged surface estimate gains the factor \(\sigma\) by averaging over
+this bound \skl{over the late range} is not logarithmic\skl{. At the time
+\(\tau_h=Lh^2\) of Subsection~\ref{sec:rate} the balance with the
+smoothing error gives the power \(n^{-1/3}\) of Gao and Zhang, and only a
+time re-optimized to the order \(L^{2/3}h^{4/3}\) gives \(n^{-3/8}\), up to
+logarithmic factors.} The averaged surface estimate gains the factor \(\sigma\) by averaging over
 the concentrated base, which restores the factor \(1/\lambda\) and with
 it the logarithm. Gao and Zhang use their uniform bound for the cubic
-term on their second path~\cite[eq.~(19)]{GaoZhang}, where it suffices,
+term \lin{of their second stage}~\cite[eq.~(19)]{GaoZhang}, where it suffices,
 because that term involves no power of~\(h\).
 
-The remaining steps keep these bounds free of the rank and the
-eigenvalues of~\(\Sigma\). The support coordinates and the summation
-against the identity \(\sum_i\E\zeta_i^0(\zeta_i^0)^\top=I_r\) follow
-Gao and Zhang. The translation formula~\eqref{eq:weight-translation}
-brings every derivative to the common base \(U\) with no remainder term,
-and the exact identity of Lemma~\ref{appx-an:lem:identity} places the
-cubic term at the full path, so that cancellation of third moments
-removes the term \(\delta L^{3/2}\) in Theorem~\ref{thm:zero-skew}.}
+\lin{The translation formula~\eqref{eq:weight-translation} and the
+exact identity of Lemma~\ref{appx-an:lem:identity} replace
+approximations in the argument of Gao and Zhang. The first brings every
+derivative from the translated bases \(U+v_i\) back to the common base
+\(U\) as an absolutely convergent series with no remainder term, in place
+of their independent copies and high-order Taylor
+expansion~\cite[Lemmas~19 and~23]{GaoZhang}. The second places the cubic
+term at the full path, so that cancellation of third moments removes it
+before any estimate is taken, which gives
+Theorem~\ref{thm:zero-skew}.}}
 
 
 % Source: sharpness_and_discussion
@@ -1144,7 +1167,8 @@ The dependence on sample size cannot improve beyond \(n^{-1/2}\)
 under the present assumptions. A normalized Rademacher sum has an atom
 of order \(n^{-1/2}\), while the Gaussian probability of an interval
 shrinking to this atom tends to zero. This obstruction already occurs
-in one dimension and survives zero skewness.
+in one dimension and survives zero skewness\lin{, that is, the
+cancellation~\eqref{eq:zero-third} of third moments}.
 
 Dimension introduces another obstruction, already visible when the
 coordinates are independent. \pass{Chernozhukov, Chetverikov, and
@@ -1259,130 +1283,15 @@ to logarithms. Appendix~\ref{app:subexponential} compares the
 assumptions and rates in detail.}
 
 
-\section{Lean Certification}\label{sec:lean-certification}
-\rev{Lean is a proof assistant, a program that checks each step of a
-formal proof against a small set of logical rules. Its library mathlib
-contains the formalized background mathematics used below.}
-The upper bounds \pass{for bounded summands} in Theorems~\ref{thm:unrestricted}--\ref{thm:zero-skew}
-were first certified on 20~October~2026. The combined Lean theorem is
-\nolinkurl{RectangleCLT.Companion.companionCLTExists_common}.
-
-The two bounds in Corollary~\ref{cor:subexponential} were first certified
-on 21~October~2026. Their Lean statements are
-\nolinkurl{RectangleCLT.Companion.subexponentialCLT_psi1} and
-\nolinkurl{RectangleCLT.Companion.fixedGapSubexponentialCLT_psi1}.
-These use the Orlicz norm bound and variance normalization of the
-manuscript. The formalization includes clipping, the residual-sum bound,
-joint Gaussian covariance restoration, and transfer to rectangles.
-
-The lower bound in Theorem~\ref{opt:skew-lower} and both equivalences in
-Theorem~\ref{opt:consistency} were first certified on 21~October~2026.
-The Lean statements are
-\nolinkurl{RectangleCLT.Companion.skewedTwoPointLowerScale} and
-\nolinkurl{RectangleCLT.Companion.uniformConsistencyTheorem}.
-The first constructs the independent two-point arrays, proves that their
-envelopes are attained, and retains the stated lower constant.
-The second uses the numerical suprema over the full probability classes,
-formed before taking the limit. It retains arbitrary envelope sequences
-\(B_n\ge2\) in the general case and each fixed \(B\ge1\) under
-aggregate third-moment cancellation.
-
-The current verified source revision is
-\href{https://github.com/VC2015/HDCLTs/commit/6548201a5c5d9c132a53f1d504f7ef70346aa782}{\texttt{6548201a5c5d}},
-checked with Lean~4.19.0 and mathlib~v4.19.0.\footnote{Full Git SHA:
-\nolinkurl{6548201a5c5d9c132a53f1d504f7ef70346aa782}. The
-\href{https://github.com/VC2015/HDCLTs/blob/bbf1ab99c733a398c181ca8c9f5a243a41f258c6/verification/2026-10-21-companion-results/README.md}{verification record}
-contains the successful complete-package build and CI results,
-the expanded theorem statements, transitive axiom audits, and
-reproduction commands. It preserves the earlier certification archives.}
-The separate \nolinkurl{LowerResultsAudit} checks 12 named declarations,
-including the final statements and their construction and supremum bridges.
-The count includes intermediate bridges supporting the same main results.
-The recorded axiom audits trace the proofs through their dependencies
-and report only Lean's
-\href{https://lean-lang.org/doc/reference/latest/Axioms/}{standard mathematical axioms}:
-\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
-Propositional extensionality (\texttt{propext}) identifies logically
-equivalent propositions. Classical choice selects an element from a
-nonempty type without requiring an explicit construction. Quotient
-soundness identifies equivalent representatives in a quotient.
-Thus the audited proofs use no additional axioms or \texttt{sorry}
-placeholders for unfinished proofs.
-
-Separate source-level reviews compared the formal statements with the
-manuscript on 21~October~2026. The initial review, at revision
-\texttt{25f68a4}, covered
-Theorems~\ref{thm:unrestricted}--\ref{thm:zero-skew} and
-Corollaries~\ref{cor:observations}--\ref{cor:subexponential}.
-A subsequent
-\polish{\href{https://github.com/VC2015/HDCLTs/blob/bbf1ab99c733a398c181ca8c9f5a243a41f258c6/verification/2026-10-21-companion-results/final-results-correspondence.md}{correspondence review}}
-checked Theorems~\ref{opt:skew-lower} and~\ref{opt:consistency},
-including constants and quantifier order. No substantive mismatch was
-found in the statements examined; the
-\polish{\href{https://github.com/VC2015/HDCLTs/blob/bbf1ab99c733a398c181ca8c9f5a243a41f258c6/verification/2026-10-21-review-resolution/README.md}{review-resolution record}}
-documents these checks.
-
-\rev{The strict sub-exponential audit covers 258 theorem declarations,
-including private helpers, and the final theorems have no unproved
-analytic estimates as premises.}
-
-These certifications cover the five main theorems and the two bounds in
-Corollary~\ref{cor:subexponential}. \rev{The further results in the
-Supplement are not certified.}
-\polish{Appendix~\ref{appx-app:concentration} presents two written proofs
-of the concentration statement. The certification refers to the recorded
-Lean proofs of that statement, rather than to each displayed derivation.}
-
 % Source: references
 \begin{thebibliography}{99}
 \phantomsection
 \addcontentsline{toc}{section}{References}
-\bibitem{Obstruction}
-\rev{\emph{A curvature obstruction for two-scale smoothing}.
-Companion research note, 23 October 2026.
-\href{https://github.com/VC2015/HDCLTs/blob/main/research-rectangle-clt-singular/Rectangle_CLT_Curvature_Obstruction.pdf}{\nolinkurl{Rectangle_CLT_Curvature_Obstruction.pdf}}.}
-
-\bibitem{IntegratedRemainder}
-\rev{\emph{Toward an integrated curvature estimate: a proved rank-one case
-and an entropy identity for the general problem}.
-Companion research note, 24 October 2026.
-\href{https://github.com/VC2015/HDCLTs/blob/main/research-rectangle-clt-singular/Rectangle_CLT_Integrated_Remainder.pdf}{\nolinkurl{Rectangle_CLT_Integrated_Remainder.pdf}}.}
-
 \bibitem{AL}
 P.~M. Aronow and P. Lopatto (2026).
 \emph{Optimal central limit theorem for bounded random variables in high dimensions}.
 Manuscript, arXiv:2609.07067v1.
 \url{https://arxiv.org/abs/2609.07067v1}.
-
-\bibitem{McFadden1989}
-D. McFadden (1989).
-\emph{A method of simulated moments for estimation of discrete
-response models without numerical integration}.
-Econometrica \textbf{57}(5), 995--1026.
-\href{https://doi.org/10.2307/1913621}{doi:10.2307/1913621}.
-
-\bibitem{OST}
-R. O'Donnell, R.~A. Servedio, and L.-Y. Tan (2019).
-Fooling polytopes.
-In \emph{Proceedings of the 51st Annual ACM SIGACT Symposium on
-Theory of Computing}, 614--625.
-\href{https://doi.org/10.1145/3313276.3316321}{doi:10.1145/3313276.3316321}.
-
-\bibitem{CCK}
-V. Chernozhukov, D. Chetverikov, and Y. Koike (2023).
-\emph{Nearly optimal central limit theorem and bootstrap approximations
-in high dimensions}.
-The Annals of Applied Probability \textbf{33}(3), 2374--2425.
-\href{https://doi.org/10.1214/22-AAP1870}{doi:10.1214/22-AAP1870}.
-Working version: arXiv:2012.09513v2, May 12, 2021.
-\url{https://arxiv.org/abs/2012.09513v2}.
-
-\bibitem{Local}
-V. Chernozhukov, D. Chetverikov, K. Kato, and Y. Koike,
-with AI collaborators (2026).
-\emph{High-dimensional Gaussian approximation over rectangles under
-local nondegeneracy}. Companion working manuscript supplied
-20 October 2026.
 
 \bibitem{CCK2013}
 V. Chernozhukov, D. Chetverikov, and K. Kato (2013).
@@ -1403,23 +1312,11 @@ V. Chernozhukov, D. Chetverikov, K. Kato, and Y. Koike (2022).
 high dimensions}. The Annals of Statistics \textbf{50}(5), 2562--2586.
 \href{https://doi.org/10.1214/22-AOS2193}{doi:10.1214/22-AOS2193}.
 
-\bibitem{GaoZhang}
-Z. Gao and W. Zhang (2026).
-\emph{Cubic-root Gaussian approximation under unrestricted covariance}.
-arXiv:2608.30221v1, 31 August 2026.
-\url{https://arxiv.org/abs/2608.30221v1}.
-
-\bibitem{FKLZ}
-X. Fang, Y. Koike, S.-H. Liu, and Y.-K. Zhao (2026).
-\emph{High-dimensional central limit theorems by Stein's method in
-the degenerate case}. The Annals of Applied Probability, to appear.
-\href{https://research.cuhk.edu.hk/en/publications/high-dimensional-central-limit-theorems-by-steins-method-in-the-d/}{Accepted manuscript (2026)}.
-
-\bibitem{Prekopa1973}
-\polish{A.~Pr\'ekopa (1973).
-\emph{On logarithmic concave measures and functions}.
-Acta Scientiarum Mathematicarum (Szeged) \textbf{34}, 335--343.
-\url{https://rutcor.rutgers.edu/Prekopa/pdf/SCIENT2.pdf}.}
+\bibitem{Local}
+V. Chernozhukov, D. Chetverikov, K. Kato, and Y. Koike,
+with AI collaborators (2026).
+\emph{High-dimensional Gaussian approximation over rectangles under
+local nondegeneracy}. Companion working manuscript\skl{, 21 October 2026}.
 
 \bibitem{Supplement}
 \polish{V.~Chernozhukov, D.~Chetverikov, K.~Kato, and Y.~Koike,
@@ -1429,6 +1326,28 @@ over rectangles without covariance restrictions}.
 Working manuscript, 20 October 2026, revision \texttt{bbf1ab99c733}.
 \href{https://github.com/VC2015/HDCLTs/blob/bbf1ab99c733a398c181ca8c9f5a243a41f258c6/research-rectangle-clt-singular/Rectangle_CLT_Supplement.pdf}{Supplement}.}
 
+\bibitem{CCK}
+V. Chernozhukov, D. Chetverikov, and Y. Koike (2023).
+\emph{Nearly optimal central limit theorem and bootstrap approximations
+in high dimensions}.
+The Annals of Applied Probability \textbf{33}(3), 2374--2425.
+\href{https://doi.org/10.1214/22-AAP1870}{doi:10.1214/22-AAP1870}.
+Working version: arXiv:2012.09513v2, May 12, 2021.
+\url{https://arxiv.org/abs/2012.09513v2}.
+
+\bibitem{FKLZ}
+X. Fang, Y. Koike, S.-H. Liu, and Y.-K. Zhao (2026).
+\emph{High-dimensional central limit theorems by Stein's method in
+the degenerate case}. The Annals of Applied Probability, to appear.
+\skl{arXiv:2305.17365.}
+\href{https://research.cuhk.edu.hk/en/publications/high-dimensional-central-limit-theorems-by-steins-method-in-the-d/}{Accepted manuscript (2026)}.
+
+\bibitem{GaoZhang}
+Z. Gao and W. Zhang (2026).
+\emph{Cubic-root Gaussian approximation under unrestricted covariance}.
+arXiv:2608.30221v1, 31 August 2026.
+\url{https://arxiv.org/abs/2608.30221v1}.
+
 \bibitem{Kane}
 \polish{D.~M. Kane (2014).
 \emph{The average sensitivity of an intersection of half spaces}.
@@ -1436,6 +1355,37 @@ Research in the Mathematical Sciences \textbf{1}, Article~13.
 \href{https://doi.org/10.1186/s40687-014-0013-6}{doi:10.1186/s40687-014-0013-6}.
 Working version: arXiv:1309.2987v3.
 \url{https://arxiv.org/abs/1309.2987v3}.}
+
+\bibitem{McFadden1989}
+D. McFadden (1989).
+\emph{A method of simulated moments for estimation of discrete
+response models without numerical integration}.
+Econometrica \textbf{57}(5), 995--1026.
+\href{https://doi.org/10.2307/1913621}{doi:10.2307/1913621}.
+
+\bibitem{OST}
+R. O'Donnell, R.~A. Servedio, and L.-Y. Tan (2019).
+Fooling polytopes.
+In \emph{Proceedings of the 51st Annual ACM SIGACT Symposium on
+Theory of Computing}, 614--625.
+\href{https://doi.org/10.1145/3313276.3316321}{doi:10.1145/3313276.3316321}.
+
+\bibitem{Prekopa1973}
+\polish{A.~Pr\'ekopa (1973).
+\emph{On logarithmic concave measures and functions}.
+Acta Scientiarum Mathematicarum (Szeged) \textbf{34}, 335--343.
+\url{https://rutcor.rutgers.edu/Prekopa/pdf/SCIENT2.pdf}.}
+
+\bibitem{IntegratedRemainder}
+\rev{\emph{Toward an integrated curvature estimate: a proved rank-one case
+and an entropy identity for the general problem}.
+Companion research note, 24 October 2026.
+\href{https://github.com/VC2015/HDCLTs/blob/main/research-rectangle-clt-singular/Rectangle_CLT_Integrated_Remainder.pdf}{\nolinkurl{Rectangle_CLT_Integrated_Remainder.pdf}}.}
+
+\bibitem{Obstruction}
+\rev{\emph{A curvature obstruction for two-scale smoothing}.
+Companion research note, 23 October 2026.
+\href{https://github.com/VC2015/HDCLTs/blob/main/research-rectangle-clt-singular/Rectangle_CLT_Curvature_Obstruction.pdf}{\nolinkurl{Rectangle_CLT_Curvature_Obstruction.pdf}}.}
 
 \end{thebibliography}
 
@@ -1491,13 +1441,15 @@ mixture representation of \(F\)\\
 \(\max_\alpha|u_\alpha\cdot x|\)\\
 \(\zeta_i^0;\ \zeta_i,\ \widetilde\zeta_i\) & summands in support coordinates; two
 independent copies of them\\
-\(\gamma,\ q,\ B_{i,\lambda}\) & amplitude \(1+\lambda\), selection
+\(\gamma,\ \sks{\varpi},\ \sks{\mathbb B}_{i,\lambda}\) & amplitude \(1+\lambda\), selection
 probability \((1-\lambda)/(1+\lambda)^2\), and the selection variables\\
 \(Y_i,\ V_\lambda,\ U_\lambda,\ H_i\) & selected summands
-\(\gamma B_{i,\lambda}\zeta_i^0\), their sum, the path, and the path with
+\(\gamma \sks{\mathbb B}_{i,\lambda}\zeta_i^0\), their sum, the path, and the path with
 summand \(i\) deleted\\
 \(V_0,\ \sigma,\ G,\ U\) & concentrated base, Gaussian scale, standard
-Gaussian vector on \(\R^r\), and \(U=V_0+\sigma G\)\\
+Gaussian vector on \(\R^r\), and \(U=V_0+\sigma G\)\skl{; the coordinate
+standard deviations \(\sigma_j\) of Corollary~\ref{cor:subexponential}
+carry a subscript}\\
 \(\Phi_r,\ \varphi_r,\ H_2,\ \surf\) & standard Gaussian measure and
 density on \(\R^r\), \(H_2(g)=\norm g^2-r\), and the Gaussian surface
 integral\\
@@ -1603,7 +1555,7 @@ Apply Theorem~\ref{thm:optimized}.
 
 
 % Source: zero_skewness_proof
-\subsection{When the cubic term cancels}\label{zs:section}
+\subsection{\texorpdfstring{\sks{Third-moment cancellation: the second part of Proposition~\ref{prop:moving-cutoff} and Theorem~\ref{thm:zero-skew}}}{Third-moment cancellation: the second part of Proposition 2 and Theorem 3}}\label{zs:section}
 \trim{This subsection proves the second part of
 Proposition~\ref{prop:moving-cutoff} and Theorem~\ref{thm:zero-skew}.}
 
@@ -1691,11 +1643,11 @@ the same variance and summand bound. The intersection
 \(\{\nu_\alpha\cdot x\le a_\alpha\}_{\alpha\le m}\) is the inverse
 image of the lower orthant \(\prod_{\alpha\le m}(-\infty,a_\alpha]\)
 in \(\R^m\); comparing thresholds increased and decreased by \(\rs t\)
-gives the shell in the concentration estimate. The orthant \pass{is} nonempty even when
+gives the \skl{boundary layer} in the concentration estimate. The orthant \pass{is} nonempty even when
 its inverse image is empty, so \trim{systems of inequalities with no
 common solution} are covered. Since \(m\le2p\), \pass{we have} \(\log(em)\le CL\).
 
-\subsection{\texorpdfstring{\trs{Mixture and derivative formulas}}{Mixture and derivative formulas}}
+\subsection{\texorpdfstring{\trs{Mixture and derivative formulas}}{Mixture and derivative formulas}}\label{appx-sec:mixture}
 
 \trim{We keep the notation of Subsection~\ref{sec:outline-smoothing} for
 the faces \(\alpha=1,\ldots,m\) of \(A\), with \trim{outward} normals
@@ -1728,15 +1680,15 @@ thresholds are shifted at random by
 exponentials. To verify it, observe that, conditional on
 \(\rs{\omega_0}\), the probability that \(x\in A_{\rs\omega}\)} is
 \(e^{-\rs{\omega_0}T(x)}\), and its expectation is \((1+T(x))^{-1}\).
-Equivalently, \(G_\beta=-\log\rs{\omega_\beta}\) are independent standard
+Equivalently, \skl{the variables \(-\log\omega_\beta\)} are independent standard
 Gumbel variables, so
 \[
- F_{A,h}(x)=\Pp\!\left\{hG_0\ge
- \max_\alpha(\nu_\alpha\cdot x-a_\alpha+hG_\alpha)\right\}.
+ F_{A,h}(x)=\Pp\!\left\{\sks{-h\log\omega_0}\ge
+ \max_\alpha(\nu_\alpha\cdot x-a_\alpha-\sks{h\log\omega_\alpha})\right\}.
 \]
 \rev{Here the baseline \trim{category} has deterministic score zero, and the face
-displacements \(h(G_0-G_\alpha)\) have logistic marginals and are
-dependent through \(G_0\); independent logistic displacements would give
+displacements \(\sks{h\log(\omega_\alpha/\omega_0)}\) have logistic marginals and are
+dependent through \(\sks{\omega_0}\); independent logistic displacements would give
 a different approximation. McFadden~\cite[p.~1001]{McFadden1989} uses
 the same random-utility representation, and Gao and
 Zhang~\cite[Lemma~14]{GaoZhang} state it for their softmax weights.} \revnote{Citation of the unavailable
@@ -1789,6 +1741,12 @@ changes by a factor in
 After summing over coordinate tuples and face indices, the terms with
 \(k\) blocks are bounded by a constant times
 \(h^{-q}T^k/(1+T)^{k+1}\le h^{-q}F(1-F)\).
+
+\skl{In the next lemma, \(U\) has an independent component in the sense
+that \(U=S+R\), where \(S\) is independent of \(R\) and \(S\) is either a
+sum of independent centered vectors with summand bound \(2\delta\) and
+equal coordinate variances at least \(1/2\), or a centered Gaussian vector
+with equal coordinate variances at least \(1/2\).}
 
 \begin{lemma}[Averaging the derivative envelope]\label{appx-lem:envelope}
 Suppose a random vector \(U\) has an independent component that is
@@ -2059,7 +2017,7 @@ Subsection~\ref{sec:outline-late}, a random translation \(V_0\) of
 \end{equation}
 The property passes to subsystems, by sending unused thresholds to
 infinity, and to deterministic translates of~\(V_0\). Under \(\Gamma\),
-the event in~\eqref{appx-an:concentration} is a boundary shell of a system
+the event in~\eqref{appx-an:concentration} is a boundary \skl{layer} of a system
 of coordinate inequalities. Lemma~\ref{lem:concentration}, applied
 to the \trim{vector of face projections} as in Appendix~\ref{appx-sec:smoothing}, will
 therefore show that every base used below is concentrated.
@@ -2084,7 +2042,7 @@ The proof of Lemma~\ref{appx-lem:envelope} uses only the concentration
 of its base and therefore applies here. It rests on the inequality
 \(F(1-F)\le\frac e2(F_h-F_{-h})\) for the common threshold shifts
 \(\pm h\), and on the fact that \(F_h-F_{-h}\) is an average of
-indicators of shells of width~\(2h\), each of probability at most
+indicators of \skl{boundary layers} of width~\(2h\), each of probability at most
 \(C_0(h+\delta)\sqrt L\). The same bound holds for the function
 \(e^{t_j}/(1+e^{t_j})^2\) of a single inequality, since it is \(F(1-F)\)
 for the subsystem consisting of that face.
@@ -2093,21 +2051,21 @@ for the subsystem consisting of that face.
 \label{appx-an:sec:path}
 
 \trim{In support coordinates, the path~\eqref{eq:path} of
-Subsection~\ref{sec:outline-path}, with the same \(\gamma\), \(q\), and
-\(B_{i,\lambda}\), reads}
+Subsection~\ref{sec:outline-path}, with the same \(\gamma\), \(\sks{\varpi}\), and
+\(\sks{\mathbb B}_{i,\lambda}\), reads}
 \begin{equation}
- Y_i=\gamma B_{i,\lambda}\zeta_i^0,\qquad V_\lambda=\sum_iY_i,
+ Y_i=\gamma \sks{\mathbb B}_{i,\lambda}\zeta_i^0,\qquad V_\lambda=\sum_iY_i,
  \qquad U_\lambda=V_\lambda+\sqrt\lambda\,G,
  \qquad \trs{0\le\lambda\le1},
  \label{appx-an:path}
 \end{equation}
-where the selection variables \(B_{i,\lambda}\), the summands, and \(G\) are
+where the selection variables \(\sks{\mathbb B}_{i,\lambda}\), the summands, and \(G\) are
 independent. Only the law of \(U_\lambda\) at each \(\lambda\) is used,
-so no coupling across \(\lambda\) is needed. Since \(q\gamma^2=1-\lambda\),
+so no coupling across \(\lambda\) is needed. Since \(\sks{\varpi}\gamma^2=1-\lambda\),
 the covariance of \(U_\lambda\) is \(I_r\) for every \(\lambda\), and
 \(\Gamma U_\lambda\) has the law of the path~\eqref{eq:path}; hence
 \(P_A(\lambda)=\E F(U_\lambda)\). \trim{Since} the cubic coefficient
-\(q\gamma^3=1-\lambda^2\) has zero derivative at \(\lambda=0\)\trim{, as
+\(\sks{\varpi}\gamma^3=1-\lambda^2\) has zero derivative at \(\lambda=0\)\trim{, as
 arranged in Subsection~\ref{sec:outline-path},} the cubic part of the
 early bound~\eqref{an:early} vanishes linearly in~\(\lambda\).
 
@@ -2118,18 +2076,7 @@ independent of the path and of~\(G\). Thus \(\E\zeta_i^{\otimes3}\) is
 the third-moment tensor of summand~\(i\).
 
 The next lemma splits \(P_A'(\lambda)\) into a cubic term at the full
-path and three fourth-order corrections. The term \(\mathcal A_i\) is
-the Taylor remainder of the \(i\)th summand; the term \(\mathcal B_i\) arises
-because the Gaussian heat term acts at the full path while the quadratic
-part of the summand acts at the leave-one-out base; and the term
-\(\mathcal C_i\) moves the cubic part of the summand from \(H_i\) back to
-\(U_\lambda\), which places all the cubic tensors at one base, where
-their aggregate can cancel. \rev{Steps~1 and~2 of the proof follow
-Aronow and Lopatto's proof of their Lemma~4.1~\cite[eqs.~(20)
-and~(21)]{AL}, with the same fourth-order kernel. They leave the cubic
-term at the leave-one-out base; Step~3 moves it to the full path, which
-gives the identity the form of Gao and Zhang's derivative
-identity~\cite[Lemma~22, eq.~(15)]{GaoZhang} for their path.}
+path and three fourth-order corrections.
 
 \begin{lemma}[Exact fourth-order identity]\label{appx-an:lem:identity}
 For \(0<\lambda<1\),
@@ -2163,40 +2110,53 @@ where
  \label{appx-an:C}
 \end{align}
 \end{lemma}
+\lin{In~\eqref{appx-an:fourth-identity}, the term \(\mathcal A_i\) is
+the Taylor remainder of the \(i\)th summand; the term \(\mathcal B_i\) arises
+because the Gaussian heat term acts at the full path while the quadratic
+part of the summand acts at the leave-one-out base; and the term
+\(\mathcal C_i\) moves the cubic part of the summand from \(H_i\) back to
+\(U_\lambda\), which places all the cubic tensors at one base, where
+their aggregate can cancel.}
+\rev{Steps~1 and~2 of the proof follow
+Aronow and Lopatto's proof of their Lemma~4.1~\cite[eqs.~(20)
+and~(21)]{AL}, with the same fourth-order kernel. They leave the cubic
+term at the leave-one-out base; Step~3 moves it to the full path, which
+gives the identity the form of Gao and Zhang's derivative
+identity~\cite[Lemma~22, eq.~(15)]{GaoZhang} for their path.}
 
 \begin{proof}
 Write \(M_i=\E\zeta_i\zeta_i^\top\) and
-\(K_i^{(3)}=\E\zeta_i^{\otimes3}\). All differentiations below are
+\(\sks{M_i^{(3)}}=\E\zeta_i^{\otimes3}\). All differentiations below are
 legitimate for fixed \(h>0\), since the number of summands is finite, the summands are
 bounded, and \(F\) and its derivatives are bounded.
 
 \emph{Step 1: the summand operators.} For a smooth function \(f\), the
 \(i\)th summand acts through
 \[
- \ps{\mathcal S_i}f(x)=(1-q)f(x)+q\E f(x+\gamma\zeta_i).
+ \ps{\mathcal S_i}f(x)=(1-\sks{\varpi})f(x)+\sks{\varpi}\E f(x+\gamma\zeta_i).
 \]
 Since \(\gamma'=1\), differentiation in \(\lambda\) gives
 \[
- \ps{\dot{\mathcal S}_i}f(x)=q'\{\E f(x+\gamma\zeta_i)-f(x)\}
-                  +q\E Df(x+\gamma\zeta_i)[\zeta_i].
+ \ps{\dot{\mathcal S}_i}f(x)=\sks{\varpi}'\{\E f(x+\gamma\zeta_i)-f(x)\}
+                  +\sks{\varpi}\E Df(x+\gamma\zeta_i)[\zeta_i].
 \]
 Expand the difference by Taylor's formula through degree three, and the
 derivative through degree two. Centering removes the linear terms. Since
-\((q\gamma^2)'=-1\) and \((q\gamma^3)'=-2\lambda\), the result is
+\((\sks{\varpi}\gamma^2)'=-1\) and \((\sks{\varpi}\gamma^3)'=-2\lambda\), the result is
 \[
  \ps{\dot{\mathcal S}_i}f
  =-\tfrac12 M_i:D^2f
-   -\tfrac\lambda3 K_i^{(3)}:D^3f
+   -\tfrac\lambda3 \sks{M_i^{(3)}}:D^3f
    +\int_0^1k_\lambda(s)
         \E D^4f(\,\cdot+s\gamma\zeta_i)[\zeta_i^4]\dd s,
 \]
 where \([\zeta_i^4]\) means four repeated arguments. The fourth-order
 kernel is exactly
 \[
- \frac{q'\gamma^4}{6}(1-s)^3+\frac{q\gamma^3}{2}(1-s)^2
+ \frac{\sks{\varpi}'\gamma^4}{6}(1-s)^3+\frac{\sks{\varpi}\gamma^3}{2}(1-s)^2
  =\frac\gamma6(1-s)^2\{(3-\lambda)s-2\lambda\},
 \]
-because \(q'=-(3-\lambda)/\gamma^3\) and \(q\gamma^3=(1-\lambda)\gamma\).
+because \(\sks{\varpi}'=-(3-\lambda)/\gamma^3\) and \(\sks{\varpi}\gamma^3=(1-\lambda)\gamma\).
 The derivative of \(P_A\) collects \(\ps{\dot{\mathcal S}_i}\) applied with the other
 summands and the Gaussian vector held fixed, that is, at the base~\(H_i\).
 The fourth-order part of this expansion gives \(\mathcal A_i\).
@@ -2210,18 +2170,18 @@ contributes \(\tfrac12\sum_iM_i:\E D^2F(U_\lambda)\), because
 \]
 Conditional on \(H_i\), the deleted summand \(Y_i\) is centered and
 independent of~\(H_i\). Its second-order Taylor formula, with
-\(q\gamma^2=1-\lambda\), identifies this expression with
+\(\sks{\varpi}\gamma^2=1-\lambda\), identifies this expression with
 \(\sum_i\mathcal B_i\).
 
 \emph{Step 3: moving the cubic term.} Finally,
 \[
- -\frac\lambda3 K_i^{(3)}:\E D^3F(H_i)
- =-\frac\lambda3 K_i^{(3)}:\E D^3F(U_\lambda)
-   +\frac\lambda3 K_i^{(3)}:
+ -\frac\lambda3 \sks{M_i^{(3)}}:\E D^3F(H_i)
+ =-\frac\lambda3 \sks{M_i^{(3)}}:\E D^3F(U_\lambda)
+   +\frac\lambda3 \sks{M_i^{(3)}}:
           \E\{D^3F(U_\lambda)-D^3F(H_i)\}.
 \]
 A first-order integral expansion of the last difference is exactly
-\(\mathcal C_i\), because \(q\gamma=(1-\lambda)/\gamma\). The first term
+\(\mathcal C_i\), because \(\sks{\varpi}\gamma=(1-\lambda)/\gamma\). The first term
 on the right is the cubic term of~\eqref{appx-an:fourth-identity}. This
 proves the identity.
 \end{proof}
@@ -2327,6 +2287,8 @@ integer \(k\ge1\),
 \end{equation}
 where \(C_1\ge1\) is an absolute constant\trim{ and the} sum runs over
 all \(m^k\) ordered tuples of faces.
+\skl{In the next lemma, the random vectors \(Z_i\) and \(Z_{i,a}\) are
+auxiliary arrays in \(\R^r\), unrelated to the Gaussian target~\(Z\).}
 
 \begin{lemma}[Paired derivatives at translated bases]
 \label{appx-an:lem:restoration}
@@ -2396,13 +2358,13 @@ If \(\norm v_U\le b\delta\), then \(|d_j(v)|\le\epsilon\) and
 convergent expansion
 \[
  \{1+z_v\}^{-k-1}
- =\sum_{\ell\ge0}(-1)^\ell\binom{k+\ell}{\ell}z_v^\ell,
+ =\sum_{\sks{t}\ge0}(-1)^{\sks{t}}\binom{k+\sks{t}}{\sks{t}}z_v^{\sks{t}},
  \qquad
- z_v^\ell=\sum_{\beta_1,\ldots,\beta_\ell}
-                \prod_{q=1}^\ell\pi_{\beta_q}(x)d_{\beta_q}(v).
+ z_v^{\sks{t}}=\sum_{\beta_1,\ldots,\beta_{\sks{t}}}
+                \prod_{q=1}^{\sks{t}}\pi_{\beta_q}(x)d_{\beta_q}(v).
 \]
-Thus a term of order \(\ell\) carries the weight
-\(F(U)\prod_a\pi_{\alpha_a}(U)\prod_q\pi_{\beta_q}(U)\), with \(k+\ell\)
+Thus a term of order \(\sks{t}\) carries the weight
+\(F(U)\prod_a\pi_{\alpha_a}(U)\prod_q\pi_{\beta_q}(U)\), with \(k+\sks{t}\)
 factors \(\pi\), all evaluated at the common base~\(U\).
 
 \emph{Step 3: the sum over \(i\).} For fixed face tuples \(\alpha\) and
@@ -2412,16 +2374,16 @@ factors \(\pi\), all evaluated at the common base~\(U\).
   Z_iZ_i^\top
   \prod_{a=1}^k\prod_{\iota\in J_a}(u_{\alpha_a}\cdot Z_{i,\iota})\,
   e^{\sum_a u_{\alpha_a}\cdot v_i/h}
-  \prod_{q=1}^\ell d_{\beta_q}(v_i)
+  \prod_{q=1}^{\sks{t}} d_{\beta_q}(v_i)
        \,\middle|\,\mathcal H\right].
 \]
 For every deterministic vector \(z\), the bounds
 in~\eqref{appx-an:conditional-budget} give, pointwise in~\(\mathcal H\),
 \[
  |z^\top\Xi_{\alpha,\beta}z|
- \le\delta^se^{kb\delta/h}\epsilon^\ell
+ \le\delta^se^{kb\delta/h}\epsilon^{\sks{t}}
                \sum_i\E[(z\cdot Z_i)^2\mid\mathcal H]
- \le\delta^se^{kb\delta/h}\epsilon^\ell\norm{z}^2.
+ \le\delta^se^{kb\delta/h}\epsilon^{\sks{t}}\norm{z}^2.
 \]
 The matrix is symmetric, so its operator norm obeys the same bound, for
 every realization of~\(\mathcal H\). This step uses the covariance
@@ -2431,13 +2393,13 @@ every realization of~\(\mathcal H\). This step uses the covariance
 operator norm and the nuclear norm,
 \(|\tr(\Xi M)|\le\norm{\Xi}_{\mathrm{op}}\norm{M}_*\). Apply it to each
 pair of tuples, average over \(\mathcal H\), and
-use~\eqref{appx-an:matrix-bound} with \(k+\ell\) weights. Only the
+use~\eqref{appx-an:matrix-bound} with \(k+\sks{t}\) weights. Only the
 averaged matrix estimate uses the concentration of~\(V_0\), so no
 concentration conditional on \(\mathcal H\) is needed. The resulting
 series is at most
 \[
  e^{kb\delta/h}C_1^{k+1}
- \sum_{\ell\ge0}\binom{k+\ell}{\ell}(C_1\epsilon)^\ell
+ \sum_{\sks{t}\ge0}\binom{k+\sks{t}}{\sks{t}}(C_1\epsilon)^{\sks{t}}
  =e^{kb\delta/h}C_1^{k+1}(1-C_1\epsilon)^{-k-1}
  \le C_b^{k+1},
 \]
@@ -2448,7 +2410,7 @@ proves~\eqref{appx-an:restoration-bound}.
 
 The interchanges of sums and expectations can first be justified with a
 finite bound that depends on~\(r\). The absolute face sums at order
-\(\ell\) are at most \(\epsilon^\ell\), and their binomial series sums to
+\(\sks{t}\) are at most \(\epsilon^{\sks{t}}\), and their binomial series sums to
 \((1-\epsilon)^{-k-1}\). Moreover \(\sum_i\E\norm{Z_i}^2\le r\), so the
 \trim{factor \(\tr\{(GG^\top-I_r)Z_iZ_i^\top\}\)} is integrable after summing over the arrays. This finite
 bound serves only the justification and does not enter the estimate.
@@ -2592,7 +2554,7 @@ write
 \emph{Step 1: the tilt and the trace reduction.} The logarithm of
 \(w_\alpha\) is a linear function of \(g\) minus
 \((k+1)\log N(V_0+\sigma g)\), and \(\log N\) is convex, so \(w_\alpha\)
-is log-concave. Let \(\mu_\alpha\) and \(K_\alpha\) be the mean and
+is log-concave. Let \(\mu_\alpha\) and \(\sks{\Sigma_\alpha}\) be the mean and
 covariance of the Gaussian law tilted by \(w_\alpha\). Pr\'ekopa's
 theorem~\cite[Theorem~6]{Prekopa1973} states that integrating a
 log-concave function of two vectors over one of them leaves a
@@ -2602,15 +2564,15 @@ function of \((z,g)\) under the integral, it shows that the function
  z\longmapsto\int_{\R^r}e^{-\norm{g-z}^2/2}w_\alpha(g)\dd g
 \]
 is log-concave. The Hessian of its logarithm at zero is
-\(K_\alpha-I_r\), so \(K_\alpha\preceq I_r\). \rev{For indicators of
+\(\sks{\Sigma_\alpha}-I_r\), so \(\sks{\Sigma_\alpha}\preceq I_r\). \rev{For indicators of
 convex cells, Gao and Zhang~\cite[Lemma~11]{GaoZhang} obtain the same
 bound from the Brascamp--Lieb inequality\pass{, a variance bound for log-concave
 laws}.} Now
-\(\E_G[(GG^\top-I_r)w_\alpha(G)]=p_\alpha(K_\alpha-I_r+\mu_\alpha\mu_\alpha^\top)\).
-Since \(I_r-K_\alpha\succeq0\), the nuclear norm of the right side is at
-most \(p_\alpha\{\tr(I_r-K_\alpha)+\norm{\mu_\alpha}^2\}\), and its trace is
-\(p_\alpha(\tr K_\alpha-r+\norm{\mu_\alpha}^2)=\E_G[H_2(G)w_\alpha(G)]\),
-where \(H_2(g)=\norm g^2-r\). Eliminating \(\tr K_\alpha\) gives
+\(\E_G[(GG^\top-I_r)w_\alpha(G)]=p_\alpha(\sks{\Sigma_\alpha}-I_r+\mu_\alpha\mu_\alpha^\top)\).
+Since \(I_r-\sks{\Sigma_\alpha}\succeq0\), the nuclear norm of the right side is at
+most \(p_\alpha\{\tr(I_r-\sks{\Sigma_\alpha})+\norm{\mu_\alpha}^2\}\), and its trace is
+\(p_\alpha(\tr \sks{\Sigma_\alpha}-r+\norm{\mu_\alpha}^2)=\E_G[H_2(G)w_\alpha(G)]\),
+where \(H_2(g)=\norm g^2-r\). Eliminating \(\tr \sks{\Sigma_\alpha}\) gives
 \begin{equation}
  \left\|\E_G[(GG^\top-I_r)w_\alpha(G)]\right\|_*
  \le2p_\alpha\norm{\mu_\alpha}^2
@@ -2622,7 +2584,7 @@ where \(H_2(g)=\norm g^2-r\). Eliminating \(\tr K_\alpha\) gives
 unity, as the indicators of convex cells do in Gao and Zhang's
 Lemma~12, the trace terms would add up to \(\E H_2(G)=0\). Here they add
 up to \(\E_G[H_2(G)F(U)\theta(U)^k]\), which Step~4 bounds.}
-It remains to bound the sum over \(\alpha\) of each term on the right.
+\skl{We now} bound the sum over \(\alpha\) of each term on the right.
 
 \emph{Step 2: the means.} Use the first face of each tuple as a
 one-dimensional reference. For a tuple whose first entry is \(j\), put
@@ -2681,17 +2643,17 @@ taken}. Shift every threshold by \(s\), and write
 \]
 so the \trim{trace term} is a derivative in a common threshold shift. To turn
 it into a surface integral, we represent powers of \(F_s\) as mixtures of
-polyhedral indicators. For an integer \(\ell\ge1\), let
-\(T_\ell\sim\operatorname{Gamma}(\ell,1)\) and let \(\omega_j\) be
+polyhedral indicators. For an integer \(\sks{t}\ge1\), let
+\(T_{\sks{t}}\sim\operatorname{Gamma}(\sks{t},1)\) and let \(\omega_j\) be
 independent unit exponentials, all independent of \(V_0\) and~\(G\). The
 Laplace transform of the Gamma law gives
 \begin{equation}
- F_s(x)^\ell=
- \Pp\{u_j\cdot x\le a_j+s+h\log(\omega_j/T_\ell),\ j\le m\}.
+ F_s(x)^{\sks{t}}=
+ \Pp\{u_j\cdot x\le a_j+s+h\log(\omega_j/T_{\sks{t}}),\ j\le m\}.
  \label{appx-an:gamma-mixture}
 \end{equation}
-Expand \(\theta_s^k=\sum_{\ell=0}^k(-1)^\ell\binom k\ell F_s^\ell\). The
-absolute coefficients sum to \(2^k\), and the term \(\ell=0\) has zero
+Expand \(\theta_s^k=\sum_{\sks{t}=0}^k(-1)^{\sks{t}}\binom k{\sks{t}} F_s^{\sks{t}}\). The
+absolute coefficients sum to \(2^k\), and the term \(\sks{t}=0\) has zero
 derivative. The first-variation formula at the end of
 Subsection~\ref{appx-an:sec:surface}, which expresses the derivative of a
 Gaussian integral over a polyhedron, when all its faces move outward at
@@ -2703,7 +2665,7 @@ and Lemma~\ref{appx-an:lem:surface} yield
    \sup_Q\E_{V_0}|\surf((Q-V_0)/\sigma)|
  \le C2^khL^{3/2}.
 \]
-The common shift \(-h\log T_\ell\) has an absolutely continuous law, so
+The common shift \(-h\log T_{\sks{t}}\) has an absolutely continuous law, so
 the first-variation formula applies\trim{, although the polyhedron
 may become lower dimensional at exceptional values of the shift}.
 
@@ -2732,7 +2694,8 @@ polyhedron \emph{proper} if it is neither empty nor the whole space, and
 \(\surf(Q)\) is defined for} proper, full-dimensional \trim{polyhedra} \(Q\)
 with normals among \(u_1,\ldots,u_m\), \trim{with} each facet counted
 once\trim{, and we} set \(\surf(Q)=0\) when \(Q\) is empty or the whole
-space.
+space. \lin{We call the polyhedra \(Q\) whose rescaled translates
+\((Q-V_0)/\sigma\) are averaged target polyhedra.}
 
 \begin{lemma}[Averaged scalar surface]\label{appx-an:lem:surface}
 Let \(V_0\) be a concentrated base, and let \(0<\sigma\le1\). Uniformly
@@ -2837,18 +2800,18 @@ threshold
 system contains redundant inequalities.
 
 \emph{Step 3: dyadic summation.} Divide the facet and ridge offsets into
-dyadic shells. Let \(R_\ell=2^{\ell+1}\) for \(\ell\ge0\). The zeroth shell
+dyadic shells. Let \(R_{\sks{\iota}}=2^{\sks{\iota}+1}\) for \(\sks{\iota}\ge0\). The zeroth shell
 contains the facet offsets of absolute value at most \(2\) and the ridge
-offsets of norm at most \(2\); shell \(\ell\ge1\) contains the offsets in
-\((R_\ell/2,R_\ell]\). Let \(\mathcal O_\ell(V_0)\) be the union of the
-associated tubes, all of radius \((1+R_\ell)^{-1}\). Then
+offsets of norm at most \(2\); shell \(\sks{\iota}\ge1\) contains the offsets in
+\((R_{\sks{\iota}}/2,R_{\sks{\iota}}]\). Let \(\mathcal O_{\sks{\iota}}(V_0)\) be the union of the
+associated tubes, all of radius \((1+R_{\sks{\iota}})^{-1}\). Then
 \begin{equation}
- |\surf(Q')|\le C\sum_{\ell\ge0}R_\ell^3\,
-                         \Phi_r(\mathcal O_\ell(V_0)).
+ |\surf(Q')|\le C\sum_{\sks{\iota}\ge0}R_{\sks{\iota}}^3\,
+                         \Phi_r(\mathcal O_{\sks{\iota}}(V_0)).
  \label{appx-an:dyadic-tubes}
 \end{equation}
 To average over \(V_0\), we record two consequences of the event
-\(G\in\mathcal O_\ell(V_0)\). Let \(\Pi_{jk}\) be the orthogonal
+\(G\in\mathcal O_{\sks{\iota}}(V_0)\). Let \(\Pi_{jk}\) be the orthogonal
 projection onto \(\operatorname{span}(u_j,u_k)\) for linearly independent
 pairs, and put
 \[
@@ -2856,31 +2819,31 @@ pairs, and put
    \max_{j,k:\,u_j,u_k\text{ independent}}\norm{\Pi_{jk}G}\Bigr\},
 \]
 omitting the second maximum when it is empty. First, if
-\(G\in\mathcal O_\ell(V_0)\) and \(\ell\ge1\), then
-\(\mathcal M(G)\ge R_\ell/2-1\), since the relevant facet coordinate or
+\(G\in\mathcal O_{\sks{\iota}}(V_0)\) and \(\sks{\iota}\ge1\), then
+\(\mathcal M(G)\ge R_{\sks{\iota}}/2-1\), since the relevant facet coordinate or
 ridge projection of \(G\) differs from the shell offset by at most one.
-Second, for every \(\ell\),
+Second, for every \(\sks{\iota}\),
 \[
- G\in\mathcal O_\ell(V_0)
+ G\in\mathcal O_{\sks{\iota}}(V_0)
  \quad\Longrightarrow\quad
- V_0+\sigma G\in Q^{\sigma/(1+R_\ell)}\setminus Q.
+ V_0+\sigma G\in Q^{\sigma/(1+R_{\sks{\iota}})}\setminus Q.
 \]
 Condition on \(G\), apply~\eqref{appx-an:concentration} to the last event,
 and retain the necessary event involving \(\mathcal M(G)\). This gives
 \[
- \E\,\Phi_r(\mathcal O_\ell(V_0))
- \le C(\sigma/R_\ell+\delta)\sqrt L\,\beta_\ell,
+ \E\,\Phi_r(\mathcal O_{\sks{\iota}}(V_0))
+ \le C(\sigma/R_{\sks{\iota}}+\delta)\sqrt L\,\beta_{\sks{\iota}},
 \]
-where \(\beta_0=1\) and \(\beta_\ell=\Pp\{\mathcal M(G)\ge R_\ell/2-1\}\)
-for \(\ell\ge1\). The maximum defining \(\mathcal M\) involves at most
+where \(\beta_0=1\) and \(\beta_{\sks{\iota}}=\Pp\{\mathcal M(G)\ge R_{\sks{\iota}}/2-1\}\)
+for \(\sks{\iota}\ge1\). The maximum defining \(\mathcal M\) involves at most
 \(m+m^2\) one- or two-dimensional Gaussian projections, so
 \[
- \beta_\ell\le\min\{1,Cm^2e^{-c_*R_\ell^2}\},\qquad \ell\ge1.
+ \beta_{\sks{\iota}}\le\min\{1,Cm^2e^{-c_*R_{\sks{\iota}}^2}\},\qquad \sks{\iota}\ge1.
 \]
-Splitting the dyadic sum where \(R_\ell\) is of order
+Splitting the dyadic sum where \(R_{\sks{\iota}}\) is of order
 \(\sqrt{\log(em)}\) yields, for \(q=2,3\),
 \[
- \sum_{\ell\ge0}R_\ell^q\beta_\ell
+ \sum_{\sks{\iota}\ge0}R_{\sks{\iota}}^q\beta_{\sks{\iota}}
  \le C_q\{\log(em)\}^{q/2}\le C_qL^{q/2}.
 \]
 Taking expectations in~\eqref{appx-an:dyadic-tubes} and using Tonelli's
@@ -3172,69 +3135,70 @@ The unrestricted bound follows from the bound by one, after adjusting its absolu
 constant, when \(b\ge1/16\), so assume \(b<1/16\).
 
 \emph{Step 1: Clip the \rs{summands} and bound the residual sum.}
-Put \(u=4\ell\), \(T=Ku\), and define coordinatewise
+\skl{With the clipping level \(4K\ell\),} define coordinatewise
 \[
- C_T(x)=\operatorname{sgn}(x)\min\{|x|,T\},\qquad
- Y_i=C_T(X_i)-\E C_T(X_i),\qquad R_i=X_i-C_T(X_i).
+ C_T(x)=\operatorname{sgn}(x)\min\{|x|,\sks{4K\ell}\},\qquad
+ Y_i=C_T(X_i)-\E C_T(X_i),\qquad \sks{D}_i=X_i-C_T(X_i).
 \]
-Here \(Y_i\) is the centered clipped \rs{summand} and \(R_i\) is the discarded
-part. Their normalized sums satisfy
+Here \(Y_i\) is the centered clipped \rs{summand} and \(\sks{D}_i\) is the discarded
+part. Their normalized sums\skl{, marked by the subscripts \(T\) and \(D\),} satisfy
 \[
  W_T=n^{-1/2}\sum_iY_i,\qquad
- V=n^{-1/2}\sum_i(R_i-\E R_i),\qquad W_n=W_T+V.
+ \sks{W_D}=n^{-1/2}\sum_i(\sks{D}_i-\E \sks{D}_i),\qquad W_n=W_T+\sks{W_D}.
 \]
 The exponential-moment assumption gives, for \(t\ge0\),
 \[
- \Pp(|R_{ij}|>t)\le2e^{-u-t/K},\qquad
- \E|R_{ij}|^k\le2k!K^ke^{-u}\quad(k\ge1).
+ \Pp(|\sks{D}_{ij}|>t)\le2e^{-\sks{4\ell}-t/K},\qquad
+ \E|\sks{D}_{ij}|^k\le2k!K^ke^{-\sks{4\ell}}\quad(k\ge1).
 \]
 In particular, independence of the \rs{summands} implies
 \begin{equation}
- \max_j\Var(V_j)\le4K^2e^{-u}.
+ \max_j\Var(\sks{W_{D,j}})\le4K^2e^{-\sks{4\ell}}.
  \label{tail:residual-moments}
 \end{equation}
-The pointwise bound \(e^{|R_{ij}|/K}\le1+e^{-u}e^{|X_{ij}|/K}\)
-gives \(\E e^{|R_{ij}|/K}\le1+2e^{-u}\). Together with
-\(\E|R_{ij}|\le2Ke^{-u}\), independence and the triangle inequality
+The pointwise bound \(e^{|\sks{D}_{ij}|/K}\le1+e^{-\sks{4\ell}}e^{|X_{ij}|/K}\)
+gives \(\E e^{|\sks{D}_{ij}|/K}\le1+2e^{-\sks{4\ell}}\). Together with
+\(\E|\sks{D}_{ij}|\le2Ke^{-\sks{4\ell}}\), independence and the triangle inequality
 therefore yield
 \begin{align*}
- \E\exp\!\left(\frac{\sqrt n\,|V_j|}{K}\right)
- &\le\exp\!\left(\frac1K\sum_i\E|R_{ij}|\right)
-          \prod_i\E e^{|R_{ij}|/K}\\
- &\le e^{2ne^{-u}}(1+2e^{-u})^n
- \le e^{4ne^{-u}}.
+ \E\exp\!\left(\frac{\sqrt n\,|\sks{W_{D,j}}|}{K}\right)
+ &\le\exp\!\left(\frac1K\sum_i\E|\sks{D}_{ij}|\right)
+          \prod_i\E e^{|\sks{D}_{ij}|/K}\\
+ &\le e^{2ne^{-\sks{4\ell}}}(1+2e^{-\sks{4\ell}})^n
+ \le e^{4ne^{-\sks{4\ell}}}.
 \end{align*}
-For \(s=\log(4np)\), Markov's inequality gives
+For \(\sks{\bar L}=\log(4np)\), Markov's inequality gives
 \[
- \Pp\!\left(\sqrt n\,|V_j|\ge K[s+4ne^{-u}]\right)\le e^{-s}.
+ \Pp\!\left(\sqrt n\,|\sks{W_{D,j}}|\ge K[\sks{\bar L}+4ne^{-\sks{4\ell}}]\right)\le e^{-\sks{\bar L}}.
 \]
 Since \(n,p\ge1\),
 \[
- 4ne^{-u}=4e^{-4}n^{-3}\le\frac14\le\log4\le s.
+ 4ne^{-\sks{4\ell}}=4e^{-4}n^{-3}\le\frac14\le\log4\le \sks{\bar L}.
 \]
 A coordinate union bound now yields
 \begin{equation}
- \Pp(\|V\|_\infty>r_1)\le\frac1{4n}\le\frac1{2n},\qquad
- r_1=\frac{2Ks}{\sqrt n}.
+ \Pp(\|\sks{W_D}\|_\infty>\sks{\varrho_1})\le\frac1{4n}\le\frac1{2n},\qquad
+ \sks{\varrho_1}=\frac{2K\sks{\bar L}}{\sqrt n}.
  \label{tail:sum-coupling}
 \end{equation}
 \rev{Since the union bound is applied to the residual sums, the clipping
 level can depend only on \(\log n\).}
 
 \emph{Step 2: Apply the bounded comparison.}
-Set \(\rs{\sigma_{T,j}}=\sqrt{\Var(W_{T,j})}\) and \(\tau=2Ke^{-u/2}\).
+Set \(\tau=2Ke^{-\sks{2\ell}}\)\skl{, and write \(\operatorname{sd}(W_{T,j})\) for the
+standard deviation of the \(j\)th coordinate of~\(W_T\)}.
 Since each coordinate of \(W_n\) has variance one, the triangle
 inequality in \(L^2\) gives
 \[
- |\rs{\sigma_{T,j}}-1|\le\tau,
+ |\sks{\operatorname{sd}(W_{T,j})}-1|\le\tau,
  \qquad \frac\tau b=\frac{2\sqrt n\,e^{-2\ell}}\ell
  \le\frac2{e^2}.
 \]
-Hence \(\rs{\sigma_{T,j}}\ge1/2\). Since \(\|Y_i\|_\infty\le2T\), the
+Hence \(\sks{\operatorname{sd}(W_{T,j})}\ge1/2\). Since \(\|Y_i\|_\infty\le\sks{8K\ell}\), the
 independent centered \rs{summands} of the marginally standardized \(W_T\)
 have envelope at most
 \[
- \frac{2T}{\sqrt n\min_j\rs{\sigma_{T,j}}}\le16b.
+ \frac{\sks{8K\ell}}{\sqrt n\min_j\sks{\operatorname{sd}(W_{T,j})}}\le16b.
 \]
 Let \(Z_T\) be Gaussian with covariance \(\Cov(W_T)\).
 Positive diagonal scaling preserves rectangle distance. Applying
@@ -3248,14 +3212,14 @@ The factor 16 is absorbed into the absolute constant, since increasing
 the envelope decreases the logarithmic factor.
 
 \emph{Step 3: Restore the covariance.}
-Construct a jointly centered Gaussian vector \((Z_T,H)\) with the
-block covariance of \((W_T,V)\). This covariance is positive
-semidefinite, even when singular. Set \(Z_n=Z_T+H\) on this coupling.
+Construct a jointly centered Gaussian vector \((Z_T,\sks{Z_D})\) with the
+block covariance of \((W_T,\sks{W_D})\). This covariance is positive
+semidefinite, even when singular. Set \(Z_n=Z_T+\sks{Z_D}\) on this coupling.
 Then \(Z_n\) has exactly the covariance of \(W_n\), while
-\(\max_j\Var(H_j)\le\tau^2\). Gaussian tails therefore give
+\(\max_j\Var(\sks{Z_{D,j}})\le\tau^2\). Gaussian tails therefore give
 \begin{equation}
- \Pp(\|H\|_\infty>r_2)\le\frac1{2n},\qquad
- r_2=\sqrt8\,Ke^{-u/2}\sqrt s.
+ \Pp(\|\sks{Z_D}\|_\infty>\sks{\varrho_2})\le\frac1{2n},\qquad
+ \sks{\varrho_2}=\sqrt8\,Ke^{-\sks{2\ell}}\sqrt{\sks{\bar L}}.
  \label{tail:Gaussian-coupling}
 \end{equation}
 The Gaussian components need not be independent.
@@ -3263,27 +3227,27 @@ The Gaussian components need not be independent.
 For any rectangle \(A\), the two coupling bounds give
 \begin{align*}
  \Pp(W_n\in A)
- &\le\Pp(W_T\in A^{r_1})+\frac1{2n}\\
- &\le\Pp(Z_T\in A^{r_1})+\rh(W_T,Z_T)+\frac1{2n}\\
- &\le\Pp(Z_n\in A^{r_1+r_2})+\rh(W_T,Z_T)+\frac1n.
+ &\le\Pp(W_T\in A^{\sks{\varrho_1}})+\frac1{2n}\\
+ &\le\Pp(Z_T\in A^{\sks{\varrho_1}})+\rh(W_T,Z_T)+\frac1{2n}\\
+ &\le\Pp(Z_n\in A^{\sks{\varrho_1}+\sks{\varrho_2}})+\rh(W_T,Z_T)+\frac1n.
 \end{align*}
 Inward expansions give the reverse bound
-\(\Pp(W_n\in A)\ge\Pp(Z_n\in A^{-(r_1+r_2)})
+\(\Pp(W_n\in A)\ge\Pp(Z_n\in A^{-(\sks{\varrho_1}+\sks{\varrho_2})})
 -\rh(W_T,Z_T)-1/n\). Applying Gaussian rectangle concentration at
 the unit-marginal target \(Z_n\), from Lemma~\ref{lem:concentration}, yields
 \begin{equation}
  \rh(W_n,Z_n)\le\rh(W_T,Z_T)
-       +C(r_1+r_2)\sqrt L+\frac1n.
+       +C(\sks{\varrho_1}+\sks{\varrho_2})\sqrt L+\frac1n.
  \label{tail:transfer}
 \end{equation}
 No independence between the two vectors within either coupling is
 required for this sandwich argument.
 The transfer error has order \(bL^{3/2}\): since
-\(s\le2\ell L\) and \(K\ge1\),
+\(\sks{\bar L}\le2\ell L\) and \(K\ge1\),
 \[
- (r_1+r_2)\sqrt L+\frac1n
- \le CK\left[e^{-2\ell}\sqrt{Ls}
-                     +\frac{s\sqrt L}{\sqrt n}\right]+\frac1n
+ (\sks{\varrho_1}+\sks{\varrho_2})\sqrt L+\frac1n
+ \le CK\left[e^{-2\ell}\sqrt{L\sks{\bar L}}
+                     +\frac{\sks{\bar L}\sqrt L}{\sqrt n}\right]+\frac1n
  \le CbL^{3/2}.
 \]
 Combine this with \eqref{tail:bounded-comparison} and the bound by one
@@ -3294,9 +3258,9 @@ For \eqref{eq:subexponential-gap}, it suffices to consider
 \(b<\min\{1/16,c_0/4\}\); otherwise its right-hand side is at
 least one after increasing \(C_{c_0}\).
 Under the Gaussian coupling, both \(Z_n\) and the standardized clipped
-vector \((Z_{T,j}/\rs{\sigma_{T,j}})_{j\le p}\) have unit coordinate variances, and
+vector \((Z_{T,j}/\sks{\operatorname{sd}(W_{T,j})})_{j\le p}\) have unit coordinate variances, and
 \[
- \|Z_{T,j}/\rs{\sigma_{T,j}}-Z_{n,j}\|_{L^2}\le2\tau.
+ \|Z_{T,j}/\sks{\operatorname{sd}(W_{T,j})}-Z_{n,j}\|_{L^2}\le2\tau.
 \]
 Writing the difference of two covariance entries as a sum of two
 products and applying Cauchy--Schwarz shows that the covariance matrices
@@ -3328,8 +3292,7 @@ When these principal-submatrix eigenvalues are bounded below by \(a>0\), its bou
  \frac{C_a}{\sqrt n}\left[B_4L^{3/2}
                    +K\log(enp)\sqrt L\right],
 \]
-capped at one. For fixed \(K,B_4,a\) and \(p\asymp n^q\), \pass{where} \(q>0\)
-\pass{is fixed},
+capped at one. For fixed \(K,B_4,a\) and \skl{\(p\) growing polynomially in~\(n\)},
 this is \(O(n^{-1/2}(\log n)^{3/2})\), whereas
 \eqref{eq:subexponential} is \(O(n^{-1/2}(\log n)^3)\).
 The latter requires neither a fourth-moment hypothesis in addition to
