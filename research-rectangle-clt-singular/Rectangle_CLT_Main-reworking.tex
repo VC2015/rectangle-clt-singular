@@ -70,6 +70,14 @@
 \newcommand{\sks}[1]{\ifshowskill{\color{revblue}#1}\else#1\fi}
 \newenvironment{skillblock}{\ifshowskill\color{revblue}%
 \hypersetup{linkcolor=revblue,citecolor=revblue,urlcolor=revblue}\fi}{}
+% Readable geometry in the proof of Lemma C.5 (25 October 2026, against
+% commit 87fd7a7): a reminder of the terms from the geometry of polyhedra, a
+% rewritten first paragraph of the proof and a rewritten Step 1 are shown in
+% blue when \showgeotrue is set; the marks are off.
+\newif\ifshowgeo
+\showgeofalse
+\newenvironment{geoblock}{\ifshowgeo\color{revblue}%
+\hypersetup{linkcolor=revblue,citecolor=revblue,urlcolor=revblue}\fi}{}
 \definecolor{paperlink}{RGB}{0,0,114}
 \usepackage[colorlinks=true,hypertexnames=false,linktoc=all,linkcolor=paperlink,citecolor=paperlink,urlcolor=paperlink]{hyperref}
 \usepackage{fancyhdr}
@@ -2715,10 +2723,55 @@ exceptional values of a common threshold shift; the shifts used in
 Step~4 above have absolutely continuous laws, and the first-variation
 formula below makes this precise.
 
+\begin{geoblock}
+\paragraph{Terms from the geometry of polyhedra.}
+A \emph{polyhedron} is an intersection of finitely many closed half-spaces
+\(\{x:u_j\cdot x\le a_j\}\), where the unit vectors \(u_j\) are the
+\emph{outward normals} and the numbers \(a_j\) the \emph{offsets}. An
+inequality is \emph{redundant} if deleting it leaves the set unchanged. Let
+\(Q\) be a proper, full-dimensional polyhedron in \(\R^r\), described without
+redundant inequalities. Each inequality then defines a \emph{facet}
+\(F_j=Q\cap\{u_j\cdot x=a_j\}\), a piece of the boundary of dimension
+\(r-1\) that lies in one hyperplane, and the boundary \(\partial Q\) is the
+union of the facets. Two facets that meet in a set of dimension \(r-2\)
+share a \emph{ridge}. In the plane the facets are the sides of a polygon and
+the ridges its corners; in \(\R^3\) the facets are the faces of a solid and
+the ridges its edges; on the line the facets are the endpoints of an
+interval, and there are no ridges. The measure \(\mathcal H^{r-1}\) is area
+on a facet and \(\mathcal H^{r-2}\) the corresponding measure on a ridge.
+Every point outside \(Q\) has a unique \emph{nearest point} in \(Q\). The
+\emph{normal cone} of \(Q\) at a boundary point \(x\) is the set of
+directions \(v\) for which \(x\) is the nearest point of \(x+tv\) for every
+\(t>0\). At a point lying on the facet \(j\) only, it is the ray spanned by
+\(u_j\); at a point lying on the facets \(j\) and \(k\) only, it is the
+sector between \(u_j\) and \(u_k\) in the plane that they span. The
+\emph{outward tube of length \(\varepsilon\)} over a facet or a ridge is
+the set of points \(x+v\) with \(x\) in the facet or ridge, \(v\) in the
+normal cone at \(x\), and \(\norm v<\varepsilon\).
+\end{geoblock}
+
 \begin{proof}
-Condition on \(V_0\), and put \(Q'=(Q-V_0)/\sigma\). Assume that \(Q'\) is
-proper and full dimensional, and remove redundant inequalities and
-repeated descriptions of the same facet. \rev{Steps~1 and~2 follow
+\begin{geoblock}
+Condition on \(V_0\) and put \(Q'=(Q-V_0)/\sigma\), so that
+\(V_0+\sigma G\in Q\) exactly when \(G\in Q'\). The set \(Q'\) is again a
+polyhedron with normals among \(u_1,\ldots,u_m\), and it is empty or full
+dimensional. If it is empty or the whole space, then \(\surf(Q')=0\) and
+there is nothing to bound, so assume that \(Q'\) is proper and full
+dimensional. Since \(\surf(Q')\) depends on the set \(Q'\) and not on its
+description, we may delete every inequality that is redundant or repeats
+another one. After this, each inequality defines exactly one facet, different
+facets have different outward normals, and two facets that share a ridge
+have normals that are neither equal nor opposite, because facets in parallel
+hyperplanes do not meet in a ridge of a full-dimensional polyhedron; the
+angle between such normals lies in \((0,\pi)\).
+
+The proof first writes
+\(\surf(Q')\) as an explicit sum of facet terms and ridge terms (Step~1),
+then bounds each term by the Gaussian mass of a thin outward tube
+(Step~2), and finally sums the tubes over dyadic sizes and averages over
+\(V_0\) (Step~3).
+\end{geoblock}
+\rev{Steps~1 and~2 follow
 Gao and Zhang's proof of their Proposition~4~\cite{GaoZhang}, in the
 case where each matrix weight there is the identity. The divergence
 identity of Step~1 combines their Lemmas~24, 25, and~27, and the tube
@@ -2726,45 +2779,74 @@ estimates of Step~2 adapt their Lemmas~28 and~29. Step~3, which averages
 over the translation and gains the factor~\(\sigma\), has no counterpart
 there.}
 
-\emph{Step 1: a divergence identity.} Write \(a'_j\) for the offset of
-facet \(j\) and \(s_j\) for its Gaussian surface mass. For a ridge shared
-by facets \(j\) and \(k\), let \(z_{jk}\) be the orthogonal projection of
-its points onto \(\operatorname{span}(u_j,u_k)\), which is constant on the
-ridge; let \(\rho_{jk}\) be the integral of the Gaussian density over the
-ridge with respect to \((r-2)\)-dimensional surface measure; and
-put \(\alpha_{jk}=\arccos(u_j\cdot u_k)\in(0,\pi)\). Then
+\emph{Step 1: a divergence identity.}
+\begin{geoblock}
+Index the facets of \(Q'\) by \(j\), and write \(F_j\) for the facet with
+outward normal \(u_j\), lying in the hyperplane
+\(\{g:u_j\cdot g=a'_j\}\). The offset \(a'_j\) is the signed distance from the
+origin to this hyperplane, whose point nearest the origin is \(a'_ju_j\); it
+is an offset of \(Q'\), not of \(Q\). Let
+\(s_j=\int_{F_j}\varphi_r\dd\mathcal H^{r-1}\) be the Gaussian surface mass of
+facet~\(j\). For a ridge \(E_{jk}\) shared by the facets \(j\) and \(k\), let
+\(\alpha_{jk}=\arccos(u_j\cdot u_k)\in(0,\pi)\) be the angle between their
+normals, let \(\rho_{jk}=\int_{E_{jk}}\varphi_r\dd\mathcal H^{r-2}\), and let
+\(z_{jk}\) be the point of \(\operatorname{span}(u_j,u_k)\) with
+\(u_j\cdot z_{jk}=a'_j\) and \(u_k\cdot z_{jk}=a'_k\). Every point \(g\) of the
+ridge satisfies these two equations, so \(z_{jk}\) is the orthogonal
+projection of every point of the ridge onto \(\operatorname{span}(u_j,u_k)\),
+and it is the point of the intersection of the two hyperplanes nearest the
+origin. Then
 \begin{equation}
  \surf(Q')=
  \sum_j\bigl((a'_j)^2-1\bigr)s_j
  -\sum_{\{j,k\}}(d_{k\mid j}+d_{j\mid k})\rho_{jk},
  \label{appx-an:surface-identity}
 \end{equation}
-where
+where the second sum runs over the ridges (the corners, when \(r=2\)), and
 \[
  d_{k\mid j}=
  \frac{a'_k-(u_j\cdot u_k)a'_j}{\sin\alpha_{jk}},
  \qquad
- d_{k\mid j}+d_{j\mid k}
- =2\sin(\alpha_{jk}/2)\,
+ d_{k\mid j}+d_{j\mid k}=
+ 2\sin(\alpha_{jk}/2)\,
     \frac{u_j+u_k}{\norm{u_j+u_k}}\cdot z_{jk}.
 \]
-To see this, write a point of facet \(j\) as \(g=a'_ju_j+y\), with
-\(y\perp u_j\), and use the divergence identity within the hyperplane
-of the facet
+
+The identity is the divergence theorem, applied facet by facet. A point of
+facet \(j\) is \(g=a'_ju_j+y\) with \(y\perp u_j\), and then
+\(\varphi_r(g)=\varphi_1(a'_j)\varphi_{r-1}(y)\) and
+\(H_2(g)=\{(a'_j)^2-1\}+\{\norm y^2-(r-1)\}\). The first part contributes
+\(((a'_j)^2-1)s_j\). For the second part,
 \[
  (\norm{y}^2-(r-1))\varphi_{r-1}(y)
  =-\operatorname{div}_{u_j^\perp}
-                  \{y\varphi_{r-1}(y)\}.
+                  \{y\varphi_{r-1}(y)\},
 \]
-The boundary term on the ridge shared with facet \(k\) is
-\(-d_{k\mid j}\rho_{jk}\), and pairing the two contributions of each ridge
-gives~\eqref{appx-an:surface-identity}. Truncation justifies the
-calculation for unbounded facets, since polynomial Gaussian terms vanish
-at infinity. When \(r=1\) there are no ridges, and the identity is read
-as a sum over endpoints. The two ridge terms must be paired before they
-are estimated, since each alone contains the factor
-\(1/\sin\alpha_{jk}\), which is large for nearly parallel facets, while
-their sum carries the small factor \(\sin(\alpha_{jk}/2)\).
+the divergence being taken within the hyperplane \(u_j^\perp\), which is
+parallel to the facet. The facet is itself a polyhedron in its hyperplane,
+so the divergence theorem (Gauss--Green formula) turns the integral over
+\(F_j\) into an integral over its boundary, the union of its ridges. Across
+the ridge shared with facet \(k\), the unit vector in \(u_j^\perp\) that points
+out of \(F_j\) is \(\nu_{k\mid j}=(u_k-(u_j\cdot u_k)u_j)/\sin\alpha_{jk}\), and
+at every point \(g\) of the ridge
+\(y\cdot\nu_{k\mid j}=g\cdot\nu_{k\mid j}=d_{k\mid j}\), because
+\(g\cdot u_j=a'_j\) and \(g\cdot u_k=a'_k\). Facet \(j\) therefore contributes
+\(-d_{k\mid j}\rho_{jk}\) at this ridge, and the same ridge contributes
+\(-d_{j\mid k}\rho_{jk}\) when it is seen from facet~\(k\); adding the
+contributions gives~\eqref{appx-an:surface-identity}. The second form of
+\(d_{k\mid j}+d_{j\mid k}\) follows from \(1-\cos\alpha=2\sin^2(\alpha/2)\),
+\(\sin\alpha=2\sin(\alpha/2)\cos(\alpha/2)\), \(\norm{u_j+u_k}=2\cos(\alpha/2)\),
+and \((u_j+u_k)\cdot z_{jk}=a'_j+a'_k\).
+
+Truncation justifies the calculation for unbounded facets, since polynomial
+Gaussian terms vanish at infinity. When \(r=1\) there are no ridges, and the
+identity is read as a sum over endpoints.
+
+The two terms of a ridge must be paired before they are estimated. Each alone contains the factor
+\(1/\sin\alpha_{jk}\), which is large when the two facets are nearly
+parallel, while their sum is at most \(2\sin(\alpha_{jk}/2)\norm{z_{jk}}\le
+\alpha_{jk}\norm{z_{jk}}\) in absolute value.
+\end{geoblock}
 
 \emph{Step 2: local tube estimates.} We bound each term
 of~\eqref{appx-an:surface-identity} by the Gaussian mass of a short outward
