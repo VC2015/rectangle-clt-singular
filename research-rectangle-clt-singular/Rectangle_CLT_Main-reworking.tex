@@ -78,6 +78,15 @@
 \showgeofalse
 \newenvironment{geoblock}{\ifshowgeo\color{revblue}%
 \hypersetup{linkcolor=revblue,citecolor=revblue,urlcolor=revblue}\fi}{}
+% Neutral attribution pass (26 October 2026, against commit 12b6efd): the
+% wording that credited the results of the works [AL] and [GZ] to their
+% authors, or claimed the results of this paper as ``ours'', is shown in
+% blue when \shownattrue is set; the marks are off.
+\newif\ifshownat
+\shownatfalse
+\newcommand{\nat}[1]{\ifshownat{\color{revblue}%
+\hypersetup{linkcolor=revblue,citecolor=revblue,urlcolor=revblue}#1}\else#1\fi}
+\newcommand{\nas}[1]{\ifshownat{\color{revblue}#1}\else#1\fi}
 \definecolor{paperlink}{RGB}{0,0,114}
 \usepackage[colorlinks=true,hypertexnames=false,linktoc=all,linkcolor=paperlink,citecolor=paperlink,urlcolor=paperlink]{hyperref}
 \usepackage{fancyhdr}
@@ -136,8 +145,7 @@ GPT-6 Sol, and Claude Opus.}}}\\[0.65em]
 \thispagestyle{plain}
 
 \begin{abstract}
-\begin{skillblock}
-We study the Gaussian approximation of sums of independent bounded random
+\begin{skillblock} \nat{This paper studies} the Gaussian approximation of sums of independent bounded random
 vectors over rectangles, with no assumption on the covariance matrix,
 which may be singular. Let \(X_1,\ldots,X_n\) be independent centered
 random vectors in \(\R^p\) whose coordinates \(X_{ij}\) are bounded in
@@ -175,8 +183,7 @@ approximating maxima and constructing simultaneous confidence regions.
 \rev{In these problems the coordinates may satisfy exact linear relations,
 so that the covariance matrix is singular although every coordinate has
 positive variance, and nearly exact relations produce arbitrarily small
-eigenvalues. We give bounds whose constants do not depend on the
-eigenvalues.}
+eigenvalues. \nat{The bounds of this paper have constants that do not depend on the eigenvalues.}}
 
 Let \(\mathcal R\) denote the class of axis-aligned rectangles in
 \(\R^p\). We measure the approximation error by
@@ -218,7 +225,7 @@ Here \(L\) records the dependence on dimension, while \(D_L\)
 contributes an additional logarithmic factor. Constants denoted by
 \(C\) are absolute unless a subscript records their dependence.
 
-\rev{Our first bound depends only on the summand envelope and the
+\rev{\nat{The first bound of this paper} depends only on the summand envelope and the
 dimension, so it holds uniformly as covariance eigenvalues approach or
 reach zero.}
 
@@ -396,8 +403,7 @@ fixed}, these rates are
 \(n^{-1/2}(\log n)^{5/2}\), respectively\rev{, so the power of the
 sample size is again optimal up to logarithmic factors}. In particular,
 \eqref{eq:subexponential} guarantees convergence for fixed \(K\) when
-\(\log p=o(n^{1/3}/\log(en))\). \rev{We do not claim that these
-dimension ranges are sharp for the sub-exponential class.}
+\(\log p=o(n^{1/3}/\log(en))\). \rev{\nat{These dimension ranges are not claimed to be sharp for the sub-exponential class.}}
 Appendix~\ref{app:subexponential} controls the discarded sum directly,
 which allows the \lin{truncation level} to depend only on \(\log n\), and restores
 covariance through a joint Gaussian coupling.
@@ -409,10 +415,7 @@ Without covariance restrictions beyond positive marginal variances,
 Chernozhukov, Chetverikov, Kato, and Koike~\cite[Theorem~2.1]{CCKK2022}
 obtained an \(n^{-1/4}\) rate, up to logarithms, under coordinatewise
 sub-exponential tails and an averaged fourth-moment condition.
-Gao and Zhang~\cite[Theorem~1 and Section~5]{GaoZhang} recently improved
-the sample-size power to \(n^{-1/3}\). Under the tail assumption of
-Corollary~\ref{cor:subexponential}, their rectangle bound, in our
-unit-variance notation, is
+\nat{The cube-root rectangle bound reported in~\cite[Theorem~1 and Section~5]{GaoZhang} improves the sample-size power to \(n^{-1/3}\). Under the tail assumption of Corollary~\ref{cor:subexponential}, in the unit-variance notation of this paper, it is}
 \begin{equation*}
  C\min\left\{1,
  \left(\frac{K^2}{n}\right)^{1/3}\{\log(2np)\}^{7/3}
@@ -430,9 +433,9 @@ bounds retain their different dependence on these parameters.
 
 A second line of work obtains rates close to \(n^{-1/2}\) under
 covariance nondegeneracy. For bounded sums with positive definite
-\(\Sigma\), Aronow and Lopatto~\cite[Theorem~1.1]{AL} remove the
+\(\Sigma\), \nat{the nondegenerate \(n^{-1/2}\) bound reported in~\cite[Theorem~1.1]{AL} removes the}
 \(\log(en)\) factor from the bound of Chernozhukov, Chetverikov,
-and Koike~\cite[Corollary~2.1]{CCK}, and prove
+and Koike~\cite[Corollary~2.1]{CCK}, \nat{and reads}
 \begin{equation*}
  \rh(W_n,Z_n)\le C\min\left\{1,
  \frac{BL^{3/2}}{\lambda_{\min}(\Sigma)\sqrt n}\right\}.
@@ -440,7 +443,7 @@ and Koike~\cite[Corollary~2.1]{CCK}, and prove
 A fixed positive minimum eigenvalue therefore gives the sharp
 \(BL^{3/2}/\sqrt n\) scale in the regimes of matching lower
 bounds\pass{~\cite[Proposition~2.1]{CCK}}.
-\rev{Our unrestricted bound does not involve \(\lambda_{\min}(\Sigma)\),
+\rev{\nat{The unrestricted bound of this paper} does not involve \(\lambda_{\min}(\Sigma)\),
 and it exceeds this scale only by the factor \(\sqrt{D_L}\).}
 
 \rev{Other results replace full nondegeneracy by conditions on small
@@ -456,7 +459,7 @@ three- and four-coordinate submatrices. \rev{The two papers therefore
 complement each other, and without the local condition the bound loses
 only the factor \(\sqrt{D_L}\).}
 
-\skl{Our bounds reach the rate \(n^{-1/2}\), up to logarithmic factors, with
+\skl{\nat{The bounds of this paper} reach the rate \(n^{-1/2}\), up to logarithmic factors, with
 no condition on the covariance matrix, and they lose only the factor
 \(\sqrt{D_L}\) against the sharp bounds under nondegeneracy. They come
 from an interpolation between the sum and its Gaussian counterpart along
@@ -465,8 +468,7 @@ without reference to the eigenvalues of the covariance matrix.}
 
 \rev{Section~\ref{sec:smoothing} outlines the proof\trim{, derives
 the rates from its main estimates, and explains why they reach the
-power \(n^{-1/2}\)\lin{, comparing the argument with those of Aronow and
-Lopatto and of Gao and Zhang}; it also} introduces the
+power \(n^{-1/2}\)\lin{, comparing the argument with those of \nat{\cite{AL} and~\cite{GaoZhang}}}; it also} introduces the
 notation used in the appendices\trim{. Section~\ref{opt:section}
 discusses sharpness}, and \skl{Subsection~\ref{sec:lean-certification}}
 records the formal verification\skl{ in Lean}.}
@@ -509,7 +511,7 @@ Proposition~\ref{an:prop:derivative} bounds this derivative \skl{for
 and~\ref{sec:outline-late} explain the two bounds.
 Subsection~\ref{sec:rate} integrates them and chooses~\(h\), which proves
 the theorems, and Subsection~\ref{sec:why-rate} compares the argument
-with those of Aronow and Lopatto and of Gao and Zhang and explains why it
+with those of \nat{\cite{AL} and~\cite{GaoZhang}} and explains why it
 reaches the power \(n^{-1/2}\).
 
 The appendices give the proofs in the same order, from the top down.
@@ -567,8 +569,7 @@ to a step function. With several inequalities, it has the multinomial
 logistic form, with one score for each coordinate bound and a baseline
 score of zero. McFadden~\cite[p.~1001]{McFadden1989} uses this form
 to smooth indicators of simultaneous inequalities.
-\rev{Gao and Zhang~\cite[eq.~(5)]{GaoZhang} use the same multinomial
-logistic (softmax) form, with a baseline score, for maxima of high-dimensional sums.}
+\rev{\nat{The same multinomial logistic (softmax) form, with a baseline score, smooths maxima of high-dimensional sums in~\cite[eq.~(5)]{GaoZhang}.}}
 The quantity \(\nu_\alpha\cdot x-a_\alpha\) is positive exactly
 when the corresponding bound is violated. The exponential terms
 therefore make \(F_{A,h}\) small outside the rectangle; as \(h\)
@@ -613,7 +614,7 @@ the same bound holds with \(\eta=0\), including singular covariance.
 \polish{Appendix~\ref{appx-app:concentration} gives two proofs of the
 bounded-sum assertion: a conditioning argument using the Rademacher
 anti-concentration inequality in~\cite[Lemma~J.4]{CCKK2022}, and
-Aronow--Lopatto's resampling proof~\cite[Lemma~2.1]{AL}, based on
+\nat{the resampling proof of~\cite[Lemma~2.1]{AL}}, based on
 Kane's noise-sensitivity bound~\cite{Kane}\lin{, which controls how
 often the indicator of a set changes when a small random fraction of its
 inputs is changed}. \rev{\lin{The name of Lemma~\ref{lem:concentration}
@@ -695,11 +696,10 @@ average, derivatives of order \(q\) are thus of size
 uniform bound \(h^{-q}\).
 \end{revblock}
 
-\subsection{\texorpdfstring{\rs{The interpolation path}}{The interpolation path}}
+\subsection{\texorpdfstring{\nas{The Bernoulli--Gauss interpolation}}{The Bernoulli-Gauss interpolation}}
 \label{sec:outline-path}
 
-\polish{For the smooth comparison,} \rev{we use the Bernoulli-thinning
-path of Aronow and Lopatto~\cite[\skl{Section~4, the display after eq.~(16)}]{AL}, which removes the bounded
+\polish{For the smooth comparison,} \rev{we use the \nat{Bernoulli--Gauss interpolation of}~\cite[\skl{Section~4, the display after eq.~(16)}]{AL}, which removes the bounded
 summands at random while a Gaussian vector supplies the lost covariance.}
 \polish{Let \(Z\) be independent of the \rs{summands}
 and, for \(\lambda\in[0,1]\), set}
@@ -715,8 +715,7 @@ with \(U_0\stackrel d=W\) and \(U_1\stackrel d=Z\).
 \lin{The amplitude \(\gamma=1+\lambda\) is chosen so that the coefficient
 \(\sks{\varpi}\gamma^3=1-\lambda^2\) of the third moments of the summands has zero
 derivative at the bounded endpoint \(\lambda=0\)~\cite[eq.~(17)]{AL}.}
-\rev{Unlike Aronow and Lopatto, we add no Gaussian smoothing at the
-bounded endpoint; the logistic approximation takes its place.}
+\rev{\nat{Unlike the interpolation of~\cite{AL}, the path~\eqref{eq:path} adds no Gaussian smoothing at the bounded endpoint;} the logistic approximation takes its place.}
 \lin{Put \(P_A(\lambda)=\E F_{A,h}(U_\lambda)\). The largest difference
 \(M_h\) of smoothed expectations, defined in~\eqref{eq:selector}, is then
 \(\sup_A|P_A(1)-P_A(0)|\), and together with Lemma~\ref{lem:endpoint}
@@ -817,7 +816,7 @@ bounded part of the path as the independent component when
 \(\lambda\le1/2\), and with the Gaussian part when \(\lambda\ge1/2\). The
 cubic term of~\eqref{eq:path-summary} carries the factor \(\lambda\),
 which gives the term \(\lambda\delta/h^2\) in~\eqref{an:early}. The
-argument follows the proof of Lemma~4.1 of Aronow and Lopatto~\cite{AL},
+argument follows the proof of \nat{the early derivative bound~\cite[Lemma~4.1]{AL}},
 where the same derivatives are bounded by Gaussian smoothing, at a cost
 that grows as \(\lambda_{\min}(\Sigma)\to0\).
 
@@ -851,7 +850,7 @@ only through the \emph{face norm} \(\norm x_U=\max_\alpha|u_\alpha\cdot x|\),
 which satisfies \(\norm{\zeta_i^0}_U\le\delta\), and through the identity
 \(\sum_i\E\zeta_i^0(\zeta_i^0)^\top=I_r\). Their Euclidean norms, which are
 large when \(\Sigma\) has small positive eigenvalues, are never used.
-This reduction follows Gao and Zhang~\cite[Section~2.3]{GaoZhang}.
+\nat{This is the support-coordinate reduction of~\cite[Section~2.3]{GaoZhang}.}
 
 \emph{Integration by parts against the covariance of the summands.} We write the
 path in support coordinates as \(U=V_0+\sigma G\), with \(\sigma^2\) of
@@ -952,7 +951,7 @@ Gaussian density on \(\R^r\) and \(\mathcal H^{r-1}\) is surface
 measure\trim{; moving every face of a polyhedron \(Q\) outward at unit
 speed changes the integral of \(\Hh\varphi_r\) over \(Q\) at the rate
 \(\surf(Q)\)}.
-Gao and Zhang~\cite[Proposition~4]{GaoZhang} prove
+\nat{The polyhedral surface bound~\cite[Proposition~4]{GaoZhang} states that}
 \(|\surf(Q)|\le C\{\log(2m)\}^{3/2}\) for every polyhedron with \(m\)
 faces, and Lemma~\ref{appx-an:lem:surface} shows that averaging over a
 concentrated base gains the factor \(\sigma\), in the sense that
@@ -1058,61 +1057,41 @@ admissibility of the smoothing scale.
 
 \subsection{\texorpdfstring{\lns{Sources of the argument and the power \(n^{-1/2}\)}}{Sources of the argument and the power n to the -1/2}}
 \label{sec:why-rate}\label{sec:sources}
-\lin{The interpolation path~\eqref{eq:path} is the Bernoulli-thinning
-path of Aronow and Lopatto~\cite[\skl{Section~4, the display after eq.~(16)}]{AL}, and
+\lin{\nat{The Bernoulli--Gauss interpolation}~\eqref{eq:path} is \nat{taken from}~\cite[\skl{Section~4, the display after eq.~(16)}]{AL}, and
 Lemma~\ref{lem:concentration}, which controls the path near its bounded
-endpoint, is their Lemma~2.1; Appendix~\ref{appx-app:concentration}
-proves it both by their argument and by a second one. The first two
-steps of our exact fourth-order identity
+endpoint, is \nat{the bounded-sum anti-concentration result of~\cite[Lemma~2.1]{AL}}; Appendix~\ref{appx-app:concentration} proves it \nat{by the resampling argument of~\cite{AL}} and by a second one. The first two
+steps of \nat{the exact fourth-order identity}
 (Lemma~\ref{appx-an:lem:identity}) and the early bounds of
-Subsection~\ref{sec:outline-early} follow their proof of Lemma~4.1.
-Aronow and Lopatto reach the power \(n^{-1/2}\), but their Gaussian
-derivative bounds carry negative powers of \(\lambda_{\min}(\Sigma)\).
-The support coordinates of Subsection~\ref{sec:outline-late} follow Gao
-and Zhang~\cite[Section~2.3]{GaoZhang}. Along a different path, their
-derivative identity~\cite[Lemma~22]{GaoZhang} has the same form as ours,
-a cubic term at the full path plus three fourth-order corrections, and
-our bound for the corrections (Lemma~\ref{appx-an:lem:restoration})
-follows their proof of Lemma~23, which integrates by parts twice in a
+Subsection~\ref{sec:outline-early} follow \nat{the proof of~\cite[Lemma~4.1]{AL}. The bound of~\cite{AL} reaches the power \(n^{-1/2}\), but its Gaussian derivative bounds carry negative powers of} \(\lambda_{\min}(\Sigma)\).
+The support coordinates of Subsection~\ref{sec:outline-late} follow \nat{the support-coordinate reduction of~\cite[Section~2.3]{GaoZhang}. Along the two-stage interpolation of~\cite{GaoZhang}, the two-stage derivative identity~\cite[Lemma~22]{GaoZhang} has the same form as the identity of this paper},
+a cubic term at the full path plus three fourth-order corrections, and \nat{this paper's bound for the corrections} (Lemma~\ref{appx-an:lem:restoration}) \nat{follows the proof of the fourth-order correction bound~\cite[Lemma~23]{GaoZhang}}, which integrates by parts twice in a
 Gaussian direction, sums over the summands against their total
-covariance, and applies a matrix estimate. Our matrix and surface
-estimates, Lemmas~\ref{appx-an:lem:matrix}
-and~\ref{appx-an:lem:surface}, adapt their Lemma~12 and Proposition~4,
+covariance, and applies a matrix estimate. \nat{The matrix and surface} estimates, Lemmas~\ref{appx-an:lem:matrix} and~\ref{appx-an:lem:surface}, \nat{adapt the convex-cell bound~\cite[Lemma~12]{GaoZhang} and the polyhedral surface bound~\cite[Proposition~4]{GaoZhang}},
 with the same covariance bound for tilted Gaussian laws and the same
 pairing of the boundary terms on each ridge. The logistic
 approximation~\eqref{eq:selector} is the multinomial logistic (softmax)
 probability of a baseline category with score zero, as used by
-\skl{McFadden~\cite[p.~1001]{McFadden1989} and} Gao and
-Zhang~\cite[eq.~(5)]{GaoZhang}, and its derivative formula and
+\skl{McFadden~\cite[p.~1001]{McFadden1989} and} \nat{in~\cite[eq.~(5)]{GaoZhang}}, and its derivative formula and
 \skl{mixture representation~\eqref{eq:mixture}, proved in
-Subsection~\ref{appx-sec:mixture}, correspond to} their Lemmas~13 and~14.
-Gao and Zhang avoid the
-eigenvalues of \(\Sigma\) and obtain the power~\(n^{-1/3}\).}
+Subsection~\ref{appx-sec:mixture}, correspond to} \nat{the softmax cumulant formula and the random-utility representation of~\cite[Lemmas~13 and~14]{GaoZhang}. The argument of~\cite{GaoZhang} avoids the eigenvalues of \(\Sigma\) and obtains the power~\(n^{-1/3}\).}}
 
 \trim{The bound of Theorem~\ref{thm:optimized} is the sum of the
 smoothing error \(Ch\sqrt L\,\kappa\) of Lemma~\ref{lem:endpoint}, the
 cubic contribution \(C\delta L^{3/2}\), which does not depend on~\(h\),
 and the integrated fourth-order terms. The power of \(n\) is decided by
-the balance between the first and the last. \lin{Gao and Zhang, who
-improved the power \(n^{-1/4}\) of~\cite{CCKK2022} to \(n^{-1/3}\),
-interpolate in two stages, first from the sum to an intermediate vector
+the balance between the first and the last. \lin{\nat{The improvement of the power \(n^{-1/4}\) of~\cite{CCKK2022} to \(n^{-1/3}\) in~\cite{GaoZhang} uses a two-stage interpolation, first} from the sum to an intermediate vector
 that has a fixed Gaussian component and the same moments through order
 three, and then from that vector to the Gaussian
-limit~\cite[Section~4]{GaoZhang}. Their bound has the same three
-errors~\cite[eq.~(20)]{GaoZhang}. In our notation, with \(h\) in place
-of their \(1/\beta\) and \(\delta\) in place of their envelope
-\(b_{d,n}\), the fourth-order terms of their first stage are bounded,
-when that stage carries Gaussian variance \(\lambda/2\), in the proof of
-their Proposition~2, by a constant times}
+limit~\cite[Section~4]{GaoZhang}. \nat{The bound reported there has the same three errors}~\cite[eq.~(20)]{GaoZhang}. \nat{In the notation of this paper, with \(h\) in place of the parameter \(1/\beta\) of~\cite{GaoZhang} and \(\delta\) in place of the envelope \(b_{d,n}\) there, the fourth-order terms of the first stage} are bounded,
+when that stage carries Gaussian variance \(\lambda/2\), in the proof of \nat{\cite[Proposition~2]{GaoZhang}}, by a constant times}
 \[
  \frac{\delta^2L}{\lambda h^2}.
 \]
 \lin{Integrated from a small time \(\tau\) to one}, this gives
 \(\delta^2L/h^2\) times \lns{\(\log(1/\tau)\)}, which balances the
 smoothing error \(h\sqrt L\) when \(h\) is of order \(\delta^{2/3}\), up
-to logarithmic factors. This is their choice of~\(\beta\)
-in~\cite[eq.~(21)]{GaoZhang}, and with \(\delta=B/\sqrt n\) it gives the
-power \(n^{-1/3}\). Our late bound~\eqref{an:remainder} is smaller by
+to logarithmic factors. This is \nat{the choice of}~\(\beta\) in~\cite[eq.~(21)]{GaoZhang}, and with \(\delta=B/\sqrt n\) it gives the
+power \(n^{-1/3}\). \nat{The late bound~\eqref{an:remainder} of this paper} is smaller by
 the factor \(h\sqrt L\). Its integral, \(\delta^2L^{3/2}/h\) times a
 logarithm, balances the smoothing error when \(h\) is of order
 \(\delta\), up to logarithmic factors, as in~\eqref{eq:optimal-scale},
@@ -1126,16 +1105,12 @@ of Lemma~\ref{lem:concentration} bounds \skl{by}
 Subsection~\ref{sec:outline-smoothing}. In the early range the derivative
 envelope gives the factor directly (Subsection~\ref{sec:outline-early}).
 In the late range two derivatives are moved onto the Gaussian density,
-and the factor must survive this step. Gao and Zhang write the products
-of logistic weights that remain after the integrations by parts as
-probabilities of convex cells that partition the
-space~\cite[Lemmas~13 and~14]{GaoZhang}, and their bound for the sum over
-the cells~\cite[Lemma~12]{GaoZhang} is of order \(L\), uniformly over
+and the factor must survive this step. \nat{In~\cite[Lemmas~13 and~14]{GaoZhang} the products of logistic weights that remain after the integrations by parts are written as probabilities of convex cells that partition the space, and the convex-cell bound~\cite[Lemma~12]{GaoZhang} for the sum over the cells} is of order \(L\), uniformly over
 partitions. A partition has total probability one, so this bound\skl{,
 being uniform over partitions, does not carry the factor \(h\sqrt L\), and
-we see no way to recover the factor from it}.
+\nat{it is not clear how to recover the factor from it}}.
 
-\skl{The factor survives in our argument because the matrix estimate is
+\skl{The factor survives in \nat{the argument of this paper} because the matrix estimate is
 applied to the logistic weights themselves and because the trace term,
 which does not cancel, is averaged over the concentrated base. The total
 mass of the weights satisfies} \(\E F\theta^k(U)\le Ch\sqrt L\), and the term of \skl{the
@@ -1143,27 +1118,23 @@ proof of the matrix estimate} that involves
 the tilted means inherits this factor directly. \skl{The} trace term
 \(\E[\Hh(G)w(G)]\) does not cancel, because the weights do not form a
 partition, and it is bounded by \(h/\sigma\) times an average of Gaussian
-surface integrals of translated polyhedra. The uniform bound
-\(C\{\log(2m)\}^{3/2}\) of Gao and Zhang~\cite[Proposition~4]{GaoZhang}
+surface integrals of translated polyhedra. \nat{The polyhedral surface bound} \(C\{\log(2m)\}^{3/2}\) \nat{of}~\cite[Proposition~4]{GaoZhang}
 for these integrals would leave the factor \(h/\sigma\), and the late
 bound would become \(C\delta^2L^{3/2}/(\lambda^{3/2}h)\). The integral of
 this bound \skl{over the late range} is not logarithmic\skl{. At the time
 \(\tau_h=Lh^2\) of Subsection~\ref{sec:rate} the balance with the
-smoothing error gives the power \(n^{-1/3}\) of Gao and Zhang, and only a
+smoothing error gives the power \(n^{-1/3}\) of \nat{\cite{GaoZhang}}, and only a
 time re-optimized to the order \(L^{2/3}h^{4/3}\) gives \(n^{-3/8}\), up to
 logarithmic factors.} The averaged surface estimate gains the factor \(\sigma\) by averaging over
 the concentrated base, which restores the factor \(1/\lambda\) and with
-it the logarithm. Gao and Zhang use their uniform bound for the cubic
-term \lin{of their second stage}~\cite[eq.~(19)]{GaoZhang}, where it suffices,
+it the logarithm. \nat{In~\cite[eq.~(19)]{GaoZhang} the polyhedral surface bound controls the cubic term of the second stage}, where it suffices,
 because that term involves no power of~\(h\).
 
 \lin{The translation formula~\eqref{eq:weight-translation} and the
 exact identity of Lemma~\ref{appx-an:lem:identity} replace
-approximations in the argument of Gao and Zhang. The first brings every
+approximations in the argument of \nat{\cite{GaoZhang}}. The first brings every
 derivative from the translated bases \(U+v_i\) back to the common base
-\(U\) as an absolutely convergent series with no remainder term, in place
-of their independent copies and high-order Taylor
-expansion~\cite[Lemmas~19 and~23]{GaoZhang}. The second places the cubic
+\(U\) as an absolutely convergent series with no remainder term, in place of \nat{the independent-copy Taylor expansion of}~\cite[Lemmas~19 and~23]{GaoZhang}. The second places the cubic
 term at the full path, so that cancellation of third moments removes it
 before any estimate is taken, which gives
 Theorem~\ref{thm:zero-skew}.}}
@@ -1264,7 +1235,7 @@ unsmoothed error bound.
 \rev{For unrestricted covariance the upper bound is optimal up to
 logarithmic factors, and where the lower scale \(\delta L^{3/2}\) is
 attained, the upper and lower bounds differ by at most the factor
-\(\sqrt{D_L}\). We do not know whether this factor is necessary, nor how
+\(\sqrt{D_L}\). \nat{It is not known whether this factor is necessary, nor how}
 the optimal bound depends on a vanishing correlation gap. The companion
 note~\cite{Obstruction} shows that natural pointwise strengthenings of
 the fourth-order remainder bound, for a two-scale version of the
@@ -1698,8 +1669,7 @@ Gumbel variables, so
 displacements \(\sks{h\log(\omega_\alpha/\omega_0)}\) have logistic marginals and are
 dependent through \(\sks{\omega_0}\); independent logistic displacements would give
 a different approximation. McFadden~\cite[p.~1001]{McFadden1989} uses
-the same random-utility representation, and Gao and
-Zhang~\cite[Lemma~14]{GaoZhang} state it for their softmax weights.} \revnote{Citation of the unavailable
+the same random-utility representation, \nat{it is stated for softmax weights in~\cite[Lemma~14]{GaoZhang}}.} \revnote{Citation of the unavailable
 Gumbel note removed.}
 
 \trim{The chain-rule formula sketched in
@@ -1729,7 +1699,7 @@ In particular,
  \max_\alpha|\nu_\alpha\cdot z_a|.
  \label{appx-eq:all-orders}
 \end{equation}
-\rev{Gao and Zhang~\cite[Lemma~13]{GaoZhang} obtain
+\rev{\nat{The softmax cumulant formula~\cite[Lemma~13]{GaoZhang} derives}
 \eqref{appx-eq:partition-derivative} and~\eqref{appx-eq:all-orders}
 from the joint cumulants of a categorical variable.}
 
@@ -2125,12 +2095,8 @@ part of the summand acts at the leave-one-out base; and the term
 \(\mathcal C_i\) moves the cubic part of the summand from \(H_i\) back to
 \(U_\lambda\), which places all the cubic tensors at one base, where
 their aggregate can cancel.}
-\rev{Steps~1 and~2 of the proof follow
-Aronow and Lopatto's proof of their Lemma~4.1~\cite[eqs.~(20)
-and~(21)]{AL}, with the same fourth-order kernel. They leave the cubic
-term at the leave-one-out base; Step~3 moves it to the full path, which
-gives the identity the form of Gao and Zhang's derivative
-identity~\cite[Lemma~22, eq.~(15)]{GaoZhang} for their path.}
+\rev{Steps~1 and~2 of the proof follow \nat{the proof of~\cite[Lemma~4.1, eqs.~(20) and~(21)]{AL}}, with the same fourth-order kernel. \nat{That proof leaves} the cubic term at the leave-one-out base; Step~3 moves it to the full path, which
+gives the identity the form of \nat{the two-stage derivative identity~\cite[Lemma~22, eq.~(15)]{GaoZhang}}.}
 
 \begin{proof}
 Write \(M_i=\E\zeta_i\zeta_i^\top\) and
@@ -2211,12 +2177,7 @@ Near \(\lambda=0\) the path is almost the bounded sum itself, so for the
 early bounds \eqref{an:early} and~\eqref{eq:remainder-early} we estimate
 the derivatives in~\eqref{appx-an:fourth-identity} directly, by their
 size near the boundary of the rectangle. \rev{The argument follows the
-rest of Aronow and Lopatto's proof of their Lemma~4.1~\cite{AL}. Step~2
-below corresponds to their moment bounds~(22) and~(23), and Step~3 to
-their local supremum over shifts of size~\(4\delta\); they reach a
-common law through an independent copy of the deleted summand, where we use
-the translates~\eqref{appx-an:translates}. They bound the local suprema
-by Gaussian smoothing~\cite[Corollary~3.2]{AL}, which requires
+\nat{rest of the proof of~\cite[Lemma~4.1]{AL}. Step~2 below corresponds to the moment bounds~(22) and~(23) there, and Step~3 to the local supremum over shifts of size~\(4\delta\); that proof reaches a common law through an independent copy of the leave-one-out summand, where the translates~\eqref{appx-an:translates} are used here. The local suprema there are bounded by the Gaussian smoothing bound~\cite[Corollary~3.2]{AL}, which requires}
 \(\lambda_{\min}(\Sigma)>0\), and Steps~1 and~3 use the logistic
 envelope of Lemma~\ref{appx-lem:envelope} instead.}
 
@@ -2495,8 +2456,7 @@ term, which may have either sign}.
 We control the means relative to a single face
 (Lemma~\ref{appx-an:lem:mean}), and the \trim{trace term} by a Gaussian
 surface estimate (Lemma~\ref{appx-an:lem:surface}). The argument is the
-soft-weight analogue of the convex-cell bound of Gao and
-Zhang~\cite[Lemma~12]{GaoZhang}, in which the weights are indicators of
+soft-weight analogue of the \nat{convex-cell bound}~\cite[Lemma~12]{GaoZhang}, in which the weights are indicators of
 convex cells.
 
 Throughout, \(V_0\) is a concentrated base, \(G\sim N(0,I_r)\) is
@@ -2509,8 +2469,7 @@ A weight can move the Gaussian mean both normally and tangentially to a
 face, and Lemma~\ref{appx-an:lem:mean} bounds the normal component by a
 second moment and the tangential component by the loss of mass relative
 to a weight that depends on the normal coordinate alone. \rev{It refines
-the entropy inequality \(\norm{\mu_w}^2\le2\log(1/p_w)\), which Gao and
-Zhang use in the proof of their Lemma~12~\cite{GaoZhang}, and which the
+the entropy inequality \(\norm{\mu_w}^2\le2\log(1/p_w)\), which \nat{is used in the proof of~\cite[Lemma~12]{GaoZhang}}, and which the
 first step of the proof below gives in every direction when
 \(b\equiv1\).}
 
@@ -2573,8 +2532,7 @@ function of \((z,g)\) under the integral, it shows that the function
 \]
 is log-concave. The Hessian of its logarithm at zero is
 \(\sks{\Sigma_\alpha}-I_r\), so \(\sks{\Sigma_\alpha}\preceq I_r\). \rev{For indicators of
-convex cells, Gao and Zhang~\cite[Lemma~11]{GaoZhang} obtain the same
-bound from the Brascamp--Lieb inequality\pass{, a variance bound for log-concave
+convex cells, \nat{the cell covariance bound~\cite[Lemma~11]{GaoZhang} is the same estimate, obtained} from the Brascamp--Lieb inequality\pass{, a variance bound for log-concave
 laws}.} Now
 \(\E_G[(GG^\top-I_r)w_\alpha(G)]=p_\alpha(\sks{\Sigma_\alpha}-I_r+\mu_\alpha\mu_\alpha^\top)\).
 Since \(I_r-\sks{\Sigma_\alpha}\succeq0\), the nuclear norm of the right side is at
@@ -2589,8 +2547,7 @@ where \(H_2(g)=\norm g^2-r\). Eliminating \(\tr \sks{\Sigma_\alpha}\) gives
 \end{equation}
 \trim{The function \(H_2\) enters only as the trace of
 \(gg^\top-I_r\). If the weights \(w_\alpha\) formed a partition of
-unity, as the indicators of convex cells do in Gao and Zhang's
-Lemma~12, the trace terms would add up to \(\E H_2(G)=0\). Here they add
+unity, as the indicators of convex cells do in \nat{\cite[Lemma~12]{GaoZhang}}, the trace terms would add up to \(\E H_2(G)=0\). Here they add
 up to \(\E_G[H_2(G)F(U)\theta(U)^k]\), which Step~4 bounds.}
 \skl{We now} bound the sum over \(\alpha\) of each term on the right.
 
@@ -2693,8 +2650,7 @@ which we now prove. \trim{We keep the notation \(H_2\), \(\varphi_r\),
 Step~1 of that proof, since \(H_2\) is the trace of \(gg^\top-I_r\). The
 translation is the concentrated base \(V_0\), and \(\sigma\) is the scale
 of the Gaussian part of the path. A bound uniform over translations,
-such as the bound \(C\{\log(2m)\}^{3/2}\) of Gao and
-Zhang~\cite[Proposition~4]{GaoZhang}, would cost a factor \(1/\sigma\)
+\nat{such as the polyhedral surface bound \(C\{\log(2m)\}^{3/2}\) of~\cite[Proposition~4]{GaoZhang},} would cost a factor \(1/\sigma\)
 in the late bounds, and averaging over \(V_0\) removes it
 (Subsection~\ref{sec:why-rate}).} Call a
 polyhedron \emph{proper} if it is neither empty nor the whole space, and
@@ -2771,11 +2727,9 @@ then bounds each term by the Gaussian mass of a thin outward tube
 (Step~2), and finally sums the tubes over dyadic sizes and averages over
 \(V_0\) (Step~3).
 \end{geoblock}
-\rev{Steps~1 and~2 follow
-Gao and Zhang's proof of their Proposition~4~\cite{GaoZhang}, in the
+\rev{Steps~1 and~2 follow \nat{the proof of~\cite[Proposition~4]{GaoZhang}}, in the
 case where each matrix weight there is the identity. The divergence
-identity of Step~1 combines their Lemmas~24, 25, and~27, and the tube
-estimates of Step~2 adapt their Lemmas~28 and~29. Step~3, which averages
+identity of Step~1 combines \nat{\cite[Lemmas~24, 25, and~27]{GaoZhang}}, and the tube estimates of Step~2 adapt \nat{\cite[Lemmas~28 and~29]{GaoZhang}}. Step~3, which averages
 over the translation and gains the factor~\(\sigma\), has no counterpart
 there.}
 
@@ -3058,11 +3012,10 @@ the minimum with one completes the proof.
 \color{magenta}
 \hypersetup{linkcolor=magenta,citecolor=magenta,urlcolor=magenta}
 \fi
-\subsection{Aronow--Lopatto's resampling proof}
+\subsection{\texorpdfstring{\nas{Resampling and noise sensitivity}}{Resampling and noise sensitivity}}
 \label{appx-conc:resampling}
 
-\rev{This subsection gives the resampling proof of Aronow and
-Lopatto~\cite[Lemma~2.1]{AL}, which compares two ways of measuring a
+\rev{This subsection gives \nat{the resampling proof of~\cite[Lemma~2.1]{AL}}, which compares two ways of measuring a
 boundary layer.} Resampling a small
 proportion of the \rs{summands} gives a point near a face a fixed positive chance
 of leaving the rectangle, apart from a tail event. Kane's noise-sensitivity
@@ -3190,8 +3143,7 @@ fixed rectangle boundary layer is therefore a continuity set for the
 Gaussian law\rev{, a set whose boundary has Gaussian probability zero, so
 that convergence in distribution carries over to its probability}. The finite-dimensional CLT passes the bounded-sum estimate
 to the limit. Conditioning again permits independent shifts.
-\rev{This paragraph reproduces Aronow and Lopatto's proof of their
-Corollary~2.2~\cite{AL}.}
+\rev{This paragraph reproduces \nat{the proof of~\cite[Corollary~2.2]{AL}}.}
 
 
 \endgroup
