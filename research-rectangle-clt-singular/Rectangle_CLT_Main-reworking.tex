@@ -87,6 +87,24 @@
 \newcommand{\nat}[1]{\ifshownat{\color{revblue}%
 \hypersetup{linkcolor=revblue,citecolor=revblue,urlcolor=revblue}#1}\else#1\fi}
 \newcommand{\nas}[1]{\ifshownat{\color{revblue}#1}\else#1\fi}
+% Revised abstract (26 October 2026, against commit ccb1a49): the words and
+% the formula that differ from the abstract on main are shown in blue when
+% \showabstracttrue is set; the marks are off.
+\newif\ifshowabstract
+\showabstractfalse
+\newcommand{\abt}[1]{\ifshowabstract{\color{revblue}#1}\else#1\fi}
+% Opening of Section 1 (26 October 2026, against commit ccb1a49): the revised
+% first paragraph, with the citation of the review of the high-dimensional
+% bootstrap, and the paragraph defining the distance, which now stands just
+% before Theorem 1, are shown in blue when \showintrotrue is set; the marks
+% are off.
+\newif\ifshowintro
+\showintrofalse
+\newcommand{\itx}[1]{\ifshowintro{\color{revblue}%
+\hypersetup{linkcolor=revblue,citecolor=revblue,urlcolor=revblue}#1}\else#1\fi}
+\newcommand{\its}[1]{\ifshowintro{\color{revblue}#1}\else#1\fi}
+\newenvironment{introblock}{\ifshowintro\color{revblue}%
+\hypersetup{linkcolor=revblue,citecolor=revblue,urlcolor=revblue}\fi\indent}{}
 \definecolor{paperlink}{RGB}{0,0,114}
 \usepackage[colorlinks=true,hypertexnames=false,linktoc=all,linkcolor=paperlink,citecolor=paperlink,urlcolor=paperlink]{hyperref}
 \usepackage{fancyhdr}
@@ -146,7 +164,7 @@ GPT-6 Sol, and Claude Opus.}}}\\[0.65em]
 
 \begin{abstract}
 \begin{skillblock} \nat{This paper studies} the Gaussian approximation of sums of independent bounded random
-vectors over rectangles, with no assumption on the covariance matrix,
+vectors over rectangles, with no assumption on the \abt{correlation} matrix,
 which may be singular. Let \(X_1,\ldots,X_n\) be independent centered
 random vectors in \(\R^p\) whose coordinates \(X_{ij}\) are bounded in
 absolute value by a constant~\(B\), and suppose that each coordinate of
@@ -156,18 +174,16 @@ centered Gaussian vector with the covariance matrix of \(W_n\), and put
 between \(\Pp(W_n\in A)\) and \(\Pp(Z_n\in A)\) over rectangles \(A\) is
 at most
 \[
- \frac{C_BL^{3/2}}{\sqrt n}\sqrt{1+\log_+\sqrt{n/L}},
+ \frac{\abt{B}L^{3/2}}{\sqrt n}\sqrt{1+\log_+\sqrt{n/L}},
 \]
-where \(C_B\) depends only on~\(B\). If, for a fixed \(c_0>0\), no two
+\abt{up to a numerical constant}. If, for a fixed \(c_0>0\), no two
 coordinates have correlation larger than \(1-c_0\) in absolute value, the
-bound improves slightly, by a logarithmic factor. When \(p\) grows
+bound improves slightly. When \(p\) grows
 polynomially in~\(n\), the two bounds are of order \(n^{-1/2}(\log n)^2\) and
-\(n^{-1/2}(\log n)^{3/2}\), respectively. A further improvement holds if the
+\(n^{-1/2}(\log n)^{3/2}\), respectively. A further \abt{refinement} holds if the
 third moments cancel in aggregate, that is, if
 \(\sum_i\E[X_{ij}X_{ik}X_{i\ell}]=0\) for all coordinates \(j,k,\ell\).
-The power
-\(n^{-1/2}\) cannot be improved even when \(p=1\), and a two-point lower
-bound shows that the factor \(L^{3/2}\) cannot be improved either, so the
+\abt{The factor \(BL^{3/2}/\sqrt n\) cannot be improved in general}, so the
 second rate is then optimal and the first is optimal up to the factor
 \((\log n)^{1/2}\).
 \end{skillblock}
@@ -179,26 +195,21 @@ second rate is then optimal and the first is optimal up to the factor
 
 \section{\texorpdfstring{\sks{Introduction and main results}}{Introduction and main results}}\label{sec:results}
 Gaussian approximation over rectangles provides a common foundation for
-approximating maxima and constructing simultaneous confidence regions.
-\rev{In these problems the coordinates may satisfy exact linear relations,
-so that the covariance matrix is singular although every coordinate has
-positive variance, and nearly exact relations produce arbitrarily small
-eigenvalues. \nat{The bounds of this paper have constants that do not depend on the eigenvalues.}}
+approximating maxima and constructing simultaneous confidence regions\itx{, with
+applications to a wide variety of statistical inference problems that we
+reviewed in~\cite{CCKK2023}}.
+\itx{In many of these applications the correlation matrix may be nearly or
+exactly singular, resulting in arbitrarily small eigenvalues. This motivates the
+Gaussian approximations of this paper, whose quality does not depend on the
+eigenvalues.}
 
-Let \(\mathcal R\) denote the class of axis-aligned rectangles in
-\(\R^p\). We measure the approximation error by
-\[
- \rh(U,V)=\sup_{A\in\mathcal R}
-       |\Pp(U\in A)-\Pp(V\in A)|.
-\]
-For example, taking \(A=(-\infty,t]^p\) shows that this distance
-controls the error in approximating the distribution of the largest
-coordinate.
-
-Consider a sum of independent centered random vectors,
+Consider a sum of independent centered \itx{bounded} random vectors in
+\(\R^p\)\itx{ with marginal unit variance and covariance \(\Sigma\), and let
+\(Z\sim N(0,\Sigma)\) be the ``approximating'' normal vector that shares the
+mean and covariance of the sum:}
 \begin{equation}
  \begin{gathered}
- W=\sum_{i=1}^n\xi_i,\qquad
+ W=\its{(W_j)_{j=1}^p=}\sum_{i=1}^n\xi_i,\qquad
  \E\xi_i=0,\qquad \norm{\xi_i}_\infty\le\delta\quad\text{a.s.},\\
  \Sigma=\Cov(W),\qquad\Sigma_{jj}=1\ (j\le p),
  \qquad Z\sim N(0,\Sigma).
@@ -208,22 +219,35 @@ Consider a sum of independent centered random vectors,
 The summands need not have the same distribution, and coordinates within
 a summand may be dependent. \rev{The unit marginal variances fix the scale
 of each coordinate; they can be obtained by coordinatewise rescaling
-whenever all marginal variances are positive, and they place no
+whenever all marginal variances are positive\itx{; and we place} no
 restriction on the rank of \(\Sigma\).}
 
 The parameter \(\delta\) bounds the contribution of any one summand
-to any coordinate of \(W\). For a normalized sample sum with
-observations bounded by \(B\), it equals \(B/\sqrt n\). \rev{A uniform
-bound of this kind is called an \emph{envelope}.} To state the
+to any coordinate of \(W\)\itx{, and such a uniform bound is called an
+\emph{envelope}}. To state the
 bound compactly, put
 \[
  L=\log(ep),\qquad
  D_L=1+\log_+\frac1{\delta\sqrt L},\qquad
  \log_+x=\max\{0,\log x\}.
 \]
-Here \(L\) records the dependence on dimension, while \(D_L\)
+Here \(L\) \itx{encodes} the dependence on dimension, while \(D_L\)
 contributes an additional logarithmic factor. Constants denoted by
 \(C\) are absolute unless a subscript records their dependence.
+
+\begin{introblock}
+Let \(\mathcal R\) denote the class of axis-aligned hyper-rectangles in
+\(\R^p\). We measure the approximation error by the Kolmogorov distance
+between the distributions of the random vectors \(W\) and \(Z\):
+\[
+ \rh(W,Z)=\sup_{A\in\mathcal R}
+       |\Pp(W\in A)-\Pp(Z\in A)|.
+\]
+The same notation is used for any two random vectors in \(\R^p\). For
+example, taking \(A=(-\infty,t]^p\) shows that this distance controls the
+error in approximating the distribution of \(\max_{j\le p}W_j\), the maximum
+coordinate of \(W\).
+\end{introblock}
 
 \rev{\nat{The first bound of this paper} depends only on the summand envelope and the
 dimension, so it holds uniformly as covariance eigenvalues approach or
@@ -237,7 +261,7 @@ Under~\eqref{eq:setup},
 \end{equation}
 \end{theorem}
 
-\rev{Theorem~\ref{thm:unrestricted} allows any covariance rank, perfect
+\rev{Theorem~\ref{thm:unrestricted} allows any \itx{rank of \(\Sigma\)}, perfect
 correlations, and singular principal submatrices, and for normalized
 observations it gives the following dependence on the sample size.}
 
@@ -254,36 +278,41 @@ Let \(X_1,\ldots,X_n\in\R^p\) be independent and centered. Suppose
 \end{equation}
 \end{corollary}
 
-\rev{Corollary~\ref{cor:observations} is Theorem~\ref{thm:unrestricted}
-with \(\xi_i=X_i/\sqrt n\)\pass{, and for} fixed \(B\) and polynomial
-dimension \(p\asymp n^a\), where \(a>0\) is fixed, \pass{its} bound has
-order \(n^{-1/2}(\log n)^2\), so the usual power \(n^{-1/2}\) of the
-sample size is kept up to logarithmic factors, however small the
-covariance eigenvalues are.} \pass{The factor \(BL^{3/2}\) cannot be
-improved, because Chernozhukov, Chetverikov, and
-Koike~\cite[Proposition~2.1]{CCK} construct i.i.d.\ observations with
-independent coordinates whose error is at least of order
-\(BL^{3/2}/\sqrt n\); Theorem~\ref{opt:skew-lower} gives a version of
-their example with the envelope attained. The bound
-\eqref{eq:observations-unrestricted} is thus optimal up to the factor
-\(\sqrt{1+\log_+(\sqrt n/(B\sqrt L))}\), which is of order
-\((\log n)^{1/2}\) in polynomial dimension.} \skl{Whether this factor is
-needed is open.}
+\rev{Corollary~\ref{cor:observations} \itx{follows from} Theorem~\ref{thm:unrestricted}
+\itx{by setting} \(\xi_i=X_i/\sqrt n\)\itx{, which has envelope \(\delta=B/\sqrt n\). For}
+fixed \(B\) and \itx{\(p\) growing polynomially in~\(n\), its} bound has
+order \(n^{-1/2}(\log n)^2\), so the \itx{power} \(n^{-1/2}\) of the
+sample size is \itx{reached} up to logarithmic factors, however small the
+\itx{eigenvalues of \(\Sigma\)} are.}
 
-For unequal marginal variances, define
+\itx{The factor \(BL^{3/2}/\sqrt n\) is sharp. For \(B\ge2\), \(p\to\infty\) and
+\(BL^{3/2}/\sqrt n\to0\), Theorem~\ref{opt:skew-lower} gives i.i.d.\ observations
+with independent coordinates whose error is at least of order
+\(BL^{3/2}/\sqrt n\). The example is inspired by that of Chernozhukov,
+Chetverikov, and Koike~\cite[Proposition~2.1]{CCK}, and it drops some of their
+side conditions on \(B\) and \(p\). Thus, in this regime, the
+bound~\eqref{eq:observations-unrestricted} is optimal up to the logarithmic
+factor \(\sqrt{1+\log_+(\sqrt n/(B\sqrt L))}\); when \(p\) grows polynomially
+in~\(n\) and \(B\) is fixed, this factor is of order \((\log n)^{1/2}\). Whether
+this factor can be improved remains an open question that we could not
+resolve.}
+
+For unequal marginal variances, \itx{let}
 \[
  \sigma_j^2=n^{-1}\sum_i\E X_{ij}^2,
  \qquad
  \underline\sigma=\min_j\sigma_j>0.
 \]
-Apply the result to \(X_{ij}/\sigma_j\). If
-\(\max_i\norm{X_i}_\infty\le K_n\), the standardized summands have
+\itx{We then apply Theorem~\ref{thm:unrestricted} to the summands
+\(\xi_{ij}=X_{ij}/(\sigma_j\sqrt n)\).} If
+\(\max_i\norm{X_i}_\infty\le K_n\), \itx{these} summands have
 envelope \(\delta=K_n/(\underline\sigma\sqrt n)\).
-Positive diagonal scaling preserves rectangles and their approximation
-distance, so the resulting bound also applies in the original coordinates.
+Positive diagonal scaling \itx{maps rectangles to rectangles and so} preserves
+\itx{the distance \(\rh\), and} the resulting bound also \itx{holds} in the
+original coordinates.
 
 \subsection{Correlation gaps and third-moment cancellation}
-\polish{A better bound is available when no two distinct coordinates are nearly
+\polish{\itx{We can obtain a better bound} when no two distinct coordinates are nearly
 equal or opposite. To measure this separation, define}
 \[
  c=1-\max_{j\ne k}|\Sigma_{jk}|,
@@ -329,11 +358,10 @@ Then
 \end{equation}
 \end{theorem}
 
-\rev{Condition~\eqref{eq:zero-third} holds when each summand is centrally
-symmetric, that is, when \(\xi_i\) and \(-\xi_i\) have the same law; it
-involves the mixed third moments, so vanishing marginal
-third moments do not suffice. The condition allows cancellation between
-different summands and is preserved by deterministic linear maps.}
+\itx{Condition~\eqref{eq:zero-third} holds when each summand is centrally
+symmetric, that is, when \(\xi_i\) and \(-\xi_i\) have the same law. Because it
+involves the mixed third moments \(\E[\xi_{ij}\xi_{ik}\xi_{i\ell}]\), vanishing
+marginal third moments do not suffice for this cancellation.}
 
 For a fixed standardized envelope and \(c\ge c_0>0\), the sample-size
 bounds become
@@ -362,10 +390,10 @@ to be sharp.}
 
 \subsection{Sub-exponential coordinates}\label{sec:subexponential}
 \rev{The bounded theorems extend to sub-exponential coordinates if each
-coordinate is clipped, that is, truncated to an interval \([-T,T]\), at a
-level \(T\) that depends only on \(\log n\), and the discarded sum is
-controlled separately. We measure tails by the Orlicz
-norm}
+coordinate is \itx{truncated} to an interval \([-T,T]\), at a
+level \(T\) that depends only on \(\log n\) \itx{and on the tail scale \(K\) defined below}, and the discarded sum is
+controlled separately. \itx{We measure the size of sub-exponential variables by
+the Orlicz norm}}
 \[
  \|V\|_{\psi_1}=\inf\{t>0:\E e^{|V|/t}\le2\}.
 \]
@@ -391,22 +419,25 @@ If the correlation gap of \(W_n\) is at least a fixed \(c_0>0\), then
  b_n\left[L^{3/2}+L\sqrt{1+\log_+\frac1{b_nL}}\right]\right\}.
  \label{eq:subexponential-gap}
 \end{equation}
-No local determinant or positive-eigenvalue lower bound is needed for
-\eqref{eq:subexponential}. Unequal marginal variances are handled by
-imposing the tail condition on \(X_{ij}/\sigma_j\), as in the
-standardization following Corollary~\ref{cor:observations}.
 \end{corollary}
 
-For fixed \(K\) and \(p\asymp n^a\), \pass{where} \(a>0\) \pass{is
-fixed}, these rates are
-\(n^{-1/2}(\log n)^3\) and
-\(n^{-1/2}(\log n)^{5/2}\), respectively\rev{, so the power of the
-sample size is again optimal up to logarithmic factors}. In particular,
-\eqref{eq:subexponential} guarantees convergence for fixed \(K\) when
-\(\log p=o(n^{1/3}/\log(en))\). \rev{\nat{These dimension ranges are not claimed to be sharp for the sub-exponential class.}}
-Appendix~\ref{app:subexponential} controls the discarded sum directly,
-which allows the \lin{truncation level} to depend only on \(\log n\), and restores
-covariance through a joint Gaussian coupling.
+\itx{The bound~\eqref{eq:subexponential} requires neither a lower bound on a
+local determinant nor a lower bound on the positive eigenvalues of the
+covariance matrix of \(W_n\). For unequal marginal variances, the tail
+condition is imposed on \(X_{ij}/\sigma_j\), as in the standardization after
+Corollary~\ref{cor:observations}.}
+
+\itx{For fixed \(K\) and \(p\asymp n^a\) with \(a>0\) fixed, the
+bound~\eqref{eq:subexponential} is of order \(n^{-1/2}(\log n)^3\), and the
+bound~\eqref{eq:subexponential-gap} under a fixed correlation gap is of order
+\(n^{-1/2}(\log n)^{5/2}\), so the power \(n^{-1/2}\) of the sample size is
+again optimal up to logarithmic factors. By~\eqref{eq:subexponential}, the error
+tends to zero for fixed \(K\) when \(\log p=o(n^{1/3}/\log(en))\).
+The proof is in Appendix~\ref{app:subexponential}. It truncates each coordinate
+at a level of order \(K\log(en)\). The exponential moments bound the discarded
+part of the sum directly, so the level depends on \(K\) and \(\log n\) alone. Truncation
+changes the covariance, and a joint Gaussian coupling of the truncated and the
+discarded parts gives \(Z_n\) exactly the covariance of \(W_n\).}
 
 \subsection{Relation to recent work}\label{sec:literature}
 High-dimensional Gaussian approximation for maxima and rectangles was
@@ -461,7 +492,7 @@ only the factor \(\sqrt{D_L}\).}
 
 \skl{\nat{The bounds of this paper} reach the rate \(n^{-1/2}\), up to logarithmic factors, with
 no condition on the covariance matrix, and they lose only the factor
-\(\sqrt{D_L}\) against the sharp bounds under nondegeneracy. They come
+\(\sqrt{D_L}\) against the sharp bounds under nondegeneracy. They \itx{arise}
 from an interpolation between the sum and its Gaussian counterpart along
 which the derivative of a smoothed rectangle probability is bounded
 without reference to the eigenvalues of the covariance matrix.}
@@ -1290,6 +1321,13 @@ V. Chernozhukov, D. Chetverikov, K. Kato, and Y. Koike (2022).
 \emph{Improved central limit theorem and bootstrap approximations in
 high dimensions}. The Annals of Statistics \textbf{50}(5), 2562--2586.
 \href{https://doi.org/10.1214/22-AOS2193}{doi:10.1214/22-AOS2193}.
+
+\bibitem{CCKK2023}
+\itx{V. Chernozhukov, D. Chetverikov, K. Kato, and Y. Koike (2023).
+\emph{High-dimensional data bootstrap}.
+Annual Review of Statistics and Its Application \textbf{10}, 427--449.
+Working version: arXiv:2205.09691.
+\url{https://arxiv.org/abs/2205.09691}.}
 
 \bibitem{Local}
 V. Chernozhukov, D. Chetverikov, K. Kato, and Y. Koike,
@@ -3216,7 +3254,7 @@ A coordinate union bound now yields
  \label{tail:sum-coupling}
 \end{equation}
 \rev{Since the union bound is applied to the residual sums, the clipping
-level can depend only on \(\log n\).}
+level can depend only on \itx{\(K\) and} \(\log n\).}
 
 \emph{Step 2: Apply the bounded comparison.}
 Set \(\tau=2Ke^{-\sks{2\ell}}\)\skl{, and write \(\operatorname{sd}(W_{T,j})\) for the
