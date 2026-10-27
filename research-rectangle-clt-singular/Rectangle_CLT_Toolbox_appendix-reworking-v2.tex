@@ -1,0 +1,1267 @@
+% Toolbox appendix aligned with Rectangle_CLT_Main-reworking-v2.tex,
+% 27 October 2026. The standalone source embeds this body; this file can
+% also be included after Appendix E of the main manuscript with
+%   \def\toolboxinpaper{}
+%   \input{Rectangle_CLT_Toolbox_appendix-reworking-v2}
+% Fallback paper numbers below are checked against the v2 auxiliary file.
+
+\makeatletter
+\providecommand{\E}{\mathbb E}
+\providecommand{\Pp}{\mathbb P}
+\providecommand{\R}{\mathbb R}
+\providecommand{\tr}{\operatorname{tr}}
+\providecommand{\op}{\mathrm{op}}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\ind}{\mathbf 1}
+\providecommand{\dd}{\,d}
+\providecommand{\Hh}{H_2}
+\providecommand{\surf}{\mathcal J}
+\providecommand{\relint}{\operatorname{relint}}
+\providecommand{\aff}{\operatorname{aff}}
+\providecommand{\cone}{\operatorname{cone}}
+\providecommand{\dist}{\operatorname{dist}}
+\providecommand{\prj}{\operatorname{pr}}
+\providecommand{\Haus}{\mathcal H}
+\providecommand{\TBc}[1]{[#1]}
+% \PN{label}{C.5} prints a number of the paper (a \ref in the paper);
+% \PR{Lemma}{label}{C.5} prints "Lemma C.5"; \PE{label}{C.21} an equation.
+\providecommand{\PN}[2]{\ifdefined\toolboxinpaper\ref{#1}\else#2\fi}
+\providecommand{\PR}[3]{#1~\PN{#2}{#3}}
+\providecommand{\PE}[2]{(\PN{#1}{#2})}
+\providecommand{\usedin}[1]{\par\smallskip\noindent{\small\emph{Used in:} #1}\par\smallskip}
+\@ifundefined{c@fact}{\newtheorem{fact}{Fact}[section]}{}
+\makeatother
+
+\section{Toolbox: facts from analysis and geometry}\label{app:toolbox}
+
+This appendix collects the facts from analysis, convex geometry, and
+measure theory on which the proofs in Appendices~\PN{appx-sec:smoothing}{B}
+and~\PN{appx-sec:support}{C} rely and which a mathematical statistician may
+not have at hand. Every surface in those proofs is a finite union of flat
+pieces of hyperplanes, so no differential geometry beyond the flat case is
+needed. On a hyperplane the area formula is Fubini's theorem, the
+Gauss--Green formula (the divergence theorem) is the fundamental theorem of
+calculus along parallel lines, and the coarea formula is Fubini's theorem
+applied piece by piece; the proofs below carry out each of these
+reductions. Each fact is stated in the form in which
+the proofs use it, and is followed by the places that use it and by a proof
+or a reference. A proof is given when it takes a few lines, and a standard
+source, listed at the end of the appendix, is cited otherwise. The facts are
+standard tools and elementary consequences used by the paper, so they
+carry their own numbering. The symbols in the lines headed ``Used in'' are those of the
+paper's appendices. The references and applications below follow
+\texttt{reworking-v2}, dated 27 October 2026. This toolbox has not been
+Lean-certified; re-certification of the revised development remains
+future work.
+
+Subsection~\ref{tb:sec:calc} treats integration and calculus,
+Subsection~\ref{tb:sec:gauss} the Gaussian identities, and
+Subsection~\ref{tb:sec:matrix} the matrix and entropy inequalities.
+Subsection~\ref{tb:sec:logconcave} covers log-concavity and
+Pr\'ekopa's theorem. Subsections~\ref{tb:sec:poly}--\ref{tb:sec:tubes}
+treat polyhedra, from faces and normal cones through the divergence
+theorem to variable-width tubes, in the order in which
+\PR{Lemma}{appx-an:lem:surface}{C.5} uses them.
+Subsection~\ref{tb:sec:coarea} justifies the first variation used
+in \PR{Lemma}{appx-an:lem:matrix}{C.4}, and
+Subsection~\ref{tb:sec:index} lists where each fact is used.
+
+\subsection{Notation}\label{tb:sec:notation}
+
+The space \(\R^n\) carries the inner product \(x\cdot y\) and the Euclidean
+norm \(\norm x\); in the proofs \(n\) is the rank \(r\) of the covariance,
+or \(r-1\) when a hyperplane of \(\R^r\) is identified with
+\(\R^{r-1}\). We write \(dx\) for Lebesgue measure, \(\varphi_n\) and
+\(\Phi_n\) for the standard Gaussian density and law on \(\R^n\), and \(G\)
+for a standard Gaussian vector. For a linear subspace \(L\), \(\varphi_L\)
+is the standard Gaussian density on \(L\) with respect to Lebesgue measure
+on \(L\). For a set \(S\), \(\ind_S\) is its indicator function, \(\aff S\)
+is the smallest affine subspace containing it, the dimension of \(S\) is
+that of \(\aff S\), and \(\relint S\) is the interior of \(S\) relative to
+\(\aff S\). The distance from a point \(y\) to a set \(S\) is
+\(\dist(y,S)=\inf_{x\in S}\norm{y-x}\).
+
+For \(f\in C^q(\R^n)\), the derivative of order \(q\) in the directions
+\(z_1,\ldots,z_q\in\R^n\) is
+\[
+ D^qf(x)[z_1,\ldots,z_q]
+ =\partial_{s_1}\cdots\partial_{s_q}f(x+s_1z_1+\cdots+s_qz_q)\Big|_{s=0}
+ =\sum_{i_1,\ldots,i_q}\partial_{i_1\cdots i_q}f(x)\,
+   z_{1,i_1}\cdots z_{q,i_q},
+\]
+which is symmetric and multilinear in the directions. We write
+\(D^qf(x)[z^{\otimes q}]\) when all directions equal \(z\), and
+\(D^1f=\nabla f\). The Loewner order \(M\preceq N\) means that
+\(N-M\) is positive semidefinite, \(\norm\Xi_\op\) is the operator norm
+of a matrix \(\Xi\), and \(\norm M_*\) is the \emph{nuclear norm}, which for
+a symmetric matrix \(M\) with eigenvalues \(\mu_i\) equals \(\sum_i|\mu_i|\).
+
+\subsection{Integration and calculus}\label{tb:sec:calc}
+
+\begin{fact}[Fubini and Tonelli]\label{tb:fubini}
+Let \((S_1,\mu_1)\) and \((S_2,\mu_2)\) be \(\sigma\)-finite measure
+spaces and let \(f\) be a measurable function on \(S_1\times S_2\). If
+\(f\ge0\), then \(s_1\mapsto\int f(s_1,s_2)\,\mu_2(ds_2)\) is measurable
+and
+\[
+ \int\Bigl(\int f\,d\mu_2\Bigr)d\mu_1
+ =\int\Bigl(\int f\,d\mu_1\Bigr)d\mu_2
+ =\int f\,d(\mu_1\otimes\mu_2)\in[0,\infty].
+\]
+If \(\int|f|\,d(\mu_1\otimes\mu_2)<\infty\), the same equalities hold, and
+the inner integrals are finite almost everywhere.
+\end{fact}
+
+Three special cases occur in the proofs. If \(X\) and \(Y\) are
+independent random elements and either \(f\ge0\) or \(f(X,Y)\) is
+integrable, then
+\[
+ \E f(X,Y)=\E g(X),\qquad g(x)=\E f(x,Y),
+\]
+because the joint law is the product of the marginal laws. This is the
+formal content of every argument that is carried out for a fixed value of
+an independent component such as \(V_0\) and then averaged over it. With
+\(\mu_2\) the counting measure, the theorem says that
+\(\E\sum_k\xi_k=\sum_k\E\xi_k\) for nonnegative terms, and for terms with
+\(\sum_k\E|\xi_k|<\infty\). For an orthogonal decomposition
+\(\R^n=L\oplus L^\perp\), Lebesgue measure on \(\R^n\) is the product of the
+Lebesgue measures on \(L\) and on \(L^\perp\), so that
+\(\int_{\R^n}f\,dx=\int_{L^\perp}\int_Lf(l+w)\,dl\,dw\).
+
+The final averaging in \PR{Lemma}{appx-an:lem:surface}{C.5} is an
+instance of the first case. For independent \(V_0\) and \(G\), it gives
+\[
+ \E\!\left[R(G)^3\ind\{V_0+\sigma G\in
+                   Q^{\sigma/R(G)}\setminus Q\}\right]
+ =\E_G\!\left[R(G)^3\Pp_{V_0}\{V_0+\sigma G\in
+                   Q^{\sigma/R(G)}\setminus Q\}\right].
+\]
+Here \(R\) is the projection radius in
+Fact~\ref{tb:projection-moments}, and \(Q^t\) shifts every
+unit-normal threshold outward by \(t\). Conditional on \(G\), both
+the width \(\sigma/R(G)\) and the translation \(\sigma G\) are fixed.
+Concentration of \(V_0\) can therefore be applied directly. Tonelli
+requires no integrability check at this stage because the integrand
+is nonnegative.
+
+\usedin{conditioning on independent components in Appendices~\PN{appx-sec:smoothing}{B}
+and~\PN{appx-sec:support}{C}; absolute convergence of the translated-weight
+series in \PR{Lemma}{appx-an:lem:restoration}{C.2}; final averaging in
+\PR{Lemma}{appx-an:lem:surface}{C.5}; conditioning on independent pairs
+in the retained proof in \PR{Appendix}{appx-app:concentration}{D}.}
+\emph{Source.} \TBc{Fol99}, Section~2.5.
+
+\begin{fact}[Differentiation under the integral sign; Taylor's formula]
+\label{tb:taylor}
+(a) Let \(I\) be an open interval and let \(f(\lambda,\omega)\) be
+integrable in \(\omega\) and differentiable in \(\lambda\in I\), with
+\(|\partial_\lambda f(\lambda,\omega)|\le g(\omega)\) for an integrable
+function \(g\). Then \(\frac d{d\lambda}\E f(\lambda,\cdot)
+=\E\,\partial_\lambda f(\lambda,\cdot)\) on \(I\).
+
+(b) For \(f\in C^q(\R^n)\) and \(x,v\in\R^n\),
+\[
+ f(x+v)=\sum_{k=0}^{q-1}\frac1{k!}D^kf(x)[v^{\otimes k}]
+ +\int_0^1\frac{(1-s)^{q-1}}{(q-1)!}D^qf(x+sv)[v^{\otimes q}]\,ds.
+\]
+For \(q=1\) this is \(f(x+v)-f(x)=\int_0^1Df(x+sv)[v]\,ds\).
+\end{fact}
+
+\begin{proof}
+For (a), the mean value theorem bounds the difference quotients by \(g\),
+and they converge pointwise, so dominated convergence applies. For (b),
+the function \(s\mapsto f(x+sv)\) is of class \(C^q\) with \(k\)th derivative
+\(D^kf(x+sv)[v^{\otimes k}]\); apply the one-dimensional Taylor formula with
+integral remainder at \(s=0\) and evaluate it at \(s=1\).
+\end{proof}
+
+\usedin{the signed Hessian comparison and its Taylor expansion in
+Subsection~\PN{appx-an:sec:path}{C.2}; the restoration of the cubic term
+to the full path in \PR{Lemma}{appx-an:lem:identity}{C.1}; the segment
+integral in \PR{Lemma}{appx-lem:endpoint-gap}{B.3}.}
+\emph{Source.} \TBc{Fol99}, Section~2.3.
+
+Differentiating the thinning probability changes one mask at a time.
+The following finite-product identity isolates that operation before
+amplitude differentiation and the Gaussian heat equation are applied.
+
+\begin{fact}[Differentiating independent Bernoulli masks]\label{tb:bernoulli}
+Let \(B_1,\ldots,B_N\) be independent Bernoulli variables with parameter
+\(q\in(0,1)\). For a function \(H:\{0,1\}^N\to\R\), write
+\(B^{i,b}\) for the vector obtained by setting its \(i\)th entry to
+\(b\in\{0,1\}\). Then
+\[
+ \frac{d}{dq}\E_q H(B)
+ =\sum_{i=1}^N\E_q\{H(B^{i,1})-H(B^{i,0})\}.
+\]
+If \(q=q(\lambda)\) and \(H=H_\lambda\) are differentiable, then
+\[
+ \frac{d}{d\lambda}\E_{q(\lambda)}H_\lambda(B)
+ =\E_{q(\lambda)}\partial_\lambda H_\lambda(B)
+ +q'(\lambda)\sum_i\E_{q(\lambda)}
+       \{H_\lambda(B^{i,1})-H_\lambda(B^{i,0})\}.
+\]
+\end{fact}
+
+\begin{proof}
+Temporarily give the masks separate parameters \(q_1,\ldots,q_N\).
+Conditioning on all masks except the \(i\)th makes their expectation
+affine in \(q_i\), with derivative equal to the insertion--deletion
+difference in the first display. Differentiating along
+\(q_1=\cdots=q_N=q\) gives the sum. The second formula is the chain
+rule. Independent random arguments may be included by conditioning
+and then applying Fact~\ref{tb:taylor}(a).
+\end{proof}
+
+\usedin{Subsection~\PN{appx-an:sec:path}{C.2}, before
+\PR{Lemma}{appx-an:lem:identity}{C.1}, to differentiate the masks in
+the Bernoulli--Gauss path.}
+
+The resulting signed Hessian comparison has scalar weight
+\[
+ \nu_\lambda(s)=\frac{4-2(3-\lambda)s}{1+\lambda},\qquad 0\le s\le1.
+\]
+Direct integration gives
+\[
+ \int_0^1\nu_\lambda(s)\,ds=1,\qquad
+ \int_0^1s\nu_\lambda(s)\,ds=\frac{2\lambda}{3(1+\lambda)}.
+\]
+For a twice continuously differentiable scalar function \(g\),
+Taylor's formula and the first identity give
+\[
+ g(0)-\int_0^1\nu_\lambda(s)g(s)\,ds
+ =-\frac{2\lambda}{3(1+\lambda)}g'(0)
+   -\int_0^1\nu_\lambda(s)\int_0^s(s-t)g''(t)\,dt\,ds.
+\]
+With \(g(s)=D^2F(H_i+s(1+\lambda)\zeta_i)[\zeta_i,\zeta_i]\),
+the factor \(1/2\) in the signed Hessian comparison turns the first
+term into \(-\lambda D^3F(H_i)[\zeta_i^3]/3\). This explains the
+cubic coefficient before the derivatives are restored to the full path.
+The weight \(\nu_\lambda\) is signed; these identities use its
+integrals, not a probability interpretation.
+
+\begin{fact}[Fa\`a di Bruno's formula]\label{tb:faa}
+Let \(\phi\) be a smooth function on an open interval of \(\R\) and let
+\(g:\R^n\to\R\) be smooth with values in that interval. For \(q\ge1\), let
+\(\Pi_q\) be the set of partitions \(\mathcal P\) of \(\{1,\ldots,q\}\) into
+nonempty blocks, let \(|\mathcal P|\) be the number of blocks, and for a
+block \(J\) let \(z_J\) be the list of directions \(z_a\) with
+\(a\in J\). Then
+\[
+ D^q(\phi\circ g)(x)[z_1,\ldots,z_q]
+ =\sum_{\mathcal P\in\Pi_q}\phi^{(|\mathcal P|)}(g(x))
+  \prod_{J\in\mathcal P}D^{|J|}g(x)[z_J].
+\]
+\end{fact}
+
+\begin{proof}
+For \(q=1\) this is the chain rule. Differentiate the right side for \(q\)
+in the direction \(z_{q+1}\). By the product rule, the derivative either
+falls on \(\phi^{(|\mathcal P|)}(g(x))\), which gives
+\(\phi^{(|\mathcal P|+1)}(g(x))\,Dg(x)[z_{q+1}]\) and adds the block
+\(\{q+1\}\) to \(\mathcal P\), or falls on one factor
+\(D^{|J|}g(x)[z_J]\), which adds \(q+1\) to the block \(J\). Every partition
+of \(\{1,\ldots,q+1\}\) arises exactly once in this way, by removing
+\(q+1\) from its block.
+\end{proof}
+
+\begin{fact}[Derivatives of the logistic approximation]\label{tb:logistic}
+Let \(\nu_1,\ldots,\nu_m\in\R^n\), \(a_1,\ldots,a_m\in\R\), \(h>0\), and
+\[
+ w_\alpha(x)=e^{(\nu_\alpha\cdot x-a_\alpha)/h},\qquad
+ T=\sum_\alpha w_\alpha,\qquad
+ F=\frac1{1+T},\qquad
+ \pi_\alpha=\frac{w_\alpha}{1+T}=Fw_\alpha .
+\]
+For directions \(z_1,\ldots,z_q\), with the blocks \(J_1,\ldots,J_{|\mathcal P|}\)
+of \(\mathcal P\) listed in any fixed order,
+\[
+ D^qF(x)[z_1,\ldots,z_q]
+ =h^{-q}\sum_{\mathcal P\in\Pi_q}(-1)^{|\mathcal P|}|\mathcal P|!
+ \sum_{\alpha_1,\ldots,\alpha_{|\mathcal P|}}
+ F(x)\prod_{b=1}^{|\mathcal P|}\pi_{\alpha_b}(x)
+ \prod_{b=1}^{|\mathcal P|}\prod_{a\in J_b}(\nu_{\alpha_b}\cdot z_a),
+\]
+and \(\sum_{\mathcal P\in\Pi_q}|\mathcal P|!\le q!\,2^{q-1}\). Consequently
+\(|D^qF(x)[z_1,\ldots,z_q]|\le q!\,2^{q-1}h^{-q}\,F(x)\prod_{a=1}^q
+\max_\alpha|\nu_\alpha\cdot z_a|\).
+\end{fact}
+
+\begin{proof}
+Apply Fact~\ref{tb:faa} with \(\phi(\tau)=(1+\tau)^{-1}\) and \(g=T\). Then
+\(\phi^{(k)}(\tau)=(-1)^kk!\,(1+\tau)^{-k-1}\), and since each \(w_\alpha\) is
+an exponential of an affine function,
+\(D^lT(x)[z_1,\ldots,z_l]=h^{-l}\sum_\alpha w_\alpha(x)\prod_{a\le l}
+(\nu_\alpha\cdot z_a)\). Substituting, and using
+\((1+T)^{-|\mathcal P|-1}\prod_bw_{\alpha_b}=F\prod_b\pi_{\alpha_b}\) and
+\(\sum_b|J_b|=q\), gives the formula. The number
+\(\sum_{\mathcal P}|\mathcal P|!\) counts ordered partitions
+\((J_1,\ldots,J_k)\) of \(\{1,\ldots,q\}\). Writing the elements of
+\(J_1\), then of \(J_2\), and so on, in increasing order inside each block,
+gives a permutation together with the set of positions at which a new block
+starts, which is a subset of the \(q-1\) gaps between consecutive entries.
+Every ordered partition arises from at least one of these
+\(q!\,2^{q-1}\) pairs. For the bound, the sum over \(\alpha_b\) of
+\(\pi_{\alpha_b}\) is \(1-F\le1\), and each product of projections is
+at most \(\prod_a\max_\alpha|\nu_\alpha\cdot z_a|\).
+\end{proof}
+
+After the two Gaussian integrations by parts in Appendix C, only
+the cases \(q=1,2\) remain. Writing them explicitly avoids carrying
+the partition notation through that estimate:
+\begin{align*}
+ DF(x)[z]&=-h^{-1}\sum_\alpha F\pi_\alpha(\nu_\alpha\cdot z),\\
+ D^2F(x)[z_1,z_2]
+ &=h^{-2}\left\{2\sum_{\alpha,\beta}F\pi_\alpha\pi_\beta
+       (\nu_\alpha\cdot z_1)(\nu_\beta\cdot z_2)
+       -\sum_\alpha F\pi_\alpha
+       (\nu_\alpha\cdot z_1)(\nu_\alpha\cdot z_2)\right\}.
+\end{align*}
+All weights on the right are evaluated at \(x\). The general formula
+still supplies the third- and fourth-order envelopes for the early
+estimate. Since each partition has at least one block, its weight
+sum contains \((1-F)^k\le1-F\); thus the derivative bound can retain
+the factor \(F(1-F)\) whose expectation concentration controls.
+
+\usedin{the general derivative expansion and local envelope in
+Subsection~\PN{appx-sec:mixture}{B.2}, namely
+\PE{appx-eq:partition-derivative}{B.1}--\PE{appx-eq:local-envelope}{B.3};
+the explicit first and second derivatives in
+\PR{Lemma}{appx-an:lem:restoration}{C.2}.}
+\emph{Source.} \TBc{Com74}; the proof above is complete.
+
+\subsection{Gaussian identities}\label{tb:sec:gauss}
+
+\begin{fact}[Gaussian density in orthogonal coordinates]\label{tb:gauss-coord}
+(a) Let \(\R^n=L\oplus L^\perp\) be an orthogonal decomposition. Then
+\(\varphi_n(l+w)=\varphi_L(l)\varphi_{L^\perp}(w)\) for \(l\in L\) and
+\(w\in L^\perp\), so the projections of a standard Gaussian vector onto
+\(L\) and \(L^\perp\) are independent standard Gaussian vectors. In
+particular, for a unit vector \(u\), \(a\in\R\), and \(y\perp u\),
+\(\varphi_n(au+y)=\varphi_1(a)\varphi_{n-1}(y)\).
+
+(b) For \(x,v\in\R^n\),
+\(\varphi_n(x+v)=\varphi_n(x)\exp\{-x\cdot v-\tfrac12\norm v^2\}\).
+\end{fact}
+
+\begin{proof}
+Both follow from \(\norm{l+w}^2=\norm l^2+\norm w^2\) and from expanding
+\(\norm{x+v}^2\).
+\end{proof}
+
+\usedin{the normal--tangential decomposition in
+\PR{Lemma}{appx-an:lem:mean}{C.3}; the facet density factorization
+and density comparison along normal tubes in
+\PR{Lemma}{appx-an:lem:surface}{C.5}.}
+
+\begin{fact}[Gaussian integration by parts]\label{tb:stein}
+Let \(G\sim N(0,I_n)\) and let \(f\in C^2(\R^n)\) have \(f\) and its partial
+derivatives of orders at most two of polynomial growth. Then
+\begin{enumerate}
+\item[(a)] \(\E[Gf(G)]=\E\nabla f(G)\);
+\item[(b)] \(\E[(GG^\top-I_n)f(G)]=\E D^2f(G)\); equivalently, for \(z\in\R^n\),
+\(\E D^2f(G)[z,z]=\E\bigl[\tr\{(GG^\top-I_n)zz^\top\}f(G)\bigr]\), where
+\(\tr\{(GG^\top-I_n)zz^\top\}=(z\cdot G)^2-\norm z^2\);
+\item[(c)] if \(v\in\R^n\), \(\sigma>0\), \(U=v+\sigma G\), and
+\(F\in C^{s+2}(\R^n)\) has derivatives of polynomial growth, then for
+\(z,z_1,\ldots,z_s\in\R^n\),
+\[
+ \E D^{s+2}F(U)[z,z,z_1,\ldots,z_s]
+ =\sigma^{-2}\E\bigl[\tr\{(GG^\top-I_n)zz^\top\}\,
+ D^sF(U)[z_1,\ldots,z_s]\bigr].
+\]
+\end{enumerate}
+\end{fact}
+
+\begin{proof}
+For (a) in one coordinate, \(x\varphi_1(x)=-\varphi_1'(x)\), so integration by
+parts gives
+\[\int xf(x)\varphi_1(x)\,dx=\int f'(x)\varphi_1(x)\,dx,\]
+and the boundary terms vanish because of the growth condition. The other coordinates
+are handled by Fact~\ref{tb:fubini}. For (b), apply (a) to \(\partial_if\) and
+to \(G_kf\): \(\E[G_iG_kf(G)]=\E\partial_i(G_kf)(G)=\delta_{ik}\E f(G)
++\E[G_k\partial_if(G)]=\delta_{ik}\E f(G)+\E\partial_{ik}f(G)\). For (c), the
+function \(f(g)=D^sF(v+\sigma g)[z_1,\ldots,z_s]\) has
+\(D^2f(g)[z,z]=\sigma^2D^{s+2}F(v+\sigma g)[z,z,z_1,\ldots,z_s]\); apply (b).
+\end{proof}
+
+\usedin{Subsection~\PN{sec:outline-late}{2.4} and
+\PR{Lemma}{appx-an:lem:restoration}{C.2}, conditional on \(\mathcal H\)
+with \(v=V_0+v_i\) and \(z=Z_i\); the identity
+\(\E[Z\cdot\nabla\Psi(Z)]=\E\tr(\Sigma D^2\Psi(Z))\)
+in \PR{Lemma}{appx-lem:endpoint-gap}{B.3}.}
+\emph{Source.} Stein~\TBc{Ste81}; the proof above is complete.
+
+\begin{fact}[Heat equation for the Gaussian component]\label{tb:heat}
+Let \(Z\sim N(0,\Sigma)\) in \(\R^p\), where \(\Sigma\) may be singular, and
+let \(f\in C^2(\R^p)\) be bounded with bounded first and second derivatives.
+Then, for \(x\in\R^p\) and \(\lambda>0\),
+\[
+ \frac d{d\lambda}\E f(x+\sqrt\lambda Z)
+ =\tfrac12\E\tr\{\Sigma D^2f(x+\sqrt\lambda Z)\}.
+\]
+\end{fact}
+
+\begin{proof}
+Write \(Z=\Gamma G\) with \(\Gamma\Gamma^\top=\Sigma\) and \(G\) standard
+Gaussian. By Fact~\ref{tb:taylor}(a), which applies because the difference
+quotients are bounded by \(\norm\nabla f_\infty\norm{\Gamma G}/(2\sqrt\lambda)\)
+locally uniformly in \(\lambda>0\), the derivative equals
+\((2\sqrt\lambda)^{-1}\E[G\cdot\Gamma^\top\nabla f(x+\sqrt\lambda\Gamma G)]\).
+Fact~\ref{tb:stein}(a) applied to the function \(g\mapsto
+\Gamma^\top\nabla f(x+\sqrt\lambda\Gamma g)\) turns this into
+\((2\sqrt\lambda)^{-1}\sqrt\lambda\,\E\tr\{\Gamma^\top D^2f\,\Gamma\}
+=\frac12\E\tr\{\Sigma D^2f\}\).
+\end{proof}
+
+\usedin{Subsection~\PN{sec:outline-path}{2.2} and the derivation of
+\PE{appx-an:signed-hessian}{C.6} in
+Subsection~\PN{appx-an:sec:path}{C.2}. The Gaussian component supplies
+the covariance term that cancels the constant term of the Hessian
+expansion.}
+
+The surface estimate needs the size of a few normal projections,
+not the Euclidean length of the full Gaussian vector. The following
+bound explains why only a logarithm of the number of faces enters.
+
+\begin{fact}[Maxima of one- and two-dimensional Gaussian projections]
+\label{tb:projection-moments}
+Let \(u_1,\ldots,u_m\) be unit vectors in \(\R^r\), with \(m\ge1\).
+For linearly independent \(u_j,u_k\), let \(\Pi_{jk}\) be orthogonal
+projection onto their span, and put
+\[
+ \mathcal M(g)=\max\left\{\max_j|u_j\cdot g|,
+   \max_{j,k:\,u_j,u_k\text{ independent}}\norm{\Pi_{jk}g}\right\},
+ \qquad R(g)=1+\mathcal M(g).
+\]
+An empty second maximum is omitted. Then \(R\) is \(1\)-Lipschitz.
+For \(G\sim N(0,I_r)\) and \(q\in\{2,3\}\),
+\[
+ \E R(G)^q\le C_q\{\log(em)\}^{q/2}.
+\]
+\end{fact}
+
+\begin{proof}
+Every projection is a contraction, so each function in the maximum
+is \(1\)-Lipschitz, as is their maximum. A scalar standard normal
+satisfies \(\Pp(|Z|>t)\le2e^{-t^2/2}\); the length of a
+two-dimensional standard normal satisfies
+\(\Pp(\norm{G_2}>t)=e^{-t^2/2}\). A union bound gives
+\[
+ \Pp\{\mathcal M(G)>t\}\le\min\{1,2(m+m^2)e^{-t^2/2}\}.
+\]
+The projections need not be independent. Integrate
+\(q\int_0^\infty t^{q-1}\Pp\{\mathcal M(G)>t\}\,dt\), splitting
+at \(\sqrt{8\log(em)}\), and use
+\((1+x)^q\le2^{q-1}(1+x^q)\).
+\end{proof}
+
+\usedin{\PE{appx-an:projection-moments}{C.28} in
+\PR{Lemma}{appx-an:lem:surface}{C.5}. Since \(m\le2p\), these moments
+are of orders \(L\) and \(L^{3/2}\), where \(L=\log(ep)\).}
+
+\subsection{Matrix and entropy inequalities}\label{tb:sec:matrix}
+
+Both time ranges use the same observation: the summed second moments
+control a pair of projections even when other random coefficients
+remain inside the expectation.
+
+\begin{fact}[Conditional covariance contraction]\label{tb:covariance}
+Let \(Z_1,\ldots,Z_N\in\R^r\) have finite second moments, and let
+\(\mathcal H\) be a sigma-field such that
+\(\sum_i\E[Z_iZ_i^\top\mid\mathcal H]\preceq I_r\) almost surely.
+For unit vectors \(u,v\),
+\[
+ \sum_i\E[|(u\cdot Z_i)(v\cdot Z_i)|\mid\mathcal H]\le1.
+\]
+If real random coefficients satisfy \(|c_i|\le a\) almost surely,
+where \(a\ge0\) is constant, then
+\[
+ \left\|\sum_i\E[c_iZ_iZ_i^\top\mid\mathcal H]\right\|_\op\le a.
+\]
+No independence of the coefficients and vectors is required.
+\end{fact}
+
+\begin{proof}
+Conditional Cauchy--Schwarz, followed by Cauchy--Schwarz over the
+index \(i\), bounds the first sum by
+\[
+ \left(\sum_i\E[(u\cdot Z_i)^2\mid\mathcal H]\right)^{1/2}
+ \left(\sum_i\E[(v\cdot Z_i)^2\mid\mathcal H]\right)^{1/2}\le1.
+\]
+For the second claim, each unit vector \(u\) gives
+\(\bigl|\sum_i\E[c_i(u\cdot Z_i)^2\mid\mathcal H]\bigr|\le a\).
+The matrix is symmetric, so taking the supremum of its absolute
+quadratic forms proves the operator-norm bound.
+\end{proof}
+
+\usedin{\PE{appx-an:pair-contraction}{C.2} and the early estimates in
+Subsection~\PN{appx-an:sec:early}{C.3}; the coefficient matrices in
+\PR{Lemma}{appx-an:lem:restoration}{C.2}. Bounded face projections
+control the remaining directions by powers of \(\delta\).}
+
+\begin{fact}[Duality between the operator and nuclear norms]\label{tb:nuclear}
+(a) For every square matrix \(\Xi\) and every symmetric matrix \(M\),
+\(|\tr(\Xi M)|\le\norm\Xi_\op\norm M_*\). Moreover
+\(\norm M_*=\max\{\tr(\Xi M):\norm\Xi_\op\le1\}\), so that \(\norm\cdot_*\) is
+a norm on symmetric matrices.
+
+(b) If \(M=P-N\) with \(P\succeq0\) and \(N\succeq0\), then
+\(\norm M_*\le\tr P+\tr N=2\tr P-\tr M\).
+\end{fact}
+
+\begin{proof}
+For (a), let \(M=\sum_i\mu_ie_ie_i^\top\) be a spectral decomposition. Then
+\(\tr(\Xi M)=\sum_i\mu_i\,e_i^\top\Xi e_i\) and \(|e_i^\top\Xi e_i|\le
+\norm\Xi_\op\), which gives the inequality. Equality is attained at
+\(\Xi=\sum_i\operatorname{sgn}(\mu_i)e_ie_i^\top\). A supremum of linear
+functionals satisfies the triangle inequality. For (b), the norm of a
+positive semidefinite matrix is its trace, so the triangle inequality gives
+\(\norm M_*\le\tr P+\tr N\), and \(\tr N=\tr P-\tr M\).
+\end{proof}
+
+\usedin{the final contraction in \PR{Lemma}{appx-an:lem:restoration}{C.2};
+the reduction \PE{appx-an:matrix-trace-reduction}{C.22} in
+\PR{Lemma}{appx-an:lem:matrix}{C.4}, with
+\(P=p_\alpha\mu_\alpha\mu_\alpha^\top\) and
+\(N=p_\alpha(I_r-K_\alpha)\).}
+
+\begin{fact}[Log-sum inequality and a concave function]\label{tb:logsum}
+(a) For positive numbers \(y_1,\ldots,y_l\) and \(z_1,\ldots,z_l\) with sums
+\(y\) and \(z\),
+\(\sum_jy_j\log(z_j/y_j)\le y\log(z/y)\).
+
+(b) The function \((x,y)\mapsto x\log(y/x)\) is concave on \((0,\infty)^2\).
+Hence, for positive integrable random variables \(X,Y\),
+\(\E[X\log(Y/X)]\le\E X\,\log(\E Y/\E X)\).
+\end{fact}
+
+\begin{proof}
+For (a), Jensen's inequality for the concave function \(\log\), with the
+weights \(y_j/y\), gives \(\sum_j(y_j/y)\log(z_j/y_j)\le\log\sum_j(y_j/y)(z_j/y_j)
+=\log(z/y)\). For (b), the function \(f(x,y)=x\log y-x\log x\) has Hessian
+\(\begin{pmatrix}-1/x&1/y\\1/y&-x/y^2\end{pmatrix}\), whose determinant is
+zero and whose trace is negative, so the Hessian is negative semidefinite;
+the second statement is Jensen's inequality for the concave function
+\(f\) and the random vector \((X,Y)\).
+\end{proof}
+
+\usedin{the reference-mass estimate in
+\PR{Lemma}{appx-an:lem:matrix}{C.4}: first sum over tuples sharing
+their first face, then average over \(V_0\). Both the reference mass
+and the logistic mass contain the factor \(h\sqrt L\), which cancels
+inside the logarithm.}
+\emph{Source.} \TBc{CT06}, Theorem~2.7.1, for (a).
+
+\subsection{Log-concavity}\label{tb:sec:logconcave}
+
+A function \(f:\R^n\to[0,\infty)\) is \emph{log-concave} if
+\(f((1-t)x+ty)\ge f(x)^{1-t}f(y)^t\) for all \(x,y\) and \(t\in[0,1]\);
+when \(f>0\) this says that \(\log f\) is concave.
+
+\begin{fact}[Pr\'ekopa--Leindler inequality and Pr\'ekopa's theorem]
+\label{tb:prekopa}
+(a) Let \(0<t<1\) and let \(f,g,h:\R^n\to[0,\infty)\) be bounded,
+continuous, and integrable, with
+\(h((1-t)x+ty)\ge f(x)^{1-t}g(y)^t\) for all \(x,y\). Then
+\(\int h\ge(\int f)^{1-t}(\int g)^t\).
+
+(b) Let \(f:\R^a\times\R^b\to[0,\infty)\) be bounded, continuous, and
+log-concave, with \(f(z,\cdot)\) integrable for every \(z\). Then
+\(z\mapsto\int f(z,y)\,dy\) is log-concave on \(\R^a\).
+\end{fact}
+
+\begin{proof}
+(a) For \(n=1\), assume first that \(\sup f=\sup g=1\); the general case
+follows by dividing \(f,g,h\) by \(\sup f\), \(\sup g\), and
+\((\sup f)^{1-t}(\sup g)^t\). For \(0<s<1\) the level sets
+\(\{f\ge s\}\) and \(\{g\ge s\}\) are nonempty, and the hypothesis gives
+\(\{h\ge s\}\supseteq(1-t)\{f\ge s\}+t\{g\ge s\}\). In one dimension
+\(|A+B|\ge|A|+|B|\) for nonempty compact sets \(A\) and \(B\), because
+\(A+B\) contains the translates \(A+\min B\) and \(\max A+B\), which meet in
+one point; the inequality passes to measurable sets by approximation from
+inside by compact sets. Therefore
+\(|\{h\ge s\}|\ge(1-t)|\{f\ge s\}|+t|\{g\ge s\}|\), and integration over
+\(s\in(0,1)\) gives \(\int h\ge(1-t)\int f+t\int g\ge(\int f)^{1-t}(\int g)^t\),
+by the inequality between the arithmetic and geometric means. For \(n\ge2\),
+apply the case of dimension \(n-1\) to the sections of \(f,g,h\) at the last
+coordinates \(s_0\), \(s_1\), and \((1-t)s_0+ts_1\), and then the case of
+dimension one to the integrals of the sections, with Fubini's theorem
+(Fact~\ref{tb:fubini}) connecting the steps; the routine measurability
+checks are omitted here and can be found in~\TBc{Gar02}.
+
+(b) Fix \(z_0,z_1\) and put \(z_t=(1-t)z_0+tz_1\). Log-concavity of \(f\)
+gives \(f(z_t,(1-t)y_0+ty_1)\ge f(z_0,y_0)^{1-t}f(z_1,y_1)^t\), so (a) applies
+to \(f(z_0,\cdot)\), \(f(z_1,\cdot)\), and \(f(z_t,\cdot)\).
+\end{proof}
+
+\emph{Source.} Pr\'ekopa~\TBc{Pre71,Pre73}, Leindler~\TBc{Lei72}; a
+survey with the proof of the general case is~\TBc{Gar02}, Section~7. The
+paper cites Theorem~6 of~\TBc{Pre73}.
+
+\begin{fact}[Gaussian laws tilted by a log-concave weight]\label{tb:tilt}
+Let \(w:\R^r\to[0,\infty)\) be bounded, continuous, and log-concave, with
+\(p=\E w(G)>0\) for \(G\sim N(0,I_r)\). Let \(\mu\) and \(K\) be the mean and
+covariance matrix of the probability law with density \(w(g)\varphi_r(g)/p\).
+Then \(K\preceq I_r\), and
+\(\E[(GG^\top-I_r)w(G)]=p(K-I_r+\mu\mu^\top)\).
+\end{fact}
+
+\begin{proof}
+The function \((z,g)\mapsto e^{-\norm{g-z}^2/2}w(g)\) is log-concave, since
+\(\norm{g-z}^2\) is jointly convex in \((z,g)\), and it is bounded and
+continuous. By Fact~\ref{tb:prekopa}(b), \(\ell(z)=\log\int e^{-\norm{g-z}^2/2}
+w(g)\,dg\) is concave. Since \(\norm{g-z}^2=\norm g^2-2z\cdot g+\norm z^2\),
+\[
+ \ell(z)=\text{const}-\tfrac12\norm z^2+\log M(z),\qquad
+ M(z)=\int e^{z\cdot g}w(g)\varphi_r(g)\,dg=p\,\E_\nu e^{z\cdot g},
+\]
+where \(\nu\) is the tilted law. The function \(M\) is finite and smooth,
+because \(w\) is bounded, and the Hessian of \(\log M\) at \(0\) is the
+covariance \(K\) of \(\nu\). A concave function of class \(C^2\) has a
+negative semidefinite Hessian, so \(K-I_r\preceq0\). The identity is the
+decomposition of the second moment \(\E_\nu gg^\top=K+\mu\mu^\top\).
+\end{proof}
+
+\usedin{the Gaussian-tilt calculation in
+\PR{Lemma}{appx-an:lem:matrix}{C.4}, where \(w=w_\alpha\) and
+\(K=K_\alpha\), and its explanation in
+Subsection~\PN{sec:outline-late}{2.4}.}
+\emph{Source.} For indicators of convex cells, the cell covariance bound
+\TBc{GZ}, Lemma~11, is the same estimate \(K\preceq I_r\), obtained from the
+Brascamp--Lieb inequality~\TBc{BL76}; the weights here are not indicators,
+which is why the proof goes through Pr\'ekopa's theorem.
+
+\begin{fact}[Log-concavity of the logistic weights]\label{tb:lc-weights}
+With the notation of Fact~\ref{tb:logistic}, for every \(k\ge0\) and every
+tuple \((\alpha_1,\ldots,\alpha_k)\), the function
+\(F\pi_{\alpha_1}\cdots\pi_{\alpha_k}=\exp\{\sum_{a\le k}t_{\alpha_a}\}
+(1+T)^{-k-1}\), where \(t_\alpha=(\nu_\alpha\cdot x-a_\alpha)/h\), is
+log-concave on \(\R^n\), and so is its composition
+\(g\mapsto F\pi_{\alpha_1}\cdots\pi_{\alpha_k}(v+\sigma g)\) with any affine map.
+\end{fact}
+
+\begin{proof}
+The logarithm is a sum of the affine functions \(t_{\alpha_a}\) and
+\(-(k+1)\log(1+\sum_\alpha e^{t_\alpha})\). The function
+\(\log(1+\sum_\alpha e^{t_\alpha})\) is the logarithm of a sum of
+exponentials of the affine functions \(0,t_1,\ldots,t_m\) and is convex by
+H\"older's inequality: \(\sum_\alpha e^{(1-s)t_\alpha+st'_\alpha}\le
+(\sum_\alpha e^{t_\alpha})^{1-s}(\sum_\alpha e^{t'_\alpha})^s\). Composition
+with an affine map preserves concavity.
+\end{proof}
+
+\usedin{the application of covariance contraction to every
+\(w_\alpha=F\prod_a\pi_{\alpha_a}\) in
+\PR{Lemma}{appx-an:lem:matrix}{C.4}.}
+
+\subsection{Polyhedra: faces, normal cones, and nearest points}\label{tb:sec:poly}
+
+A \emph{polyhedron} is a set
+\[
+ Q=\bigcap_{j=1}^m\{x\in\R^n:u_j\cdot x\le a_j\},
+\]
+with unit vectors \(u_j\), called \emph{outward normals}, and numbers
+\(a_j\), called \emph{offsets}. It is closed and convex. It is
+\emph{full-dimensional} if it has an interior point, and \emph{proper} if it
+is neither empty nor \(\R^n\). The description is \emph{irredundant} if
+deleting any one inequality changes the set; deleting redundant or repeated
+inequalities one at a time turns every description into an irredundant one
+of the same set. For \(j\le m\), put \(H_j=\{x:u_j\cdot x=a_j\}\) and
+\(F_j=Q\cap H_j\). A \emph{face} of \(Q\) is \(Q\) itself or a set
+\(Q\cap\{u\cdot x=c\}\) with \(u\ne0\) and \(Q\subseteq\{u\cdot x\le c\}\).
+A \emph{facet} is a face of dimension \(n-1\), and a \emph{ridge} is a face
+of dimension \(n-2\). In the plane the facets are the sides of a polygon
+and the ridges its corners, in \(\R^3\) the facets are the faces of a solid
+and the ridges its edges, and on the line the facets are the endpoints of an
+interval, which has no ridges. We use these standard properties of faces:
+the relative interiors of the faces of \(Q\) are pairwise disjoint and cover
+\(Q\); a face of a face of \(Q\) is a face of \(Q\); and a face \(G'\)
+of a face \(G\) with \(G'\ne G\) lies in the relative boundary
+\(G\setminus\relint G\) of \(G\) (\TBc{Roc70}, Section~18; \TBc{Zie95}, Chapter~2).
+
+\begin{fact}[Facets and ridges of a polyhedron]\label{tb:facets}
+Let \(Q\) be a proper, full-dimensional polyhedron in \(\R^n\) with an
+irredundant description.
+\begin{enumerate}
+\item[(a)] The normals \(u_1,\ldots,u_m\) are pairwise distinct, each
+\(F_j\) is a facet, \(Q\) has no other facets, and
+\(\partial Q=F_1\cup\cdots\cup F_m\).
+\item[(b)] For \(j\ne k\), \(F_j\cap F_k\subseteq H_j\cap H_k\), and
+\(H_j\cap H_k\) is empty if \(u_k=-u_j\), and an affine subspace of
+dimension \(n-2\) otherwise. In particular \(F_j\cap F_k\) lies in a
+finite union of affine subspaces of dimension at most \(n-2\).
+\item[(c)] Each \(F_j\) is a full-dimensional polyhedron in the hyperplane
+\(H_j\). Write the points of \(H_j\) as \(a_ju_j+y\) with \(y\perp u_j\), and,
+for \(k\ne j\) with \(u_k\ne\pm u_j\), put
+\(\alpha_{jk}=\arccos(u_j\cdot u_k)\in(0,\pi)\),
+\[
+ \nu_{k\mid j}=\frac{u_k-(u_j\cdot u_k)u_j}{\sin\alpha_{jk}},\qquad
+ d_{k\mid j}=\frac{a_k-(u_j\cdot u_k)a_j}{\sin\alpha_{jk}} .
+\]
+Then \(F_j\) is described in the coordinate \(y\) by the inequalities
+\(\nu_{k\mid j}\cdot y\le d_{k\mid j}\), and its facets are exactly the
+ridges \(E_{jk}=F_j\cap F_k\) of \(Q\) of dimension \(n-2\); the outward
+unit normal of \(F_j\) at \(E_{jk}\) is \(\nu_{k\mid j}\).
+\item[(d)] Every ridge of \(Q\) lies in exactly two facets, so the ridges
+correspond to the unordered pairs \(\{j,k\}\) with
+\(\dim(F_j\cap F_k)=n-2\); for such a pair \(u_k\ne\pm u_j\), and the
+only inequalities active at a point of \(\relint E_{jk}\) are \(j\) and \(k\).
+\end{enumerate}
+\end{fact}
+
+\begin{proof}[Proof (sketch)]
+(a) Fix \(j\). Irredundancy gives a point \(x_j\) with \(u_j\cdot x_j>a_j\)
+and \(u_k\cdot x_j\le a_k\) for \(k\ne j\). Let \(x_0\) be an interior point of
+\(Q\), and let \(x_*\) be the point where the segment from \(x_0\) to \(x_j\)
+crosses \(H_j\). For \(k\ne j\), \(u_k\cdot x_*<a_k\), because \(x_*\) is a
+convex combination of \(x_0\), where the inequality is strict, with positive
+weight, and of \(x_j\), where it holds weakly. Hence a neighborhood of
+\(x_*\) in \(H_j\) lies in \(F_j\), and \(\dim F_j=n-1\). Two inequalities
+with the same normal cannot both be irredundant, since the one with the
+larger offset is implied by the other. A point of \(Q\) at
+which no inequality is active is interior, and at a point where
+inequality \(j\) is active the points \(x+\varepsilon u_j\) lie outside \(Q\),
+so \(\partial Q=\bigcup_jF_j\). If \(G=Q\cap\{u\cdot x=c\}\) is a facet and
+\(x\in\relint G\), some inequality \(j\) is active at \(x\); on \(G\) the
+affine function \(u_j\cdot x-a_j\le0\) attains its maximum at a relative
+interior point and is therefore zero, so \(G\subseteq H_j\), and since \(G\) has
+dimension \(n-1\), \(G=Q\cap H_j=F_j\).
+
+(b) If \(u_k=-u_j\) and \(H_j\cap H_k\ne\emptyset\), then \(Q\) would lie in
+the hyperplane \(H_j\), contradicting full dimension. If \(u_k\ne\pm u_j\),
+the two equations are independent.
+
+(c) The set \(F_j\) is the polyhedron in \(H_j\) cut out by the remaining
+inequalities, which take the stated form in the coordinate \(y\) because
+\(u_k\cdot(a_ju_j+y)=a_ju_j\cdot u_k+(u_k-(u_j\cdot u_k)u_j)\cdot y\); an
+inequality with \(u_k=-u_j\) holds automatically on \(H_j\) since
+\(F_j\ne\emptyset\). By (a) applied inside \(H_j\), the facets of \(F_j\) are
+the faces of \(F_j\) of dimension \(n-2\), hence faces of \(Q\) of that
+dimension, that is, ridges of \(Q\) in \(F_j\); each equals
+\(F_j\cap H_k=F_j\cap F_k\) for the inequality \(k\) that defines it.
+
+(d) Let \(E\) be a ridge and \(y\in\relint E\), and let \(J\) be the set of
+inequalities active at \(y\). On \(E\) each affine function
+\(u_i\cdot x-a_i\), \(i\in J\), is at most zero and vanishes at the relative
+interior point \(y\), so it vanishes on \(E\); thus \(E\subseteq F_i\) for
+\(i\in J\) and \(\dim\operatorname{span}\{u_i:i\in J\}\le2\). A single active
+inequality is impossible, since then \(y\) would lie in the relative interior
+of \(F_j\) and the only face of \(F_j\) containing it is \(F_j\) itself, of
+dimension \(n-1\). Opposite normals \(u_i=-u_j\) are excluded by (b). Hence
+the active normals span a plane \(\Pi\). Near \(y\), \(Q\) coincides with
+\(y\) plus the product of \(\Pi^\perp\) and a planar cone \(K\subseteq\Pi\)
+with nonempty interior, defined by the active inequalities and contained in
+a wedge of opening \(\pi-\alpha_{jk}<\pi\); this cone has exactly two
+boundary rays. Each active inequality \(i\) has \(\dim F_i=n-1\), so
+\(F_i\) meets every neighborhood of \(y\) in a set of dimension \(n-1\), and
+the line \(\{u_i\cdot v=0\}\) must therefore carry a boundary ray of \(K\).
+With distinct normals this leaves exactly two active inequalities.
+\end{proof}
+
+\usedin{the facet--ridge decomposition leading to
+\PE{appx-an:surface-identity}{C.30} and the pairing of the two terms
+attached to each ridge in \PR{Lemma}{appx-an:lem:surface}{C.5}.}
+\emph{Source.} \TBc{Zie95}, Chapter~2; \TBc{Roc70}, Sections~18 and~19;
+the facet decomposition of \(\partial Q\) with the pairing of ridges is
+the content of \TBc{GZ}, Lemma~27.
+
+\begin{fact}[Normal cones]\label{tb:normalcone}
+Let \(Q\) be a polyhedron as in Fact~\ref{tb:facets}. For \(x\in Q\) let
+\(J(x)=\{j:u_j\cdot x=a_j\}\), and let
+\[
+ N_Q(x)=\{v\in\R^n:v\cdot(q-x)\le0\text{ for all }q\in Q\}
+\]
+be the \emph{normal cone} of \(Q\) at \(x\). Then
+\(N_Q(x)=\{\sum_{j\in J(x)}c_ju_j:c_j\ge0\}\). In particular
+\(N_Q(x)=\{0\}\) at interior points, \(N_Q(x)=\{cu_j:c\ge0\}\) for
+\(x\in\relint F_j\), and \(N_Q(x)=\{c_ju_j+c_ku_k:c_j,c_k\ge0\}\), a sector of
+angle \(\alpha_{jk}\) in the plane spanned by \(u_j\) and \(u_k\), for
+\(x\in\relint E_{jk}\).
+\end{fact}
+
+\begin{proof}
+Put \(T=\{d:u_j\cdot d\le0\text{ for }j\in J(x)\}\). A vector \(v\) lies in
+\(N_Q(x)\) if and only if \(v\cdot d\le0\) for all \(d\in T\): if \(d\in T\)
+then \(x+\varepsilon d\in Q\) for small \(\varepsilon>0\), because the
+inactive inequalities are strict at \(x\), and conversely \(q-x\in T\) for
+\(q\in Q\). By Farkas's lemma, which says that \(v\cdot d\le0\) for all
+\(d\) with \(u_j\cdot d\le0\) (\(j\in J\)) if and only if \(v\) is a
+nonnegative combination of the \(u_j\), \(j\in J\), this is the stated
+cone. For \(x\in\relint F_j\), \(J(x)=\{j\}\), since an index \(k\ne j\) in
+\(J(x)\) would put \(x\) in \(F_j\cap F_k\), a face of \(F_j\) of dimension
+at most \(n-2\), and so in the relative boundary of \(F_j\). For
+\(x\in\relint E_{jk}\), \(J(x)=\{j,k\}\) by Fact~\ref{tb:facets}(d).
+\end{proof}
+
+\usedin{the choice of the normal interval over a facet and the normal
+sector over a ridge in \PR{Lemma}{appx-an:lem:surface}{C.5}.}
+\emph{Source.} \TBc{Roc70}, Sections~22 and~23, for Farkas's lemma and normal
+cones; \TBc{RW98}, Chapter~6.
+
+\begin{fact}[Nearest point]\label{tb:projection}
+Let \(Q\subseteq\R^n\) be nonempty, closed, and convex. For each
+\(y\in\R^n\) there is a unique point \(\prj_Q(y)\in Q\) with
+\(\norm{y-\prj_Q(y)}=\dist(y,Q)\), and \(x=\prj_Q(y)\) if and only if
+\(x\in Q\) and \(y-x\in N_Q(x)\). Consequently every \(y\in\R^n\) can be
+written in exactly one way as \(y=x+v\) with \(x\in Q\) and \(v\in N_Q(x)\),
+and then \(\norm v=\dist(y,Q)\). A direction \(v\) lies in \(N_Q(x)\) if and
+only if \(x\) is the nearest point of \(x+tv\) in \(Q\) for every \(t>0\).
+\end{fact}
+
+\begin{proof}
+For \(x,q\in Q\), \(\norm{y-q}^2=\norm{y-x}^2+\norm{x-q}^2-2(y-x)\cdot(q-x)\).
+If \(y-x\in N_Q(x)\), the last term is nonnegative, so
+\(\norm{y-q}^2\ge\norm{y-x}^2+\norm{x-q}^2>\norm{y-x}^2\) for \(q\ne x\); thus
+\(x\) is the unique nearest point. Conversely, if \((y-x)\cdot(q-x)>0\) for
+some \(q\in Q\), then moving from \(x\) toward \(q\) decreases the distance
+to \(y\) for small steps, by the displayed identity applied to
+\(x+\varepsilon(q-x)\in Q\), so \(x\) is not nearest. A nearest point exists
+because \(Q\) is closed. The last statement follows because \(N_Q(x)\) is a
+cone.
+\end{proof}
+
+\usedin{disjointness of the variable-width tubes in
+\PR{Lemma}{appx-an:lem:surface}{C.5}; each tube point has its nearest
+point in the relative interior of exactly one face.}
+\emph{Source.} \TBc{RW98}, Chapter~6 (Moreau's decomposition); \TBc{GZ},
+proof of Lemma~28.
+
+\subsection{Surface measure, Gaussian surface integrals, and the
+divergence theorem}\label{tb:sec:surface}
+
+\begin{fact}[Hausdorff measure on flat pieces]\label{tb:hausdorff}
+For \(0\le k\le n\), the \(k\)-dimensional Hausdorff measure \(\Haus^k\) on
+\(\R^n\) is the Borel measure
+\[
+ \Haus^k(S)=\lim_{\epsilon\downarrow0}\inf\Bigl\{\sum_i\omega_k
+ \Bigl(\tfrac12\operatorname{diam}C_i\Bigr)^k:S\subseteq\bigcup_iC_i,\
+ \operatorname{diam}C_i\le\epsilon\Bigr\},
+\]
+where \(\omega_k\) is the volume of the unit ball of \(\R^k\). (a) On an
+affine subspace of dimension \(k\), \(\Haus^k\) is \(k\)-dimensional Lebesgue
+measure; in particular \(\Haus^0\) is counting measure and \(\Haus^n\) is
+Lebesgue measure on \(\R^n\). (b) \(\Haus^k\) is invariant under isometries.
+(c) A set contained in a finite union of affine subspaces of dimension less
+than \(k\) has \(\Haus^k\)-measure zero.
+\end{fact}
+
+Part (c) follows from (a), since each such subspace lies in a
+\(k\)-dimensional affine subspace in which it is a Lebesgue null set. For a
+proper, full-dimensional polyhedron \(Q\) with an irredundant description,
+and for a function \(f\ge0\) or \(f\) integrable on \(\partial Q\), the
+\emph{surface integral} is
+\[
+ \int_{\partial Q}f\,d\Haus^{n-1}=\sum_{j=1}^m\int_{F_j}f\,d\Haus^{n-1},
+\]
+where on each facet \(\Haus^{n-1}\) is Lebesgue measure on the hyperplane
+\(H_j\) by part~(a). By Fact~\ref{tb:facets}(b) and part~(c), distinct
+facets overlap in sets of \(\Haus^{n-1}\)-measure zero, so the sum is the
+integral of \(f\) over the set \(\partial Q\) with respect to
+\(\Haus^{n-1}\). It depends on the set \(Q\) and not on its description,
+which justifies deleting redundant inequalities before computing it.
+The Gaussian surface integral \(\surf(Q)=\int_{\partial Q}\Hh\,\varphi_r\,
+d\Haus^{r-1}\) of Subsection~\PN{sec:outline-late}{2.4} is the case
+\(n=r\) and \(f=\Hh\varphi_r\), with \(\Hh(g)=\norm g^2-r\).
+
+\usedin{the definition of \(\surf\) in
+Subsection~\PN{sec:outline-late}{2.4} and
+\PR{Lemma}{appx-an:lem:surface}{C.5}.}
+\emph{Source.} \TBc{EG15}, Chapter~2.
+
+\begin{fact}[Gauss--Green formula (divergence theorem) for a polyhedron]\label{tb:divergence}
+Let \(Q\subseteq\R^n\) (\(n\ge1\)) be a proper, full-dimensional polyhedron
+with an irredundant description, facets \(F_1,\ldots,F_m\), and outward unit
+normals \(u_1,\ldots,u_m\). Let \(X:\R^n\to\R^n\) be of class \(C^1\), with
+\(\norm{X(x)}+|\operatorname{div}X(x)|\le C(1+\norm x)^k\varphi_n(x)\) for
+some \(C\) and \(k\). Then
+\[
+ \int_Q\operatorname{div}X\,dx=\sum_{j=1}^m\int_{F_j}X\cdot u_j\,d\Haus^{n-1}.
+\]
+For \(n=1\) the facets are the endpoints of an interval, \(\Haus^0\) is
+counting measure, and the identity is the fundamental theorem of calculus.
+\end{fact}
+
+\begin{proof}
+It suffices to show, for a unit vector \(e\) and a function
+\(f\in C^1(\R^n)\) with \(|f|+|\partial_ef|\le C(1+\norm x)^k\varphi_n(x)\),
+that
+\begin{equation}
+ \int_Q\partial_ef\,dx=\sum_j(e\cdot u_j)\int_{F_j}f\,d\Haus^{n-1},
+ \tag{\(*\)}
+\end{equation}
+since the theorem follows by taking \(e=e_i\) and \(f=X_i\) and summing over
+\(i\). Write \(x=w+te\) with \(w\in e^\perp\). By Fubini's theorem,
+\(\int_Q\partial_ef\,dx=\int_{e^\perp}\int_{I(w)}\partial_tf(w+te)\,dt\,dw\),
+where \(I(w)=\{t:w+te\in Q\}\) is a closed interval, possibly empty, a point,
+or unbounded, because \(Q\) is convex. Since \(f\) tends to zero along every
+line, the inner integral equals \(f(w+t_+(w)e)-f(w+t_-(w)e)\), where
+\(t_\pm(w)\) are the endpoints of \(I(w)\) and a term with an infinite
+endpoint is read as zero.
+
+Consider the upper endpoints \(x=w+t_+(w)e\). If \(x\in\relint F_j\), then
+only the inequality \(j\) is active at \(x\) (Fact~\ref{tb:normalcone}), so
+\(x+te\in Q\) for small \(t>0\) unless \(e\cdot u_j>0\), and \(x\) is an upper
+endpoint if and only if \(e\cdot u_j>0\). The upper endpoints that lie in no
+\(\relint F_j\) lie in \(\bigcup_{j\ne k}F_j\cap F_k\), which is a subset of a
+finite union of affine subspaces of dimension at most \(n-2\)
+(Fact~\ref{tb:facets}(b)); its projection along \(e\) onto \(e^\perp\) is a
+Lebesgue null set of \(e^\perp\). For fixed \(j\) with \(e\cdot u_j>0\), the
+map \(x\mapsto x-(x\cdot e)e\) is injective on the set of upper endpoints in
+\(\relint F_j\), since a line meets \(Q\) in one interval, and it is the
+restriction to \(H_j\) of a linear map whose Jacobian with respect to
+\(\Haus^{n-1}\) on \(H_j\) is \(e\cdot u_j\): if \(b_1,\ldots,b_{n-1}\) is an
+orthonormal basis of \(u_j^\perp\), the volume of the projection along \(e\)
+of the cube they span equals the volume of the parallelepiped spanned by
+\(b_1,\ldots,b_{n-1},e\), which is \(|e\cdot u_j|\). Therefore
+\(\int f(w+t_+(w)e)\,dw=\sum_{j:\,e\cdot u_j>0}(e\cdot u_j)\int_{F_j}f\,d\Haus^{n-1}\),
+the sets \(F_j\setminus\relint F_j\) being \(\Haus^{n-1}\)-null. The same
+argument for the lower endpoints gives
+\(-\sum_{j:\,e\cdot u_j<0}|e\cdot u_j|\int_{F_j}f\,d\Haus^{n-1}\), and
+subtracting proves \((*)\); facets with \(e\cdot u_j=0\) contribute nothing
+on either side.
+\end{proof}
+
+\usedin{the divergence calculation inside a facet in
+\PR{Lemma}{appx-an:lem:surface}{C.5}. The vector field is
+\(X(y)=y\varphi_{r-1}(y)\), with divergence
+\(\{r-1-\norm y^2\}\varphi_{r-1}(y)\); the boundary terms are the
+ridge contributions in \PE{appx-an:surface-identity}{C.30}.}
+\emph{Source.} \TBc{GZ}, Lemma~24, proved there by truncation to a ball and
+the Gauss--Green formula for Lipschitz domains~\TBc{EG15}, Chapters~4
+and~5.
+
+For the surface integral used in the paper, this divergence
+calculation produces coefficients whose separate expressions contain
+\(1/\sin\alpha_{jk}\). We combine the two contributions of a ridge
+before estimating them. Let
+\(s_j=\int_{F_j}\varphi_r\,d\Haus^{r-1}\),
+\(\rho_{jk}=\int_{E_{jk}}\varphi_r\,d\Haus^{r-2}\), and let
+\(z_{jk}\) be the projection of a ridge point onto
+\(\operatorname{span}(u_j,u_k)\). Applying the divergence formula in
+each facet gives
+\[
+ \surf(Q)=\sum_j(a_j^2-1)s_j
+       -\sum_{\{j,k\}}(d_{k\mid j}+d_{j\mid k})\rho_{jk}.
+\]
+The offsets \(d_{k\mid j}\) from Fact~\ref{tb:facets}(c) satisfy
+\[
+ d_{k\mid j}+d_{j\mid k}
+ =2\sin(\alpha_{jk}/2)\,
+       \frac{u_j+u_k}{\norm{u_j+u_k}}\cdot z_{jk},\qquad
+ |d_{k\mid j}+d_{j\mid k}|\le\alpha_{jk}\norm{z_{jk}}.
+\]
+Indeed, their sum is
+\((1-\cos\alpha_{jk})(a_j+a_k)/\sin\alpha_{jk}\), and
+\(a_j+a_k=(u_j+u_k)\cdot z_{jk}\).
+The inverse sine cancels. The remaining factor \(\alpha_{jk}\)
+is precisely the angle of the normal sector whose mass we use next.
+
+\subsection{Tubes around a polyhedron}\label{tb:sec:tubes}
+
+The Gaussian density changes rapidly when a boundary point has a large
+normal projection. We therefore shorten the outward tube at that point.
+Its width may vary along a face: the required integration formula still
+follows from orthogonal coordinates and Fubini's theorem.
+
+Let \(Q\) be a proper, full-dimensional polyhedron in \(\R^n\) with
+facets \(F_j\), ridges \(E_{jk}\), and an irredundant description by
+unit normals \(u_j\). For a ridge, put
+\(L_{jk}=\operatorname{span}(u_j,u_k)\) and
+\(z_{jk}=\Pi_{jk}x\), for any \(x\in E_{jk}\). This vector is constant
+on the ridge because
+\(u_j\cdot z_{jk}=a_j\) and \(u_k\cdot z_{jk}=a_k\).
+Let \(\eta(x)>0\) be a measurable function on the facets and ridges.
+The outward tubes are
+\begin{align*}
+ \mathcal T_j&=\{x+tu_j:x\in\relint F_j,\ 0<t<\eta(x)\},\\
+ \mathcal T_{jk}&=\{x+v:x\in\relint E_{jk},\ v\in N_Q(x),\
+                         0<\norm v<\eta(x)\}.
+\end{align*}
+For \(x\in\relint E_{jk}\), the normal cone is a sector of angle
+\(\alpha_{jk}\) in \(L_{jk}\). Write
+\(S_{jk}(a)=N_Q(x)\cap\{v:0<\norm v<a\}\); its area is
+\(\alpha_{jk}a^2/2\). For \(Q=\bigcap_j\{u_j\cdot x\le a_j\}\),
+the notation \(Q^t\) increases every threshold by \(t\); it does not
+denote a Euclidean neighborhood.
+
+\begin{fact}[Variable-width normal tubes]\label{tb:tubes}
+(a) The tubes over distinct facets and ridges are pairwise disjoint.
+Each tube point \(g=x+v\) has nearest point \(x\) in \(Q\), and
+\(\dist(g,Q)=\norm v\).
+
+(b) For a nonnegative measurable function \(f\),
+\begin{align*}
+ \int_{\mathcal T_j}f(g)\,dg
+ &=\int_{F_j}\int_0^{\eta(x)} f(x+tu_j)\,dt\,d\Haus^{n-1}(x),\\
+ \int_{\mathcal T_{jk}}f(g)\,dg
+ &=\int_{E_{jk}}\int_{S_{jk}(\eta(x))}f(x+v)\,dv\,d\Haus^{n-2}(x).
+\end{align*}
+The same formulas hold whenever \(f\) is integrable on the relevant tube.
+
+(c) Use the function \(R\) in Fact~\ref{tb:projection-moments}, built
+from the normals of \(Q\), and choose \(\eta(x)=1/(4R(x))\).
+Then all these tubes lie in \(\{g:g\in Q^{1/R(g)}\setminus Q\}\).
+For an absolute constant \(c>0\), their normal integrals obey
+\begin{align*}
+ \int_0^{\eta(x)}R(x+tu_j)^3\varphi_n(x+tu_j)\,dt
+ &\ge c\{1+a_j^2\}\varphi_n(x),\qquad x\in F_j,\\
+ \int_{S_{jk}(\eta(x))}R(x+v)^3\varphi_n(x+v)\,dv
+ &\ge c\alpha_{jk}\norm{z_{jk}}\varphi_n(x),\qquad x\in E_{jk}.
+\end{align*}
+For \(n=1\), there are no ridge tubes.
+\end{fact}
+
+\begin{proof}
+(a) Facts~\ref{tb:normalcone} and~\ref{tb:projection} identify \(x\)
+as the unique nearest point of \(x+v\). The relative interiors of
+distinct faces are disjoint, so the tubes are disjoint.
+
+(b) The map \((x,t)\mapsto x+tu_j\) is an affine isometry from
+\(H_j\times\R\) onto \(\R^n\). Likewise, \((x,v)\mapsto x+v\)
+is an affine isometry from \((z_{jk}+L_{jk}^\perp)\times L_{jk}\)
+onto \(\R^n\). The Jacobians are one. Apply Fubini to the indicator
+of the domain \(0<t<\eta(x)\), or \(0<\norm v<\eta(x)\) in the
+normal sector. No derivative of \(\eta\) is involved, and no
+smoothness of \(\eta\) is needed.
+
+(c) For a facet displacement \(v=tu_j\), and for a ridge displacement
+\(v\in L_{jk}\), respectively,
+\[
+ |x\cdot v|\le\mathcal M(x)\norm v\le\tfrac14.
+\]
+The ridge case uses \(x\cdot v=z_{jk}\cdot v\). Since
+\(\norm v\le1/4\), Fact~\ref{tb:gauss-coord}(b) gives
+\(\varphi_n(x+v)\ge e^{-1/4-1/32}\varphi_n(x)\).
+The Lipschitz property and \(R\ge1\) also give
+\[
+ \tfrac34R(x)\le R(x+v)\le\tfrac54R(x).
+\]
+The facet integral is therefore at least
+\(cR(x)^3\eta(x)\varphi_n(x)=c'R(x)^2\varphi_n(x)\), which
+dominates \(c''(1+a_j^2)\varphi_n(x)\) because
+\(R(x)\ge1+|u_j\cdot x|=1+|a_j|\). The ridge integral is at least
+\(c\alpha_{jk}R(x)^3\eta(x)^2\varphi_n(x)
+=c'\alpha_{jk}R(x)\varphi_n(x)\); use
+\(R(x)\ge\norm{z_{jk}}\).
+
+Finally, a tube point \(g=x+v\) lies outside \(Q\), and each
+unit-normal inequality defining \(Q\) satisfies
+\[
+ u_j\cdot g-a_j\le\norm v<\frac1{4R(x)}\le\frac1{R(g)}.
+\]
+This proves the inclusion in (c), even if the threshold system used
+to define \(Q^t\) also contains redundant inequalities.
+\end{proof}
+
+Together with the paired ridge coefficients derived above, part (c)
+gives
+\[
+ |\surf(Q)|\le C\E\left[R(G)^3
+              \ind\{G\in Q^{1/R(G)}\setminus Q\}\right].
+\]
+The power three serves both dimensions: integration along a facet
+uses one power of the tube width, leaving \(R^2\), while integration
+over a ridge sector uses two, leaving \(R\).
+
+\usedin{\PE{appx-an:adaptive-tubes}{C.29} in
+\PR{Lemma}{appx-an:lem:surface}{C.5}. After setting
+\(Q'=(Q-V_0)/\sigma\), the event is
+\(V_0+\sigma G\in Q^{\sigma/R(G)}\setminus Q\).
+Conditional on \(G\), its width is fixed; concentration of \(V_0\)
+and Fact~\ref{tb:projection-moments} give the averaged surface bound.}
+\emph{Source.} The normal-tube construction is used in \TBc{GZ},
+Lemmas~28 and~29. The variable-width and weighted forms above are
+the elementary consequences needed for \texttt{reworking-v2}.
+
+\subsection{The coarea formula and the first variation of a Gaussian
+integral}\label{tb:sec:coarea}
+
+\begin{fact}[Coarea formula]\label{tb:coarea}
+Let \(\psi:\R^n\to\R\) be Lipschitz, so that \(\nabla\psi\) exists almost
+everywhere. For every measurable \(f\ge0\),
+\[
+ \int_{\R^n}f\,\norm{\nabla\psi}\,dx=\int_{-\infty}^\infty
+ \Bigl(\int_{\{\psi=s\}}f\,d\Haus^{n-1}\Bigr)ds ,
+\]
+and the same holds for integrable \(f\).
+\end{fact}
+
+\emph{Source.} \TBc{EG15}, Section~3.4. The proofs use the formula only for
+a maximum of finitely many affine functions with gradients of equal length, and
+for these Fact~\ref{tb:variation} gives a direct proof from Fubini's theorem.
+
+\begin{fact}[First variation of a polyhedral sublevel integral]\label{tb:variation}
+Let \(u_1,\ldots,u_m\) be unit vectors in \(\R^n\) (\(m\ge1\)), \(\kappa>0\),
+\(b_1,\ldots,b_m\in\R\), and
+\[
+ \psi(g)=\max_{j\le m}\{\kappa\,u_j\cdot g-b_j\},\qquad Q_s=\{g:\psi(g)\le s\}.
+\]
+(a) For \(f\ge0\) measurable, or \(f\) integrable, and \(s\in\R\),
+\[
+ \int_{Q_s}f\,dg=\kappa^{-1}\int_{-\infty}^s\Bigl(\int_{\{\psi=s'\}}f\,d\Haus^{n-1}
+ \Bigr)ds'.
+\]
+(b) If \(f\) is integrable, then \(\Lambda(s)=\int_{Q_s}f\,dg\) is absolutely
+continuous, and for almost every \(s\)
+\[
+ \Lambda'(s)=\kappa^{-1}\int_{\{\psi=s\}}f\,d\Haus^{n-1},\qquad
+ |\Lambda'(s)|\le\kappa^{-1}\sum_{j=1}^m\int_{\{\kappa u_j\cdot g-b_j=s\}}|f|\,d\Haus^{n-1}.
+\]
+(c) If \(s>\inf\psi\), then \(Q_s\) is a proper, full-dimensional polyhedron
+with normals \(u_j\) and offsets \((s+b_j)/\kappa\), \(\{\psi=s\}=\partial Q_s\),
+and \(\int_{\{\psi=s\}}f\,d\Haus^{n-1}\) is the surface integral of \(f\) over
+\(\partial Q_s\) of Subsection~\ref{tb:sec:surface}. For \(s<\inf\psi\) the set
+\(Q_s\) is empty, and \(s=\inf\psi\) is the only other level at which \(Q_s\)
+may fail to be full-dimensional.
+
+(d) If \(\Lambda\) is Lipschitz and \(S\) is a real random variable with a
+density, then \(s\mapsto\E\Lambda(s+S)\) is differentiable with derivative
+\(\E\Lambda'(s+S)\), where \(\Lambda'\) is defined almost everywhere.
+\end{fact}
+
+\begin{proof}
+(a) Let \(C_j\) be the set where \(j\) is the smallest index attaining the
+maximum defining \(\psi\); the Borel sets \(C_1,\ldots,C_m\) partition
+\(\R^n\). On \(C_j\), \(\psi(g)=\kappa t-b_j\) in the coordinates
+\(g=tu_j+y\), \(y\perp u_j\). By Fact~\ref{tb:fubini}, in these coordinates,
+\[
+ \int_{C_j\cap Q_s}f\,dg=\int_{u_j^\perp}\int_{-\infty}^{(s+b_j)/\kappa}
+ (f\ind_{C_j})(tu_j+y)\,dt\,dy .
+\]
+The substitution \(s'=\kappa t-b_j\) turns the inner integral into
+\(\kappa^{-1}\int_{-\infty}^s(f\ind_{C_j})(tu_j+y)\,ds'\) with
+\(t=(s'+b_j)/\kappa\), and a further application of Fubini's theorem
+exchanges the integrals. For fixed \(s'\), the set of \(tu_j+y\) in \(C_j\)
+with this \(t\) is the slice \(C_j\cap\{\psi=s'\}\), and on the hyperplane
+containing it \(\Haus^{n-1}\) is Lebesgue measure \(dy\)
+(Fact~\ref{tb:hausdorff}(a)). Hence
+\(\int_{C_j\cap Q_s}f\,dg=\kappa^{-1}\int_{-\infty}^s\int_{C_j\cap\{\psi=s'\}}
+f\,d\Haus^{n-1}\,ds'\). Summing over \(j\) gives (a), since the slices
+\(C_j\cap\{\psi=s'\}\) partition \(\{\psi=s'\}\).
+
+(b) Applying (a) to \(|f|\) and letting \(s\to\infty\) shows that
+\(I(s')=\kappa^{-1}\int_{\{\psi=s'\}}f\,d\Haus^{n-1}\) is integrable on
+\(\R\), and (a) says \(\Lambda(s)=\int_{-\infty}^sI(s')\,ds'\). Hence \(\Lambda\) is
+absolutely continuous, and \(\Lambda'=I\) almost everywhere by Lebesgue's
+differentiation theorem. The bound follows because
+\(\{\psi=s\}\subseteq\bigcup_j\{\kappa u_j\cdot g-b_j=s\}\), a union of \(m\)
+hyperplanes.
+
+(c) The set \(Q_s\) is the polyhedron \(\bigcap_j\{u_j\cdot g\le(s+b_j)/\kappa\}\),
+and \(\psi\) is convex and continuous. If \(\psi(g)=s>\inf\psi\), choose \(g'\)
+with \(\psi(g')<s\); for \(\tau>0\), \(g=(g_\tau+\tau g')/(1+\tau)\) with
+\(g_\tau=g+\tau(g-g')\), so convexity gives
+\(\psi(g_\tau)\ge s+\tau(s-\psi(g'))>s\). Thus \(g\) is a limit of points
+outside \(Q_s\) and \(g\in\partial Q_s\); the open set \(\{\psi<s\}\) is
+nonempty and lies in \(Q_s\), which is therefore full-dimensional, and it
+is a proper subset because \(\psi(g)\ge\kappa u_1\cdot g-b_1\to\infty\) along
+\(u_1\). A point with \(\psi<s\) is interior, so \(\partial Q_s=\{\psi=s\}\). After
+the redundant and repeated inequalities are deleted, \(\partial Q_s=\{\psi=s\}\)
+is the union of the sets \(Q_s\cap\{\kappa u_j\cdot g-b_j=s\}\) of the
+remaining inequalities, which are faces of \(Q_s\) or empty. A face of
+dimension \(n-1\) is a facet (Fact~\ref{tb:facets}(a)) and any other face is
+\(\Haus^{n-1}\)-null, so the integral over \(\{\psi=s\}\) is the sum over the
+facets of the irredundant description.
+
+(d) A Lipschitz function is absolutely continuous and differentiable outside a
+Lebesgue null set \(\mathcal N\). The random variable \(s+S\) avoids
+\(\mathcal N\) almost surely, because \(S\) has a density, so the difference
+quotients of \(\Lambda(s+S)\) converge almost surely and are bounded by the
+Lipschitz constant. Dominated convergence gives the claim.
+\end{proof}
+
+\usedin{the first-variation paragraph in the proof of
+\PR{Lemma}{appx-an:lem:matrix}{C.4}, immediately after
+\PE{appx-an:gamma-mixture}{C.25}. Here
+\(\psi(g)=\max_j\{u_j\cdot(V_0+\sigma g)-a_j\}\),
+\(\kappa=\sigma\), \(b_j=a_j-u_j\cdot V_0\), and
+\(f(g)=(\norm g^2-r)\varphi_r(g)\). Parts (a)--(c) give
+\(\sigma^{-1}\surf((Q(a+s\mathbf1)-V_0)/\sigma)\) for almost every
+\(s\). The independent shift \(-h\log T_t\), with
+\(T_t\sim\operatorname{Gamma}(t,1)\), has a density, so part (d)
+permits averaging these derivatives. A uniform bound
+\(Cm(r+1)/\sigma\) follows from (b) and the Gaussian integral over
+each supporting hyperplane; it justifies the interchange and does
+not enter the final dimension-free bound.}
+
+\clearpage
+\subsection{Where each fact is used}\label{tb:sec:index}
+
+The table follows the order of the v2 proof. Each row identifies the
+operation for which the corresponding facts are needed.
+
+\medskip
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{@{}p{0.27\textwidth}p{0.68\textwidth}@{}}
+Facts~\ref{tb:fubini}, \ref{tb:taylor} &
+Conditioning, Taylor remainders, and exchange of expectations with
+convergent series in Appendices B--C.\\
+Facts~\ref{tb:bernoulli}, \ref{tb:heat} &
+Mask differentiation, the heat equation, and the signed Hessian
+comparison in Subsection~\PN{appx-an:sec:path}{C.2}.\\
+Facts~\ref{tb:faa}, \ref{tb:logistic}, \ref{tb:covariance} &
+Derivative envelopes in Appendix~\PN{appx-sec:smoothing}{B}; early
+bounds in \PN{appx-an:sec:early}{C.3} and coefficient matrices in
+\PR{Lemma}{appx-an:lem:restoration}{C.2}.\\
+Facts~\ref{tb:stein}, \ref{tb:nuclear} &
+Two Gaussian integrations by parts and matrix contraction in
+\PR{Lemma}{appx-an:lem:restoration}{C.2}.\\
+Facts~\ref{tb:gauss-coord}, \ref{tb:logsum} &
+Reference-face mean bounds and summation of reference masses in
+\PR{Lemmas}{appx-an:lem:mean}{C.3} and~\PN{appx-an:lem:matrix}{C.4}.\\
+Facts~\ref{tb:prekopa}--\ref{tb:lc-weights} &
+Logistic-tilt covariance contraction in
+\PR{Lemma}{appx-an:lem:matrix}{C.4}.\\
+Facts~\ref{tb:facets}--\ref{tb:divergence} &
+Surface measure and the facet--ridge identity in
+\PR{Lemma}{appx-an:lem:surface}{C.5}.\\
+Facts~\ref{tb:tubes}, \ref{tb:projection-moments} &
+Adaptive normal tubes and Gaussian projection moments in
+\PR{Lemma}{appx-an:lem:surface}{C.5}.\\
+Facts~\ref{tb:coarea}, \ref{tb:variation} &
+First variation of the Gamma mixture in
+\PR{Lemma}{appx-an:lem:matrix}{C.4}.\\
+\end{tabular}
+\end{center}
+
+\subsection{Sources}\label{tb:sec:sources}
+
+\begin{description}\small\setlength{\itemsep}{0pt}
+\item[{[BL76]}] H.~J. Brascamp and E.~H. Lieb (1976). On extensions of the
+Brunn--Minkowski and Pr\'ekopa--Leindler theorems, including inequalities
+for log concave functions, and with an application to the diffusion
+equation. \emph{Journal of Functional Analysis} \textbf{22}, 366--389.
+\item[{[Com74]}] L. Comtet (1974). \emph{Advanced Combinatorics}. Reidel,
+Dordrecht.
+\item[{[CT06]}] T.~M. Cover and J.~A. Thomas (2006). \emph{Elements of
+Information Theory}, 2nd edition. Wiley.
+\item[{[EG15]}] L.~C. Evans and R.~F. Gariepy (2015). \emph{Measure Theory
+and Fine Properties of Functions}, revised edition. CRC Press.
+\item[{[Fol99]}] G.~B. Folland (1999). \emph{Real Analysis: Modern
+Techniques and Their Applications}, 2nd edition. Wiley.
+\item[{[Gar02]}] R.~J. Gardner (2002). The Brunn--Minkowski inequality.
+\emph{Bulletin of the American Mathematical Society} \textbf{39}, 355--405.
+\item[{[GZ]}] Z. Gao and W. Zhang (2026). Cubic-root Gaussian approximation
+under unrestricted covariance. arXiv:2608.30221v1.
+\item[{[Lei72]}] L. Leindler (1972). On a certain converse of H\"older's
+inequality II. \emph{Acta Scientiarum Mathematicarum (Szeged)} \textbf{33},
+217--223.
+\item[{[Pre71]}] A. Pr\'ekopa (1971). Logarithmic concave measures with
+application to stochastic programming. \emph{Acta Scientiarum Mathematicarum
+(Szeged)} \textbf{32}, 301--316.
+\item[{[Pre73]}] A. Pr\'ekopa (1973). On logarithmic concave measures and
+functions. \emph{Acta Scientiarum Mathematicarum (Szeged)} \textbf{34},
+335--343.
+\item[{[Roc70]}] R.~T. Rockafellar (1970). \emph{Convex Analysis}. Princeton
+University Press.
+\item[{[RW98]}] R.~T. Rockafellar and R.~J.-B. Wets (1998). \emph{Variational
+Analysis}. Springer, Berlin.
+\item[{[Ste81]}] C.~M. Stein (1981). Estimation of the mean of a multivariate
+normal distribution. \emph{The Annals of Statistics} \textbf{9}, 1135--1151.
+\item[{[Zie95]}] G.~M. Ziegler (1995). \emph{Lectures on Polytopes}.
+Springer, New York.
+\end{description}
+
