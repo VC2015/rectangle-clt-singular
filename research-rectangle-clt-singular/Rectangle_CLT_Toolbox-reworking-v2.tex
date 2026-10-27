@@ -6,9 +6,7 @@
 \usepackage{lmodern}
 \IfFileExists{microtype.sty}{\usepackage{microtype}}{}
 \usepackage{amsmath,amssymb,amsthm}
-\usepackage{xcolor}
-\definecolor{paperlink}{RGB}{0,0,114}
-\usepackage[colorlinks=true,linkcolor=paperlink,citecolor=paperlink,urlcolor=paperlink]{hyperref}
+\usepackage[hidelinks]{hyperref}
 \hypersetup{pdftitle={Toolbox: facts from analysis and geometry used in the proofs},pdfauthor={Victor Chernozhukov, Denis Chetverikov, Kengo Kato, Yuta Koike}}
 \setlength{\parindent}{1.25em}
 \emergencystretch=2em
@@ -663,7 +661,7 @@ decomposition of the second moment \(\E_\nu gg^\top=K+\mu\mu^\top\).
 \(K=K_\alpha\), and its explanation in
 Subsection~\PN{sec:outline-late}{2.4}.}
 \emph{Source.} For indicators of convex cells, the cell covariance bound
-\TBc{GZ}, Lemma~11, is the same estimate \(K\preceq I_r\), obtained from the
+\TBc{10}, Lemma~11, is the same estimate \(K\preceq I_r\), obtained from the
 Brascamp--Lieb inequality~\TBc{BL76}; the weights here are not indicators,
 which is why the proof goes through Pr\'ekopa's theorem.
 
@@ -696,8 +694,9 @@ A \emph{polyhedron} is a set
 \[
  Q=\bigcap_{j=1}^m\{x\in\R^n:u_j\cdot x\le a_j\},
 \]
-with unit vectors \(u_j\), called \emph{outward normals}, and numbers
-\(a_j\), called \emph{offsets}. It is closed and convex. It is
+with unit vectors \(u_j\), called \emph{face normals}, and numbers
+\(a_j\), called \emph{offsets}. Each face normal points outward.
+The polyhedron is closed and convex. It is
 \emph{full-dimensional} if it has an interior point, and \emph{proper} if it
 is neither empty nor \(\R^n\). The description is \emph{irredundant} if
 deleting any one inequality changes the set; deleting redundant or repeated
@@ -719,7 +718,7 @@ of a face \(G\) with \(G'\ne G\) lies in the relative boundary
 Let \(Q\) be a proper, full-dimensional polyhedron in \(\R^n\) with an
 irredundant description.
 \begin{enumerate}
-\item[(a)] The normals \(u_1,\ldots,u_m\) are pairwise distinct, each
+\item[(a)] The face normals \(u_1,\ldots,u_m\) are pairwise distinct, each
 \(F_j\) is a facet, \(Q\) has no other facets, and
 \(\partial Q=F_1\cup\cdots\cup F_m\).
 \item[(b)] For \(j\ne k\), \(F_j\cap F_k\subseteq H_j\cap H_k\), and
@@ -783,15 +782,15 @@ interior point \(y\), so it vanishes on \(E\); thus \(E\subseteq F_i\) for
 \(i\in J\) and \(\dim\operatorname{span}\{u_i:i\in J\}\le2\). A single active
 inequality is impossible, since then \(y\) would lie in the relative interior
 of \(F_j\) and the only face of \(F_j\) containing it is \(F_j\) itself, of
-dimension \(n-1\). Opposite normals \(u_i=-u_j\) are excluded by (b). Hence
-the active normals span a plane \(\Pi\). Near \(y\), \(Q\) coincides with
+dimension \(n-1\). Opposite face normals \(u_i=-u_j\) are excluded by (b). Hence
+the active face normals span a plane \(\Pi\). Near \(y\), \(Q\) coincides with
 \(y\) plus the product of \(\Pi^\perp\) and a planar cone \(K\subseteq\Pi\)
 with nonempty interior, defined by the active inequalities and contained in
 a wedge of opening \(\pi-\alpha_{jk}<\pi\); this cone has exactly two
 boundary rays. Each active inequality \(i\) has \(\dim F_i=n-1\), so
 \(F_i\) meets every neighborhood of \(y\) in a set of dimension \(n-1\), and
 the line \(\{u_i\cdot v=0\}\) must therefore carry a boundary ray of \(K\).
-With distinct normals this leaves exactly two active inequalities.
+With distinct face normals this leaves exactly two active inequalities.
 \end{proof}
 
 \usedin{the facet--ridge decomposition leading to
@@ -799,7 +798,7 @@ With distinct normals this leaves exactly two active inequalities.
 attached to each ridge in \PR{Lemma}{appx-an:lem:surface}{C.5}.}
 \emph{Source.} \TBc{Zie95}, Chapter~2; \TBc{Roc70}, Sections~18 and~19;
 the facet decomposition of \(\partial Q\) with the pairing of ridges is
-the content of \TBc{GZ}, Lemma~27.
+the content of \TBc{10}, Lemma~27.
 
 \begin{fact}[Normal cones]\label{tb:normalcone}
 Let \(Q\) be a polyhedron as in Fact~\ref{tb:facets}. For \(x\in Q\) let
@@ -859,7 +858,7 @@ cone.
 \usedin{disjointness of the variable-width tubes in
 \PR{Lemma}{appx-an:lem:surface}{C.5}; each tube point has its nearest
 point in the relative interior of exactly one face.}
-\emph{Source.} \TBc{RW98}, Chapter~6 (Moreau's decomposition); \TBc{GZ},
+\emph{Source.} \TBc{RW98}, Chapter~6 (Moreau's decomposition); \TBc{10},
 proof of Lemma~28.
 
 \subsection{Surface measure, Gaussian surface integrals, and the
@@ -906,8 +905,8 @@ Subsection~\PN{sec:outline-late}{2.4} and
 
 \begin{fact}[Gauss--Green formula (divergence theorem) for a polyhedron]\label{tb:divergence}
 Let \(Q\subseteq\R^n\) (\(n\ge1\)) be a proper, full-dimensional polyhedron
-with an irredundant description, facets \(F_1,\ldots,F_m\), and outward unit
-normals \(u_1,\ldots,u_m\). Let \(X:\R^n\to\R^n\) be of class \(C^1\), with
+with an irredundant description, facets \(F_1,\ldots,F_m\), and unit
+face normals \(u_1,\ldots,u_m\). Let \(X:\R^n\to\R^n\) be of class \(C^1\), with
 \(\norm{X(x)}+|\operatorname{div}X(x)|\le C(1+\norm x)^k\varphi_n(x)\) for
 some \(C\) and \(k\). Then
 \[
@@ -962,7 +961,7 @@ on either side.
 \(X(y)=y\varphi_{r-1}(y)\), with divergence
 \(\{r-1-\norm y^2\}\varphi_{r-1}(y)\); the boundary terms are the
 ridge contributions in \PE{appx-an:surface-identity}{C.30}.}
-\emph{Source.} \TBc{GZ}, Lemma~24, proved there by truncation to a ball and
+\emph{Source.} \TBc{10}, Lemma~24, proved there by truncation to a ball and
 the Gauss--Green formula for Lipschitz domains~\TBc{EG15}, Chapters~4
 and~5.
 
@@ -1001,7 +1000,7 @@ follows from orthogonal coordinates and Fubini's theorem.
 
 Let \(Q\) be a proper, full-dimensional polyhedron in \(\R^n\) with
 facets \(F_j\), ridges \(E_{jk}\), and an irredundant description by
-unit normals \(u_j\). For a ridge, put
+unit face normals \(u_j\). For a ridge, put
 \(L_{jk}=\operatorname{span}(u_j,u_k)\) and
 \(z_{jk}=\Pi_{jk}x\), for any \(x\in E_{jk}\). This vector is constant
 on the ridge because
@@ -1035,7 +1034,7 @@ Each tube point \(g=x+v\) has nearest point \(x\) in \(Q\), and
 The same formulas hold whenever \(f\) is integrable on the relevant tube.
 
 (c) Use the function \(R\) in Fact~\ref{tb:projection-moments}, built
-from the normals of \(Q\), and choose \(\eta(x)=1/(4R(x))\).
+from the face normals of \(Q\), and choose \(\eta(x)=1/(4R(x))\).
 Then all these tubes lie in \(\{g:g\in Q^{1/R(g)}\setminus Q\}\).
 For an absolute constant \(c>0\), their normal integrals obey
 \begin{align*}
@@ -1105,7 +1104,7 @@ over a ridge sector uses two, leaving \(R\).
 \(V_0+\sigma G\in Q^{\sigma/R(G)}\setminus Q\).
 Conditional on \(G\), its width is fixed; concentration of \(V_0\)
 and Fact~\ref{tb:projection-moments} give the averaged surface bound.}
-\emph{Source.} The normal-tube construction is used in \TBc{GZ},
+\emph{Source.} The normal-tube construction is used in \TBc{10},
 Lemmas~28 and~29. The variable-width and weighted forms above are
 the elementary consequences needed for \texttt{reworking-v2}.
 
@@ -1144,7 +1143,7 @@ continuous, and for almost every \(s\)
  |\Lambda'(s)|\le\kappa^{-1}\sum_{j=1}^m\int_{\{\kappa u_j\cdot g-b_j=s\}}|f|\,d\Haus^{n-1}.
 \]
 (c) If \(s>\inf\psi\), then \(Q_s\) is a proper, full-dimensional polyhedron
-with normals \(u_j\) and offsets \((s+b_j)/\kappa\), \(\{\psi=s\}=\partial Q_s\),
+with face normals \(u_j\) and offsets \((s+b_j)/\kappa\), \(\{\psi=s\}=\partial Q_s\),
 and \(\int_{\{\psi=s\}}f\,d\Haus^{n-1}\) is the surface integral of \(f\) over
 \(\partial Q_s\) of Subsection~\ref{tb:sec:surface}. For \(s<\inf\psi\) the set
 \(Q_s\) is empty, and \(s=\inf\psi\) is the only other level at which \(Q_s\)
@@ -1279,7 +1278,7 @@ and Fine Properties of Functions}, revised edition. CRC Press.
 Techniques and Their Applications}, 2nd edition. Wiley.
 \item[{[Gar02]}] R.~J. Gardner (2002). The Brunn--Minkowski inequality.
 \emph{Bulletin of the American Mathematical Society} \textbf{39}, 355--405.
-\item[{[GZ]}] Z. Gao and W. Zhang (2026). Cubic-root Gaussian approximation
+\item[{[10]}] Z. Gao and W. Zhang (2026). Cubic-root Gaussian approximation
 under unrestricted covariance. arXiv:2608.30221v1.
 \item[{[Lei72]}] L. Leindler (1972). On a certain converse of H\"older's
 inequality II. \emph{Acta Scientiarum Mathematicarum (Szeged)} \textbf{33},
