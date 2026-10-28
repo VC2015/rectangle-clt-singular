@@ -402,7 +402,8 @@ notation used in the appendices. Section~\ref{opt:section}
 discusses sharpness, and Subsection~\ref{sec:lean-certification}
 records the formal verification in Lean.
 Appendices~\ref{sec:main-proof}--\ref{app:subexponential}
-contain all proofs of the upper bounds. The Supplement~\cite{Supplement} collects the lower-bound calculations,
+contain all proofs of the upper bounds. Appendix~\ref{app:symmetric-lower}
+proves the centrally symmetric lower bound. The Supplement~\cite{Supplement} collects the lower-bound calculations,
 exact coordinate reductions, and further investigations.
 
 \subsection{\texorpdfstring{Formal verification in Lean}{Formal verification in Lean}}\label{sec:lean-certification}
@@ -1622,8 +1623,73 @@ threshold says nothing about the error rate below it. In the range
 The lattice obstruction must also be retained in any improved
 unsmoothed error bound.
 
+Central symmetry does not remove the lower scale
+\(\delta L^{3/2}\) when the covariance is unrestricted. The following construction shows this even when every observation is centrally symmetric, a
+stronger condition than cancellation of the aggregate third moments.
+Let \(m_n\to\infty\), put \(\ell_n\coloneqq\log m_n\) and
+\(p_n\coloneqq m_n^2\), and suppose \(\ell_n^3/n\to0\).
+There are i.i.d.\ centrally symmetric observations with unit marginal
+variances and \(\norm{X_{n,i}}_\infty\le2\) such that, with
+\(\delta_n\coloneqq2/\sqrt n\) and \(L_n\coloneqq\log(ep_n)\),
+\[
+ \liminf_{n\to\infty}
+ \frac{\rh(W_n,Z_n)}{\delta_n L_n^{3/2}}\ge\frac1{8e}.
+\]
+Here \(W_n=n^{-1/2}\sum_iX_{n,i}\), and \(Z_n\) has the same
+covariance as \(W_n\). More precisely, a single lower orthant has
+probability discrepancy
+\(\{1/(8e)+o(1)\}\delta_nL_n^{3/2}\); this is not an assertion
+of an exact asymptotic for the supremum over all rectangles.
+
+The example combines independent signs with a rare activation shared
+across coordinates. Suppress the subscript \(n\), and set
+\[
+ q\coloneqq\frac{\log m}{2n},\qquad s\coloneqq\sqrt{1-q},
+ \qquad X_{i,jk}\coloneqq s\eta_{ij}+I_i\varepsilon_{ik},
+ \quad 1\le j,k\le m,
+\]
+where all \(\eta_{ij},\varepsilon_{ik}\) are independent Rademacher
+signs, and the \(I_i\sim\operatorname{Bernoulli}(q)\) are independent
+of the signs and of one another. Reversing all signs in a row proves
+central symmetry, hence all mixed third moments vanish. Each coordinate
+has variance \(s^2+q=1\), and the covariance is
+\[
+ \Sigma_{(j,k),(j',k')}=(1-q)\ind\{j=j'\}+q\ind\{k=k'\}.
+\]
+It has rank \(2m-1\) and correlation gap \(q\) for sufficiently large
+\(n\). Thus the example has singular covariance and a vanishing gap,
+without exactly repeated or opposite coordinates. This modifies the
+common Bernoulli activation construction
+in~\cite[Proposition~E.1]{FKLZ}.
+
+The size of the discrepancy can be seen from the maxima. Put
+\(A_j\coloneqq n^{-1/2}\sum_i\eta_{ij}\),
+\(T_k\coloneqq\sum_i I_i\varepsilon_{ik}\), and
+\(T_*\coloneqq\max_kT_k\). For independent standard normal arrays
+\((G_j)_j,(H_k)_k\), the two maxima have the representations
+\[
+ \max_{j,k}W_{jk}=s\max_jA_j+\frac{T_*}{\sqrt n},
+ \qquad
+ \max_{j,k}Z_{jk}=s\max_jG_j+\sqrt q\max_kH_k.
+\]
+With high probability, one sign column is positive on every active
+row, and \(\E T_*=(1/2+o(1))\log m\). By contrast,
+\(\sqrt q\,\E\max_kH_k=(1+o(1))\log m/\sqrt n\).
+The difference between these mean shifts is therefore
+\((1/2+o(1))\log m/\sqrt n\). At the threshold \(u_m\) determined
+by \(m\{1-\Phi(u_m)\}=1\), the density of the Gaussian maximum is
+asymptotic to \(\sqrt{2\log m}/e\), where \(\Phi\) is the standard
+normal distribution function. Their product gives the orthant
+discrepancy \(\{1/(e\sqrt2)+o(1)\}(\log m)^{3/2}/\sqrt n\),
+equivalent to the constant above. The uniform Rademacher-maximum
+approximation and the Taylor remainder estimates justifying this
+calculation are proved in Appendix~\ref{app:symmetric-lower}.
+The vanishing correlation gap is essential to the scope of this
+example: it leaves the fixed-gap zero-skewness rate question above
+open.
+
 For unrestricted covariance the upper bound is optimal up to
-logarithmic factors, and where the lower scale \(\delta L^{3/2}\) is
+logarithmic factors even under central symmetry. Where the lower scale \(\delta L^{3/2}\) is
 attained, the upper and lower bounds differ by at most the factor
 \(\sqrt{D_L}\). It is not known whether this factor is necessary, nor how
 the optimal bound depends on a vanishing correlation gap. The companion
@@ -1778,14 +1844,41 @@ Journal of Machine Learning Research \textbf{15}(56), 1929--1958.
 \numberwithin{corollary}{section}
 \numberwithin{remark}{section}
 
+\section*{How to read the appendices}
+\addcontentsline{toc}{section}{How to read the appendices}
+The appendices present the proof from its conclusion back to its
+ingredients. Appendix~\ref{sec:main-proof} first assembles the main
+bounds: it integrates the interpolation estimates proved in
+Appendix~\ref{appx-sec:support} and adds the smoothing error proved in
+Appendix~\ref{appx-sec:smoothing}. Both of those appendices use the
+anti-concentration inequality proved independently in
+Appendix~\ref{appx-app:concentration}. Thus a reader who wants to see
+how the rate emerges can start with Appendix~\ref{sec:main-proof},
+treating these inputs as given; a reader who prefers to establish the
+inputs first can read Appendices~\ref{appx-app:concentration},
+\ref{appx-sec:smoothing}, \ref{appx-sec:support}, and
+\ref{sec:main-proof}, in that order.
+
+Within Appendix~\ref{appx-sec:support}, the support coordinates and
+interpolation identity come first, followed by the early and late
+bounds. The late-bound proof uses a matrix estimate established in
+Subsection~\ref{appx-an:sec:matrix}; that estimate in turn uses the
+Gaussian surface estimate in Subsection~\ref{appx-an:sec:surface}.
+These two supporting arguments are placed last so that their purpose
+is visible before their proofs. Appendix~\ref{app:subexponential}
+then extends the bounded-summand results by truncation, whereas
+Appendix~\ref{app:symmetric-lower} proves the lower bound of
+Section~\ref{opt:section} independently of the interpolation argument.
+
 \section*{Notation in the appendices}
 \addcontentsline{toc}{section}{Notation in the appendices}
 The following symbols, most of which Section~\ref{sec:smoothing}
 introduces, are used throughout
 Appendices~\ref{sec:main-proof}, \ref{appx-sec:smoothing},
 and~\ref{appx-sec:support}.
-Appendices~\ref{appx-app:concentration} and~E use a few local
-symbols, introduced where they occur.
+Appendices~\ref{appx-app:concentration}, \ref{app:subexponential},
+and~\ref{app:symmetric-lower} use additional local symbols, introduced
+where they occur.
 
 \medskip
 \begin{center}
@@ -1854,8 +1947,18 @@ path~\eqref{eq:path}, so that \(P_A(0)=\E F_{A,h}(W)\) and
 
 \begin{proof}[Proof of~\eqref{eq:smooth-moving} in
 Proposition~\ref{prop:moving-cutoff}]
-Increase \(\Ac\) so that \eqref{an:early} and \eqref{an:late} apply and
-\(\Ac^2\ge d_0\). Put \(\tau_h=Lh^2\), the time at which their
+The two derivative estimates in Proposition~\ref{an:prop:derivative},
+equations~\eqref{an:early} and~\eqref{an:late}, are
+\[
+ \begin{aligned}
+ |P_A'(t)|&\le C\sqrt L\left(\frac{t\delta}{h^2}
+                    +\frac{\delta^2}{h^3}\right),&&0<t<1,\\
+ |P_A'(t)|&\le CL^{3/2}\left(\delta+\frac{\delta^2}{th}\right),
+                    &&d_0\delta^2L\le t<1.
+ \end{aligned}
+\]
+Increase \(\Ac\) so that these estimates apply for \(h\ge\Ac\delta\)
+and \(\Ac^2\ge d_0\). Put \(\tau_h=Lh^2\), the time at which their
 fourth-order terms agree. Since \(h\ge\Ac\delta\), we have
 \(\tau_h\ge d_0\delta^2L\). If \(\tau_h<1\), the later estimate
 is therefore available throughout \([\tau_h,1]\). Integrating the
@@ -1894,8 +1997,17 @@ Continuity at the interpolation endpoints permits integration up to
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:optimized}]
-Combining Proposition~\ref{prop:moving-cutoff} with
-\eqref{eq:endpoint-min} yields, for every \(h\ge\Ac\delta\),
+The smoothed comparison just proved in
+Proposition~\ref{prop:moving-cutoff}, equation~\eqref{eq:smooth-moving},
+and the smoothing inequality of Lemma~\ref{lem:endpoint},
+equation~\eqref{eq:endpoint-min}, give, respectively,
+\[
+ M_h\le CL^{3/2}\left[\delta+\frac{\delta^2}{h}
+          \log_+\frac1{Lh^2}\right],
+ \qquad \rh(W,Z)\le M_h+Ch\sqrt L\,\kappa.
+\]
+Substituting the first bound into the second yields, for every
+\(h\ge\Ac\delta\),
 \begin{equation}
  \rh(W,Z)\le C\left[
  \delta L^{3/2}
@@ -1904,8 +2016,14 @@ Combining Proposition~\ref{prop:moving-cutoff} with
  \label{eq:variational}
 \end{equation}
 The first term is independent of \(h\). To balance the fourth-order
-comparison error against the endpoint error, choose \(h\) as
-in~\eqref{eq:optimal-scale}. Because \(\kappa\le L\) and \(E_\kappa\ge1\), this scale is at least
+comparison error against the endpoint error, use the width from
+equation~\eqref{eq:optimal-scale}:
+\[
+ h=\Ac\delta\sqrt{LE_\kappa/\kappa},\qquad
+ E_\kappa=1+\log_+\frac{\sqrt\kappa}{\delta L},\qquad
+ \kappa=\min\{L,c^{-1}\},
+\]
+with \(\kappa=L\) when \(c=0\). Because \(\kappa\le L\) and \(E_\kappa\ge1\), this scale is at least
 \(\Ac\delta\). Moreover,
 \[
  \log_+\frac1{Lh^2}
@@ -1936,9 +2054,12 @@ Proposition~\ref{prop:moving-cutoff} and Theorem~\ref{thm:zero-skew}.
 
 \begin{proof}[Proof of~\eqref{zs:smooth} in
 Proposition~\ref{prop:moving-cutoff}]
-Use \eqref{zs:identity} to cancel the common-base cubic term before
-estimating the derivative. The separate fourth-order bounds
-\eqref{eq:remainder-early} and \eqref{an:remainder} then give
+The assumption \(\sum_i\E\xi_i^{\otimes3}=0\) cancels the cubic
+term in the interpolation identity, leaving
+\(P_A'(t)=R_{4,A,h}(t)\), as stated in equation~\eqref{zs:identity}.
+The fourth-order remainder estimates of
+Proposition~\ref{an:prop:derivative}, equations
+\eqref{eq:remainder-early} and~\eqref{an:remainder}, therefore give
 \begin{align}
  |P_A'(t)|
  &\le \frac{C\delta^2\sqrt L}{h^3},
@@ -1966,8 +2087,15 @@ proves \eqref{zs:smooth}.
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:zero-skew}]
-Combine the second part of Proposition~\ref{prop:moving-cutoff} with the endpoint
-bound \eqref{eq:endpoint-min} to obtain, for every \(h\ge\Ac\delta\),
+The second part of Proposition~\ref{prop:moving-cutoff} gives
+\[
+ M_h\le\frac{C\delta^2L^{3/2}}h
+       \left[1+\log_+\frac1{Lh^2}\right].
+\]
+Insert this into the smoothing inequality
+\(\rh(W,Z)\le M_h+Ch\sqrt L\,\kappa\) from
+Lemma~\ref{lem:endpoint}, equation~\eqref{eq:endpoint-min}.
+For every \(h\ge\Ac\delta\), this yields
 \begin{equation}
  \rh(W,Z)\le C\left\{
  \frac{\delta^2L^{3/2}}h
@@ -1975,7 +2103,8 @@ bound \eqref{eq:endpoint-min} to obtain, for every \(h\ge\Ac\delta\),
  \label{zs:variational}
 \end{equation}
 To balance the comparison error against the endpoint error, choose
-\(h\) by~\eqref{eq:optimal-scale} again; it is admissible because \(\kappa\le L\) and \(E_\kappa\ge1\).
+\(h=\Ac\delta\sqrt{LE_\kappa/\kappa}\), the width in
+equation~\eqref{eq:optimal-scale}, again; it is admissible because \(\kappa\le L\) and \(E_\kappa\ge1\).
 As before,
 \[
  \log_+\frac1{Lh^2}
@@ -2047,12 +2176,15 @@ inequalities, and its denominator is positive. If \(m=0\), the logistic
 approximation is identically one and all comparisons are trivial; the
 analytic arguments below take \(m\ge1\).
 
-The mixture representation~\eqref{eq:mixture} expresses \(F\) as
-an average of indicators of the systems \(A_{\omega}\), whose
-thresholds are shifted at random by
-\(h\log(\omega_\alpha/\omega_0)\), where
-\(\omega_0,(\omega_\alpha)_\alpha\) are independent unit
-exponentials. To verify it, observe that, conditional on
+The mixture representation in equation~\eqref{eq:mixture} is
+\[
+ F_{A,h}(x)=\E_\omega\ind_{A_\omega}(x),\qquad
+ A_\omega=\{x:\nu_\alpha\cdot x\le
+ a_\alpha+h\log(\omega_\alpha/\omega_0)\text{ for every }\alpha\},
+\]
+where \(\omega_0,(\omega_\alpha)_\alpha\) are independent unit
+exponentials. It expresses \(F\) as an average of rectangle indicators
+with randomly shifted thresholds. To verify it, observe that, conditional on
 \(\omega_0\), the probability that \(x\in A_{\omega}\) is
 \(e^{-\omega_0T(x)}\), and its expectation is \((1+T(x))^{-1}\).
 Equivalently, the variables \(-\log\omega_\beta\) are independent standard
@@ -2297,7 +2429,9 @@ The smaller of the two is \(Ch\sqrt L\,\kappa\), which
 is~\eqref{eq:endpoint-error}. Since
 \(|\Pp(W\in A)-\Pp(Z\in A)|\) is at most
 \(|\E F_{A,h}(W)-\E F_{A,h}(Z)|\) plus the two endpoint errors,
-\eqref{eq:endpoint-min} follows.
+taking the supremum over \(A\) gives
+\(\rh(W,Z)\le M_h+Ch\sqrt L\,\kappa\), the smoothing inequality
+in equation~\eqref{eq:endpoint-min}.
 \end{proof}
 
 % Replace the complete Appendix C (including its old outer revblock).
@@ -3518,6 +3652,204 @@ The latter requires neither a fourth-moment hypothesis in addition to
 the tail bound nor a local covariance assumption. If \(K\) varies,
 the elementary fourth-moment consequence is \(B_4\le C K^2\);
 the tail bound alone does not justify taking \(B_4=K\).
+
+\section{A centrally symmetric lower bound}
+\label{app:symmetric-lower}
+
+This appendix proves the centrally symmetric lower bound in
+Section~\ref{opt:section}. The construction is given there; the main
+task is to compare the small random shifts added to the two maxima.
+We first establish the scalar estimates needed to make this comparison
+uniform, including when the dimension grows slowly. Throughout,
+\(\Phi\) and \(\varphi\) denote the standard normal distribution
+function and density, and \(\bar\Phi\coloneqq1-\Phi\).
+
+\subsection{Two estimates for maxima}
+
+Let \(A_n\coloneqq n^{-1/2}\sum_{i=1}^n\eta_i\), where the
+\(\eta_i\) are independent Rademacher signs, and let
+\(A_{n,1},\ldots,A_{n,m}\) be independent copies. Put
+\(\Lambda_m\coloneqq\log(em)\). There are absolute constants
+\(c_0,C>0\) such that, for large \(n\) and
+\(\Lambda_m\le c_0\sqrt n\),
+\[
+ \sup_x\left|\Pp\{\max_{j\le m}A_{n,j}\le x\}-\Phi(x)^m\right|
+ \le C\left(\frac{\sqrt{\Lambda_m}}{\sqrt n}
+                 +\frac{\Lambda_m^2}{n}\right).
+\]
+The first term retains the effect of the lattice. To prove the bound,
+we use exponential tilting to obtain, for a sufficiently small
+absolute \(a>0\) and \(0\le x\le an^{1/4}\),
+\[
+ \left|\log\frac{\Pp(A_n>x)}{\bar\Phi(x)}\right|
+ \le C\epsilon_n(x),\qquad
+ \epsilon_n(x)\coloneqq\frac{1+x}{\sqrt n}+\frac{x^4}{n}.
+\]
+Indeed, the log moment-generating function is
+\(K(\tau)\coloneqq n\log\cosh(\tau/\sqrt n)\). The solution to
+\(K'(\tau)=x\) is \(\tau=\sqrt n\operatorname{arctanh}(x/\sqrt n)\).
+Set \(v^2\coloneqq K''(\tau)=1-x^2/n\) and \(z\coloneqq\tau v\).
+Taylor expansion gives
+\[
+ K(\tau)-\tau x=-x^2/2+O(x^4/n),
+ \qquad z=x+O(x^3/n).
+\]
+Under the tilted law
+\(d\Pp_\tau=e^{\tau A_n-K(\tau)}d\Pp\), the signs remain
+independent, and \(T\coloneqq(A_n-x)/v\) has mean zero and variance
+one. For \(Y_i\coloneqq(\eta_i-x/\sqrt n)/\sqrt n\),
+\[
+ \sum_i\E_\tau Y_i^2=v^2,
+ \qquad \sum_i\E_\tau|Y_i|^3\le2v^2/\sqrt n.
+\]
+Since \(v\) is bounded away from zero, the scalar Berry--Esseen
+inequality gives \(\sup_y|\Pp_\tau(T\le y)-\Phi(y)|\le C/\sqrt n\).
+For \(z\ge0\), integration by parts in the tail yields
+\[
+ \E_\tau[e^{-zT}\ind\{T>0\}]
+ =\Pp_\tau(T>0)-z\int_0^\infty e^{-zy}\Pp_\tau(T>y)\dd y
+ =J(z)+O(n^{-1/2}),
+\]
+where \(J(z)\coloneqq\int_0^\infty e^{-zy}\varphi(y)\dd y\);
+the integral multiplied by \(z\) is zero when \(z=0\).
+The strict inequalities in this identity account for a possible atom
+at zero. Elementary integration gives
+\(J(z)\asymp(1+z)^{-1}\) and
+\(|(\log J)'(z)|\le C/(1+z)\). Thus the error relative to \(J(z)\)
+is \(O((1+x)/\sqrt n)\), and
+\(\log J(z)-\log J(x)=O(x^3/[n(1+x)])\). Combining these facts with
+\[
+ \Pp(A_n>x)=e^{K(\tau)-\tau x}
+                \E_\tau[e^{-zT}\ind\{T>0\}],
+ \qquad \bar\Phi(x)=e^{-x^2/2}J(x),
+\]
+proves the relative-tail estimate. Taking \(a\) small also gives
+uniform comparability of the two tails and
+\(|\Pp(A_n>x)/\bar\Phi(x)-1|\le C\epsilon_n(x)\).
+
+We now pass from one coordinate to the maximum. For \(x\le1\),
+Berry--Esseen and a fixed upper bound \(r_0<1\) on the two scalar
+distribution functions give an error at most
+\(Cm r_0^{m-1}/\sqrt n\le C/\sqrt n\). For
+\(1<x\le an^{1/4}\), put \(p\coloneqq\Pp(A_n>x)\),
+\(v_0\coloneqq\bar\Phi(x)\), and \(w\coloneqq mv_0\).
+Tail comparability and the mean value theorem give
+\[
+ |(1-p)^m-(1-v_0)^m|\le C\epsilon_n(x)w e^{-cw}.
+\]
+If \(x\le2\sqrt{\Lambda_m}\), this is bounded by the asserted
+maximum error. Otherwise \(w\le e^{-x^2/4}\), so the error is
+at most \(C\epsilon_n(x)e^{-x^2/4}\le C/\sqrt n\).
+Finally, choose \(c_0<a^2/4\). For \(x>an^{1/4}\), the
+sub-Gaussian tails of both scalar variables give an error at most
+\[
+ 2m e^{-x^2/2}\le2e^{-a^2\sqrt n/4}=O(n^{-1/2}).
+\]
+This proves the uniform estimate for Rademacher maxima.
+
+We also need the size and smoothness of the Gaussian maximum.
+Let \(F_m(x)\coloneqq\Phi(x)^m\), choose \(u_m\) by
+\(m\bar\Phi(u_m)=1\), and let \(H_*\coloneqq\max_{k\le m}H_k\)
+for independent standard normals. As \(m\to\infty\),
+\[
+ u_m\sim\sqrt{2\log m},\qquad
+ F_m'(u_m)\sim\frac{\sqrt{2\log m}}e,\qquad
+ \E H_*\sim\sqrt{2\log m},\qquad \E H_*^2=O(\log m).
+\]
+Moreover, \(\|F_m''\|_\infty\le C\log(em)\) for \(m\ge2\).
+The normal tail estimates
+\(\bar\Phi(x)\asymp\varphi(x)/(1+x)\) for \(x\ge0\) and
+\(\varphi(x)/\bar\Phi(x)\sim x\) imply the first two assertions,
+using \(F_m'(u_m)=m\varphi(u_m)(1-1/m)^{m-1}\).
+They also give \(H_*/\sqrt{2\log m}\to1\) in probability.
+Integrating \(\Pp(\max_k|H_k|>y)\le\min\{1,2me^{-y^2/2}\}\)
+gives the second-moment bound and uniform integrability needed for
+the mean asymptotic. Finally,
+\[
+ F_m''(x)=m(m-1)\varphi(x)^2\Phi(x)^{m-2}
+             -mx\varphi(x)\Phi(x)^{m-1}.
+\]
+For \(x<0\), the powers of \(\Phi(x)\le1/2\) bound both terms
+by an absolute constant, treating \(m=2,3\) separately. For
+\(0\le x\le2\sqrt{\log(em)}\), put \(w=m\bar\Phi(x)\) and use
+\(\varphi(x)\le C(1+x)\bar\Phi(x)\). The resulting bound is
+\(C(1+x)^2(w+w^2)e^{-cw}\le C\log(em)\), again treating
+\(m=2,3\) separately. For larger \(x\), the bound
+\(C(m^2e^{-x^2}+mx e^{-x^2/2})\le C\log(em)\) suffices.
+
+\subsection{The symmetric construction and its discrepancy}
+
+Use the construction in Section~\ref{opt:section}, writing
+\(\ell=\log m\), \(q=\ell/(2n)\), and \(s=\sqrt{1-q}\).
+All statements concern sufficiently large \(n\), so \(0<q<1/2\).
+The rows are independent and identically distributed, bounded by
+\(s+1\le2\), and centrally symmetric. Their covariance formula in
+Section~\ref{opt:section} shows that the correlation gap is \(q\).
+Its range consists of arrays \((a_j+b_k)_{j,k}\), a space of
+dimension \(2m-1\); both components have positive variance, so this
+is also its rank.
+
+The common activation count \(N\coloneqq\sum_iI_i\) has mean
+\(\ell/2\), variance at most \(\ell/2\), and second moment
+\(O(\ell^2)\). Conditional on the active rows, each sign column is
+positive on all of them with probability \(2^{-N}\), independently
+across columns. Since \(|T_*|\le N\),
+\[
+ \Pp(T_*\ne N\mid N=k)=(1-2^{-k})^m\le e^{-m2^{-k}}.
+\]
+Chebyshev's inequality gives \(\Pp(N>\ell)\le2/\ell\), hence
+\[
+ \Pp(T_*\ne N)\le\frac2\ell+e^{-m2^{-\ell}}=o(1).
+\]
+Here \(m2^{-\ell}=\exp\{(1-\log2)\ell\}\to\infty\).
+Cauchy--Schwarz then yields
+\[
+ 0\le\E(N-T_*)\le2(\E N^2)^{1/2}
+                         \Pp(T_*\ne N)^{1/2}=o(\ell).
+\]
+Consequently, \(\E T_*=(1/2+o(1))\ell\) and
+\(\E T_*^2=O(\ell^2)\).
+
+Let \(F_{n,m}\) be the distribution function of \(\max_jA_j\),
+and put \(r_n\coloneqq\ell^{3/2}/\sqrt n\). The assumed condition
+\(\ell^3/n\to0\), together with the first estimate above, gives
+\[
+ \|F_{n,m}-F_m\|_\infty
+ \le C\left(\frac{\sqrt\ell}{\sqrt n}+\frac{\ell^2}{n}\right)
+ =o(r_n).
+\]
+The two components of each maximum in Section~\ref{opt:section}
+are independent. At the threshold \(t_n\coloneqq s u_m\), define
+the shifts \(V_W\coloneqq T_*/(s\sqrt n)\) and
+\(V_G\coloneqq\sqrt q\,H_*/s\). It follows that
+\[
+ \Pp(\max_{j,k}W_{jk}\le t_n)=\E F_m(u_m-V_W)+o(r_n),
+ \qquad
+ \Pp(\max_{j,k}Z_{jk}\le t_n)=\E F_m(u_m-V_G).
+\]
+Since \(s\to1\), the mean and second-moment estimates give
+\[
+ \E V_G-\E V_W=(1/2+o(1))\frac\ell{\sqrt n},
+ \qquad \E V_G^2+\E V_W^2=O(\ell^2/n).
+\]
+The global bound on \(F_m''\) justifies Taylor expansion even when
+one of the shifts is negative:
+\[
+ \E F_m(u_m-V)=F_m(u_m)-F_m'(u_m)\E V+O(\ell\E V^2).
+\]
+Subtracting the two expansions therefore gives
+\[
+ \Pp(\max_{j,k}W_{jk}\le t_n)-\Pp(\max_{j,k}Z_{jk}\le t_n)
+ =\left(\frac1{e\sqrt2}+o(1)\right)r_n+O(r_n^2).
+\]
+Finally, \(r_n\to0\) and
+\(\delta_nL_n^{3/2}=2(1+2\ell)^{3/2}/\sqrt n\sim2^{5/2}r_n\).
+The displayed lower orthant thus has discrepancy
+\(\{1/(8e)+o(1)\}\delta_nL_n^{3/2}\), proving the lower bound
+for the supremum over rectangles. The gap \(q\to0\), so this
+construction makes no assertion about sharp rates under a fixed
+positive correlation gap.
+
 
 \end{document}
 
