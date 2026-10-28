@@ -1,5 +1,5 @@
 % Toolbox appendix aligned with Rectangle_CLT_Main-reworking-v2.tex,
-% 27 October 2026. The standalone source embeds this body; this file can
+% 28 October 2026. The standalone source embeds this body; this file can
 % also be included after Appendix E of the main manuscript with
 %   \def\toolboxinpaper{}
 %   \input{Rectangle_CLT_Toolbox_appendix-reworking-v2}
@@ -50,7 +50,7 @@ source, listed at the end of the appendix, is cited otherwise. The facts are
 standard tools and elementary consequences used by the paper, so they
 carry their own numbering. The symbols in the lines headed ``Used in'' are those of the
 paper's appendices. The references and applications below follow
-\texttt{reworking-v2}, dated 27 October 2026. This toolbox has not been
+\texttt{reworking-v2}, dated 28 October 2026. This toolbox has not been
 Lean-certified; re-certification of the revised development remains
 future work.
 
@@ -79,13 +79,13 @@ on \(L\). For a set \(S\), \(\ind_S\) is its indicator function, \(\aff S\)
 is the smallest affine subspace containing it, the dimension of \(S\) is
 that of \(\aff S\), and \(\relint S\) is the interior of \(S\) relative to
 \(\aff S\). The distance from a point \(y\) to a set \(S\) is
-\(\dist(y,S)=\inf_{x\in S}\norm{y-x}\).
+\(\dist(y,S)\coloneqq \inf_{x\in S}\norm{y-x}\).
 
 For \(f\in C^q(\R^n)\), the derivative of order \(q\) in the directions
 \(z_1,\ldots,z_q\in\R^n\) is
 \[
  D^qf(x)[z_1,\ldots,z_q]
- =\partial_{s_1}\cdots\partial_{s_q}f(x+s_1z_1+\cdots+s_qz_q)\Big|_{s=0}
+ \coloneqq \partial_{s_1}\cdots\partial_{s_q}f(x+s_1z_1+\cdots+s_qz_q)\Big|_{s=0}
  =\sum_{i_1,\ldots,i_q}\partial_{i_1\cdots i_q}f(x)\,
    z_{1,i_1}\cdots z_{q,i_q},
 \]
@@ -116,7 +116,7 @@ Three special cases occur in the proofs. If \(X\) and \(Y\) are
 independent random elements and either \(f\ge0\) or \(f(X,Y)\) is
 integrable, then
 \[
- \E f(X,Y)=\E g(X),\qquad g(x)=\E f(x,Y),
+ \E f(X,Y)=\E g(X),\qquad g(x)\coloneqq \E f(x,Y),
 \]
 because the joint law is the product of the marginal laws. This is the
 formal content of every argument that is carried out for a fixed value of
@@ -137,8 +137,8 @@ instance of the first case. For independent \(V_0\) and \(G\), it gives
                    Q^{\sigma/R(G)}\setminus Q\}\right].
 \]
 Here \(R\) is the projection radius in
-Fact~\ref{tb:projection-moments}, and \(Q^t\) shifts every
-unit-normal threshold outward by \(t\). Conditional on \(G\), both
+Fact~\ref{tb:projection-moments}, and \(Q^s\) shifts every
+unit-normal threshold outward by \(s\). Conditional on \(G\), both
 the width \(\sigma/R(G)\) and the translation \(\sigma G\) are fixed.
 Concentration of \(V_0\) can therefore be applied directly. Tonelli
 requires no integrability check at this stage because the integrand
@@ -153,11 +153,11 @@ in the retained proof in \PR{Appendix}{appx-app:concentration}{D}.}
 
 \begin{fact}[Differentiation under the integral sign; Taylor's formula]
 \label{tb:taylor}
-(a) Let \(I\) be an open interval and let \(f(\lambda,\omega)\) be
-integrable in \(\omega\) and differentiable in \(\lambda\in I\), with
-\(|\partial_\lambda f(\lambda,\omega)|\le g(\omega)\) for an integrable
-function \(g\). Then \(\frac d{d\lambda}\E f(\lambda,\cdot)
-=\E\,\partial_\lambda f(\lambda,\cdot)\) on \(I\).
+(a) Let \(I\) be an open interval and let \(f(t,\omega)\) be
+integrable in \(\omega\) and differentiable in \(t\in I\), with
+\(|\partial_t f(t,\omega)|\le g(\omega)\) for an integrable
+function \(g\). Then \(\frac d{dt}\E f(t,\cdot)
+=\E\,\partial_t f(t,\cdot)\) on \(I\).
 
 (b) For \(f\in C^q(\R^n)\) and \(x,v\in\R^n\),
 \[
@@ -194,12 +194,12 @@ Let \(B_1,\ldots,B_N\) be independent Bernoulli variables with parameter
  \frac{d}{dq}\E_q H(B)
  =\sum_{i=1}^N\E_q\{H(B^{i,1})-H(B^{i,0})\}.
 \]
-If \(q=q(\lambda)\) and \(H=H_\lambda\) are differentiable, then
+If \(q=q(t)\) and \(H=H_t\) are differentiable, then
 \[
- \frac{d}{d\lambda}\E_{q(\lambda)}H_\lambda(B)
- =\E_{q(\lambda)}\partial_\lambda H_\lambda(B)
- +q'(\lambda)\sum_i\E_{q(\lambda)}
-       \{H_\lambda(B^{i,1})-H_\lambda(B^{i,0})\}.
+ \frac{d}{dt}\E_{q(t)}H_t(B)
+ =\E_{q(t)}\partial_t H_t(B)
+ +q'(t)\sum_i\E_{q(t)}
+       \{H_t(B^{i,1})-H_t(B^{i,0})\}.
 \]
 \end{fact}
 
@@ -219,25 +219,25 @@ the Bernoulli--Gauss path.}
 
 The resulting signed Hessian comparison has scalar weight
 \[
- \nu_\lambda(s)=\frac{4-2(3-\lambda)s}{1+\lambda},\qquad 0\le s\le1.
+ \nu_t(s)\coloneqq \frac{4-2(3-t)s}{1+t},\qquad 0\le s\le1.
 \]
 Direct integration gives
 \[
- \int_0^1\nu_\lambda(s)\,ds=1,\qquad
- \int_0^1s\nu_\lambda(s)\,ds=\frac{2\lambda}{3(1+\lambda)}.
+ \int_0^1\nu_t(s)\,ds=1,\qquad
+ \int_0^1s\nu_t(s)\,ds=\frac{2t}{3(1+t)}.
 \]
 For a twice continuously differentiable scalar function \(g\),
 Taylor's formula and the first identity give
 \[
- g(0)-\int_0^1\nu_\lambda(s)g(s)\,ds
- =-\frac{2\lambda}{3(1+\lambda)}g'(0)
-   -\int_0^1\nu_\lambda(s)\int_0^s(s-t)g''(t)\,dt\,ds.
+ g(0)-\int_0^1\nu_t(s)g(s)\,ds
+ =-\frac{2t}{3(1+t)}g'(0)
+   -\int_0^1\nu_t(s)\int_0^s(s-u)g''(u)\,du\,ds.
 \]
-With \(g(s)=D^2F(H_i+s(1+\lambda)\zeta_i)[\zeta_i,\zeta_i]\),
+With \(g(s)\coloneqq D^2F(H_i+s(1+t)\zeta_i)[\zeta_i,\zeta_i]\),
 the factor \(1/2\) in the signed Hessian comparison turns the first
-term into \(-\lambda D^3F(H_i)[\zeta_i^3]/3\). This explains the
+term into \(-t D^3F(H_i)[\zeta_i^3]/3\). This explains the
 cubic coefficient before the derivatives are restored to the full path.
-The weight \(\nu_\lambda\) is signed; these identities use its
+The weight \(\nu_t\) is signed; these identities use its
 integrals, not a probability interpretation.
 
 \begin{fact}[Fa\`a di Bruno's formula]\label{tb:faa}
@@ -268,10 +268,10 @@ of \(\{1,\ldots,q+1\}\) arises exactly once in this way, by removing
 \begin{fact}[Derivatives of the logistic approximation]\label{tb:logistic}
 Let \(\nu_1,\ldots,\nu_m\in\R^n\), \(a_1,\ldots,a_m\in\R\), \(h>0\), and
 \[
- w_\alpha(x)=e^{(\nu_\alpha\cdot x-a_\alpha)/h},\qquad
- T=\sum_\alpha w_\alpha,\qquad
- F=\frac1{1+T},\qquad
- \pi_\alpha=\frac{w_\alpha}{1+T}=Fw_\alpha .
+ w_\alpha(x)\coloneqq e^{(\nu_\alpha\cdot x-a_\alpha)/h},\qquad
+ T\coloneqq \sum_\alpha w_\alpha,\qquad
+ F\coloneqq \frac1{1+T},\qquad
+ \pi_\alpha\coloneqq \frac{w_\alpha}{1+T}=Fw_\alpha .
 \]
 For directions \(z_1,\ldots,z_q\), with the blocks \(J_1,\ldots,J_{|\mathcal P|}\)
 of \(\mathcal P\) listed in any fixed order,
@@ -288,7 +288,7 @@ and \(\sum_{\mathcal P\in\Pi_q}|\mathcal P|!\le q!\,2^{q-1}\). Consequently
 \end{fact}
 
 \begin{proof}
-Apply Fact~\ref{tb:faa} with \(\phi(\tau)=(1+\tau)^{-1}\) and \(g=T\). Then
+Apply Fact~\ref{tb:faa} with \(\phi(\tau)\coloneqq (1+\tau)^{-1}\) and \(g=T\). Then
 \(\phi^{(k)}(\tau)=(-1)^kk!\,(1+\tau)^{-k-1}\), and since each \(w_\alpha\) is
 an exponential of an affine function,
 \(D^lT(x)[z_1,\ldots,z_l]=h^{-l}\sum_\alpha w_\alpha(x)\prod_{a\le l}
@@ -362,7 +362,7 @@ derivatives of orders at most two of polynomial growth. Then
 \item[(b)] \(\E[(GG^\top-I_n)f(G)]=\E D^2f(G)\); equivalently, for \(z\in\R^n\),
 \(\E D^2f(G)[z,z]=\E\bigl[\tr\{(GG^\top-I_n)zz^\top\}f(G)\bigr]\), where
 \(\tr\{(GG^\top-I_n)zz^\top\}=(z\cdot G)^2-\norm z^2\);
-\item[(c)] if \(v\in\R^n\), \(\sigma>0\), \(U=v+\sigma G\), and
+\item[(c)] if \(v\in\R^n\), \(\sigma>0\), \(U\coloneqq v+\sigma G\), and
 \(F\in C^{s+2}(\R^n)\) has derivatives of polynomial growth, then for
 \(z,z_1,\ldots,z_s\in\R^n\),
 \[
@@ -381,7 +381,7 @@ and the boundary terms vanish because of the growth condition. The other coordin
 are handled by Fact~\ref{tb:fubini}. For (b), apply (a) to \(\partial_if\) and
 to \(G_kf\): \(\E[G_iG_kf(G)]=\E\partial_i(G_kf)(G)=\delta_{ik}\E f(G)
 +\E[G_k\partial_if(G)]=\delta_{ik}\E f(G)+\E\partial_{ik}f(G)\). For (c), the
-function \(f(g)=D^sF(v+\sigma g)[z_1,\ldots,z_s]\) has
+function \(f(g)\coloneqq D^sF(v+\sigma g)[z_1,\ldots,z_s]\) has
 \(D^2f(g)[z,z]=\sigma^2D^{s+2}F(v+\sigma g)[z,z,z_1,\ldots,z_s]\); apply (b).
 \end{proof}
 
@@ -395,22 +395,22 @@ in \PR{Lemma}{appx-lem:endpoint-gap}{B.3}.}
 \begin{fact}[Heat equation for the Gaussian component]\label{tb:heat}
 Let \(Z\sim N(0,\Sigma)\) in \(\R^p\), where \(\Sigma\) may be singular, and
 let \(f\in C^2(\R^p)\) be bounded with bounded first and second derivatives.
-Then, for \(x\in\R^p\) and \(\lambda>0\),
+Then, for \(x\in\R^p\) and \(t>0\),
 \[
- \frac d{d\lambda}\E f(x+\sqrt\lambda Z)
- =\tfrac12\E\tr\{\Sigma D^2f(x+\sqrt\lambda Z)\}.
+ \frac d{dt}\E f(x+\sqrt t Z)
+ =\tfrac12\E\tr\{\Sigma D^2f(x+\sqrt t Z)\}.
 \]
 \end{fact}
 
 \begin{proof}
 Write \(Z=\Gamma G\) with \(\Gamma\Gamma^\top=\Sigma\) and \(G\) standard
 Gaussian. By Fact~\ref{tb:taylor}(a), which applies because the difference
-quotients are bounded by \(\norm\nabla f_\infty\norm{\Gamma G}/(2\sqrt\lambda)\)
-locally uniformly in \(\lambda>0\), the derivative equals
-\((2\sqrt\lambda)^{-1}\E[G\cdot\Gamma^\top\nabla f(x+\sqrt\lambda\Gamma G)]\).
+quotients are bounded by \(\norm\nabla f_\infty\norm{\Gamma G}/(2\sqrt t)\)
+locally uniformly in \(t>0\), the derivative equals
+\((2\sqrt t)^{-1}\E[G\cdot\Gamma^\top\nabla f(x+\sqrt t\Gamma G)]\).
 Fact~\ref{tb:stein}(a) applied to the function \(g\mapsto
-\Gamma^\top\nabla f(x+\sqrt\lambda\Gamma g)\) turns this into
-\((2\sqrt\lambda)^{-1}\sqrt\lambda\,\E\tr\{\Gamma^\top D^2f\,\Gamma\}
+\Gamma^\top\nabla f(x+\sqrt t\Gamma g)\) turns this into
+\((2\sqrt t)^{-1}\sqrt t\,\E\tr\{\Gamma^\top D^2f\,\Gamma\}
 =\frac12\E\tr\{\Sigma D^2f\}\).
 \end{proof}
 
@@ -430,9 +430,9 @@ Let \(u_1,\ldots,u_m\) be unit vectors in \(\R^r\), with \(m\ge1\).
 For linearly independent \(u_j,u_k\), let \(\Pi_{jk}\) be orthogonal
 projection onto their span, and put
 \[
- \mathcal M(g)=\max\left\{\max_j|u_j\cdot g|,
+ \mathcal M(g)\coloneqq \max\left\{\max_j|u_j\cdot g|,
    \max_{j,k:\,u_j,u_k\text{ independent}}\norm{\Pi_{jk}g}\right\},
- \qquad R(g)=1+\mathcal M(g).
+ \qquad R(g)\coloneqq 1+\mathcal M(g).
 \]
 An empty second maximum is omitted. Then \(R\) is \(1\)-Lipschitz.
 For \(G\sim N(0,I_r)\) and \(q\in\{2,3\}\),
@@ -444,14 +444,14 @@ For \(G\sim N(0,I_r)\) and \(q\in\{2,3\}\),
 \begin{proof}
 Every projection is a contraction, so each function in the maximum
 is \(1\)-Lipschitz, as is their maximum. A scalar standard normal
-satisfies \(\Pp(|Z|>t)\le2e^{-t^2/2}\); the length of a
+satisfies \(\Pp(|Z|>s)\le2e^{-s^2/2}\); the length of a
 two-dimensional standard normal satisfies
-\(\Pp(\norm{G_2}>t)=e^{-t^2/2}\). A union bound gives
+\(\Pp(\norm{G_2}>s)=e^{-s^2/2}\). A union bound gives
 \[
- \Pp\{\mathcal M(G)>t\}\le\min\{1,2(m+m^2)e^{-t^2/2}\}.
+ \Pp\{\mathcal M(G)>s\}\le\min\{1,2(m+m^2)e^{-s^2/2}\}.
 \]
 The projections need not be independent. Integrate
-\(q\int_0^\infty t^{q-1}\Pp\{\mathcal M(G)>t\}\,dt\), splitting
+\(q\int_0^\infty s^{q-1}\Pp\{\mathcal M(G)>s\}\,ds\), splitting
 at \(\sqrt{8\log(em)}\), and use
 \((1+x)^q\le2^{q-1}(1+x^q)\).
 \end{proof}
@@ -514,7 +514,7 @@ a norm on symmetric matrices.
 For (a), let \(M=\sum_i\mu_ie_ie_i^\top\) be a spectral decomposition. Then
 \(\tr(\Xi M)=\sum_i\mu_i\,e_i^\top\Xi e_i\) and \(|e_i^\top\Xi e_i|\le
 \norm\Xi_\op\), which gives the inequality. Equality is attained at
-\(\Xi=\sum_i\operatorname{sgn}(\mu_i)e_ie_i^\top\). A supremum of linear
+\(\Xi\coloneqq \sum_i\operatorname{sgn}(\mu_i)e_ie_i^\top\). A supremum of linear
 functionals satisfies the triangle inequality. For (b), the norm of a
 positive semidefinite matrix is its trace, so the triangle inequality gives
 \(\norm M_*\le\tr P+\tr N\), and \(\tr N=\tr P-\tr M\).
@@ -539,7 +539,7 @@ Hence, for positive integrable random variables \(X,Y\),
 \begin{proof}
 For (a), Jensen's inequality for the concave function \(\log\), with the
 weights \(y_j/y\), gives \(\sum_j(y_j/y)\log(z_j/y_j)\le\log\sum_j(y_j/y)(z_j/y_j)
-=\log(z/y)\). For (b), the function \(f(x,y)=x\log y-x\log x\) has Hessian
+=\log(z/y)\). For (b), the function \(f(x,y)\coloneqq x\log y-x\log x\) has Hessian
 \(\begin{pmatrix}-1/x&1/y\\1/y&-x/y^2\end{pmatrix}\), whose determinant is
 zero and whose trace is negative, so the Hessian is negative semidefinite;
 the second statement is Jensen's inequality for the concave function
@@ -556,15 +556,15 @@ inside the logarithm.}
 \subsection{Log-concavity}\label{tb:sec:logconcave}
 
 A function \(f:\R^n\to[0,\infty)\) is \emph{log-concave} if
-\(f((1-t)x+ty)\ge f(x)^{1-t}f(y)^t\) for all \(x,y\) and \(t\in[0,1]\);
+\(f((1-\alpha)x+\alpha y)\ge f(x)^{1-\alpha}f(y)^\alpha\) for all \(x,y\) and \(\alpha\in[0,1]\);
 when \(f>0\) this says that \(\log f\) is concave.
 
 \begin{fact}[Pr\'ekopa--Leindler inequality and Pr\'ekopa's theorem]
 \label{tb:prekopa}
-(a) Let \(0<t<1\) and let \(f,g,h:\R^n\to[0,\infty)\) be bounded,
+(a) Let \(0<\alpha<1\) and let \(f,g,h:\R^n\to[0,\infty)\) be bounded,
 continuous, and integrable, with
-\(h((1-t)x+ty)\ge f(x)^{1-t}g(y)^t\) for all \(x,y\). Then
-\(\int h\ge(\int f)^{1-t}(\int g)^t\).
+\(h((1-\alpha)x+\alpha y)\ge f(x)^{1-\alpha}g(y)^\alpha\) for all \(x,y\). Then
+\(\int h\ge(\int f)^{1-\alpha}(\int g)^\alpha\).
 
 (b) Let \(f:\R^a\times\R^b\to[0,\infty)\) be bounded, continuous, and
 log-concave, with \(f(z,\cdot)\) integrable for every \(z\). Then
@@ -574,25 +574,25 @@ log-concave, with \(f(z,\cdot)\) integrable for every \(z\). Then
 \begin{proof}
 (a) For \(n=1\), assume first that \(\sup f=\sup g=1\); the general case
 follows by dividing \(f,g,h\) by \(\sup f\), \(\sup g\), and
-\((\sup f)^{1-t}(\sup g)^t\). For \(0<s<1\) the level sets
+\((\sup f)^{1-\alpha}(\sup g)^\alpha\). For \(0<s<1\) the level sets
 \(\{f\ge s\}\) and \(\{g\ge s\}\) are nonempty, and the hypothesis gives
-\(\{h\ge s\}\supseteq(1-t)\{f\ge s\}+t\{g\ge s\}\). In one dimension
+\(\{h\ge s\}\supseteq(1-\alpha)\{f\ge s\}+\alpha\{g\ge s\}\). In one dimension
 \(|A+B|\ge|A|+|B|\) for nonempty compact sets \(A\) and \(B\), because
 \(A+B\) contains the translates \(A+\min B\) and \(\max A+B\), which meet in
 one point; the inequality passes to measurable sets by approximation from
 inside by compact sets. Therefore
-\(|\{h\ge s\}|\ge(1-t)|\{f\ge s\}|+t|\{g\ge s\}|\), and integration over
-\(s\in(0,1)\) gives \(\int h\ge(1-t)\int f+t\int g\ge(\int f)^{1-t}(\int g)^t\),
+\(|\{h\ge s\}|\ge(1-\alpha)|\{f\ge s\}|+\alpha|\{g\ge s\}|\), and integration over
+\(s\in(0,1)\) gives \(\int h\ge(1-\alpha)\int f+\alpha\int g\ge(\int f)^{1-\alpha}(\int g)^\alpha\),
 by the inequality between the arithmetic and geometric means. For \(n\ge2\),
 apply the case of dimension \(n-1\) to the sections of \(f,g,h\) at the last
-coordinates \(s_0\), \(s_1\), and \((1-t)s_0+ts_1\), and then the case of
+coordinates \(s_0\), \(s_1\), and \((1-\alpha)s_0+\alpha s_1\), and then the case of
 dimension one to the integrals of the sections, with Fubini's theorem
 (Fact~\ref{tb:fubini}) connecting the steps; the routine measurability
 checks are omitted here and can be found in~\TBc{Gar02}.
 
-(b) Fix \(z_0,z_1\) and put \(z_t=(1-t)z_0+tz_1\). Log-concavity of \(f\)
-gives \(f(z_t,(1-t)y_0+ty_1)\ge f(z_0,y_0)^{1-t}f(z_1,y_1)^t\), so (a) applies
-to \(f(z_0,\cdot)\), \(f(z_1,\cdot)\), and \(f(z_t,\cdot)\).
+(b) Fix \(z_0,z_1\) and put \(z_\alpha\coloneqq (1-\alpha)z_0+\alpha z_1\). Log-concavity of \(f\)
+gives \(f(z_\alpha,(1-\alpha)y_0+\alpha y_1)\ge f(z_0,y_0)^{1-\alpha}f(z_1,y_1)^\alpha\), so (a) applies
+to \(f(z_0,\cdot)\), \(f(z_1,\cdot)\), and \(f(z_\alpha,\cdot)\).
 \end{proof}
 
 \emph{Source.} Pr\'ekopa~\TBc{Pre71,Pre73}, Leindler~\TBc{Lei72}; a
@@ -601,7 +601,7 @@ paper cites Theorem~6 of~\TBc{Pre73}.
 
 \begin{fact}[Gaussian laws tilted by a log-concave weight]\label{tb:tilt}
 Let \(w:\R^r\to[0,\infty)\) be bounded, continuous, and log-concave, with
-\(p=\E w(G)>0\) for \(G\sim N(0,I_r)\). Let \(\mu\) and \(K\) be the mean and
+\(p\coloneqq \E w(G)>0\) for \(G\sim N(0,I_r)\). Let \(\mu\) and \(K\) be the mean and
 covariance matrix of the probability law with density \(w(g)\varphi_r(g)/p\).
 Then \(K\preceq I_r\), and
 \(\E[(GG^\top-I_r)w(G)]=p(K-I_r+\mu\mu^\top)\).
@@ -610,11 +610,11 @@ Then \(K\preceq I_r\), and
 \begin{proof}
 The function \((z,g)\mapsto e^{-\norm{g-z}^2/2}w(g)\) is log-concave, since
 \(\norm{g-z}^2\) is jointly convex in \((z,g)\), and it is bounded and
-continuous. By Fact~\ref{tb:prekopa}(b), \(\ell(z)=\log\int e^{-\norm{g-z}^2/2}
+continuous. By Fact~\ref{tb:prekopa}(b), \(\ell(z)\coloneqq \log\int e^{-\norm{g-z}^2/2}
 w(g)\,dg\) is concave. Since \(\norm{g-z}^2=\norm g^2-2z\cdot g+\norm z^2\),
 \[
  \ell(z)=\text{const}-\tfrac12\norm z^2+\log M(z),\qquad
- M(z)=\int e^{z\cdot g}w(g)\varphi_r(g)\,dg=p\,\E_\nu e^{z\cdot g},
+ M(z)\coloneqq \int e^{z\cdot g}w(g)\varphi_r(g)\,dg=p\,\E_\nu e^{z\cdot g},
 \]
 where \(\nu\) is the tilted law. The function \(M\) is finite and smooth,
 because \(w\) is bounded, and the Hessian of \(\log M\) at \(0\) is the
@@ -635,19 +635,19 @@ which is why the proof goes through Pr\'ekopa's theorem.
 \begin{fact}[Log-concavity of the logistic weights]\label{tb:lc-weights}
 With the notation of Fact~\ref{tb:logistic}, for every \(k\ge0\) and every
 tuple \((\alpha_1,\ldots,\alpha_k)\), the function
-\(F\pi_{\alpha_1}\cdots\pi_{\alpha_k}=\exp\{\sum_{a\le k}t_{\alpha_a}\}
-(1+T)^{-k-1}\), where \(t_\alpha=(\nu_\alpha\cdot x-a_\alpha)/h\), is
+\(F\pi_{\alpha_1}\cdots\pi_{\alpha_k}=\exp\{\sum_{a\le k}q_{\alpha_a}\}
+(1+T)^{-k-1}\), where \(q_\alpha\coloneqq (\nu_\alpha\cdot x-a_\alpha)/h\), is
 log-concave on \(\R^n\), and so is its composition
 \(g\mapsto F\pi_{\alpha_1}\cdots\pi_{\alpha_k}(v+\sigma g)\) with any affine map.
 \end{fact}
 
 \begin{proof}
-The logarithm is a sum of the affine functions \(t_{\alpha_a}\) and
-\(-(k+1)\log(1+\sum_\alpha e^{t_\alpha})\). The function
-\(\log(1+\sum_\alpha e^{t_\alpha})\) is the logarithm of a sum of
-exponentials of the affine functions \(0,t_1,\ldots,t_m\) and is convex by
-H\"older's inequality: \(\sum_\alpha e^{(1-s)t_\alpha+st'_\alpha}\le
-(\sum_\alpha e^{t_\alpha})^{1-s}(\sum_\alpha e^{t'_\alpha})^s\). Composition
+The logarithm is a sum of the affine functions \(q_{\alpha_a}\) and
+\(-(k+1)\log(1+\sum_\alpha e^{q_\alpha})\). The function
+\(\log(1+\sum_\alpha e^{q_\alpha})\) is the logarithm of a sum of
+exponentials of the affine functions \(0,q_1,\ldots,q_m\) and is convex by
+H\"older's inequality: \(\sum_\alpha e^{(1-s)q_\alpha+sq'_\alpha}\le
+(\sum_\alpha e^{q_\alpha})^{1-s}(\sum_\alpha e^{q'_\alpha})^s\). Composition
 with an affine map preserves concavity.
 \end{proof}
 
@@ -659,7 +659,7 @@ with an affine map preserves concavity.
 
 A \emph{polyhedron} is a set
 \[
- Q=\bigcap_{j=1}^m\{x\in\R^n:u_j\cdot x\le a_j\},
+ Q\coloneqq \bigcap_{j=1}^m\{x\in\R^n:u_j\cdot x\le a_j\},
 \]
 with unit vectors \(u_j\), called \emph{face normals}, and numbers
 \(a_j\), called \emph{offsets}. Each face normal points outward.
@@ -668,8 +668,8 @@ The polyhedron is closed and convex. It is
 is neither empty nor \(\R^n\). The description is \emph{irredundant} if
 deleting any one inequality changes the set; deleting redundant or repeated
 inequalities one at a time turns every description into an irredundant one
-of the same set. For \(j\le m\), put \(H_j=\{x:u_j\cdot x=a_j\}\) and
-\(F_j=Q\cap H_j\). A \emph{face} of \(Q\) is \(Q\) itself or a set
+of the same set. For \(j\le m\), put \(H_j\coloneqq \{x:u_j\cdot x=a_j\}\) and
+\(F_j\coloneqq Q\cap H_j\). A \emph{face} of \(Q\) is \(Q\) itself or a set
 \(Q\cap\{u\cdot x=c\}\) with \(u\ne0\) and \(Q\subseteq\{u\cdot x\le c\}\).
 A \emph{facet} is a face of dimension \(n-1\), and a \emph{ridge} is a face
 of dimension \(n-2\). In the plane the facets are the sides of a polygon
@@ -695,14 +695,14 @@ finite union of affine subspaces of dimension at most \(n-2\).
 \item[(c)] Each \(F_j\) is a full-dimensional polyhedron in the hyperplane
 \(H_j\). Write the points of \(H_j\) as \(a_ju_j+y\) with \(y\perp u_j\), and,
 for \(k\ne j\) with \(u_k\ne\pm u_j\), put
-\(\alpha_{jk}=\arccos(u_j\cdot u_k)\in(0,\pi)\),
+\(\alpha_{jk}\coloneqq \arccos(u_j\cdot u_k)\in(0,\pi)\),
 \[
- \nu_{k\mid j}=\frac{u_k-(u_j\cdot u_k)u_j}{\sin\alpha_{jk}},\qquad
- d_{k\mid j}=\frac{a_k-(u_j\cdot u_k)a_j}{\sin\alpha_{jk}} .
+ \nu_{k\mid j}\coloneqq \frac{u_k-(u_j\cdot u_k)u_j}{\sin\alpha_{jk}},\qquad
+ d_{k\mid j}\coloneqq \frac{a_k-(u_j\cdot u_k)a_j}{\sin\alpha_{jk}} .
 \]
 Then \(F_j\) is described in the coordinate \(y\) by the inequalities
 \(\nu_{k\mid j}\cdot y\le d_{k\mid j}\), and its facets are exactly the
-ridges \(E_{jk}=F_j\cap F_k\) of \(Q\) of dimension \(n-2\); the outward
+ridges \(E_{jk}\coloneqq F_j\cap F_k\) of \(Q\) of dimension \(n-2\); the outward
 unit normal of \(F_j\) at \(E_{jk}\) is \(\nu_{k\mid j}\).
 \item[(d)] Every ridge of \(Q\) lies in exactly two facets, so the ridges
 correspond to the unordered pairs \(\{j,k\}\) with
@@ -769,9 +769,9 @@ the content of \TBc{10}, Lemma~27.
 
 \begin{fact}[Normal cones]\label{tb:normalcone}
 Let \(Q\) be a polyhedron as in Fact~\ref{tb:facets}. For \(x\in Q\) let
-\(J(x)=\{j:u_j\cdot x=a_j\}\), and let
+\(J(x)\coloneqq \{j:u_j\cdot x=a_j\}\), and let
 \[
- N_Q(x)=\{v\in\R^n:v\cdot(q-x)\le0\text{ for all }q\in Q\}
+ N_Q(x)\coloneqq \{v\in\R^n:v\cdot(q-x)\le0\text{ for all }q\in Q\}
 \]
 be the \emph{normal cone} of \(Q\) at \(x\). Then
 \(N_Q(x)=\{\sum_{j\in J(x)}c_ju_j:c_j\ge0\}\). In particular
@@ -782,7 +782,7 @@ angle \(\alpha_{jk}\) in the plane spanned by \(u_j\) and \(u_k\), for
 \end{fact}
 
 \begin{proof}
-Put \(T=\{d:u_j\cdot d\le0\text{ for }j\in J(x)\}\). A vector \(v\) lies in
+Put \(T\coloneqq \{d:u_j\cdot d\le0\text{ for }j\in J(x)\}\). A vector \(v\) lies in
 \(N_Q(x)\) if and only if \(v\cdot d\le0\) for all \(d\in T\): if \(d\in T\)
 then \(x+\varepsilon d\in Q\) for small \(\varepsilon>0\), because the
 inactive inequalities are strict at \(x\), and conversely \(q-x\in T\) for
@@ -807,7 +807,7 @@ Let \(Q\subseteq\R^n\) be nonempty, closed, and convex. For each
 \(x\in Q\) and \(y-x\in N_Q(x)\). Consequently every \(y\in\R^n\) can be
 written in exactly one way as \(y=x+v\) with \(x\in Q\) and \(v\in N_Q(x)\),
 and then \(\norm v=\dist(y,Q)\). A direction \(v\) lies in \(N_Q(x)\) if and
-only if \(x\) is the nearest point of \(x+tv\) in \(Q\) for every \(t>0\).
+only if \(x\) is the nearest point of \(x+s v\) in \(Q\) for every \(s>0\).
 \end{fact}
 
 \begin{proof}
@@ -835,7 +835,7 @@ divergence theorem}\label{tb:sec:surface}
 For \(0\le k\le n\), the \(k\)-dimensional Hausdorff measure \(\Haus^k\) on
 \(\R^n\) is the Borel measure
 \[
- \Haus^k(S)=\lim_{\epsilon\downarrow0}\inf\Bigl\{\sum_i\omega_k
+ \Haus^k(S)\coloneqq \lim_{\epsilon\downarrow0}\inf\Bigl\{\sum_i\omega_k
  \Bigl(\tfrac12\operatorname{diam}C_i\Bigr)^k:S\subseteq\bigcup_iC_i,\
  \operatorname{diam}C_i\le\epsilon\Bigr\},
 \]
@@ -863,7 +863,7 @@ integral of \(f\) over the set \(\partial Q\) with respect to
 which justifies deleting redundant inequalities before computing it.
 The Gaussian surface integral \(\surf(Q)=\int_{\partial Q}\Hh\,\varphi_r\,
 d\Haus^{r-1}\) of Subsection~\PN{sec:outline-late}{2.4} is the case
-\(n=r\) and \(f=\Hh\varphi_r\), with \(\Hh(g)=\norm g^2-r\).
+\(n=r\) and \(f=\Hh\varphi_r\), with \(\Hh(g)\coloneqq \norm g^2-r\).
 
 \usedin{the definition of \(\surf\) in
 Subsection~\PN{sec:outline-late}{2.4} and
@@ -892,17 +892,17 @@ that
  \tag{\(*\)}
 \end{equation}
 since the theorem follows by taking \(e=e_i\) and \(f=X_i\) and summing over
-\(i\). Write \(x=w+te\) with \(w\in e^\perp\). By Fubini's theorem,
-\(\int_Q\partial_ef\,dx=\int_{e^\perp}\int_{I(w)}\partial_tf(w+te)\,dt\,dw\),
-where \(I(w)=\{t:w+te\in Q\}\) is a closed interval, possibly empty, a point,
+\(i\). Write \(x=w+s e\) with \(w\in e^\perp\). By Fubini's theorem,
+\(\int_Q\partial_ef\,dx=\int_{e^\perp}\int_{I(w)}\partial_sf(w+s e)\,ds\,dw\),
+where \(I(w)\coloneqq \{s:w+s e\in Q\}\) is a closed interval, possibly empty, a point,
 or unbounded, because \(Q\) is convex. Since \(f\) tends to zero along every
-line, the inner integral equals \(f(w+t_+(w)e)-f(w+t_-(w)e)\), where
-\(t_\pm(w)\) are the endpoints of \(I(w)\) and a term with an infinite
+line, the inner integral equals \(f(w+s_+(w)e)-f(w+s_-(w)e)\), where
+\(s_\pm(w)\) are the endpoints of \(I(w)\) and a term with an infinite
 endpoint is read as zero.
 
-Consider the upper endpoints \(x=w+t_+(w)e\). If \(x\in\relint F_j\), then
+Consider the upper endpoints \(x=w+s_+(w)e\). If \(x\in\relint F_j\), then
 only the inequality \(j\) is active at \(x\) (Fact~\ref{tb:normalcone}), so
-\(x+te\in Q\) for small \(t>0\) unless \(e\cdot u_j>0\), and \(x\) is an upper
+\(x+s e\in Q\) for small \(s>0\) unless \(e\cdot u_j>0\), and \(x\) is an upper
 endpoint if and only if \(e\cdot u_j>0\). The upper endpoints that lie in no
 \(\relint F_j\) lie in \(\bigcup_{j\ne k}F_j\cap F_k\), which is a subset of a
 finite union of affine subspaces of dimension at most \(n-2\)
@@ -915,7 +915,7 @@ restriction to \(H_j\) of a linear map whose Jacobian with respect to
 orthonormal basis of \(u_j^\perp\), the volume of the projection along \(e\)
 of the cube they span equals the volume of the parallelepiped spanned by
 \(b_1,\ldots,b_{n-1},e\), which is \(|e\cdot u_j|\). Therefore
-\(\int f(w+t_+(w)e)\,dw=\sum_{j:\,e\cdot u_j>0}(e\cdot u_j)\int_{F_j}f\,d\Haus^{n-1}\),
+\(\int f(w+s_+(w)e)\,dw=\sum_{j:\,e\cdot u_j>0}(e\cdot u_j)\int_{F_j}f\,d\Haus^{n-1}\),
 the sets \(F_j\setminus\relint F_j\) being \(\Haus^{n-1}\)-null. The same
 argument for the lower endpoints gives
 \(-\sum_{j:\,e\cdot u_j<0}|e\cdot u_j|\int_{F_j}f\,d\Haus^{n-1}\), and
@@ -925,7 +925,7 @@ on either side.
 
 \usedin{the divergence calculation inside a facet in
 \PR{Lemma}{appx-an:lem:surface}{C.5}. The vector field is
-\(X(y)=y\varphi_{r-1}(y)\), with divergence
+\(X(y)\coloneqq y\varphi_{r-1}(y)\), with divergence
 \(\{r-1-\norm y^2\}\varphi_{r-1}(y)\); the boundary terms are the
 ridge contributions in \PE{appx-an:surface-identity}{C.30}.}
 \emph{Source.} \TBc{10}, Lemma~24, proved there by truncation to a ball and
@@ -936,8 +936,8 @@ For the surface integral used in the paper, this divergence
 calculation produces coefficients whose separate expressions contain
 \(1/\sin\alpha_{jk}\). We combine the two contributions of a ridge
 before estimating them. Let
-\(s_j=\int_{F_j}\varphi_r\,d\Haus^{r-1}\),
-\(\rho_{jk}=\int_{E_{jk}}\varphi_r\,d\Haus^{r-2}\), and let
+\(s_j\coloneqq \int_{F_j}\varphi_r\,d\Haus^{r-1}\),
+\(\rho_{jk}\coloneqq \int_{E_{jk}}\varphi_r\,d\Haus^{r-2}\), and let
 \(z_{jk}\) be the projection of a ridge point onto
 \(\operatorname{span}(u_j,u_k)\). Applying the divergence formula in
 each facet gives
@@ -968,22 +968,22 @@ follows from orthogonal coordinates and Fubini's theorem.
 Let \(Q\) be a proper, full-dimensional polyhedron in \(\R^n\) with
 facets \(F_j\), ridges \(E_{jk}\), and an irredundant description by
 unit face normals \(u_j\). For a ridge, put
-\(L_{jk}=\operatorname{span}(u_j,u_k)\) and
-\(z_{jk}=\Pi_{jk}x\), for any \(x\in E_{jk}\). This vector is constant
+\(L_{jk}\coloneqq \operatorname{span}(u_j,u_k)\) and
+\(z_{jk}\coloneqq \Pi_{jk}x\), for any \(x\in E_{jk}\). This vector is constant
 on the ridge because
 \(u_j\cdot z_{jk}=a_j\) and \(u_k\cdot z_{jk}=a_k\).
 Let \(\eta(x)>0\) be a measurable function on the facets and ridges.
 The outward tubes are
 \begin{align*}
- \mathcal T_j&=\{x+tu_j:x\in\relint F_j,\ 0<t<\eta(x)\},\\
- \mathcal T_{jk}&=\{x+v:x\in\relint E_{jk},\ v\in N_Q(x),\
+ \mathcal T_j&\coloneqq \{x+s u_j:x\in\relint F_j,\ 0<s<\eta(x)\},\\
+ \mathcal T_{jk}&\coloneqq \{x+v:x\in\relint E_{jk},\ v\in N_Q(x),\
                          0<\norm v<\eta(x)\}.
 \end{align*}
 For \(x\in\relint E_{jk}\), the normal cone is a sector of angle
 \(\alpha_{jk}\) in \(L_{jk}\). Write
-\(S_{jk}(a)=N_Q(x)\cap\{v:0<\norm v<a\}\); its area is
+\(S_{jk}(a)\coloneqq N_Q(x)\cap\{v:0<\norm v<a\}\); its area is
 \(\alpha_{jk}a^2/2\). For \(Q=\bigcap_j\{u_j\cdot x\le a_j\}\),
-the notation \(Q^t\) increases every threshold by \(t\); it does not
+the notation \(Q^s\) increases every threshold by \(s\); it does not
 denote a Euclidean neighborhood.
 
 \begin{fact}[Variable-width normal tubes]\label{tb:tubes}
@@ -994,18 +994,18 @@ Each tube point \(g=x+v\) has nearest point \(x\) in \(Q\), and
 (b) For a nonnegative measurable function \(f\),
 \begin{align*}
  \int_{\mathcal T_j}f(g)\,dg
- &=\int_{F_j}\int_0^{\eta(x)} f(x+tu_j)\,dt\,d\Haus^{n-1}(x),\\
+ &=\int_{F_j}\int_0^{\eta(x)} f(x+s u_j)\,ds\,d\Haus^{n-1}(x),\\
  \int_{\mathcal T_{jk}}f(g)\,dg
  &=\int_{E_{jk}}\int_{S_{jk}(\eta(x))}f(x+v)\,dv\,d\Haus^{n-2}(x).
 \end{align*}
 The same formulas hold whenever \(f\) is integrable on the relevant tube.
 
 (c) Use the function \(R\) in Fact~\ref{tb:projection-moments}, built
-from the face normals of \(Q\), and choose \(\eta(x)=1/(4R(x))\).
+from the face normals of \(Q\), and choose \(\eta(x)\coloneqq 1/(4R(x))\).
 Then all these tubes lie in \(\{g:g\in Q^{1/R(g)}\setminus Q\}\).
 For an absolute constant \(c>0\), their normal integrals obey
 \begin{align*}
- \int_0^{\eta(x)}R(x+tu_j)^3\varphi_n(x+tu_j)\,dt
+ \int_0^{\eta(x)}R(x+s u_j)^3\varphi_n(x+s u_j)\,ds
  &\ge c\{1+a_j^2\}\varphi_n(x),\qquad x\in F_j,\\
  \int_{S_{jk}(\eta(x))}R(x+v)^3\varphi_n(x+v)\,dv
  &\ge c\alpha_{jk}\norm{z_{jk}}\varphi_n(x),\qquad x\in E_{jk}.
@@ -1018,15 +1018,15 @@ For \(n=1\), there are no ridge tubes.
 as the unique nearest point of \(x+v\). The relative interiors of
 distinct faces are disjoint, so the tubes are disjoint.
 
-(b) The map \((x,t)\mapsto x+tu_j\) is an affine isometry from
+(b) The map \((x,s)\mapsto x+s u_j\) is an affine isometry from
 \(H_j\times\R\) onto \(\R^n\). Likewise, \((x,v)\mapsto x+v\)
 is an affine isometry from \((z_{jk}+L_{jk}^\perp)\times L_{jk}\)
 onto \(\R^n\). The Jacobians are one. Apply Fubini to the indicator
-of the domain \(0<t<\eta(x)\), or \(0<\norm v<\eta(x)\) in the
+of the domain \(0<s<\eta(x)\), or \(0<\norm v<\eta(x)\) in the
 normal sector. No derivative of \(\eta\) is involved, and no
 smoothness of \(\eta\) is needed.
 
-(c) For a facet displacement \(v=tu_j\), and for a ridge displacement
+(c) For a facet displacement \(v=s u_j\), and for a ridge displacement
 \(v\in L_{jk}\), respectively,
 \[
  |x\cdot v|\le\mathcal M(x)\norm v\le\tfrac14.
@@ -1052,7 +1052,7 @@ unit-normal inequality defining \(Q\) satisfies
  u_j\cdot g-a_j\le\norm v<\frac1{4R(x)}\le\frac1{R(g)}.
 \]
 This proves the inclusion in (c), even if the threshold system used
-to define \(Q^t\) also contains redundant inequalities.
+to define \(Q^s\) also contains redundant inequalities.
 \end{proof}
 
 Together with the paired ridge coefficients derived above, part (c)
@@ -1067,7 +1067,7 @@ over a ridge sector uses two, leaving \(R\).
 
 \usedin{\PE{appx-an:adaptive-tubes}{C.29} in
 \PR{Lemma}{appx-an:lem:surface}{C.5}. After setting
-\(Q'=(Q-V_0)/\sigma\), the event is
+\(Q'\coloneqq (Q-V_0)/\sigma\), the event is
 \(V_0+\sigma G\in Q^{\sigma/R(G)}\setminus Q\).
 Conditional on \(G\), its width is fixed; concentration of \(V_0\)
 and Fact~\ref{tb:projection-moments} give the averaged surface bound.}
@@ -1096,14 +1096,14 @@ for these Fact~\ref{tb:variation} gives a direct proof from Fubini's theorem.
 Let \(u_1,\ldots,u_m\) be unit vectors in \(\R^n\) (\(m\ge1\)), \(\kappa>0\),
 \(b_1,\ldots,b_m\in\R\), and
 \[
- \psi(g)=\max_{j\le m}\{\kappa\,u_j\cdot g-b_j\},\qquad Q_s=\{g:\psi(g)\le s\}.
+ \psi(g)\coloneqq \max_{j\le m}\{\kappa\,u_j\cdot g-b_j\},\qquad Q_s\coloneqq \{g:\psi(g)\le s\}.
 \]
 (a) For \(f\ge0\) measurable, or \(f\) integrable, and \(s\in\R\),
 \[
  \int_{Q_s}f\,dg=\kappa^{-1}\int_{-\infty}^s\Bigl(\int_{\{\psi=s'\}}f\,d\Haus^{n-1}
  \Bigr)ds'.
 \]
-(b) If \(f\) is integrable, then \(\Lambda(s)=\int_{Q_s}f\,dg\) is absolutely
+(b) If \(f\) is integrable, then \(\Lambda(s)\coloneqq \int_{Q_s}f\,dg\) is absolutely
 continuous, and for almost every \(s\)
 \[
  \Lambda'(s)=\kappa^{-1}\int_{\{\psi=s\}}f\,d\Haus^{n-1},\qquad
@@ -1124,17 +1124,17 @@ density, then \(s\mapsto\E\Lambda(s+S)\) is differentiable with derivative
 \begin{proof}
 (a) Let \(C_j\) be the set where \(j\) is the smallest index attaining the
 maximum defining \(\psi\); the Borel sets \(C_1,\ldots,C_m\) partition
-\(\R^n\). On \(C_j\), \(\psi(g)=\kappa t-b_j\) in the coordinates
-\(g=tu_j+y\), \(y\perp u_j\). By Fact~\ref{tb:fubini}, in these coordinates,
+\(\R^n\). On \(C_j\), \(\psi(g)=\kappa u-b_j\) in the coordinates
+\(g=u u_j+y\), \(y\perp u_j\). By Fact~\ref{tb:fubini}, in these coordinates,
 \[
  \int_{C_j\cap Q_s}f\,dg=\int_{u_j^\perp}\int_{-\infty}^{(s+b_j)/\kappa}
- (f\ind_{C_j})(tu_j+y)\,dt\,dy .
+ (f\ind_{C_j})(u u_j+y)\,du\,dy .
 \]
-The substitution \(s'=\kappa t-b_j\) turns the inner integral into
-\(\kappa^{-1}\int_{-\infty}^s(f\ind_{C_j})(tu_j+y)\,ds'\) with
-\(t=(s'+b_j)/\kappa\), and a further application of Fubini's theorem
-exchanges the integrals. For fixed \(s'\), the set of \(tu_j+y\) in \(C_j\)
-with this \(t\) is the slice \(C_j\cap\{\psi=s'\}\), and on the hyperplane
+The substitution \(s'=\kappa u-b_j\) turns the inner integral into
+\(\kappa^{-1}\int_{-\infty}^s(f\ind_{C_j})(u u_j+y)\,ds'\) with
+\(u=(s'+b_j)/\kappa\), and a further application of Fubini's theorem
+exchanges the integrals. For fixed \(s'\), the set of \(u u_j+y\) in \(C_j\)
+with this \(u\) is the slice \(C_j\cap\{\psi=s'\}\), and on the hyperplane
 containing it \(\Haus^{n-1}\) is Lebesgue measure \(dy\)
 (Fact~\ref{tb:hausdorff}(a)). Hence
 \(\int_{C_j\cap Q_s}f\,dg=\kappa^{-1}\int_{-\infty}^s\int_{C_j\cap\{\psi=s'\}}
@@ -1142,7 +1142,7 @@ f\,d\Haus^{n-1}\,ds'\). Summing over \(j\) gives (a), since the slices
 \(C_j\cap\{\psi=s'\}\) partition \(\{\psi=s'\}\).
 
 (b) Applying (a) to \(|f|\) and letting \(s\to\infty\) shows that
-\(I(s')=\kappa^{-1}\int_{\{\psi=s'\}}f\,d\Haus^{n-1}\) is integrable on
+\(I(s')\coloneqq \kappa^{-1}\int_{\{\psi=s'\}}f\,d\Haus^{n-1}\) is integrable on
 \(\R\), and (a) says \(\Lambda(s)=\int_{-\infty}^sI(s')\,ds'\). Hence \(\Lambda\) is
 absolutely continuous, and \(\Lambda'=I\) almost everywhere by Lebesgue's
 differentiation theorem. The bound follows because
@@ -1152,7 +1152,7 @@ hyperplanes.
 (c) The set \(Q_s\) is the polyhedron \(\bigcap_j\{u_j\cdot g\le(s+b_j)/\kappa\}\),
 and \(\psi\) is convex and continuous. If \(\psi(g)=s>\inf\psi\), choose \(g'\)
 with \(\psi(g')<s\); for \(\tau>0\), \(g=(g_\tau+\tau g')/(1+\tau)\) with
-\(g_\tau=g+\tau(g-g')\), so convexity gives
+\(g_\tau\coloneqq g+\tau(g-g')\), so convexity gives
 \(\psi(g_\tau)\ge s+\tau(s-\psi(g'))>s\). Thus \(g\) is a limit of points
 outside \(Q_s\) and \(g\in\partial Q_s\); the open set \(\{\psi<s\}\) is
 nonempty and lies in \(Q_s\), which is therefore full-dimensional, and it
@@ -1179,8 +1179,8 @@ Lipschitz constant. Dominated convergence gives the claim.
 \(\kappa=\sigma\), \(b_j=a_j-u_j\cdot V_0\), and
 \(f(g)=(\norm g^2-r)\varphi_r(g)\). Parts (a)--(c) give
 \(\sigma^{-1}\surf((Q(a+s\mathbf1)-V_0)/\sigma)\) for almost every
-\(s\). The independent shift \(-h\log T_t\), with
-\(T_t\sim\operatorname{Gamma}(t,1)\), has a density, so part (d)
+\(s\). The independent shift \(-h\log T_\ell\), with
+\(T_\ell\sim\operatorname{Gamma}(\ell,1)\), has a density, so part (d)
 permits averaging these derivatives. A uniform bound
 \(Cm(r+1)/\sigma\) follows from (b) and the Gaussian integral over
 each supporting hyperplane; it justifies the interchange and does
