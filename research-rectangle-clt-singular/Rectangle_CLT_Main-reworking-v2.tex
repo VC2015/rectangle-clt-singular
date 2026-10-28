@@ -1533,19 +1533,34 @@ a positive lower bound on that eigenvalue, including when
 
 % Source: sharpness_and_discussion
 \section{Sharpness and remaining questions}\label{opt:section}
-The dependence on sample size cannot improve beyond \(n^{-1/2}\)
-under the present assumptions. A normalized Rademacher sum has an atom
-of order \(n^{-1/2}\), while the Gaussian probability of an interval
-shrinking to this atom tends to zero. This obstruction already occurs
-in one dimension and survives zero skewness, that is, the
-cancellation~\eqref{eq:zero-third} of third moments.
+This section compares the upper bounds with examples that limit how
+accurate a Gaussian approximation can be. Two questions are distinct:
+what is the smallest possible uniform error bound, and how quickly may
+the dimension grow while that error still tends to zero? At a fixed
+positive correlation gap, the results below settle the second question
+both with and without cancellation of third moments. The sharp error
+rate under cancellation remains open. Allowing the correlation gap to
+shrink introduces a further obstruction, illustrated by a centrally
+symmetric example.
 
-Dimension introduces another obstruction, already visible when the
-coordinates are independent. Chernozhukov, Chetverikov, and
-Koike~\cite[Proposition~2.1]{CCK} showed with i.i.d.\ two-point
-coordinates that the factor \((\log p)^{3/2}\) in the rate cannot be
-improved, under further growth conditions on \(B_n\) and \(p_n\) that the
-following theorem does not need.
+Even in one dimension, the dependence on sample size cannot improve
+beyond \(n^{-1/2}\) under the present assumptions. A normalized sum of
+independent Rademacher signs has an atom of order \(n^{-1/2}\) at one
+of its lattice points. An interval shrinking to that point retains the
+atom, whereas its Gaussian probability tends to zero. Thus the
+Kolmogorov distance over intervals is at least of order \(n^{-1/2}\).
+This obstruction persists under central symmetry and hence under the
+third-moment cancellation condition~\eqref{eq:zero-third}.
+
+Growing dimension creates another obstruction through the tails of
+coordinate maxima. Chernozhukov, Chetverikov, and
+Koike~\cite[Proposition~2.1]{CCK} used independent two-point coordinates
+to show that the factor \((\log p)^{3/2}\) is necessary in general.
+The following theorem retains that construction and removes its
+additional growth restrictions on the envelope and dimension. The
+condition \(r_n\to0\) places the comparison in the regime where a
+vanishing approximation error is possible.
+\begin{samepage}
 \begin{theorem}[Lower scale]\label{opt:skew-lower}
 Suppose \(p_n\to\infty\), \(B_n\ge2\), and
 \(r_n\coloneqq B_n(\log p_n)^{3/2}/\sqrt n\to0\). There are i.i.d.
@@ -1558,40 +1573,64 @@ centered observations with independent coordinates, covariance
 Here \(W_n\coloneqq n^{-1/2}\sum_iX_{n,i}\),
 \(Z_n\sim N(0,I_{p_n})\), and the envelope is attained.
 \end{theorem}
-The example uses the centered, unit-variance two-point law
+\end{samepage}
+Each scalar coordinate of the observations has the centered,
+unit-variance two-point law
 \[
  \Pp(X=B_n)=\frac1{B_n^2+1},\qquad
  \Pp(X=-B_n^{-1})=\frac{B_n^2}{B_n^2+1}.
 \]
-At a normal maximum threshold of order \(\sqrt{\log p_n}\), its
-skewness changes each relative tail by order \(r_n\). Taking the
-product of the coordinate probabilities preserves this discrepancy.
-The Supplement~\cite[Section~S.4.1, Theorem~S.3 and Lemma~S.2]{Supplement}
-proves a moderate-tail estimate uniform in the envelope and includes the
-lattice corrections. This extends the regime of the two-point lower
-construction in~\cite[Proposition~2.1]{CCK}, with the law parameterized here
-by its attained envelope.
+Its third moment is \(B_n-B_n^{-1}\), which is of order \(B_n\)
+for \(B_n\ge2\). Write \(\Phi\) for the standard normal distribution
+function. Near the threshold \(x_n\) defined by
+\(p_n\{1-\Phi(x_n)\}=1\), we have
+\(x_n\asymp\sqrt{\log p_n}\); this is where a Gaussian maximum
+has a nontrivial distribution. The third-moment correction changes
+the relative tail probability by order \(r_n\). Since each tail is
+of order \(1/p_n\), multiplying the \(p_n\) coordinate distribution
+functions produces a discrepancy of order \(r_n\) between
+the distribution functions of the two maxima. The Supplement~\cite[Section~S.4.1, Theorem~S.3 and
+Lemma~S.2]{Supplement} proves the tail estimate uniformly in \(B_n\),
+including the lattice corrections needed for this conclusion.
 
-These lower examples have correlation gap one, so they belong to
-every class with a fixed positive gap. To express uniformity,
-let \(M_n(c_0;B,p)\) be the supremum of rectangle error over the
-independent centered observations with envelope at most \(B\), unit
-average marginal variances, and correlation gap at least \(c_0\).
-Write \(M_n^0(c_0;B,p)\) for the same supremum restricted to
-observations whose aggregate third-moment tensor vanishes.
-For fixed \(c_0\in(0,1]\), Theorem~\ref{thm:optimized} and the lower
-example give
+The covariance in this example is the identity, so its correlation
+gap is one. It therefore supplies a lower bound for every class with
+a prescribed gap \(c_0\in(0,1]\). To state the uniform comparison,
+let \(M_n(c_0;B,p)\) be the supremum of \(\rh(W_n,Z_n)\) over
+independent centered observations \(X_1,\ldots,X_n\in\R^p\) with
+\(\norm{X_i}_\infty\le B\),
+\(n^{-1}\sum_i\E X_{ij}^2=1\) for every coordinate, and correlation
+gap at least \(c_0\). Here \(W_n=n^{-1/2}\sum_iX_i\), and \(Z_n\)
+is centered Gaussian with the same covariance. The observations in
+this supremum need not be identically distributed. Let
+\(M_n^0(c_0;B,p)\) denote the same supremum restricted to observations
+satisfying \(\sum_i\E X_i^{\otimes3}=0\).
+
+The upper and lower rates match when the dimension is large enough
+to absorb the additional logarithm in the upper bound. More precisely,
+fix \(\Lambda>0\) and suppose
+\[
+ 1+\log_+(\sqrt n/B_n)\le\Lambda\log(ep_n).
+\]
+If also \(p_n\to\infty\), \(B_n\ge2\), and \(r_n\to0\),
+Theorems~\ref{thm:optimized} and~\ref{opt:skew-lower} give
 \begin{equation}
  M_n(c_0;B_n,p_n)\asymp_{c_0,\Lambda}
- \frac{B_n(\log p_n)^{3/2}}{\sqrt n}
+ \frac{B_n(\log p_n)^{3/2}}{\sqrt n}.
  \label{opt:matching-minimax}
 \end{equation}
-whenever \(p_n\to\infty\), \(B_n\ge2\), the displayed rate tends
-to zero, and \(1+\log_+(\sqrt n/B_n)\le\Lambda\log(ep_n)\).
-This includes polynomial dimension and growing envelopes subject to
-the vanishing-rate condition. The Supplement~\cite[Section~S.4.2,
-Theorem~S.4]{Supplement} gives the general consistency argument below.
+The symbol \(\asymp_{c_0,\Lambda}\) means that the ratio is bounded
+above and below by positive constants depending only on \(c_0\) and
+\(\Lambda\). In particular, this conclusion holds when
+\(p_n\asymp n^a\) for a fixed \(a>0\), with \(B_n\) allowed to grow
+subject to \(r_n\to0\).
 
+Uniform convergence requires no additional condition relating the
+two logarithms. The next theorem gives its exact criterion and shows
+how third-moment cancellation enlarges the admissible dimension range.
+The general consistency argument is proved in the
+Supplement~\cite[Section~S.4.2, Theorem~S.4]{Supplement}; the
+zero-third-moment case is proved there in Section~S.3.
 \begin{theorem}[Uniform consistency at a fixed gap]
 \label{opt:consistency}
 For fixed \(c_0\in(0,1]\), arbitrary dimension sequences \(p_n\ge1\),
@@ -1608,41 +1647,63 @@ For each fixed \(B\ge1\),
  \quad\Longleftrightarrow\quad \log p_n=o(\sqrt n).
 \]
 \end{theorem}
+For a fixed envelope \(B\ge2\), the first criterion is
+\(\log p_n=o(n^{1/3})\). Cancellation improves it to
+\(\log p_n=o(\sqrt n)\), but this larger range does not by itself
+identify the sharp error rate within the range.
 
-For the zero-skewness assertion, independent Rademacher coordinates
-locate the critical dimension at
-\(\log p\asymp\sqrt n\). If \(\log p_n\sim a\sqrt n\), their
-maximum has a limiting discrepancy
-\(e^{-\exp(-a^2/3)}-e^{-1}>0\) at a threshold chosen so that the
-Gaussian upper-tail count tends to one. The fourth-order tail calculation and the necessity argument for
-arbitrary dimension sequences are in the Supplement~\cite[Section~S.3,
-Proposition~S.2 and the following proof]{Supplement}. The sharpness of the
-threshold says nothing about the error rate below it. In the range
-\(n^{1/3}\ll L\ll\sqrt n\), known lower bounds have scale
-\(L^2/n\), while the fixed-gap zero-skewness upper bound is larger.
-The lattice obstruction must also be retained in any improved
-unsmoothed error bound.
+Independent Rademacher coordinates explain the second threshold.
+If \(\log p_n\sim a\sqrt n\) for a fixed \(a>0\), their normalized
+sums satisfy
+\[
+ \Pp\!\left(\max_{j\le p_n}W_{n,j}\le x_n\right)
+ -\Pp\!\left(\max_{j\le p_n}Z_{n,j}\le x_n\right)
+ \longrightarrow e^{-\exp(-a^2/3)}-e^{-1}>0,
+\]
+where \(x_n\) again satisfies \(p_n\{1-\Phi(x_n)\}=1\).
+The fourth-order tail correction therefore prevents convergence at
+this dimension scale, even though all third moments vanish.
+The calculation and the necessity argument for arbitrary dimension
+sequences are in the Supplement~\cite[Section~S.3, Proposition~S.2
+and the following proof]{Supplement}.
 
-Central symmetry does not remove the lower scale
-\(\delta L^{3/2}\) when the covariance is unrestricted. The following construction shows this even when every observation is centrally symmetric, a
-stronger condition than cancellation of the aggregate third moments.
-Let \(m_n\to\infty\), put \(\ell_n\coloneqq\log m_n\) and
-\(p_n\coloneqq m_n^2\), and suppose \(\ell_n^3/n\to0\).
-There are i.i.d.\ centrally symmetric observations with unit marginal
-variances and \(\norm{X_{n,i}}_\infty\le2\) such that, with
-\(\delta_n\coloneqq2/\sqrt n\) and \(L_n\coloneqq\log(ep_n)\),
+Below this threshold, a gap between the known upper and lower rates
+remains. In the range \(n^{1/3}\ll L\ll\sqrt n\), the fourth-order
+tail calculations give a lower-bound scale \(L^2/n\), whereas
+Theorem~\ref{thm:zero-skew}, for fixed \(B\) and \(c_0\), gives
+\[
+ \rh(W_n,Z_n)\le C_{B,c_0}\frac L{\sqrt n}
+       \sqrt{1+\log_+\frac{\sqrt n}{L}}.
+\]
+The Supplement~\cite[Section~S.3.1]{Supplement} discusses this
+difference. Any improvement valid also in fixed dimension must retain
+the lattice obstruction of order \(n^{-1/2}\) described above;
+\(L^2/n\) alone cannot be a uniform upper bound under the present
+assumptions.
+
+The role of the correlation gap becomes more apparent when it is
+allowed to shrink. Central symmetry then permits a lower bound of
+order \(\delta L^{3/2}\), despite the vanishing of every third moment.
+To state this example, let \(m_n\to\infty\), put
+\(\ell_n\coloneqq\log m_n\) and \(p_n\coloneqq m_n^2\), and assume
+\(\ell_n^3/n\to0\). There are i.i.d.\ centrally symmetric observations
+with unit marginal variances and \(\norm{X_{n,i}}_\infty\le2\) such
+that, with \(\delta_n\coloneqq2/\sqrt n\) bounding the normalized
+summands and \(L_n\coloneqq\log(ep_n)\),
 \[
  \liminf_{n\to\infty}
  \frac{\rh(W_n,Z_n)}{\delta_n L_n^{3/2}}\ge\frac1{8e}.
 \]
-Here \(W_n=n^{-1/2}\sum_iX_{n,i}\), and \(Z_n\) has the same
-covariance as \(W_n\). More precisely, a single lower orthant has
-probability discrepancy
-\(\{1/(8e)+o(1)\}\delta_nL_n^{3/2}\); this is not an assertion
-of an exact asymptotic for the supremum over all rectangles.
+Here \(W_n=n^{-1/2}\sum_iX_{n,i}\), and \(Z_n\) is centered Gaussian
+with the same covariance. A single lower orthant attains discrepancy
+\(\{1/(8e)+o(1)\}\delta_nL_n^{3/2}\), which gives the displayed
+lower bound for the supremum over rectangles. The full proof is in
+Appendix~\ref{app:symmetric-lower}.
 
-The example combines independent signs with a rare activation shared
-across coordinates. Suppress the subscript \(n\), and set
+The construction combines two arrays of independent signs, with one
+array switched on only in a small random set of observations.
+Suppress the subscript \(n\) and index the \(p=m^2\) coordinates by
+pairs \((j,k)\). Set
 \[
  q\coloneqq\frac{\log m}{2n},\qquad s\coloneqq\sqrt{1-q},
  \qquad X_{i,jk}\coloneqq s\eta_{ij}+I_i\varepsilon_{ik},
@@ -1650,70 +1711,109 @@ across coordinates. Suppress the subscript \(n\), and set
 \]
 where all \(\eta_{ij},\varepsilon_{ik}\) are independent Rademacher
 signs, and the \(I_i\sim\operatorname{Bernoulli}(q)\) are independent
-of the signs and of one another. Reversing all signs in a row proves
-central symmetry, hence all mixed third moments vanish. Each coordinate
-has variance \(s^2+q=1\), and the covariance is
+of the signs and of one another. Observation \(i\) is called active
+when \(I_i=1\); its indicator is shared by all coordinate pairs.
+Reversing all signs in one observation leaves its law unchanged and
+negates every coordinate, proving central symmetry. Each coordinate
+has variance \(s^2+q=1\), and
 \[
  \Sigma_{(j,k),(j',k')}=(1-q)\ind\{j=j'\}+q\ind\{k=k'\}.
 \]
-It has rank \(2m-1\) and correlation gap \(q\) for sufficiently large
-\(n\). Thus the example has singular covariance and a vanishing gap,
-without exactly repeated or opposite coordinates. This modifies the
-common Bernoulli activation construction
+This covariance has rank \(2m-1\) and correlation gap \(q\) for
+sufficiently large \(n\). It is singular, but no two distinct
+coordinates are exactly equal or opposite. The construction modifies
+the common Bernoulli activation example
 in~\cite[Proposition~E.1]{FKLZ}.
 
-The size of the discrepancy can be seen from the maxima. Put
-\(A_j\coloneqq n^{-1/2}\sum_i\eta_{ij}\),
-\(T_k\coloneqq\sum_i I_i\varepsilon_{ik}\), and
-\(T_*\coloneqq\max_kT_k\). For independent standard normal arrays
-\((G_j)_j,(H_k)_k\), the two maxima have the representations
+The discrepancy comes from the different shifts that the rare active
+observations add to a coordinate maximum. Define
+\[
+ A_j\coloneqq n^{-1/2}\sum_i\eta_{ij},\qquad
+ T_k\coloneqq\sum_i I_i\varepsilon_{ik},\qquad
+ T_*\coloneqq\max_{k\le m}T_k.
+\]
+A Gaussian vector with the required covariance can be represented as
+\(Z_{jk}=sG_j+\sqrt q\,H_k\), where all \(G_j,H_k\) are independent
+standard normals. Consequently,
 \[
  \max_{j,k}W_{jk}=s\max_jA_j+\frac{T_*}{\sqrt n},
  \qquad
  \max_{j,k}Z_{jk}=s\max_jG_j+\sqrt q\max_kH_k.
 \]
-With high probability, one sign column is positive on every active
-row, and \(\E T_*=(1/2+o(1))\log m\). By contrast,
-\(\sqrt q\,\E\max_kH_k=(1+o(1))\log m/\sqrt n\).
-The difference between these mean shifts is therefore
-\((1/2+o(1))\log m/\sqrt n\). At the threshold \(u_m\) determined
-by \(m\{1-\Phi(u_m)\}=1\), the density of the Gaussian maximum is
-asymptotic to \(\sqrt{2\log m}/e\), where \(\Phi\) is the standard
-normal distribution function. Their product gives the orthant
-discrepancy \(\{1/(e\sqrt2)+o(1)\}(\log m)^{3/2}/\sqrt n\),
-equivalent to the constant above. The uniform Rademacher-maximum
-approximation and the Taylor remainder estimates justifying this
-calculation are proved in Appendix~\ref{app:symmetric-lower}.
-The vanishing correlation gap is essential to the scope of this
-example: it leaves the fixed-gap zero-skewness rate question above
-open.
+In each representation, the two terms are independent. The common
+parts \(s\max_jA_j\) and \(s\max_jG_j\) have distribution functions
+whose difference is negligible at the scale of the claimed lower bound.
+The remaining terms have different mean sizes.
 
-For unrestricted covariance the upper bound is optimal up to
-logarithmic factors even under central symmetry. Where the lower scale \(\delta L^{3/2}\) is
-attained, the upper and lower bounds differ by at most the factor
-\(\sqrt{D_L}\). It is not known whether this factor is necessary, nor how
-the optimal bound depends on a vanishing correlation gap. The companion
-note~\cite{Obstruction} shows that natural pointwise strengthenings of
-the fourth-order remainder bound, for a two-scale version of the
-smoother, are false, so the factor cannot be removed by recovering a
-cancellation lost in a pointwise derivative estimate. It also states an
-integrated estimate of the remainder that would suffice, and a second
-note~\cite{IntegratedRemainder} proves this estimate when the covariance
-has rank one.
+There are about \((\log m)/2\) active observations. With probability
+tending to one, at least one of the \(m\) sign columns is positive
+on every active observation, so its sum equals the number of active
+observations. Appendix~\ref{app:symmetric-lower} turns this observation
+into the moment estimate for \(T_*\). Together with the Gaussian
+maximum estimate, it gives
+\[
+ \frac{\E T_*}{\sqrt n}
+ =\left(\frac12+o(1)\right)\frac{\log m}{\sqrt n},
+ \qquad
+ \sqrt q\,\E\max_kH_k
+ =(1+o(1))\frac{\log m}{\sqrt n}.
+\]
+Thus the Gaussian maximum receives the larger mean shift, by
+\((1/2+o(1))\log m/\sqrt n\).
 
-Exactly repeated or opposite coordinates can be removed without
-changing rectangle distance; see the Supplement~\cite[Section~S.5,
-Proposition~S.6]{Supplement}. It also gives the rank-one minimax rate
-\(C\min\{1,B/\sqrt n\}\) \cite[Section~S.4.3, Proposition~S.4]{Supplement}.
-The proof for arbitrary rank does not use these reductions.
+To translate this shift difference into a probability difference,
+choose \(u_m\) so that \(m\{1-\Phi(u_m)\}=1\). The density of
+\(\max_jG_j\) at \(u_m\) is asymptotic to
+\(\sqrt{2\log m}/e\). Since \(s\to1\), the density of
+\(s\max_jG_j\) at \(s u_m\) has the same leading term.
+Multiplying by the difference between the mean shifts gives the discrepancy
+\[
+ \left(\frac1{e\sqrt2}+o(1)\right)
+       \frac{(\log m)^{3/2}}{\sqrt n}
+ =\left(\frac1{8e}+o(1)\right)\delta_nL_n^{3/2}
+\]
+for the lower orthant with common threshold \(s u_m\).
+Appendix~\ref{app:symmetric-lower} justifies this calculation by a
+uniform approximation for the Rademacher maximum and a Taylor
+expansion with a smaller remainder. The correlation gap
+\(q=(\log m)/(2n)\) tends to zero, so this example does not determine
+the sharp rate under a fixed positive gap.
 
-Corollary~\ref{cor:subexponential} complements the companion
-paper~\cite{Local}, whose sub-exponential bound is sharper in logarithms
-when all principal covariance submatrices of order at most four are
-uniformly nondegenerate. Without that restriction,
-Corollary~\ref{cor:subexponential} still gives the power \(n^{-1/2}\) up
-to logarithms. Appendix~\ref{app:subexponential} compares the
-assumptions and rates in detail.
+For unrestricted covariance, these examples leave at most the factor
+\(\sqrt{D_L}\) between the general upper bound and the attained lower
+scale \(\delta L^{3/2}\), even under central symmetry. Recall that
+\(D_L=1+\log_+(1/(\delta\sqrt L))\). Whether that factor is necessary,
+and how the optimal rate depends on a shrinking correlation gap,
+remain open. The note~\cite{Obstruction} disproves particular
+pointwise improvements of the fourth-order remainder estimate for a
+two-scale smoother, even after the full covariance contraction.
+Those counterexamples rule out the proposed pointwise estimates;
+they do not rule out an improved CLT rate. The same note formulates
+an integrated remainder estimate that would support the desired
+improvement, and~\cite{IntegratedRemainder} proves that estimate for
+rank-one covariance. The general integrated estimate remains open.
+
+Some singular covariance structures do admit a simpler reduction.
+Exactly equal or opposite coordinates can be removed without changing
+the Kolmogorov distance over rectangles: their constraints combine
+into intervals for the retained coordinates. In rank one, all unit-variance
+coordinates are equal up to sign, so this reduction leaves a scalar
+comparison. Its worst-case error has order
+\(\min\{1,B/\sqrt n\}\), with no dimension logarithm.
+The Supplement proves the coordinate reduction~\cite[Section~S.5,
+Proposition~S.6]{Supplement} and the matching rank-one bounds
+\cite[Section~S.4.3, Proposition~S.4]{Supplement}. The upper-bound
+proof for arbitrary rank does not require either reduction.
+
+For sub-exponential observations, the remaining comparison also
+depends on the covariance assumptions. The companion
+paper~\cite{Local} gives a sharper logarithmic dependence when every
+principal covariance submatrix of order at most four has its smallest
+eigenvalue bounded below by a positive constant.
+Corollary~\ref{cor:subexponential} retains the power \(n^{-1/2}\), up
+to logarithms, without that local nondegeneracy assumption.
+Appendix~\ref{app:subexponential} compares the assumptions and rates
+in detail.
 
 % Source: references
 \begin{thebibliography}{99}
@@ -1908,7 +2008,7 @@ mass \(1-F\), weighted face normal \(\nabla\Psi\), and curvature
 mixture representation of \(F\)\\
 \(\Gamma,\ r,\ u_\alpha,\ \norm\cdot_U\) & support factor
 \(\Sigma=\Gamma\Gamma^\top\), its rank, face normals
-\(\Gamma^\top\nu_\alpha\), and the face norm
+\(\Gamma^\top\nu_\alpha\), and the face seminorm
 \(\max_\alpha|u_\alpha\cdot x|\)\\
 \(\zeta_i^0;\ \zeta_i,\ \widetilde\zeta_i\) & summands in support coordinates; two
 independent copies of them\\
@@ -2152,13 +2252,17 @@ common solution are covered. Since \(m\le2p\), we have \(\log(em)\le CL\).
 
 \subsection{\texorpdfstring{Mixture and derivative formulas}{Mixture and derivative formulas}}\label{appx-sec:mixture}
 
-We keep the notation of Subsection~\ref{sec:outline-smoothing} for
-the faces \(\alpha=1,\ldots,m\) of \(A\), with face normals
-\(\nu_\alpha\) and thresholds \(a_\alpha\), for the face weights
-\(w_\alpha\), the logistic approximation \(F=F_{A,h}\), the face
-probabilities \(\pi_\alpha\), and \(\theta=1-F\).
-Recall that \(T=\sum_\alpha w_\alpha\) and
-\(\Psi=\Psi_{A,h}=h\log(1+T)\). In addition, put
+For the finite faces \(\alpha=1,\ldots,m\) of \(A\), let
+\(\nu_\alpha\) and \(a_\alpha\) be the face normals and thresholds.
+Recall the weights and probabilities from
+Subsection~\ref{sec:outline-smoothing}:
+\[
+ w_\alpha(x)=e^{(\nu_\alpha\cdot x-a_\alpha)/h},\qquad
+ T=\sum_\alpha w_\alpha,\qquad F=F_{A,h}=(1+T)^{-1},\qquad
+ \pi_\alpha=Fw_\alpha.
+\]
+We also use \(\theta=1-F\) and the potential
+\(\Psi=\Psi_{A,h}=h\log(1+T)\). Put
 \[
  \pi_0\coloneqq F=\frac1{1+T},\qquad
  \bar\nu\coloneqq \sum_\alpha\pi_\alpha\nu_\alpha,
@@ -2199,9 +2303,15 @@ dependent through \(\omega_0\); independent logistic displacements would give
 a different approximation. McFadden~\cite[p.~1001]{McFadden1989} uses
 the same random-utility representation, it is stated for softmax weights in~\cite[Lemma~14]{GaoZhang}. 
 
-The general derivative formula described in
-Subsection~\ref{sec:outline-smoothing} reads, for vectors
-\(z_1,\ldots,z_q\),
+The partition formula follows by applying the higher-order chain
+rule to \(F=f(T)\), where \(f(T)=(1+T)^{-1}\) and
+\[
+ f^{(k)}(T)=(-1)^k k!(1+T)^{-k-1}.
+\]
+Each block of a partition groups the directions entering one
+derivative of \(T\); the number of blocks determines the derivative
+of \(f\). Thus, for vectors \(z_1,\ldots,z_q\), the formula from
+Subsection~\ref{sec:outline-smoothing} is
 \begin{equation}
  \begin{split}
  D^qF(x)[z_1,\ldots,z_q]
@@ -2231,10 +2341,10 @@ The softmax cumulant formula~\cite[Lemma~13]{GaoZhang} derives
 from the joint cumulants of a categorical variable.
 
 The uniform bound \eqref{appx-eq:all-orders} does not yet record that the
-derivatives are small away from the boundary. For the ordered
-coordinate tuples \(I\) and the derivatives \(\partial_I\) of
-Subsection~\ref{sec:outline-smoothing}, the same positive majorant,
-using \(\norm{\nu_\alpha}_1=1\), gives
+derivatives are small away from the boundary. For an ordered tuple
+\(I=(i_1,\ldots,i_q)\in\{1,\ldots,p\}^q\), write
+\(\partial_I=\partial_{i_1}\cdots\partial_{i_q}\).
+The same positive majorant, using \(\norm{\nu_\alpha}_1=1\), gives
 \begin{equation}
  \sum_I\sup_{\norm z_\infty\le\varrho}|\partial_IF(x+z)|
  \le C_qh^{-q}F(x)(1-F(x)),\qquad 0\le\varrho\le h.
@@ -2314,10 +2424,13 @@ Under \eqref{eq:setup}, for \(h\ge\delta\),
 Recall the largest threshold change
 \(R_h=h\max_\alpha|\log(\omega_\alpha/\omega_0)|\)
 from Subsection~\ref{sec:outline-smoothing}.
-Then \(A^{-R_h}\subseteq A_{\omega}\subseteq A^{R_h}\), and
-\(\E R_h\le Ch\log(em)\le ChL\).
-The last assertion follows by integrating the exponential tails of
-\(-\log\omega_\alpha\), and the faster upper tails of \(\log\omega_\alpha\).
+Then \(A^{-R_h}\subseteq A_{\omega}\subseteq A^{R_h}\). For \(s\ge0\),
+\[
+ \Pp\{|\log(\omega_\alpha/\omega_0)|>s\}
+ =\frac{2}{1+e^s}\le2e^{-s}.
+\]
+A union bound and integration therefore give
+\(\E R_h\le h\{\log(2m)+1\}\le Ch\log(em)\le ChL\).
 For fixed exponentials, the indicators can disagree only in
 \(A^{R_h}\setminus A^{-R_h}\). Jensen's inequality moves the absolute
 value inside the exponential average. Conditional on the exponentials,
@@ -2350,12 +2463,17 @@ the correlation gap. Direct differentiation gives
  \label{appx-eq:hessian}
 \end{equation}
 Distinct face normals \(\pm e_j\) have nonpositive inner products.
-Thus, with \(\pi_* \coloneqq \max_\alpha\pi_\alpha\),
-\(\chi\ge\theta(1-\theta)\) and
-\(\chi\ge\theta(1-\pi_*)\).
+With \(\pi_*\coloneqq\max_\alpha\pi_\alpha\), this gives
+\[
+ \norm{\bar\nu}_2^2\le\sum_\alpha\pi_\alpha^2\le\pi_*\theta,
+ \qquad
+ \norm{\bar\nu}_2^2\le\norm{\bar\nu}_1^2\le\theta^2.
+\]
+Substitution into \(\chi=\theta-\norm{\bar\nu}_2^2\) yields
+\(\chi\ge\theta(1-\pi_*)\) and \(\chi\ge\theta(1-\theta)\).
 On \(A\), every \(w_\alpha\le1\), so \(\pi_*\le1/2\).
-Off \(A\) we have \(T>1\), so \(\theta>1/2\). On \(A\), the second
-lower bound gives \(\chi\ge\theta/2\); off \(A\), the first gives
+Off \(A\) we have \(T>1\), so \(\theta>1/2\). On \(A\), the first
+lower bound gives \(\chi\ge\theta/2\); off \(A\), the second gives
 \(\chi\ge F/2\). The indicator error is \(\theta\) and \(F\)
 in the two cases, respectively, so
 \begin{equation}
@@ -2377,15 +2495,19 @@ and since \(\Sigma_{jj}=1\) and \(|\Sigma_{jk}|\le1-c\) for
 \end{equation}
 
 To compare the Hessian at nearby points, include the index \(0\), with
-\(\nu_0\coloneqq 0\) and \(\pi_0=F\); the positive representation
+\(\nu_0\coloneqq 0\) and \(\pi_0=F\). If \(\norm z_\infty\le\varrho\),
+each \(\pi_\alpha\), including \(\pi_0\), changes by a factor between
+\(e^{-2\varrho/h}\) and \(e^{2\varrho/h}\). Each product
+\(\pi_\alpha\pi_\beta\) therefore changes by a factor between
+\(e^{-4\varrho/h}\) and \(e^{4\varrho/h}\). The representation
 \[
  D^2\Psi=\frac1{2h}\sum_{\alpha,\beta\in\{0,1,\ldots,m\}}
  \pi_\alpha\pi_\beta
  (\nu_\alpha-\nu_\beta)(\nu_\alpha-\nu_\beta)^\top
 \]
-implies
+is a sum of positive semidefinite matrices, so comparison term by term gives
 \(e^{-4\varrho/h}D^2\Psi(x)\preceq D^2\Psi(x+z)
-\preceq e^{4\varrho/h}D^2\Psi(x)\) when \(\norm z_\infty\le\varrho\);
+\preceq e^{4\varrho/h}D^2\Psi(x)\);
 here \(M\preceq N\) means that \(N-M\) is positive semidefinite.
 Set \(W_i\coloneqq W-\xi_i\). Centering and independence let us subtract
 \(\nabla\Psi(W_i)\) before integrating the Hessian along the segment
@@ -2463,8 +2585,13 @@ Factor \(\Sigma=\Gamma\Gamma^\top\), where \(\Gamma\) has full column
 rank \(r=\operatorname{rank}\Sigma\). Every summand lies almost surely
 in its range: for each null direction \(z\) of \(\Sigma\),
 \(\sum_i\E(z\cdot\xi_i)^2=z^\top\Sigma z=0\).
-We may therefore write \(\xi_i=\Gamma\zeta_i^0\), and injectivity of
-\(\Gamma\) gives \(\sum_i\E\zeta_i^0(\zeta_i^0)^\top=I_r\).
+Define the support coordinates by
+\[
+ \zeta_i^0\coloneqq(\Gamma^\top\Gamma)^{-1}\Gamma^\top\xi_i.
+\]
+Then \(\xi_i=\Gamma\zeta_i^0\), and the covariance identity
+\(\sum_i\E\xi_i\xi_i^\top=\Gamma\Gamma^\top\) gives
+\(\sum_i\E\zeta_i^0(\zeta_i^0)^\top=I_r\).
 For each face normal \(\nu_j\), put \(u_j=\Gamma^\top\nu_j\).
 Unit marginal variances give \(\norm{u_j}=1\). The two properties
 of these coordinates that we will use are
@@ -2475,6 +2602,9 @@ of these coordinates that we will use are
  \label{appx-eq:projected-bound}
 \end{equation}
 The second follows from \(u_j\cdot\zeta_i^0=\nu_j\cdot\xi_i\).
+The quantity \(\norm{\cdot}_U\) is a seminorm; it is a norm when
+the selected face normals span \(\R^r\). Only the displayed bounds
+on components along these normals are needed below.
 Thus small positive eigenvalues of \(\Sigma\) do not affect the
 quantities used in the proof. This is the support-coordinate reduction
 of~\cite[Section~2.3]{GaoZhang}.
@@ -2487,8 +2617,9 @@ We keep the notation \(F(x)=F_{A,h}(\Gamma x)\) and write
 The derivative formulas of Appendix~\ref{appx-sec:smoothing} apply
 with \(u_j\) in place of \(\nu_j\).
 
-The covariance identity controls products of two face projections.
-We will also use its conditional version. If a random array \((Z_i)_i\)
+The covariance identity controls products of two components along face normals.
+We also use the following conditional second-moment version, which
+does not require conditional centering. If a random array \((Z_i)_i\)
 and a \(\sigma\)-field \(\mathcal H\) satisfy
 \(\sum_i\E[Z_iZ_i^\top\mid\mathcal H]\preceq I_r\), then, for
 any unit vectors \(u,v\), conditional Cauchy--Schwarz gives
@@ -2501,7 +2632,7 @@ any unit vectors \(u,v\), conditional Cauchy--Schwarz gives
 \end{equation}
 Bounding the other directions by \(\delta\) will therefore cost
 \(\delta\) for a third derivative and \(\delta^2\) for a fourth
-derivative. The same covariance bound will later control coefficient
+derivative. The same second-moment bound will later control coefficient
 matrices in operator norm.
 
 We also record the concentration property that supplies the small
@@ -2559,11 +2690,13 @@ is \(I_r\), and \(P_A(t)=\E F(U_t)\).
 The additional calibration \(\varpi\gamma^3=1-t^2\)
 makes the cubic coefficient stationary at \(t=0\).
 
-Let \(H_i\coloneqq U_t-Y_i\). Let \(\zeta_i,\widetilde\zeta_i\)
-be independent fresh copies of \(\zeta_i^0\), independent of the
-entire path. We abbreviate repeated arguments by
-\(D^qF(x)[z^q]\). To see the cancellations before expanding the
-remainder, define the signed density
+Let \(H_i\coloneqq U_t-Y_i\). For each \(i\), let
+\(\zeta_i,\widetilde\zeta_i\) be copies of \(\zeta_i^0\), with all
+copies mutually independent and independent of the entire path.
+For repeated directions, write
+\(D^qF(x)[z^q]=D^qF(x)[z,\ldots,z]\).
+To see the cancellations before expanding the remainder, define the
+signed density
 \[
  \nu_t(s)\coloneqq \frac{4-2(3-t)s}{\gamma},\qquad 0\le s\le1.
 \]
@@ -2586,17 +2719,30 @@ produces the coefficient \(-t/3\) of the cubic term.
 The density may be negative, and should not be interpreted as a
 probability density. Its total variation is at most \(5/3\).
 
-To prove~\eqref{appx-an:signed-hessian}, differentiate one Bernoulli
-law at a time, then its amplitude and the Gaussian variance. This gives
+To prove~\eqref{appx-an:signed-hessian}, differentiate each Bernoulli
+factor of the joint law, then the amplitudes and the Gaussian variance.
+In the contribution of the \(i\)th factor or amplitude, hold the other
+summands fixed; their dependence on \(t\) is accounted for by their
+own contributions. Thus \(H_i\) serves as a fixed base in that term,
+not as a quantity whose law is constant along the path. This gives
 \begin{align*}
  P_A'(t)
  ={}&\frac12\sum_i\E D^2F(U_t)[\zeta_i^2]\\
  &+\sum_i\left[\varpi'\E\{F(H_i+\gamma\zeta_i)-F(H_i)\}
              +\varpi\E DF(H_i+\gamma\zeta_i)[\zeta_i]\right].
 \end{align*}
-Here the first term is the Gaussian heat derivative, using
-\(\sum_i\E\zeta_i\zeta_i^\top=I_r\). At a fixed base \(x\),
-centering and the fundamental theorem of calculus give
+The first term comes from differentiating the Gaussian variance.
+For a fixed \(v\), the heat identity gives
+\[
+ \frac{d}{dt}\E_G F(v+\sqrt t\,G)
+ =\frac12\E_G\tr D^2F(v+\sqrt t\,G).
+\]
+Averaging over \(v=V_t\) gives the contribution of the Gaussian
+factor at time \(t\); the change in the law of \(V_t\) contributes
+the other terms. Since the copies \(\zeta_i\) are independent of
+\(U_t\) and \(\sum_i\E\zeta_i\zeta_i^\top=I_r\),
+\(\E\tr D^2F(U_t)=\sum_i\E D^2F(U_t)[\zeta_i^2]\).
+At a fixed base \(x\), centering and the fundamental theorem of calculus give
 \begin{align*}
  \E\{F(x+\gamma\zeta_i)-F(x)\}
  &=\gamma^2\int_0^1(1-s)
@@ -2736,10 +2882,13 @@ write
 \end{equation}
 This leaves its law unchanged. The bounded and Gaussian components
 of \(V_{0,t}\) have equal face variances \(1-t\) and
-\(t/2\), respectively. Since their maximum is at least
-\(1/3\), Lemma~\ref{lem:concentration} makes \(V_{0,t}\)
-a concentrated base for every \(0\le t\le1\).
-The bounded component has summand face bound \(2\delta\).
+\(t/2\), respectively. For \(t\le2/3\), the bounded component
+has face variance at least \(1/3\); for \(t\ge2/3\), the Gaussian
+component does. Apply Lemma~\ref{lem:concentration} to that component
+and condition on the other. Rescaling a variance bounded below by
+\(1/3\) changes only the absolute constant, and the bounded component
+has summand face bound \(2\delta\). Thus \(V_{0,t}\) is a concentrated
+base for every \(0\le t\le1\).
 By~\eqref{appx-an:weight-concentration},
 \begin{equation}
  \E F(U_t)\theta(U_t)\le Ch\sqrt L.
@@ -2750,7 +2899,7 @@ The early estimate bounds all derivatives directly. In the cubic
 term and the \(a_t\) term of \(\mathcal T_{i,t}\), retain the pair
 \((\zeta_i,\zeta_i)\); in the \(b_t\) and \(c_t\) terms, retain
 \((\widetilde\zeta_i,\widetilde\zeta_i)\). The remaining one or two
-directions have face norm at most \(\delta\).
+directions have face seminorm at most \(\delta\).
 Formula~\eqref{appx-an:pair-contraction} controls either pair. In
 particular, for any face indices \(a,b\),
 \[
@@ -2760,8 +2909,10 @@ The same inequality holds for \(\widetilde\zeta_i\). This gives the
 moment factor \(\delta^{q-2}\) for derivative order \(q=3,4\),
 including the mixed-copy terms.
 
-To separate these moments from the derivatives, first remove the
-shifts using positivity of the logistic weights. If
+The shift \(v_i\) may depend on the same copy that supplies the
+derivative directions. To separate these moments from the derivatives,
+first compare the positive logistic weights at \(U_t+v_i\) with
+those at \(U_t\), before using independence. If
 \(\norm v_U\le4\delta\) and \(h\ge4\delta\), every weight
 \(F\prod_{a=1}^k\pi_{\alpha_a}\), with \(k\le4\), changes by
 at most an absolute factor. Apply the derivative formula
@@ -2797,7 +2948,7 @@ condition.
 For the late estimate we move the repeated pair of derivatives onto
 the Gaussian density. This replaces two factors \(h^{-1}\) by
 \(\sigma^{-2}\). To keep the bound independent of rank, we then
-sum the coefficient matrices using the covariance bound before
+sum the coefficient matrices using the second-moment bound before
 taking the nuclear norm of the Gaussian average.
 
 The matrix estimate needed for this step is proved in
@@ -2845,8 +2996,11 @@ such that \(h\ge\mathsf A_b\delta\) implies
 \end{lemma}
 
 \begin{proof}
-Condition on \(\mathcal H\) and on the arrays. Two Gaussian
-integrations by parts give
+Condition on \(\mathcal H\) and on the arrays, leaving only \(G\)
+random. This conditioning is used for Gaussian integration by parts;
+we average again before applying the matrix estimate. Concentration
+is required only for the unconditional law of \(V_0\), not for its
+conditional law given \(\mathcal H\). Two integrations by parts give
 \begin{align*}
  &\E_G D^{s+2}F(U+v_i)[Z_i,Z_i,Z_{i,1},\ldots,Z_{i,s}]\\
  &\qquad=\sigma^{-2}\E_G\left[
@@ -2896,7 +3050,7 @@ summands is now in the symmetric coefficient matrix
  e^{\sum_a u_{\alpha_a}\cdot v_i/h}
  \prod_{q=1}^\ell d_{\beta_q}(v_i)\,\middle|\,\mathcal H\right].
 \]
-For any vector \(z\), the conditional covariance bound implies
+For any vector \(z\), the conditional second-moment bound implies
 \[
  |z^\top\Xi_{\alpha,\beta}z|
  \le\delta^s e^{kb\delta/h}\epsilon^\ell
@@ -2904,7 +3058,7 @@ For any vector \(z\), the conditional covariance bound implies
  \le\delta^s e^{kb\delta/h}\epsilon^\ell\norm z^2.
 \]
 Hence \(\norm{\Xi_{\alpha,\beta}}_\op\) has the same scalar bound.
-This is the matrix use of the covariance principle in
+This is the matrix use of the second-moment bound underlying
 \eqref{appx-an:pair-contraction}; replacing it by a trace bound
 would introduce the rank.
 
@@ -2920,7 +3074,6 @@ is bounded by \(\sigma^{-2}\delta^sh^{1-s}L^{3/2}\) times
 Choose \(\mathsf A_b\) so that \(h\ge\mathsf A_b\delta\) implies
 \(C_1\epsilon\le1/2\). Since \(k\le2\), the last expression is
 bounded by \(C_b\), proving~\eqref{appx-an:restoration-bound}.
-Only the averaged matrix estimate uses concentration of \(V_0\).
 
 The series and expectation interchanges can first be justified by
 the convergent scalar majorant \((1-\epsilon)^{-k-1}\), the bound
@@ -2931,8 +3084,11 @@ the operator-norm argument supplies the stated bound.
 
 \begin{proof}[Proof of the late bounds \eqref{an:late}
 and~\eqref{an:remainder}]
-Use the decomposition~\eqref{appx-an:gaussian-split} and let
-\(\mathcal H\) contain the path array and \(G_0\).
+Use the decomposition~\eqref{appx-an:gaussian-split} and set
+\[
+ \mathcal H\coloneqq
+ \sigma\bigl((\zeta_i^0,\mathbb B_{i,t})_{i=1}^n,G_0\bigr).
+\]
 The base \(V_{0,t}\) is concentrated, \(G_1\) is independent
 of \(\mathcal H\), and \(\sigma_t^2=t/2\).
 Thus \(t\ge d_0\delta^2L\), with \(d_0\ge2\), ensures
@@ -2948,13 +3104,16 @@ For the cubic term, take \(s=1\), \(Z_i=Z_{i,1}=\zeta_i\), and
  \le C\delta L^{3/2}.
  \label{appx-an:cubic-bound}
 \end{equation}
-For the fourth-order integral, use \(s=2\) and the common shifts
-in~\eqref{appx-an:translates}, with \(b=4\). For the \(a_t\) term
+For each fixed integration point in the fourth-order remainder,
+apply the two-remaining-directions case of Lemma~\ref{appx-an:lem:restoration}
+(the index \(s=2\) in that lemma). This index counts directions and
+is distinct from the integration variable in the remainder.
+Use the common shifts in~\eqref{appx-an:translates}, with \(b=4\). For the \(a_t\) term
 of \(\mathcal T_{i,t}\), take \(Z_i=\zeta_i\), leaving directions
 \((\zeta_i,\zeta_i)\). For the \(b_t\) and \(c_t\) terms,
 take \(Z_i=\widetilde\zeta_i\), leaving directions
 \((\zeta_i,\zeta_i)\) and \((\widetilde\zeta_i,\zeta_i)\),
-respectively. These directions have face norms at most \(\delta\),
+respectively. These directions have face seminorms at most \(\delta\),
 so each summed derivative contribution is bounded by
 \(C\delta^2L^{3/2}/(t h)\). Integrating the bounded scalar
 kernels proves~\eqref{an:remainder}; combining it with the cubic
@@ -2989,8 +3148,8 @@ Subsection~\ref{appx-an:sec:coords}, so
 \(N=1+\sum_j e^{q_j}\), \(F=N^{-1}\),
 \(\pi_j=e^{q_j}/N\), and \(\theta=1-F\).
 
-For the mean estimate, comparing a weight with the constant one would
-give the entropy bound \(\norm{\mu_w}^2\le2\log(1/p_w)\).
+For the mean estimate, comparison with the constant weight one would
+introduce the logarithm of the reciprocal Gaussian mass of the weight.
 Instead, we compare it with a weight depending on one normal coordinate.
 This leaves that coordinate to a second-moment bound and measures the
 tangential displacement by the loss of mass relative to the reference
@@ -3038,22 +3197,34 @@ integer \(k\ge1\).
 
 \begin{proof}
 We first record the Gaussian-tilt calculation. Let \(w:\R^r\to[0,1]\)
-be log-concave with \(p_w\coloneqq \E_Gw(G)>0\), and let \(\mu_w,K_w\)
-be the mean and covariance under the tilted law. Pr\'ekopa's
+be log-concave with \(p_w\coloneqq \E_Gw(G)>0\). Define the tilted
+probability measure by
+\[
+ dQ_w(g)\coloneqq\frac{w(g)}{p_w}\,d\Phi_r(g),
+\]
+and let \(\mu_w,K_w\) be its mean and covariance. Pr\'ekopa's
 theorem~\cite[Theorem~6]{Prekopa1973} makes
 \[
  z\longmapsto\int_{\R^r}e^{-\norm{g-z}^2/2}w(g)\dd g
 \]
-log-concave. The Hessian of its logarithm at zero is \(K_w-I_r\),
-so \(K_w\preceq I_r\). The same covariance contraction for convex-cell
+log-concave. At zero, the gradient of its logarithm is the tilted
+mean \(\mu_w\), and its Hessian is \(K_w-I_r\).
+Log-concavity therefore implies \(K_w\preceq I_r\). The same covariance contraction for convex-cell
 indicators appears in~\cite[Lemma~11]{GaoZhang}.
 Writing
 \[
  \E_G[(GG^\top-I_r)w(G)]
  =p_w\{\mu_w\mu_w^\top-(I_r-K_w)\}
 \]
-as the difference of two positive semidefinite matrices, and using
-\(\E_G[H_2(G)w(G)]=p_w(\tr K_w-r+\norm{\mu_w}^2)\), gives
+as \(A-B\), with \(A\coloneqq p_w\mu_w\mu_w^\top\) and
+\(B\coloneqq p_w(I_r-K_w)\), we have \(A,B\succeq0\). The triangle
+inequality for the nuclear norm gives
+\[
+ \norm{A-B}_*\le\tr A+\tr B
+ =2\tr A-\tr(A-B).
+\]
+Since \(\tr A=p_w\norm{\mu_w}^2\) and
+\(\tr(A-B)=\E_G[H_2(G)w(G)]\), this gives
 \begin{equation}
  \left\|\E_G[(GG^\top-I_r)w(G)]\right\|_*
  \le2p_w\norm{\mu_w}^2-\E_G[H_2(G)w(G)],
@@ -3149,6 +3320,9 @@ of \(F_s\) as mixtures of polyhedral indicators. For an integer
         a_j+s+h\log(\omega_j/T_\ell),\ j\le m\}.
  \label{appx-an:gamma-mixture}
 \end{equation}
+Indeed, conditional on \(T_\ell\), the probability of all the
+inequalities is \(e^{-T_\ell e^{-s/h}T(x)}\). Its average over
+\(T_\ell\) is \((1+e^{-s/h}T(x))^{-\ell}=F_s(x)^\ell\).
 Expand \(\theta_s^k=\sum_{\ell=0}^k(-1)^\ell\binom k\ell  F_s^\ell\).
 The absolute coefficients sum to \(2^k\), and the constant term has
 zero derivative. For fixed random thresholds, the first-variation formula says that
@@ -3277,7 +3451,10 @@ where the second sum runs over the ridges and
 \[
  d_{k\mid j}\coloneqq \frac{a'_k-(u_j\cdot u_k)a'_j}{\sin\alpha_{jk}}.
 \]
-Indeed, writing \(x=a'_ju_j+y\) on facet \(j\), with \(y\perp u_j\),
+Within the hyperplane of facet \(j\), \(d_{k\mid j}\) is the signed
+distance from \(a'_ju_j\) to the hyperplane containing the ridge,
+measured in the outward unit normal direction of that ridge.
+Writing \(x=a'_ju_j+y\) on facet \(j\), with \(y\perp u_j\),
 splits \(H_2(x)\) into \((a'_j)^2-1\) and \(\norm y^2-(r-1)\).
 The first term gives the facet contribution above. For the second,
 \[
@@ -3399,7 +3576,10 @@ Tan~\cite{OST} in the form recorded in~\cite[Lemma~J.4]{CCKK2022}.
 This gives a short proof of the bounded-sum estimate stated
 in~\cite[Lemma~2.1]{AL}.
 
-First take \(v=1\) and omit the independent shift. Let
+Recall that \(\eta\) bounds the absolute value of every summand
+coordinate, and \(v\) is the common coordinate variance of
+\(S=\sum_i\zeta_i\). First take \(v=1\) and omit the independent
+shift \(R\). Let
 \(\zeta_i'\) be independent copies of the summands, and let
 \(\varepsilon_i\) be independent uniform signs, independent of all
 these vectors. Put
@@ -3452,9 +3632,11 @@ If \(\eta\sqrt L\le c_2\), with \(c_2>0\) sufficiently small, then
 \(L\le c_1/(2\eta^2)\), and the last term is at most
 \(\exp(-c_1/(2\eta^2))\le C\eta\le C\eta\sqrt L\).
 Otherwise the desired estimate follows from the bound by one.
-This proves the bounded-sum assertion for \(v=1\). Dividing by
-\(\sqrt v\) gives the general case, and conditioning on \(R\)
-permits any independent shift.
+This proves the bounded-sum assertion for \(v=1\). For general
+\(v>0\), divide the summands and thresholds by \(\sqrt v\): the
+boundary width and summand bound become \(s/\sqrt v\) and
+\(\eta/\sqrt v\). Conditioning on \(R\) then permits any independent
+shift.
 
 For a centered Gaussian vector \(G\), Nazarov's anti-concentration
 inequality in
@@ -3473,8 +3655,8 @@ the minimum with one completes the proof.
 We clip each coordinate, apply the bounded theorem after marginal
 standardization, and transfer the result back to \(W_n\). This requires
 control of both the discarded sum and the Gaussian covariance change.
-We drop the subscript \(n\) and write \(\ell\) and \(b\) for the
-quantities \(\ell_n\) and \(b_n\) of the corollary.
+Suppressing the subscript \(n\) on the parameters of the corollary,
+write \(\ell=\log(en)\) and \(b=K\ell/\sqrt n\).
 
 We first prove the bounds under \(\E e^{|X_{ij}|/K}\le2\) for every
 coordinate. The stated norm condition gives this exponential-moment
@@ -3488,9 +3670,9 @@ The unrestricted bound follows from the bound by one, after adjusting its absolu
 constant, when \(b\ge1/16\), so assume \(b<1/16\).
 
 \emph{Step 1: Clip the summands and bound the residual sum.}
-With the clipping level \(4K\ell\), define coordinatewise
+With the clipping level \(T\coloneqq4K\ell\), define coordinatewise
 \[
- C_T(x)\coloneqq \operatorname{sgn}(x)\min\{|x|,4K\ell\},\qquad
+ C_T(x)\coloneqq \operatorname{sgn}(x)\min\{|x|,T\},\qquad
  Y_i\coloneqq C_T(X_i)-\E C_T(X_i),\qquad D_i\coloneqq X_i-C_T(X_i).
 \]
 Here \(Y_i\) is the centered clipped summand and \(D_i\) is the discarded
@@ -3615,9 +3797,18 @@ vector \((Z_{T,j}/\operatorname{sd}(W_{T,j}))_{j\le p}\) have unit coordinate va
 \[
  \|Z_{T,j}/\operatorname{sd}(W_{T,j})-Z_{n,j}\|_{L^2}\le2\tau.
 \]
-Writing the difference of two covariance entries as a sum of two
-products and applying Cauchy--Schwarz shows that the covariance matrices
-differ entrywise by at most \(4\tau\). Since
+For this calculation, abbreviate the standardized clipped Gaussian
+vector by \(A\) and the target \(Z_n\) by \(B\). Both are centered
+with unit coordinate variances, so Cauchy--Schwarz gives
+\[
+ \begin{aligned}
+ |\E A_jA_k-\E B_jB_k|
+ &\le\|A_j-B_j\|_{L^2}\|A_k\|_{L^2}
+       +\|B_j\|_{L^2}\|A_k-B_k\|_{L^2}\\
+ &\le4\tau.
+ \end{aligned}
+\]
+Thus the covariance matrices differ entrywise by at most \(4\tau\). Since
 \(4\tau\le(8/e^2)b<c_0/2\), the standardized clipped covariance
 has correlation gap at least \(c_0/2\).
 Theorem~\ref{thm:optimized} applied with envelope \(16b\) now gives
@@ -3671,12 +3862,13 @@ Let \(A_n\coloneqq n^{-1/2}\sum_{i=1}^n\eta_i\), where the
 \(A_{n,1},\ldots,A_{n,m}\) be independent copies. Put
 \(\Lambda_m\coloneqq\log(em)\). There are absolute constants
 \(c_0,C>0\) such that, for large \(n\) and
-\(\Lambda_m\le c_0\sqrt n\),
-\[
+\(\Lambda_m\le c_0\sqrt n\), the Rademacher-maximum approximation is
+\begin{equation}
  \sup_x\left|\Pp\{\max_{j\le m}A_{n,j}\le x\}-\Phi(x)^m\right|
  \le C\left(\frac{\sqrt{\Lambda_m}}{\sqrt n}
                  +\frac{\Lambda_m^2}{n}\right).
-\]
+ \label{sym:eq:rademacher-max}
+\end{equation}
 The first term retains the effect of the lattice. To prove the bound,
 we use exponential tilting to obtain, for a sufficiently small
 absolute \(a>0\) and \(0\le x\le an^{1/4}\),
@@ -3750,13 +3942,19 @@ This proves the uniform estimate for Rademacher maxima.
 We also need the size and smoothness of the Gaussian maximum.
 Let \(F_m(x)\coloneqq\Phi(x)^m\), choose \(u_m\) by
 \(m\bar\Phi(u_m)=1\), and let \(H_*\coloneqq\max_{k\le m}H_k\)
-for independent standard normals. As \(m\to\infty\),
-\[
+for independent standard normals. The Gaussian-maximum estimates are,
+as \(m\to\infty\),
+\begin{equation}
  u_m\sim\sqrt{2\log m},\qquad
  F_m'(u_m)\sim\frac{\sqrt{2\log m}}e,\qquad
  \E H_*\sim\sqrt{2\log m},\qquad \E H_*^2=O(\log m).
-\]
-Moreover, \(\|F_m''\|_\infty\le C\log(em)\) for \(m\ge2\).
+ \label{sym:eq:gaussian-max}
+\end{equation}
+The accompanying smoothness bound is
+\begin{equation}
+ \|F_m''\|_\infty\le C\log(em),\qquad m\ge2.
+ \label{sym:eq:gaussian-smoothness}
+\end{equation}
 The normal tail estimates
 \(\bar\Phi(x)\asymp\varphi(x)/(1+x)\) for \(x\ge0\) and
 \(\varphi(x)/\bar\Phi(x)\sim x\) imply the first two assertions,
@@ -3779,15 +3977,41 @@ by an absolute constant, treating \(m=2,3\) separately. For
 
 \subsection{The symmetric construction and its discrepancy}
 
-Use the construction in Section~\ref{opt:section}, writing
-\(\ell=\log m\), \(q=\ell/(2n)\), and \(s=\sqrt{1-q}\).
-All statements concern sufficiently large \(n\), so \(0<q<1/2\).
+Recall the construction in Section~\ref{opt:section}. Let
+\(m\to\infty\), put \(\ell=\log m\), and assume \(\ell^3/n\to0\).
+With \(q=\ell/(2n)\) and \(s=\sqrt{1-q}\), the observations are
+\[
+ X_{i,jk}=s\eta_{ij}+I_i\varepsilon_{ik},\qquad 1\le j,k\le m.
+\]
+Here all \(\eta_{ij},\varepsilon_{ik}\) are independent Rademacher
+signs, and the \(I_i\) are independent Bernoulli\((q)\) variables,
+independent of the signs. All statements concern sufficiently large
+\(n\), so \(0<q<1/2\).
 The rows are independent and identically distributed, bounded by
-\(s+1\le2\), and centrally symmetric. Their covariance formula in
-Section~\ref{opt:section} shows that the correlation gap is \(q\).
+\(s+1\le2\), and centrally symmetric. Their covariance matrix is
+\[
+ \Sigma_{(j,k),(j',k')}=(1-q)\ind\{j=j'\}+q\ind\{k=k'\}.
+\]
+For \(m\ge2\) and \(0<q<1/2\), its largest off-diagonal correlation
+is \(1-q\), so the correlation gap is \(q\).
 Its range consists of arrays \((a_j+b_k)_{j,k}\), a space of
 dimension \(2m-1\); both components have positive variance, so this
 is also its rank.
+
+To compare the maxima, recall the component sums
+\[
+ A_j=n^{-1/2}\sum_i\eta_{ij},\qquad
+ T_k=\sum_i I_i\varepsilon_{ik},\qquad T_*=\max_{k\le m}T_k.
+\]
+For \(W=n^{-1/2}\sum_iX_i\) and a covariance-matched Gaussian
+vector \(Z\), the maximum representations are
+\[
+ \max_{j,k}W_{jk}=s\max_jA_j+T_*/\sqrt n,\qquad
+ \max_{j,k}Z_{jk}\stackrel d=s\max_jG_j+\sqrt q\,H_*,
+\]
+where \(G_j,H_k\) are mutually independent standard normals and
+\(H_*=\max_kH_k\). In each representation the two components are
+independent.
 
 The common activation count \(N\coloneqq\sum_iI_i\) has mean
 \(\ell/2\), variance at most \(\ell/2\), and second moment
@@ -3812,27 +4036,29 @@ Consequently, \(\E T_*=(1/2+o(1))\ell\) and
 
 Let \(F_{n,m}\) be the distribution function of \(\max_jA_j\),
 and put \(r_n\coloneqq\ell^{3/2}/\sqrt n\). The assumed condition
-\(\ell^3/n\to0\), together with the first estimate above, gives
+\(\ell^3/n\to0\), together with the Rademacher-maximum
+estimate~\eqref{sym:eq:rademacher-max}, gives
 \[
  \|F_{n,m}-F_m\|_\infty
  \le C\left(\frac{\sqrt\ell}{\sqrt n}+\frac{\ell^2}{n}\right)
  =o(r_n).
 \]
-The two components of each maximum in Section~\ref{opt:section}
-are independent. At the threshold \(t_n\coloneqq s u_m\), define
-the shifts \(V_W\coloneqq T_*/(s\sqrt n)\) and
-\(V_G\coloneqq\sqrt q\,H_*/s\). It follows that
+At the threshold \(t_n\coloneqq s u_m\), define the shifts
+\(V_W\coloneqq T_*/(s\sqrt n)\) and \(V_G\coloneqq\sqrt q\,H_*/s\).
+Independence in the two maximum representations gives
 \[
  \Pp(\max_{j,k}W_{jk}\le t_n)=\E F_m(u_m-V_W)+o(r_n),
  \qquad
  \Pp(\max_{j,k}Z_{jk}\le t_n)=\E F_m(u_m-V_G).
 \]
-Since \(s\to1\), the mean and second-moment estimates give
+Since \(s\to1\), the Gaussian moment estimates
+in~\eqref{sym:eq:gaussian-max} and the bounds for \(T_*\) give
 \[
  \E V_G-\E V_W=(1/2+o(1))\frac\ell{\sqrt n},
  \qquad \E V_G^2+\E V_W^2=O(\ell^2/n).
 \]
-The global bound on \(F_m''\) justifies Taylor expansion even when
+The global smoothness bound~\eqref{sym:eq:gaussian-smoothness}
+justifies Taylor expansion even when
 one of the shifts is negative:
 \[
  \E F_m(u_m-V)=F_m(u_m)-F_m'(u_m)\E V+O(\ell\E V^2).
@@ -3842,9 +4068,10 @@ Subtracting the two expansions therefore gives
  \Pp(\max_{j,k}W_{jk}\le t_n)-\Pp(\max_{j,k}Z_{jk}\le t_n)
  =\left(\frac1{e\sqrt2}+o(1)\right)r_n+O(r_n^2).
 \]
-Finally, \(r_n\to0\) and
-\(\delta_nL_n^{3/2}=2(1+2\ell)^{3/2}/\sqrt n\sim2^{5/2}r_n\).
-The displayed lower orthant thus has discrepancy
+Finally, recall that \(\delta_n=2/\sqrt n\) and
+\(L_n=\log(em^2)=1+2\ell\). Since \(r_n\to0\) and
+\(\delta_nL_n^{3/2}=2(1+2\ell)^{3/2}/\sqrt n\sim2^{5/2}r_n\),
+the displayed lower orthant has discrepancy
 \(\{1/(8e)+o(1)\}\delta_nL_n^{3/2}\), proving the lower bound
 for the supremum over rectangles. The gap \(q\to0\), so this
 construction makes no assertion about sharp rates under a fixed
