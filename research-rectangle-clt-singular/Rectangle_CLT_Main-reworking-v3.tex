@@ -1591,12 +1591,20 @@ summation and two Gaussian integrations by parts
 of~\cite[Lemma~23]{GaoZhang}. The exact translation series in
 Subsection~\ref{sec:outline-late} expresses weights at the shifted
 evaluation points as a convergent series of weights at \(U_t\),
-without introducing an additional Taylor remainder. The matrix and
-surface estimates adapt the convex-cell and polyhedral arguments
-of~\cite[Lemma~12 and Proposition~4]{GaoZhang}. These include the
-contraction of Gaussian covariance after reweighting by a log-concave
-function and the pairing of boundary contributions from adjacent
-facets.
+without introducing an additional Taylor remainder.
+
+The matrix and surface estimates use classical log-concavity and
+convex geometry. Gaussian covariance contraction follows from
+Pr\'ekopa's theorem~\cite[Theorem~6]{Prekopa1973}; for smooth positive
+weights it also follows from the Brascamp--Lieb variance
+inequality~\cite{BrascampLieb1976}. The facet--ridge identity is a
+Gaussian specialization of the Gauss--Green theorem
+\cite[Chapter~5]{EvansGariepy2015}. The outward facet tubes follow
+Nazarov~\cite{Nazarov2003}, with a detailed proof
+in~\cite[Lemmas~1--2]{CCK17N}. We derive the variable tube widths,
+paired-ridge estimates, and averaging needed here in
+Subsection~\ref{appx-an:sec:surface}. For related convex-cell and
+polyhedral applications, see~\cite[Lemma~12 and Proposition~4]{GaoZhang}.
 
 The improvement in the sample-size dependence comes from the late
 fourth-order estimate. Expressed in the notation of this paper, the
@@ -2045,6 +2053,35 @@ A. C. Berry (1941).
 \emph{The accuracy of the Gaussian approximation to the sum of independent variates}.
 Transactions of the American Mathematical Society \textbf{49}(1), 122--136.
 \href{https://doi.org/10.1090/S0002-9947-1941-0003498-3}{doi:10.1090/S0002-9947-1941-0003498-3}.
+
+\bibitem{BrascampLieb1976}
+H. J. Brascamp and E. H. Lieb (1976).
+\emph{On extensions of the Brunn--Minkowski and Pr\'ekopa--Leindler
+theorems, including inequalities for log concave functions, and with
+an application to the diffusion equation}.
+Journal of Functional Analysis \textbf{22}(4), 366--389.
+\href{https://doi.org/10.1016/0022-1236(76)90004-5}{doi:10.1016/0022-1236(76)90004-5}.
+
+\bibitem{Rockafellar1970}
+R. T. Rockafellar (1970).
+\emph{Convex Analysis}.
+Princeton Mathematical Series \textbf{28}.
+Princeton University Press, Princeton, NJ.
+
+\bibitem{Nazarov2003}
+F. Nazarov (2003).
+\emph{On the maximal perimeter of a convex set in \(\R^n\)
+with respect to a Gaussian measure}.
+In V. D. Milman and G. Schechtman (eds.),
+\emph{Geometric Aspects of Functional Analysis (2001--2002)},
+Lecture Notes in Mathematics \textbf{1807}, 169--187.
+Springer, Berlin.
+
+\bibitem{CCK17N}
+V. Chernozhukov, D. Chetverikov, and K. Kato (2017).
+\emph{Detailed proof of Nazarov's inequality}.
+arXiv:1711.10696.
+\url{https://arxiv.org/abs/1711.10696}.
 
 \end{thebibliography}
 
@@ -3315,13 +3352,14 @@ estimate proved next.
 
 We now prove~\eqref{appx-an:matrix-bound}. The key observation is that
 tilting a standard Gaussian law by a log-concave weight can only
-decrease its covariance. This reduces the nuclear norm to two scalar
+decrease its covariance, by Pr\'ekopa's
+theorem~\cite[Theorem~6]{Prekopa1973}. This reduces the nuclear norm to two scalar
 quantities: the squared length of the tilted mean and a signed trace
 term. We control the means relative to a single face and sum the
 weights before estimating the trace. The latter then becomes a
 surface integral, bounded in Subsection~\ref{appx-an:sec:surface}.
-This is the soft-weight counterpart of the convex-cell argument
-in~\cite[Lemma~12]{GaoZhang}.
+For a related application to convex cells,
+see~\cite[Lemma~12]{GaoZhang}.
 
 Throughout this subsection, \(V_0\) is a concentrated base,
 \(G\sim N(0,I_r)\) is independent of \(V_0\),
@@ -3395,8 +3433,14 @@ theorem~\cite[Theorem~6]{Prekopa1973} makes
 log-concave. Differentiating under the integral shows that at zero
 the gradient of its logarithm is \(\mu_w\), and the Hessian is
 \(\E_{Q_w}GG^\top-\mu_w\mu_w^\top-I_r=K_w-I_r\).
-Log-concavity therefore implies \(K_w\preceq I_r\). The same covariance contraction for convex-cell
-indicators appears in~\cite[Lemma~11]{GaoZhang}.
+Log-concavity therefore implies \(K_w\preceq I_r\).
+This argument includes convex-cell indicators, which are log-concave.
+For smooth positive \(w\), the same bound follows from the
+Brascamp--Lieb variance inequality~\cite{BrascampLieb1976}, applied
+to linear functions: the potential
+\(V(g)=\norm g^2/2-\log w(g)\) has \(\nabla^2V\succeq I_r\),
+so \(\operatorname{Var}_{Q_w}(a\cdot G)\le\norm a^2\) for every
+\(a\in\R^r\).
 Writing
 \[
  \E_G[(GG^\top-I_r)w(G)]
@@ -3583,11 +3627,15 @@ In particular, if \(\sigma\ge\delta\sqrt L\), the right side is at most
 
 \begin{proof}
 We first bound the surface integral of a fixed polyhedron by an integral
-over short outward tubes, and then average over \(V_0\). The geometric
-argument uses the facet--ridge divergence identity and normal tubes
-from the proof of~\cite[Proposition~4]{GaoZhang}. We choose the tube
-width at each boundary point, so that the subsequent averaging reduces
-to two Gaussian moments.
+over short outward tubes, and then average over \(V_0\). The
+facet--ridge identity follows from the classical Gauss--Green
+theorem~\cite[Chapter~5]{EvansGariepy2015}. The outward facet construction
+is due to Nazarov~\cite{Nazarov2003}; see the detailed proof
+in~\cite[Lemmas~1--2]{CCK17N}, which explicitly traces this argument
+to Nazarov. Below we derive the variable tube widths, ridge-sector
+integrals, and weighted estimates used here. Choosing the width at each
+boundary point reduces the subsequent averaging to two Gaussian moments.
+For a related polyhedral application, see~\cite[Proposition~4]{GaoZhang}.
 
 The facet contributions depend on one normal coordinate; the ridge
 contributions depend on the plane spanned by two normals. We therefore
@@ -3629,7 +3677,9 @@ density comparable along each tube without using the full norm
 To prove~\eqref{appx-an:adaptive-tubes}, write the defining thresholds
 of \(P\) as \(a'_j\). For the facet calculation, retain only the
 inequalities that describe distinct actual facets; the outer layer
-still uses the full defining system. Write \(F_j\) for a retained
+still uses the full defining system. We use the standard face geometry
+of polyhedra; see~\cite[\S\S18--19]{Rockafellar1970}
+and~\cite[Chapter~2]{Ziegler1995}. Write \(F_j\) for a retained
 facet in \(u_j\cdot x=a'_j\), and let
 \(s_j\coloneqq \int_{F_j}\varphi_r\dd\mathcal H^{r-1}\).
 A ridge \(E_{jk}\) is a face of dimension \(r-2\) shared by exactly
@@ -3663,15 +3713,20 @@ The first term gives the facet contribution above. For the second,
  (\norm y^2-(r-1))\varphi_{r-1}(y)
  =-\operatorname{div}_{u_j^\perp}\{y\varphi_{r-1}(y)\}.
 \]
-The Gauss--Green divergence theorem within the
+The classical Gauss--Green divergence theorem within the
 facet~\cite[Chapter~5]{EvansGariepy2015} gives
 \(-d_{k\mid j}\rho_{jk}\) on its ridge with facet \(k\), because
 the outward unit normal to that ridge within the facet is
 \((u_k-(u_j\cdot u_k)u_j)/\sin\alpha_{jk}\).
+For an unbounded facet, apply the theorem after multiplying the
+vector field by a smooth cutoff that is one on the ball of radius
+\(M\), vanishes outside the ball of radius \(2M\), and has gradient
+bounded by \(C/M\). The cutoff error tends to zero by Gaussian decay.
+Dominated convergence for the facet and ridge integrals then gives
+the same identity. This cutoff argument is our specialization of
+Gauss--Green to the polynomial Gaussian integrands used here.
 Summing over facets proves~\eqref{appx-an:surface-identity}.
-Truncation handles unbounded facets, since polynomial Gaussian terms
-vanish at infinity. For \(r=1\), there are no ridges and the identity
-is a sum over endpoints.
+For \(r=1\), there are no ridges and the identity is a sum over endpoints.
 
 We pair the two contributions of each ridge before bounding them.
 The elementary identity
@@ -3698,8 +3753,11 @@ Over a facet, use displacements \(y=s u_j\), with \(0<s<\eta(x)\).
 Over a ridge, use \(0<\norm y<\eta(x)\) in the outward normal cone,
 the sector of angle \(\alpha_{jk}\) spanned by \(u_j,u_k\), by the
 normal-cone formula for polyhedra~\cite[Theorem~6.46]{RockafellarWets1998}.
-For these normal displacements, \(x\) is the nearest point in \(P\)
-to \(x+y\). This will make the tubes over distinct faces disjoint. In both cases,
+By the projection--normal-cone characterization
+\cite[Proposition~6.17]{RockafellarWets1998}, these normal displacements
+satisfy \(x=\operatorname{proj}_P(x+y)\). Thus \(x\) is the nearest point
+in \(P\) to \(x+y\), which will make the tubes over distinct faces
+disjoint. In both cases,
 \[
  |x\cdot y|\le\mathcal M(x)\norm y\le\tfrac14,\qquad
  \frac{\varphi_r(x+y)}{\varphi_r(x)}
