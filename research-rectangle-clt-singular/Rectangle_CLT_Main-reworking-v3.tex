@@ -1348,7 +1348,9 @@ The factor \(h\) in this matrix estimate is essential to the improved
 dependence on the smoothing width. To understand its origin, fix the
 base and a face tuple, multiply the standard Gaussian density by the
 corresponding logistic weight, and normalize the result to integrate
-to one. The weight is log-concave, so the covariance matrix of this
+to one. The weight is log-concave by convexity of
+log-sum-exp~\cite[Section~3.1.5, pp.~72--74]{BoydVandenberghe2004},
+so the covariance matrix of this
 reweighted Gaussian distribution is at most \(I_r\), by
 Pr\'ekopa's marginal log-concavity theorem~\cite[Theorem~6]{Prekopa1973},
 as shown in Lemma~\ref{appx-an:lem:matrix}. This fact bounds
@@ -2082,6 +2084,12 @@ V. Chernozhukov, D. Chetverikov, and K. Kato (2017).
 \emph{Detailed proof of Nazarov's inequality}.
 arXiv:1711.10696.
 \url{https://arxiv.org/abs/1711.10696}.
+
+\bibitem{BoydVandenberghe2004}
+S. Boyd and L. Vandenberghe (2004).
+\emph{Convex Optimization}.
+Cambridge University Press, Cambridge.
+\url{https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf}.
 
 \end{thebibliography}
 
@@ -3472,8 +3480,23 @@ Condition on \(V_0\). For each ordered tuple
  \quad p_\alpha\coloneqq \E_Gw_\alpha(G),
  \quad \mu_\alpha\coloneqq \frac{\E_G[Gw_\alpha(G)]}{p_\alpha}.
 \]
-Its logarithm is affine minus \((k+1)\log N(V_0+\sigma g)\), so
-\(w_\alpha\) is log-concave. Moreover,
+To check log-concavity, recall that \(F=N^{-1}\) and
+\(\pi_j=e^{q_j}/N\). Hence
+\[
+ \log w_\alpha(g)
+ =\sum_{a=1}^k q_{\alpha_a}(V_0+\sigma g)
+  -(k+1)\log N(V_0+\sigma g).
+\]
+Each score \(q_j(V_0+\sigma g)\) is affine in \(g\). Since
+\(N=1+\sum_j e^{q_j}\), its logarithm is a log-sum-exp of these
+affine scores and the constant score \(0\), with \(1=e^0\) supplying
+the baseline term. The standard convexity of
+log-sum-exp~\cite[Section~3.1.5, pp.~72--74]{BoydVandenberghe2004}
+therefore makes \(\log N(V_0+\sigma g)\) convex. Thus
+\(\log w_\alpha\) is affine minus a convex function, so
+\(w_\alpha\) is log-concave.
+
+Moreover,
 \(\bar w(g)\coloneqq \sum_\alpha w_\alpha(g)
 =F(V_0+\sigma g)\theta(V_0+\sigma g)^k\).
 Summing~\eqref{appx-an:matrix-trace-reduction} and then averaging over
