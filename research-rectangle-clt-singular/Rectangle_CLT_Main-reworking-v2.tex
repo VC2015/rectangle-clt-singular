@@ -689,7 +689,8 @@ same reasoning controls their total absolute value: summing over
 coordinates uses \(\sum_j|\nu_{\alpha,j}|=1\), while summing
 products of \(k\) face probabilities gives \(\theta^k\le\theta\).
 The number and coefficients of these terms depend only on the
-derivative order.
+derivative order; they are organized by Fa\`a di Bruno's higher-order
+chain rule~\cite{Comtet1974}.
 
 We also need a bound that holds uniformly at nearby points. If
 \(\norm z_\infty\le h\), each exponential weight
@@ -839,17 +840,21 @@ absolute value is taken. Under condition~\eqref{eq:zero-third}, therefore,
  P_A'(t)=R_{4,A,h}(t).
  \label{zs:identity}
 \end{equation}
-The fourth-order remainder has a similar tensor representation. The
-prime and double prime on \(\xi_i'\) and \(\xi_i''\) label independent
-copies of \(\xi_i\): both have the same distribution as \(\xi_i\).
-All these copies are mutually independent and independent of the
-interpolation variables. Remove the \(i\)th bounded summand from
-the path by setting
+The fourth-order remainder has a similar tensor representation, with
+derivatives evaluated along short segments near \(U_t\). To describe
+these segments, first remove the \(i\)th bounded summand from the
+interpolation path and set
 \[
  H_i\coloneqq U_t-\gamma\mathbb B_{i,t}\xi_i,
  \qquad \gamma=1+t.
 \]
-For \(0\le s\le1\), define the fourth-order tensor
+For each \(i\), introduce copies \(\xi_i'\) and \(\xi_i''\) having
+the same distribution as \(\xi_i\). Take all these
+copies to be mutually independent and independent of the original
+summands, the Bernoulli masks, and the Gaussian vector. The points
+\(H_i+s\gamma\xi_i'\), \(0\le s\le1\), then trace a segment that
+inserts an independent copy of the deleted summand with increasing
+amplitude. The fourth-order tensor associated with this segment is
 \[
  \begin{aligned}
  \mathcal T_{i,t}(s)\coloneqq{}&a_t(s)(\xi_i')^{\otimes4}\\
@@ -1115,7 +1120,7 @@ a derivative of order \(q\in\{3,4\}\), with repeated direction
 \(\zeta_i\), remaining directions \(z_3,\ldots,z_q\), and evaluation
 point \(U_t+v_i\). The shift and all these directions are fixed under
 the conditioning. Since \(U_t=V_{0,t}+\sqrt{t/2}\,G_1\), two Gaussian
-integrations by parts give
+integrations by parts, using Stein's identity~\cite{Stein1981}, give
 \[
  \begin{aligned}
  &\E_{G_1}D^qF(U_t+v_i)
@@ -1189,7 +1194,8 @@ the conditional covariance identity gives
 \]
 Thus \(\norm\Xi_\op\le K\), where the operator norm of a symmetric
 matrix is its largest absolute eigenvalue. The same argument applies
-to \(\widetilde\zeta_i\). For any symmetric matrix \(M\),
+to \(\widetilde\zeta_i\). Operator--nuclear norm
+duality~\cite[Chapter~IV]{Bhatia1997} gives, for any symmetric matrix \(M\),
 \[
  |\tr(\Xi M)|\le\norm\Xi_\op\norm M_*,
 \]
@@ -1228,7 +1234,9 @@ dependence on the smoothing width. To understand its origin, fix the
 base and a face tuple, multiply the standard Gaussian density by the
 corresponding logistic weight, and normalize the result to integrate
 to one. The weight is log-concave, so the covariance matrix of this
-reweighted Gaussian distribution is at most \(I_r\). This fact bounds
+reweighted Gaussian distribution is at most \(I_r\), by
+Pr\'ekopa's marginal log-concavity theorem~\cite[Theorem~6]{Prekopa1973},
+as shown in Lemma~\ref{appx-an:lem:matrix}. This fact bounds
 the nuclear norm by two scalar contributions: one involving the
 squared length of the new mean, and one involving a signed trace.
 Lemma~\ref{appx-an:lem:matrix} bounds the mean contribution using
@@ -1933,6 +1941,52 @@ R. Salakhutdinov (2014).
 Journal of Machine Learning Research \textbf{15}(56), 1929--1958.
 \url{https://www.jmlr.org/papers/v15/srivastava14a.html}.
 
+\bibitem{Bhatia1997}
+R. Bhatia (1997).
+\emph{Matrix Analysis}.
+Graduate Texts in Mathematics \textbf{169}. Springer, New York.
+\href{https://doi.org/10.1007/978-1-4612-0653-8}{doi:10.1007/978-1-4612-0653-8}.
+
+\bibitem{Comtet1974}
+L. Comtet (1974).
+\emph{Advanced Combinatorics: The Art of Finite and Infinite Expansions}.
+Reidel, Dordrecht.
+\href{https://doi.org/10.1007/978-94-010-2196-8}{doi:10.1007/978-94-010-2196-8}.
+
+\bibitem{CoverThomas2006}
+T. M. Cover and J. A. Thomas (2006).
+\emph{Elements of Information Theory}, 2nd edition.
+Wiley, Hoboken, NJ.
+
+\bibitem{EvansGariepy2015}
+L. C. Evans and R. F. Gariepy (2015).
+\emph{Measure Theory and Fine Properties of Functions}, revised edition.
+CRC Press, Boca Raton, FL.
+
+\bibitem{Folland1999}
+G. B. Folland (1999).
+\emph{Real Analysis: Modern Techniques and Their Applications}, 2nd edition.
+Wiley, New York.
+
+\bibitem{RockafellarWets1998}
+R. T. Rockafellar and R. J.-B. Wets (1998).
+\emph{Variational Analysis}.
+Grundlehren der mathematischen Wissenschaften \textbf{317}.
+Springer, Berlin.
+\href{https://doi.org/10.1007/978-3-642-02431-3}{doi:10.1007/978-3-642-02431-3}.
+
+\bibitem{Stein1981}
+C. M. Stein (1981).
+\emph{Estimation of the mean of a multivariate normal distribution}.
+The Annals of Statistics \textbf{9}(6), 1135--1151.
+\href{https://doi.org/10.1214/aos/1176345632}{doi:10.1214/aos/1176345632}.
+
+\bibitem{Ziegler1995}
+G. M. Ziegler (1995).
+\emph{Lectures on Polytopes}.
+Graduate Texts in Mathematics \textbf{152}. Springer, New York.
+\href{https://doi.org/10.1007/978-1-4613-8431-1}{doi:10.1007/978-1-4613-8431-1}.
+
 \end{thebibliography}
 
 \clearpage
@@ -2303,8 +2357,9 @@ dependent through \(\omega_0\); independent logistic displacements would give
 a different approximation. McFadden~\cite[p.~1001]{McFadden1989} uses
 the same random-utility representation, it is stated for softmax weights in~\cite[Lemma~14]{GaoZhang}. 
 
-The partition formula follows by applying the higher-order chain
-rule to \(F=f(T)\), where \(f(T)=(1+T)^{-1}\) and
+The partition formula follows by applying Fa\`a di Bruno's
+higher-order chain rule~\cite{Comtet1974} to \(F=f(T)\), where
+\(f(T)=(1+T)^{-1}\) and
 \[
  f^{(k)}(T)=(-1)^k k!(1+T)^{-k-1}.
 \]
@@ -2533,7 +2588,7 @@ absolutely. Combining with \eqref{appx-eq:gap-contraction} gives
 \(\E\chi(W)\le Ch\sqrt L/c\).
 If \(\delta\sqrt L>1\), the same conclusion follows from
 \(\chi\le1\) and \(h\ge\delta\).
-For \(Z\), Gaussian integration by parts gives
+For \(Z\), Gaussian integration by parts~\cite{Stein1981} gives
 \[
  \E[Z\cdot\nabla\Psi(Z)]
  =\E\tr(\Sigma D^2\Psi(Z)),\qquad
@@ -2732,7 +2787,8 @@ not as a quantity whose law is constant along the path. This gives
              +\varpi\E DF(H_i+\gamma\zeta_i)[\zeta_i]\right].
 \end{align*}
 The first term comes from differentiating the Gaussian variance.
-For a fixed \(v\), the heat identity gives
+For a fixed \(v\), differentiating under the Gaussian integral and
+applying Stein's identity~\cite{Stein1981} gives the heat identity
 \[
  \frac{d}{dt}\E_G F(v+\sqrt t\,G)
  =\frac12\E_G\tr D^2F(v+\sqrt t\,G).
@@ -2755,7 +2811,8 @@ is \(\varpi'\gamma^2(1-s)+\varpi\gamma=-\nu_t(s)/2\).
 This proves~\eqref{appx-an:signed-hessian}; integrating the affine
 density gives~\eqref{appx-an:signed-moments}. All differentiations
 are justified for fixed \(h>0\) by bounded summands and bounded
-derivatives of \(F\).
+derivatives of \(F\), using dominated differentiation under the
+integral~\cite[Section~2.3]{Folland1999}.
 
 We now put the cubic term at the full path, where aggregate third
 moments can cancel. The fourth-order remainder combines three
@@ -3000,7 +3057,8 @@ Condition on \(\mathcal H\) and on the arrays, leaving only \(G\)
 random. This conditioning is used for Gaussian integration by parts;
 we average again before applying the matrix estimate. Concentration
 is required only for the unconditional law of \(V_0\), not for its
-conditional law given \(\mathcal H\). Two integrations by parts give
+conditional law given \(\mathcal H\). Applying Stein's
+identity~\cite{Stein1981} twice gives
 \begin{align*}
  &\E_G D^{s+2}F(U+v_i)[Z_i,Z_i,Z_{i,1},\ldots,Z_{i,s}]\\
  &\qquad=\sigma^{-2}\E_G\left[
@@ -3062,7 +3120,9 @@ This is the matrix use of the second-moment bound underlying
 \eqref{appx-an:pair-contraction}; replacing it by a trace bound
 would introduce the rank.
 
-Apply \(|\tr(\Xi M)|\le\norm\Xi_\op\norm M_*\), sum over face
+Apply the operator--nuclear norm inequality
+\(|\tr(\Xi M)|\le\norm\Xi_\op\norm M_*\)
+from~\cite[Chapter~IV]{Bhatia1997}, sum over face
 tuples, and use~\eqref{appx-an:matrix-bound} with \(k+\ell\) factors.
 After restoring \(\sigma^{-2}h^{-s}\), each of the three forms
 is bounded by \(\sigma^{-2}\delta^sh^{1-s}L^{3/2}\) times
@@ -3075,8 +3135,9 @@ Choose \(\mathsf A_b\) so that \(h\ge\mathsf A_b\delta\) implies
 \(C_1\epsilon\le1/2\). Since \(k\le2\), the last expression is
 bounded by \(C_b\), proving~\eqref{appx-an:restoration-bound}.
 
-The series and expectation interchanges can first be justified by
-the convergent scalar majorant \((1-\epsilon)^{-k-1}\), the bound
+Fubini's theorem~\cite[Section~2.5]{Folland1999} justifies the
+series and expectation interchanges using the convergent scalar
+majorant \((1-\epsilon)^{-k-1}\), the bound
 \(\sum_i\E\norm{Z_i}^2\le r\), and Gaussian integrability.
 This finite preliminary bound is used only for the interchanges;
 the operator-norm argument supplies the stated bound.
@@ -3280,7 +3341,8 @@ For the logarithmic term, define the total averaged masses
  \bar b\coloneqq m^{k-1}\sum_j\E_{V_0,G}b_j(G).
 \]
 There are \(m^{k-1}\) tuples with each first face. The log-sum
-inequality and the joint concavity of \((x,y)\mapsto x\log(y/x)\)
+inequality~\cite[Theorem~2.7.1]{CoverThomas2006} and the joint concavity
+of \((x,y)\mapsto x\log(y/x)\)
 therefore give
 \[
  \E_{V_0}\sum_\alpha p_\alpha
@@ -3325,7 +3387,8 @@ inequalities is \(e^{-T_\ell e^{-s/h}T(x)}\). Its average over
 \(T_\ell\) is \((1+e^{-s/h}T(x))^{-\ell}=F_s(x)^\ell\).
 Expand \(\theta_s^k=\sum_{\ell=0}^k(-1)^\ell\binom k\ell  F_s^\ell\).
 The absolute coefficients sum to \(2^k\), and the constant term has
-zero derivative. For fixed random thresholds, the first-variation formula says that
+zero derivative. For fixed random thresholds, the coarea
+formula~\cite[Section~3.4]{EvansGariepy2015} gives the first variation:
 increasing every unit-normal threshold at unit speed differentiates
 the Gaussian integral into the boundary integral, with the factor
 \(\sigma^{-1}\) after rescaling. This holds for almost every common
@@ -3363,8 +3426,10 @@ We retain the notation
  H_2(g)=\norm g^2-r,\qquad
  \surf(P)=\int_{\partial P}H_2(g)\varphi_r(g)\dd\mathcal H^{r-1}(g),
 \]
-where \(\varphi_r\) is the standard Gaussian density and each facet is
-counted once. The integral is defined for proper, full-dimensional
+where \(\varphi_r\) is the standard Gaussian density and
+\(\mathcal H^{r-1}\) is Hausdorff measure, normalized to agree with
+Euclidean surface measure on each facet~\cite[Chapter~2]{EvansGariepy2015}.
+Each facet is counted once. The integral is defined for proper, full-dimensional
 polyhedra: those with nonempty interior that are not the whole space.
 We set \(\surf(P)\coloneqq 0\) for the empty set and the whole space. As in
 Subsection~\ref{appx-an:sec:coords}, \(P^s\) means that all thresholds
@@ -3433,7 +3498,8 @@ To prove~\eqref{appx-an:adaptive-tubes}, describe the actual facets of
 for the facet in \(u_j\cdot x=a'_j\), and let
 \(s_j\coloneqq \int_{F_j}\varphi_r\dd\mathcal H^{r-1}\).
 A ridge \(E_{jk}\) is a face of dimension \(r-2\) shared by exactly
-two facets, \(F_j\) and \(F_k\). Let \(\alpha_{jk}\in(0,\pi)\) be the
+two facets, \(F_j\) and \(F_k\); see~\cite[Chapter~2]{Ziegler1995}
+for this standard face-incidence property. Let \(\alpha_{jk}\in(0,\pi)\) be the
 angle between their face normals, and set
 \[
  \rho_{jk}\coloneqq \int_{E_{jk}}\varphi_r\dd\mathcal H^{r-2},\qquad
@@ -3461,7 +3527,8 @@ The first term gives the facet contribution above. For the second,
  (\norm y^2-(r-1))\varphi_{r-1}(y)
  =-\operatorname{div}_{u_j^\perp}\{y\varphi_{r-1}(y)\}.
 \]
-The divergence theorem within the facet gives
+The Gauss--Green divergence theorem within the
+facet~\cite[Chapter~5]{EvansGariepy2015} gives
 \(-d_{k\mid j}\rho_{jk}\) on its ridge with facet \(k\), because
 the outward unit normal to that ridge within the facet is
 \((u_k-(u_j\cdot u_k)u_j)/\sin\alpha_{jk}\).
@@ -3492,7 +3559,8 @@ the tube width
 \]
 Over a facet, use displacements \(y=s u_j\), with \(0<s<\eta(x)\).
 Over a ridge, use \(0<\norm y<\eta(x)\) in the outward normal cone,
-the sector of angle \(\alpha_{jk}\) spanned by \(u_j,u_k\).
+the sector of angle \(\alpha_{jk}\) spanned by \(u_j,u_k\), by the
+normal-cone formula for polyhedra~\cite[Theorem~6.46]{RockafellarWets1998}.
 These are precisely normal directions for which \(x\) is the nearest
 point in \(P\) to \(x+y\). In both cases,
 \[
@@ -3523,9 +3591,11 @@ two-dimensional plane. The first integral contains one power of
 \(R^3\) in~\eqref{appx-an:adaptive-tubes}.
 
 The tubes over distinct faces are disjoint up to null sets, by
-uniqueness of the nearest point in a closed convex set. Within each
+uniqueness of the nearest point in a closed convex
+set~\cite[Example~2.25]{RockafellarWets1998}. Within each
 face, the decomposition into tangential and normal coordinates has
-Jacobian one. Fubini's theorem therefore applies even though
+Jacobian one. Fubini's theorem~\cite[Section~2.5]{Folland1999}
+therefore applies even though
 \(\eta(x)\) varies along the face. Every tube point \(g=x+y\) lies
 outside \(P\), and, for every inequality in its original description,
 \[
@@ -3551,7 +3621,8 @@ Conditional on \(G\), the width \(\sigma/R(G)\) is fixed. Translate
 the thresholds by \(-\sigma G\) and enlarge this outer layer to the
 symmetric layer in~\eqref{appx-an:concentration}. Concentration then
 bounds its conditional probability by
-\(C\{\sigma/R(G)+\delta\}\sqrt L\). Tonelli's theorem and
+\(C\{\sigma/R(G)+\delta\}\sqrt L\). Tonelli's
+theorem~\cite[Section~2.5]{Folland1999} and
 \eqref{appx-an:projection-moments} yield
 \begin{align*}
  \E_{V_0}|\surf((Q-V_0)/\sigma)|
