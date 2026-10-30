@@ -28,6 +28,7 @@
 \newtheorem{proposition}{Proposition}
 \newtheorem{lemma}{Lemma}
 \newtheorem{corollary}{Corollary}
+\newtheorem{conjecture}{Conjecture}
 \theoremstyle{remark}
 \newtheorem{remark}{Remark}
 \newcommand{\E}{\mathbb E}
@@ -197,8 +198,8 @@ Chetverikov, and Koike~\cite[Proposition~2.1]{CCK}, and it drops some of their
 side conditions on \(B\) and \(p\). Thus, in this regime, the
 bound~\eqref{eq:observations-unrestricted} is optimal up to the logarithmic
 factor \(\sqrt{1+\log_+(\sqrt n/(B\sqrt L))}\); when \(p\) grows polynomially
-in~\(n\) and \(B\) is fixed, this factor is of order \((\log n)^{1/2}\). Whether
-this factor can be improved remains an open question.
+in~\(n\) and \(B\) is fixed, this factor is of order \((\log n)^{1/2}\).
+Conjecture~\ref{conj:sharp-unrestricted} states that this factor can be removed.
 
 For unequal marginal variances, let
 \[
@@ -1794,14 +1795,33 @@ Appendix~\ref{app:symmetric-lower} proves the theorem by modifying
 the common activation example in~\cite[Proposition~E.1]{FKLZ}.
 Because \(c_n\to0\), it leaves the fixed-gap rate open.
 
-For unrestricted covariance, the remaining gap is at most the factor
-\(\sqrt{D_L}\), where \(D_L=1+\log_+(1/(\delta\sqrt L))\), even
-under central symmetry. Whether this factor is necessary, and how
-the optimal rate depends on a shrinking correlation gap, remain open.
+For unrestricted covariance, Theorem~\ref{thm:unrestricted} exceeds
+the lower scale only by \(\sqrt{D_L}\), where
+\(D_L=1+\log_+(1/(\delta\sqrt L))\). We conjecture that this
+additional logarithm can be removed uniformly over covariance matrices.
+\begin{conjecture}[Sharp rectangle approximation under unrestricted covariance]
+\label{conj:sharp-unrestricted}
+Under~\eqref{eq:setup}, there is an absolute constant \(C\) such that
+\[
+ \rh(W,Z)\le C\min\{1,\delta L^{3/2}\},\qquad L=\log(ep),
+\]
+uniformly in \(n,p,\delta\) and \(\Sigma\), including singular \(\Sigma\).
+\end{conjecture}
+For normalized observations, the conjectured scale is
+\(BL^{3/2}/\sqrt n\). Theorems~\ref{opt:skew-lower}
+and~\ref{opt:symmetric-lower} show that the factor \(L^{3/2}\)
+cannot generally be reduced, even under central symmetry when the gap
+may vanish. At rank one, Appendix~\ref{app:rank-one} proves the stronger
+bound \(C\min\{1,\delta\}\) and its matching minimax lower rate.
+Thus singularity alone does not force a logarithmic loss; the conjecture
+concerns arbitrary dependence in higher rank. The sharp cancellation
+rate at a fixed positive gap, and the dependence on a shrinking gap,
+remain separate open questions.
+
 The pointwise remainder counterexamples in~\cite{Obstruction} do not
-exclude a better CLT rate. The integrated estimate proposed there is
-proved for rank-one covariance in~\cite{IntegratedRemainder}; its
-general form remains open.
+rule out the conjecture. The rank-one integrated estimate
+in~\cite{IntegratedRemainder} is a separate result; its general form
+remains open.
 
 For sub-exponential observations, Appendix~\ref{app:subexponential}
 compares Corollary~\ref{cor:subexponential} with the sharper logarithmic
@@ -2062,6 +2082,8 @@ calculation supplies the obstruction under third-moment cancellation.
 These estimates yield both consistency criteria. The appendix ends
 with the centrally symmetric lower bound at a shrinking correlation gap,
 reusing the scalar tail estimate to control its leading maximum.
+Appendix~\ref{app:rank-one} gives a separate rank-one benchmark for
+Conjecture~\ref{conj:sharp-unrestricted}, using scalar normal approximation.
 
 \section*{Notation in the appendices}
 \addcontentsline{toc}{section}{Notation in the appendices}
@@ -4768,5 +4790,83 @@ Finally, recall that \(\delta_n=2/\sqrt n\) and
 \(\delta_nL_n^{3/2}=2(1+2\ell)^{3/2}/\sqrt n\sim2^{5/2}r_n\),
 the displayed lower orthant has discrepancy
 \(\{1/(8e)+o(1)\}\delta_nL_n^{3/2}\), proving Theorem~\ref{opt:symmetric-lower}.
+
+
+\clearpage
+\section{The rank-one case}\label{app:rank-one}
+At rank one, the coordinates are signed copies of a single scalar
+variable, and every rectangle event reduces to an interval event.
+The following proposition therefore gives a stronger bound than
+Conjecture~\ref{conj:sharp-unrestricted}, with no dependence on the
+ambient dimension. It also records the matching lower rate.
+
+For integers \(n,p\ge1\) and \(B\ge1\), let \(M_n^{(1)}(B,p)\) be the
+supremum of the rectangle error over the independent centered
+observations in Corollary~\ref{cor:observations}, with envelope \(B\),
+unit average marginal variances, and covariance of rank one.
+\begin{proposition}[Rank-one approximation and sharpness]
+\label{prop:rank-one}
+Under~\eqref{eq:setup}, if \(\operatorname{rank}(\Sigma)=1\), then
+\[
+ \rh(W,Z)\le C\min\{1,\delta\}.
+\]
+Moreover, for all \(n,p\ge1\) and \(B\ge1\),
+\[
+ a_0\min\{1,B/\sqrt n\}\le M_n^{(1)}(B,p)
+ \le A_0\min\{1,B/\sqrt n\},
+\]
+where \(a_0,A_0>0\) are absolute constants.
+\end{proposition}
+
+\begin{proof}
+A rank-one covariance matrix with unit diagonal has the form
+\(\Sigma=ss^\top\), where \(s_j\in\{-1,1\}\); choose \(s_1=1\).
+For each \(j\), independence and centering give
+\[
+ 0=\Var(W_j-s_jW_1)
+   =\sum_i\E(\xi_{ij}-s_j\xi_{i1})^2.
+\]
+Every term is nonnegative, so \(\xi_i=s\eta_i\) almost surely, where
+\(\eta_i\coloneqq\xi_{i1}\). Thus \(W=sS\), with
+\(S\coloneqq\sum_i\eta_i\), and \(Z\) has the law of \(sG\)
+for \(G\sim N(0,1)\).
+For a bounded closed rectangle \(A=\prod_j I_j\), its inverse image
+on the line is the interval \(\bigcap_j s_j I_j\), possibly empty.
+Conversely, any bounded closed interval \(I\) is the inverse image
+of \(\prod_j s_j I\). Hence the rectangle error is exactly the
+supremum of the scalar interval discrepancies.
+
+The variables \(\eta_i\) are independent and centered, and
+\[
+ \sum_i\E\eta_i^2=1,\qquad
+ \sum_i\E|\eta_i|^3\le\delta\sum_i\E\eta_i^2=\delta.
+\]
+The scalar Berry--Esseen inequality~\cite{Berry1941} bounds the
+Kolmogorov distance between \(S\) and \(G\) by \(C\delta\).
+Continuity of the Gaussian distribution gives the same bound for
+strict half-lines. Subtracting the distribution functions at the two
+endpoints bounds every interval discrepancy by \(2C\delta\).
+The trivial bound by one proves the first assertion, and setting
+\(\delta=B/\sqrt n\) gives the minimax upper bound.
+
+For the lower bound, take i.i.d.\ scalar variables \(Y_i\) equal to
+\(B\) with probability \(\pi\coloneqq(B^2+1)^{-1}\) and to
+\(-1/B\) otherwise, and put \(X_i\coloneqq sY_i\). Then
+\(\E Y_i=0\), \(\E Y_i^2=1\), and \(|Y_i|\le B\).
+The normalized scalar sum is an affine function of
+\(N\sim\operatorname{Bin}(n,\pi)\), whose variance
+\(v=n\pi(1-\pi)\) is at most \(n/B^2\).
+Chebyshev's inequality puts probability at least \(3/4\) within
+\(2\sqrt v\) of its mean. This interval contains at most
+\(4\sqrt v+2\) integers, so
+\[
+ \max_k\Pp(N=k)\ge\frac{3/4}{4\sqrt v+2}
+ \ge a_0\min\{1,B/\sqrt n\}.
+\]
+Bounded intervals shrinking to an atom of this size have Gaussian
+probability tending to zero. The corresponding rectangles therefore
+give the required lower bound, including \(B=1\) and
+\(B\ge\sqrt n\).
+\end{proof}
 
 \end{document}
