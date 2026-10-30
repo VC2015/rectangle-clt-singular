@@ -1670,34 +1670,21 @@ a positive lower bound on that eigenvalue, including when
 
 % Source: sharpness_and_discussion
 \section{Sharpness and remaining questions}\label{opt:section}
-This section compares the upper bounds with examples that limit how
-accurate a Gaussian approximation can be. Two questions are distinct:
-what is the smallest possible uniform error bound, and how quickly may
-the dimension grow while that error still tends to zero? At a fixed
-positive correlation gap, the results below settle the second question
-both with and without cancellation of third moments. The sharp error
-rate under cancellation remains open. Allowing the correlation gap to
-shrink introduces a further obstruction, illustrated by a centrally
-symmetric example.
+Sharp error rates and the dimension range for uniform convergence are
+distinct questions. At a fixed positive correlation gap, we determine
+the exact convergence criteria with and without third-moment
+cancellation; the sharp error rate under cancellation remains open.
+The proofs and supporting calculations are collected in
+Appendix~\ref{app:sharpness-proofs}.
 
-Even in one dimension, the dependence on sample size cannot improve
-beyond \(n^{-1/2}\) under the present assumptions. A normalized sum of
-independent Rademacher signs has an atom of order \(n^{-1/2}\) at one
-of its lattice points. An interval shrinking to that point retains the
-atom, whereas its Gaussian probability tends to zero. Thus the
-Kolmogorov distance over intervals is at least of order \(n^{-1/2}\).
-This obstruction persists under central symmetry and hence under the
-third-moment cancellation condition~\eqref{eq:zero-third}; the scalar
-atom argument in Appendix~\ref{app:consistency-proof} gives a proof.
-
-Growing dimension creates another obstruction through the tails of
-coordinate maxima. Chernozhukov, Chetverikov, and
-Koike~\cite[Proposition~2.1]{CCK} used independent two-point coordinates
-to show that the factor \((\log p)^{3/2}\) is necessary in general.
-The following theorem retains that construction and removes its
-additional growth restrictions on the envelope and dimension. The
-condition \(r_n\to0\) places the comparison in the regime where a
-vanishing approximation error is possible.
+Even under central symmetry, a normalized Rademacher sum has an atom
+of order \(n^{-1/2}\), which prevents a smaller uniform error rate in
+fixed dimension. Appendix~\ref{app:consistency-proof} proves this
+lattice obstruction. Growing dimension creates a further obstruction
+through coordinate tails. The next theorem uses the two-point
+construction of Chernozhukov, Chetverikov, and
+Koike~\cite[Proposition~2.1]{CCK}, removing its additional growth
+restrictions on the envelope and dimension.
 \begin{samepage}
 \begin{theorem}[Lower scale]\label{opt:skew-lower}
 Suppose \(p_n\to\infty\), \(B_n\ge2\), and
@@ -1712,64 +1699,41 @@ Here \(W_n\coloneqq n^{-1/2}\sum_iX_{n,i}\),
 \(Z_n\sim N(0,I_{p_n})\), and the envelope is attained.
 \end{theorem}
 \end{samepage}
-Each scalar coordinate of the observations has the centered,
-unit-variance two-point law
-\[
- \Pp(X=B_n)=\frac1{B_n^2+1},\qquad
- \Pp(X=-B_n^{-1})=\frac{B_n^2}{B_n^2+1}.
-\]
-Its third moment is \(B_n-B_n^{-1}\), which is of order \(B_n\)
-for \(B_n\ge2\). Write \(\Phi\) for the standard normal distribution
-function. Near the threshold \(x_n\) defined by
-\(p_n\{1-\Phi(x_n)\}=1\), we have
-\(x_n\asymp\sqrt{\log p_n}\); this is where a Gaussian maximum
-has a nontrivial distribution. The third-moment correction changes
-the relative tail probability by order \(r_n\). Since each tail is
-of order \(1/p_n\), multiplying the \(p_n\) coordinate distribution
-functions produces a discrepancy of order \(r_n\) between
-the distribution functions of the two maxima. Lemma~\ref{opt:moderate-tail}
-proves the tail estimate uniformly in \(B_n\), including lattice
-distributions. Appendix~\ref{app:skew-proof} uses it to prove the theorem
-with the stated constant.
+Each coordinate has third moment of order \(B_n\); its effect on the
+tails at a Gaussian maximum quantile yields the lower scale \(r_n\).
+Appendix~\ref{app:skew-proof} gives the construction and proof, using
+the uniform tail estimate in Lemma~\ref{opt:moderate-tail}.
 
-The covariance in this example is the identity, so its correlation
-gap is one. It therefore supplies a lower bound for every class with
-a prescribed gap \(c_0\in(0,1]\). To state the uniform comparison,
-let \(M_n(c_0;B,p)\) be the supremum of \(\rh(W_n,Z_n)\) over
-independent centered observations \(X_1,\ldots,X_n\in\R^p\) with
+Since its covariance is the identity, this example belongs to every
+class with a prescribed gap \(c_0\in(0,1]\). Fix such a \(c_0\), and let
+\(M_n(c_0;B,p)\) be the supremum of \(\rh(W_n,Z_n)\) over independent
+centered observations \(X_1,\ldots,X_n\in\R^p\) satisfying
 \(\norm{X_i}_\infty\le B\),
 \(n^{-1}\sum_i\E X_{ij}^2=1\) for every coordinate, and correlation
 gap at least \(c_0\). Here \(W_n=n^{-1/2}\sum_iX_i\), and \(Z_n\)
-is centered Gaussian with the same covariance. The observations in
-this supremum need not be identically distributed. Let
-\(M_n^0(c_0;B,p)\) denote the same supremum restricted to observations
-satisfying \(\sum_i\E X_i^{\otimes3}=0\).
+is centered Gaussian with the same covariance. Let \(M_n^0(c_0;B,p)\)
+denote the same supremum under \(\sum_i\E X_i^{\otimes3}=0\).
 
-The upper and lower rates match when the dimension is large enough
-to absorb the additional logarithm in the upper bound. More precisely,
-fix \(\Lambda>0\) and suppose
+The upper and lower rates match when dimension absorbs the extra
+logarithm in the upper bound. Specifically, if \(p_n\to\infty\),
+\(B_n\ge2\), \(r_n\to0\), and, for some fixed \(\Lambda>0\),
 \[
- 1+\log_+(\sqrt n/B_n)\le\Lambda\log(ep_n).
+ 1+\log_+(\sqrt n/B_n)\le\Lambda\log(ep_n),
 \]
-If also \(p_n\to\infty\), \(B_n\ge2\), and \(r_n\to0\),
-Theorems~\ref{thm:optimized} and~\ref{opt:skew-lower} give
+then Theorems~\ref{thm:optimized} and~\ref{opt:skew-lower} give
 \begin{equation}
  M_n(c_0;B_n,p_n)\asymp_{c_0,\Lambda}
  \frac{B_n(\log p_n)^{3/2}}{\sqrt n}.
  \label{opt:matching-minimax}
 \end{equation}
-The symbol \(\asymp_{c_0,\Lambda}\) means that the ratio is bounded
-above and below by positive constants depending only on \(c_0\) and
-\(\Lambda\). In particular, this conclusion holds when
-\(p_n\asymp n^a\) for a fixed \(a>0\), with \(B_n\) allowed to grow
-subject to \(r_n\to0\). Appendix~\ref{app:skew-proof} gives the
-logarithmic comparison used in~\eqref{opt:matching-minimax}.
+Here \(\asymp_{c_0,\Lambda}\) bounds the ratio above and below by
+positive constants depending only on \(c_0,\Lambda\). This includes
+\(p_n\asymp n^a\), \(a>0\), with \(B_n\) growing subject to
+\(r_n\to0\); Appendix~\ref{app:skew-proof} gives the comparison.
 
-Uniform convergence requires no additional condition relating the
-two logarithms. The next theorem gives its exact criterion and shows
-how third-moment cancellation enlarges the admissible dimension range.
-Appendix~\ref{app:consistency-proof} proves both assertions, using
-the scalar tail calculations in the preceding appendix subsections.
+Uniform convergence requires no such comparison of logarithms. The
+next theorem gives its exact criterion and shows how cancellation
+enlarges the admissible dimension range.
 \begin{theorem}[Uniform consistency at a fixed gap]
 \label{opt:consistency}
 For fixed \(c_0\in(0,1]\), arbitrary dimension sequences \(p_n\ge1\),
@@ -1786,46 +1750,26 @@ For each fixed \(B\ge1\),
  \quad\Longleftrightarrow\quad \log p_n=o(\sqrt n).
 \]
 \end{theorem}
-For a fixed envelope \(B\ge2\), the first criterion is
-\(\log p_n=o(n^{1/3})\). Cancellation improves it to
-\(\log p_n=o(\sqrt n)\), but this larger range does not by itself
-identify the sharp error rate within the range.
-
-Independent Rademacher coordinates explain the second threshold.
-If \(\log p_n\sim a\sqrt n\) for a fixed \(a>0\), their normalized
-sums satisfy
-\[
- \Pp\!\left(\max_{j\le p_n}W_{n,j}\le x_n\right)
- -\Pp\!\left(\max_{j\le p_n}Z_{n,j}\le x_n\right)
- \longrightarrow e^{-\exp(-a^2/3)}-e^{-1}>0,
-\]
-where \(x_n\) again satisfies \(p_n\{1-\Phi(x_n)\}=1\).
-The fourth-order tail correction therefore prevents convergence at
-this dimension scale, even though all third moments vanish.
-Appendix~\ref{app:rademacher-tail} gives the calculation, and
-Appendix~\ref{app:consistency-proof} extends the necessity argument to
+For fixed \(B\ge2\), the dimension condition is
+\(\log p_n=o(n^{1/3})\) in general and \(\log p_n=o(\sqrt n)\)
+under cancellation. Independent Rademacher coordinates obstruct
+convergence at the latter boundary through a fourth-order tail
+correction (Appendix~\ref{app:rademacher-tail}).
+Appendix~\ref{app:consistency-proof} proves both equivalences for
 arbitrary dimension sequences.
 
-Below this threshold, a gap between the known upper and lower rates
-remains. In the range \(n^{1/3}\ll L\ll\sqrt n\), the fourth-order
-tail calculations give a lower-bound scale \(L^2/n\), whereas
-Theorem~\ref{thm:zero-skew}, for fixed \(B\) and \(c_0\), gives
-\[
- \rh(W_n,Z_n)\le C_{B,c_0}\frac L{\sqrt n}
-       \sqrt{1+\log_+\frac{\sqrt n}{L}}.
-\]
-Appendix~\ref{app:rademacher-tail} proves the lower scale directly
-for Rademacher coordinates; see also~\cite[Proposition~4.1]{CCK}.
-Any improvement valid also in fixed dimension must retain
-the lattice obstruction of order \(n^{-1/2}\) described above;
-\(L^2/n\) alone cannot be a uniform upper bound under the present
-assumptions.
+The sharp error rate under cancellation is still unresolved. For
+\(n^{1/3}\ll L\ll\sqrt n\), the Rademacher calculation gives the
+lower scale \(L^2/n\), while the fixed-gap upper
+bound~\eqref{eq:zero-fixed} is larger; see
+Appendix~\ref{app:rademacher-tail} and~\cite[Proposition~4.1]{CCK}.
+Any bound valid also in fixed dimension must retain the
+\(n^{-1/2}\) lattice obstruction, so \(L^2/n\) alone cannot be a
+uniform upper bound.
 
-When the correlation gap is allowed to shrink, central symmetry alone
-does not improve the lower scale \(\delta L^{3/2}\). The next theorem
-gives a singular example with unit marginal variances and a positive,
-but vanishing, correlation gap.
-
+When the correlation gap may shrink, central symmetry does not improve
+the lower scale \(\delta L^{3/2}\). The next theorem gives a singular
+example with a positive but vanishing gap.
 \begin{theorem}[Centrally symmetric lower bound]\label{opt:symmetric-lower}
 Let \(m_n\ge2\) be integers such that \(m_n\to\infty\) and
 \((\log m_n)^3/n\to0\). Put
@@ -1847,34 +1791,21 @@ counterpart \(Z_n\sim N(0,\Sigma_n)\) satisfy
 \end{theorem}
 
 Appendix~\ref{app:symmetric-lower} proves the theorem by modifying
-the common Bernoulli activation example in~\cite[Proposition~E.1]{FKLZ}.
-A single lower orthant attains the stated asymptotic constant.
-Since \(c_n\to0\), the result leaves the sharp rate under a fixed
-positive gap open.
+the common activation example in~\cite[Proposition~E.1]{FKLZ}.
+Because \(c_n\to0\), it leaves the fixed-gap rate open.
 
-For unrestricted covariance, these examples leave at most the factor
-\(\sqrt{D_L}\) between the general upper bound and the attained lower
-scale \(\delta L^{3/2}\), even under central symmetry. Recall that
-\(D_L=1+\log_+(1/(\delta\sqrt L))\). Whether that factor is necessary,
-and how the optimal rate depends on a shrinking correlation gap,
-remain open. The note~\cite{Obstruction} disproves particular
-pointwise improvements of the fourth-order remainder estimate for a
-two-scale smoother, even after the full covariance contraction.
-Those counterexamples rule out the proposed pointwise estimates;
-they do not rule out an improved CLT rate. The same note formulates
-an integrated remainder estimate that would support the desired
-improvement, and~\cite{IntegratedRemainder} proves that estimate for
-rank-one covariance. The general integrated estimate remains open.
+For unrestricted covariance, the remaining gap is at most the factor
+\(\sqrt{D_L}\), where \(D_L=1+\log_+(1/(\delta\sqrt L))\), even
+under central symmetry. Whether this factor is necessary, and how
+the optimal rate depends on a shrinking correlation gap, remain open.
+The pointwise remainder counterexamples in~\cite{Obstruction} do not
+exclude a better CLT rate. The integrated estimate proposed there is
+proved for rank-one covariance in~\cite{IntegratedRemainder}; its
+general form remains open.
 
-For sub-exponential observations, the remaining comparison also
-depends on the covariance assumptions. The companion
-paper~\cite{Local} gives a sharper logarithmic dependence when every
-principal covariance submatrix of order at most four has its smallest
-eigenvalue bounded below by a positive constant.
-Corollary~\ref{cor:subexponential} retains the power \(n^{-1/2}\), up
-to logarithms, without that local nondegeneracy assumption.
-Appendix~\ref{app:subexponential} compares the assumptions and rates
-in detail.
+For sub-exponential observations, Appendix~\ref{app:subexponential}
+compares Corollary~\ref{cor:subexponential} with the sharper logarithmic
+rate of~\cite{Local}, which requires local covariance nondegeneracy.
 
 % Source: references
 \begin{thebibliography}{99}
