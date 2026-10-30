@@ -521,10 +521,9 @@ notation used in the appendices. Section~\ref{opt:section}
 discusses sharpness, and Subsection~\ref{sec:lean-certification}
 records the formal verification in Lean.
 Appendices~\ref{sec:main-proof}--\ref{app:subexponential}
-contain all proofs of the upper bounds. Appendix~\ref{app:symmetric-lower}
-proves the centrally symmetric lower bound. Appendix~\ref{app:sharpness-proofs}
-proves the other results in Section~\ref{opt:section}, including the
-consistency criteria and exact coordinate reductions. The
+contain all proofs of the upper bounds. Appendix~\ref{app:sharpness-proofs}
+collects the proofs for Section~\ref{opt:section}: the lower bounds,
+the consistency criteria, and the supporting tail calculations. The
 Supplement~\cite{Supplement} contains earlier versions of these
 arguments and further investigations.
 
@@ -1688,7 +1687,8 @@ of its lattice points. An interval shrinking to that point retains the
 atom, whereas its Gaussian probability tends to zero. Thus the
 Kolmogorov distance over intervals is at least of order \(n^{-1/2}\).
 This obstruction persists under central symmetry and hence under the
-third-moment cancellation condition~\eqref{eq:zero-third}.
+third-moment cancellation condition~\eqref{eq:zero-third}; the scalar
+atom argument in Appendix~\ref{app:consistency-proof} gives a proof.
 
 Growing dimension creates another obstruction through the tails of
 coordinate maxima. Chernozhukov, Chetverikov, and
@@ -1865,17 +1865,6 @@ they do not rule out an improved CLT rate. The same note formulates
 an integrated remainder estimate that would support the desired
 improvement, and~\cite{IntegratedRemainder} proves that estimate for
 rank-one covariance. The general integrated estimate remains open.
-
-Some singular covariance structures do admit a simpler reduction.
-Exactly equal or opposite coordinates can be removed without changing
-the Kolmogorov distance over rectangles: their constraints combine
-into intervals for the retained coordinates. In rank one, all unit-variance
-coordinates are equal up to sign, so this reduction leaves a scalar
-comparison. Its worst-case error has order
-\(\min\{1,B/\sqrt n\}\), with no dimension logarithm.
-Appendix~\ref{app:coordinate-rank-one} proves the exact reduction and
-both rank-one bounds, including the scalar atom estimate used above.
-The upper-bound proof for arbitrary rank does not require either reduction.
 
 For sub-exponential observations, the remaining comparison also
 depends on the covariance assumptions. The companion
@@ -2135,13 +2124,13 @@ Gaussian surface estimate in Subsection~\ref{appx-an:sec:surface}.
 These two supporting arguments are placed last so that their purpose
 is visible before their proofs. Appendix~\ref{app:subexponential}
 then extends the bounded-summand results by truncation and transfers
-the resulting bounds to polyhedra, whereas
-Appendix~\ref{app:symmetric-lower} proves
-Theorem~\ref{opt:symmetric-lower} independently of the interpolation argument.
-Appendix~\ref{app:sharpness-proofs} supplies the remaining proofs for
-Section~\ref{opt:section}: the scalar tail estimates lead to the lower
-scale and both consistency criteria, followed by the exact coordinate
-reduction and rank-one bounds.
+the resulting bounds to polyhedra. Appendix~\ref{app:sharpness-proofs}
+collects the proofs for Section~\ref{opt:section}. A uniform scalar
+tail estimate gives the skewed lower bound, and a Rademacher tail
+calculation supplies the obstruction under third-moment cancellation.
+These estimates yield both consistency criteria. The appendix ends
+with the centrally symmetric lower bound at a shrinking correlation gap,
+reusing the scalar tail estimate to control its leading maximum.
 
 \section*{Notation in the appendices}
 \addcontentsline{toc}{section}{Notation in the appendices}
@@ -4204,277 +4193,26 @@ the tail bound nor a local covariance assumption. If \(K\) varies,
 the elementary fourth-moment consequence is \(B_4\le C K^2\);
 the tail bound alone does not justify taking \(B_4=K\).
 
-\section{\texorpdfstring{The symmetric lower bound: proof of Theorem~\ref{opt:symmetric-lower}}{The symmetric lower bound: proof of Theorem 6}}
-\label{app:symmetric-lower}
-
-We prove Theorem~\ref{opt:symmetric-lower} by constructing two maxima
-with leading components close in law and small independent shifts.
-The Gaussian shift has a larger mean; the density of the leading
-maximum converts this mean difference into a probability difference.
-We first bound the approximation and Taylor errors, including when the
-dimension grows slowly. Throughout,
-\(\Phi\) and \(\varphi\) denote the standard normal distribution
-function and density, and \(\bar\Phi\coloneqq1-\Phi\).
-
-\subsection{Two estimates for maxima}
-
-We need a uniform approximation for a maximum of independent
-Rademacher sums, keeping the lattice error explicit. Let
-\(A_n\coloneqq n^{-1/2}\sum_{i=1}^n\eta_i\), where the
-\(\eta_i\) are independent Rademacher signs, and let
-\(A_{n,1},\ldots,A_{n,m}\) be independent copies. Put
-\(\Lambda_m\coloneqq\log(em)\). There are absolute constants
-\(c_0,C>0\) such that, for large \(n\) and
-\(\Lambda_m\le c_0\sqrt n\), the Rademacher-maximum approximation is
-\begin{equation}
- \sup_x\left|\Pp\{\max_{j\le m}A_{n,j}\le x\}-\Phi(x)^m\right|
- \le C\left(\frac{\sqrt{\Lambda_m}}{\sqrt n}
-                 +\frac{\Lambda_m^2}{n}\right).
- \label{sym:eq:rademacher-max}
-\end{equation}
-The first term retains the effect of the lattice. A scalar absolute
-error would accumulate over \(m\) coordinates, so we instead control
-the relative error in the upper tail. Exponential tilting gives,
-for a sufficiently small
-absolute \(a>0\) and \(0\le x\le an^{1/4}\),
-\[
- \left|\log\frac{\Pp(A_n>x)}{\bar\Phi(x)}\right|
- \le C\epsilon_n(x),\qquad
- \epsilon_n(x)\coloneqq\frac{1+x}{\sqrt n}+\frac{x^4}{n}.
-\]
-The tilt makes the threshold \(x\) the new mean, placing the tail
-calculation in a region where the scalar central limit theorem applies.
-The log moment-generating function is
-\(K(\tau)\coloneqq n\log\cosh(\tau/\sqrt n)\). The solution to
-\(K'(\tau)=x\) is \(\tau=\sqrt n\operatorname{arctanh}(x/\sqrt n)\).
-Set \(v^2\coloneqq K''(\tau)=1-x^2/n\) and \(z\coloneqq\tau v\).
-Taylor expansion gives
-\[
- K(\tau)-\tau x=-x^2/2+O(x^4/n),
- \qquad z=x+O(x^3/n).
-\]
-Under the tilted law
-\(d\Pp_\tau=e^{\tau A_n-K(\tau)}d\Pp\), the signs remain
-independent, and \(T\coloneqq(A_n-x)/v\) has mean zero and variance
-one. For \(Y_i\coloneqq(\eta_i-x/\sqrt n)/\sqrt n\),
-\[
- \sum_i\E_\tau Y_i^2=v^2,
- \qquad \sum_i\E_\tau|Y_i|^3\le2v^2/\sqrt n.
-\]
-The scalar Berry--Esseen inequality~\cite{Berry1941} bounds the
-distributional error by \(Cv^{-3}\sum_i\E_\tau|Y_i|^3\).
-Since \(v\) is bounded away from zero, this gives
-\(\sup_y|\Pp_\tau(T\le y)-\Phi(y)|\le C/\sqrt n\).
-For \(z\ge0\), integration by parts in the tail yields
-\[
- \E_\tau[e^{-zT}\ind\{T>0\}]
- =\Pp_\tau(T>0)-z\int_0^\infty e^{-zy}\Pp_\tau(T>y)\dd y
- =J(z)+O(n^{-1/2}),
-\]
-where \(J(z)\coloneqq\int_0^\infty e^{-zy}\varphi(y)\dd y\);
-the integral multiplied by \(z\) is zero when \(z=0\).
-The strict inequalities in this identity account for a possible atom
-at zero. Elementary integration gives
-\(J(z)\asymp(1+z)^{-1}\) and
-\(|(\log J)'(z)|\le C/(1+z)\). Thus the error relative to \(J(z)\)
-is \(O((1+x)/\sqrt n)\), and
-\(\log J(z)-\log J(x)=O(x^3/[n(1+x)])\). Combining these facts with
-\[
- \Pp(A_n>x)=e^{K(\tau)-\tau x}
-                \E_\tau[e^{-zT}\ind\{T>0\}],
- \qquad \bar\Phi(x)=e^{-x^2/2}J(x),
-\]
-proves the relative-tail estimate. Taking \(a\) small also gives
-uniform comparability of the two tails and
-\(|\Pp(A_n>x)/\bar\Phi(x)-1|\le C\epsilon_n(x)\).
-
-Independence expresses the maximum distribution as a power of the
-scalar distribution function. We consider three threshold ranges.
-For \(x\le1\),
-Berry--Esseen and a fixed upper bound \(r_0<1\) on the two scalar
-distribution functions give an error at most
-\(Cm r_0^{m-1}/\sqrt n\le C/\sqrt n\). For
-\(1<x\le an^{1/4}\), put \(p\coloneqq\Pp(A_n>x)\),
-\(v_0\coloneqq\bar\Phi(x)\), and \(w\coloneqq mv_0\).
-Tail comparability and the mean value theorem give
-\[
- |(1-p)^m-(1-v_0)^m|\le C\epsilon_n(x)w e^{-c_*w}.
-\]
-If \(x\le2\sqrt{\Lambda_m}\), this is bounded by the asserted
-maximum error. Otherwise \(w\le e^{-x^2/4}\), so the error is
-at most \(C\epsilon_n(x)e^{-x^2/4}\le C/\sqrt n\).
-Finally, choose \(c_0<a^2/4\). For \(x>an^{1/4}\), the
-sub-Gaussian tails bound the error by
-\(2m e^{-x^2/2}\le2e^{-a^2\sqrt n/4}=O(n^{-1/2})\).
-This proves~\eqref{sym:eq:rademacher-max}.
-
-The shift comparison requires a threshold where the Gaussian-maximum
-density is of order \(\sqrt{\log m}\), and a global bound on its
-derivative. Let
-\(F_m(x)\coloneqq\Phi(x)^m\). For \(m\ge2\), choose \(u_m\) by
-\(m\bar\Phi(u_m)=1\), and put \(H_*\coloneqq\max_{k\le m}H_k\)
-for independent standard normals. The Gaussian-maximum estimates are,
-as \(m\to\infty\),
-\begin{equation}
- u_m\sim\sqrt{2\log m},\qquad
- F_m'(u_m)\sim\frac{\sqrt{2\log m}}e,\qquad
- \E H_*\sim\sqrt{2\log m},\qquad \E H_*^2=O(\log m).
- \label{sym:eq:gaussian-max}
-\end{equation}
-The accompanying smoothness bound is
-\begin{equation}
- \|F_m''\|_\infty\le C\log(em),\qquad m\ge2.
- \label{sym:eq:gaussian-smoothness}
-\end{equation}
-The normal tail estimates
-\(\bar\Phi(x)\asymp\varphi(x)/(1+x)\) for \(x\ge0\) and
-\(\varphi(x)/\bar\Phi(x)\sim x\) imply the first two assertions,
-using \(F_m'(u_m)=m\varphi(u_m)(1-1/m)^{m-1}\).
-They also give \(H_*/\sqrt{2\log m}\to1\) in probability.
-Integrating \(\Pp(\max_k|H_k|>y)\le\min\{1,2me^{-y^2/2}\}\)
-gives the second-moment bound and uniform integrability needed for
-the mean asymptotic. Finally,
-\[
- F_m''(x)=m(m-1)\varphi(x)^2\Phi(x)^{m-2}
-             -mx\varphi(x)\Phi(x)^{m-1}.
-\]
-For \(x<0\), the powers of \(\Phi(x)\le1/2\) bound both terms
-by an absolute constant, treating \(m=2,3\) separately. For
-\(0\le x\le2\sqrt{\log(em)}\), put \(w=m\bar\Phi(x)\) and use
-\(\varphi(x)\le C(1+x)\bar\Phi(x)\). The resulting bound is
-\(C(1+x)^2(w+w^2)e^{-c_*w}\le C\log(em)\), again treating
-\(m=2,3\) separately. For larger \(x\), the bound
-\(C(m^2e^{-x^2}+mx e^{-x^2/2})\le C\log(em)\) suffices.
-
-\subsection{The symmetric construction and its discrepancy}
-
-We now construct the observations in Theorem~\ref{opt:symmetric-lower},
-modifying the common activation example in~\cite[Proposition~E.1]{FKLZ}.
-Suppress the subscript \(n\): let \(m\to\infty\), put
-\(\ell\coloneqq\log m\), and assume \(\ell^3/n\to0\).
-With \(q\coloneqq\ell/(2n)\) and \(s\coloneqq\sqrt{1-q}\), define
-\[
- X_{i,jk}\coloneqq s\eta_{ij}+I_i\varepsilon_{ik},\qquad 1\le j,k\le m.
-\]
-Here all \(\eta_{ij},\varepsilon_{ik}\) are independent Rademacher
-signs, and the \(I_i\) are independent Bernoulli\((q)\) variables,
-independent of the signs. All statements concern sufficiently large
-\(n\), so \(0<q<1/2\).
-The rows are independent and identically distributed and bounded by
-\(s+1\le2\). Reversing all signs in one row preserves its law and
-negates that row, so its distribution is centrally symmetric and
-its third-moment tensor vanishes. The covariance matrix is
-\[
- \Sigma_{(j,k),(j',k')}=(1-q)\ind\{j=j'\}+q\ind\{k=k'\}.
-\]
-For \(m\ge2\) and \(0<q<1/2\), its largest off-diagonal correlation
-is \(1-q\), so the correlation gap is \(q\).
-Its range consists of arrays \((a_j+b_k)_{j,k}\), a space of
-dimension \(2m-1\); both components have positive variance, so this
-is also its rank.
-
-To compare the maxima, separate the always-present sign component
-from the component contributed by the active rows. Define
-\[
- A_j\coloneqq n^{-1/2}\sum_i\eta_{ij},\qquad
- T_k\coloneqq\sum_i I_i\varepsilon_{ik},\qquad
- T_*\coloneqq\max_{k\le m}T_k.
-\]
-For \(W=n^{-1/2}\sum_iX_i\) and a covariance-matched Gaussian
-vector \(Z\), the maximum representations are
-\[
- \max_{j,k}W_{jk}=s\max_jA_j+T_*/\sqrt n,\qquad
- \max_{j,k}Z_{jk}\stackrel d=s\max_jG_j+\sqrt q\,H_*,
-\]
-where \(G_j,H_k\) are mutually independent standard normals and
-\(H_*=\max_kH_k\). In each representation the two components are
-independent.
-
-With many columns, one column is likely to be positive on every
-active row, making \(T_*\) equal to the number \(N\coloneqq\sum_iI_i\)
-of active rows. Here \(\E N=\ell/2\), \(\operatorname{Var}(N)\le\ell/2\),
-and \(\E N^2=O(\ell^2)\). Conditional on the active rows, each
-column is positive on all of them with probability \(2^{-N}\),
-independently across columns. Thus, using Chebyshev's bound
-\(\Pp(N>\ell)\le2/\ell\),
-\begin{align*}
- \Pp(T_*\ne N\mid N=k)&=(1-2^{-k})^m\le e^{-m2^{-k}},\\
- \Pp(T_*\ne N)&\le\frac2\ell+e^{-m2^{-\ell}}=o(1),
-\end{align*}
-where \(m2^{-\ell}=\exp\{(1-\log2)\ell\}\to\infty\).
-Since \(|T_*|\le N\),
-Cauchy--Schwarz then yields
-\[
- 0\le\E(N-T_*)\le2(\E N^2)^{1/2}
-                         \Pp(T_*\ne N)^{1/2}=o(\ell).
-\]
-Consequently, \(\E T_*=(1/2+o(1))\ell\) and
-\(\E T_*^2=O(\ell^2)\).
-
-We now replace the leading Rademacher maximum by a Gaussian maximum
-at a cost smaller than the discrepancy we seek. Let \(F_{n,m}\) be
-the distribution function of \(\max_jA_j\), and put
-\(r_n\coloneqq\ell^{3/2}/\sqrt n\). The assumed condition
-\(\ell^3/n\to0\), together with the Rademacher-maximum
-estimate~\eqref{sym:eq:rademacher-max}, gives
-\[
- \|F_{n,m}-F_m\|_\infty
- \le C\left(\frac{\sqrt\ell}{\sqrt n}+\frac{\ell^2}{n}\right)
- =o(r_n).
-\]
-At the threshold \(t_n\coloneqq s u_m\), define the shifts
-\(V_W\coloneqq T_*/(s\sqrt n)\) and \(V_G\coloneqq\sqrt q\,H_*/s\).
-Independence in the two maximum representations gives
-\[
- \Pp(\max_{j,k}W_{jk}\le t_n)=\E F_m(u_m-V_W)+o(r_n),
- \qquad
- \Pp(\max_{j,k}Z_{jk}\le t_n)=\E F_m(u_m-V_G).
-\]
-Since \(s\to1\), the Gaussian moment estimates
-in~\eqref{sym:eq:gaussian-max} and the bounds for \(T_*\) give
-\[
- \E V_G-\E V_W=(1/2+o(1))\frac\ell{\sqrt n},
- \qquad \E V_G^2+\E V_W^2=O(\ell^2/n).
-\]
-The mean-shift difference is of order \(\ell/\sqrt n\); multiplying
-it by \(F_m'(u_m)\asymp\sqrt\ell\) gives the desired order \(r_n\).
-To control the remainder, use the global bound
-\eqref{sym:eq:gaussian-smoothness}, which also covers negative shifts:
-\[
- \E F_m(u_m-V)=F_m(u_m)-F_m'(u_m)\E V+O(\ell\E V^2).
-\]
-Subtracting the two expansions therefore gives
-\[
- \Pp(\max_{j,k}W_{jk}\le t_n)-\Pp(\max_{j,k}Z_{jk}\le t_n)
- =\left(\frac1{e\sqrt2}+o(1)\right)r_n+O(r_n^2).
-\]
-Finally, recall that \(\delta_n=2/\sqrt n\) and
-\(L_n=\log(em^2)=1+2\ell\). Since \(r_n\to0\) and
-\(\delta_nL_n^{3/2}=2(1+2\ell)^{3/2}/\sqrt n\sim2^{5/2}r_n\),
-the displayed lower orthant has discrepancy
-\(\{1/(8e)+o(1)\}\delta_nL_n^{3/2}\), proving Theorem~\ref{opt:symmetric-lower}.
-
-
-
-
-\section{Proofs for sharpness and uniform consistency}
+\section{\texorpdfstring{Proofs for Section~\ref{opt:section}}{Proofs for Section 3}}
 \label{app:sharpness-proofs}
-This appendix proves the results of Section~\ref{opt:section} other
-than Theorem~\ref{opt:symmetric-lower}, whose proof is in
-Appendix~\ref{app:symmetric-lower}. We first establish a scalar tail
-estimate that is uniform over the bounded two-point laws used in the
-lower bound. A separate Rademacher calculation gives the fourth-order
-correction needed under third-moment cancellation. We then prove both
-consistency criteria and the exact coordinate and rank-one reductions.
+The lower bounds in Section~\ref{opt:section} arise from small errors
+in scalar tails that become visible when we take coordinate maxima.
+We first prove a tail estimate uniform over bounded summands and use
+it for Theorem~\ref{opt:skew-lower}. For symmetric signs, a more
+precise calculation identifies the fourth-order correction; together
+these two estimates prove the consistency criteria in
+Theorem~\ref{opt:consistency}. We then prove
+Theorem~\ref{opt:symmetric-lower} by comparing two maxima with small
+independent shifts. Throughout, \(\Phi\) and \(\varphi\) denote the
+standard normal distribution function and density, and
+\(\bar\Phi\coloneqq1-\Phi\).
 
-We use lower orthants and rectangles that leave some coordinates
-unrestricted when calculating lower bounds. This is compatible with
-the bounded closed rectangles used in the proof of the upper bounds:
-for each fixed \(n\) and finite dimension, intersect such a set with
-\([-R,R]^p\) and let \(R\to\infty\). Continuity of both probabilities
-from below shows that its discrepancy is a limit of discrepancies on
-bounded closed rectangles. In particular, every lower bound below is
-valid for that smaller working class as well.
+The lower-bound calculations use lower orthants and may leave some
+coordinates unrestricted. For each fixed \(n\) and finite dimension,
+intersecting these sets with \([-R,R]^p\) and letting \(R\to\infty\)
+recovers their discrepancies by continuity of probability from below.
+Thus all the lower bounds also hold when the supremum is taken only
+over bounded closed rectangles.
 
 \subsection{A uniform scalar tail estimate}
 \label{app:moderate-tail-proof}
@@ -4501,9 +4239,12 @@ has constants independent of the lattice spacing or the position of
 \end{lemma}
 
 \begin{proof}
-Put \(K(t)\coloneqq\sum_i\log\E e^{t\eta_i}\). For each summand, its
-exponential tilt at \(t\ge0\) has likelihood ratio between
-\(e^{-2\delta t}\) and \(e^{2\delta t}\). If \(\Var_t\) denotes variance
+We change measure so that the rare threshold becomes the mean, then
+apply the scalar central limit theorem under that measure. Put
+\(K(t)\coloneqq\sum_i\log\E e^{t\eta_i}\). Tilting the law of
+\(\eta_i\) multiplies it by \(e^{t\eta_i}/\E e^{t\eta_i}\), which
+lies between \(e^{-2\delta t}\) and \(e^{2\delta t}\) for \(t\ge0\).
+If \(\Var_t\) denotes variance
 under this tilt, the independent-copy formula for variance gives
 \[
  e^{-4\delta t}\Var(\eta_i)
@@ -4514,7 +4255,8 @@ Consequently, for a fixed small absolute \(a_0>0\),
 \(0\le t\le a_0/\delta\). The centered tilted variable is bounded by
 \(2\delta\), and \(\Var_t(\eta_i)\le\delta^2\). Its fourth cumulant
 therefore has absolute value at most
-\(7\delta^2\Var_t(\eta_i)\). Summing gives
+\(7\delta^2\Var_t(\eta_i)\). Since \(K^{(4)}(t)\) is the sum of
+these tilted fourth cumulants, we obtain
 \(\sup_{0\le t\le a_0/\delta}|K^{(4)}(t)|\le C\delta^2\).
 Also \(|\gamma|\le\delta\). Taylor's theorem now yields, uniformly in
 this local range,
@@ -4570,11 +4312,10 @@ valid for \(s\ge0\), with the second term interpreted as zero when
 the same identity for a standard normal variable shows that
 \begin{equation}
  \E_t[e^{-sT}\ind_{\{T>0\}}]=J(s)+O(\delta),\qquad
- J(u)\coloneqq\int_0^\infty e^{-uy}\varphi(y)\,dy,
+ J(u)\coloneqq\int_0^\infty e^{-uy}\varphi(y)\,dy.
  \label{opt:strict-tail}
 \end{equation}
-where \(\varphi\) is the standard normal density. The same
-\(O(\delta)\) estimate therefore covers an atom at \(T=0\).
+The same \(O(\delta)\) estimate therefore covers an atom at \(T=0\).
 The integral gives \(J(u)\asymp(1+u)^{-1}\) and
 \(|(\log J)'(u)|\le C/(1+u)\) for \(u\ge0\).
 The error in \eqref{opt:strict-tail} is thus relative
@@ -4590,7 +4331,6 @@ Taking logarithms and using \eqref{opt:tilt-root} proves
 \eqref{opt:moderate-tail-formula}; the smaller
 \(O(\delta^2x^2)\) term is absorbed into its stated remainder.
 \end{proof}
-
 
 
 \subsection{The skewed lower bound and matching rates}
@@ -4614,7 +4354,9 @@ It has mean zero, variance one, and third moment
  t_n\coloneqq1-\Phi(x_n),\qquad q_n\coloneqq\Pp(W_{n,1}>x_n).
 \]
 Then \(x_n\sim\sqrt{2\log p_n}\), \(p_nt_n\to1\), and
-\(\delta_nx_n^3\to0\). Lemma~\ref{opt:moderate-tail} gives
+\(\delta_nx_n^3\to0\). The normalized scalar sum has aggregate
+third moment \(\gamma=\mu_{3,n}/\sqrt n\), so
+Lemma~\ref{opt:moderate-tail} gives
 \begin{equation}
  q_n=t_n\{1+s_n+o(r_n)\},\qquad
  s_n\coloneqq\frac{\mu_{3,n}x_n^3}{6\sqrt n}.
@@ -4639,10 +4381,10 @@ converges to \(e^{-1}\). Thus, more precisely,
  \label{opt:exact-product-asymptotic}
 \end{equation}
 The choice of \(x_n\) makes \((1-t_n)^{p_n}=e^{-1}\) exactly.
-This avoids an additive \(O(p_n^{-1})\) error and hence a restriction
-on \(p_nr_n\). The uniform scalar estimate removes the separate growth
-restriction on \(B_n\). These two observations give the enlarged regime
-in the theorem, and \eqref{opt:lower-constant} follows.
+Thus the comparison has no additive \(O(p_n^{-1})\) error, and no
+condition on \(p_nr_n\) is needed. The uniform scalar estimate likewise
+requires no further restriction on \(B_n\). Dividing by \(r_n\) and
+using \(\liminf s_n/r_n\ge\sqrt2/4\) proves~\eqref{opt:lower-constant}.
 \end{proof}
 
 To obtain the matching rate in~\eqref{opt:matching-minimax}, put
@@ -4665,6 +4407,10 @@ a constant depending only on \(a\), since \(B_n\ge2\) implies
 
 \subsection{Rademacher tails and the fourth-order correction}
 \label{app:rademacher-tail}
+When the third moments vanish, the leading obstruction comes from the
+fourth-order tail correction. To identify its sign and size, we use
+the exact binomial probabilities for symmetric signs rather than the
+remainder bound of Lemma~\ref{opt:moderate-tail}.
 Let \(S_n\coloneqq\sum_{i=1}^n\varepsilon_i\), where the
 \(\varepsilon_i\) are independent signs with probabilities \(1/2\).
 We will show that, for any sequence \(x=x_n\to\infty\) with
@@ -4780,11 +4526,35 @@ The mean value theorem, with \(u_n\) between \(q_n\) and \(t_n\), gives
  &\sim\frac{L_n^2}{3en}.
 \end{align*}
 Here \(p_nt_n\to1\) and \(q_n/t_n\to1\), so the prefactor tends
-to \(e^{-1}\). This proves the stated \(L_n^2/n\) lower scale for
-the bounded symmetric class without using an external tail expansion.
+to \(e^{-1}\). Hence this bounded symmetric example attains the
+\(L_n^2/n\) lower scale asserted in Section~\ref{opt:section}.
 
 \subsection{Both uniform consistency criteria}
 \label{app:consistency-proof}
+The upper bounds give sufficiency. For necessity, the tail estimates
+handle growing dimension, but we must also exclude convergence when
+the envelope is too large even in one coordinate. The following atom
+bound covers this case and the fixed-dimensional Rademacher example.
+
+For any \(B\ge1\), use the two-point law~\eqref{opt:two-point-law}
+with \(B_n=B\). The normalized sum of \(n\) independent copies is
+an affine function of \(N\sim\operatorname{Bin}(n,\pi)\), where
+\(\pi\coloneqq(B^2+1)^{-1}\). Write
+\(v\coloneqq n\pi(1-\pi)\le n/B^2\). Chebyshev's inequality places
+probability at least \(3/4\) in an interval of radius \(2\sqrt v\),
+containing at most \(4\sqrt v+2\) integers. Consequently,
+\begin{equation}
+ \max_k\Pp(N=k)\ge\frac{3/4}{4\sqrt v+2}
+       \ge c\min\{1,B/\sqrt n\}.
+ \label{app:scalar-atom}
+\end{equation}
+A closed interval shrinking to such an atom has Gaussian probability
+tending to zero, so its mass is a lower bound for the scalar error.
+Using the law independently in all coordinates gives identity covariance
+and the same lower bound by restricting one coordinate. With \(B=1\),
+the law is Rademacher, proving the \(n^{-1/2}\) obstruction for either
+parity of \(n\).
+
 \begin{proof}[Proof of Theorem~\ref{opt:consistency}]
 First consider the class without cancellation, and put
 \(\delta_n\coloneqq B_n/\sqrt n\) and
@@ -4799,11 +4569,10 @@ If \(\delta_nL_n^{3/2}\to0\), then \(t_n\to0\), and the second
 term also tends to zero. This proves sufficiency for arbitrary
 dimension and envelope sequences.
 
-For necessity, if \(\delta_n\) does not tend to zero, the scalar
-atom estimate proved in Appendix~\ref{app:coordinate-rank-one},
-applied independently in all coordinates, gives identity covariance
-and error at least \(c\min\{1,\delta_n\}\). Thus uniform convergence
-fails along a subsequence. It remains to consider \(\delta_n\to0\).
+For necessity, if \(\delta_n\) does not tend to zero,
+\eqref{app:scalar-atom} gives identity-covariance examples with error
+at least \(c\min\{1,\delta_n\}\), so convergence fails along a
+subsequence. It remains to consider \(\delta_n\to0\).
 If \(\delta_nL_n^{3/2}\) does not tend to zero, choose a subsequence
 on which it is at least \(\varepsilon>0\). Then \(p_n\to\infty\), and
 eventually
@@ -4835,9 +4604,8 @@ Since \(m_n\{1-\Phi(x_n)\}\to1\), independence implies
  <e^{-1}
  =\Pp(\max_{j\le m_n}Z_{n,j}\le x_n).
 \]
-This is a nonvanishing rectangle discrepancy in the original
-\(p_n\)-dimensional class. The exhaustion described at the start of
-this appendix also makes it a lower bound for bounded rectangles.
+This nonvanishing discrepancy on a coordinate subfamily is a lower
+bound for the error in the original \(p_n\)-dimensional class.
 Necessity in~\eqref{opt:consistency-iff} follows.
 
 Now impose cancellation and fix \(B\ge1\). Theorem~\ref{thm:zero-skew}
@@ -4859,110 +4627,215 @@ convergence. These arrays are admissible for every \(B\ge1\) and
 This proves the second equivalence.
 \end{proof}
 
-\subsection{Exact coordinate reduction and the rank-one rate}
-\label{app:coordinate-rank-one}
-Under~\eqref{eq:setup}, define \(j\sim k\) when
-\(|\Sigma_{jk}|=1\). If \(\varepsilon\coloneqq\Sigma_{jk}\in\{-1,1\}\),
-independence and centering give
-\[
- 0=\Var(W_j-\varepsilon W_k)
-   =\sum_i\E(\xi_{ij}-\varepsilon\xi_{ik})^2.
-\]
-Each term is nonnegative, so
-\(\xi_{ij}=\varepsilon\xi_{ik}\) almost surely for every \(i\),
-and \(W_j=\varepsilon W_k\). The same zero-variance argument gives
-\(Z_j=\varepsilon Z_k\) almost surely. Reflexivity and symmetry of
-\(\sim\) are immediate; composing these signed identities proves
-transitivity. Thus \(\sim\) is an equivalence relation.
+\subsection{The centrally symmetric lower bound}
+\label{app:symmetric-lower}
+The preceding examples have identity covariance. We now allow the
+correlation gap to shrink and prove Theorem~\ref{opt:symmetric-lower}
+using a centrally symmetric construction. Its maximum and the Gaussian
+maximum have leading components close in law and small independent
+shifts. The Gaussian shift has a larger mean; the density of the
+leading maximum converts this difference into the required probability
+discrepancy. We first bound the approximation and Taylor errors.
 
-Let \(C_1,\ldots,C_q\) be its classes, choose one representative
-\(j_a\in C_a\), and put
-\[
- \bar\xi_i\coloneqq(\xi_{i,j_a})_{a=1}^q,\quad
- \bar W\coloneqq(W_{j_a})_{a=1}^q,\quad
- \bar Z\coloneqq(Z_{j_a})_{a=1}^q,\quad
- \bar\Sigma\coloneqq\Cov(\bar W).
-\]
-For \(j\in C_a\), set \(\varepsilon_j\coloneqq\Sigma_{j,j_a}\).
-The reduced summands retain independence, centering, unit aggregate
-marginal variances, and the envelope \(\delta\). Cancellation of the
-third tensor, if assumed, is retained by coordinate selection.
-Let \(T:\R^q\to\R^p\) be the signed duplication map
-\((Tx)_j\coloneqq\varepsilon_jx_a\) for \(j\in C_a\), and let
-\(P:\R^p\to\R^q\) select the representatives. Then \(PT=I_q\), and
-\[
- W=T\bar W,\qquad Z=T\bar Z\quad\text{a.s.},\qquad
- \Sigma=T\bar\Sigma T^\top,\qquad
- \bar\Sigma=P\Sigma P^\top.
-\]
-The last two identities give equality of covariance ranks.
-Distinct representatives have \(|\bar\Sigma_{ab}|<1\), so the
-reduced correlation gap is positive, with the convention one if \(q=1\).
+\subsubsection{Estimates for the leading maximum}
 
-For a bounded closed rectangle \(A=\prod_{j=1}^p I_j\), its inverse
-image under \(T\) is
-\[
- T^{-1}A=\prod_{a=1}^q
-       \left(\bigcap_{j\in C_a}\varepsilon_jI_j\right),
- \qquad \varepsilon I\coloneqq\{\varepsilon x:x\in I\}.
-\]
-Each factor is a bounded closed interval, possibly empty or a
-singleton. Empty factors give zero discrepancy. Thus
-\(\rh(W,Z)\le\rh(\bar W,\bar Z)\).
-Conversely, for a bounded closed reduced rectangle
-\(B=\prod_{a=1}^qJ_a\), set \(I_j\coloneqq\varepsilon_jJ_a\)
-for every \(j\in C_a\). Then \(T^{-1}A=B\), with \(A\) again bounded
-and closed. This proves the exact identity
+We need a uniform approximation for a maximum of independent
+Rademacher sums, keeping the lattice error explicit. Let
+\(A_n\coloneqq n^{-1/2}\sum_{i=1}^n\eta_i\), where the
+\(\eta_i\) are independent Rademacher signs, and let
+\(A_{n,1},\ldots,A_{n,m}\) be independent copies. Put
+\(\Lambda_m\coloneqq\log(em)\). There are absolute constants
+\(c_0,C>0\) such that, for large \(n\) and
+\(\Lambda_m\le c_0\sqrt n\), the Rademacher-maximum approximation is
 \begin{equation}
- \rh(W,Z)=\rh(\bar W,\bar Z).
- \label{app:coordinate-distance}
+ \sup_x\left|\Pp\{\max_{j\le m}A_{n,j}\le x\}-\Phi(x)^m\right|
+ \le C\left(\frac{\sqrt{\Lambda_m}}{\sqrt n}
+                 +\frac{\Lambda_m^2}{n}\right).
+ \label{sym:eq:rademacher-max}
 \end{equation}
-Open, half-open, or unbounded rectangles have the same supremum by
-increasing approximation with bounded closed intervals, as in
-Section~\ref{sec:smoothing}.
-
-Rank one is equivalent to \(q=1\). In one direction this follows from
-rank preservation. In the other, a positive semidefinite rank-one
-matrix with unit diagonal has the form \(ss^\top\), with every
-\(s_j\in\{-1,1\}\), so all coordinates lie in the same class.
-For the resulting scalar sum \(S\coloneqq\sum_i\eta_i\),
+The first term retains the effect of the lattice. A scalar absolute
+error would accumulate over \(m\) coordinates, so we use the relative
+tail estimate from Lemma~\ref{opt:moderate-tail}. Here
+\(\delta=n^{-1/2}\) and \(\gamma=0\), and the lemma gives
 \[
- \sum_i\E\eta_i^2=1,\qquad
- \sum_i\E|\eta_i|^3\le\delta\sum_i\E\eta_i^2=\delta.
+ \left|\log\frac{\Pp(A_n>x)}{\bar\Phi(x)}\right|
+ \le C\epsilon_n(x),\qquad
+ \epsilon_n(x)\coloneqq\frac{1+x}{\sqrt n}+\frac{x^4}{n},
+ \qquad 0\le x\le an^{1/4},
 \]
-The scalar Berry--Esseen inequality~\cite{Berry1941} bounds its
-distribution-function error by \(C\delta\). Taking one-sided limits
-gives the same bound for strict distribution functions. Subtracting
-at the two endpoints of an interval therefore gives error at most
-\(2C\delta\), including singleton intervals. By
-\eqref{app:coordinate-distance} and the trivial bound by one,
-\(\rh(W,Z)\le C\min\{1,\delta\}\). For observations with envelope
-\(B\), this is \(C\min\{1,B/\sqrt n\}\).
+for a sufficiently small absolute \(a>0\) and all large \(n\).
+Indeed \(n^{-1/2}(1+x)\) satisfies the lemma's condition uniformly
+on this range. Choosing \(a\) small makes the two tails uniformly
+comparable and yields
+\(\left|\Pp(A_n>x)/\bar\Phi(x)-1\right|\le C\epsilon_n(x)\).
 
-To prove the matching lower bound for every \(n\ge1\) and \(B\ge1\),
-take independent scalar observations with law
-\eqref{opt:two-point-law}, replacing \(B_n\) by \(B\), and repeat
-each scalar across coordinates with arbitrary fixed signs. Their
-normalized covariance has rank one and unit diagonal. The scalar sum
-is an affine function of \(N\sim\operatorname{Bin}(n,\pi)\), where
-\(\pi\coloneqq(B^2+1)^{-1}\). Its binomial variance satisfies
-\(v\coloneqq n\pi(1-\pi)\le n/B^2\). Chebyshev's inequality places
-probability at least \(3/4\) in an interval of radius \(2\sqrt v\),
-which contains at most \(4\sqrt v+2\) integers. Hence
+Independence expresses the maximum distribution as a power of the
+scalar distribution function. We consider three threshold ranges.
+For \(x\le1\),
+Berry--Esseen and a fixed upper bound \(r_0<1\) on the two scalar
+distribution functions give an error at most
+\(Cm r_0^{m-1}/\sqrt n\le C/\sqrt n\). For
+\(1<x\le an^{1/4}\), put \(p\coloneqq\Pp(A_n>x)\),
+\(v_0\coloneqq\bar\Phi(x)\), and \(w\coloneqq mv_0\).
+Tail comparability and the mean value theorem give
 \[
- \max_k\Pp(N=k)\ge\frac{3/4}{4\sqrt v+2}
-       \ge c\min\{1,B/\sqrt n\}.
+ |(1-p)^m-(1-v_0)^m|\le C\epsilon_n(x)w e^{-c_*w}.
 \]
-A closed interval shrinking to an atom of this size has Gaussian
-probability tending to zero, so the scalar rectangle distance is at
-least the atom size. The exact reduction transfers this lower bound
-to any dimension at rank one. For \(B=1\), the law is Rademacher,
-which also proves the \(n^{-1/2}\) lattice obstruction stated at the
-start of Section~\ref{opt:section}, for both parities of \(n\).
-Finally, using this scalar law independently in all coordinates gives
-identity covariance and the same lower bound by restricting just one
-coordinate. This is the atom estimate used in the first necessity
-argument of Theorem~\ref{opt:consistency}.
+If \(x\le2\sqrt{\Lambda_m}\), this is bounded by the asserted
+maximum error. Otherwise \(w\le e^{-x^2/4}\), so the error is
+at most \(C\epsilon_n(x)e^{-x^2/4}\le C/\sqrt n\).
+Finally, choose \(c_0<a^2/4\). For \(x>an^{1/4}\), the
+sub-Gaussian tails bound the error by
+\(2m e^{-x^2/2}\le2e^{-a^2\sqrt n/4}=O(n^{-1/2})\).
+This proves~\eqref{sym:eq:rademacher-max}.
+
+The shift comparison requires a threshold where the Gaussian-maximum
+density is of order \(\sqrt{\log m}\), and a global bound on its
+derivative. Let
+\(F_m(x)\coloneqq\Phi(x)^m\). For \(m\ge2\), choose \(u_m\) by
+\(m\bar\Phi(u_m)=1\), and put \(H_*\coloneqq\max_{k\le m}H_k\)
+for independent standard normals. The Gaussian-maximum estimates are,
+as \(m\to\infty\),
+\begin{equation}
+ u_m\sim\sqrt{2\log m},\qquad
+ F_m'(u_m)\sim\frac{\sqrt{2\log m}}e,\qquad
+ \E H_*\sim\sqrt{2\log m},\qquad \E H_*^2=O(\log m).
+ \label{sym:eq:gaussian-max}
+\end{equation}
+The accompanying smoothness bound is
+\begin{equation}
+ \|F_m''\|_\infty\le C\log(em),\qquad m\ge2.
+ \label{sym:eq:gaussian-smoothness}
+\end{equation}
+The normal tail estimates
+\(\bar\Phi(x)\asymp\varphi(x)/(1+x)\) for \(x\ge0\) and
+\(\varphi(x)/\bar\Phi(x)\sim x\) imply the first two assertions,
+using \(F_m'(u_m)=m\varphi(u_m)(1-1/m)^{m-1}\).
+They also give \(H_*/\sqrt{2\log m}\to1\) in probability.
+Integrating \(\Pp(\max_k|H_k|>y)\le\min\{1,2me^{-y^2/2}\}\)
+gives the second-moment bound and uniform integrability needed for
+the mean asymptotic. Finally,
+\[
+ F_m''(x)=m(m-1)\varphi(x)^2\Phi(x)^{m-2}
+             -mx\varphi(x)\Phi(x)^{m-1}.
+\]
+For \(x<0\), the powers of \(\Phi(x)\le1/2\) bound both terms
+by an absolute constant, treating \(m=2,3\) separately. For
+\(0\le x\le2\sqrt{\log(em)}\), put \(w=m\bar\Phi(x)\) and use
+\(\varphi(x)\le C(1+x)\bar\Phi(x)\). The resulting bound is
+\(C(1+x)^2(w+w^2)e^{-c_*w}\le C\log(em)\), again treating
+\(m=2,3\) separately. For larger \(x\), the bound
+\(C(m^2e^{-x^2}+mx e^{-x^2/2})\le C\log(em)\) suffices.
+
+\subsubsection{The symmetric construction and its discrepancy}
+
+We now construct the observations in Theorem~\ref{opt:symmetric-lower},
+modifying the common activation example in~\cite[Proposition~E.1]{FKLZ}.
+Suppress the subscript \(n\): let \(m\to\infty\), put
+\(\ell\coloneqq\log m\), and assume \(\ell^3/n\to0\).
+With \(q\coloneqq\ell/(2n)\) and \(s\coloneqq\sqrt{1-q}\), define
+\[
+ X_{i,jk}\coloneqq s\eta_{ij}+I_i\varepsilon_{ik},\qquad 1\le j,k\le m.
+\]
+Here all \(\eta_{ij},\varepsilon_{ik}\) are independent Rademacher
+signs, and the \(I_i\) are independent Bernoulli\((q)\) variables,
+independent of the signs. All statements concern sufficiently large
+\(n\), so \(0<q<1/2\).
+The rows are independent and identically distributed and bounded by
+\(s+1\le2\). Reversing all signs in one row preserves its law and
+negates that row, so its distribution is centrally symmetric and
+its third-moment tensor vanishes. The covariance matrix is
+\[
+ \Sigma_{(j,k),(j',k')}=(1-q)\ind\{j=j'\}+q\ind\{k=k'\}.
+\]
+For \(m\ge2\) and \(0<q<1/2\), its largest off-diagonal correlation
+is \(1-q\), so the correlation gap is \(q\).
+Its range consists of arrays \((a_j+b_k)_{j,k}\), a space of
+dimension \(2m-1\); both components have positive variance, so this
+is also its rank.
+
+To compare the maxima, separate the always-present sign component
+from the component contributed by the active rows. Define
+\[
+ A_j\coloneqq n^{-1/2}\sum_i\eta_{ij},\qquad
+ T_k\coloneqq\sum_i I_i\varepsilon_{ik},\qquad
+ T_*\coloneqq\max_{k\le m}T_k.
+\]
+For \(W=n^{-1/2}\sum_iX_i\) and a covariance-matched Gaussian
+vector \(Z\), the maximum representations are
+\[
+ \max_{j,k}W_{jk}=s\max_jA_j+T_*/\sqrt n,\qquad
+ \max_{j,k}Z_{jk}\stackrel d=s\max_jG_j+\sqrt q\,H_*,
+\]
+where \(G_j,H_k\) are mutually independent standard normals and
+\(H_*=\max_kH_k\). The Gaussian vector represented here is
+\(Z_{jk}=sG_j+\sqrt q\,H_k\), whose covariance is exactly \(\Sigma\).
+In each maximum representation the two components are independent.
+
+With many columns, one column is likely to be positive on every
+active row, making \(T_*\) equal to the number \(N\coloneqq\sum_iI_i\)
+of active rows. Here \(\E N=\ell/2\), \(\operatorname{Var}(N)\le\ell/2\),
+and \(\E N^2=O(\ell^2)\). Conditional on the active rows, each
+column is positive on all of them with probability \(2^{-N}\),
+independently across columns. Thus, using Chebyshev's bound
+\(\Pp(N>\ell)\le2/\ell\),
+\begin{align*}
+ \Pp(T_*\ne N\mid N=k)&=(1-2^{-k})^m\le e^{-m2^{-k}},\\
+ \Pp(T_*\ne N)&\le\frac2\ell+e^{-m2^{-\ell}}=o(1),
+\end{align*}
+where \(m2^{-\ell}=\exp\{(1-\log2)\ell\}\to\infty\).
+Since \(|T_*|\le N\),
+Cauchy--Schwarz then yields
+\[
+ 0\le\E(N-T_*)\le2(\E N^2)^{1/2}
+                         \Pp(T_*\ne N)^{1/2}=o(\ell).
+\]
+Consequently, \(\E T_*=(1/2+o(1))\ell\) and
+\(\E T_*^2=O(\ell^2)\).
+
+We now replace the leading Rademacher maximum by a Gaussian maximum
+at a cost smaller than the discrepancy we seek. Let \(F_{n,m}\) be
+the distribution function of \(\max_jA_j\), and put
+\(r_n\coloneqq\ell^{3/2}/\sqrt n\). The assumed condition
+\(\ell^3/n\to0\), together with the Rademacher-maximum
+estimate~\eqref{sym:eq:rademacher-max}, gives
+\[
+ \|F_{n,m}-F_m\|_\infty
+ \le C\left(\frac{\sqrt\ell}{\sqrt n}+\frac{\ell^2}{n}\right)
+ =o(r_n).
+\]
+At the threshold \(t_n\coloneqq s u_m\), define the shifts
+\(V_W\coloneqq T_*/(s\sqrt n)\) and \(V_G\coloneqq\sqrt q\,H_*/s\).
+Independence in the two maximum representations gives
+\[
+ \Pp(\max_{j,k}W_{jk}\le t_n)=\E F_m(u_m-V_W)+o(r_n),
+ \qquad
+ \Pp(\max_{j,k}Z_{jk}\le t_n)=\E F_m(u_m-V_G).
+\]
+Since \(s\to1\), the Gaussian moment estimates
+in~\eqref{sym:eq:gaussian-max} and the bounds for \(T_*\) give
+\[
+ \E V_G-\E V_W=(1/2+o(1))\frac\ell{\sqrt n},
+ \qquad \E V_G^2+\E V_W^2=O(\ell^2/n).
+\]
+The active-row maximum contributes mean \((1/2+o(1))\ell/\sqrt n\),
+whereas its Gaussian counterpart contributes \((1+o(1))\ell/\sqrt n\).
+Multiplying their difference by \(F_m'(u_m)\asymp\sqrt\ell\) gives
+the desired order \(r_n\).
+To control the remainder, use the global bound
+\eqref{sym:eq:gaussian-smoothness}, which also covers negative shifts:
+\[
+ \E F_m(u_m-V)=F_m(u_m)-F_m'(u_m)\E V+O(\ell\E V^2).
+\]
+Subtracting the two expansions therefore gives
+\[
+ \Pp(\max_{j,k}W_{jk}\le t_n)-\Pp(\max_{j,k}Z_{jk}\le t_n)
+ =\left(\frac1{e\sqrt2}+o(1)\right)r_n+O(r_n^2).
+\]
+Finally, recall that \(\delta_n=2/\sqrt n\) and
+\(L_n=\log(em^2)=1+2\ell\). Since \(r_n\to0\) and
+\(\delta_nL_n^{3/2}=2(1+2\ell)^{3/2}/\sqrt n\sim2^{5/2}r_n\),
+the displayed lower orthant has discrepancy
+\(\{1/(8e)+o(1)\}\delta_nL_n^{3/2}\), proving Theorem~\ref{opt:symmetric-lower}.
 
 \end{document}
-
