@@ -162,9 +162,9 @@ integrable, then
 \[
  \E f(X,Y)=\E g(X),\qquad g(x)\coloneqq \E f(x,Y),
 \]
-because the joint law is the product of the marginal laws. This is the
-formal content of every argument that is carried out for a fixed value of
-an independent component such as \(V_0\) and then averaged over it. With
+because the joint law is the product of the marginal laws. This justifies
+fixing an independent component such as \(V_0\), carrying out the argument,
+and then averaging over that component. With
 \(\mu_2\) the counting measure, the theorem says that
 \(\E\sum_k\xi_k=\sum_k\E\xi_k\) for nonnegative terms, and for terms with
 \(\sum_k\E|\xi_k|<\infty\). For an orthogonal decomposition
@@ -261,8 +261,8 @@ If \(q=q(t)\) and \(H=H_t\) are differentiable, then
 
 \begin{proof}
 Temporarily give the masks separate parameters \(q_1,\ldots,q_N\).
-Conditioning on all masks except the \(i\)th makes their expectation
-affine in \(q_i\), with derivative equal to the insertion--deletion
+Conditional on all masks except the \(i\)th, the expectation of \(H(B)\)
+is affine in \(q_i\), with derivative equal to the insertion--deletion
 difference in the first display. Differentiating along
 \(q_1=\cdots=q_N=q\) gives the sum. The second formula is the chain
 rule. Independent random arguments may be included by conditioning
@@ -293,7 +293,7 @@ Direct integration gives
  \int_0^1s\nu_t(s)\,ds=\frac{2t}{3(1+t)}.
 \]
 For a twice continuously differentiable scalar function \(g\),
-Taylor's formula and the first identity give
+Taylor's formula and the two moment identities give
 \[
  g(0)-\int_0^1\nu_t(s)g(s)\,ds
  =-\frac{2t}{3(1+t)}g'(0)
@@ -357,7 +357,7 @@ Here \(F\) is the logistic approximation to the indicator of the
 threshold set. The baseline outcome has weight one and probability
 \(F\); face \(\alpha\) has probability \(\pi_\alpha\). These
 probabilities describe the smoothing formula, not the original event.
-One and two differentiations give
+Differentiating once and twice gives
 \begin{align*}
  DF(x)[z]&=-h^{-1}\sum_\alpha F\pi_\alpha(u_\alpha\cdot z),\\
  D^2F(x)[z_1,z_2]
@@ -373,13 +373,13 @@ The next result retains this factor at every derivative order.
 \begin{fact}[Derivatives of the logistic approximation]\label{tb:logistic}
 With the notation above, let \(q\ge1\).
 For directions \(z_1,\ldots,z_q\), with the blocks \(J_1,\ldots,J_{|\mathcal P|}\)
-of \(\mathcal P\) listed in any fixed order,
+of \(\mathcal P\) listed in any fixed order, we have
 \[
  D^qF(x)[z_1,\ldots,z_q]
  =h^{-q}\sum_{\mathcal P\in\Pi_q}(-1)^{|\mathcal P|}|\mathcal P|!
  \sum_{\alpha_1,\ldots,\alpha_{|\mathcal P|}}
  F(x)\prod_{b=1}^{|\mathcal P|}\pi_{\alpha_b}(x)
- \prod_{b=1}^{|\mathcal P|}\prod_{a\in J_b}(u_{\alpha_b}\cdot z_a),
+ \prod_{b=1}^{|\mathcal P|}\prod_{a\in J_b}(u_{\alpha_b}\cdot z_a).
 \]
 Moreover, \(\sum_{\mathcal P\in\Pi_q}|\mathcal P|!\le q!\,2^{q-1}\), and hence
 \[
@@ -394,9 +394,9 @@ Apply Fact~\ref{tb:faa} with \(\phi(\tau)\coloneqq (1+\tau)^{-1}\) and \(g=T\). 
 \(\phi^{(k)}(\tau)=(-1)^kk!\,(1+\tau)^{-k-1}\), and since each \(w_\alpha\) is
 an exponential of an affine function,
 \(D^lT(x)[z_1,\ldots,z_l]=h^{-l}\sum_\alpha w_\alpha(x)\prod_{a\le l}
-(u_\alpha\cdot z_a)\). Substituting, and using
+(u_\alpha\cdot z_a)\). Substituting these expressions and using
 \((1+T)^{-|\mathcal P|-1}\prod_bw_{\alpha_b}=F\prod_b\pi_{\alpha_b}\) and
-\(\sum_b|J_b|=q\), gives the formula. The number
+\(\sum_b|J_b|=q\) gives the formula. The number
 \(\sum_{\mathcal P}|\mathcal P|!\) counts ordered partitions
 \((J_1,\ldots,J_k)\) of \(\{1,\ldots,q\}\). Writing the elements of
 \(J_1\), then of \(J_2\), and so on, in increasing order inside each block,
@@ -444,7 +444,7 @@ particular, for a unit vector \(u\), \(a\in\R\), and \(y\perp u\),
 \end{fact}
 
 \begin{proof}
-Both follow from \(\norm{l+w}^2=\norm l^2+\norm w^2\) and from expanding
+For (a), use \(\norm{l+w}^2=\norm l^2+\norm w^2\); for (b), expand
 \(\norm{x+v}^2\).
 \end{proof}
 
@@ -521,10 +521,10 @@ Then, for \(x\in\R^p\) and \(t>0\),
 
 \begin{proof}
 Write \(Z=\Gamma G\) with \(\Gamma\Gamma^\top=\Sigma\) and \(G\) standard
-Gaussian. By Fact~\ref{tb:taylor}(a), which applies because the difference
-quotients near \(t_0>0\) are bounded by
-\(\norm\nabla f_\infty\norm{\Gamma G}/(2\sqrt{t_0/2})\)
-when the times lie in \([t_0/2,3t_0/2]\), the derivative equals
+Gaussian. For times in \([t_0/2,3t_0/2]\), where \(t_0>0\), the difference
+quotients are bounded by the integrable random variable
+\(\norm\nabla f_\infty\norm{\Gamma G}/(2\sqrt{t_0/2})\).
+Fact~\ref{tb:taylor}(a) therefore gives the derivative as
 \((2\sqrt t)^{-1}\E[G\cdot\Gamma^\top\nabla f(x+\sqrt t\Gamma G)]\).
 Fact~\ref{tb:stein}(a) applied to the function \(g\mapsto
 \Gamma^\top\nabla f(x+\sqrt t\Gamma g)\) turns this into
@@ -573,9 +573,10 @@ two-dimensional standard normal satisfies
 \[
  \Pp\{\mathcal M(G)>s\}\le\min\{1,2(m+m^2)e^{-s^2/2}\}.
 \]
-The projections need not be independent. Integrate
-\(q\int_0^\infty s^{q-1}\Pp\{\mathcal M(G)>s\}\,ds\), splitting
-at \(\sqrt{8\log(em)}\), and use
+The projections need not be independent. The \(q\)th moment of
+\(\mathcal M(G)\) equals
+\(q\int_0^\infty s^{q-1}\Pp\{\mathcal M(G)>s\}\,ds\).
+Split this integral at \(\sqrt{8\log(em)}\) and use
 \((1+x)^q\le2^{q-1}(1+x^q)\).
 \end{proof}
 
@@ -642,7 +643,7 @@ For (a), let \(M=\sum_i\mu_ie_ie_i^\top\) be a spectral decomposition. Then
 \(\tr(\Xi M)=\sum_i\mu_i\,e_i^\top\Xi e_i\) and \(|e_i^\top\Xi e_i|\le
 \norm\Xi_\op\), which gives the inequality. Equality is attained at
 \(\Xi\coloneqq \sum_i\operatorname{sgn}(\mu_i)e_ie_i^\top\). A supremum of linear
-functionals satisfies the triangle inequality. For (b), the norm of a
+functionals satisfies the triangle inequality. For (b), the nuclear norm of a
 positive semidefinite matrix is its trace, so the triangle inequality gives
 \(\norm M_*\le\tr P+\tr N\), and \(\tr N=\tr P-\tr M\).
 \end{proof}
@@ -701,8 +702,8 @@ A function \(f:\R^n\to[0,\infty)\) is \emph{log-concave} if
 when \(f>0\) this says that \(\log f\) is concave. At the endpoints
 \(\alpha=0,1\) the inequality means equality, without a convention
 for \(0^0\). We need the fact that integrating out coordinates
-preserves log-concavity: it will turn a Gaussian convolution into a
-concave log normalizing constant.
+preserves log-concavity: the Gaussian convolution will have a
+concave logarithm.
 
 \begin{fact}[Pr\'ekopa--Leindler inequality and Pr\'ekopa's theorem]
 \label{tb:prekopa}
@@ -763,8 +764,8 @@ where \(\nu\) is the tilted law. The function \(M\) is finite and smooth: on eve
 times \((1+\norm g)^k e^{c\norm g}\varphi_r(g)\), an integrable function.
 Thus differentiation under the integral is valid, and the Hessian of \(\log M\) at \(0\) is the
 covariance \(K\) of \(\nu\). A concave function of class \(C^2\) has a
-negative semidefinite Hessian, so \(K-I_r\preceq0\). The identity is the
-decomposition of the second moment \(\E_\nu gg^\top=K+\mu\mu^\top\).
+negative semidefinite Hessian, so \(K-I_r\preceq0\). The remaining identity
+follows from the second-moment decomposition \(\E_\nu gg^\top=K+\mu\mu^\top\).
 \end{proof}
 
 \usedin{the Gaussian-tilt calculation in
@@ -804,8 +805,8 @@ term explicitly, put \(q_0\coloneqq0\). H\"older's inequality gives
      \left(\sum_{\alpha=0}^m e^{q_\alpha(y)}\right)^s,
  \qquad 0<s<1.
 \]
-Taking logarithms proves the assertion. Composition
-with an affine map preserves concavity.
+Taking logarithms proves this convexity, so the logarithm of the weight
+is concave. Composition with an affine map preserves concavity.
 \end{proof}
 
 \usedin{the application of covariance contraction to every
@@ -835,10 +836,9 @@ of the same set. For \(j\le m\), put \(H_j\coloneqq \{x:u_j\cdot x=a_j\}\) and
 \(F_j\coloneqq Q\cap H_j\). A \emph{face} of \(Q\) is \(Q\) itself or a set
 \(Q\cap\{u\cdot x=c\}\) with \(u\ne0\) and \(Q\subseteq\{u\cdot x\le c\}\).
 A \emph{facet} is a face of dimension \(n-1\), and a \emph{ridge}, when \(n\ge2\), is a face
-of dimension \(n-2\). In the plane the facets are the sides of a polygon
-and the ridges its corners, in \(\R^3\) the facets are the faces of a solid
-and the ridges its edges, and on the line the facets are the endpoints of an
-interval, which has no ridges. We use these standard properties of faces:
+of dimension \(n-2\). In the plane, facets are the sides of a polygon
+and ridges its corners. In \(\R^3\), they are the faces and edges of a solid.
+On the line, facets are the endpoints of an interval, which has no ridges. We use these standard properties of faces:
 the relative interiors of the faces of \(Q\) are pairwise disjoint and cover
 \(Q\); a face of a face of \(Q\) is a face of \(Q\); and a face \(G'\)
 of a face \(G\) with \(G'\ne G\) lies in the relative boundary
@@ -883,8 +883,8 @@ only inequalities active at a point of \(\relint E_{jk}\) are \(j\) and \(k\).
 and \(u_k\cdot x_j\le a_k\) for \(k\ne j\). Let \(x_0\) be an interior point of
 \(Q\), and let \(x_*\) be the point where the segment from \(x_0\) to \(x_j\)
 crosses \(H_j\). For \(k\ne j\), \(u_k\cdot x_*<a_k\), because \(x_*\) is a
-convex combination of \(x_0\), where the inequality is strict, with positive
-weight, and of \(x_j\), where it holds weakly. Hence a neighborhood of
+convex combination with positive weight on \(x_0\), where the inequality
+is strict, and remaining weight on \(x_j\), where it holds weakly. Hence a neighborhood of
 \(x_*\) in \(H_j\) lies in \(F_j\), and \(\dim F_j=n-1\). Two inequalities
 with the same normal cannot both be irredundant, since the one with the
 larger offset is implied by the other. A point of \(Q\) at
@@ -959,10 +959,9 @@ Put \(T\coloneqq \{d:u_j\cdot d\le0\text{ for }j\in J(x)\}\). A vector \(v\) lie
 \(N_Q(x)\) if and only if \(v\cdot d\le0\) for all \(d\in T\): if \(d\in T\)
 then \(x+\varepsilon d\in Q\) for small \(\varepsilon>0\), because the
 inactive inequalities are strict at \(x\), and conversely \(q-x\in T\) for
-\(q\in Q\). By Farkas's lemma, which says that \(v\cdot d\le0\) for all
-\(d\) with \(u_j\cdot d\le0\) (\(j\in J\)) if and only if \(v\) is a
-nonnegative combination of the \(u_j\), \(j\in J\), this is the stated
-cone. For \(x\in\relint F_j\), \(J(x)=\{j\}\), since an index \(k\ne j\) in
+\(q\in Q\). Farkas's lemma identifies the vectors \(v\) satisfying this
+condition as the nonnegative combinations of \(u_j\), \(j\in J(x)\).
+This gives the stated normal cone. For \(x\in\relint F_j\), \(J(x)=\{j\}\), since an index \(k\ne j\) in
 \(J(x)\) would put \(x\) in \(F_j\cap F_k\), a face of \(F_j\) of dimension
 at most \(n-2\), and so in the relative boundary of \(F_j\). For
 \(x\in\relint E_{jk}\), \(J(x)=\{j,k\}\) by Fact~\ref{tb:facets}(d).
@@ -993,7 +992,7 @@ If \(y-x\in N_Q(x)\), the last term is nonnegative, so
 \(\norm{y-q}^2\ge\norm{y-x}^2+\norm{x-q}^2>\norm{y-x}^2\) for \(q\ne x\); thus
 \(x\) is the unique nearest point. Conversely, if \((y-x)\cdot(q-x)>0\) for
 some \(q\in Q\), then moving from \(x\) toward \(q\) decreases the distance
-to \(y\) for small steps, by the displayed identity applied to
+to \(y\) for small steps, by the squared-distance identity applied to
 \(x+\varepsilon(q-x)\in Q\), so \(x\) is not nearest. For existence, choose \(q_0\in Q\). A minimizing sequence may be
 restricted to the closed ball centered at \(y\) with radius
 \(\norm{y-q_0}+1\); it therefore has a convergent subsequence in
@@ -1086,13 +1085,12 @@ counting measure, and the identity is the fundamental theorem of calculus.
 \begin{proof}
 We first prove the formula for a compactly supported \(C^1\) vector
 field. For a unit vector \(e\) and a compactly supported
-\(C^1\) scalar function \(f\), we claim that
+\(C^1\) scalar function \(f\), it suffices to prove
 \begin{equation}
- \int_Q\partial_ef\,dx=\sum_j(e\cdot u_j)\int_{F_j}f\,d\Haus^{n-1},
+ \int_Q\partial_ef\,dx=\sum_j(e\cdot u_j)\int_{F_j}f\,d\Haus^{n-1}.
  \tag{\(*\)}
 \end{equation}
-since the theorem follows by taking \(e=e_i\) and \(f=X_i\) and summing over
-\(i\). Write \(x=w+s e\) with \(w\in e^\perp\). By Fubini's theorem,
+Taking \(e=e_i\) and \(f=X_i\) and summing over \(i\) then gives the theorem. Write \(x=w+s e\) with \(w\in e^\perp\). By Fubini's theorem,
 \(\int_Q\partial_ef\,dx=\int_{e^\perp}\int_{I(w)}\partial_sf(w+s e)\,ds\,dw\),
 where \(I(w)\coloneqq \{s:w+s e\in Q\}\) is a closed interval, possibly empty, a point,
 or unbounded, because \(Q\) is convex. Since \(f\) tends to zero along every
@@ -1135,8 +1133,8 @@ The product rule gives
  \operatorname{div}(\chi_RX)
  =\chi_R\operatorname{div}X+\nabla\chi_R\cdot X.
 \]
-The first term converges in integral by the assumed integrable bound;
-the second has integral in absolute value at most
+Dominated convergence applies to the first term. The absolute value
+of the second term's integral is at most
 \((C/R)\int_{\{\norm x\ge R\}}\norm{X(x)}\,dx\to0\).
 On each of the finitely many facets, polynomial times Gaussian decay
 is integrable, so dominated convergence also applies to the boundary
@@ -1254,8 +1252,8 @@ of the domain \(0<s<\eta(x)\), or \(0<\norm v<\eta(x)\) in the
 normal sector. No derivative of \(\eta\) is involved, and no
 smoothness of \(\eta\) is needed.
 
-(c) For a facet displacement \(v=s u_j\), and for a ridge displacement
-\(v\in L_{jk}\), respectively,
+(c) For either a facet displacement \(v=s u_j\) or a ridge displacement
+\(v\in L_{jk}\), we have
 \[
  |x\cdot v|\le\mathcal M(x)\norm v\le\tfrac14.
 \]
@@ -1319,19 +1317,18 @@ Let \(\psi:\R^n\to\R\) be Lipschitz, so that \(\nabla\psi\) exists almost
 everywhere. For every measurable \(f\ge0\),
 \[
  \int_{\R^n}f\,\norm{\nabla\psi}\,dx=\int_{-\infty}^\infty
- \Bigl(\int_{\{\psi=s\}}f\,d\Haus^{n-1}\Bigr)ds ,
+ \Bigl(\int_{\{\psi=s\}}f\,d\Haus^{n-1}\Bigr)ds.
 \]
 For signed \(f\), the same identity holds if
 \(\int |f|\norm{\nabla\psi}\,dx<\infty\), in particular if
 \(f\in L^1(\R^n)\), since \(\psi\) is Lipschitz.
 \end{fact}
 
-\emph{Source.} \TBc{EG15}, Section~3.4. The proofs use the formula only for
-a maximum of finitely many affine functions with gradients of equal length, and
-for these Fact~\ref{tb:variation} gives a direct proof from Fubini's theorem.
+\emph{Source.} \TBc{EG15}, Section~3.4.
 
-For the finite maximum used here, the coarea formula can be proved
-directly by partitioning the space according to the maximizing face.
+For the finite maximum used here, whose affine pieces have gradients of
+equal length, we prove the coarea formula directly from Fubini's theorem
+by partitioning the space according to the maximizing face.
 This proof also identifies the exceptional levels and explains why the
 independent Gamma shift permits differentiation at every fixed threshold.
 
@@ -1368,7 +1365,7 @@ Lipschitz. If \(S\) is a real random variable with a density, then \(s\mapsto\E\
 (a) Let \(C_j\) be the set where \(j\) is the smallest index attaining the
 maximum defining \(\psi\); the Borel sets \(C_1,\ldots,C_m\) partition
 \(\R^n\). On \(C_j\), \(\psi(g)=\kappa v-b_j\) in the coordinates
-\(g=v u_j+y\), \(y\perp u_j\). By Fact~\ref{tb:fubini}, in these coordinates,
+\(g=v u_j+y\), \(y\perp u_j\). Fact~\ref{tb:fubini} gives
 \[
  \int_{C_j\cap Q_s}f\,dg=\int_{u_j^\perp}\int_{-\infty}^{(s+b_j)/\kappa}
  (f\ind_{C_j})(v u_j+y)\,dv\,dy .
@@ -1394,8 +1391,8 @@ hyperplanes.
 
 (c) The set \(Q_s\) is the polyhedron \(\bigcap_j\{u_j\cdot g\le(s+b_j)/\kappa\}\),
 and \(\psi\) is convex and continuous. If \(\psi(g)=s>\inf\psi\), choose \(g'\)
-with \(\psi(g')<s\); for \(\tau>0\), \(g=(g_\tau+\tau g')/(1+\tau)\) with
-\(g_\tau\coloneqq g+\tau(g-g')\), so convexity gives
+with \(\psi(g')<s\). For \(\tau>0\), put \(g_\tau\coloneqq g+\tau(g-g')\).
+Then \(g=(g_\tau+\tau g')/(1+\tau)\), so convexity gives
 \(\psi(g_\tau)\ge s+\tau(s-\psi(g'))>s\). Thus \(g\) is a limit of points
 outside \(Q_s\) and \(g\in\partial Q_s\); the open set \(\{\psi<s\}\) is
 nonempty and lies in \(Q_s\), which is therefore full-dimensional, and it
