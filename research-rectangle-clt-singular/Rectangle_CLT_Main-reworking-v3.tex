@@ -125,7 +125,7 @@ mean and covariance of the sum:
 The summands need not have the same distribution, and coordinates within
 a summand may be dependent. The unit marginal variances fix the scale
 of each coordinate; they can be obtained by coordinatewise rescaling
-whenever all marginal variances are positive; there is no
+whenever all marginal variances are positive. There is no
 restriction on the rank of \(\Sigma\).
 
 The parameter \(\delta\) bounds the contribution of any one summand
@@ -167,8 +167,8 @@ Under~\eqref{eq:setup},
 \end{theorem}
 
 Theorem~\ref{thm:unrestricted} allows any rank of \(\Sigma\), perfect
-correlations, and singular principal submatrices, and for normalized
-observations it gives the following dependence on the sample size.
+correlations, and singular principal submatrices. For normalized
+observations, it gives the following dependence on the sample size.
 
 \begin{corollary}[Normalized observations]\label{cor:observations}
 Let \(X_1,\ldots,X_n\in\R^p\) be independent and centered. Suppose
@@ -841,7 +841,7 @@ and~\ref{appx-lem:endpoint-gap} give the details.
 
 The comparison along the interpolation path defined in
 Subsection~\ref{sec:outline-path} uses third- and fourth-order
-derivatives of this same function. Abbreviate \(F_{a,h}\) to
+derivatives of the logistic approximation. Abbreviate \(F_{a,h}\) to
 \(F\) when the thresholds and width are fixed, and write
 \[
  w_\alpha(x)\coloneqq e^{(u_\alpha\cdot x-a_\alpha)/h},\qquad
@@ -1224,10 +1224,10 @@ components along each face normal are at most \(2\delta\) in absolute
 value, because \(\gamma\le2\). Thus either the bounded component or
 the Gaussian component satisfies the assumptions of
 Lemma~\ref{lem:concentration} with a variance bounded away from zero.
-Conditioning on the other component,
-Lemma~\ref{lem:concentration} bounds the probability that \(V_{0,t}\)
-lies in a boundary layer formed by shifting all face thresholds
-outward and inward by \(s>0\) by
+Conditioning on the other component and applying
+Lemma~\ref{lem:concentration}, we find that the probability of
+\(V_{0,t}\) lying in a boundary layer formed by shifting all face
+thresholds outward and inward by \(s>0\) is at most
 \[
  C(s+\delta)\sqrt L,
 \]
@@ -1645,7 +1645,7 @@ The integrated third-order contribution in this paper is also of
 order \(\delta\), up to logarithmic factors, and therefore does
 not change the latter power.
 
-The ratio of the two displayed remainder scales is \(h\sqrt L\).
+The ratio of our remainder scale to the first is \(h\sqrt L\).
 The source of this factor is anti-concentration: the logistic
 derivative weights have expected total mass at most \(Ch\sqrt L\),
 because their mixture representation concentrates them near randomly
@@ -2091,7 +2091,7 @@ The following symbols, most of which Section~\ref{sec:smoothing}
 introduces, are used throughout
 Appendices~\ref{sec:main-proof}, \ref{appx-sec:smoothing},
 and~\ref{appx-sec:support}.
-Appendices~\ref{appx-app:concentration}--\ref{app:sharpness-proofs}
+Appendices~\ref{appx-app:concentration}--\ref{app:rank-one}
 use additional local symbols, introduced
 where they occur.
 
@@ -2262,12 +2262,12 @@ The version with \(D_L\) follows from \(E_\kappa\le D_L\).
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:unrestricted}]
-Since \(\kappa\le L\), \(E_\kappa\le D_L\), and \(D_L\ge1\),
+The inequalities \(\kappa\le L\), \(E_\kappa\le D_L\), and \(D_L\ge1\) give
 \[
  L^{3/2}+L\sqrt{\kappa E_\kappa}
  \le 2L^{3/2}\sqrt{D_L}.
 \]
-Apply Theorem~\ref{thm:optimized}.
+The claim therefore follows from Theorem~\ref{thm:optimized}.
 \end{proof}
 
 % Source: zero_skewness_proof
@@ -2328,9 +2328,10 @@ For every \(h\ge\Ac\delta\), this yields
  \left[1+\log_+\frac1{Lh^2}\right]+h\sqrt L\,\kappa\right\}.
  \label{zs:variational}
 \end{equation}
-To balance the comparison error against the endpoint error, choose
-\(h=\Ac\delta\sqrt{LE_\kappa/\kappa}\), the width in
-equation~\eqref{eq:optimal-scale}, again; it is admissible because \(\kappa\le L\) and \(E_\kappa\ge1\).
+To balance the comparison error against the endpoint error, again choose
+\(h=\Ac\delta\sqrt{LE_\kappa/\kappa}\), as in
+equation~\eqref{eq:optimal-scale}. This width is admissible because
+\(\kappa\le L\) and \(E_\kappa\ge1\).
 As before,
 \[
  \log_+\frac1{Lh^2}
@@ -2538,9 +2539,9 @@ in the partition formula before summing the positive weight products.
 For \(\norm v_U\le\varrho\), every \(w_\alpha(x+v)\) and the
 denominator \(1+T(x+v)\) change by factors between
 \(e^{-\varrho/h}\) and \(e^{\varrho/h}\). Comparing each weight
-product with its value at \(x\), and using
+product with its value at \(x\) and using
 \(\sum_{\alpha_1,\ldots,\alpha_k}\prod_b\pi_{\alpha_b}
-=\theta^k\le\theta\), yields
+=\theta^k\le\theta\) yields
 \begin{equation}
  \sup_{\norm v_U\le\varrho}|D^qF(x+v)[z_1,\ldots,z_q]|
  \le C_qh^{-q}F(x)(1-F(x))\prod_{j=1}^q\norm{z_j}_U,
@@ -2880,7 +2881,7 @@ Then
        D^2F(H_i+s\gamma\zeta_i)[\zeta_i^2]\dd s\right].
  \label{appx-an:signed-hessian}
 \end{equation}
-Its two relevant moments are
+The signed density has the two moment identities
 \begin{equation}
  \int_0^1\nu_t(s)\dd s=1,\qquad
  \int_0^1s\nu_t(s)\dd s=\frac{2t}{3\gamma}.
@@ -2979,7 +2980,8 @@ is needed because \(D^4F\) is symmetric.
 
 \begin{proof}
 Expand the segment Hessian in~\eqref{appx-an:signed-hessian}
-about \(H_i\), through its linear term. The two moments give
+about \(H_i\), through its linear term. The moment identities
+\eqref{appx-an:signed-moments} give
 \begin{align*}
  P_a'(t)
  ={}&\frac12\sum_i\E\{(D^2F(U_t)-D^2F(H_i))[\zeta_i^2]\}\\
@@ -3056,8 +3058,7 @@ independent of the summands and masks, and represent the path in law as
  \sigma_t^2=t/2.
  \label{appx-an:gaussian-split}
 \end{equation}
-This leaves its law unchanged. The bounded and Gaussian components
-of \(V_{0,t}\) have equal face variances \(1-t\) and
+The bounded and Gaussian components of \(V_{0,t}\) have equal face variances \(1-t\) and
 \(t/2\), respectively. For \(t\le2/3\), the bounded component
 has face variance at least \(1/3\); for \(t\ge2/3\), the Gaussian
 component does. Apply Lemma~\ref{lem:concentration} to that component
@@ -3074,10 +3075,9 @@ By~\eqref{appx-an:weight-concentration},
 The early estimate bounds all derivatives directly. In the cubic
 term and the \(a_t\) term of \(\mathcal T_{i,t}\), retain the pair
 \((\zeta_i,\zeta_i)\); in the \(b_t\) and \(c_t\) terms, retain
-\((\widetilde\zeta_i,\widetilde\zeta_i)\). The remaining one or two
-directions have face norm at most \(\delta\).
-We retain the repeated pair for the covariance estimate, bounding
-the remaining directions by \(\delta\). For example,~\eqref{appx-an:pair-contraction}
+\((\widetilde\zeta_i,\widetilde\zeta_i)\). We use the repeated pair for the covariance estimate and bound each
+remaining direction by its face norm, which is at most \(\delta\).
+For example,~\eqref{appx-an:pair-contraction}
 gives, for any face indices \(a,b\),
 \[
  \sum_i\E|(u_a\cdot\zeta_i)(u_b\cdot\zeta_i)|\le1.
@@ -3213,7 +3213,7 @@ Since \(N(x+v)=N(x)(1+z_v(x))\),
  \label{eq:weight-translation}
 \end{equation}
 If \(\norm v_U\le b\delta\), then \(|d_j(v)|,|z_v(x)|\le\epsilon\).
-For \(\epsilon<1\), expand
+For \(\epsilon<1\), the binomial series gives
 \[
  (1+z_v)^{-k-1}
  =\sum_{\ell\ge0}(-1)^\ell\binom{k+\ell}{\ell}
@@ -3403,13 +3403,14 @@ to linear functions: the potential
 \(V(g)=\norm g^2/2-\log w(g)\) has \(\nabla^2V\succeq I_r\),
 so \(\operatorname{Var}_{Q_w}(a\cdot G)\le\norm a^2\) for every
 \(a\in\R^r\).
-Writing
+The identity
 \[
  \E_G[(GG^\top-I_r)w(G)]
  =p_w\{\mu_w\mu_w^\top-(I_r-K_w)\}
 \]
-as \(A-B\), with \(A\coloneqq p_w\mu_w\mu_w^\top\) and
-\(B\coloneqq p_w(I_r-K_w)\), we have \(A,B\succeq0\). The triangle
+expresses the matrix on the left as \(A-B\), where
+\(A\coloneqq p_w\mu_w\mu_w^\top\) and \(B\coloneqq p_w(I_r-K_w)\)
+are positive semidefinite. The triangle
 inequality for the nuclear norm gives
 \[
  \norm{A-B}_*\le\tr A+\tr B
@@ -3450,7 +3451,7 @@ therefore makes \(\log N(V_0+\sigma g)\) convex. Thus
 \(\log w_\alpha\) is affine minus a convex function, so
 \(w_\alpha\) is log-concave.
 
-Moreover,
+Summing over the ordered tuples gives the total weight
 \(\bar w(g)\coloneqq \sum_\alpha w_\alpha(g)
 =F(V_0+\sigma g)\theta(V_0+\sigma g)^k\).
 Summing~\eqref{appx-an:matrix-trace-reduction} and then averaging over
@@ -4271,7 +4272,7 @@ the same identity for a standard normal variable shows that
 The same \(O(\delta)\) estimate therefore covers an atom at \(T=0\).
 The integral gives \(J(u)\asymp(1+u)^{-1}\) and
 \(|(\log J)'(u)|\le C/(1+u)\) for \(u\ge0\).
-The error in \eqref{opt:strict-tail} is thus relative
+The relative error in \eqref{opt:strict-tail} is therefore
 \(O(\delta(1+s))\); choosing \(a\) small makes it less than \(1/2\).
 Also \eqref{opt:tilted-scale} gives
 \(\log J(s)-\log J(x)=O(\delta^2x^2)\).
@@ -4315,16 +4316,16 @@ Lemma~\ref{opt:moderate-tail} gives
  s_n\coloneqq\frac{\mu_{3,n}x_n^3}{6\sqrt n}.
  \label{opt:tail-linearization}
 \end{equation}
-Indeed its remainder divided by \(r_n\) is
+Indeed, its remainder divided by \(r_n\) is
 \(O(x_n^{-2}+\delta_nx_n)=o(1)\), and exponentiating introduces only
-\(O(r_n^2)=o(r_n)\). Moreover
+\(O(r_n^2)=o(r_n)\). Moreover,
 \(\liminf s_n/r_n\ge\sqrt2/4\).
 By exact independence, the discrepancy on the common-threshold orthant is
 \[
  \Pp(\max_jW_{n,j}\le x_n)-\Pp(\max_jZ_{n,j}\le x_n)
  =(1-q_n)^{p_n}-(1-t_n)^{p_n}.
 \]
-The mean value theorem makes this
+The mean value theorem expresses this discrepancy as
 \(-p_nt_n(1-u_n)^{p_n-1}\{s_n+o(r_n)\}\), for \(u_n\) between
 \(q_n\) and \(t_n\). Since \(q_n/t_n\to1\), the leading prefactor
 converges to \(e^{-1}\). Thus, more precisely,
@@ -4410,8 +4411,8 @@ Indeed the logarithm of the ratio at step \(\ell\), minus
 arguments of the logarithms stay bounded away from zero in this range.
 For larger admissible \(j\), the upper bound \(\rho^j\) still holds.
 Using \(1-e^{-u}\le u\) and the first two moments of a geometric
-series, the relative difference between the full tail sum and
-\(b_n(k)/(1-\rho)\) is at most
+series, we bound the relative difference between the full tail sum and
+\(b_n(k)/(1-\rho)\) by
 \[
  \frac Cn(1-\rho)\sum_{j\ge0}(j+j^2)\rho^j
        +\rho^{\lfloor n/8\rfloor}
@@ -4647,8 +4648,7 @@ density is of order \(\sqrt{\log m}\), and a global bound on its
 derivative. Let
 \(F_m(x)\coloneqq\Phi(x)^m\). For \(m\ge2\), choose \(u_m\) by
 \(m\bar\Phi(u_m)=1\), and put \(H_*\coloneqq\max_{k\le m}H_k\)
-for independent standard normals. The Gaussian-maximum estimates are,
-as \(m\to\infty\),
+for independent standard normals. The Gaussian maximum satisfies, as \(m\to\infty\),
 \begin{equation}
  u_m\sim\sqrt{2\log m},\qquad
  F_m'(u_m)\sim\frac{\sqrt{2\log m}}e,\qquad
@@ -4830,8 +4830,8 @@ Every term is nonnegative, so \(\xi_i=s\eta_i\) almost surely, where
 \(\eta_i\coloneqq\xi_{i1}\). Thus \(W=sS\), with
 \(S\coloneqq\sum_i\eta_i\), and \(Z\) has the law of \(sG\)
 for \(G\sim N(0,1)\).
-For a bounded closed rectangle \(A=\prod_j I_j\), its inverse image
-on the line is the interval \(\bigcap_j s_j I_j\), possibly empty.
+The inverse image on the line of a bounded closed rectangle
+\(A=\prod_j I_j\) is the interval \(\bigcap_j s_j I_j\), possibly empty.
 Conversely, any bounded closed interval \(I\) is the inverse image
 of \(\prod_j s_j I\). Hence the rectangle error is exactly the
 supremum of the scalar interval discrepancies.
