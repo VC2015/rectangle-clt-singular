@@ -1,7 +1,5 @@
-% Full manuscript: reworking-v4, 31 October 2026.
-% Smooth Slepian initialization, seeded calibrated thinning, unified optimization.
-% Headline statements retained; general leave-one-out identity replaces calibrated-only form.
-% Source: preamble
+% High-dimensional Gaussian approximation over rectangles.
+% Manuscript dated 31 October 2026.
 \documentclass[11pt,letterpaper]{article}
 \usepackage[margin=1.05in]{geometry}
 \usepackage[T1]{fontenc}
@@ -51,7 +49,6 @@
 
 \newcommand{\logp}{\log_+}
 
-% Source: front
 \begin{document}
 \begin{center}
 {\Large High-Dimensional Gaussian Approximations\\[0.15em]
@@ -109,10 +106,10 @@ exactly singular, resulting in arbitrarily small eigenvalues. This motivates the
 Gaussian approximations of this paper, whose quality does not depend on the
 eigenvalues.
 
-Consider a sum of independent centered bounded random vectors in
-\(\R^p\) with marginal unit variance and covariance \(\Sigma\), and let
-\(Z\sim N(0,\Sigma)\) be the ``approximating'' normal vector that shares the
-mean and covariance of the sum:
+Let \(W\) be a sum of independent centered bounded random vectors in
+\(\R^p\). Suppose that each coordinate of the sum has unit variance,
+and let \(Z\) be a centered Gaussian vector with the same covariance.
+Our standing assumptions and notation are
 \begin{equation}
  \begin{gathered}
  W\coloneqq (W_j)_{j=1}^p=\sum_{i=1}^n\xi_i,\qquad
@@ -141,10 +138,8 @@ Here \(L\) encodes the dependence on dimension, while \(D_L\)
 contributes an additional logarithmic factor. Constants denoted by
 \(C\) are absolute unless a subscript records their dependence.
 
-\indent
-Let \(\mathcal R\) denote the class of axis-aligned hyper-rectangles in
-\(\R^p\). We measure the approximation error by the Kolmogorov distance
-between the distributions of the random vectors \(W\) and \(Z\):
+Let \(\mathcal R\) denote the class of axis-aligned rectangles in
+\(\R^p\). We measure the approximation error by the rectangle distance
 \[
  \rh(W,Z)\coloneqq \sup_{A\in\mathcal R}
        |\Pp(W\in A)-\Pp(Z\in A)|.
@@ -216,8 +211,8 @@ the distance \(\rh\), and the resulting bound also holds in the
 original coordinates.
 
 \subsection{Correlation gaps and third-moment cancellation}
-We can obtain a better bound when no two distinct coordinates are nearly
-equal or opposite. To measure this separation, define
+The bound improves when distinct coordinates are separated in
+correlation. We measure this separation by the correlation gap
 \[
  c\coloneqq 1-\max_{j\ne k}|\Sigma_{jk}|,
  \qquad c\coloneqq 1\ \text{when }p=1,
@@ -228,8 +223,11 @@ and put
  \qquad E_\kappa\coloneqq 1+\log_+\frac{\sqrt\kappa}{\delta L}.
  \label{eq:parameters}
 \end{equation}
-A positive gap excludes equal or opposite coordinates; it still permits
-singular covariance matrices.
+A positive gap excludes equal or opposite coordinates, but permits
+singular covariance matrices. The parameter \(\kappa\) selects the
+smaller of two smoothing-error bounds: one holds for every covariance
+matrix, and the other uses the correlation gap. The factor
+\(E_\kappa\) arises when we choose the smoothing width.
 
 \begin{theorem}[Gap-sensitive bound]\label{thm:optimized}
 Under~\eqref{eq:setup},
@@ -267,8 +265,9 @@ symmetric, that is, when \(\xi_i\) and \(-\xi_i\) have the same law. Because it
 involves the mixed third moments \(\E[\xi_{ij}\xi_{ik}\xi_{i\ell}]\), vanishing
 marginal third moments do not suffice for this cancellation.
 
-For a fixed standardized envelope and \(c\ge c_0>0\), the sample-size
-bounds become
+For the normalized observations of Corollary~\ref{cor:observations},
+fix \(B\) and suppose \(c\ge c_0>0\). Substituting
+\(\delta=B/\sqrt n\) into the preceding two theorems gives
 \begin{align}
  \rh(W_n,Z_n)&\le C_{B,c_0}\min\!\left\{1,
  \frac{L^{3/2}}{\sqrt n}
@@ -508,45 +507,46 @@ three- and four-coordinate submatrices. The two papers therefore
 complement each other, and without the local condition the bound loses
 only the factor \(\sqrt{D_L}\).
 
-The bounds of this paper reach the rate \(n^{-1/2}\), up to logarithmic factors, with
-no condition on the covariance matrix, and they lose only the factor
-\(\sqrt{D_L}\) against the sharp bounds under nondegeneracy. They arise
-from an interpolation between the sum and its Gaussian counterpart along
-which the derivative of a smoothed rectangle probability is bounded
-without reference to the eigenvalues of the covariance matrix.
+The proof compares the sum with its Gaussian counterpart along
+covariance-preserving interpolations. We smooth the rectangle indicator,
+then control its derivatives through the aggregate covariance and
+concentration near the rectangle boundary. These estimates avoid
+inverse covariance eigenvalues and remain valid when the covariance
+matrix is singular.
 
-Section~\ref{sec:smoothing} outlines the proof, derives
-the rates from its main estimates, and explains why they reach the
-power \(n^{-1/2}\); it also introduces the
-notation used in the appendices. Section~\ref{opt:section}
-discusses sharpness, and Subsection~\ref{sec:lean-certification}
-records the formal verification in Lean.
-Appendices~\ref{sec:main-proof}--\ref{app:subexponential}
-contain all proofs of the upper bounds. Appendix~\ref{app:sharpness-proofs}
-collects the proofs for Section~\ref{opt:section}: the lower bounds,
-the consistency criteria, and the supporting tail calculations. The
-Supplement~\cite{Supplement} contains earlier versions of these
-arguments and further investigations.
+The next subsection records the scope of formal verification in Lean.
+Section~\ref{sec:smoothing} then outlines the proof, introduces its
+notation, and derives the rates from the main estimates.
+Section~\ref{opt:section} discusses sharpness and open questions.
+Appendices~\ref{sec:main-proof}--\ref{app:subexponential} prove the
+upper bounds, and Appendix~\ref{app:sharpness-proofs} proves the
+lower bounds and consistency criteria. Appendix~\ref{app:rank-one}
+establishes the sharper rate available at rank one. All proofs of the
+results stated here are included in this paper. The
+Supplement~\cite{Supplement} contains additional calculations and
+related investigations.
 
 \subsection{\texorpdfstring{Formal verification in Lean}{Formal verification in Lean}}\label{sec:lean-certification}
-\leavevmode Theorems~\ref{thm:unrestricted}--\ref{opt:consistency} and the two rectangle bounds of
-Corollary~\ref{cor:subexponential} were certified on 20 and 21~October 2026
-in Lean~4.19.0, a proof assistant that checks formal proofs by computer,
-with its library mathlib~v4.19.0, and the proofs use only Lean's standard
-axioms. The Lean sources, the axiom audits, and the reviews that compare the
-formal statements with the manuscript at that time are in the
+Lean is a proof assistant that checks formal mathematical proofs by
+computer. A separate Lean development establishes
+Theorems~\ref{thm:unrestricted}--\ref{opt:consistency} and the two
+rectangle bounds of Corollary~\ref{cor:subexponential}. These proofs
+were checked on 20 and 21~October 2026 using Lean~4.19.0 and
+mathlib~v4.19.0, and use only Lean's standard axioms. The
 \href{https://github.com/VC2015/HDCLTs/blob/bbf1ab99c733a398c181ca8c9f5a243a41f258c6/verification/2026-10-21-companion-results/README.md}{verification record}
-of the repository, for source revision
+contains the Lean sources, axiom audits, and statement-correspondence
+reviews for source revision
 \href{https://github.com/VC2015/HDCLTs/commit/6548201a5c5d9c132a53f1d504f7ef70346aa782}{\texttt{6548201a5c5d}}.
-The certification refers to these Lean proofs, not to the written
-derivations, and does not cover the Supplement as a whole.
-Theorem~\ref{opt:symmetric-lower} has not been certified.
-The revised proofs, including the general leave-one-out identity and
-smooth Gaussian initialization in \texttt{reworking-v4}, have not been
-re-certified. The polyhedral extensions in Corollaries~\ref{cor:polyhedra}
-and~\ref{cor:subexponential} also remain outside this certification.
-Updating the Lean development and checking its correspondence with this
-version of the manuscript remain to be done.
+
+That record certifies the specified results through their Lean proofs.
+A formal verification of the complete interpolation argument presented
+here, including the general leave-one-out identity and smooth Gaussian
+initialization, remains to be carried out. Theorem~\ref{opt:symmetric-lower},
+the polyhedral extensions in Corollaries~\ref{cor:polyhedra}
+and~\ref{cor:subexponential}, and Proposition~\ref{prop:rank-one}
+are also outside the certification. The record therefore does not
+certify every result or written derivation in this paper, or the
+Supplement as a whole.
 
 \section{Outline of the proof}
 \label{sec:smoothing}
@@ -898,7 +898,8 @@ The remainder contains fourth derivatives along segments that insert
 an independent copy of a deleted summand. For the amplitudes below,
 the segments stay within face distance \(4\delta\) of \(Y_t\),
 and the scalar kernels have uniformly bounded absolute integrals.
-The exact kernels and their derivation belong to the appendix.
+Lemma~\ref{appx-an:lem:identity} specifies these kernels and derives
+the identity.
 
 Two choices of amplitude explain the construction. With
 \(\gamma(t)=\sqrt{1-t}\), every summand is retained and the cubic
@@ -906,14 +907,16 @@ coefficient is \(-\sqrt{1-t}/4\); with seed zero this is ordinary
 Slepian interpolation. With \(\gamma(t)=1+t\), the retention
 probability is \((1-t)/(1+t)^2\) and the cubic coefficient is
 \(-t/3\). This is the calibrated Bernoulli--Gaussian interpolation
-of~\cite[Section~4]{AL}. Its third-moment coefficient is stationary
-at zero, weakening the cubic contribution where Gaussian variance is
+of~\cite[Section~4]{AL}. The third-moment multiplier is then
+\(q_3(t)=1-t^2\), whose derivative vanishes at \(t=0\).
+This weakens the cubic contribution where the Gaussian variance is
 smallest. The common evaluation point in~\eqref{eq:path-summary}
 also preserves aggregate cancellation, as in~\cite[Lemma~22]{GaoZhang}.
 In particular, \(K_3=0\) removes the cubic term for either amplitude.
 
-We introduce the seed through smooth expectations, so the smoothing
-error is still evaluated at the original endpoints \(S\) and \(G\).
+We introduce the seed by comparing smooth expectations. This lets us
+bound its cost within \(M_h\), while evaluating the smoothing error
+at \(S\) and \(G\).
 For now suppose \(Lh^2<1/4\), and define
 \begin{equation}
  \varepsilon\coloneqq Lh^2,\qquad
@@ -1049,14 +1052,14 @@ With \(q=3,4\), these factors combine as
 The cubic coefficient supplies the additional \(t/3\).
 Appendix~\ref{appx-sec:support} checks the conditional independence,
 bounded shifts, and scale conditions, and proves the direct estimate
-used to introduce the seed. The matrix and averaged surface estimates
-remain the analytic inputs that make the comparison independent of rank.
+used to introduce the seed. The matrix and averaged surface estimates are what make this
+Gaussian comparison independent of rank.
 
 \subsection{Integration and the choice of smoothing width}
 \label{sec:rate}
 
-The initialization and the seeded comparison now fit together without
-splitting the main time integral. The cubic factor
+We add the initialization cost to the integral of the seeded
+derivative bound over \(0<t<1\). The cubic factor
 \(t/(t+\varepsilon)\) is at most one, while integrating
 \((t+\varepsilon)^{-1}\) gives \(\log(1+1/\varepsilon)\).
 Together with the initialization cost and \(\varepsilon=Lh^2\),
@@ -1088,8 +1091,7 @@ and a logarithm from the seeded comparison. In the general bound,
 the nonlogarithmic fourth-order contribution is absorbed into
 \(C\delta L^{3/2}\), since \(h\ge\delta\). Under aggregate
 zero skew, the cubic term vanishes in both stages and we keep that
-fourth-order contribution explicitly. The cancellation therefore
-requires no new interpolation or separate optimization.
+fourth-order contribution explicitly. We can therefore optimize both bounds with the same smoothing width.
 
 A larger width reduces the fourth-order comparison error but
 increases the endpoint error \(Ch\sqrt L\,\kappa\). Recall
@@ -1100,12 +1102,13 @@ terms suggests
  \label{eq:optimal-scale}
 \end{equation}
 This is admissible because \(\kappa\le L\) and \(E_\kappa\ge1\).
-At this width, both terms have order
+At this width, both terms are bounded by a constant times
 \(\delta L\sqrt{\kappa E_\kappa}\). Adding the cubic contribution
 gives Theorem~\ref{thm:optimized}; omitting it gives
 Theorem~\ref{thm:zero-skew}. The inequalities \(\kappa\le L\)
 and \(E_\kappa\le D_L\) then give Theorem~\ref{thm:unrestricted}.
-Appendix~\ref{sec:main-proof} proves these conclusions in one argument.
+Appendix~\ref{sec:main-proof} verifies this choice of width and
+proves the three theorems.
 
 The construction combines several existing ideas. The logistic
 approximation and its random-threshold representation are described
@@ -1145,7 +1148,6 @@ the estimates here instead use aggregate covariance and bounded
 components along face normals.
 
 
-% Source: sharpness_and_discussion
 \section{Sharpness and remaining questions}\label{opt:section}
 Sharp error rates and the dimension range for uniform convergence are
 distinct questions. At a fixed positive correlation gap, we determine
@@ -1294,16 +1296,18 @@ concerns arbitrary dependence in higher rank. The sharp cancellation
 rate at a fixed positive gap, and the dependence on a shrinking gap,
 remain separate open questions.
 
-The pointwise remainder counterexamples in~\cite{Obstruction} do not
-rule out the conjecture. The rank-one integrated estimate
-in~\cite{IntegratedRemainder} is a separate result; its general form
-remains open.
+The conjecture concerns the total approximation error. Counterexamples
+to pointwise bounds on an interpolation remainder, such as those
+in~\cite{Obstruction}, do not by themselves refute it: integration
+may allow cancellation that a pointwise absolute bound discards.
+An integrated remainder estimate is established at rank one
+in~\cite{IntegratedRemainder}; extending that estimate to general
+rank remains open.
 
 For sub-exponential observations, Appendix~\ref{app:subexponential}
 compares Corollary~\ref{cor:subexponential} with the sharper logarithmic
 rate of~\cite{Local}, which requires local covariance nondegeneracy.
 
-% Source: references
 \begin{thebibliography}{99}
 \setlength{\itemsep}{3pt}
 \phantomsection
@@ -1549,9 +1553,9 @@ smooth initialization and the seeded derivative estimate. The latter
 uses a matrix estimate established in
 Subsection~\ref{appx-an:sec:matrix}; that estimate in turn uses the
 Gaussian surface estimate in Subsection~\ref{appx-an:sec:surface}.
-These two supporting arguments are placed last so that their purpose
-is visible before their proofs. Appendix~\ref{app:subexponential}
-then extends the bounded-summand results by truncation and transfers
+Together, the matrix and surface estimates control the Gaussian
+derivative terms without a factor depending on rank.
+Appendix~\ref{app:subexponential} extends the bounded-summand results by truncation and transfers
 the resulting bounds to polyhedra. Appendix~\ref{app:sharpness-proofs}
 collects the proofs for Section~\ref{opt:section}. A uniform scalar
 tail estimate gives the skewed lower bound, and a Rademacher tail
@@ -1634,15 +1638,15 @@ dependence. The letter \(c\) alone is the correlation gap.\\
 \end{longtable}
 \endgroup
 
-% Source: unified_seeded_integration
 \section{\texorpdfstring{Proofs of Proposition~\ref{prop:moving-cutoff} and the theorems}{Proofs of Proposition 2 and the theorems}}\label{sec:main-proof}
-We integrate the initialization and seeded estimates once, keeping
-the cubic contribution separate. The same calculation then gives
-the general and zero-skew bounds. The inputs are
+The upper bounds follow by adding the initialization cost to the
+integrated seeded estimate, then balancing this comparison error
+against the smoothing error. Keeping the cubic contribution separate
+gives the bound under third-moment cancellation as well. The inputs are
 Proposition~\ref{an:prop:derivative} and Lemma~\ref{lem:endpoint},
 proved in Appendices~\ref{appx-sec:support} and~\ref{appx-sec:smoothing}.
-Subsection~\ref{app:polyhedral-transfer} retains the linear reduction
-from polyhedra to rectangles.
+Subsection~\ref{app:polyhedral-transfer} then transfers the rectangle
+bounds to polyhedra by a linear map.
 
 \begin{proof}[Proof of Proposition~\ref{prop:moving-cutoff}]
 First suppose \(Lh^2<1/4\), and choose
@@ -1798,7 +1802,6 @@ probabilities unchanged; if \(a_\alpha<0\), both probabilities
 are zero. The corollary applies to the remaining inequalities when
 they satisfy its stated conditions.
 
-% Source: smoothing_proofs
 \section{\texorpdfstring{The logistic approximation: proof of Lemma~\ref{lem:endpoint}}{The logistic approximation: proof of Lemma 2}}\label{appx-sec:smoothing}
 
 We work throughout in \(\R^r\), with the \(m=2p\) unit face normals,
@@ -1823,7 +1826,8 @@ below and in Appendix~\ref{appx-sec:support}.
 
 \subsection{\texorpdfstring{Mixture and derivative formulas}{Mixture and derivative formulas}}\label{appx-sec:mixture}
 
-Fix \(a\in\R^m\) and \(h>0\), and recall
+Fix \(a\in\R^m\) and \(h>0\). To differentiate the logistic
+approximation, write its unnormalized face weights and their sum as
 \[
  w_\alpha(x)=e^{(u_\alpha\cdot x-a_\alpha)/h},\qquad
  T=\sum_{\alpha=1}^m w_\alpha,\qquad
@@ -2127,7 +2131,8 @@ and fourth-order remainder. We first record their common covariance
 and concentration inputs, then derive the leave-one-out identity for
 both amplitudes. Subsection~\ref{appx-an:sec:initialization} proves the
 direct estimate and the cost of initialization. Subsection~\ref{appx-an:sec:restoration}
-retains the paired-derivative lemma and applies it to the seeded path.
+moves a repeated pair of derivatives onto the Gaussian density and
+applies the resulting bound to the seeded path.
 The matrix and surface estimates in Subsections~\ref{appx-an:sec:matrix}
 and~\ref{appx-an:sec:surface} supply its analytic inputs. The face
 family has \(m=2p\) members; estimates for subsystems follow by
@@ -2173,12 +2178,10 @@ Bounding the other directions by \(\delta\) will therefore cost
 derivative. The same second-moment bound will later control coefficient
 matrices in operator norm.
 
-The second ingredient is a bound on boundary probabilities. Fix a
-positive absolute constant \(C_0\), large enough for the applications
-below. With the
-threshold sets \(A_a\) and their enlargements already defined in
-Subsection~\ref{sec:outline-smoothing}, we call \(V_0\) a
-\emph{concentrated base} if
+The second ingredient controls the probability of lying near any
+boundary formed by the face inequalities. Fix a positive absolute
+constant \(C_0\), large enough for the applications below. We call
+a random vector \(V_0\) a \emph{concentrated base} if
 \begin{equation}
  \Pp\{V_0\in A_a^s\setminus A_a^{-s}\}
  \le C_0(s+\delta)\sqrt L,
@@ -2369,7 +2372,9 @@ cubic coefficient is
 \(- (1-\lambda)\sqrt{1-t}/4-\lambda t/3\).
 Moreover, \(-1/2\le\eta_t\le1\) and \(\gamma_\lambda\le2\),
 so the same bounded-kernel and bounded-shift conclusions hold.
-The proof uses only the two endpoints of this family.
+The intermediate amplitudes illustrate the scope of the identity;
+the derivative estimates below use its Slepian and calibrated-thinning
+endpoints.
 
 \subsection{Direct derivatives and smooth initialization}
 \label{appx-an:sec:initialization}
@@ -2377,7 +2382,8 @@ The proof uses only the two endpoints of this family.
 We first prove~\eqref{eq:direct-initialization}. Along
 \(T_v=\sqrt{1-v}\,S+\sqrt v\,G\), the bounded and Gaussian
 components have equal face variances \(1-v\) and \(v\), respectively.
-One is at least \(1/2\). The bounded component has summand face
+At least one of these variances is \(1/2\) or larger. The bounded
+component has summand face
 norm at most \(\delta\), so Lemma~\ref{appx-lem:envelope}, applied
 to that component and conditional on the other, gives
 \begin{equation}
@@ -2410,7 +2416,9 @@ For each direction pattern of order \(q=3,4\), we therefore obtain
  &\le C\delta^{q-2}h^{1-q}\sqrt L,
  \end{aligned}
 \]
-where \(\zeta_i\) denotes whichever copy supplies the retained pair.
+where \(\zeta_i\) denotes whichever copy supplies the retained pair,
+and the \(z_{i,a}\) are the remaining copy directions in that tensor.
+For the cubic contraction, the shift is zero.
 The uniformly bounded integrals of the Slepian kernels now prove
 \eqref{eq:direct-initialization}. This is the covariance summation
 of~\cite[Lemma~4.1]{AL}, with the logistic envelope supplying a
@@ -2454,7 +2462,8 @@ that, for every integer \(k\ge1\),
 \end{equation}
 The sum is over ordered face tuples, \(C_1\ge1\) is absolute,
 and \(\norm{\cdot}_*\) denotes the nuclear norm, the sum of singular
-values. The next lemma brings derivatives at different nearby points
+values. We also use \(\norm{\cdot}_\op\) for the operator norm,
+the largest singular value. The next lemma brings derivatives at different nearby points
 to the common base where this estimate applies. Its auxiliary vectors \(Z_i,Z_{i,a}\) are unrelated to the
 Gaussian target \(Z\).
 
@@ -2871,8 +2880,11 @@ shift. Uniform bounds on Gaussian integrals over the finitely many
 supporting hyperplanes justify differentiation under the mixture
 average. The independent, absolutely continuous shift \(-h\log T_\ell\)
 avoids the exceptional levels, including those at which a target
-polyhedron is lower dimensional. Lemma~\ref{appx-an:lem:surface}
-therefore gives
+polyhedron is lower dimensional. Write \(\surf(P)\) for the signed
+integral of \(H_2\) against Gaussian surface measure on
+\(\partial P\), with each facet counted once. Its precise definition
+and bound are given in Subsection~\ref{appx-an:sec:surface}.
+Lemma~\ref{appx-an:lem:surface} gives
 \begin{align*}
  \left|\E_{V_0,G}[H_2(G)F(U)\theta(U)^k]\right|
  &\le\frac{2^kh}{k\sigma}
@@ -2896,7 +2908,7 @@ The trace term in Lemma~\ref{appx-an:lem:matrix} becomes a Gaussian
 surface integral over a randomly translated polyhedron. We now show
 that averaging over the concentrated translation gains the factor
 \(\sigma\) needed to cancel the \(\sigma^{-1}\) in that argument.
-We retain the notation
+Recall the signed surface integral used in that reduction:
 \[
  H_2(g)=\norm g^2-r,\qquad
  \surf(P)=\int_{\partial P}H_2(g)\varphi_r(g)\dd\mathcal H^{r-1}(g),
@@ -3131,7 +3143,6 @@ theorem~\cite[Section~2.5]{Folland1999} and
 This is~\eqref{appx-an:surface-bound}.
 \end{proof}
 
-% Source: concentration_proof
 \section{\texorpdfstring{Proof of the anti-concentration inequality of Lemma~\ref{lem:concentration}}{Proof of the anti-concentration inequality of Lemma 1}}\label{appx-app:concentration}
 \label{appx-conc:conditioning}
 
@@ -3139,8 +3150,10 @@ We represent each summand as a random choice between two independent
 copies. Conditional on the copies, its \(m=2p\) face components
 form a translated Rademacher sum. We then apply the anti-concentration
 inequality of O'Donnell, Servedio, and Tan~\cite{OST}, in the form
-recorded in~\cite[Lemma~J.4]{CCKK2022}. This proves the bounded-sum
-estimate of~\cite[Lemma~2.1]{AL} for the face inequalities used here.
+recorded in~\cite[Lemma~J.4]{CCKK2022}. To use that inequality,
+we must first bound the chance that any conditional face variance is
+too small. This yields the bounded-sum estimate of~\cite[Lemma~2.1]{AL}
+for the face inequalities used here.
 
 Use the notation \(V=\sum_iX_i\) of Lemma~\ref{lem:concentration}.
 The bound \(\norm{X_i}_U\le\eta\) controls each face component,
@@ -3224,7 +3237,6 @@ Only positive marginal variances are required; the face components
 may have singular covariance. Condition on the independent shift
 and take the minimum with one to complete the proof.
 
-% Source: subexponential_extension_proof
 \section{\texorpdfstring{Sub-exponential transfer: proof of Corollary~\ref{cor:subexponential}}{Sub-exponential transfer: proof of Corollary 3}}\label{app:subexponential}
 \begin{proof}[Proof of Corollary~\ref{cor:subexponential}]
 We first prove the rectangle bounds by clipping each coordinate,
@@ -3240,8 +3252,10 @@ every scale larger than \(K\) is admissible, and monotone convergence
 allows those scales to decrease to \(K>0\). We use this exponential
 moment directly in the clipping argument.
 
-The unrestricted bound follows from the bound by one, after adjusting its absolute
-constant, when \(b\ge1/16\), so assume \(b<1/16\).
+When \(b\ge1/16\), the unrestricted bound follows from
+\(\rh\le1\) after increasing its absolute constant. We therefore
+assume \(b<1/16\), so the clipped variances will remain bounded
+away from zero.
 
 We choose a clipping level depending on \(\log n\); the dependence
 on \(p\) will enter when we bound the residual sums. With \(T\coloneqq4K\ell\), define coordinatewise
@@ -3446,8 +3460,8 @@ inequalities are deterministic and are treated as in
 Subsection~\ref{app:polyhedral-transfer}.
 \end{proof}
 
-The same proof does not automatically give a third-moment-cancellation
-refinement. Odd coordinatewise clipping preserves central symmetry
+A third-moment-cancellation refinement requires additional control
+of the clipping and transfer errors. Odd coordinatewise clipping preserves central symmetry
 of each summand, but it need not preserve aggregate cancellation
 across different summands. Even under symmetry, the transfer error
 in~\eqref{tail:transfer} still contributes \(bL^{3/2}\).
@@ -3613,8 +3627,9 @@ Taking logarithms and using \eqref{opt:tilt-root} proves
 \subsection{The skewed lower bound and matching rates}
 \label{app:skew-proof}
 We now apply Lemma~\ref{opt:moderate-tail} at a Gaussian maximum
-quantile. Choosing that quantile exactly will keep the product
-calculation accurate even when the proposed lower scale is very small.
+quantile chosen so that the Gaussian orthant probability is exactly
+\(e^{-1}\). This keeps the product calculation accurate even when
+the lower scale \(r_n\) tends to zero rapidly.
 
 \begin{proof}[Proof of Theorem~\ref{opt:skew-lower}]
 Use mutually independent coordinates and rows with the two-point law
@@ -3751,7 +3766,9 @@ Since \((1-\rho)^{-1}=(1+t)/(2t)\), we obtain
  \label{app:rad-tail-sum}
 \end{equation}
 
-Now \(I(t)=t^2/2+t^4/12+O(t^6)\), and Mills' ratio gives
+The quadratic term in \(I(t)\) matches the Gaussian tail exponent;
+its fourth-order term produces the discrepancy. Indeed,
+\(I(t)=t^2/2+t^4/12+O(t^6)\), and Mills' ratio gives
 \(1-\Phi(x)=e^{-x^2/2}(x\sqrt{2\pi})^{-1}\{1+O(x^{-2})\}\).
 Combining this with~\eqref{app:rad-mass}--\eqref{app:rad-tail-sum}
 yields
@@ -3846,10 +3863,13 @@ If \(\delta_nL_n^{3/2}\to0\), then \(t_n\to0\), and the second
 term also tends to zero. This proves sufficiency for arbitrary
 dimension and envelope sequences.
 
-For necessity, if \(\delta_n\) does not tend to zero,
+For necessity, we first use one coordinate to rule out large
+summands. If \(\delta_n\) does not tend to zero,
 \eqref{app:scalar-atom} gives identity-covariance examples with error
 at least \(c\min\{1,\delta_n\}\), so convergence fails along a
-subsequence. It remains to consider \(\delta_n\to0\).
+subsequence. It remains to consider \(\delta_n\to0\). We select a subset of
+coordinates large enough to produce a nonvanishing tail correction,
+but small enough for the uniform tail estimate to apply.
 If \(\delta_nL_n^{3/2}\) does not tend to zero, choose a subsequence
 on which it is at least \(\varepsilon>0\). Then \(p_n\to\infty\), and
 eventually
@@ -3910,9 +3930,11 @@ The preceding examples have identity covariance. We now allow the
 correlation gap to shrink and prove Theorem~\ref{opt:symmetric-lower}
 using a centrally symmetric construction. Its maximum and the Gaussian
 maximum have leading components close in law and small independent
-shifts. The Gaussian shift has a larger mean; the density of the
-leading maximum converts this difference into the required probability
-discrepancy. We first bound the approximation and Taylor errors.
+shifts. The Gaussian shift has a larger mean. Taylor expansion at a threshold
+where the leading maximum has a large density turns this mean difference
+into a probability discrepancy. We first bound the approximation error
+for the leading maximum and its second derivative, which will control
+the Taylor remainder.
 
 \subsubsection{Estimates for the leading maximum}
 
@@ -4006,8 +4028,10 @@ by an absolute constant, treating \(m=2,3\) separately. For
 \subsubsection{The symmetric construction and its discrepancy}
 
 We now construct the observations in Theorem~\ref{opt:symmetric-lower},
-modifying the common activation example in~\cite[Proposition~E.1]{FKLZ}.
-Suppress the subscript \(n\): let \(m\to\infty\), put
+using the common activation mechanism of~\cite[Proposition~E.1]{FKLZ}.
+Each coordinate has a sign component that is always present and a
+second sign component activated by a Bernoulli variable shared across
+the row. Suppress the subscript \(n\): let \(m\to\infty\), put
 \(\ell\coloneqq\log m\), and assume \(\ell^3/n\to0\).
 With \(q\coloneqq\ell/(2n)\) and \(s\coloneqq\sqrt{1-q}\), define
 \[
@@ -4170,7 +4194,9 @@ Continuity of the Gaussian distribution gives the same bound for
 strict half-lines. Subtracting the distribution functions at the two
 endpoints bounds every interval discrepancy by \(2C\delta\).
 The trivial bound by one proves the first assertion, and setting
-\(\delta=B/\sqrt n\) gives the minimax upper bound.
+\(\delta=B/\sqrt n\) gives the minimax upper bound. To match it,
+we construct a scalar sum with a large atom and embed it on the same
+line.
 
 For the lower bound, take i.i.d.\ scalar variables \(Y_i\) equal to
 \(B\) with probability \(\pi\coloneqq(B^2+1)^{-1}\) and to
