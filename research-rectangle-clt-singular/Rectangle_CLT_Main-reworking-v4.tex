@@ -70,22 +70,24 @@ random vectors in \(\R^p\) whose coordinates \(X_{ij}\) are bounded in
 absolute value by a constant~\(B\), and suppose that each coordinate of
 \(W_n\coloneqq n^{-1/2}(X_1+\cdots+X_n)\) has unit variance. Let \(Z_n\) be a
 centered Gaussian vector with the covariance matrix of \(W_n\), and put
-\(L\coloneqq \log(ep)\) and \(\log_+x\coloneqq \max\{0,\log x\}\). The largest difference
+\(L\coloneqq \log(ep)\) and \(\log_+x\coloneqq \max\{0,\log x\}\). The largest absolute difference
 between \(\Pp(W_n\in A)\) and \(\Pp(Z_n\in A)\) over rectangles \(A\) is
 at most
 \[
  \frac{BL^{3/2}}{\sqrt n}\sqrt{1+\log_+\sqrt{n/L}},
 \]
-up to a numerical constant. If, for a fixed \(c_0>0\), no two
-coordinates have correlation larger than \(1-c_0\) in absolute value, the
-bound improves slightly. When \(p\) grows
-polynomially in~\(n\), the two bounds are of order \(n^{-1/2}(\log n)^2\) and
-\(n^{-1/2}(\log n)^{3/2}\), respectively. A further refinement holds if the
+up to a numerical constant. For fixed \(B\) and \(p\asymp n^a\), with
+fixed \(a>0\), this bound has order \(n^{-1/2}(\log n)^2\).
+If, for a fixed \(c_0>0\), no two distinct coordinates have correlation
+larger than \(1-c_0\) in absolute value, the order improves to
+\(n^{-1/2}(\log n)^{3/2}\). A further refinement holds if the
 third moments cancel in aggregate, that is, if
 \(\sum_i\E[X_{ij}X_{ik}X_{i\ell}]=0\) for all coordinates \(j,k,\ell\).
 The factor \(BL^{3/2}/\sqrt n\) cannot be improved in general, so the
-second rate is then optimal and the first is optimal up to the factor
-\((\log n)^{1/2}\).
+fixed-gap rate is optimal in this dimension regime, and the unrestricted
+rate is optimal up to the factor \((\log n)^{1/2}\). Coordinatewise
+truncation extends the bounds to sub-exponential observations, with
+additional logarithmic factors.
 
 \end{abstract}
 
@@ -102,9 +104,8 @@ Gaussian approximation over rectangles provides a common foundation for
 approximating maxima and constructing simultaneous confidence regions, with
 applications to a wide variety of statistical inference problems reviewed in~\cite{CCKK2023}.
 In many of these applications the correlation matrix may be nearly or
-exactly singular, resulting in arbitrarily small eigenvalues. This motivates the
-Gaussian approximations of this paper, whose quality does not depend on the
-eigenvalues.
+exactly singular. We obtain approximation bounds that remain uniform
+as its eigenvalues approach zero.
 
 Let \(W\) be a sum of independent centered bounded random vectors in
 \(\R^p\). Suppose that each coordinate of the sum has unit variance,
@@ -161,9 +162,8 @@ Under~\eqref{eq:setup},
 \end{equation}
 \end{theorem}
 
-Theorem~\ref{thm:unrestricted} allows any rank of \(\Sigma\), perfect
-correlations, and singular principal submatrices. For normalized
-observations, it gives the following dependence on the sample size.
+For normalized observations, Theorem~\ref{thm:unrestricted} gives
+the following dependence on the sample size.
 
 \begin{corollary}[Normalized observations]\label{cor:observations}
 Let \(X_1,\ldots,X_n\in\R^p\) be independent and centered. Suppose
@@ -180,10 +180,8 @@ Let \(X_1,\ldots,X_n\in\R^p\) be independent and centered. Suppose
 
 Corollary~\ref{cor:observations} follows from Theorem~\ref{thm:unrestricted}
 by setting \(\xi_i\coloneqq X_i/\sqrt n\), which has envelope \(\delta=B/\sqrt n\). For
-fixed \(B\) and \(p\) growing polynomially in~\(n\), its bound has
-order \(n^{-1/2}(\log n)^2\), so the power \(n^{-1/2}\) of the
-sample size is reached up to logarithmic factors, however small the
-eigenvalues of \(\Sigma\) are.
+fixed \(B\) and \(p\asymp n^a\), with fixed \(a>0\), its bound has
+order \(n^{-1/2}(\log n)^2\).
 
 The factor \(BL^{3/2}/\sqrt n\) is sharp. For \(B\ge2\), \(p\to\infty\) and
 \(BL^{3/2}/\sqrt n\to0\), Theorem~\ref{opt:skew-lower} gives i.i.d.\ observations
@@ -503,9 +501,11 @@ assumes uniformly positive eigenvalues for principal submatrices of
 order at most four. For bounded observations it gives
 \(C_aBL^{3/2}/\sqrt n\), and \(C_aBL/\sqrt n\) under aggregate
 third-moment cancellation. The present results also cover singular
-three- and four-coordinate submatrices. The two papers therefore
-complement each other, and without the local condition the bound loses
-only the factor \(\sqrt{D_L}\).
+three- and four-coordinate submatrices. For general bounded observations,
+the unrestricted bound here has an additional factor \(\sqrt{D_L}\).
+Under third-moment cancellation, the companion paper's
+\(C_aBL/\sqrt n\) rate is sharper than the unrestricted bound obtained
+here.
 
 The proof compares the sum with its Gaussian counterpart along
 covariance-preserving interpolations. We smooth the rectangle indicator,
@@ -540,7 +540,7 @@ reviews for source revision
 
 That record certifies the specified results through their Lean proofs.
 A formal verification of the complete interpolation argument presented
-here, including the general leave-one-out identity and smooth Gaussian
+here, including the general interpolation identity and smooth Gaussian
 initialization, remains to be carried out. Theorem~\ref{opt:symmetric-lower},
 the polyhedral extensions in Corollaries~\ref{cor:polyhedra}
 and~\ref{cor:subexponential}, and Proposition~\ref{prop:rank-one}
@@ -555,10 +555,11 @@ We compare logistic approximations of rectangle indicators along two
 covariance-preserving interpolations. A short Slepian interpolation first
 introduces a small Gaussian component. We then retain or delete bounded
 summands independently, rescale those retained, and add Gaussian noise
-until only the Gaussian target remains. The initial noise makes one
-Gaussian derivative estimate available throughout this second comparison.
+until only the Gaussian target remains. The initial noise keeps the Gaussian variance positive throughout
+this second comparison, allowing the same Gaussian integration-by-parts
+estimate to be used at every time.
 
-Both interpolations follow from the same leave-one-out identity. It
+Both paths satisfy the same general interpolation identity. It
 places all third derivatives at a common evaluation point, so aggregate
 third moments can cancel before we take absolute values. Its fourth-order
 remainder involves only bounded shifts. We control a pair of derivative
@@ -583,7 +584,7 @@ We use bounded closed rectangles, allowing an interval with its lower
 endpoint above its upper endpoint to make the rectangle empty.
 Each coordinate contributes a lower and an upper inequality, giving
 \(m\coloneqq2p\) inequalities in all. This restriction loses no
-generality: for any possibly unbounded rectangle \(B\), the sets
+generality: for any possibly unbounded closed rectangle \(B\), the sets
 \(B\cap[-M,M]^p\) increase to \(B\).
 Continuity of probability from below therefore extends any uniform
 bound for bounded rectangles to all rectangles.
@@ -781,8 +782,8 @@ Consequently,
 
 To bound the smoothing error without assuming a positive correlation
 gap, let \(\omega_0,\omega_1,\ldots,\omega_m\) be independent
-exponential random variables with mean one. The logistic approximation
-has the exact representation
+exponential random variables with mean one, independent of \(S\) and
+\(G\). The logistic approximation has the exact representation
 \begin{equation}
  \begin{split}
  F_{a,h}(x)&=\Pp_\omega(x\in A_{a,\omega}),\\
@@ -857,18 +858,21 @@ averaged derivative bounds. We retain the individual face components
 until after summing over the observations, so that the covariance
 identity can control two of them.
 
-\subsection{Leave-one-out interpolation and Gaussian initialization}
+\subsection{Calibrated dropout with Slepian regularization}
 \label{sec:outline-path}
 
-We choose the interpolation by asking it to preserve covariance and
-control the evolution of third moments. Let \(\gamma(t)>0\) be a
+We choose the interpolation to preserve covariance and make the
+third-moment contribution small near the bounded endpoint. Let \(\gamma(t)>0\) be a
 differentiable \emph{amplitude} and put \(\varpi(t)\coloneqq(1-t)/\gamma(t)^2\),
 assuming \(\varpi(t)\in[0,1]\). At each time \(0<t<1\), let
 \(\mathbb B_{i,t}\) be independent Bernoulli \emph{masks} with success
 probability \(\varpi(t)\), independent of the summands and \(G\).
 We call \(\varpi(t)\) the \emph{retention probability}.
-A value one retains a summand, and a value zero deletes it. For a \emph{Gaussian
-seed} with variance \(\varepsilon\ge0\), set
+A mask equal to one retains its summand, and a mask equal to zero
+deletes it. This is
+\emph{Bernoulli thinning}~\cite{Renyi1956,SteutelHarn1979}, described
+for point processes in~\cite[Section~5.3]{LastPenrose2017}.
+For a \emph{Gaussian seed} with variance \(\varepsilon\ge0\), set
 \begin{equation}
  Y_t\coloneqq\gamma(t)\sum_i\mathbb B_{i,t}\zeta_i^0
                     +\sqrt{t+\varepsilon}\,G,
@@ -885,11 +889,14 @@ The aggregate third-moment tensor
  K_3\coloneqq\sum_i\E(\zeta_i^0)^{\otimes3}
 \]
 has entries \(\sum_i\E[\zeta_{ij}^0\zeta_{ik}^0\zeta_{i\ell}^0]\).
-Since the summands are centered, the third cumulant of \(Y_t\) is
-\(q_3(t)K_3\), where \(q_3(t)\coloneqq(1-t)\gamma(t)\).
+Since the summands are centered and independent, the third-moment
+tensor of \(Y_t\) is \(q_3(t)K_3\), where
+\(q_3(t)\coloneqq(1-t)\gamma(t)\). Indeed, each retained summand
+contributes the multiplier \(\varpi(t)\gamma(t)^3=(1-t)\gamma(t)\),
+and the independent Gaussian term has zero third moments.
 For a smooth test function \(f\) with bounded derivatives through
 order four, Lemma~\ref{appx-an:lem:identity} gives the exact
-leave-one-out identity
+interpolation identity
 \begin{equation}
  \frac{d}{dt}\E f(Y_t)
  =\frac{q_3'(t)}6\,\E D^3f(Y_t):K_3+R_f(t).
@@ -909,17 +916,20 @@ Two choices of amplitude explain the construction. With
 coefficient is \(-\sqrt{1-t}/4\). With seed zero this is ordinary
 \emph{Slepian interpolation}. With \(\gamma(t)=1+t\), the retention
 probability is \((1-t)/(1+t)^2\) and the cubic coefficient is
-\(-t/3\). This is the \emph{calibrated Bernoulli--Gaussian interpolation}
-of~\cite[Section~4]{AL}. The third-moment multiplier is then
+\(-t/3\). We call this choice \emph{calibrated dropout}, referring
+to the independent Bernoulli masks used in dropout~\cite{Dropout2014}.
+Here each mask acts on a whole summand. With seed zero, this is
+the calibrated Bernoulli--Gaussian interpolation
+defined in~\cite[Section~4]{AL}. The third-moment multiplier is then
 \(q_3(t)=1-t^2\), whose derivative vanishes at \(t=0\).
 This weakens the cubic contribution where the Gaussian variance is
 smallest. The common evaluation point in~\eqref{eq:path-summary}
 also preserves aggregate cancellation, as in~\cite[Lemma~22]{GaoZhang}.
 In particular, \(K_3=0\) removes the cubic term for either amplitude.
 
-We introduce the seed by comparing smooth expectations. This lets us
-bound its cost within \(M_h\), while evaluating the smoothing error
-at \(S\) and \(G\).
+We introduce the seed by comparing smooth expectations, so its
+contribution is included in \(M_h\). The smoothing error is still
+evaluated at the original endpoints \(S\) and \(G\).
 For now suppose \(Lh^2<1/4\), and define
 \begin{equation}
  \varepsilon\coloneqq Lh^2,\qquad
@@ -929,8 +939,16 @@ For now suppose \(Lh^2<1/4\), and define
  \label{eq:seed-initialization}
 \end{equation}
 The short Slepian path \(0\le v\le v_\varepsilon\) connects \(S\)
-to \((S+\sqrt\varepsilon G)/c_\varepsilon\). The main comparison
-then uses
+to \((S+\sqrt\varepsilon G)/c_\varepsilon\). We call this operation
+\emph{Slepian regularization}. The Gaussian interpolation is discussed
+in~\cite[Section~6]{Nourdin2012}. Under the time change
+\(v=1-e^{-2s}\), the path becomes
+\(e^{-s}S+\sqrt{1-e^{-2s}}\,G\), so the same operation is
+\emph{Ornstein--Uhlenbeck regularization} at time
+\(s_\varepsilon\coloneqq\tfrac12\log(1+\varepsilon)\), by
+Mehler's formula~\cite[Theorem~4.12]{Nourdin2012}.
+
+The main comparison uses
 \begin{equation}
  Y_t\coloneqq(1+t)\sum_i\mathbb B_{i,t}\zeta_i^0
                     +\sqrt{t+\varepsilon}\,G,
@@ -938,7 +956,8 @@ then uses
  \qquad \varpi(t)=\frac{1-t}{(1+t)^2}.
  \label{eq:path}
 \end{equation}
-Its starting law is exactly that of \(T_{v_\varepsilon}\), and
+The law of \(U_t\) is the Slepian regularization of the corresponding
+unseeded calibrated path. Its starting law is that of \(T_{v_\varepsilon}\), and
 its endpoint law is that of \(G\). Indeed, the retained sum has
 covariance \((1-t)I_r\) and tends to zero in mean square as
 \(t\uparrow1\). Write
@@ -946,26 +965,29 @@ covariance \((1-t)I_r\) and tends to zero in mean square as
  P_a(t)\coloneqq\E F_{a,h}(U_t),\qquad
  I_h\coloneqq\sup_a|\E F_{a,h}(S)-\E F_{a,h}(T_{v_\varepsilon})|.
 \]
-The triangle inequality and Lemma~\ref{lem:endpoint} give the roadmap
+The triangle inequality and Lemma~\ref{lem:endpoint} separate the
+probability error into smoothing, initialization, and path comparison:
 \begin{equation}
  \rho\le M_h+Ch\sqrt L\,\kappa,
  \qquad M_h\le I_h+\sup_a\int_0^1|P_a'(t)|\dd t.
  \label{eq:roadmap}
 \end{equation}
-The bounds below justify the endpoint integrations. The seed scale
-\(Lh^2\) is chosen so that the direct fourth-order estimate
-\(\delta^2\sqrt L/h^3\) agrees with the Gaussian estimate
-\(\delta^2L^{3/2}/(h\varepsilon)\). Its introduction and subsequent
-use can therefore be controlled at the same scale.
+The bounds below justify integration up to both endpoints. To choose
+the seed, compare the direct fourth-order bound
+\(\delta^2\sqrt L/h^3\) with the Gaussian bound at \(t=0\),
+\(\delta^2L^{3/2}/(h\varepsilon)\). Equating these expressions gives
+\(\varepsilon=Lh^2\), the value in~\eqref{eq:seed-initialization}.
+This choice lets the Gaussian estimate apply from the start of the
+main comparison while keeping the initialization error at the required
+order.
 
 \subsection{Derivative estimates with a Gaussian seed}
 \label{sec:outline-seeded}
 
-The derivative estimate has two ingredients with distinct roles.
 During initialization we bound the logistic derivatives directly.
 Along the seeded path, two Gaussian integrations by parts reduce
-their order by two. In both arguments we retain a repeated pair of
-summand directions until applying the covariance identity. For this
+their order by two. In both arguments we keep two direction factors from the same
+summand together until we apply the covariance identity. For this
 calculation, let \(\zeta_i\) be independent copies of \(\zeta_i^0\),
 independent of the interpolation variables. For unit face normals
 \(u,w\), the covariance identity and Cauchy--Schwarz give
@@ -974,9 +996,10 @@ independent of the interpolation variables. For unit face normals
  \le\left(\sum_i\E(u\cdot\zeta_i)^2\right)^{1/2}
       \left(\sum_i\E(w\cdot\zeta_i)^2\right)^{1/2}=1.
 \]
-Thus a third derivative costs one remaining factor \(\delta\),
-and a fourth derivative costs two. The logistic weights supply the
-additional averaged factor \(h\sqrt L\).
+After this summation controls two direction factors, the envelope
+bounds the remaining factors by \(\delta\) for a third derivative
+and by \(\delta^2\) for a fourth derivative. Averaging the logistic
+weights contributes the factor \(h\sqrt L\).
 
 To state both estimates, write the Slepian identity as
 \[
@@ -1055,8 +1078,8 @@ With \(q=3,4\), these factors combine as
 The cubic coefficient supplies the additional \(t/3\).
 Appendix~\ref{appx-sec:support} checks the conditional independence,
 bounded shifts, and scale conditions, and proves the direct estimate
-used to introduce the seed. The matrix and averaged surface estimates are what make this
-Gaussian comparison independent of rank.
+used to introduce the seed. The matrix and averaged surface estimates bound these terms without
+a factor depending on \(r\).
 
 \subsection{Integration and the choice of smoothing width}
 \label{sec:rate}
@@ -1093,8 +1116,9 @@ The fourth-order term contains an additive one from initialization
 and a logarithm from the seeded comparison. In the general bound,
 the nonlogarithmic fourth-order contribution is absorbed into
 \(C\delta L^{3/2}\), since \(h\ge\delta\). Under aggregate
-zero skew, the cubic term vanishes in both stages and we keep that
-fourth-order contribution explicitly. We can therefore optimize both bounds with the same smoothing width.
+third-moment cancellation, the cubic term vanishes in both stages,
+so we retain the nonlogarithmic fourth-order contribution. Both
+bounds can then be optimized with the same smoothing width.
 
 A larger width reduces the fourth-order comparison error but
 increases the endpoint error \(Ch\sqrt L\,\kappa\). Recall
@@ -1115,8 +1139,8 @@ proves the three theorems.
 
 The construction combines several existing ideas. The logistic
 approximation and its random-threshold representation are described
-in Subsection~\ref{sec:outline-smoothing}, and the calibrated thinning
-comes from~\cite[Section~4]{AL}. The covariance summation and two
+in Subsection~\ref{sec:outline-smoothing}, and the calibrated path
+is defined in~\cite[Section~4]{AL}. The covariance summation and two
 Gaussian integrations by parts follow the approach
 of~\cite[Lemma~23]{GaoZhang}. The matrix estimate uses Gaussian
 covariance contraction from Pr\'ekopa's theorem~\cite[Theorem~6]{Prekopa1973},
@@ -1196,8 +1220,9 @@ gap at least \(c_0\). Here \(W_n=n^{-1/2}\sum_iX_i\), and \(Z_n\)
 is centered Gaussian with the same covariance. Let \(M_n^0(c_0;B,p)\)
 denote the same supremum under \(\sum_i\E X_i^{\otimes3}=0\).
 
-The upper and lower rates match when dimension absorbs the extra
-logarithm in the upper bound. Specifically, if \(p_n\to\infty\),
+The upper and lower rates match when \(\log(ep_n)\) is at least
+of the order of the additional logarithmic factor in the upper bound.
+Specifically, if \(p_n\to\infty\),
 \(B_n\ge2\), \(r_n\to0\), and, for some fixed \(\Lambda>0\),
 \[
  1+\log_+(\sqrt n/B_n)\le\Lambda\log(ep_n),
@@ -1313,7 +1338,7 @@ compares Corollary~\ref{cor:subexponential} with the sharper logarithmic
 rate of~\cite{Local}, which requires local covariance nondegeneracy.
 
 \begin{thebibliography}{99}
-\setlength{\itemsep}{3pt}
+\setlength{\itemsep}{1pt}
 \phantomsection
 \addcontentsline{toc}{section}{References}
 \bibitem{AL}
@@ -1523,6 +1548,45 @@ S. Boyd and L. Vandenberghe (2004).
 Cambridge University Press, Cambridge.
 \url{https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf}.
 
+\bibitem{Nourdin2012}
+I. Nourdin (2012).
+\emph{Lectures on Gaussian approximations with Malliavin calculus}.
+Lecture notes, arXiv:1203.4147v3.
+\url{https://arxiv.org/abs/1203.4147v3}.
+
+\bibitem{Renyi1956}
+A. R\'enyi (1956).
+\emph{A characterization of Poisson processes}.
+Magyar Tud. Akad. Mat. Kutat\'o Int. K\"ozl. \textbf{1}(4), 519--527.
+In Hungarian, with an English summary.
+\url{https://real.mtak.hu/200653/}.
+
+\bibitem{SteutelHarn1979}
+F. W. Steutel and K. van Harn (1979).
+\emph{Discrete analogues of self-decomposability and stability}.
+The Annals of Probability \textbf{7}(5), 893--899.
+\href{https://doi.org/10.1214/aop/1176994950}{doi:10.1214/aop/1176994950}.
+
+\bibitem{LastPenrose2017}
+G. Last and M. Penrose (2017).
+\emph{Lectures on the Poisson Process}.
+Cambridge University Press, Cambridge.
+\href{https://doi.org/10.1017/9781316104477}{doi:10.1017/9781316104477}.
+
+\bibitem{Yellott1977}
+J. I. Yellott, Jr. (1977).
+\emph{The relationship between Luce's Choice Axiom, Thurstone's Theory
+of Comparative Judgment, and the double exponential distribution}.
+Journal of Mathematical Psychology \textbf{15}(2), 109--144.
+\href{https://doi.org/10.1016/0022-2496(77)90026-8}{doi:10.1016/0022-2496(77)90026-8}.
+
+\bibitem{Janson1997}
+S. Janson (1997).
+\emph{Gaussian Hilbert Spaces}.
+Cambridge Tracts in Mathematics \textbf{129}.
+Cambridge University Press, Cambridge.
+\href{https://doi.org/10.1017/CBO9780511526169}{doi:10.1017/CBO9780511526169}.
+
 \end{thebibliography}
 
 \clearpage
@@ -1536,23 +1600,18 @@ Cambridge University Press, Cambridge.
 
 \section*{How to read the appendices}
 \addcontentsline{toc}{section}{How to read the appendices}
-The appendices present the proof from its conclusion back to its
-ingredients. Appendix~\ref{sec:main-proof} first assembles the main
-bounds: it integrates the interpolation estimates proved in
-Appendix~\ref{appx-sec:support} and adds the smoothing error proved in
-Appendix~\ref{appx-sec:smoothing}. Both of those appendices use the
-anti-concentration inequality proved independently in
-Appendix~\ref{appx-app:concentration}. Thus a reader who wants to see
-how the rate emerges can start with Appendix~\ref{sec:main-proof},
-treating these inputs as given. A reader who prefers to establish the
-inputs first can read Appendices~\ref{appx-app:concentration},
+Appendix~\ref{sec:main-proof} derives the main bounds from the smoothing
+error in Appendix~\ref{appx-sec:smoothing} and the interpolation estimates
+in Appendix~\ref{appx-sec:support}, then transfers the rectangle bounds
+to polyhedra. Both inputs use the anti-concentration inequality proved
+independently in Appendix~\ref{appx-app:concentration}. To follow the proof
+in dependency order, read Appendices~\ref{appx-app:concentration},
 \ref{appx-sec:smoothing}, \ref{appx-sec:support}, and
-\ref{sec:main-proof}, in that order. The final subsection of
-Appendix~\ref{sec:main-proof} then transfers the rectangle bounds
-to polyhedra by a linear transformation.
+\ref{sec:main-proof}. To see first how the estimates yield the rates,
+start with Appendix~\ref{sec:main-proof}.
 
 Within Appendix~\ref{appx-sec:support}, the covariance and concentration
-facts and the general leave-one-out identity come first, followed by
+facts and the general interpolation identity come first, followed by
 smooth initialization and the seeded derivative estimate. The latter
 uses a matrix estimate established in
 Subsection~\ref{appx-an:sec:matrix}, which in turn uses the
@@ -1679,7 +1738,7 @@ theorem of calculus applies on the full intervals. Since
        \left[1+\log_+\frac1{Lh^2}\right],
  \label{eq:unified-smooth}
 \end{equation}
-with the first term omitted under aggregate zero skew.
+with the first term omitted under aggregate third-moment cancellation.
 
 For \(Lh^2\ge1/4\), use ordinary Slepian interpolation on
 \(0\le v\le1\). The direct bounds~\eqref{eq:direct-initialization}
@@ -1808,13 +1867,14 @@ they satisfy its stated conditions.
 
 \section{\texorpdfstring{The logistic approximation: proof of Lemma~\ref{lem:endpoint}}{The logistic approximation: proof of Lemma 2}}\label{appx-sec:smoothing}
 
-We work throughout in \(\R^r\), with the \(m=2p\) unit face normals,
+We work in \(\R^r\), with the \(m=2p\) unit face normals,
 threshold sets \(A_a\), and logistic approximation \(F_{a,h}\) from
-Subsection~\ref{sec:outline-smoothing}. We first explain the scope of
-the anti-concentration bound, then derive the mixture and derivative
-formulas, and finally bound the smoothing error at \(S\) and \(G\).
-The derivative formulas and the averaged envelope will also be used
-in Appendix~\ref{appx-sec:support}.
+Subsection~\ref{sec:outline-smoothing}. The mixture representation
+bounds the smoothing error for every covariance matrix. When the
+face normals are separated, the Hessian of the logistic potential
+can give a sharper bound. The derivative formulas and their averaged
+envelope also enter the interpolation estimates in
+Appendix~\ref{appx-sec:support}.
 
 \subsection{Anti-concentration for the face inequalities}
 
@@ -1837,8 +1897,8 @@ approximation, write its unnormalized face weights and their sum as
  T=\sum_{\alpha=1}^m w_\alpha,\qquad
  F=F_{a,h}=(1+T)^{-1},\qquad \pi_\alpha=Fw_\alpha.
 \]
-The \emph{face mass} \(\theta=1-F\) measures the complement of the baseline
-probability. For the curvature argument we also recall the potential
+The \emph{face mass} \(\theta=1-F\) is the total probability assigned
+to the face categories. For the curvature argument we also recall the potential
 \(\Psi=h\log(1+T)\) and write
 \[
  \pi_0\coloneqq F,\qquad
@@ -1871,14 +1931,18 @@ expectation is \((1+T(x))^{-1}\). Equivalently,
  (u_\alpha\cdot x-a_\alpha-h\log\omega_\alpha)\right\}.
 \]
 The variables \(-\log\omega_\beta\) are independent \emph{standard
-Gumbel variables}. The face displacements have logistic marginals and
+Gumbel variables}, giving the classical random-utility representation
+in~\cite[Section~2.6]{Yellott1977}. The face displacements have logistic marginals and
 are dependent through \(\omega_0\). McFadden~\cite[p.~1001]{McFadden1989}
 uses this random-utility representation, and it is stated for softmax
 weights in~\cite[Lemma~14]{GaoZhang}.
 
-We next express derivatives through positive products of face weights
-so that we can separate these weights from random derivative directions.
-Apply Fa\`a di Bruno's higher-order chain rule~\cite{Comtet1974}
+The first derivative is
+\(DF(x)[z]=-h^{-1}F(x)\sum_\alpha\pi_\alpha(x)(u_\alpha\cdot z)\).
+Higher derivatives likewise separate into positive products of face
+weights and products of directional projections, with scalar coefficients
+that may have either sign. To obtain this representation, apply
+Fa\`a di Bruno's higher-order chain rule~\cite{Comtet1974}
 to \(F=f(T)\), where
 \(f^{(k)}(T)=(-1)^k k!(1+T)^{-k-1}\). Each block of a partition
 groups the directions entering one derivative of \(T\), while the
@@ -1911,9 +1975,10 @@ In particular,
 The softmax cumulant formula~\cite[Lemma~13]{GaoZhang} gives the
 same identities through the joint cumulants of a categorical variable.
 
-The all-orders bound discards the factor \(F\theta\), whose expectation
-is small by anti-concentration. To retain it, take absolute values
-in the partition formula before summing the positive weight products.
+For each fixed derivative order, we also need a bound that retains
+\(F\theta\), since anti-concentration makes its expectation small.
+We obtain it by taking absolute values in the partition formula
+before summing the positive weight products.
 For \(\norm v_U\le\varrho\), every \(w_\alpha(x+v)\) and the
 denominator \(1+T(x+v)\) change by factors between
 \(e^{-\varrho/h}\) and \(e^{\varrho/h}\). Comparing each weight
@@ -2132,7 +2197,7 @@ Taking the supremum over \(a\in\R^m\) yields
 
 The direct and Gaussian estimates control the same cubic contraction
 and fourth-order remainder. We first record their common covariance
-and concentration inputs, then derive the leave-one-out identity for
+and concentration inputs, then derive the interpolation identity for
 both amplitudes. Subsection~\ref{appx-an:sec:initialization} proves the
 direct estimate and the cost of initialization. Subsection~\ref{appx-an:sec:restoration}
 moves a repeated pair of derivatives onto the Gaussian density and
@@ -2178,10 +2243,11 @@ conditional Cauchy--Schwarz gives
  \le1.
  \label{appx-an:pair-contraction}
 \end{equation}
-Bounding the other directions by \(\delta\) will therefore cost
-\(\delta\) for a third derivative and \(\delta^2\) for a fourth
-derivative. The same second-moment bound will later control coefficient
-matrices in operator norm.
+After this pair of directions has been summed, bounding the remaining
+face projections by \(\delta\) contributes a factor \(\delta\)
+for a third derivative and \(\delta^2\) for a fourth derivative.
+The same second-moment bound will also control coefficient matrices
+in operator norm.
 
 The second ingredient controls the probability of lying near any
 boundary formed by the face inequalities. Fix a positive absolute
@@ -2215,16 +2281,17 @@ the difference as an average of boundary layers, each controlled by
 an independent Gaussian shift. We require concentration only for the
 unconditional law of \(V_0\).
 
-\subsection{A leave-one-out identity for the interpolation}
+\subsection{Interpolation identity with a Gaussian seed}
 \label{appx-an:sec:path}
 
-The same deleted-summand calculation covers the Slepian initialization
-and the seeded thinning path. We state it for a general amplitude,
-with the retention probability determined by the covariance condition. The
-seed changes the Gaussian variance at the evaluation points but
-does not change its time derivative or the scalar remainder kernels.
+We derive the Slepian and seeded thinning identities by expanding at
+a base with one summand removed. The amplitude can be any function
+satisfying the conditions below, with its retention probability chosen
+to keep the covariance constant. Adding a fixed seed \(\varepsilon\)
+changes the Gaussian variance from \(t\) to \(t+\varepsilon\),
+so its derivative and the scalar remainder kernels are unchanged.
 
-\begin{lemma}[Leave-one-out interpolation with a Gaussian seed]
+\begin{lemma}[Interpolation identity with a Gaussian seed]
 \label{appx-an:lem:identity}
 Let \(\varepsilon\ge0\), let \(\gamma:(0,1)\to(0,\infty)\) be
 continuously differentiable, and suppose
@@ -2424,10 +2491,11 @@ For each direction pattern of order \(q=3,4\), we therefore obtain
 where \(\zeta_i\) denotes whichever copy supplies the retained pair,
 and the \(z_{i,a}\) are the remaining copy directions in that tensor.
 For the cubic contraction, the shift is zero.
-The uniformly bounded integrals of the Slepian kernels now prove
-\eqref{eq:direct-initialization}. This is the covariance summation
-of~\cite[Lemma~4.1]{AL}, with the logistic envelope supplying a
-boundary factor without an eigenvalue condition.
+The uniformly bounded integrals of the Slepian kernels prove
+\eqref{eq:direct-initialization}. The pair summation follows
+\cite[Lemma~4.1]{AL}, and averaging the logistic envelope supplies
+the factor \(h\sqrt L\) without a lower bound on covariance
+eigenvalues.
 
 For \(\varepsilon=Lh^2<1/4\), the initialization interval has length
 \(v_\varepsilon\le Lh^2\). Integrating the Slepian identity and
@@ -2446,11 +2514,12 @@ hold on the entire Slepian interval, as needed for larger widths.
 \subsection{Paired derivatives and the seeded comparison}
 \label{appx-an:sec:restoration}
 
-For the Gaussian estimate we move the repeated pair of derivatives onto
-the Gaussian density. This replaces two factors \(h^{-1}\) by
-\(\sigma^{-2}\). To keep the bound independent of rank, we then
-sum the coefficient matrices using the second-moment bound before
-taking the nuclear norm of the Gaussian average.
+For the Gaussian estimate we integrate twice by parts in the repeated
+summand direction. Differentiating the Gaussian density twice contributes a factor
+\(\sigma^{-2}\), leaving two fewer derivatives of the logistic
+approximation. We then sum the coefficient matrices using the
+second-moment bound before estimating the Gaussian matrix average.
+This order of summation avoids a factor depending on rank.
 
 The following matrix estimate, proved in
 Subsection~\ref{appx-an:sec:matrix}, controls the Gaussian factor
@@ -2511,6 +2580,8 @@ identity~\cite{Stein1981} twice gives
        \tr\{(GG^\top-I_r)Z_iZ_i^\top\}
        D^sF(U+v_i)[Z_{i,1},\ldots,Z_{i,s}]\right].
 \end{align*}
+The entries of \(GG^\top-I_r\) are the \emph{quadratic Wick products}
+of the Gaussian coordinates~\cite[Chapter~3]{Janson1997}.
 Only first and second derivatives remain. With
 \(W_j\coloneqq F\pi_j\) and \(W_{jk}\coloneqq F\pi_j\pi_k\), they are
 \begin{align*}
@@ -2545,10 +2616,11 @@ For \(\eta_b<1\), the binomial series gives
        \sum_{\beta_1,\ldots,\beta_\ell}
        \prod_{q=1}^\ell\pi_{\beta_q}(x)d_{\beta_q}(v).
 \]
-The expansion is useful because every weight depending on \(G\) is
-now evaluated at \(U\), while the translation enters only through
-coefficients independent of \(G\). For fixed face tuples \(\alpha,\beta\), all dependence on the
-summands is now in the symmetric coefficient matrix
+Every weight depending on \(G\) is now evaluated at the common
+point \(U\). The translations and derivative directions enter through
+coefficients that are independent of \(G\) conditional on
+\(\mathcal H\). For fixed face tuples \(\alpha,\beta\), average
+these coefficients into the symmetric matrix
 \[
  \Xi_{\alpha,\beta}\coloneqq \sum_i\E\left[
  Z_iZ_i^\top c_{i,\alpha}
@@ -2641,20 +2713,20 @@ summed fourth derivative is bounded by
 \(C\sigma_t^{-2}\delta^2\widetilde h^{-1}L^{3/2}\).
 Integrating the uniformly bounded calibrated kernels and using
 \(\widetilde h\ge h\) proves the remainder estimate in
-\eqref{eq:seeded-derivatives}. Together with the direct estimates,
-this proves Proposition~\ref{an:prop:derivative}, subject to the
-matrix estimate established next.
+\eqref{eq:seeded-derivatives}. Together with the direct estimates and the matrix estimate proved
+in the next subsection, this establishes
+Proposition~\ref{an:prop:derivative}.
 \end{proof}
 
 \subsection{A matrix estimate for the logistic weights}
 \label{appx-an:sec:matrix}
 
-We now prove~\eqref{appx-an:matrix-bound}. The key observation is that
-tilting a standard Gaussian law by a log-concave weight can only
-decrease its covariance, by Pr\'ekopa's
-theorem~\cite[Theorem~6]{Prekopa1973}. This reduces the nuclear norm to two scalar
-quantities: the squared length of the tilted mean and a signed trace
-term. We control the means relative to a single face and sum the
+To prove~\eqref{appx-an:matrix-bound}, we use the covariance bound for
+a standard Gaussian law tilted by a log-concave weight. Pr\'ekopa's
+theorem~\cite[Theorem~6]{Prekopa1973} implies that this covariance is
+at most \(I_r\) in the positive-semidefinite order. The nuclear norm
+can then be bounded by the squared length of the tilted mean and a
+signed trace term. We control the means relative to a single face and sum the
 weights before estimating the trace. The latter then becomes a
 surface integral, bounded in Subsection~\ref{appx-an:sec:surface}.
 For a related application to convex cells,
@@ -2668,13 +2740,14 @@ Subsection~\ref{appx-an:sec:coords}, so
 \(N=1+\sum_j e^{q_j}\), \(F=N^{-1}\),
 \(\pi_j=e^{q_j}/N\), and \(\theta=1-F\).
 
-For the mean estimate, comparison with the constant weight one would
-introduce the logarithm of the reciprocal Gaussian mass of the weight.
-Instead, we compare it with a weight depending on one normal coordinate.
-The component along that normal is controlled by a second moment.
-The component orthogonal to it is controlled by the logarithm of the
-ratio of reference mass to tilted mass. This refinement of the entropy argument
-in~\cite[Lemma~12]{GaoZhang} avoids a logarithm of the smoothing scale.
+For the mean estimate, we compare each weight with a reference weight
+depending on one normal coordinate. A second moment controls the
+component along that normal, and the logarithm of the ratio of
+reference mass to tilted mass controls the orthogonal component.
+Using the constant weight one as the reference would instead introduce
+the logarithm of the reciprocal tilted mass. The single-face reference
+avoids a logarithm of the smoothing scale and refines the entropy argument
+in~\cite[Lemma~12]{GaoZhang}.
 
 \begin{lemma}[Gaussian mean relative to a single face]
 \label{appx-an:lem:mean}
@@ -2778,14 +2851,11 @@ To check log-concavity, recall that \(F=N^{-1}\) and
  =\sum_{a=1}^k q_{\alpha_a}(V_0+\sigma g)
   -(k+1)\log N(V_0+\sigma g).
 \]
-Each score \(q_j(V_0+\sigma g)\) is affine in \(g\). Since
-\(N=1+\sum_j e^{q_j}\), its logarithm is a log-sum-exp of these
-affine scores and the constant score \(0\), with \(1=e^0\) supplying
-the baseline term. The standard convexity of
-log-sum-exp~\cite[Section~3.1.5, pp.~72--74]{BoydVandenberghe2004}
-therefore makes \(\log N(V_0+\sigma g)\) convex. Thus
-\(\log w_\alpha\) is affine minus a convex function, so
-\(w_\alpha\) is log-concave.
+Each score \(q_j(V_0+\sigma g)\) is affine in \(g\). The function
+\(\log N(V_0+\sigma g)\) is the log-sum-exp of these affine scores
+and the constant score \(0\), so it is convex
+by~\cite[Section~3.1.5, pp.~72--74]{BoydVandenberghe2004}.
+Consequently, \(\log w_\alpha\) is concave.
 
 Summing over the ordered tuples gives the total weight
 \(\bar w(g)\coloneqq \sum_\alpha w_\alpha(g)
@@ -2818,9 +2888,8 @@ The first term has expectation at most \(ChL^{3/2}\): condition on
 \(G\), apply~\eqref{appx-an:weight-concentration} using
 \(\bar w\le F\theta\), and then use \(\E\norm G_U^2\le CL\).
 
-The logarithmic term can be summed before any individual mass is
-bounded. This is essential because an individual \(p_\alpha\) can
-be arbitrarily small. Define the total averaged masses
+An individual \(p_\alpha\) can be arbitrarily small, so we bound the
+sum of logarithmic terms using the total averaged masses
 \[
  \bar p\coloneqq \E_{V_0,G}\bar w(G),\qquad
  \bar b\coloneqq m^{k-1}\sum_j\E_{V_0,G}b_j(G).
@@ -3217,8 +3286,8 @@ ones. Averaging and using~\eqref{appx-eq:conditional-variance} gives
  \le C(s+\eta)\sqrt L+m e^{-c_1/\eta^2}.
  \label{appx-eq:concentration-pairs}
 \end{equation}
-The exceptional probability is harmless in the regime where the
-claimed estimate is informative. If \(\eta\sqrt L\le c_2\),
+The exceptional probability can be absorbed into the
+\(C\eta\sqrt L\) term whenever the claimed estimate is smaller than one. If \(\eta\sqrt L\le c_2\),
 for a sufficiently small absolute
 \(c_2>0\), then \(\log m\le c_1/(2\eta^2)\). The last term is
 at most \(e^{-c_1/(2\eta^2)}\le C\eta\le C\eta\sqrt L\).
@@ -3388,10 +3457,9 @@ Combine this with \eqref{tail:bounded-comparison} and the bound by one
 to prove \eqref{eq:subexponential}.
 
 For the sharper bound we must also check the correlations after
-clipping and standardization. To prove~\eqref{eq:subexponential-gap},
-it suffices to consider
-\(b<\min\{1/16,c_0/4\}\); otherwise its right-hand side is at
-least one after increasing \(C_{c_0}\).
+clipping and standardization. For~\eqref{eq:subexponential-gap}, we may assume
+\(b<\min\{1/16,c_0/4\}\). Outside this range, the bound follows from
+\(\rh\le1\) after increasing \(C_{c_0}\).
 Under the Gaussian coupling, both \(Z_n\) and the standardized clipped
 vector \((Z_{T,j}/\operatorname{sd}(W_{T,j}))_{j\le p}\) have unit coordinate variances, and
 \[
@@ -3533,8 +3601,9 @@ has constants independent of the lattice spacing or the position of
 \end{lemma}
 
 \begin{proof}
-We change measure so that the rare threshold becomes the mean, then
-apply the scalar central limit theorem under that measure. Put
+We change measure so that the threshold \(x\) becomes the mean, and
+then apply the scalar Berry--Esseen inequality under that measure.
+Define the \emph{cumulant-generating function}
 \(K(t)\coloneqq\sum_i\log\E e^{t\eta_i}\). Tilting the law of
 \(\eta_i\) multiplies it by \(e^{t\eta_i}/\E e^{t\eta_i}\), which
 lies between \(e^{-2\delta t}\) and \(e^{2\delta t}\) for \(t\ge0\).
@@ -3622,8 +3691,9 @@ Finally,
  1-\Phi(x)=e^{-x^2/2}J(x).
 \]
 Taking logarithms and using \eqref{opt:tilt-root} proves
-\eqref{opt:moderate-tail-formula}, with the smaller
-\(O(\delta^2x^2)\) term absorbed into its stated remainder.
+\eqref{opt:moderate-tail-formula}. The term \(O(\delta^2x^2)\) is
+absorbed by \(O(\delta(1+x))\) for \(0\le x\le1\), and by
+\(O(\delta^2x^4)\) for \(x\ge1\).
 \end{proof}
 
 
@@ -3935,9 +4005,10 @@ using a centrally symmetric construction. Its maximum and the Gaussian
 maximum have leading components close in law and small independent
 shifts. The Gaussian shift has a larger mean. Taylor expansion at a threshold
 where the leading maximum has a large density turns this mean difference
-into a probability discrepancy. We first bound the approximation error
-for the leading maximum and its second derivative, which will control
-the Taylor remainder.
+into a probability discrepancy. We first bound the error in approximating the leading Rademacher
+maximum by a Gaussian maximum. We also bound the second derivative
+of the Gaussian maximum's distribution function to control the Taylor
+remainder.
 
 \subsubsection{Estimates for the leading maximum}
 
@@ -3947,8 +4018,8 @@ Rademacher sums, keeping the lattice error explicit. Let
 \(\eta_i\) are independent Rademacher signs, and let
 \(A_{n,1},\ldots,A_{n,m}\) be independent copies. Put
 \(\Lambda_m\coloneqq\log(em)\). There are absolute constants
-\(c_0,C>0\) such that, for large \(n\) and
-\(\Lambda_m\le c_0\sqrt n\), the Rademacher-maximum approximation is
+\(a_1,C>0\) such that, for large \(n\) and
+\(\Lambda_m\le a_1\sqrt n\), the Rademacher-maximum approximation is
 \begin{equation}
  \sup_x\left|\Pp\{\max_{j\le m}A_{n,j}\le x\}-\Phi(x)^m\right|
  \le C\left(\frac{\sqrt{\Lambda_m}}{\sqrt n}
@@ -3986,7 +4057,7 @@ Tail comparability and the mean value theorem give
 If \(x\le2\sqrt{\Lambda_m}\), this is bounded by the asserted
 maximum error. Otherwise \(w\le e^{-x^2/4}\), so the error is
 at most \(C\epsilon_n(x)e^{-x^2/4}\le C/\sqrt n\).
-Finally, choose \(c_0<a^2/4\). For \(x>an^{1/4}\), the
+Finally, choose \(a_1<a^2/4\). For \(x>an^{1/4}\), the
 sub-Gaussian tails bound the error by
 \(2m e^{-x^2/2}\le2e^{-a^2\sqrt n/4}=O(n^{-1/2})\).
 This proves~\eqref{sym:eq:rademacher-max}.
