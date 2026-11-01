@@ -6,6 +6,8 @@
 \usepackage{lmodern,microtype}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{longtable}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
 \usepackage[hidelinks,hypertexnames=false,linktoc=all]{hyperref}
 \newcommand{\Ac}{\mathsf A}
 \usepackage{fancyhdr}
@@ -140,7 +142,7 @@ contributes an additional logarithmic factor. Constants denoted by
 \(C\) are absolute unless a subscript records their dependence.
 
 Let \(\mathcal R\) denote the class of axis-aligned rectangles in
-\(\R^p\). We measure the approximation error by the \emph{rectangle distance}
+\(\R^p\). We measure the approximation error by the \emph{Kolmogorov distance over rectangles}
 \[
  \rh(W,Z)\coloneqq \sup_{A\in\mathcal R}
        |\Pp(W\in A)-\Pp(Z\in A)|.
@@ -258,7 +260,7 @@ Then
 \end{equation}
 \end{theorem}
 
-Condition~\eqref{eq:zero-third} holds when each summand is \emph{centrally
+The zero-skewness condition~\eqref{eq:zero-third} holds when each summand is \emph{centrally
 symmetric}, that is, when \(\xi_i\) and \(-\xi_i\) have the same law. Because it
 involves the mixed third moments \(\E[\xi_{ij}\xi_{ik}\xi_{i\ell}]\), vanishing
 marginal third moments do not suffice for this cancellation.
@@ -280,11 +282,11 @@ In polynomial dimension the bound~\eqref{eq:observations-fixed}
 has order \(n^{-1/2}(\log n)^{3/2}\), and it is optimal there, since the
 lower-bound examples of~\cite[Proposition~2.1]{CCK} and
 Theorem~\ref{opt:skew-lower} have independent coordinates and hence
-correlation gap one. These bounds give uniform convergence at a fixed
+correlation gap \(1\). These bounds give uniform convergence at a fixed
 positive gap when \(\log p=o(n^{1/3})\) in general and \(\log p=o(\sqrt n)\)
 under cancellation. Theorem~\ref{opt:consistency} shows that these
 conditions are sharp over fixed-envelope classes, with envelope at least
-two for the first assertion and at least one for the second. In
+two for the first assertion and at least \(1\) for the second. In
 the second case the sharpness concerns only the dimension threshold, and
 below the threshold the error rate in~\eqref{eq:zero-fixed} is not known
 to be sharp.
@@ -521,7 +523,7 @@ Section~\ref{opt:section} discusses sharpness and open questions.
 Appendices~\ref{sec:main-proof}--\ref{app:subexponential} prove the
 upper bounds, and Appendix~\ref{app:sharpness-proofs} proves the
 lower bounds and consistency criteria. Appendix~\ref{app:rank-one}
-establishes the sharper rate available at rank one. All proofs of the
+establishes the sharper rate available at rank \(1\). All proofs of the
 results stated here are included in this paper. The
 Supplement~\cite{Supplement} contains additional calculations and
 related investigations.
@@ -551,18 +553,22 @@ Supplement as a whole.
 \section{Outline of the proof}
 \label{sec:smoothing}
 
-We prove the rectangle bounds by smoothing the indicator, comparing
-the smoothed expectations, and then choosing the smoothing width.
-The comparison must remain uniform when the covariance is singular
-and when individual summands have nonzero third moments. We work
-on the covariance support and use a covariance-preserving path that
-replaces bounded summands by Gaussian noise.
+We prove the rectangle bounds by replacing each rectangle indicator
+by a smooth approximation, comparing its expectations under the sum
+and the Gaussian target, and then choosing the smoothing width.
+This comparison between the smoothed expectations under the sum and
+the Gaussian target must allow singular covariance matrices and nonzero
+third moments, with estimates that do not involve inverse covariance
+eigenvalues. We work on the linear subspace supporting the sum and
+follow a path that preserves covariance while replacing bounded
+summands by Gaussian noise.
 
-The path begins with a small Gaussian component. We introduce this
-component by a short Slepian interpolation, then use calibrated
-Bernoulli thinning for the main comparison. The seed makes Gaussian
-integration by parts available throughout, while the calibration
-controls the third-moment term near the starting point.
+We first add a small independent Gaussian component and normalize
+the result to preserve covariance. We then gradually delete summands
+and rescale those retained while increasing the Gaussian variance.
+The initial Gaussian component permits Gaussian integration by parts
+throughout the main comparison, and our choice of rescaling controls
+the third-moment contribution near the starting point.
 Subsection~\ref{sec:outline-smoothing} gives the smoothing bound,
 Subsections~\ref{sec:outline-path}--\ref{sec:outline-seeded} explain
 the comparison, and Subsection~\ref{sec:rate} derives the rates.
@@ -573,27 +579,18 @@ Appendices~\ref{sec:main-proof}--\ref{appx-app:concentration}.
 \subsection{Support coordinates and the logistic approximation}
 \label{sec:outline-smoothing}
 
-We use bounded closed rectangles, allowing an interval with its lower
-endpoint above its upper endpoint to make the rectangle empty.
-Each coordinate contributes a lower and an upper inequality, giving
-\(m\coloneqq2p\) inequalities in all. This restriction loses no
-generality: for any possibly unbounded closed rectangle \(B\), the sets
-\(B\cap[-M,M]^p\) increase to \(B\).
-Continuity of probability from below therefore extends any uniform
-bound for bounded rectangles to all rectangles.
-Open or half-open intervals can likewise be exhausted by closed
-intervals, so their endpoint conventions cause no additional restriction.
+A bounded closed rectangle is specified by one lower and one upper
+inequality for each coordinate, giving \(m\coloneqq2p\) inequalities
+in all. It suffices to prove uniform bounds for these rectangles,
+since the result for general rectangles follows by monotone approximation.
 
-We now make a single change of coordinates for the proof. Its purpose
-is to represent the Gaussian target by a standard normal vector and
-to obtain a covariance identity that controls the sum of derivative
-contributions. Let \(r\coloneqq\operatorname{rank}(\Sigma)\), and
+We now make a change of coordinates such that the aggregate covariance
+is the identity. Let \(r\coloneqq\operatorname{rank}(\Sigma)\), and
 choose a \(p\times r\) matrix \(\Gamma\) with linearly independent
 columns such that \(\Sigma=\Gamma\Gamma^\top\). Each summand lies
-almost surely in its range: if \(z\) is in the null space of
+almost surely in its range: indeed, if \(z\) is in the null space of
 \(\Sigma\), independence and centering give
-\(\sum_i\E(z^\top\xi_i)^2=z^\top\Sigma z=0\), so every
-nonnegative term vanishes. Define
+\(\sum_i\E(z^\top\xi_i)^2=z^\top\Sigma z=0\). Now define
 \[
  \zeta_i^0\coloneqq(\Gamma^\top\Gamma)^{-1}\Gamma^\top\xi_i,
  \qquad S\coloneqq\sum_i\zeta_i^0,
@@ -606,65 +603,133 @@ where \(G\) is independent of the summands. The vectors
  W=\Gamma S,\qquad Z=\Gamma G,\qquad
  \sum_i\E\zeta_i^0(\zeta_i^0)^\top=I_r.
 \]
-The last identity follows by applying the coordinate map to
-\(\Sigma=\Gamma\Gamma^\top\). We call the coordinates supplied by
-this map the \emph{support coordinates}. The superscript \(0\)
-distinguishes these summands from their independent copies used later.
-From this point on, the smoothing and interpolation arguments take
-place in \(\R^r\).
+We call \(\zeta_i^0\) the \emph{support coordinates} of \(\xi_i\).
+The superscript \(0\) distinguishes these summands from their
+independent copies used later. From this point on, we carry out the
+smoothing and interpolation arguments in \(\R^r\).
 
-To describe the sets in this space, let \(e_j\) be the \(j\)th
-standard basis vector in \(\R^p\), and set
+We first write the rectangle as a system of linear inequalities, then
+express those inequalities in support coordinates. A vector
+\(y\in\R^p\) belongs to \(B=\prod_{j=1}^p[\ell_j,b_j]\) if and
+only if \(\ell_j\le y_j\le b_j\) for every \(j\). Let \(e_j\)
+denote the \(j\)th standard basis vector, and let \(\cdot\) denote
+the usual inner product. Writing both bounds with the inequality
+sign \(\le\), we obtain
+\[
+ y\in B\quad\Longleftrightarrow\quad
+ e_j\cdot y\le b_j\ \text{and}\ (-e_j)\cdot y\le-\ell_j,
+ \qquad j=1,\ldots,p.
+\]
+
+On the covariance support, we write \(y=\Gamma x\), where
+\(x\in\R^r\). Since
+\(e_j\cdot(\Gamma x)=(\Gamma^\top e_j)\cdot x\), these inequalities
+become
+\[
+ \Gamma x\in B\quad\Longleftrightarrow\quad
+ (\Gamma^\top e_j)\cdot x\le b_j\ \text{and}\
+ (-\Gamma^\top e_j)\cdot x\le-\ell_j,
+ \qquad j=1,\ldots,p.
+\]
+We therefore define the \emph{face normals} in support coordinates by
 \[
  u_j\coloneqq\Gamma^\top e_j,\qquad
  u_{p+j}\coloneqq-\Gamma^\top e_j,
  \qquad j=1,\ldots,p.
 \]
-These \(m=2p\) vectors are the \emph{face normals}: they are the
-outward normals of the defining inequalities after the coordinate
-change. They are unit vectors because
-\(\|\Gamma^\top e_j\|^2=\Sigma_{jj}=1\). Repeated normals are
-allowed. For a threshold vector \(a\in\R^m\), define
+There are \(m=2p\) normals, one for each lower or upper inequality.
+
+These vectors are the outward normals of the half-spaces defining
+the transformed rectangle. The original coordinates have variance
+\(1\), so
+\[
+ \|u_j\|^2=\|\Gamma^\top e_j\|^2=e_j^\top\Sigma e_j=1.
+\]
+The opposite normals \(u_{p+j}=-u_j\) also have unit length.
+Different coordinate inequalities may give the same normal, so
+repeated normals are allowed.
+
+Next, we collect the upper and lower thresholds into one vector
+\(a\in\R^m\) by setting
+\[
+ a_j\coloneqq b_j,\qquad a_{p+j}\coloneqq-\ell_j,
+ \qquad j=1,\ldots,p.
+\]
+The transformed inequalities then describe the set
 \[
  A_a\coloneqq\{x\in\R^r:u_\alpha\cdot x\le a_\alpha
-                       \text{ for }\alpha=1,\ldots,m\},
+                   \text{ for every }\alpha=1,\ldots,m\}.
 \]
-where \(\cdot\) denotes the usual inner product. A bounded rectangle
-\(B=\prod_j[\ell_j,b_j]\), including the empty case when some
-\(\ell_j>b_j\), corresponds to
-\(a_j=b_j\) and \(a_{p+j}=-\ell_j\): then
-\(\Gamma x\in B\) if and only if \(x\in A_a\). We allow all
-finite threshold vectors, and inconsistent inequalities give
-\(A_a=\varnothing\). Thus the approximation error to be bounded is
+Thus \(\Gamma x\in B\) if and only if \(x\in A_a\). We allow
+arbitrary finite threshold vectors. If the inequalities are
+inconsistent, the set is empty, as happens when a lower endpoint
+exceeds its upper endpoint.
+
+This correspondence lets us express the original probability
+comparison entirely in support coordinates. Since \(W=\Gamma S\)
+and \(Z=\Gamma G\), we have
+\[
+ \Pp(W\in B)=\Pp(S\in A_a),\qquad
+ \Pp(Z\in B)=\Pp(G\in A_a).
+\]
+As \(B\) ranges over bounded closed rectangles, \(a\) ranges over
+\(\R^m\). The approximation error is therefore
 \[
  \rho\coloneqq\sup_{a\in\R^m}
  |\Pp(S\in A_a)-\Pp(G\in A_a)|=\rh(W,Z).
 \]
-Each set is indexed by its threshold vector, which also specifies
-the smoothing formula when some inequalities are redundant.
 
-The summand bound survives along every face normal, since
-\(u_j\cdot\zeta_i^0=\xi_{ij}\) and
-\(u_{p+j}\cdot\zeta_i^0=-\xi_{ij}\). We measure these components
-together by the \emph{face norm}
+The original coordinate bound \(|\xi_{ij}|\le\delta\) also bounds
+the component of \(\zeta_i^0\) along each face normal. Indeed,
+\(\Gamma\zeta_i^0=\xi_i\) gives
 \[
- \norm x_U\coloneqq\max_{\alpha\le m}|u_\alpha\cdot x|,
- \qquad \norm{\zeta_i^0}_U\le\delta.
+ u_j\cdot\zeta_i^0=\xi_{ij},\qquad
+ u_{p+j}\cdot\zeta_i^0=-\xi_{ij}.
 \]
-This is a norm because \(\norm x_U=\norm{\Gamma x}_\infty\)
-and \(\Gamma\) is injective. Its bound does not depend on how small
-the positive eigenvalues of \(\Sigma\) are. This is the coordinate
-reduction used in~\cite[Section~2.3]{GaoZhang}. The original
-correlation gap \(c\) gives
-\(u_\alpha\cdot u_\beta\le1-c\) for distinct face indices:
-opposite faces have inner product \(-1\), and the other inner
-products are signed correlations. The cancellation assumption
-\eqref{eq:zero-third} is equivalently
-\(\sum_i\E(\zeta_i^0)^{\otimes3}=0\), because the coordinate
-map is invertible on the covariance support.
+Thus each such component is an original coordinate, up to sign.
 
-We now smooth these face inequalities. Let \(\ind_{A_a}\) denote
-the indicator of \(A_a\), equal to one on the set and zero outside.
+To measure all these components together, define the \emph{face norm}
+\[
+ \norm x_U\coloneqq\max_{\alpha\le m}|u_\alpha\cdot x|
+                  =\norm{\Gamma x}_\infty.
+\]
+This is a norm because \(\Gamma\) is injective. The original summand
+bound now gives
+\[
+ \norm{\zeta_i^0}_U=\norm{\xi_i}_\infty\le\delta.
+\]
+In particular, the bound is unaffected by small positive eigenvalues
+of \(\Sigma\). This is the coordinate reduction used
+in~\cite[Section~2.3]{GaoZhang}.
+
+The assumptions for the refined bounds also have direct interpretations
+in these coordinates. Recall that \(c\) is the correlation gap, so
+\(|\Sigma_{jk}|\le1-c\) for \(j\ne k\). For the upper-face normals,
+\[
+ u_j\cdot u_k=e_j^\top\Sigma e_k=\Sigma_{jk}.
+\]
+Reversing a normal changes the sign of the inner product.
+Consequently, normals from different coordinates have inner product
+at most \(1-c\), while opposite normals from the same coordinate
+have inner product \(-1\). Hence
+\[
+ u_\alpha\cdot u_\beta\le1-c\qquad\text{whenever }\alpha\ne\beta.
+\]
+
+Finally, the coordinate change is linear and invertible on the
+covariance support, so it preserves aggregate third-moment
+cancellation. The zero-skewness assumption~\eqref{eq:zero-third}
+is therefore equivalent to
+\begin{equation}
+ \sum_i\E(\zeta_i^0)^{\otimes3}=0.
+ \label{eq:zero-third-support}
+\end{equation}
+
+
+We now replace the indicator of \(A_a\) by a smooth function so that
+we can compare its expectations under \(S\) and \(G\) by interpolation.
+Let \(\ind_{A_a}\) denote
+the indicator of \(A_a\), equal to \(1\) on the set and zero outside.
 For a \emph{smoothing width} \(h>0\), define its
 \emph{logistic approximation} by
 \begin{equation}
@@ -674,10 +739,12 @@ For a \emph{smoothing width} \(h>0\), define its
  \qquad x\in\R^r.
  \label{eq:selector}
 \end{equation}
-For each fixed \(x\), this formula defines a probability distribution
+We index the approximation by the threshold vector \(a\), which
+specifies the formula even when some defining inequalities are redundant.
+For each fixed \(x\), this formula induces a probability distribution
 over the \(m\) faces and an additional \emph{baseline option}. Face
-\(\alpha\) receives weight \(e^{(u_\alpha\cdot x-a_\alpha)/h}\),
-while the baseline option receives weight one. After normalization,
+\(\alpha\) receives weight proportional to \(e^{(u_\alpha\cdot x-a_\alpha)/h}\),
+while the baseline option receives weight proportional to \(1\). After normalization,
 the baseline probability is \(F_{a,h}(x)\), and the \emph{face probabilities}
 sum to \(1-F_{a,h}(x)\). We use these probabilities below to express
 and bound the derivatives of the logistic approximation.
@@ -775,7 +842,7 @@ Consequently,
 
 To bound the smoothing error without assuming a positive correlation
 gap, let \(\omega_0,\omega_1,\ldots,\omega_m\) be independent
-exponential random variables with mean one, independent of \(S\) and
+exponential random variables with mean \(1\), independent of \(S\) and
 \(G\). The logistic approximation has the exact representation
 \begin{equation}
  \begin{split}
@@ -786,8 +853,17 @@ exponential random variables with mean one, independent of \(S\) and
  \end{split}
  \label{eq:mixture}
 \end{equation}
-Thus the thresholds shift randomly while the face normals remain
-fixed. The expected largest absolute threshold shift is at most
+This is also the classical \emph{random-utility representation}
+underlying multinomial logit probabilities, as described
+by Yellott~\cite[Section~2.6]{Yellott1977}. Indeed, the variables
+\(-\log\omega_\beta\), \(0\le\beta\le m\), are independent
+\emph{standard Gumbel variables}, and \(F_{a,h}(x)\) is the probability
+that the baseline utility \(-h\log\omega_0\) exceeds all face utilities
+\(u_\alpha\cdot x-a_\alpha-h\log\omega_\alpha\).
+
+For the smoothing bound, we use \eqref{eq:mixture} as a representation
+by random threshold shifts with the face normals fixed.
+The expected largest absolute threshold shift is at most
 \(ChL\), so anti-concentration bounds the smoothing error by
 \(ChL^{3/2}\). When \(c>0\), separation of the face normals
 allows a sharper bound, \(Ch\sqrt L/c\), through the second
@@ -817,7 +893,7 @@ appear in~\cite[Lemma~13]{GaoZhang}.
 
 We compare the smoothed expectations by gradually deleting the bounded
 summands and replacing them with Gaussian noise. For a fixed
-\(\varepsilon>0\), consider the path
+\(\varepsilon>0\) and time index \(t\in[0,1]\), consider the path
 \begin{equation}
  U_t\coloneqq
  \frac{(1+t)\sum_{i=1}^n\mathbb B_{i,t}\zeta_i^0
@@ -826,7 +902,7 @@ summands and replacing them with Gaussian noise. For a fixed
  \label{eq:path}
 \end{equation}
 At each fixed time, the \(\mathbb B_{i,t}\) are independent Bernoulli
-\emph{masks}, independent of the summands and \(G\). A mask equal to one retains
+\emph{masks}, independent of the summands and \(G\). A mask equal to \(1\) retains
 its summand, and a mask equal to zero deletes it. Before the common
 normalization, each retained summand is multiplied by its \emph{amplitude}
 \(\gamma(t)\coloneqq1+t\). The \emph{retention probability} is
@@ -834,24 +910,31 @@ normalization, each retained summand is multiplied by its \emph{amplitude}
  \varpi(t)\coloneqq\Pp(\mathbb B_{i,t}=1)
              =\frac{1-t}{(1+t)^2}.
 \]
-These choices give \(\varpi(t)\gamma(t)^2=1-t\), so the retained
-sum and the Gaussian term together have covariance
-\((1+\varepsilon)I_r\). The denominator in~\eqref{eq:path}
-therefore ensures that \(\Cov(U_t)=I_r\) throughout.
+These choices give \(\varpi(t)\gamma(t)^2=1-t\). In the normalized
+path~\eqref{eq:path}, the two independent components therefore contribute
+\[
+ \underbrace{\frac{1-t}{1+\varepsilon}I_r}_{\text{retained summands}}
+ +\underbrace{\frac{t+\varepsilon}{1+\varepsilon}I_r}_{\text{Gaussian component}}
+ =I_r.
+\]
+As \(t\) increases, covariance is transferred from the retained summands
+to the Gaussian component, while \(\Cov(U_t)=I_r\) throughout.
+At \(t=0\), every summand is retained. At \(t=1\), all summands have
+been deleted, leaving only the Gaussian vector.
 
-This random deletion is \emph{Bernoulli thinning}
+This random deletion is known as \emph{Bernoulli thinning}
 \cite{Renyi1956,SteutelHarn1979,LastPenrose2017}. We call the
 chosen amplitude and retention probability \emph{calibrated dropout},
-in reference to the independent masks used in dropout~\cite{Dropout2014}.
-With \(\varepsilon=0\), this is the calibrated path
+in reference to the independent masks used in dropout regularization~\cite{Dropout2014}.
+With \(\varepsilon=0\), this coincides with the calibrated path
 defined in~\cite[Section~4]{AL}. Before normalization, each summand's third-moment tensor is multiplied
 by \(\varpi(t)\gamma(t)^3=1-t^2\). The derivative of this multiplier
-vanishes at \(t=0\), which will weaken the third-moment contribution
-where the Gaussian variance is smallest.
+conveniently vanishes at \(t=0\), which will help control the impact of
+the third moments when the Gaussian variance is smallest.
 
 The extra Gaussian variance \(\varepsilon\), called the
 \emph{Gaussian seed}, keeps that variance positive from the start.
-The endpoints are
+The endpoints of the interpolation are
 \[
  U_0=\frac{S+\sqrt\varepsilon\,G}{\sqrt{1+\varepsilon}},
  \qquad U_1=G.
@@ -867,7 +950,40 @@ We call this initial operation \emph{Slepian regularization}.
 After a change of time it is also
 \emph{Ornstein--Uhlenbeck regularization}~\cite[Theorem~4.12]{Nourdin2012}.
 
-We thus compare \(S\) with \(U_0\), and then \(U_0\) with \(G\).
+Figure~\ref{fig:two-stage-path} summarizes the two stages. Slepian
+regularization rescales every summand and adds a small Gaussian component.
+The calibrated dropout path then deletes summands at random, amplifies
+those retained, and increases the Gaussian variance. Both stages preserve
+covariance \(I_r\). The paths describe distributions at each time, and
+we do not need to couple the Bernoulli masks across different times.
+
+\begin{figure}[htbp]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[>=Stealth,font=\fontsize{9}{11}\selectfont]
+\definecolor{seed}{RGB}{32,91,135}
+\definecolor{drop}{RGB}{136,73,32}
+\node[font=\Large] (S) at (0,0) {$S$};
+\node[font=\Large] (U) at (6.2,0) {$U_0$};
+\node[font=\Large] (G) at (12.4,0) {$G$};
+\draw[->,thick,seed] (S) -- node[above=9pt,align=center] {Slepian regularization} node[below=8pt] {$0\le v\le v_\varepsilon$} (U);
+\draw[->,thick,drop] (U) -- node[above=9pt,align=center] {Calibrated dropout with a Gaussian seed} node[below=8pt] {$0\le t\le1$} (G);
+\node[anchor=north,align=center] at (6.2,-0.85) {$\displaystyle U_0=\frac{S+\sqrt\varepsilon\,G}{\sqrt{1+\varepsilon}}$
+\\[5pt] $\displaystyle v_\varepsilon=\frac{\varepsilon}{1+\varepsilon}$};
+\node[anchor=north,align=center,text width=6.1cm] at (2.8,-2.9) {Rescale all summands and add Gaussian noise.\\[9pt]
+ $\displaystyle T_v=\sqrt{1-v}\,S+\sqrt v\,G$};
+\node[anchor=north,align=center,text width=7.0cm] at (10,-2.9) {Randomly delete summands, amplify survivors,\\and increase the Gaussian variance.\\[9pt]
+ $\displaystyle U_t=\frac{(1+t)\sum_i\mathbb B_{i,t}\zeta_i^0+\sqrt{t+\varepsilon}\,G}{\sqrt{1+\varepsilon}}$\\[9pt]
+ $\displaystyle \mathbb P(\mathbb B_{i,t}=1)=\frac{1-t}{(1+t)^2}$};
+\end{tikzpicture}
+}
+\caption{The comparison from \(S\) to \(G\) passes through the regularized
+sum \(U_0\). The first stage follows \(T_v\) up to \(v_\varepsilon\),
+and the second follows \(U_t\) from \(t=0\) to \(t=1\).}
+\label{fig:two-stage-path}
+\end{figure}
+
+We first compare \(S\) with \(U_0\), and then \(U_0\) with \(G\).
 For fixed thresholds, write
 \[
  P_a(t)\coloneqq\E F_{a,h}(U_t),\qquad
@@ -877,9 +993,11 @@ The quantity \(I_h\) measures the error from introducing the seed.
 The triangle inequality and the smoothing lemma give
 \begin{equation}
  \rho\le M_h+Ch\sqrt L\,\kappa,\qquad
- M_h\le I_h+\sup_a\int_0^1|P_a'(t)|\dd t.
+ M_h\le I_h+\sup_a\int_0^1|P_a'(t)|\dd t,
  \label{eq:roadmap}
 \end{equation}
+where \(P_a'(t)\) is the time derivative of \(P_a(t)\), measuring
+the rate of change of the smoothed probability at time \(t\).
 The smoothing error is evaluated at the original endpoints \(S\)
 and \(G\). It remains to bound the initialization error and the
 derivative along the seeded path.
@@ -887,8 +1005,10 @@ derivative along the seeded path.
 \subsection{Controlling the comparison error}
 \label{sec:outline-seeded}
 
-Differentiating the smoothed probability separates the effect of
-third moments from a fourth-order remainder. Let
+To bound the integral in~\eqref{eq:roadmap}, we need an expression
+for how \(P_a(t)\) changes along the interpolation. The identity below
+separates a term involving the aggregate third moments from a remainder
+involving fourth derivatives. Let
 \(K_3\coloneqq\sum_i\E(\zeta_i^0)^{\otimes3}\) be the aggregate
 third-moment tensor. Lemma~\ref{appx-an:lem:identity} gives
 \begin{equation}
@@ -901,7 +1021,7 @@ Here \(D^3F\) is the third derivative tensor, and the colon sums
 products of corresponding tensor entries. The remainder involves
 fourth derivatives evaluated at nearby points. Evaluating all third
 derivatives at the common point \(U_t\) permits aggregate cancellation,
-as in~\cite[Lemma~22]{GaoZhang}: under~\eqref{eq:zero-third},
+as in~\cite[Lemma~22]{GaoZhang}: under~\eqref{eq:zero-third-support},
 \(K_3=0\), and only the remainder remains.
 
 The covariance identity controls the sum of derivative contributions.
@@ -986,7 +1106,7 @@ Appendix~\ref{appx-sec:support} proves the proposition.
 
 We add the initialization cost to the integral of the seeded
 derivative bound over \(0<t<1\). The cubic factor
-\(t/(t+\varepsilon)\) is at most one, while integrating
+\(t/(t+\varepsilon)\) is at most \(1\), while integrating
 \((t+\varepsilon)^{-1}\) gives \(\log(1+1/\varepsilon)\).
 Together with the initialization cost and \(\varepsilon=Lh^2\),
 these estimates yield the following comparison. Appendix~\ref{sec:main-proof}
@@ -1011,7 +1131,7 @@ as in~\eqref{eq:zero-third}, then
 \end{equation}
 \end{proposition}
 
-The fourth-order term contains an additive one from initialization
+The fourth-order term contains an additive \(1\) from initialization
 and a logarithm from the seeded comparison. In the general bound,
 the nonlogarithmic fourth-order contribution is absorbed into
 \(C\delta L^{3/2}\), since \(h\ge\delta\). Under aggregate
@@ -1217,7 +1337,7 @@ For normalized observations, the conjectured scale is
 \(BL^{3/2}/\sqrt n\). Theorems~\ref{opt:skew-lower}
 and~\ref{opt:symmetric-lower} show that the factor \(L^{3/2}\)
 cannot generally be reduced, even under central symmetry when the gap
-may vanish. At rank one, Appendix~\ref{app:rank-one} proves the stronger
+may vanish. At rank \(1\), Appendix~\ref{app:rank-one} proves the stronger
 bound \(C\min\{1,\delta\}\) and its matching minimax lower rate.
 Thus singularity alone does not force a logarithmic loss. The conjecture
 concerns arbitrary dependence in higher rank. The sharp cancellation
@@ -1228,7 +1348,7 @@ The conjecture concerns the total approximation error. Counterexamples
 to pointwise bounds on an interpolation remainder, such as those
 in~\cite{Obstruction}, do not by themselves refute it: integration
 may allow cancellation that a pointwise absolute bound discards.
-An integrated remainder estimate is established at rank one
+An integrated remainder estimate is established at rank \(1\)
 in~\cite{IntegratedRemainder}, but extending that estimate to general
 rank remains open.
 
@@ -1337,7 +1457,7 @@ Acta Scientiarum Mathematicarum (Szeged) \textbf{34}, 335--343.
 \url{https://rutcor.rutgers.edu/Prekopa/pdf/SCIENT2.pdf}.
 
 \bibitem{IntegratedRemainder}
-\emph{Toward an integrated curvature estimate: a proved rank-one case
+\emph{Toward an integrated curvature estimate: a proved rank-1 case
 and an entropy identity for the general problem}.
 Companion research note, 24 October 2026.
 \href{https://github.com/VC2015/HDCLTs/blob/main/research-rectangle-clt-singular/Rectangle_CLT_Integrated_Remainder.pdf}{\nolinkurl{Rectangle_CLT_Integrated_Remainder.pdf}}.
@@ -1518,7 +1638,7 @@ calculation supplies the obstruction under third-moment cancellation.
 These estimates yield both consistency criteria. The appendix ends
 with the centrally symmetric lower bound at a shrinking correlation gap,
 reusing the scalar tail estimate to control its leading maximum.
-Appendix~\ref{app:rank-one} gives a separate rank-one benchmark for
+Appendix~\ref{app:rank-one} gives a separate rank-1 benchmark for
 Conjecture~\ref{conj:sharp-unrestricted}, using scalar normal approximation.
 
 \section*{Notation in the appendices}
@@ -1624,7 +1744,8 @@ Proposition~\ref{an:prop:derivative} give
        \left[1+\log\left(1+\frac1\varepsilon\right)\right].
 \end{align*}
 The two terms proportional to \(\delta\) are cubic contributions,
-and both are absent when \(K_3=0\). The derivative bounds are integrable
+and both are absent under the zero-skewness condition
+\eqref{eq:zero-third-support}, which gives \(K_3=0\). The derivative bounds are integrable
 for fixed \(h\), and boundedness and continuity of the smooth test
 function give convergence at both endpoints. Thus the fundamental
 theorem of calculus applies on the full intervals. Since
@@ -1679,7 +1800,7 @@ proves Theorem~\ref{thm:zero-skew}. Finally,
 \(\kappa\le L\), \(E_\kappa\le D_L\), and \(D_L\ge1\) give
 \(L^{3/2}+L\sqrt{\kappa E_\kappa}\le2L^{3/2}\sqrt{D_L}\),
 which proves Theorem~\ref{thm:unrestricted}. Taking the minimum
-with one is justified by \(\rho\le1\).
+with \(1\) is justified by \(\rho\le1\).
 \end{proof}
 
 \subsection{\texorpdfstring{Polyhedral transfer: proof of Corollary~\ref{cor:polyhedra}}{Polyhedral transfer: proof of Corollary 2}}
@@ -1741,7 +1862,7 @@ The preceding calculations give
  =\frac{\nu_\alpha^\top\Sigma\nu_\beta}
        {\sigma_\alpha\sigma_\beta}.
 \]
-The diagonal entries of \(R\) are one. Theorem~\ref{thm:optimized}
+The diagonal entries of \(R\) are \(1\). Theorem~\ref{thm:optimized}
 therefore applies with dimension \(q\), envelope \(\Delta\), and
 the correlation gap of \(R\). To check the additional hypothesis
 of Theorem~\ref{thm:zero-skew}, apply the linear map to each factor
@@ -1818,7 +1939,7 @@ The mixture representation~\eqref{eq:mixture} is
  A_{a,\omega}=\{x:u_\alpha\cdot x\le
  a_\alpha+h\log(\omega_\alpha/\omega_0),\ \alpha\le m\},
 \]
-where \(\omega_0,\ldots,\omega_m\) are independent mean-one
+where \(\omega_0,\ldots,\omega_m\) are independent mean-1
 exponentials, independent of every random vector at which \(F\) is
 evaluated. Conditional on \(\omega_0\), membership requires
 \(\omega_\alpha\ge\omega_0w_\alpha(x)\) for every face.
@@ -1917,22 +2038,7 @@ layer indicator is at most \(C(h+\delta)\sqrt L\). Since \(h\ge4\delta\), this p
 \eqref{appx-eq:averaged-derivatives}.
 \end{proof}
 
-\begin{remark}[Random-utility interpretation]\label{appx-rem:random-utility}
-The exponential mixture also has a random-utility interpretation.
-For the independent mean-one exponentials
-\(\omega_0,\ldots,\omega_m\) used above,
-\[
- F_{a,h}(x)=\Pp\!\left\{-h\log\omega_0\ge
- \max_{\alpha\le m}
- (u_\alpha\cdot x-a_\alpha-h\log\omega_\alpha)\right\}.
-\]
-The variables \(-\log\omega_\beta\) are independent \emph{standard
-Gumbel variables}, giving the classical random-utility representation
-in~\cite[Section~2.6]{Yellott1977}. The face displacements have logistic
-marginals and are dependent through \(\omega_0\).
-McFadden~\cite[p.~1001]{McFadden1989} uses this representation,
-and it is stated for softmax weights in~\cite[Lemma~14]{GaoZhang}.
-\end{remark}
+
 
 \subsection{The error at the endpoints}
 
@@ -2010,7 +2116,7 @@ Consequently,
 where the second inequality in the first chain uses \(0<c\le1\).
 On \(A_a\), every \(w_\alpha\le1\), so \(\pi_*\le1/2\)
 and \(\chi\ge c\theta/2\). Off \(A_a\), some weight exceeds
-one, so \(\theta>1/2\) and \(\chi\ge F/2\).
+\(1\), so \(\theta>1/2\) and \(\chi\ge F/2\).
 The indicator error is \(\theta\) and \(F\) in the two cases,
 respectively. Thus
 \begin{equation}
@@ -2059,7 +2165,7 @@ the covariances sum to \(I_r\),
 Also, \(x\cdot\nabla\Psi(x)=\sum_\alpha\pi_\alpha(u_\alpha\cdot x)
 \le\norm x_U\). Bernstein's inequality and the expected-maximum bound
 in~\cite[Chapter~2]{BLM2013}, applied to the \(m=2p\) face
-components of variance one, therefore bound the left side by
+components of variance \(1\), therefore bound the left side by
 \(\E\norm S_U\le C(\sqrt L+\delta L)\).
 If \(\delta\sqrt L\le1\), this is \(C\sqrt L\), while
 \(h\ge\delta\) bounds \(e^{8\delta/h}\) absolutely. Hence
@@ -2412,7 +2518,7 @@ constant by~\eqref{appx-eq:local-envelope}.
 
 The copies are independent of \(T_v\). Thus the pair contraction
 \eqref{appx-an:pair-contraction} bounds the sum of their two retained
-face components by one. The other \(q-2\) components cost
+face components by \(1\). The other \(q-2\) components cost
 \(\delta^{q-2}\), each derivative contributes \(h^{-1}\), and
 the sum of the weights is at most a constant times \(F(1-F)\).
 For each direction pattern of order \(q=3,4\), we therefore obtain
@@ -2447,7 +2553,8 @@ the bounds just proved gives
                      +\frac{\delta^2\sqrt L}{h^3}\right)
       =C\delta L^{3/2}+\frac{C\delta^2L^{3/2}}h.
 \]
-When \(K_3=0\), the cubic contraction vanishes before integration,
+Under~\eqref{eq:zero-third-support}, we have \(K_3=0\), and the
+cubic contraction vanishes before integration,
 so the first term is absent. Boundedness and continuity of the
 test function justify the limit at \(v=0\). This proves
 \eqref{eq:initialization-bound}. The direct estimates themselves
@@ -2676,7 +2783,7 @@ For the mean estimate, we compare each weight with a reference weight
 depending on one normal coordinate. A second moment controls the
 component along that normal, and the logarithm of the ratio of
 reference mass to tilted mass controls the orthogonal component.
-Using the constant weight one as the reference would instead introduce
+Using the constant weight \(1\) as the reference would instead introduce
 the logarithm of the reciprocal tilted mass. The single-face reference
 avoids a logarithm of the smoothing scale and refines the entropy argument
 in~\cite[Lemma~12]{GaoZhang}.
@@ -2872,7 +2979,7 @@ every threshold by \(s\), then
 We turn this derivative into a surface integral by expressing powers
 of \(F_s\) as mixtures of polyhedral indicators. For an integer
 \(\ell\ge1\), let \(T_\ell\) have the Gamma law with shape \(\ell\)
-and rate one. Take \(T_\ell\) and the mean-one exponentials
+and rate \(1\). Take \(T_\ell\) and the mean-1 exponentials
 \(\omega_1,\ldots,\omega_m\) to be mutually independent and
 independent of \(V_0,G\). The Gamma Laplace transform gives
 \begin{equation}
@@ -3058,7 +3165,7 @@ facet~\cite[Chapter~5]{EvansGariepy2015} gives
 the outward unit normal to that ridge within the facet is
 \((u_k-(u_j\cdot u_k)u_j)/\sin\alpha_{jk}\).
 For an unbounded facet, apply the theorem after multiplying the
-vector field by a smooth cutoff that is one on the ball of radius
+vector field by a smooth cutoff that is \(1\) on the ball of radius
 \(M\), vanishes outside the ball of radius \(2M\), and has gradient
 bounded by \(C/M\). The cutoff error tends to zero by Gaussian decay.
 Dominated convergence for the facet and ridge integrals then gives
@@ -3128,7 +3235,7 @@ The tubes over distinct faces are disjoint up to null sets, by
 uniqueness of the nearest point in a closed convex
 set~\cite[Example~2.25]{RockafellarWets1998}. Within each
 face, the decomposition into tangential and normal coordinates has
-Jacobian one. Fubini's theorem~\cite[Section~2.5]{Folland1999}
+Jacobian \(1\). Fubini's theorem~\cite[Section~2.5]{Folland1999}
 therefore applies even though
 \(\eta(x)\) varies along the face. Every tube point \(g=x+y\) lies
 outside \(P\), and, for every inequality in its original description,
@@ -3184,7 +3291,7 @@ for the face inequalities used here.
 Use the notation \(V=\sum_iX_i\) of Lemma~\ref{lem:concentration}.
 The bound \(\norm{X_i}_U\le\eta\) controls each face component,
 and their total variances equal \(v\). We first prove the result
-at variance one without the independent shift, and then use scaling
+at variance \(1\) without the independent shift, and then use scaling
 and conditioning to obtain the full assertion. Let \(X_i'\) be independent copies of the
 summands, and let \(\varepsilon_i\) be independent uniform signs,
 independent of all these vectors. Put
@@ -3241,11 +3348,11 @@ ones. Averaging and using~\eqref{appx-eq:conditional-variance} gives
  \label{appx-eq:concentration-pairs}
 \end{equation}
 The exceptional probability can be absorbed into the
-\(C\eta\sqrt L\) term whenever the claimed estimate is smaller than one. If \(\eta\sqrt L\le c_2\),
+\(C\eta\sqrt L\) term whenever the claimed estimate is smaller than \(1\). If \(\eta\sqrt L\le c_2\),
 for a sufficiently small absolute
 \(c_2>0\), then \(\log m\le c_1/(2\eta^2)\). The last term is
 at most \(e^{-c_1/(2\eta^2)}\le C\eta\le C\eta\sqrt L\).
-Otherwise the claimed estimate follows from the bound by one.
+Otherwise the claimed estimate follows from the bound by \(1\).
 This proves the bounded-sum assertion for \(v=1\).
 For general \(v>0\), divide the summands and thresholds by
 \(\sqrt v\). The width and summand bound become \(s/\sqrt v\)
@@ -3261,7 +3368,7 @@ in~\cite[Lemma~J.3]{CCKK2022}, to
 \]
 Only positive marginal variances are required, so the face components
 may have singular covariance. Condition on the independent shift
-and take the minimum with one to complete the proof.
+and take the minimum with \(1\) to complete the proof.
 
 \section{\texorpdfstring{Sub-exponential transfer: proof of Corollary~\ref{cor:subexponential}}{Sub-exponential transfer: proof of Corollary 3}}\label{app:subexponential}
 \begin{proof}[Proof of Corollary~\ref{cor:subexponential}]
@@ -3338,7 +3445,7 @@ changed each standard deviation only slightly. Set
 \(\tau\coloneqq 2Ke^{-2\ell}\), the residual standard-deviation
 bound from~\eqref{tail:residual-moments}, and write \(\operatorname{sd}(W_{T,j})\) for the
 standard deviation of the \(j\)th coordinate of~\(W_T\).
-Since each coordinate of \(W_n\) has variance one, the triangle
+Since each coordinate of \(W_n\) has variance \(1\), the triangle
 inequality in \(L^2\) gives
 \[
  |\operatorname{sd}(W_{T,j})-1|\le\tau,
@@ -3407,7 +3514,7 @@ The transfer error has order \(bL^{3/2}\): since
                      +\frac{\bar L\sqrt L}{\sqrt n}\right]+\frac1n
  \le CbL^{3/2}.
 \]
-Combine this with \eqref{tail:bounded-comparison} and the bound by one
+Combine this with \eqref{tail:bounded-comparison} and the bound by \(1\)
 to prove \eqref{eq:subexponential}.
 
 For the sharper bound we must also check the correlations after
@@ -3505,7 +3612,7 @@ When these principal-submatrix eigenvalues are bounded below by \(a>0\), its bou
  \frac{C_a}{\sqrt n}\left[B_4L^{3/2}
                    +K\log(enp)\sqrt L\right],
 \]
-capped at one. For fixed \(K,B_4,a\) and \(p\) growing polynomially in~\(n\),
+capped at \(1\). For fixed \(K,B_4,a\) and \(p\) growing polynomially in~\(n\),
 this is \(O(n^{-1/2}(\log n)^{3/2})\), whereas
 \eqref{eq:subexponential} is \(O(n^{-1/2}(\log n)^3)\).
 The latter requires neither a fourth-moment hypothesis in addition to
@@ -3617,7 +3724,7 @@ Let \(v^2\coloneqq K''(t)\) and \(s\coloneqq tv\). Expanding the square root in
 
 Under the joint tilt
 \(d\Pp_t=e^{tS-K(t)}d\Pp\), the summands remain independent and
-\(T\coloneqq(S-x)/v\) has mean zero and variance one. Furthermore,
+\(T\coloneqq(S-x)/v\) has mean zero and variance \(1\). Furthermore,
 \[
  \sum_i\E_t|\eta_i-\E_t\eta_i|^3
  \le2\delta\sum_i\Var_t(\eta_i)=2\delta v^2.
@@ -3670,7 +3777,7 @@ Use mutually independent coordinates and rows with the two-point law
  \Pp(X=-B_n^{-1})=\frac{B_n^2}{B_n^2+1}.
  \label{opt:two-point-law}
 \end{equation}
-It has mean zero, variance one, and third moment
+It has mean zero, variance \(1\), and third moment
 \(\mu_{3,n}\coloneqq B_n-B_n^{-1}\ge3B_n/4\). Put
 \[
  \delta_n\coloneqq B_n/\sqrt n,\qquad
@@ -3832,7 +3939,7 @@ Taking products of the coordinate distribution functions proves
  \longrightarrow e^{-\exp(-a^2/3)}-e^{-1}>0.
  \label{app:rad-critical}
 \end{equation}
-These arrays have envelope one and identity covariance. Their rows
+These arrays have envelope \(1\) and identity covariance. Their rows
 are centrally symmetric, so their full third-moment tensors vanish.
 
 For the lower scale below this threshold, suppose instead
@@ -4173,8 +4280,8 @@ the displayed lower orthant has discrepancy
 
 
 \clearpage
-\section{The rank-one case}\label{app:rank-one}
-At rank one, the coordinates are signed copies of a single scalar
+\section{The rank-1 case}\label{app:rank-one}
+At rank \(1\), the coordinates are signed copies of a single scalar
 variable, and every rectangle event reduces to an interval event.
 The following proposition therefore gives a stronger bound than
 Conjecture~\ref{conj:sharp-unrestricted}, with no dependence on the
@@ -4183,8 +4290,8 @@ ambient dimension. It also records the matching lower rate.
 For integers \(n,p\ge1\) and \(B\ge1\), let \(M_n^{(1)}(B,p)\) be the
 supremum of the rectangle error over the independent centered
 observations in Corollary~\ref{cor:observations}, with envelope \(B\),
-unit average marginal variances, and covariance of rank one.
-\begin{proposition}[Rank-one approximation and sharpness]
+unit average marginal variances, and covariance of rank \(1\).
+\begin{proposition}[Rank-1 approximation and sharpness]
 \label{prop:rank-one}
 Under~\eqref{eq:setup}, if \(\operatorname{rank}(\Sigma)=1\), then
 \[
@@ -4199,7 +4306,7 @@ where \(a_0,A_0>0\) are absolute constants.
 \end{proposition}
 
 \begin{proof}
-A rank-one covariance matrix with unit diagonal has the form
+A rank-1 covariance matrix with unit diagonal has the form
 \(\Sigma=ss^\top\), where \(s_j\in\{-1,1\}\). We choose \(s_1=1\).
 For each \(j\), independence and centering give
 \[
@@ -4226,7 +4333,7 @@ Kolmogorov distance between \(S\) and \(G\) by \(C\delta\).
 Continuity of the Gaussian distribution gives the same bound for
 strict half-lines. Subtracting the distribution functions at the two
 endpoints bounds every interval discrepancy by \(2C\delta\).
-The trivial bound by one proves the first assertion, and setting
+The trivial bound by \(1\) proves the first assertion, and setting
 \(\delta=B/\sqrt n\) gives the minimax upper bound. To match it,
 we construct a scalar sum with a large atom and embed it on the same
 line.
