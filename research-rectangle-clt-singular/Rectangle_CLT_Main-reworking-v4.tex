@@ -522,9 +522,8 @@ notation, and derives the rates from the main estimates.
 Section~\ref{opt:section} discusses sharpness and open questions.
 Appendices~\ref{sec:main-proof}--\ref{app:subexponential} prove the
 upper bounds, and Appendix~\ref{app:sharpness-proofs} proves the
-lower bounds and consistency criteria. Appendix~\ref{app:rank-one}
-establishes the sharper rate available at rank \(1\). All proofs of the
-results stated here are included in this paper. The
+lower bounds and consistency criteria. All proofs of the results stated
+here are included in this paper. The
 Supplement~\cite{Supplement} contains additional calculations and
 related investigations.
 
@@ -543,9 +542,10 @@ reviews for source revision
 That record certifies the specified results through their Lean proofs.
 A formal verification of the complete interpolation argument presented
 here, including the general interpolation identity and smooth Gaussian
-initialization, remains to be carried out. Theorem~\ref{opt:symmetric-lower},
+initialization, remains to be carried out.
+Theorems~\ref{opt:symmetric-lower}--\ref{opt:q4-growing} and
 the polyhedral extensions in Corollaries~\ref{cor:polyhedra}
-and~\ref{cor:subexponential}, and Proposition~\ref{prop:rank-one}
+and~\ref{cor:subexponential}
 are also outside the certification. The record therefore does not
 certify every result or written derivation in this paper, or the
 Supplement as a whole.
@@ -1195,21 +1195,26 @@ components along face normals.
 
 
 \section{Sharpness and remaining questions}\label{opt:section}
-Sharp error rates and the dimension range for uniform convergence are
-distinct questions. At a fixed positive correlation gap, we determine
-the exact convergence criteria with and without third-moment
-cancellation. The sharp error rate under cancellation remains open.
-The proofs and supporting calculations are collected in
-Appendix~\ref{app:sharpness-proofs}.
+We now ask how much the approximation bounds can be improved.
+There are two questions: how small the error can be, and how quickly
+the dimension may grow while the error still tends to zero.
+For bounded observations, removing skewness permits a larger dimension
+when the correlations remain separated from perfect dependence.
+With weaker tail assumptions or stronger dependence, however, symmetric
+examples can still be as difficult to approximate as the general case.
+The results below identify these limitations and the questions that
+remain open. Appendix~\ref{app:sharpness-proofs} contains the proofs.
 
-Even under central symmetry, a normalized Rademacher sum has an atom
-of order \(n^{-1/2}\), which prevents a smaller uniform error rate in
-fixed dimension. Appendix~\ref{app:consistency-proof} proves this
-lattice obstruction. Growing dimension creates a further obstruction
-through coordinate tails. The next theorem uses the two-point
-construction of Chernozhukov, Chetverikov, and
-Koike~\cite[Proposition~2.1]{CCK}, removing its additional growth
-restrictions on the envelope and dimension.
+\subsection{Bounded observations and zero skewness}
+
+Even in fixed dimension, symmetry cannot eliminate every source of
+approximation error: a discrete sum assigns positive probability to
+individual points, whereas a Gaussian variable does not. In growing
+dimension, small differences between coordinate tails can create an
+additional error when we take a maximum. The next theorem shows that
+this error can attain the scale of our upper bound even with independent
+coordinates. Its construction builds on
+\cite[Proposition~2.1]{CCK}.
 \begin{samepage}
 \begin{theorem}[Lower scale]\label{opt:skew-lower}
 Suppose \(p_n\to\infty\), \(B_n\ge2\), and
@@ -1224,46 +1229,28 @@ Here \(W_n\coloneqq n^{-1/2}\sum_iX_{n,i}\),
 \(Z_n\sim N(0,I_{p_n})\), and the envelope is attained.
 \end{theorem}
 \end{samepage}
-Each coordinate has third moment of order \(B_n\), and its effect on the
-tails at a Gaussian maximum quantile yields the lower scale \(r_n\).
-Appendix~\ref{app:skew-proof} gives the construction and proof, using
-the uniform tail estimate in Lemma~\ref{opt:moderate-tail}.
 
-Since its covariance is the identity, this example belongs to every
-class with a prescribed gap \(c_0\in(0,1]\). Fix such a \(c_0\), and let
-\(M_n(c_0;B,p)\) be the supremum of \(\rh(W_n,Z_n)\) over independent
-centered observations \(X_1,\ldots,X_n\in\R^p\) satisfying
-\(\norm{X_i}_\infty\le B\),
-\(n^{-1}\sum_i\E X_{ij}^2=1\) for every coordinate, and correlation
-gap at least \(c_0\). Here \(W_n=n^{-1/2}\sum_iX_i\), and \(Z_n\)
-is centered Gaussian with the same covariance. Let \(M_n^0(c_0;B,p)\)
-denote the same supremum under \(\sum_i\E X_i^{\otimes3}=0\).
+This example shows that the dependence on sample size, dimension, and
+the observation bound can all be necessary. Strong dependence is not
+required for this obstruction. Appendix~\ref{app:skew-proof} gives the
+construction and proof.
 
-The upper and lower rates match when \(\log(ep_n)\) is at least
-of the order of the additional logarithmic factor in the upper bound.
-Specifically, if \(p_n\to\infty\),
-\(B_n\ge2\), \(r_n\to0\), and, for some fixed \(\Lambda>0\),
-\[
- 1+\log_+(\sqrt n/B_n)\le\Lambda\log(ep_n),
-\]
-then Theorems~\ref{thm:optimized} and~\ref{opt:skew-lower} give
-\begin{equation}
- M_n(c_0;B_n,p_n)\asymp_{c_0,\Lambda}
- \frac{B_n(\log p_n)^{3/2}}{\sqrt n}.
- \label{opt:matching-minimax}
-\end{equation}
-Here \(\asymp_{c_0,\Lambda}\) bounds the ratio above and below by
-positive constants depending only on \(c_0,\Lambda\). This includes
-\(p_n\asymp n^a\), \(a>0\), with \(B_n\) growing subject to
-\(r_n\to0\). Appendix~\ref{app:skew-proof} gives the comparison.
-
-Uniform convergence requires no such comparison of logarithms. The
-next theorem gives its exact criterion and shows how cancellation
-enlarges the admissible dimension range.
+We next determine when the approximation becomes uniformly accurate
+over a class of distributions. The following theorem compares the
+general class with the smaller class satisfying the zero-skewness
+assumption. In both classes, a fixed positive correlation gap keeps
+distinct coordinates away from perfect positive or negative dependence.
 \begin{theorem}[Uniform consistency at a fixed gap]
 \label{opt:consistency}
-For fixed \(c_0\in(0,1]\), arbitrary dimension sequences \(p_n\ge1\),
-and envelopes \(B_n\ge2\),
+Fix \(c_0\in(0,1]\). Let \(M_n(c_0;B,p)\) be the supremum of
+\(\rh(W_n,Z_n)\) over independent centered observations
+\(X_1,\ldots,X_n\in\R^p\) satisfying
+\(\norm{X_i}_\infty\le B\),
+\(n^{-1}\sum_i\E X_{ij}^2=1\) for every coordinate, and correlation
+gap at least \(c_0\). Here \(W_n:=n^{-1/2}\sum_iX_i\), and \(Z_n\)
+is centered Gaussian with the same covariance. Let \(M_n^0(c_0;B,p)\)
+denote the same supremum under \(\sum_i\E X_i^{\otimes3}=0\).
+For arbitrary dimension sequences \(p_n\ge1\) and envelopes \(B_n\ge2\),
 \begin{equation}
  M_n(c_0;B_n,p_n)\longrightarrow0
  \quad\Longleftrightarrow\quad
@@ -1275,28 +1262,52 @@ For each fixed \(B\ge1\),
  M_n^0(c_0;B,p_n)\longrightarrow0
  \quad\Longleftrightarrow\quad \log p_n=o(\sqrt n).
 \]
+In particular, for fixed \(B\ge2\), the dimension condition is
+\(\log p_n=o(n^{1/3})\) in general and
+\(\log p_n=o(\sqrt n)\) under cancellation.
 \end{theorem}
-For fixed \(B\ge2\), the dimension condition is
-\(\log p_n=o(n^{1/3})\) in general and \(\log p_n=o(\sqrt n)\)
-under cancellation. Independent Rademacher coordinates obstruct
-convergence at the latter boundary through a fourth-order tail
-correction (Appendix~\ref{app:rademacher-tail}).
-Appendix~\ref{app:consistency-proof} proves both equivalences for
-arbitrary dimension sequences.
 
-The sharp error rate under cancellation is still unresolved. For
-\(n^{1/3}\ll L\ll\sqrt n\), the Rademacher calculation gives the
-lower scale \(L^2/n\), while the fixed-gap upper
-bound~\eqref{eq:zero-fixed} is larger. The lower scale follows from
-Appendix~\ref{app:rademacher-tail} and also appears
-in~\cite[Proposition~4.1]{CCK}.
-Any bound valid also in fixed dimension must retain the
-\(n^{-1/2}\) lattice obstruction, so \(L^2/n\) alone cannot be a
-uniform upper bound.
+Removing skewness therefore allows a substantially larger dimension
+while preserving uniform convergence. These dimension limits are
+exact: beyond them, some distributions in the respective classes
+remain poorly approximated. Appendix~\ref{app:consistency-proof}
+proves both directions.
 
-When the correlation gap may shrink, central symmetry does not improve
-the lower scale \(\delta L^{3/2}\). The next theorem gives a singular
-example with a positive but vanishing gap.
+Within the range where the error vanishes, the general upper and lower
+bounds also match under a mild comparison of logarithmic factors.
+This includes the common setting in which dimension grows as a power
+of sample size.
+\begin{corollary}[Matching rates at a fixed gap]\label{opt:matching-rates}
+Fix \(c_0\in(0,1]\) and \(\Lambda>0\). Suppose \(p_n\to\infty\),
+\(B_n\ge2\),
+\(r_n:=B_n(\log p_n)^{3/2}/\sqrt n\to0\), and
+\[
+ 1+\log_+(\sqrt n/B_n)\le\Lambda\log(ep_n).
+\]
+Then
+\begin{equation}
+ M_n(c_0;B_n,p_n)\asymp_{c_0,\Lambda}
+ \frac{B_n(\log p_n)^{3/2}}{\sqrt n}.
+ \label{opt:matching-minimax}
+\end{equation}
+The notation \(\asymp_{c_0,\Lambda}\) bounds the ratio above and below
+by positive constants depending only on \(c_0,\Lambda\). The conclusion
+applies in particular when \(p_n\asymp n^a\), \(a>0\), and
+\(B_n\ge2\) grows subject to \(r_n\to0\).
+\end{corollary}
+
+This comparison follows from Theorems~\ref{thm:optimized}
+and~\ref{opt:skew-lower}, as shown in
+Appendix~\ref{app:skew-proof}. Under zero skewness, we know the exact
+dimension limit but have not yet determined the sharp error rate
+throughout the convergence region. The Rademacher calculation in
+Appendix~\ref{app:rademacher-tail} supplies a lower bound, and the
+discrete obstruction in fixed dimension must also be taken into account.
+
+The improvement associated with zero skewness depends on controlling
+the correlations. If the correlation gap is allowed to shrink, even
+centrally symmetric observations can attain the general lower scale.
+The next theorem gives such an example.
 \begin{theorem}[Centrally symmetric lower bound]\label{opt:symmetric-lower}
 Let \(m_n\ge2\) be integers such that \(m_n\to\infty\) and
 \((\log m_n)^3/n\to0\). Put
@@ -1317,14 +1328,122 @@ counterpart \(Z_n\sim N(0,\Sigma_n)\) satisfy
 \]
 \end{theorem}
 
-Appendix~\ref{app:symmetric-lower} proves the theorem by modifying
-the common activation example in~\cite[Proposition~E.1]{FKLZ}.
-Because \(c_n\to0\), it leaves the fixed-gap rate open.
+Symmetry removes the third moments, but it does not remove the error
+created by strong dependence in this example. Because its correlation
+gap tends to zero, the example leaves the fixed-gap question open.
+Appendix~\ref{app:symmetric-lower} proves the theorem using a
+modification of the common activation construction
+in~\cite[Proposition~E.1]{FKLZ}.
 
-For unrestricted covariance, Theorem~\ref{thm:unrestricted} exceeds
-the lower scale only by \(\sqrt{D_L}\), where
-\(D_L=1+\log_+(1/(\delta\sqrt L))\). We conjecture that this
-additional logarithm can be removed uniformly over covariance matrices.
+\subsection{Fourth-moment envelopes and the CCKK comparison}
+\label{opt:q4-comparison}
+
+We now replace the deterministic bound on each observation by moment
+conditions that permit occasional large values. These conditions
+control both individual coordinates and the largest absolute coordinate
+in an observation, its \emph{random envelope}. We compare our lower
+bounds with the existing fourth-moment result of Chernozhukov,
+Chetverikov, Kato, and Koike~\cite[Theorem~2.5]{CCKK2022}.
+The following proposition records that upper bound in our notation.
+
+\begin{proposition}[CCKK fourth-moment bound]\label{opt:q4-upper}
+For each \(n,p\ge1\) and \(B\ge2\), let \(\mathcal C_4(B,p)\) be
+the class of independent centered observations
+\(X_1,\ldots,X_n\in\R^p\) satisfying
+\begin{equation}
+ \frac1n\sum_i\E X_{ij}^2=1\quad(j\le p),\qquad
+ \max_{j\le p}\frac1n\sum_i\E X_{ij}^4\le B^2,\qquad
+ \max_{i\le n}\E\norm{X_i}_\infty^4\le B^4.
+ \label{opt:eq:q4-class}
+\end{equation}
+With \(W_n:=n^{-1/2}\sum_iX_i\), \(Z_n\) centered Gaussian with
+the same covariance, and \(L:=\log(ep)\), there are absolute
+constants \(C,C'>0\) such that
+\begin{equation}
+ \sup_{\mathcal C_4(B,p)}\rh(W_n,Z_n)
+ \le C\min\left\{1,(B^{1/2}+B)n^{-1/4}L^{5/4}\right\}
+ \le C'\min\{1,Bn^{-1/4}L^{5/4}\}.
+ \label{opt:eq:q4-upper}
+\end{equation}
+\end{proposition}
+
+Allowing rare large observations leads to a slower guarantee than the
+bounded-observation results. The next theorem shows that this slower
+rate is unavoidable under the fourth-moment assumptions. The
+sample-size and dimension powers remain necessary even for symmetric
+observations, so skewness cannot explain the loss.
+
+\begin{theorem}[Fourth-moment lower bound]\label{opt:q4-lower}
+Let \(m_n\to\infty\) be integers, put \(p_n:=m_n^2\) and
+\(L_n:=\log(ep_n)\), and suppose
+\(r_{n,4}:=n^{-1/4}L_n^{5/4}\to0\).
+For all sufficiently large \(n\), there are i.i.d.\ centrally
+symmetric observations in \(\mathcal C_4(2,p_n)\) whose covariance
+has rank \(2m_n-1\) and correlation gap
+\(c_n=\sqrt{(\log m_n)/(2n)}\), such that
+\begin{equation}
+ \liminf_{n\to\infty}
+ \frac{\rh(W_n,Z_n)}{r_{n,4}}\ge\frac1{2\sqrt2\,e}.
+ \label{opt:eq:q4-lower}
+\end{equation}
+Consequently, for every fixed \(B\ge2\), along these dimension sequences,
+\[
+ \sup_{\mathcal C_4(B,p_n)}\rh(W_n,Z_n)
+ \asymp_B n^{-1/4}L_n^{5/4}.
+\]
+The same conclusion holds if the supremum is restricted to centrally
+symmetric observations.
+\end{theorem}
+
+For a fixed moment bound, the upper and lower rates therefore agree
+up to constant factors. Appendix~\ref{app:symmetric-lower} proves
+this result and the bounded symmetric lower bound with a common
+construction, checking the required moment conditions explicitly.
+
+We next ask whether the upper bound correctly describes the cost of
+allowing more extreme observations as the sample grows. A larger
+moment parameter permits such observations. The next theorem shows
+that the resulting deterioration in accuracy is also necessary,
+up to logarithmic factors.
+
+\begin{theorem}[Growing fourth-moment envelope]\label{opt:q4-growing}
+Let \(B_n\ge2\) tend to infinity and let \(m_n\to\infty\) be integers.
+Set
+\[
+ p_n:=m_n^2,\qquad \ell_n:=\log m_n,\qquad
+ \Lambda_n:=\log(2B_n^2),\qquad
+ r_{n,B}:=\frac{B_n\ell_n^{5/4}}{n^{1/4}\Lambda_n^{3/4}}.
+\]
+Suppose \(\Lambda_n=o(\ell_n)\) and \(r_{n,B}\to0\).
+For all sufficiently large \(n\), there are i.i.d.\ centrally
+symmetric observations in \(\mathcal C_4(B_n,p_n)\) such that
+\begin{equation}
+ \liminf_{n\to\infty}
+ \frac{\rh(W_n,Z_n)}{r_{n,B}}\ge\frac1{4e}.
+ \label{opt:eq:q4-growing}
+\end{equation}
+Their covariance has rank \(2m_n-1\) and correlation gap
+\(c_n=\frac14\sqrt{\ell_n/(4n\Lambda_n)}\to0\).
+\end{theorem}
+
+Thus the linear power of the moment parameter in the CCKK upper bound
+cannot be replaced uniformly by a smaller power while retaining its
+sample-size and dimension powers. A logarithmic gap remains between
+the upper and lower bounds when the moment parameter grows.
+Appendix~\ref{app:q4-growing} gives the construction, verifies its
+moment bounds, and derives this comparison.
+
+Both fourth-moment examples have correlation gaps tending to zero.
+They show that symmetry alone cannot improve the general rate, while
+leaving open the sharp rate under zero skewness and a fixed positive
+correlation gap.
+
+\subsection{Remaining questions for bounded observations}
+
+For bounded observations with unrestricted covariance, our upper and
+lower bounds differ by an additional logarithmic factor. We conjecture
+that this factor can be removed, giving an upper bound that matches
+the examples above uniformly over covariance matrices.
 \begin{conjecture}[Sharp rectangle approximation under unrestricted covariance]
 \label{conj:sharp-unrestricted}
 Under~\eqref{eq:setup}, there is an absolute constant \(C\) such that
@@ -1333,28 +1452,22 @@ Under~\eqref{eq:setup}, there is an absolute constant \(C\) such that
 \]
 uniformly in \(n,p,\delta\) and \(\Sigma\), including singular \(\Sigma\).
 \end{conjecture}
-For normalized observations, the conjectured scale is
-\(BL^{3/2}/\sqrt n\). Theorems~\ref{opt:skew-lower}
-and~\ref{opt:symmetric-lower} show that the factor \(L^{3/2}\)
-cannot generally be reduced, even under central symmetry when the gap
-may vanish. At rank \(1\), Appendix~\ref{app:rank-one} proves the stronger
-bound \(C\min\{1,\delta\}\) and its matching minimax lower rate.
-Thus singularity alone does not force a logarithmic loss. The conjecture
-concerns arbitrary dependence in higher rank. The sharp cancellation
-rate at a fixed positive gap, and the dependence on a shrinking gap,
-remain separate open questions.
 
-The conjecture concerns the total approximation error. Counterexamples
-to pointwise bounds on an interpolation remainder, such as those
-in~\cite{Obstruction}, do not by themselves refute it: integration
-may allow cancellation that a pointwise absolute bound discards.
-An integrated remainder estimate is established at rank \(1\)
-in~\cite{IntegratedRemainder}, but extending that estimate to general
-rank remains open.
+The lower bounds show that the dimension dependence in this conjecture
+cannot generally be improved, even for centrally symmetric observations.
 
-For sub-exponential observations, Appendix~\ref{app:subexponential}
-compares Corollary~\ref{cor:subexponential} with the sharper logarithmic
-rate of~\cite{Local}, which requires local covariance nondegeneracy.
+Resolving the conjecture may require sharper control of the cumulative
+error along the comparison path. An obstruction to an individual proof
+estimate, such as those in~\cite{Obstruction}, does not rule out
+cancellation over the full path. The sharp
+zero-skewness rate at a fixed positive gap, and how it changes as the
+gap shrinks, also remain unresolved.
+
+For sub-exponential observations, stronger assumptions on small
+covariance submatrices can improve the logarithmic factors.
+Appendix~\ref{app:subexponential} compares our bound with
+the result in~\cite{Local} under those assumptions.
+
 
 \begin{thebibliography}{99}
 \setlength{\itemsep}{1pt}
@@ -1403,8 +1516,7 @@ V.~Chernozhukov, D.~Chetverikov, K.~Kato, and Y.~Koike,
 with AI collaborators (2026).
 \emph{Supplementary material: High-dimensional Gaussian approximations
 over rectangles without covariance restrictions}.
-Working manuscript, 20 October 2026, revision \texttt{bbf1ab99c733}.
-\href{https://github.com/VC2015/HDCLTs/blob/bbf1ab99c733a398c181ca8c9f5a243a41f258c6/research-rectangle-clt-singular/Rectangle_CLT_Supplement.pdf}{Supplement}.
+Supplement accompanying this paper, 2 November 2026.
 
 \bibitem{CCK}
 V. Chernozhukov, D. Chetverikov, and Y. Koike (2023).
@@ -1455,12 +1567,6 @@ A.~Pr\'ekopa (1973).
 \emph{On logarithmic concave measures and functions}.
 Acta Scientiarum Mathematicarum (Szeged) \textbf{34}, 335--343.
 \url{https://rutcor.rutgers.edu/Prekopa/pdf/SCIENT2.pdf}.
-
-\bibitem{IntegratedRemainder}
-\emph{Toward an integrated curvature estimate: a proved rank-1 case
-and an entropy identity for the general problem}.
-Companion research note, 24 October 2026.
-\href{https://github.com/VC2015/HDCLTs/blob/main/research-rectangle-clt-singular/Rectangle_CLT_Integrated_Remainder.pdf}{\nolinkurl{Rectangle_CLT_Integrated_Remainder.pdf}}.
 
 \bibitem{Obstruction}
 \emph{A curvature obstruction for two-scale smoothing}.
@@ -1635,11 +1741,10 @@ the resulting bounds to polyhedra. Appendix~\ref{app:sharpness-proofs}
 collects the proofs for Section~\ref{opt:section}. A uniform scalar
 tail estimate gives the skewed lower bound, and a Rademacher tail
 calculation supplies the obstruction under third-moment cancellation.
-These estimates yield both consistency criteria. The appendix ends
-with the centrally symmetric lower bound at a shrinking correlation gap,
-reusing the scalar tail estimate to control its leading maximum.
-Appendix~\ref{app:rank-one} gives a separate rank-1 benchmark for
-Conjecture~\ref{conj:sharp-unrestricted}, using scalar normal approximation.
+These estimates yield both consistency criteria. The appendix then
+proves the centrally symmetric lower bounds under bounded and
+fourth-moment envelopes, reusing the scalar tail estimate to control
+the leading maximum in each construction.
 
 \section*{Notation in the appendices}
 \addcontentsline{toc}{section}{Notation in the appendices}
@@ -1647,7 +1752,7 @@ The following symbols are introduced in Section~\ref{sec:smoothing}
 and the appendix proofs. They are used throughout
 Appendices~\ref{sec:main-proof}, \ref{appx-sec:smoothing},
 and~\ref{appx-sec:support}.
-Appendices~\ref{appx-app:concentration}--\ref{app:rank-one}
+Appendices~\ref{appx-app:concentration}--\ref{app:sharpness-proofs}
 use additional local symbols, introduced
 where they occur.
 
@@ -3630,8 +3735,10 @@ it for Theorem~\ref{opt:skew-lower}. For symmetric signs, a more
 precise calculation identifies the fourth-order correction. Together,
 these two estimates prove the consistency criteria in
 Theorem~\ref{opt:consistency}. We then prove
-Theorem~\ref{opt:symmetric-lower} by comparing two maxima with small
-independent shifts. Throughout, \(\Phi\) and \(\varphi\) denote the
+Theorems~\ref{opt:symmetric-lower} and~\ref{opt:q4-lower} by comparing
+two maxima with small independent shifts. A sparse modification
+proves Theorem~\ref{opt:q4-growing}, including the two fourth-moment
+conditions needed for the CCKK comparison. Throughout, \(\Phi\) and \(\varphi\) denote the
 standard normal distribution function and density, and
 \(\bar\Phi\coloneqq1-\Phi\).
 
@@ -3641,6 +3748,27 @@ intersecting these sets with \([-R,R]^p\) and letting \(R\to\infty\)
 recovers their discrepancies by continuity of probability from below.
 Thus all the lower bounds also hold when the supremum is taken only
 over bounded closed rectangles.
+
+We first verify the rectangle form of the cited fourth-moment bound.
+\begin{proof}[Derivation of Proposition~\ref{opt:q4-upper}]
+The moment conditions~\eqref{opt:eq:q4-class} are Condition M and
+condition (18) of~\cite[Theorem~2.5]{CCKK2022}, with \(q=4\)
+and \(b_1=b_2=1\). In particular, the coordinate fourth moments
+are bounded on the scale \(B^2\), and the envelope fourth moment
+on the scale \(B^4\). Neither condition requires covariance
+nondegeneracy. Equation~(51) in the proof of that theorem gives a
+uniform lower-orthant bound. Apply it to \((X_i,-X_i)\in\R^{2p}\).
+This preserves all the moment bounds and turns each rectangle into
+a lower orthant. The two terms in the resulting bound are
+\[
+ \left(\frac{B^2\log^5(2p)}n\right)^{1/4}
+ \quad\text{and}\quad
+ \left(\frac{B^2\{\log(2p)\}^{5/2}}{n^{1/2}}\right)^{1/2}.
+\]
+Using \(\log(2p)\le C\log(ep)\), \(B\ge2\), and \(\rh\le1\)
+gives~\eqref{opt:eq:q4-upper}. The finitely many sample sizes
+excluded by the cited theorem are covered by increasing the constant.
+\end{proof}
 
 \subsection{A uniform scalar tail estimate}
 \label{app:moderate-tail-proof}
@@ -3818,7 +3946,7 @@ requires no further restriction on \(B_n\). Dividing by \(r_n\) and
 using \(\liminf s_n/r_n\ge\sqrt2/4\) proves~\eqref{opt:lower-constant}.
 \end{proof}
 
-To obtain the matching rate in~\eqref{opt:matching-minimax}, put
+To prove Corollary~\ref{opt:matching-rates}, put
 \(\delta_n\coloneqq B_n/\sqrt n\) and \(L_n\coloneqq\log(ep_n)\).
 On the class defining \(M_n(c_0;B_n,p_n)\), we have
 \(\kappa\le c_0^{-1}\), so
@@ -3855,7 +3983,7 @@ We will show that, for any sequence \(x=x_n\to\infty\) with
 \end{equation}
 The first remainder term accounts for the lattice spacing. Keeping
 the remainder explicit will give both the critical-dimension limit
-and the smaller lower scale stated in Section~\ref{opt:section}.
+and the smaller lower scale discussed in Section~\ref{opt:section}.
 
 Let \(k\) be the smallest integer of the same parity as \(n\) with
 \(k>\sqrt n\,x\), and put \(t\coloneqq k/n\). Thus
@@ -3960,7 +4088,10 @@ The mean value theorem, with \(u_n\) between \(q_n\) and \(t_n\), gives
 \end{align*}
 Here \(p_nt_n\to1\) and \(q_n/t_n\to1\), so the prefactor tends
 to \(e^{-1}\). Hence this bounded symmetric example attains the
-\(L_n^2/n\) lower scale asserted in Section~\ref{opt:section}.
+\(L_n^2/n\) lower scale discussed in Section~\ref{opt:section}.
+This scale also appears in~\cite[Proposition~4.1]{CCK}. A bound
+valid in fixed dimension must additionally retain the
+\(n^{-1/2}\) lattice obstruction proved below.
 
 \subsection{Both uniform consistency criteria}
 \label{app:consistency-proof}
@@ -4063,11 +4194,11 @@ convergence. These arrays are admissible for every \(B\ge1\) and
 This proves the second equivalence.
 \end{proof}
 
-\subsection{The centrally symmetric lower bound}
+\subsection{Centrally symmetric lower bounds}
 \label{app:symmetric-lower}
 The preceding examples have identity covariance. We now allow the
-correlation gap to shrink and prove Theorem~\ref{opt:symmetric-lower}
-using a centrally symmetric construction. Its maximum and the Gaussian
+correlation gap to shrink and prove Theorems~\ref{opt:symmetric-lower}
+and~\ref{opt:q4-lower} using a common centrally symmetric construction. Its maximum and the Gaussian
 maximum have leading components close in law and small independent
 shifts. The Gaussian shift has a larger mean. Taylor expansion at a threshold
 where the leading maximum has a large density turns this mean difference
@@ -4165,197 +4296,323 @@ by an absolute constant, treating \(m=2,3\) separately. For
 \(m=2,3\) separately. For larger \(x\), the bound
 \(C(m^2e^{-x^2}+mx e^{-x^2/2})\le C\log(em)\) suffices.
 
-\subsubsection{The symmetric construction and its discrepancy}
+\subsubsection{A common construction for the bounded and fourth-moment cases}
 
-We now construct the observations in Theorem~\ref{opt:symmetric-lower},
-using the common activation mechanism of~\cite[Proposition~E.1]{FKLZ}.
-Each coordinate has a sign component that is always present and a
-second sign component activated by a Bernoulli variable shared across
-the row. Suppress the subscript \(n\): let \(m\to\infty\), put
-\(\ell\coloneqq\log m\), and assume \(\ell^3/n\to0\).
-With \(q\coloneqq\ell/(2n)\) and \(s\coloneqq\sqrt{1-q}\), define
+We prove Theorems~\ref{opt:symmetric-lower} and~\ref{opt:q4-lower}
+by varying the amplitude of the same activated sign component.
+The common activation mechanism is adapted from
+\cite[Proposition~E.1]{FKLZ}. Suppress the subscript \(n\), write
+\(\ell:=\log m\), and set
 \[
- X_{i,jk}\coloneqq s\eta_{ij}+I_i\varepsilon_{ik},\qquad 1\le j,k\le m.
+ \theta:=\frac{\ell}{2n},\qquad
+ a:=\begin{cases}1,&\text{for Theorem~\ref{opt:symmetric-lower}},\\
+                 \theta^{-1/4},&\text{for Theorem~\ref{opt:q4-lower}},
+    \end{cases}
+ \qquad v:=\theta a^2,\qquad s:=\sqrt{1-v}.
 \]
-Here all \(\eta_{ij},\varepsilon_{ik}\) are independent Rademacher
-signs, and the \(I_i\) are independent Bernoulli\((q)\) variables,
-independent of the signs. All statements concern sufficiently large
-\(n\), so \(0<q<1/2\).
-The rows are independent and identically distributed and bounded by
-\(s+1\le2\). Reversing all signs in one row preserves its law and
-negates that row, so its distribution is centrally symmetric and
-its third-moment tensor vanishes. The covariance matrix is
+The quantity
 \[
- \Sigma_{(j,k),(j',k')}=(1-q)\ind\{j=j'\}+q\ind\{k=k'\}.
+ R_n:=\frac{a\ell^{3/2}}{\sqrt n}
 \]
-For \(m\ge2\) and \(0<q<1/2\), its largest off-diagonal correlation
-is \(1-q\), so the correlation gap is \(q\).
-Its range consists of arrays \((a_j+b_k)_{j,k}\), a space of
-dimension \(2m-1\). Both components have positive variance, so this
-is also its rank.
+will measure the discrepancy. The assumptions of the respective
+theorems imply \(R_n\to0\). Since \(a\ge1\) eventually, they also
+imply \(\ell^3/n\to0\), and
+\(v=R_n^2/(2\ell^2)\to0\). Thus \(0<v<1/2\) and \(s\to1\).
 
-To compare the maxima, separate the always-present sign component
-from the component contributed by the active rows. Define
-\[
- A_j\coloneqq n^{-1/2}\sum_i\eta_{ij},\qquad
- T_k\coloneqq\sum_i I_i\varepsilon_{ik},\qquad
- T_*\coloneqq\max_{k\le m}T_k.
-\]
-For \(W=n^{-1/2}\sum_iX_i\) and a covariance-matched Gaussian
-vector \(Z\), the maximum representations are
-\[
- \max_{j,k}W_{jk}=s\max_jA_j+T_*/\sqrt n,\qquad
- \max_{j,k}Z_{jk}\stackrel d=s\max_jG_j+\sqrt q\,H_*,
-\]
-where \(G_j,H_k\) are mutually independent standard normals and
-\(H_*=\max_kH_k\). The Gaussian vector represented here is
-\(Z_{jk}=sG_j+\sqrt q\,H_k\), whose covariance is exactly \(\Sigma\).
-In each maximum representation the two components are independent.
+Let all \(\eta_{ij},\varepsilon_{ik}\) be independent Rademacher
+signs. Independently, let \(I_1,\ldots,I_n\) be independent
+Bernoulli\((\theta)\) variables. Define the observations by
+\begin{equation}
+ X_{i,jk}:=s\eta_{ij}+aI_i\varepsilon_{ik},\qquad
+ 1\le j,k\le m.
+ \label{sym:eq:common-construction}
+\end{equation}
+The rows are i.i.d.\ and centered. Reversing every sign in a row
+preserves its distribution and negates it, so its law is centrally
+symmetric and all mixed third moments vanish. Its covariance is
+\begin{equation}
+ \Sigma_{(j,k),(j',k')}=(1-v)\ind\{j=j'\}+v\ind\{k=k'\}.
+ \label{sym:eq:common-covariance}
+\end{equation}
+Each coordinate has variance \(1\). The largest off-diagonal
+correlation is \(1-v\), so the correlation gap is \(v\).
+The covariance range consists of arrays \((b_j+d_k)_{j,k}\),
+a space of dimension \(2m-1\). Both components have positive
+variance, so this is also the rank.
 
-With many columns, one column is likely to be positive on every
-active row, making \(T_*\) equal to the number \(N\coloneqq\sum_iI_i\)
-of active rows. Here \(\E N=\ell/2\), \(\operatorname{Var}(N)\le\ell/2\),
-and \(\E N^2=O(\ell^2)\). Conditional on the active rows, each
-column is positive on all of them with probability \(2^{-N}\),
-independently across columns. Thus, using Chebyshev's bound
-\(\Pp(N>\ell)\le2/\ell\),
-\begin{align*}
- \Pp(T_*\ne N\mid N=k)&=(1-2^{-k})^m\le e^{-m2^{-k}},\\
- \Pp(T_*\ne N)&\le\frac2\ell+e^{-m2^{-\ell}}=o(1),
-\end{align*}
-where \(m2^{-\ell}=\exp\{(1-\log2)\ell\}\to\infty\).
-Since \(|T_*|\le N\),
-Cauchy--Schwarz then yields
+For \(a=1\), the observations are bounded by \(s+1\le2\).
+For \(a=\theta^{-1/4}\), the fourth moments require a separate
+check because the coordinate and envelope conditions have different
+scales. Here \(v=\sqrt\theta\), and independence of the signs gives
+\begin{align}
+ \E X_{i,jk}^4
+ &=s^4+6s^2v+\theta a^4
+   =2+4v-5v^2\le\frac{14}{5}<4,\notag\\
+ \E\norm{X_i}_\infty^4
+ &\le\E(s+aI_i)^4
+   \le8(s^4+\theta a^4)\le16.
+ \label{sym:eq:q4-moments}
+\end{align}
+Thus the fourth-moment observations belong to
+\(\mathcal C_4(2,m^2)\). These calculations verify all the
+normalization, moment, rank, and gap assertions in the two theorems.
+
+We compare the maxima by separating the sign component present in
+every row from the activated component. Put
+\[
+ A_j:=n^{-1/2}\sum_i\eta_{ij},\qquad
+ T_k:=\sum_iI_i\varepsilon_{ik},\qquad
+ T_*:=\max_{k\le m}T_k,
+\]
+and let \(G_j,H_k\) be mutually independent standard normals.
+Writing \(H_*:=\max_{k\le m}H_k\), we have
+\begin{equation}
+ \max_{j,k}W_{jk}=s\max_jA_j+\frac a{\sqrt n}T_*,
+ \qquad
+ \max_{j,k}Z_{jk}\stackrel d=s\max_jG_j+a\sqrt\theta\,H_*.
+ \label{sym:eq:common-maxima}
+\end{equation}
+The Gaussian vector \(Z_{jk}=sG_j+a\sqrt\theta H_k\) has exactly
+the covariance~\eqref{sym:eq:common-covariance}. In each maximum
+representation, the two components are independent.
+
+With many columns, a column is likely to be positive on every active
+row. To make this precise, let \(N:=\sum_iI_i\). Then
+\(\E N=\ell/2\), \(\Var(N)\le\ell/2\), and
+\(\E N^2=O(\ell^2)\). Conditional on the active rows, each column
+is positive on all of them with probability \(2^{-N}\), independently
+across columns. Hence
+\[
+ \Pp(T_*\ne N)\le\Pp(N>\ell)+e^{-m2^{-\ell}}
+ \le\frac2\ell+\exp\{-e^{(1-\log2)\ell}\}=o(1).
+\]
+Since \(|T_*|\le N\), Cauchy--Schwarz gives
 \[
  0\le\E(N-T_*)\le2(\E N^2)^{1/2}
-                         \Pp(T_*\ne N)^{1/2}=o(\ell).
+       \Pp(T_*\ne N)^{1/2}=o(\ell).
 \]
-Consequently, \(\E T_*=(1/2+o(1))\ell\) and
+It follows that \(\E T_*=(1/2+o(1))\ell\) and
 \(\E T_*^2=O(\ell^2)\).
 
-We now replace the leading Rademacher maximum by a Gaussian maximum
-at a cost smaller than the discrepancy we seek. Let \(F_{n,m}\) be
-the distribution function of \(\max_jA_j\), and put
-\(r_n\coloneqq\ell^{3/2}/\sqrt n\). The assumed condition
-\(\ell^3/n\to0\), together with the Rademacher-maximum
-estimate~\eqref{sym:eq:rademacher-max}, gives
+We next replace the leading Rademacher maximum by its Gaussian
+counterpart. By~\eqref{sym:eq:rademacher-max}, the uniform error
+\(\epsilon_{n,m}\) satisfies
 \[
- \|F_{n,m}-F_m\|_\infty
- \le C\left(\frac{\sqrt\ell}{\sqrt n}+\frac{\ell^2}{n}\right)
- =o(r_n).
+ \frac{\epsilon_{n,m}}{R_n}
+ \le C\left(\frac1{a\ell}
+                  +\frac{\sqrt\ell}{a\sqrt n}\right)\longrightarrow0.
 \]
-At the threshold \(t_n\coloneqq s u_m\), define the shifts
-\(V_W\coloneqq T_*/(s\sqrt n)\) and \(V_G\coloneqq\sqrt q\,H_*/s\).
-Independence in the two maximum representations gives
+This holds for both amplitudes and imposes no lower growth condition
+on \(\ell\). At the threshold \(t_n:=s u_m\), where
+\(m\bar\Phi(u_m)=1\), define
 \[
- \Pp(\max_{j,k}W_{jk}\le t_n)=\E F_m(u_m-V_W)+o(r_n),
- \qquad
- \Pp(\max_{j,k}Z_{jk}\le t_n)=\E F_m(u_m-V_G).
+ V_W:=\frac{aT_*}{s\sqrt n},\qquad
+ V_G:=\frac{a\sqrt\theta}{s}H_*.
 \]
-Since \(s\to1\), the Gaussian moment estimates
-in~\eqref{sym:eq:gaussian-max} and the bounds for \(T_*\) give
+Independence and the uniform replacement bound imply
+\begin{align*}
+ \Pp(\max_{j,k}W_{jk}\le t_n)&=\E F_m(u_m-V_W)+o(R_n),\\
+ \Pp(\max_{j,k}Z_{jk}\le t_n)&=\E F_m(u_m-V_G).
+\end{align*}
+The estimates for \(T_*\) and~\eqref{sym:eq:gaussian-max} give
 \[
- \E V_G-\E V_W=(1/2+o(1))\frac\ell{\sqrt n},
- \qquad \E V_G^2+\E V_W^2=O(\ell^2/n).
+ \E V_G-\E V_W=(1/2+o(1))\frac{a\ell}{\sqrt n},\qquad
+ \E V_G^2+\E V_W^2=O(a^2\ell^2/n).
 \]
-The active-row maximum contributes mean \((1/2+o(1))\ell/\sqrt n\),
-whereas its Gaussian counterpart contributes \((1+o(1))\ell/\sqrt n\).
-Multiplying their difference by \(F_m'(u_m)\asymp\sqrt\ell\) gives
-the desired order \(r_n\).
-To control the remainder, use the global bound
-\eqref{sym:eq:gaussian-smoothness}, which also covers negative shifts:
+The activated maximum has only half the leading mean of its Gaussian
+counterpart. Multiplying this mean difference by the density of the
+leading Gaussian maximum gives the probability discrepancy.
+
+To justify this expansion, use the global second-derivative bound
+\eqref{sym:eq:gaussian-smoothness}, which applies also to negative
+shifts:
 \[
  \E F_m(u_m-V)=F_m(u_m)-F_m'(u_m)\E V+O(\ell\E V^2).
 \]
-Subtracting the two expansions therefore gives
+Since \(F_m'(u_m)\sim\sqrt{2\ell}/e\), subtraction yields
+\begin{equation}
+ \Pp(\max_{j,k}W_{jk}\le t_n)
+ -\Pp(\max_{j,k}Z_{jk}\le t_n)
+ =\left\{\frac1{e\sqrt2}+o(1)\right\}R_n+O(R_n^2).
+ \label{sym:eq:common-discrepancy}
+\end{equation}
+The remainder is negligible because \(R_n\to0\). This is an
+asymptotic for the displayed lower orthant, and hence a lower bound
+for the supremum over rectangles.
+
+For \(a=1\), we have
+\(\delta_nL_n^{3/2}\sim2^{5/2}R_n\), so
+\eqref{sym:eq:common-discrepancy} proves the constant \(1/(8e)\)
+in Theorem~\ref{opt:symmetric-lower}.
+For \(a=(2n/\ell)^{1/4}\),
 \[
- \Pp(\max_{j,k}W_{jk}\le t_n)-\Pp(\max_{j,k}Z_{jk}\le t_n)
- =\left(\frac1{e\sqrt2}+o(1)\right)r_n+O(r_n^2).
+ R_n=2^{1/4}n^{-1/4}\ell^{5/4}
+       =(1/2+o(1))r_{n,4},\qquad L_n=1+2\ell.
 \]
-Finally, recall that \(\delta_n=2/\sqrt n\) and
-\(L_n=\log(em^2)=1+2\ell\). Since \(r_n\to0\) and
-\(\delta_nL_n^{3/2}=2(1+2\ell)^{3/2}/\sqrt n\sim2^{5/2}r_n\),
-the displayed lower orthant has discrepancy
-\(\{1/(8e)+o(1)\}\delta_nL_n^{3/2}\), proving Theorem~\ref{opt:symmetric-lower}.
+Thus~\eqref{sym:eq:common-discrepancy} gives the constant
+\(1/(2\sqrt2\,e)\) in Theorem~\ref{opt:q4-lower}.
 
 
-\clearpage
-\section{The rank-1 case}\label{app:rank-one}
-At rank \(1\), the coordinates are signed copies of a single scalar
-variable, and every rectangle event reduces to an interval event.
-The following proposition therefore gives a stronger bound than
-Conjecture~\ref{conj:sharp-unrestricted}, with no dependence on the
-ambient dimension. It also records the matching lower rate.
+\subsection{The lower bound for a growing fourth-moment envelope}
+\label{app:q4-growing}
 
-For integers \(n,p\ge1\) and \(B\ge1\), let \(M_n^{(1)}(B,p)\) be the
-supremum of the rectangle error over the independent centered
-observations in Corollary~\ref{cor:observations}, with envelope \(B\),
-unit average marginal variances, and covariance of rank \(1\).
-\begin{proposition}[Rank-1 approximation and sharpness]
-\label{prop:rank-one}
-Under~\eqref{eq:setup}, if \(\operatorname{rank}(\Sigma)=1\), then
-\[
- \rh(W,Z)\le C\min\{1,\delta\}.
-\]
-Moreover, for all \(n,p\ge1\) and \(B\ge1\),
-\[
- a_0\min\{1,B/\sqrt n\}\le M_n^{(1)}(B,p)
- \le A_0\min\{1,B/\sqrt n\},
-\]
-where \(a_0,A_0>0\) are absolute constants.
-\end{proposition}
+We now prove Theorem~\ref{opt:q4-growing}. The common activation
+in~\eqref{sym:eq:common-construction} is supplemented by independent
+column masks. These masks reduce each coordinate's fourth moment
+without imposing the same reduction on the maximum over coordinates.
+This permits the two moment scales \(B^2\) and \(B^4\) required
+by~\eqref{opt:eq:q4-class}.
 
-\begin{proof}
-A rank-1 covariance matrix with unit diagonal has the form
-\(\Sigma=ss^\top\), where \(s_j\in\{-1,1\}\). We choose \(s_1=1\).
-For each \(j\), independence and centering give
-\[
- 0=\Var(W_j-s_jW_1)
-   =\sum_i\E(\xi_{ij}-s_j\xi_{i1})^2.
-\]
-Every term is nonnegative, so \(\xi_i=s\eta_i\) almost surely, where
-\(\eta_i\coloneqq\xi_{i1}\). Thus \(W=sS\), with
-\(S\coloneqq\sum_i\eta_i\), and \(Z\) has the law of \(sG\)
-for \(G\sim N(0,1)\).
-The inverse image on the line of a bounded closed rectangle
-\(A=\prod_j I_j\) is the interval \(\bigcap_j s_j I_j\), possibly empty.
-Conversely, any bounded closed interval \(I\) is the inverse image
-of \(\prod_j s_j I\). Hence the rectangle error is exactly the
-supremum of the scalar interval discrepancies.
+Suppress the subscript \(n\), retaining \(\ell=\log m\),
+\(\Lambda=\log(2B^2)\), and \(r=r_{n,B}\) from the theorem.
+Define
+\begin{equation}
+ k:=\frac{\ell}{4\Lambda},\qquad
+ \theta:=\frac{k}{n},\qquad \pi:=B^{-2},\qquad
+ a:=\frac B2\theta^{-1/4},\qquad
+ v:=\theta\pi a^2=\frac{\sqrt\theta}{4},\qquad
+ s:=\sqrt{1-v}.
+ \label{q4:eq:sparse-parameters}
+\end{equation}
+The assumption \(\Lambda=o(\ell)\) gives \(k\to\infty\).
+Also, with \(r_0:=n^{-1/4}\ell^{5/4}\), we have
+\(r/r_0=B/\Lambda^{3/4}\to\infty\). Thus \(r\to0\)
+implies \(\ell^5/n\to0\), \(\theta\to0\), and \(v\to0\).
+All parameters are admissible for sufficiently large \(n\).
 
-The variables \(\eta_i\) are independent and centered, and
+Let \(\eta_{ij}\) and \(\varepsilon_{iu}\) be independent Rademacher
+signs, \(I_i\) independent Bernoulli\((\theta)\) variables, and
+\(J_{iu}\) independent Bernoulli\((\pi)\) variables. Assume mutual
+independence of all these variables, and set
+\begin{equation}
+ X_{i,ju}:=s\eta_{ij}+aI_iJ_{iu}\varepsilon_{iu},
+ \qquad 1\le j,u\le m.
+ \label{q4:eq:sparse-construction}
+\end{equation}
+The rows are i.i.d., centered, and centrally symmetric. Direct
+calculation gives
+\begin{align}
+ \E X_{i,ju}^2&=s^2+\theta\pi a^2=1,\notag\\
+ \E X_{i,ju}^4
+ &=s^4+6s^2v+\theta\pi a^4
+   =1+4v-5v^2+\frac{B^2}{16}
+   \le\frac95+\frac{B^2}{16}\le B^2.
+ \label{q4:eq:sparse-coordinate-moments}
+\end{align}
+The last inequality holds for \(B\ge2\). Since
+\(\norm{X_i}_\infty\le s+aI_i\), Minkowski's inequality gives
+\begin{equation}
+ (\E\norm{X_i}_\infty^4)^{1/4}
+ \le s+a\theta^{1/4}\le1+B/2\le B.
+ \label{q4:eq:sparse-envelope-moment}
+\end{equation}
+Thus these observations belong to \(\mathcal C_4(B,m^2)\).
+The covariance entries are
 \[
- \sum_i\E\eta_i^2=1,\qquad
- \sum_i\E|\eta_i|^3\le\delta\sum_i\E\eta_i^2=\delta.
+ \Sigma_{(j,u),(j',u')}=s^2\ind\{j=j'\}+v\ind\{u=u'\}.
 \]
-The scalar Berry--Esseen inequality~\cite{Berry1941} bounds the
-Kolmogorov distance between \(S\) and \(G\) by \(C\delta\).
-Continuity of the Gaussian distribution gives the same bound for
-strict half-lines. Subtracting the distribution functions at the two
-endpoints bounds every interval discrepancy by \(2C\delta\).
-The trivial bound by \(1\) proves the first assertion, and setting
-\(\delta=B/\sqrt n\) gives the minimax upper bound. To match it,
-we construct a scalar sum with a large atom and embed it on the same
-line.
+As in~\eqref{sym:eq:common-covariance}, the rank is \(2m-1\)
+and the correlation gap is \(v\). A matching Gaussian vector is
+\(Z_{ju}=sG_j+\sqrt v\,H_u\), with all \(G_j,H_u\)
+independent standard normals.
 
-For the lower bound, take i.i.d.\ scalar variables \(Y_i\) equal to
-\(B\) with probability \(\pi\coloneqq(B^2+1)^{-1}\) and to
-\(-1/B\) otherwise, and put \(X_i\coloneqq sY_i\). Then
-\(\E Y_i=0\), \(\E Y_i^2=1\), and \(|Y_i|\le B\).
-The normalized scalar sum is an affine function of
-\(N\sim\operatorname{Bin}(n,\pi)\), whose variance
-\(v=n\pi(1-\pi)\) is at most \(n/B^2\).
-Chebyshev's inequality puts probability at least \(3/4\) within
-\(2\sqrt v\) of its mean. This interval contains at most
-\(4\sqrt v+2\) integers, so
+Let
 \[
- \max_k\Pp(N=k)\ge\frac{3/4}{4\sqrt v+2}
- \ge a_0\min\{1,B/\sqrt n\}.
+ A_j:=n^{-1/2}\sum_i\eta_{ij},\qquad N:=\sum_iI_i,\qquad
+ Q_u:=\sum_iI_iJ_{iu}\varepsilon_{iu},\qquad Q_*:=\max_{u\le m}Q_u.
 \]
-Bounded intervals shrinking to an atom of this size have Gaussian
-probability tending to zero. The corresponding rectangles therefore
-give the required lower bound, including \(B=1\) and
-\(B\ge\sqrt n\).
-\end{proof}
+Writing \(A_*:=\max_jA_j\), \(G_*:=\max_jG_j\), and
+\(H_*:=\max_uH_u\), the maxima decompose as
+\begin{equation}
+ \max_{j,u}W_{ju}=sA_*+\frac a{\sqrt n}Q_*,
+ \qquad
+ \max_{j,u}Z_{ju}=sG_*+\sqrt v\,H_*.
+ \label{q4:eq:sparse-maxima}
+\end{equation}
+Each decomposition has independent components. Conditional on the
+active rows, a given column has \(J_{iu}\varepsilon_{iu}=1\)
+on all of them with probability \((\pi/2)^N\). These events are
+independent across columns. Because
+\(\log(2/\pi)=\Lambda\), on \(N\le2k\) we have
+\(m(\pi/2)^N\ge e^{\ell/2}\). Therefore
+\[
+ \Pp(Q_*\ne N)\le\Pp(N>2k)+e^{-e^{\ell/2}}
+ \le k^{-1}+e^{-e^{\ell/2}}\longrightarrow0.
+\]
+Here \(\E N=k\) and \(\Var(N)\le k\).
+Using \(|Q_*|\le N\) and \(\E N^2\le k^2+k\), the
+Cauchy--Schwarz argument from the preceding proof gives
+\begin{equation}
+ \E Q_*=(1+o(1))k,\qquad \E Q_*^2=O(k^2).
+ \label{q4:eq:sparse-max-moments}
+\end{equation}
+
+The leading Rademacher maximum can again be replaced by a Gaussian
+maximum. By~\eqref{sym:eq:rademacher-max},
+\[
+ \frac{\epsilon_{n,m}}{r_0}
+ \le C\left(n^{-1/4}\ell^{-3/4}
+                 +n^{-3/4}\ell^{3/4}\right)\longrightarrow0,
+\]
+and hence \(\epsilon_{n,m}=o(r)\). At \(t_n:=su_m\), where
+\(m\bar\Phi(u_m)=1\), put
+\[
+ V_W:=\frac{aQ_*}{s\sqrt n},\qquad V_G:=\frac{\sqrt v}{s}H_*.
+\]
+In this sparse construction, the observation maximum has the larger
+mean shift. Indeed, by~\eqref{sym:eq:gaussian-max},
+\[
+ \frac{\sqrt v\,\E H_*}{ak/\sqrt n}
+ =\sqrt{\frac\pi k}\,\E H_*
+ \sim\frac{\sqrt{8\Lambda}}B\longrightarrow0.
+\]
+Together with~\eqref{q4:eq:sparse-max-moments}, this yields
+\begin{equation}
+ \E V_W-\E V_G=(1+o(1))\frac{ak}{s\sqrt n}.
+ \label{q4:eq:sparse-mean-gap}
+\end{equation}
+
+The parameter choices also give the exact identities
+\[
+ \frac{\ell a^2k^2}{n}=\frac{r^2}{32},\qquad
+ \ell^2v=\frac{\Lambda}{8B^2}r^2,\qquad
+ \sqrt{2\ell}\frac{ak}{\sqrt n}=\frac r4.
+\]
+Thus \(\ell\,\E(V_W^2+V_G^2)=O(r^2)\).
+Applying the Taylor comparison used
+in~\eqref{sym:eq:common-discrepancy}, now with the reversed
+mean difference, gives
+\begin{align}
+ &\Pp(\max_{j,u}Z_{ju}\le t_n)
+       -\Pp(\max_{j,u}W_{ju}\le t_n)\notag\\
+ &\qquad
+ =F_m'(u_m)(\E V_W-\E V_G)+O(r^2)+o(r)
+ =\left\{\frac1{4e}+o(1)\right\}r.
+ \label{q4:eq:sparse-orthant}
+\end{align}
+This proves~\eqref{opt:eq:q4-growing}. Since
+\(\ell=(\log p)/2\) and \(\Lambda\sim2\log B\), the orthant
+discrepancy in~\eqref{q4:eq:sparse-orthant} is equivalently
+\[
+ \left\{\frac1{16e}+o(1)\right\}
+ \frac{B n^{-1/4}(\log p)^{5/4}}{(\log B)^{3/4}}.
+\]
+This is an exact first-order asymptotic for the specified lower orthant,
+and hence a lower bound for the full rectangle distance.
+
+To verify the claim about the power of the moment parameter, take
+\(B_n=n^b\) and \(m_n=\lceil\exp(n^d)\rceil\), where
+\(b,d>0\) and \(4b+5d<1\). Then
+\(\Lambda_n\asymp\log n=o(\ell_n)\) and
+\(r_{n,B}\asymp n^{b+(5d-1)/4}(\log n)^{-3/4}\to0\).
+For every fixed \(\beta<1\), the ratio of the lower bound to
+\(B_n^\beta n^{-1/4}(\log p_n)^{5/4}\) is of order
+\[
+ \frac{B_n^{1-\beta}}{(\log B_n)^{3/4}}
+ =\frac{n^{b(1-\beta)}}{(b\log n)^{3/4}}\longrightarrow\infty.
+\]
+Thus no fixed smaller power can replace the linear power of \(B_n\)
+uniformly while the sample-size and dimension powers are retained.
+The logarithmic difference from~\eqref{opt:eq:q4-upper} remains.
 
 \end{document}
