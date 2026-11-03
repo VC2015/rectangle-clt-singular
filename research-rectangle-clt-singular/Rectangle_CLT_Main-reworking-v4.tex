@@ -2334,11 +2334,12 @@ that drive the derivative estimates:
 The covariance identity controls pairs of derivative directions,
 and the face bound controls the remaining directions. Define the
 \emph{face scores} \(q_j\) and the common denominator \(N\) by
-\[
+\begin{equation}
+ \label{appx-an:basic-notation}
  q_j(x)\coloneqq(u_j\cdot x-a_j)/h,\quad
  N(x)\coloneqq1+\sum_{j=1}^m e^{q_j(x)},\quad
  F=F_{a,h}=N^{-1},\quad\pi_j=e^{q_j}/N,\quad\theta=1-F.
-\]
+\end{equation}
 These are the function and weights from Appendix~\ref{appx-sec:smoothing}.
 We now state a conditional version of the pair estimate, because
 the Gaussian estimate conditions on the original summands and masks.
@@ -2899,9 +2900,14 @@ in~\cite[Lemma~12]{GaoZhang}.
 
 \begin{lemma}[Gaussian mean relative to a single face]
 \label{appx-an:lem:mean}
-Let \(u\) be a unit vector, and let \(b(g)\coloneqq \beta(u\cdot g)\in[0,1]\) have
-positive Gaussian integral \(p_b\). If \(0\le w\le b\),
-\(p_w\coloneqq \E w(G)>0\), and \(\mu_w\coloneqq \E[Gw(G)]/p_w\), then
+Let \(u\in\R^r\) be a unit vector and
+\(\beta:\R\to[0,1]\) be a measurable function. Denote
+\(b(g)\coloneqq\beta(u\cdot g)\) for all \(g\in\R^r\).
+Also, let \(w:\R^r\to[0,1]\) be a measurable function
+satisfying \(w(g)\le b(g)\) for all $g\in\R^r$.
+In addition, suppose \(p_b\coloneqq\E b(G)>0\) and
+\(p_w\coloneqq\E w(G)>0\), where \(G\sim N(0,I_r)\),
+and let \(\mu_w\coloneqq\E[Gw(G)]/p_w\). Then
 \begin{equation}
  p_w\norm{\mu_w}^2
  \le \E[w(G)(u\cdot G)^2]
@@ -2911,20 +2917,72 @@ positive Gaussian integral \(p_b\). If \(0\le w\le b\),
 \end{lemma}
 
 \begin{proof}
-The Gaussian component orthogonal to \(u\) is independent of the
-reference weight \(b\). For \(v\perp u\), Jensen's inequality under
-the law with density \(w/p_w\), followed by \(w\le b\), therefore gives
+Let $P_w$ be the probability measure on $\R^r$ with density
 \[
- p_we^{v\cdot\mu_w}
- \le\E[w(G)e^{v\cdot G}]
- \le\E[b(G)e^{v\cdot G}]
- =p_be^{\norm v^2/2}.
+\frac{P_w(dg)}{dg}\coloneqq \frac{w(g)\varphi_r(g)}{p_w},
 \]
-Take \(v\) to be the projection of \(\mu_w\) onto \(u^\perp\).
-Taking logarithms bounds its squared length by
-\(2\log(p_b/p_w)\). Cauchy--Schwarz gives
-\(p_w|u\cdot\mu_w|^2\le\E[w(G)(u\cdot G)^2]\) for the normal
-component. Adding the two bounds proves the claim.
+where $\varphi_r$ denotes the standard Gaussian density
+on $\R^r$. Let $G_w\sim P_w$. By the definition of
+$\mu_w$, we then have $\mu_w=\E[G_w]$.
+
+We first bound the component of $\mu_w$ that is orthogonal to $u$. To do so, fix any \(t\in\R^r\) satisfying \(t\cdot u=0\).
+By Jensen's inequality and the assumption \(w\le b\),
+\begin{align*}
+p_w\exp(t\cdot\mu_w)
+&=p_w\exp\bigl(\E[t\cdot G_w]\bigr)
+\le p_w\E[\exp(t\cdot G_w)]\\
+&=\E[w(G)\exp(t\cdot G)]
+\le\E[b(G)\exp(t\cdot G)].
+\end{align*}
+Also, since \(G\sim N(0,I_r)\),
+the random variables \(u\cdot G\) and \(t\cdot G\)
+are independent. In addition, \(t\cdot G\sim N(0,\norm{t}^2)\). Therefore,
+\begin{align*}
+\E[b(G)\exp(t\cdot G)]
+&=\E[\beta(u\cdot G)\exp(t\cdot G)]\\
+&=\E[\beta(u\cdot G)]\E[\exp(t\cdot G)]
+=p_b\exp\bigl(\norm{t}^2/2\bigr).
+\end{align*}
+Combining the preceding inequalities and taking
+logarithms yields
+\begin{equation}
+t\cdot\mu_w
+\le \log(p_b/p_w)+\frac{\norm{t}^2}{2},
+\qquad t\perp u.
+\label{appx-an:mean-orthogonal-bound}
+\end{equation}
+Next, let $t=\mu_w-(u\cdot\mu_w)u$.
+Since \(\norm{u}=1\), we have \(t\cdot u=0\), and so
+$ t\cdot\mu_w =\norm{t}^2$.
+Substituting this choice into
+\eqref{appx-an:mean-orthogonal-bound} gives
+$\norm{t}^2 \le \log(p_b/p_w)+\norm{t}^2/2$, and so $\norm{t}^2\leq 2\log(p_b/p_w)$.
+Combining this inequality with the equality $\norm{\mu_w}^2 = (u\cdot\mu_w)^2 + \norm{t}^2$ yields
+\begin{equation}
+\norm{\mu_w}^2-(u\cdot\mu_w)^2
+=\norm{t}^2
+\le 2\log(p_b/p_w).
+\label{appx-an:mean-orthogonal-result}
+\end{equation}
+Next, we bound the component of $\mu_w$ that is parallel to \(u\). By the definition of \(\mu_w\)
+and the Cauchy--Schwarz inequality,
+\begin{align*}
+p_w(u\cdot\mu_w)^2
+&=\frac{\bigl(\E[w(G)(u\cdot G)]\bigr)^2}{p_w}
+\le
+\frac{\E[w(G)]\E[w(G)(u\cdot G)^2]}{p_w}
+=\E[w(G)(u\cdot G)^2].
+\end{align*}
+Combining this bound with \eqref{appx-an:mean-orthogonal-result},
+we obtain
+\begin{align*}
+p_w\norm{\mu_w}^2
+&=p_w(u\cdot\mu_w)^2
+ +p_w\bigl(\norm{\mu_w}^2-(u\cdot\mu_w)^2\bigr)
+ \le \E[w(G)(u\cdot G)^2]
+ +2p_w\log(p_b/p_w),
+\end{align*}
+as claimed.
 \end{proof}
 
 We can now control the matrix sum without a factor depending on the
@@ -2954,181 +3012,309 @@ Here \(\pi_j\) are the face probabilities associated with
 \end{lemma}
 
 \begin{proof}
-We first record the Gaussian-tilt calculation. Let \(w:\R^r\to[0,1]\)
-be log-concave with \(p_w\coloneqq \E_Gw(G)>0\). Define the \emph{tilted probability measure} by
-\[
- dQ_w(g)\coloneqq\frac{w(g)}{p_w}\,d\Phi_r(g),
-\]
-and let \(\mu_w,K_w\) be its mean and covariance. Pr\'ekopa's
-theorem~\cite[Theorem~6]{Prekopa1973} makes
-\[
- z\longmapsto\int_{\R^r}e^{-\norm{g-z}^2/2}w(g)\dd g
-\]
-log-concave. Differentiating under the integral shows that at zero
-the gradient of its logarithm is \(\mu_w\), and the Hessian is
-\(\E_{Q_w}GG^\top-\mu_w\mu_w^\top-I_r=K_w-I_r\).
-Log-concavity therefore implies \(K_w\preceq I_r\).
-The identity
-\[
- \E_G[(GG^\top-I_r)w(G)]
- =p_w\{\mu_w\mu_w^\top-(I_r-K_w)\}
-\]
-expresses the matrix on the left as \(A-B\), where
-\(A\coloneqq p_w\mu_w\mu_w^\top\) and \(B\coloneqq p_w(I_r-K_w)\)
-are positive semidefinite. The triangle
-inequality for the nuclear norm gives
-\[
- \norm{A-B}_*\le\tr A+\tr B
- =2\tr A-\tr(A-B).
-\]
-Since \(\tr A=p_w\norm{\mu_w}^2\) and
-\(\tr(A-B)=\E_G[H_2(G)w(G)]\), this gives
-\begin{equation}
- \left\|\E_G[(GG^\top-I_r)w(G)]\right\|_*
- \le2p_w\norm{\mu_w}^2-\E_G[H_2(G)w(G)],
- \qquad H_2(g)\coloneqq \norm g^2-r.
- \label{appx-an:matrix-trace-reduction}
-\end{equation}
-Thus the matrix calculation applies to any log-concave weight. The
-two scalar estimates below are where we use the logistic form.
 
-For each ordered tuple \(\alpha=(\alpha_1,\ldots,\alpha_k)\), recall
-the product weight
-\(W_\alpha(x)=F(x)\prod_{a=1}^k\pi_{\alpha_a}(x)\).
-Condition on \(V_0\), and put
+Let \(w:\R^r\to[0,1]\) be a log-concave function
+satisfying \(p_w\coloneqq\E[w(G)]>0\) and let
+\(P_w\) be the probability measure on \(\R^r\) with density
 \[
- p_\alpha\coloneqq \E_GW_\alpha(U),\qquad
- \mu_\alpha\coloneqq \frac{\E_G[GW_\alpha(U)]}{p_\alpha}.
+\frac{P_w(dg)}{dg}
+\coloneqq\frac{w(g)\varphi_r(g)}{p_w},
 \]
-To check log-concavity, recall that \(F=N^{-1}\) and
-\(\pi_j=e^{q_j}/N\). Hence
+where \(\varphi_r\) denotes the standard Gaussian density.
+Let \(G_w\sim P_w\), and denote its mean and covariance
+matrix by
 \[
- \log W_\alpha(V_0+\sigma g)
+\mu_w\coloneqq\E[G_w]=\frac{\E[Gw(G)]}{p_w},\qquad
+K_w\coloneqq\E[(G_w-\mu_w)(G_w-\mu_w)^\top]=\frac{\E[GG^\top w(G)]}{p_w}-\mu_w\mu_w^\top.
+\]
+
+We first show that \(K_w\preceq I_r\), i.e. the matrix $I_r - K_w$ is positive semidefinite. To this end, observe that the function $(g, z)\mapsto e^{-\norm{g-z}^2/2}w(g)$
+is log-concave. Therefore, the function \(H:\R^r\to(0,\infty)\) defined by
+\[
+H(z)\coloneqq
+\int_{\R^r}e^{-\norm{g-z}^2/2}w(g)\dd g,\qquad z\in\R^r,
+\]
+is log-concave by Pr\'ekopa's theorem~\cite[Theorem~6]{Prekopa1973}.
+In particular,
+\begin{equation}\label{appx-an:prekopa-consequence}
+\nabla^2\log H(0)\preceq0.
+\end{equation}
+We next calculate $\nabla^2\log H(0)$.
+We have
+\begin{align*}
+H(z)
+&=\int_{\R^r}
+ e^{-\norm g^2/2+z\cdot g-\norm z^2/2}
+ w(g)\dd g
+ =(2\pi)^{r/2}e^{-\norm z^2/2}
+ \E[w(G)e^{z\cdot G}].
+\end{align*}
+Denoting \(M(z)\coloneqq\E[w(G)e^{z\cdot G}]\), $z\in\R^r$, and taking logarithms, we obtain
+\[
+\log H(z)
+=\frac r2\log(2\pi)-\frac{\norm z^2}{2}
+ +\log M(z).
+\]
+Also, for all \(a, b = 1,\dots, r\),
+\[
+\partial_a M(z)
+=\E[G_aw(G)e^{z\cdot G}],
+\qquad
+\partial_{ab}M(z)
+=\E[G_aG_bw(G)e^{z\cdot G}].
+\]
+Therefore,
+\begin{align*}
+\partial_{ab}\log H(z)
+&=-\mathbf 1\{a=b\}
+ +\frac{\partial_{ab}M(z)}{M(z)}
+ -\frac{\partial_aM(z)\partial_bM(z)}{M(z)^2}.
+\end{align*}
+Hence, given that \(M(0)=p_w\), we obtain
+\begin{align*}
+\partial_{ab}\log H(0)
+&=-\mathbf 1\{a=b\}
+ +\frac{\E[G_aG_bw(G)]}{p_w}
+  -\frac{\E[G_aw(G)]\E[G_bw(G)]}{p_w^2}.
+\end{align*}
+Thus, $\nabla^2\log H(0)=K_w-I_r$, and so $K_w\preceq I_r$ by \eqref{appx-an:prekopa-consequence}, as required.
+
+We now use this covariance matrix inequality to prove that
+\begin{equation}
+\left\|\E[(GG^\top-I_r)w(G)]\right\|_*
+\le 2p_w\norm{\mu_w}^2
+ -\E[H_2(G)w(G)],
+\label{appx-an:matrix-trace-reduction}
+\end{equation}
+where we denoted \(H_2(g)\coloneqq\norm g^2-r\), $g\in\R^r$. To this end, observe that
+\begin{align*}
+\E[(GG^\top-I_r)w(G)]
+&=p_w\bigl(K_w+\mu_w\mu_w^\top-I_r\bigr)
+=p_w\mu_w\mu_w^\top-p_w(I_r-K_w).
+\end{align*}
+Also, define $A\coloneqq p_w\mu_w\mu_w^\top$ and $B\coloneqq p_w(I_r-K_w)$ and note that
+both matrices are positive semidefinite, since
+\(p_w>0\) and \(K_w\preceq I_r\).
+Recall that the nuclear norm of a symmetric
+matrix is the sum of the absolute values of its
+eigenvalues. In particular, for a positive
+semidefinite matrix it equals its trace.
+The triangle inequality therefore gives
+\begin{align*}
+\norm{A-B}_*
+&\le\norm A_*+\norm B_*
+=\tr A+\tr B
+=2\tr A-\tr(A-B).
+\end{align*}
+Here, $\tr A=p_w\norm{\mu_w}^2$ and
+\begin{align*}
+\tr(A-B)
+&=\tr\E[(GG^\top-I_r)w(G)]
+=\E[(\norm G^2-r)w(G)]
+=\E[H_2(G)w(G)],
+\end{align*}
+by the definition of $H_2$ above. Combining these identities yields \eqref{appx-an:matrix-trace-reduction}, as required.
+
+In the remainder of the proof, we use the general bound \eqref{appx-an:matrix-trace-reduction} to prove \eqref{appx-an:matrix-bound}. For each \(\alpha=(\alpha_1,\ldots,\alpha_k)\in\{1,\dots,m\}^k\), denote
+\[
+ w_\alpha(g)\coloneqq F(V_0+\sigma g)
+                 \prod_{a=1}^k\pi_{\alpha_a}(V_0+\sigma g),\qquad g\in\R^r,
+\]
+\[
+p_\alpha\coloneqq \E_G[w_\alpha(G)],
+ \quad \mu_\alpha\coloneqq \frac{\E_G[Gw_\alpha(G)]}{p_\alpha}.
+\]
+Here, $\E_Gw_\alpha(G)>0$. To check log-concavity of $w_\alpha$, recall that for all $x\in \R^r$, \(F(x)=N(x)^{-1}\) and \(\pi_j(x)=e^{q_j(x)}/N(x)\), where $N(x) = 1 + \sum_{j=1}^m e^{q_j(x)}$ and $q_j(x) = (u_j\cdot x - a_j) / h$ for all $j=1,\dots, m$; see \eqref{appx-an:basic-notation}. Hence,
+\[
+ \log w_\alpha(g)
  =\sum_{a=1}^k q_{\alpha_a}(V_0+\sigma g)
   -(k+1)\log N(V_0+\sigma g).
 \]
-Each score \(q_j(V_0+\sigma g)\) is affine in \(g\). The function
-\(\log N(V_0+\sigma g)\) is the log-sum-exp of these affine scores
-and the constant score \(0\), so it is convex
-by~\cite[Section~3.1.5, pp.~72--74]{BoydVandenberghe2004}.
-Consequently, \(g\mapsto\log W_\alpha(V_0+\sigma g)\) is concave.
+Here, each \(q_j(V_0+\sigma g)\) is affine in \(g\) and it is straightforward to check that \(\log N(V_0+\sigma g)\) is convex in \(g\), e.g. see \cite[Section~3.1.5, pp.~72--74]{BoydVandenberghe2004}. Thus,
+\(\log w_\alpha\) is indeed log-concave, as required. This implies that we can apply \eqref{appx-an:matrix-trace-reduction} with $w=w_\alpha$.
 
-Summing over the ordered tuples gives the total weight
-\(\bar W(x)\coloneqq \sum_\alpha W_\alpha(x)=F(x)\theta(x)^k\).
-Summing~\eqref{appx-an:matrix-trace-reduction} and then averaging over
-\(V_0\) reduces the claim to bounds for
-\[
- \E_{V_0}\sum_\alpha p_\alpha\norm{\mu_\alpha}^2
- \quad\text{and}\quad
- \E_{V_0,G}[H_2(G)F(U)\theta(U)^k].
-\]
 
-To bound the means, use the first face of each tuple as a reference.
-For a tuple with \(\alpha_1=j\), set
+Now, use $\theta(x) = 1 - F(x) = \sum_{j=1}^m \pi_j(x)$ as in \eqref{appx-an:basic-notation} and observe that
+\begin{equation}\label{appx-an:total-product-weight}
+ \sum_\alpha w_\alpha(g)=F(V_0+\sigma g)\theta(V_0+\sigma g)^k,
+\end{equation}
+where the sum is over all $\alpha\in\{1,\dots,m\}^k$. Applying \eqref{appx-an:matrix-trace-reduction} with $w = w_{\alpha}$, summing over $\alpha$, and taking expectations over $V_0$ thus shows that
+\begin{align}
+& \E_{V_0}\sum_{\alpha_1,\ldots,\alpha_k}
+ \left\|\E_G\left[(GG^\top-I_r)F(U)
+              \prod_{a=1}^k\pi_{\alpha_a}(U)\right]\right\|_* \nonumber\\
+& \qquad\qquad\qquad \le  2\sum_\alpha \E[p_\alpha\norm{\mu_\alpha}^2]
+- \E[H_2(G)F(U)\theta(U)^k]. \label{appx-an:matrix-main-split}
+\end{align}
+We bound two terms in \eqref{appx-an:matrix-main-split} in turn.
+
+{\bf First term in \eqref{appx-an:matrix-main-split}.} For each $j=1,\dots, m$, set
 \[
- b_j(g)\coloneqq \frac{e^{q_j(V_0+\sigma g)}}
-                  {\{1+e^{q_j(V_0+\sigma g)}\}^2},
- \qquad p_{b_j}\coloneqq \E_Gb_j(G).
-\]
-This weight depends only on \(u_j\cdot g\), and
-\(W_\alpha(V_0+\sigma g)\le
-F(V_0+\sigma g)\pi_j(V_0+\sigma g)\le b_j(g)\).
-Lemma~\ref{appx-an:lem:mean}
-and \(|u_j\cdot G|\le\norm G_U\) therefore imply
-\begin{equation}
+ b_j(g)\coloneqq
+ \frac{e^{q_j(V_0+\sigma g)}}
+ {\{1+e^{q_j(V_0+\sigma g)}\}^2},
+ \qquad g\in\R^r,
+ \]
+ and \(p_{b_j}\coloneqq\E_G[b_j(G)]\).
+Since $b_j$ depends only on $u_j\cdot g$ and
+$w_\alpha\le F\pi_{\alpha_1}\le b_{\alpha_1}\leq 1$ for all $\alpha\in\{1,\dots, m\}^k$,
+Lemma~\ref{appx-an:lem:mean} and
+$|u_j\cdot G|\le\norm G_U$ give
+\[
  \sum_\alpha p_\alpha\norm{\mu_\alpha}^2
- \le\E_G[\bar W(U)\norm G_U^2]
-       +2\sum_\alpha p_\alpha\log(p_{b_{\alpha_1}}/p_\alpha).
+ \le \sum_{\alpha}\E_G[w_{\alpha}(G)\norm G_U^2]
+ +2\sum_\alpha p_\alpha
+ \log(p_{b_{\alpha_1}}/p_\alpha).
+\] 
+Thus,
+\begin{equation}
+\sum_\alpha \E[p_\alpha\norm{\mu_\alpha}^2]
+ \le \E[F(U)\theta(U)^k\norm G_U^2]
+ +2\sum_\alpha \E[p_\alpha
+ \log(p_{b_{\alpha_1}}/p_\alpha)].
  \label{appx-an:entropy-sum}
 \end{equation}
-The first term has expectation at most \(ChL^{3/2}\): condition on
-\(G\), apply~\eqref{appx-an:weight-concentration} using
-\(\bar W\le F\theta\), and then use \(\E\norm G_U^2\le CL\).
+where we used \eqref{appx-an:total-product-weight}. 
 
-An individual \(p_\alpha\) can be arbitrarily small, so we bound the
-sum of logarithmic terms using the total averaged masses
+The first term on the right-hand side of \eqref{appx-an:entropy-sum} is at most
+$ChL^{3/2}$: note that $\theta(U)^k \leq \theta(U)$, apply
+\eqref{appx-an:weight-concentration} conditional on $G$, and then use $\E\norm G_U^2\le CL$.
+To bound the second term on the right-hand side of \eqref{appx-an:entropy-sum}, 
+define
 \[
- \bar p\coloneqq \E_{V_0,G}\bar W(U),\qquad
- \bar b\coloneqq m^{k-1}\sum_j\E_{V_0,G}b_j(G).
+ P\coloneqq\sum_\alpha p_\alpha,\qquad
+ B\coloneqq\sum_\alpha p_{b_{\alpha_1}}
+ =m^{k-1}\sum_j p_{b_j}.
 \]
-There are \(m^{k-1}\) tuples with each first face. The log-sum
-inequality~\cite[Theorem~2.7.1]{CoverThomas2006} and the joint concavity
-of \((x,y)\mapsto x\log(y/x)\)
-therefore give
+Then
 \[
- \E_{V_0}\sum_\alpha p_\alpha
-          \log(p_{b_{\alpha_1}}/p_\alpha)
- \le\bar p\log(\bar b/\bar p).
+ \sum_\alpha \E [p_\alpha
+ \log(p_{b_{\alpha_1}}/p_\alpha)]
+ \le \E[P\log(B/P)]
+ \le \E[P]\log(\E[B]/\E[P]),
 \]
-By~\eqref{appx-an:weight-concentration} and its single-face version,
-\(\bar p\le Ch\sqrt L\) and \(\bar b\le Cm^kh\sqrt L\).
-Writing \(\bar p=h\sqrt L\,x\), with \(0<x\le C\), yields
+where the first inequality follows from the log-sum inequality (e.g., see \cite[Theorem~2.7.1]{CoverThomas2006}) and the second from Jensen's inequality and concavity of $(x,y)\mapsto x\log(y/x)$ on $(0,\infty)^2$.
+Here, by~\eqref{appx-an:weight-concentration} and \eqref{appx-an:total-product-weight}, $\E[P] \le Ch\sqrt L$. Also, taking the limit as $a_k\to\infty$ for all $k\neq j$ in \eqref{appx-an:weight-concentration} and applying Lebesgue's dominated convergence theorem, $\E[b_j(G)] \leq Ch\sqrt L$ for all $j=1,\dots, m$, so that  $\E[B] \le Cm^kh\sqrt L$.
+Now, writing $\E[P] =h\sqrt L\,x$, where $0<x\le C$,
+and using $\log m\le CL$, we obtain
 \[
- \bar p\log(\bar b/\bar p)
+ \E[P]\log(\E[B]/\E[P])
  \le h\sqrt L\,x\log(Cm^k/x)
  \le C(k+1)hL^{3/2}.
 \]
-The zero-mass case follows by continuity. Together with
-\eqref{appx-an:entropy-sum}, this proves
+Substituting presented bounds into \eqref{appx-an:entropy-sum} yields
 \begin{equation}
- \E_{V_0}\sum_\alpha p_\alpha\norm{\mu_\alpha}^2
+  \sum_\alpha \E[p_\alpha\norm{\mu_\alpha}^2]
  \le C(k+1)hL^{3/2}.
  \label{appx-an:tilted-mean-bound}
 \end{equation}
-The reference masses have the same factor \(h\sqrt L\) as the
-weights being bounded, so this factor cancels inside the logarithm.
 
-It remains to bound the trace after summing the weights. A common
-threshold shift turns \(F\theta^k\) into a derivative, which we can
-interpret geometrically. If \(F_s,\theta_s\) are obtained by increasing
-every threshold by \(s\), then
+{\bf Second term in \eqref{appx-an:matrix-main-split}.} 
+For $s\in\R$, let $q_{s, j}(x) := (u_j\cdot x - a_j - s) / h$ for all $x\in\R^r$ and $j=1,\dots, m$, $F_s(x) := (1 + \sum_{j=1}^m e^{q_{s, j}(x)})^{-1}$ for all $x\in\R^r$, and $\theta_s(x) := 1 - F_s(x)$ for all $x\in\R^r$.
+Since
+\( \partial_s F_s= F_s\theta_s/h\) and \(\partial_s\theta_s^k=-kF_s\theta_s^k/h\),
+we have
 \[
- F\theta^k=-\frac hk\left.\partial_s\theta_s^k\right|_{s=0}.
+ F\theta^k=-\frac hk
+ \left.\partial_s\theta_s^k\right|_{s=0}.
 \]
-We turn this derivative into a surface integral by expressing powers
-of \(F_s\) as mixtures of polyhedral indicators. For an integer
-\(\ell\ge1\), let \(T_\ell\) have the Gamma law with shape \(\ell\)
-and rate \(1\). Take \(T_\ell\) and the mean-1 exponentials
-\(\omega_1,\ldots,\omega_m\) to be mutually independent and
-independent of \(V_0,G\). The Gamma Laplace transform gives
+Also,
+\[
+ \theta_s^k
+ =\sum_{\ell=0}^k(-1)^\ell\binom{k}{\ell}F_s^\ell.
+\]
+
+Now, fix $\ell\ge1$ and let $T_\ell$ have the Gamma
+distribution with shape $\ell$ and rate one, independent of $V_0$ and $G$. Also, let $\omega_1,\ldots,\omega_m$ be independent mean-one exponential random variables, independent of $T_\ell$, $V_0$, and $G$.
+Define
+\[
+ Q_s :=\left\{x:
+ u_j\cdot x\le a_j+s+h\log(\omega_j/T_\ell),
+ \ j\le m\right\}.
+\]
+Then
+\[
+ \begin{aligned}
+ \Pp(x\in Q_s\mid T_\ell)
+ &=\prod_{j=1}^m
+ \exp\left\{-T_\ell
+ e^{(u_j\cdot x-a_j-s)/h}\right\}
+ =\exp\{-T_\ell e^{-s/h}T(x)\},
+ \end{aligned}
+\]
+where $T(x) = \sum_{j=1}^m e^{q_j(x)}$. Thus, by the law of iterated expectations,
 \begin{equation}
- F_s(x)^\ell=\Pp\{u_j\cdot x\le
-        a_j+s+h\log(\omega_j/T_\ell),\ j\le m\}.
+\Pp(x\in Q_s) = \E[\exp\{-T_\ell e^{-s/h}T(x)\}] = \bigl(1+e^{-s/h}T(x)\bigr)^{-\ell} = F_s(x)^\ell,
  \label{appx-an:gamma-mixture}
 \end{equation}
-Indeed, conditional on \(T_\ell\), the probability of all the
-inequalities is \(e^{-T_\ell e^{-s/h}T(x)}\). Its average over
-\(T_\ell\) is \((1+e^{-s/h}T(x))^{-\ell}=F_s(x)^\ell\).
-Expand \(\theta_s^k=\sum_{\ell=0}^k(-1)^\ell\binom k\ell  F_s^\ell\).
-The absolute coefficients sum to \(2^k\), and the constant term has
-zero derivative. For fixed random thresholds, the coarea
-formula~\cite[Section~3.4]{EvansGariepy2015} gives the first variation:
-increasing every unit-normal threshold at unit speed differentiates
-the Gaussian integral into the boundary integral, with the factor
-\(\sigma^{-1}\) after rescaling. This holds for almost every common
-shift. Uniform bounds on Gaussian integrals over the finitely many
-supporting hyperplanes justify differentiation under the mixture
-average. The independent, absolutely continuous shift \(-h\log T_\ell\)
-avoids the exceptional levels, including those at which a target
-polyhedron is lower dimensional. Write \(\surf(P)\) for the signed
-integral of \(H_2\) against Gaussian surface measure on
-\(\partial P\), with each facet counted once. Its precise definition
-and bound are given in Subsection~\ref{appx-an:sec:surface}.
+where the second equality follows from the Gamma Laplace transform formula.
+
+Next, define $P_s :=(Q_s-V_0)/\sigma$, so that $\Pp(U\in Q_s) = \Pp(G\in P_s)$, and
+\[
+ J(s)\coloneqq
+ \int_{P_s}H_2(g)\varphi_r(g)\,dg.
+\]
+Also, for a proper, full-dimensional polyhedron $P$ in $\R^r$, define
+\[
+\surf(P) :=\int_{\partial P}H_2(g)\varphi_r(g)\dd\mathcal H^{r-1}(g).
+\]
+Each facet is counted once, and we set $\surf(P):=0$ for the empty
+set and the whole space, as in Subsection~\ref{appx-an:sec:surface}.
+Then, almost surely at each fixed $s$, including $s=0$,
+\[
+ J'(s)=\frac1\sigma
+ \sum_{j=1}^m
+ \int_{\mathcal F_j(s)}
+ H_2(g)\varphi_r(g)\,d\mathcal H^{r-1}(g)
+ =\frac1\sigma\surf(P_s),
+\]
+where the sum runs over the distinct actual facets of $P_s$, with
+inactive inequalities contributing zero. This is the first-variation
+formula from coarea~\cite[Section~3.4]{EvansGariepy2015}, with the
+factor $\sigma^{-1}$ because the rescaled thresholds move at speed
+$\sigma^{-1}$. The independent, absolutely continuous common shift
+$-h\log T_\ell$ avoids exceptional levels, including lower-dimensional
+polyhedra, at each fixed $s$. Uniform bounds on Gaussian integrals
+over the finitely many supporting hyperplanes justify differentiation
+under the mixture expectation. Consequently,
+\[
+ \begin{aligned}
+ &\left|
+ \left.\partial_s
+ \E[H_2(G)F_s(U)^\ell]
+ \right|_{s=0}\right|
+ =
+ \frac1\sigma\left|
+ \E[\surf((Q_0-V_0)/\sigma)]
+ \right|
+ \le
+ \frac1\sigma\sup_Q
+ \E[\left|\surf((Q-V_0)/\sigma)\right|].
+ \end{aligned}
+\]
+Here the supremum is over polyhedra with the
+prescribed facet normals. Since the constant term
+in the expansion of $\theta_s^k$ has zero
+derivative and
+$\sum_{\ell=1}^k\binom{k}{\ell}\le2^k$,
 Lemma~\ref{appx-an:lem:surface} gives
-\begin{align*}
- \left|\E_{V_0,G}[H_2(G)F(U)\theta(U)^k]\right|
+\[
+ \begin{aligned}
+ \left|\E[H_2(G)F(U)\theta(U)^k]\right|
  &\le\frac{2^kh}{k\sigma}
-       \sup_Q\E_{V_0}|\surf((Q-V_0)/\sigma)|\\
+ \sup_Q\E[ \left|\surf((Q-V_0)/\sigma)\right|]\\
  &\le\frac{C2^kh}{k\sigma}
-       (\sigma L^{3/2}+\delta L^2)
+ (\sigma L^{3/2}+\delta L^2)
  \le C2^khL^{3/2},
-\end{align*}
-where the last inequality uses \(\sigma\ge\delta\sqrt L\).
-Combining this trace bound with
-\eqref{appx-an:matrix-trace-reduction} and
+ \end{aligned}
+\]
+where the last inequality uses
+$\sigma\ge\delta\sqrt L$.
+Combining this bound with
+\eqref{appx-an:matrix-main-split} and
 \eqref{appx-an:tilted-mean-bound} proves
-\eqref{appx-an:matrix-bound}, after absorbing \(k+1\) and \(2^k\)
-into \(C_1^{k+1}\).
+\eqref{appx-an:matrix-bound}, after absorbing
+$k+1$ and $2^k$ into $C_1^{k+1}$.
 \end{proof}
 
 \begin{remark}[Gaussian covariance contraction]\label{appx-rem:covariance-contraction}
@@ -4622,3 +4808,4 @@ uniformly while the sample-size and dimension powers are retained.
 The logarithmic difference from~\eqref{opt:eq:q4-upper} remains.
 
 \end{document}
+
