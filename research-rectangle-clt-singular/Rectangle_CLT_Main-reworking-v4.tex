@@ -1,11 +1,11 @@
 % High-dimensional Gaussian approximation over rectangles.
-% Manuscript dated 31 October 2026.
+% Manuscript revised 4 November 2026.
 \documentclass[11pt,letterpaper]{article}
 \usepackage[margin=1.05in]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern,microtype}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
-\usepackage{longtable}
+\usepackage{longtable,booktabs,tabularx}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
 \usepackage[hidelinks,hypertexnames=false,linktoc=all]{hyperref}
@@ -16,7 +16,7 @@
 \fancyhead[L]{\small Gaussian approximation over rectangles}
 \fancyhead[R]{\small\thepage}
 \setlength{\headheight}{14pt}
-\hypersetup{pdftitle={High-Dimensional Gaussian Approximations over Rectangles without Covariance Restrictions},pdfsubject={Bounded independent summands; rates optimal up to logarithmic factors},pdfauthor={Victor Chernozhukov, Denis Chetverikov, Kengo Kato, Yuta Koike}}
+\hypersetup{pdftitle={High-Dimensional Gaussian Approximations over Rectangles without Covariance Restrictions},pdfsubject={Independent sums with bounded, sub-exponential, or polynomial-moment envelopes},pdfauthor={Victor Chernozhukov, Denis Chetverikov, Kengo Kato, Yuta Koike}}
 \setlength{\parindent}{1.25em}
 \setlength{\parskip}{0pt}
 \emergencystretch=2em
@@ -43,6 +43,7 @@
 \newcommand{\tr}{\operatorname{tr}}
 \newcommand{\op}{\mathrm{op}}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\maxnorm}[1]{\lVert#1\rVert_{\max}}
 \newcommand{\rh}{\rho_{\mathcal R}}
 \newcommand{\ind}{\mathbf 1}
 \newcommand{\dd}{\,d}
@@ -59,13 +60,13 @@ over Rectangles without Covariance Restrictions}\\[0.85em]
 Koike\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnote{The paper
 was developed through collaboration with the AI systems GPT-6 Astra,
 GPT-6 Sol, and Claude Opus.}}\\[0.65em]
-{\normalsize 31 October 2026}
+{\normalsize 4 November 2026}
 \end{center}
 \setcounter{footnote}{0}
 \thispagestyle{plain}
 
 \begin{abstract}
- This paper studies the Gaussian approximation of sums of independent bounded random
+This paper studies the Gaussian approximation of sums of independent random
 vectors over rectangles, with no assumption on the correlation matrix,
 which may be singular. Let \(X_1,\ldots,X_n\) be independent centered
 random vectors in \(\R^p\) whose coordinates \(X_{ij}\) are bounded in
@@ -80,17 +81,21 @@ at most
 \]
 up to a numerical constant. For fixed \(B\) and \(p\asymp n^a\), with
 fixed \(a>0\), this bound has order \(n^{-1/2}(\log n)^2\).
-If, for a fixed \(c_0>0\), no two distinct coordinates have correlation
-larger than \(1-c_0\) in absolute value, the order improves to
-\(n^{-1/2}(\log n)^{3/2}\). A further refinement holds if the
-third moments cancel in aggregate, that is, if
-\(\sum_i\E[X_{ij}X_{ik}X_{i\ell}]=0\) for all coordinates \(j,k,\ell\).
-The factor \(BL^{3/2}/\sqrt n\) cannot be improved in general, so the
-fixed-gap rate is optimal in this dimension regime, and the unrestricted
-rate is optimal up to the factor \((\log n)^{1/2}\). Coordinatewise
+If distinct coordinates have absolute correlations at most \(1-c_0\)
+for a fixed \(c_0>0\), the error is at most \(C_{c_0}BL^{3/2}/\sqrt n\).
+When the third moments also cancel in aggregate, the bound improves to
+\(C_{c_0}BL/\sqrt n\). A third Gaussian integration by parts controls
+the fourth-order remainder in both bounds. The general fixed-gap rate
+matches a lower bound with independent coordinates. Under zero skewness
+and fixed \(B\), the factor \(L\) is optimal among uniform bounds of
+the form \(g(L)/\sqrt n\). For unrestricted covariance a logarithmic
+factor remains. Coordinatewise
 truncation extends the bounds to sub-exponential observations, with
-additional logarithmic factors.
-
+additional logarithmic factors. When only a polynomial moment of the
+largest absolute coordinate is bounded, the moment order determines
+how much rare observations can slow the approximation. At order \(4\),
+a Bennett inequality and symmetric examples give matching rates in
+sample size, dimension, and envelope size in the regimes studied here.
 \end{abstract}
 
 \clearpage
@@ -112,7 +117,7 @@ as its eigenvalues approach zero.
 Let \(W\) be a sum of independent centered bounded random vectors in
 \(\R^p\). Suppose that each coordinate of the sum has unit variance,
 and let \(Z\) be a centered Gaussian vector with the same covariance.
-Our standing assumptions and notation are
+For the bounded-observation results, our assumptions and notation are
 \begin{equation}
  \begin{gathered}
  W\coloneqq (W_j)_{j=1}^p=\sum_{i=1}^n\xi_i,\qquad
@@ -216,30 +221,38 @@ The bound improves when distinct coordinates are separated in
 correlation. We measure this separation by the \emph{correlation gap}
 \[
  c\coloneqq 1-\max_{j\ne k}|\Sigma_{jk}|,
- \qquad c\coloneqq 1\ \text{when }p=1,
+ \qquad c\coloneqq 1\ \text{when }p=1.
 \]
-and put
+A positive gap allows a singular covariance matrix, but separates the
+normals associated with distinct coordinates. This separation enters the
+proof twice. It controls the error in smoothing the rectangle at the
+endpoints, and it bounds the contribution of pairs of faces along the
+interpolation. To distinguish the two effects, put
 \begin{equation}
- \kappa\coloneqq \begin{cases}\min\{L,c^{-1}\},&c>0,\\L,&c=0,\end{cases}
- \qquad E_\kappa\coloneqq 1+\log_+\frac{\sqrt\kappa}{\delta L}.
+ \begin{gathered}
+ \kappa:=\min\{L,1/c\},\qquad
+ E_\kappa:=1+\log_+\frac{\sqrt\kappa}{\delta L},\\
+ d_c:=c(2-c),\qquad J_c:=1+\log(1/d_c),\qquad
+ H_c:=\min\{E_\kappa,J_c\}.
+ \end{gathered}
  \label{eq:parameters}
 \end{equation}
-A positive gap excludes equal or opposite coordinates, but permits
-singular covariance matrices. The parameter \(\kappa\) selects the
-smaller of two smoothing-error bounds: one holds for every covariance
-matrix, and the other uses the correlation gap. The factor
-\(E_\kappa\) arises when we choose the smoothing width.
+At \(c=0\) we take \(1/c=J_c=+\infty\), so that \(\kappa=L\) and
+\(H_c=E_L\). The factor \(\kappa\) comes from endpoint smoothing.
+The factor \(H_c\) comes from integrating the fourth-order remainder.
+At a fixed positive gap, both factors are bounded independently of the
+envelope and the dimension.
 
 \begin{theorem}[Gap-sensitive bound]\label{thm:optimized}
 Under~\eqref{eq:setup},
 \begin{equation}
  \rh(W,Z)\le C\min\!\left\{1,
- \delta[L^{3/2}+L\sqrt{\kappa E_\kappa}]\right\}.
+ \delta[L^{3/2}+L\sqrt{\kappa H_c}]\right\}.
  \tag{R*}\label{eq:optimized}
 \end{equation}
 \end{theorem}
 
-Since \(\kappa\le L\) and \(E_\kappa\le D_L\),
+Since \(\kappa\le L\) and \(H_c\le E_\kappa\le D_L\),
 Theorem~\ref{thm:optimized} implies Theorem~\ref{thm:unrestricted}.
 The term \(\delta L^{3/2}\) in~\eqref{eq:optimized} comes from the
 third moments of the summands,
@@ -256,7 +269,7 @@ Under~\eqref{eq:setup}, suppose
 \end{equation}
 Then
 \begin{equation}
- \rh(W,Z)\le C\min\{1,\delta L\sqrt{\kappa E_\kappa}\}.
+ \rh(W,Z)\le C\min\{1,\delta L\sqrt{\kappa H_c}\}.
  \tag{ZS}\label{eq:zero-skew}
 \end{equation}
 \end{theorem}
@@ -267,30 +280,31 @@ involves the mixed third moments \(\E[\xi_{ij}\xi_{ik}\xi_{i\ell}]\), vanishing
 marginal third moments do not suffice for this cancellation.
 
 For the normalized observations of Corollary~\ref{cor:observations},
-fix \(B\) and suppose \(c\ge c_0>0\). Substituting
-\(\delta=B/\sqrt n\) into the preceding two theorems gives
+let \(c\ge c_0>0\). Substituting \(\delta=B/\sqrt n\) gives
 \begin{align}
- \rh(W_n,Z_n)&\le C_{B,c_0}\min\!\left\{1,
- \frac{L^{3/2}}{\sqrt n}
- +\frac L{\sqrt n}\sqrt{1+\log_+\frac{\sqrt n}{L}}\right\},
+ \rh(W_n,Z_n)&\le C_{c_0}\min\{1,BL^{3/2}/\sqrt n\},
  \label{eq:observations-fixed}\\
- \rh(W_n,Z_n)&\le C_{B,c_0}\min\!\left\{1,
- \frac L{\sqrt n}\sqrt{1+\log_+\frac{\sqrt n}{L}}\right\}
- \quad\text{under~\eqref{eq:zero-third}}.
+ \rh(W_n,Z_n)&\le C_{c_0}\min\{1,BL/\sqrt n\}
+ \qquad\text{under the zero-skewness assumption~\eqref{eq:zero-third}}.
  \label{eq:zero-fixed}
 \end{align}
-In polynomial dimension the bound~\eqref{eq:observations-fixed}
-has order \(n^{-1/2}(\log n)^{3/2}\), and it is optimal there, since the
-lower-bound examples of~\cite[Proposition~2.1]{CCK} and
-Theorem~\ref{opt:skew-lower} have independent coordinates and hence
-correlation gap \(1\). These bounds give uniform convergence at a fixed
-positive gap when \(\log p=o(n^{1/3})\) in general and \(\log p=o(\sqrt n)\)
-under cancellation. Theorem~\ref{opt:consistency} shows that these
-conditions are sharp over fixed-envelope classes, with envelope at least
-two for the first assertion and at least \(1\) for the second. In
-the second case the sharpness concerns only the dimension threshold, and
-below the threshold the error rate in~\eqref{eq:zero-fixed} is not known
-to be sharp.
+The first rate matches the independent-coordinate lower bound in
+Theorem~\ref{opt:skew-lower} whenever \(p\to\infty\), \(B\ge2\),
+and \(BL^{3/2}/\sqrt n\to0\). For fixed \(B\ge2\), the corresponding
+dimension threshold is \(\log p=o(n^{1/3})\). Under zero skewness the
+threshold improves to \(\log p=o(\sqrt n)\) for fixed \(B\ge1\).
+Theorem~\ref{opt:consistency} shows that both thresholds are sharp.
+Even below the second threshold, the factor \(L\) in a bound of the
+form \(g(L)/\sqrt n\) cannot be replaced uniformly by any
+\(g(L)=o(L)\), as Corollary~\ref{opt:zero-log} shows.
+
+When \(c\) decreases, the distinction between the two factors matters.
+For \(1/L\le c\le1\), the fourth-order contribution is at most
+\(C\delta L\sqrt{(1+\log(1/c))/c}\). The logarithm is the cost
+of time integration, and the factor \(c^{-1/2}\) comes from balancing
+the comparison with endpoint smoothing. For \(0<c<1/L\), the endpoint
+factor is already capped at \(L\), and \(H_c\) still selects the
+smaller logarithm. The optimal dependence on a vanishing gap is open.
 
 \subsection{Polyhedral sets}\label{sec:polyhedra}
 A \emph{polyhedron} is an intersection of halfspaces, so membership can be
@@ -400,8 +414,7 @@ Then
 \end{equation}
 If the correlation gap of \(W_n\) is at least a fixed \(c_0>0\), then
 \begin{equation}
- \rh(W_n,Z_n)\le C_{c_0}\min\!\left\{1,
- b_n\left[L^{3/2}+L\sqrt{1+\log_+\frac1{b_nL}}\right]\right\}.
+ \rh(W_n,Z_n)\le C_{c_0}\min\{1,b_nL^{3/2}\}.
  \label{eq:subexponential-gap}
 \end{equation}
 
@@ -504,12 +517,11 @@ covariance matrix to be singular. The companion paper~\cite{Local}
 assumes uniformly positive eigenvalues for principal submatrices of
 order at most four. For bounded observations it gives
 \(C_aBL^{3/2}/\sqrt n\), and \(C_aBL/\sqrt n\) under aggregate
-third-moment cancellation. The present results also cover singular
-three- and four-coordinate submatrices. For general bounded observations,
-the unrestricted bound here has an additional factor \(\sqrt{D_L}\).
-Under third-moment cancellation, the companion paper's
-\(C_aBL/\sqrt n\) rate is sharper than the unrestricted bound obtained
-here.
+third-moment cancellation. At a fixed positive pairwise gap, \eqref{eq:observations-fixed}
+and~\eqref{eq:zero-fixed} give these same rates for bounded observations,
+even when three- and four-coordinate submatrices are singular.
+Theorem~\ref{thm:optimized} also quantifies the loss as the pairwise
+gap tends to zero.
 
 The proof compares the sum with its Gaussian counterpart along
 covariance-preserving interpolations. We smooth the rectangle indicator,
@@ -521,21 +533,30 @@ matrix is singular.
 The next subsection records the scope of formal verification in Lean.
 Section~\ref{sec:smoothing} then outlines the proof, introduces its
 notation, and derives the rates from the main estimates.
-Section~\ref{opt:section} discusses sharpness and open questions.
-Appendices~\ref{sec:main-proof}--\ref{app:subexponential} prove the
-upper bounds, and Appendix~\ref{app:sharpness-proofs} proves the
-lower bounds and consistency criteria. All proofs of the results stated
-here are included in this paper. The
+Section~\ref{sec:poly} replaces boundedness by a polynomial moment
+condition. Section~\ref{opt:section} compares the upper bounds with lower
+bounds for bounded observations and for polynomial envelopes.
+Appendices~\ref{sec:main-proof}--\ref{app:subexponential} give the
+proofs for bounded and sub-exponential observations, with the
+positive-gap estimate for the fourth-order remainder proved in
+Appendix~\ref{app:h3}.
+Appendix~\ref{app:sharpness-proofs} proves the lower bounds and consistency
+criteria, and Appendices~\ref{app:conditional} and~\ref{app:bennett}
+prove the polynomial-moment upper bounds. The
 Supplement~\cite{Supplement} contains additional calculations and
 related investigations.
 
 \subsection{\texorpdfstring{Formal verification in Lean}{Formal verification in Lean}}\label{sec:lean-certification}
 Lean is a proof assistant that checks formal mathematical proofs by
 computer. A separate Lean development establishes
-Theorems~\ref{thm:unrestricted}--\ref{opt:consistency} and the two
-rectangle bounds of Corollary~\ref{cor:subexponential}. These proofs
-were checked on 20 and 21~October 2026 using Lean~4.19.0 and
-mathlib~v4.19.0, and use only Lean's standard axioms. The
+Theorem~\ref{thm:unrestricted}, the bounded-observation results in
+Theorems~\ref{opt:skew-lower} and~\ref{opt:consistency}, and the
+unrestricted rectangle bound of Corollary~\ref{cor:subexponential}.
+For the gap-sensitive and zero-skewness results the verified bounds
+have \(E_\kappa\) in place of \(H_c\). The verification also covers
+the corresponding earlier sub-exponential rectangle bound.
+These proofs were checked on 20 and 21~October 2026 using Lean~4.19.0
+and mathlib~v4.19.0, and use only Lean's standard axioms. The
 \href{https://github.com/VC2015/HDCLTs/blob/bbf1ab99c733a398c181ca8c9f5a243a41f258c6/verification/2026-10-21-companion-results/README.md}{verification record}
 contains the Lean sources, axiom audits, and statement-correspondence
 reviews for source revision
@@ -545,12 +566,11 @@ That record certifies the specified results through their Lean proofs.
 A formal verification of the complete interpolation argument presented
 here, including the general interpolation identity and smooth Gaussian
 initialization, remains to be carried out.
-Theorems~\ref{opt:symmetric-lower}--\ref{opt:q4-growing} and
-the polyhedral extensions in Corollaries~\ref{cor:polyhedra}
-and~\ref{cor:subexponential}
-are also outside the certification. The record therefore does not
-certify every result or written derivation in this paper, or the
-Supplement as a whole.
+The \(H_3\) refinement proved in Appendix~\ref{app:h3}, its fixed-gap
+consequences, the polynomial-moment results, the centrally symmetric lower bound
+of Theorem~\ref{opt:symmetric-lower}, and the polyhedral extensions in
+Corollaries~\ref{cor:polyhedra} and~\ref{cor:subexponential} also
+remain outside that verification record.
 
 \section{Outline of the proof}
 \label{sec:smoothing}
@@ -1046,7 +1066,11 @@ The main analytic issue is to preserve the gain from concentration
 near the rectangle boundary through this operation.
 The matrix and surface estimates in
 Subsections~\ref{appx-an:sec:matrix}--\ref{appx-an:sec:surface}
-do so without introducing a factor depending on rank.
+do so without introducing a factor depending on rank. A positive gap
+permits one more integration by parts on a single face. It produces a
+Gaussian Hermite polynomial of degree \(3\). The remaining terms involve
+pairs of faces, and their exterior angles control their contribution.
+Together these two estimates give faster decay later along the path.
 
 A larger seed improves this Gaussian estimate but increases the
 initialization error. Choosing \(\varepsilon=Lh^2\) balances these
@@ -1088,34 +1112,39 @@ and, uniformly over \(a\in\R^m\) and \(0<t<1\),
  \end{aligned}
  \label{eq:seeded-derivatives}
 \end{equation}
+If \(c>0\), the remainder also satisfies
+\begin{equation}
+ |R_{4,a,h}(t)|\le\frac{C\delta^2L^2}{d_c(t+\varepsilon)^{3/2}},
+ \qquad d_c=c(2-c).
+ \label{eq:gap-pointwise}
+\end{equation}
 When \(K_3=0\), both cubic contractions vanish and the first term
 in~\eqref{eq:initialization-bound} is absent.
 \end{proposition}
 
-Combining~\eqref{eq:path-summary} and~\eqref{eq:seeded-derivatives}
-gives
-\begin{equation}
- |P_a'(t)|\le C\delta L^{3/2}\frac{t}{t+\varepsilon}
-              +\frac{C\delta^2L^{3/2}}{h(t+\varepsilon)}.
- \label{eq:outline-derivative}
-\end{equation}
-The term linear in \(\delta\) disappears when \(K_3=0\).
-The factor \(t\) supplied by the calibration keeps its integral
-bounded, while the fourth-order term contributes a logarithm.
-Appendix~\ref{appx-sec:support} proves the proposition.
-
+The factor \(t\) in the cubic term makes its integral bounded, and
+this term vanishes under zero skewness. For the fourth-order remainder,
+\eqref{eq:seeded-derivatives} is useful near \(t=0\). At a positive
+gap, \eqref{eq:gap-pointwise} becomes the smaller bound once
+\(t+\varepsilon>\varepsilon/d_c^2\). This second bound is integrable
+even if the upper time limit is extended to infinity.
+Appendix~\ref{appx-sec:support} proves~\eqref{eq:seeded-derivatives},
+and Appendix~\ref{app:h3} proves~\eqref{eq:gap-pointwise}.
 
 \subsection{Integration and the choice of smoothing width}
 \label{sec:rate}
 
-We add the initialization cost to the integral of the seeded
-derivative bound over \(0<t<1\). The cubic factor
-\(t/(t+\varepsilon)\) is at most \(1\), while integrating
-\((t+\varepsilon)^{-1}\) gives \(\log(1+1/\varepsilon)\).
-Together with the initialization cost and \(\varepsilon=Lh^2\),
-these estimates yield the following comparison. Appendix~\ref{sec:main-proof}
-also treats the larger widths \(Lh^2\ge1/4\) by using the direct
-Slepian estimate on its full interval.
+How much logarithmic loss remains depends on how long the first
+remainder bound is needed. Integrating it over the full path costs
+\(\log(1+1/\varepsilon)\). Integrating only up to the crossover costs
+at most \(2\log(1/d_c)\), and the later part contributes an absolute
+constant. With \(\varepsilon=Lh^2\), write
+\[
+ \ell_c(h):=\min\{\log_+(1/(Lh^2)),\,J_c-1\}.
+\]
+At \(c=0\) this reduces to the full smoothing logarithm.
+Appendix~\ref{sec:main-proof} gives the integral and also treats
+\(Lh^2\ge1/4\) directly by Slepian interpolation.
 
 \begin{proposition}[Smoothed comparison]\label{prop:moving-cutoff}
 \label{zs:smooth-proposition}
@@ -1123,42 +1152,32 @@ There are absolute constants \(\mathsf A,C\) such that, under
 \eqref{eq:setup}, for every \(h\ge\mathsf A\delta\),
 \begin{equation}
  M_h\le CL^{3/2}\left[
- \delta+\frac{\delta^2}{h}\log_+\frac1{Lh^2}\right].
+ \delta+\frac{\delta^2}{h}\ell_c(h)\right].
  \tag{S*}\label{eq:smooth-moving}
 \end{equation}
 If, in addition, the aggregate third-moment tensor vanishes,
 as in~\eqref{eq:zero-third}, then
 \begin{equation}
  M_h\le\frac{C\delta^2L^{3/2}}h
- \left[1+\log_+\frac1{Lh^2}\right].
+ \bigl[1+\ell_c(h)\bigr].
  \label{zs:smooth}
 \end{equation}
 \end{proposition}
 
-The fourth-order term contains an additive \(1\) from initialization
-and a logarithm from the seeded comparison. In the general bound,
-the nonlogarithmic fourth-order contribution is absorbed into
-\(C\delta L^{3/2}\), since \(h\ge\delta\). Under aggregate
-third-moment cancellation, the cubic term vanishes in both stages,
-so we retain the nonlogarithmic fourth-order contribution. Both
-bounds can then be optimized with the same smoothing width.
-
-A larger width reduces the fourth-order comparison error but
-increases the endpoint error \(Ch\sqrt L\,\kappa\). Recall
-\(E_\kappa=1+\log_+(\sqrt\kappa/(\delta L))\). Balancing these
-terms suggests
+Initialization contributes the additive \(1\) to the fourth-order
+bound. In the presence of a cubic contribution this cost is absorbed
+into \(C\delta L^{3/2}\), since \(h\ge\delta\). If third moments
+cancel, we keep it. In either case, a larger width reduces the
+fourth-order error and increases the endpoint error \(Ch\sqrt L\,\kappa\).
+Balancing these two terms gives
 \begin{equation}
- h\coloneqq\mathsf A\delta\sqrt{LE_\kappa/\kappa}.
+ h:=\mathsf A\delta\sqrt{LH_c/\kappa}.
  \label{eq:optimal-scale}
 \end{equation}
-This is admissible because \(\kappa\le L\) and \(E_\kappa\ge1\).
-At this width, both terms are bounded by a constant times
-\(\delta L\sqrt{\kappa E_\kappa}\). Adding the cubic contribution
-gives Theorem~\ref{thm:optimized}, and omitting it gives
-Theorem~\ref{thm:zero-skew}. The inequalities \(\kappa\le L\)
-and \(E_\kappa\le D_L\) then give Theorem~\ref{thm:unrestricted}.
-Appendix~\ref{sec:main-proof} verifies this choice of width and
-proves the three theorems.
+Since \(\kappa\le L\) and \(H_c\ge1\), the width is admissible.
+Both terms are then of order at most \(\delta L\sqrt{\kappa H_c}\).
+Adding the cubic contribution gives Theorem~\ref{thm:optimized},
+and omitting it gives Theorem~\ref{thm:zero-skew}.
 
 The construction combines several existing ideas. The logistic
 approximation and its random-threshold representation are described
@@ -1184,8 +1203,8 @@ order \(h\) gives \(h\asymp\delta^{2/3}\) and
 the second balance reaches the power \(n^{-1/2}\). The gain comes
 from preserving boundary concentration through the Gaussian matrix
 and surface estimates. Introducing the seed makes those estimates
-available throughout the main comparison. It does not remove the
-logarithm produced by integrating the fourth-order term.
+available throughout the main comparison. The additional Hermite
+estimate caps the time logarithm when the gap stays positive.
 
 Under \(K_3=0\), ordinary Slepian interpolation can also complete
 the seeded comparison, because its cubic term is absent. In the
@@ -1197,6 +1216,213 @@ power \(n^{-1/2}\), but involve the smallest covariance eigenvalue.
 Our estimates use aggregate covariance and bounded
 components along face normals.
 
+
+\section{Polynomial moment envelopes}\label{sec:poly}
+
+We now allow occasional observations larger than any fixed envelope.
+Their contribution depends on the size of the largest absolute
+coordinate in a row and on how often that size is attained. A moment
+bound on the row maximum controls both. Two arguments give complementary bounds. A
+conditional-truncation argument transfers the bounded-summand theorem
+to every envelope moment of order greater than two. When coordinate
+fourth moments are also controlled, a Bennett inequality improves the
+polynomial-moment bound of Chernozhukov, Chetverikov, Kato, and
+Koike~\cite{CCKK2022}. The comparison between these bounds depends on
+both the moment order and the size of the moment parameter.
+
+As in Corollary~\ref{cor:observations}, let \(W_n:=n^{-1/2}\sum_iX_i\)
+for independent centered observations satisfying
+\(n^{-1}\sum_i\E X_{ij}^2=1\) for each \(j\), and let \(Z_n\) be its matching Gaussian vector. We write
+\(W=W_n\), \(Z=Z_n\), and retain \(L=\log(ep)\).
+For \(q>2\) and \(B\ge1\), let \(\mathcal E_q(B,p)\) denote the class
+of such arrays satisfying
+\begin{equation}
+ \max_{i\le n}\E\norm{X_i}_\infty^q\le B^q.
+ \label{poly:envelope}
+\end{equation}
+The dependence of this class on \(n\) is suppressed. Condition
+\eqref{poly:envelope} controls the \emph{random envelope}
+\(\norm{X_i}_\infty\), rather than only the moments of individual
+coordinates. In particular, it accounts for the possibility that a
+large coordinate occurs at a different location in each observation.
+No restriction is imposed on the covariance rank or the correlation gap.
+
+The rate contributed by this envelope condition is conveniently written
+as
+\begin{equation}
+ \alpha_q:=\frac12-\frac1q,\qquad
+ V_q:=Bn^{-\alpha_q}L^{1+\alpha_q}.
+ \label{poly:rates}
+\end{equation}
+Here \(\alpha_q>0\), and constants indexed by \(q\) may depend on the
+fixed moment order. Our results are not uniform as \(q\) approaches two
+or infinity.
+
+\subsection{Transfer from bounded observations}\label{poly:transfer-sec}
+
+Truncating all rows and paying the probability that any row changes
+loses information about the size of the exceptional observations.
+Instead, we condition on which rows are exceptional. Given this
+information, the remaining rows are independent and bounded, and the
+exceptional part can be treated as a random shift. The bounded-summand
+theorem and Gaussian anti-concentration then control the two parts.
+
+\begin{theorem}[Polynomial envelope transfer]\label{poly:transfer}
+For every fixed \(q>2\), there is a constant \(C_q\) such that, for
+every array in \(\mathcal E_q(B,p)\),
+\begin{equation}
+ \rh(W,Z)\le C_q\min\{1,V_q\{\log(en)\}^{\alpha_q}\}.
+ \label{poly:transfer-bound}
+\end{equation}
+Only the unit marginal variances and the envelope condition
+\eqref{poly:envelope} are required.
+\end{theorem}
+
+Appendix~\ref{app:conditional} chooses the truncation threshold by
+balancing the approximation error for bounded observations against the
+variance discarded in the tails. The extra logarithm in
+\eqref{poly:transfer-bound} comes from the bounded-observation theorem.
+If Conjecture~\ref{conj:sharp-unrestricted} holds, the same argument
+gives \(C_q\min\{1,V_q\}\) under the envelope condition alone.
+
+\subsection{A refinement under coordinate fourth moments}\label{poly:bennett-sec}
+
+Coordinate fourth moments can be substantially smaller than the fourth
+moment of the random envelope. Retaining that distinction improves the
+bound when the largest observations are spread sparsely over coordinates.
+Let \(\mathcal C_q(B,p)\) be the subclass of \(\mathcal E_q(B,p)\)
+that also satisfies
+\begin{equation}
+ \max_{j\le p}\frac1n\sum_{i=1}^n\E X_{ij}^4\le B^2.
+ \label{poly:fourth}
+\end{equation}
+Condition \eqref{poly:fourth} is imposed even when \(2<q<4\).
+At \(q=4\), the coordinate and envelope budgets are respectively
+\(B^2\) and \(B^4\).
+
+Under these conditions, the polynomial-moment bound of Chernozhukov,
+Chetverikov, Kato, and Koike~\cite[Theorem~2.5]{CCKK2022} gives
+\(\rh(W,Z)\le C_q\min\{1,U+V_q\}\). To obtain its rectangle form,
+apply their lower-orthant bound to \((X_i,-X_i)\). The moment budgets
+are preserved, and \(\log(2p)\) is comparable to \(L\). Put
+\begin{equation}
+ U:=\left(\frac{B^2L^5}{n}\right)^{1/4},\qquad
+ \mathcal K_q:=\left(\frac{V_q}{U}\right)^2
+     =B\left(\frac nL\right)^{2/q-1/2},\qquad
+ \mathcal{L}_q:=\log(e+\mathcal K_q).
+ \label{poly:bennett-parameters}
+\end{equation}
+Here \(\mathcal K_q\) compares the two contributions in the CCKK bound.
+When \(\mathcal K_q\) is large, Bennett's inequality reduces the envelope
+contribution by a power of the logarithmic factor \(\mathcal{L}_q\).
+
+\begin{theorem}[Bennett refinement]\label{poly:bennett}
+For every fixed \(q>2\), there is a constant \(C_q\) such that, for
+every array in \(\mathcal C_q(B,p)\),
+\begin{equation}
+ \rh(W,Z)\le C_q\min\left\{1,
+ U+\frac{V_q}{\mathcal{L}_q^{1-1/q}}\right\}.
+ \label{poly:bennett-bound}
+\end{equation}
+The observations need not be identically distributed or symmetric.
+\end{theorem}
+
+The proof replaces the maximal inequality for large exchangeable-pair
+increments in the CCKK argument by a Bennett bound. Its variance estimate
+uses both \eqref{poly:envelope} and \eqref{poly:fourth}.
+Appendix~\ref{app:bennett} gives the proof, following the argument
+in~\cite{BennettNote}. Basu and Kuchibhotla use a related truncation
+argument for maxima of independent sums~\cite[Proposition~4.2]{BK2025}.
+
+The two upper bounds apply simultaneously on \(\mathcal C_q(B,p)\).
+Consequently,
+\begin{equation}
+ \sup_{\mathcal C_q(B,p)}\rh(W,Z)
+ \le C_q\min\left\{1,
+ U+\frac{V_q}{\mathcal{L}_q^{1-1/q}},\ V_q\{\log(en)\}^{\alpha_q}\right\}.
+ \label{poly:combined}
+\end{equation}
+This formulation is useful when \(B\) varies with \(n\), since \(\mathcal K_q\) tracks the joint
+effect of \(B\) and \(q\).
+Table~\ref{poly:summary} distinguishes the two proof routes and the
+sharpness conclusions established for each. In particular, the
+conditional-truncation result retains a logarithmic gap when \(q>4\)
+and \(B\) is fixed.
+
+\begin{table}[htbp]
+\centering
+\small
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.20\textwidth}
+ >{\raggedright\arraybackslash}p{0.28\textwidth}
+ >{\raggedright\arraybackslash}X@{}}
+\toprule
+Result and upper rate & Proof route & Sharpness established\\
+\midrule
+Theorem~\ref{poly:transfer}\newline
+Appendix~\ref{app:conditional}\newline
+\(V_q\{\log(en)\}^{\alpha_q}\)
+& Conditional truncation, followed by the bounded-summand theorem and
+Gaussian anti-concentration.
+& For fixed \(B\ge2\) and \(q>4\), the lower rate is \(V_q\) in
+Theorem~\ref{lower:dense}. The remaining gap is
+\(\{\log(en)\}^{\alpha_q}\), and its necessity is unresolved.\\[0.6em]
+Theorem~\ref{poly:bennett}\newline
+Appendix~\ref{app:bennett}\newline
+\(U+V_q/\mathcal{L}_q^{1-1/q}\)
+& The CCKK Stein estimate, a variance bound using both moment budgets,
+and a Bennett inequality for large increments.
+& Matching rates in the large-\(\mathcal K_q\) regime of
+Theorem~\ref{lower:sparse}, and for fixed \(B\ge2\) at \(q=4\)
+by Theorem~\ref{opt:q4-lower}. The term \(U\) remains when \(q>4\)
+and \(B\) is fixed.\\
+\bottomrule
+\end{tabularx}
+\caption{Upper bounds, proof methods, and scope of sharpness.
+Constants are suppressed and both upper bounds are capped at 1.
+The comparisons use the dimension and vanishing-rate conditions of
+the cited results in Section~\ref{opt:section}.}
+\label{poly:summary}
+\end{table}
+
+\subsection{The transition at four moments}\label{poly:transition}
+
+For fixed \(B\) and \(n/L\to\infty\), the three ranges of \(q\)
+have different interpretations. If \(2<q<4\), then \(\mathcal K_q\to\infty\)
+and
+\[
+ \frac{V_q/\mathcal{L}_q^{1-1/q}}{U}
+   =\frac{\sqrt{\mathcal K_q}}{\mathcal{L}_q^{1-1/q}}\longrightarrow\infty.
+\]
+The Bennett bound therefore has order \(V_q/\mathcal{L}_q^{1-1/q}\).
+The sparse construction in Theorem~\ref{lower:sparse} matches this
+order when \(\log \mathcal K_q=o(L)\) and the rate tends to zero.
+
+At \(q=4\), \(\mathcal K_4=B\), and the first term is absorbed uniformly in
+\(B\ge1\), because \(\{\log(e+B)\}^{3/4}/\sqrt B\) is bounded.
+Thus Theorem~\ref{poly:bennett} gives
+\begin{equation}
+ \rh(W,Z)\le C\min\left\{1,
+ \frac{Bn^{-1/4}L^{5/4}}{\{\log(e+B)\}^{3/4}}\right\}.
+ \label{poly:q4}
+\end{equation}
+The fixed-envelope lower bound and the sparse growing-envelope lower
+bound in Section~\ref{opt:section} identify the order in their respective
+dimension regimes.
+
+If \(q>4\) and \(B\) is fixed, then \(\mathcal K_q\to0\). The CCKK and
+Bennett bounds retain the term \(U\), whereas Theorem
+\ref{poly:transfer} gives \(V_q\{\log(en)\}^{\alpha_q}\). In particular, for
+\(p\asymp n^a\), where \(a>0\) is fixed, the latter rate is
+\[
+ O_{q,B,a}\!\left(n^{-\alpha_q}(\log n)^{1+2\alpha_q}\right).
+\]
+Since \(\alpha_q>1/4\), this improves the power of \(n\) in the CCKK
+bound. Theorem~\ref{lower:dense} supplies the lower rate \(V_q\), so
+the remaining gap is at most \(\{\log(en)\}^{\alpha_q}\). For example, at
+\(q=6\) the lower rate is \(Bn^{-1/3}L^{4/3}\), and the upper rate
+is this quantity times \(\{\log(en)\}^{1/3}\). We do not assert that this
+remaining logarithm is necessary.
 
 \section{Sharpness and remaining questions}\label{opt:section}
 We now ask how much the approximation bounds can be improved.
@@ -1277,36 +1503,50 @@ exact: beyond them, some distributions in the respective classes
 remain poorly approximated. Appendix~\ref{app:consistency-proof}
 proves both directions.
 
-Within the range where the error vanishes, the general upper and lower
-bounds also match under a mild comparison of logarithmic factors.
-This includes the common setting in which dimension grows as a power
-of sample size.
+At a fixed positive gap, the independent-coordinate example also
+determines the order of the largest error over the entire class.
 \begin{corollary}[Matching rates at a fixed gap]\label{opt:matching-rates}
-Fix \(c_0\in(0,1]\) and \(\Lambda>0\). Suppose \(p_n\to\infty\),
-\(B_n\ge2\),
-\(r_n:=B_n(\log p_n)^{3/2}/\sqrt n\to0\), and
-\[
- 1+\log_+(\sqrt n/B_n)\le\Lambda\log(ep_n).
-\]
-Then
+Fix \(c_0\in(0,1]\). Suppose \(p_n\to\infty\), \(B_n\ge2\), and
+\(B_n(\log p_n)^{3/2}/\sqrt n\to0\). Then
 \begin{equation}
- M_n(c_0;B_n,p_n)\asymp_{c_0,\Lambda}
+ M_n(c_0;B_n,p_n)\asymp_{c_0}
  \frac{B_n(\log p_n)^{3/2}}{\sqrt n}.
  \label{opt:matching-minimax}
 \end{equation}
-The notation \(\asymp_{c_0,\Lambda}\) bounds the ratio above and below
-by positive constants depending only on \(c_0,\Lambda\). The conclusion
-applies in particular when \(p_n\asymp n^a\), \(a>0\), and
-\(B_n\ge2\) grows subject to \(r_n\to0\).
+The constants in this comparison depend only on \(c_0\).
 \end{corollary}
 
 This comparison follows from Theorems~\ref{thm:optimized}
 and~\ref{opt:skew-lower}, as shown in
-Appendix~\ref{app:skew-proof}. Under zero skewness, we know the exact
-dimension limit but have not yet determined the sharp error rate
-throughout the convergence region. The Rademacher calculation in
-Appendix~\ref{app:rademacher-tail} supplies a lower bound, and the
-discrete obstruction in fixed dimension must also be taken into account.
+Appendix~\ref{app:skew-proof}.
+
+Under zero skewness, independent symmetric signs already show why the
+fixed-gap bound must contain a full power of \(L\) if one keeps a factor
+\(n^{-1/2}\). At the quantile where a Gaussian maximum has probability
+\(e^{-1}\) of falling below its threshold, the fourth-order correction
+to a single Rademacher tail survives in the product over coordinates.
+
+\begin{corollary}[Dimension dependence under zero skewness]\label{opt:zero-log}
+Let \(W_n\) be the normalized sum of \(n\) independent rows of
+independent Rademacher signs, let \(Z_n\sim N(0,I_{p_n})\), and put
+\(L_n=\log(ep_n)\). If \(n^{1/3}=o(L_n)\), \(L_n=o(\sqrt n)\), and
+\(x_n=\Phi^{-1}(e^{-1/p_n})\), then
+\begin{equation}
+ \Pp(\max_j W_{n,j}\le x_n)-\Pp(\max_j Z_{n,j}\le x_n)
+ \sim \frac{L_n^2}{3en}.
+ \label{opt:rad-subcritical}
+\end{equation}
+Consequently, even with envelope \(B=1\), gap \(c=1\), and central
+symmetry, no uniform bound \(C g(L_n)/\sqrt n\) holds for
+\(g(L)=o(L)\), \(g\ge0\), over all sequences with \(L_n=o(\sqrt n)\).
+\end{corollary}
+
+When \(L_n/\sqrt n\) is small, the discrepancy displayed in
+\eqref{opt:rad-subcritical} is quadratic in that ratio, whereas our
+upper bound is linear. Thus the dimension factor in a uniform bound
+of the stated form is sharp, and the exact worst-case error at a
+prescribed subcritical dimension is a finer question.
+Appendix~\ref{app:rademacher-tail} proves the corollary.
 
 The improvement associated with zero skewness depends on controlling
 the correlations. If the correlation gap is allowed to shrink, even
@@ -1333,49 +1573,21 @@ counterpart \(Z_n\sim N(0,\Sigma_n)\) satisfy
 \end{theorem}
 
 Symmetry removes the third moments, but it does not remove the error
-created by strong dependence in this example. Because its correlation
-gap tends to zero, the example leaves the fixed-gap question open.
+created by strong dependence in this example. Its shrinking correlation
+gap allows a factor \(\sqrt{L_n}\) beyond the fixed-gap upper bound
+under zero skewness.
 Appendix~\ref{app:symmetric-lower} proves the theorem using a
 modification of the common activation construction
 in~\cite[Proposition~E.1]{FKLZ}.
 
-\subsection{Fourth-moment envelopes and the CCKK comparison}
-\label{opt:q4-comparison}
+\subsection{Fourth-moment envelopes}\label{opt:q4-comparison}
 
-We now replace the deterministic bound on each observation by moment
-conditions that permit occasional large values. These conditions
-control both individual coordinates and the largest absolute coordinate
-in an observation, its \emph{random envelope}. We compare our lower
-bounds with the existing fourth-moment result of Chernozhukov,
-Chetverikov, Kato, and Koike~\cite[Theorem~2.5]{CCKK2022}.
-The following proposition records that upper bound in our notation.
-
-\begin{proposition}[CCKK fourth-moment bound]\label{opt:q4-upper}
-For each \(n,p\ge1\) and \(B\ge2\), let \(\mathcal C_4(B,p)\) be
-the class of independent centered observations
-\(X_1,\ldots,X_n\in\R^p\) satisfying
-\begin{equation}
- \frac1n\sum_i\E X_{ij}^2=1\quad(j\le p),\qquad
- \max_{j\le p}\frac1n\sum_i\E X_{ij}^4\le B^2,\qquad
- \max_{i\le n}\E\norm{X_i}_\infty^4\le B^4.
- \label{opt:eq:q4-class}
-\end{equation}
-With \(W_n:=n^{-1/2}\sum_iX_i\), \(Z_n\) centered Gaussian with
-the same covariance, and \(L:=\log(ep)\), there are absolute
-constants \(C,C'>0\) such that
-\begin{equation}
- \sup_{\mathcal C_4(B,p)}\rh(W_n,Z_n)
- \le C\min\left\{1,(B^{1/2}+B)n^{-1/4}L^{5/4}\right\}
- \le C'\min\{1,Bn^{-1/4}L^{5/4}\}.
- \label{opt:eq:q4-upper}
-\end{equation}
-\end{proposition}
-
-Allowing rare large observations leads to a slower guarantee than the
-bounded-observation results. The next theorem shows that this slower
-rate is unavoidable under the fourth-moment assumptions. The
-sample-size and dimension powers remain necessary even for symmetric
-observations, so skewness cannot explain the loss.
+Under the fourth-moment conditions of Section~\ref{sec:poly}, the
+coordinate bound controls the variance of rare increments, and the
+envelope bound limits their size. We now show that symmetric observations in the class
+\(\mathcal C_4(B,p)\) defined by
+\eqref{poly:envelope} and~\eqref{poly:fourth} attain the rate
+in~\eqref{poly:q4}. We start with a fixed \(B\).
 
 \begin{theorem}[Fourth-moment lower bound]\label{opt:q4-lower}
 Let \(m_n\to\infty\) be integers, put \(p_n:=m_n^2\) and
@@ -1391,24 +1603,29 @@ has rank \(2m_n-1\) and correlation gap
  \label{opt:eq:q4-lower}
 \end{equation}
 Consequently, for every fixed \(B\ge2\), along these dimension sequences,
-\[
+\begin{equation}
  \sup_{\mathcal C_4(B,p_n)}\rh(W_n,Z_n)
  \asymp_B n^{-1/4}L_n^{5/4}.
-\]
+ \label{lower:q4-fixed}
+\end{equation}
 The same conclusion holds if the supremum is restricted to centrally
 symmetric observations.
 \end{theorem}
 
-For a fixed moment bound, the upper and lower rates therefore agree
-up to constant factors. Appendix~\ref{app:symmetric-lower} proves
-this result and the bounded symmetric lower bound with a common
-construction, checking the required moment conditions explicitly.
+This confirms our conjecture that the \(n^{-1/4}\) rate in the Gaussian
+approximation bound of Chernozhukov, Chetverikov, Kato, and
+Koike~\cite[Theorem~2.5]{CCKK2022} is sharp when \(q=4\).
+For fixed \(B\ge2\), the lower bound also matches the dimension factor
+\(L_n^{5/4}\), even for centrally symmetric observations.
+Appendix~\ref{app:symmetric-lower} obtains this example from the
+bounded symmetric construction by increasing the amplitude of its rare
+component.
 
-We next ask whether the upper bound correctly describes the cost of
-allowing more extreme observations as the sample grows. A larger
-moment parameter permits such observations. The next theorem shows
-that the resulting deterioration in accuracy is also necessary,
-up to logarithmic factors.
+When \(B\) grows, the upper bound in~\eqref{poly:q4} contains a
+logarithm of \(B\) in the denominator. The next example shows that even
+this logarithmic improvement is sharp. Independent masks across
+coordinates allow a large observation to use its envelope budget while
+remaining rare in each coordinate.
 
 \begin{theorem}[Growing fourth-moment envelope]\label{opt:q4-growing}
 Let \(B_n\ge2\) tend to infinity and let \(m_n\to\infty\) be integers.
@@ -1430,17 +1647,83 @@ Their covariance has rank \(2m_n-1\) and correlation gap
 \(c_n=\frac14\sqrt{\ell_n/(4n\Lambda_n)}\to0\).
 \end{theorem}
 
-Thus the linear power of the moment parameter in the CCKK upper bound
-cannot be replaced uniformly by a smaller power while retaining its
-sample-size and dimension powers. A logarithmic gap remains between
-the upper and lower bounds when the moment parameter grows.
-Appendix~\ref{app:q4-growing} gives the construction, verifies its
-moment bounds, and derives this comparison.
-
+Since \(L_n=1+2\ell_n\) and \(\Lambda_n\sim2\log B_n\), the lower
+rate in Theorem~\ref{opt:q4-growing} agrees up to constants with
+the upper rate in~\eqref{poly:q4}, including its dependence on \(B_n\).
 Both fourth-moment examples have correlation gaps tending to zero.
-They show that symmetry alone cannot improve the general rate, while
-leaving open the sharp rate under zero skewness and a fixed positive
-correlation gap.
+
+\subsection{Polynomial envelopes beyond the fourth moment}
+
+For \(q>4\), the envelope moment permits a rare amplitude whose
+coordinate fourth-moment contribution tends to zero. The same unmasked construction as in
+Theorem~\ref{opt:q4-lower} therefore suffices when \(B\) is fixed.
+
+\begin{theorem}[Lower bound for fixed \(B\) and \(q>4\)]\label{lower:dense}
+Fix \(q>4\) and \(B\ge2\). Let \(m_n\to\infty\) be integers, set
+\(p_n:=m_n^2\), \(L_n:=\log(ep_n)\), and suppose
+\(V_{n,q}:=Bn^{-\alpha_q}L_n^{1+\alpha_q}\to0\).
+For all sufficiently large \(n\), there are i.i.d.\ centrally symmetric
+observations in \(\mathcal C_q(B,p_n)\) such that
+\begin{equation}
+ \liminf_{n\to\infty}\frac{\rh(W_n,Z_n)}{V_{n,q}}>0.
+ \label{lower:dense-rate}
+\end{equation}
+Their covariance has rank \(2m_n-1\), and their correlation gap tends
+to zero. Consequently, along these dimension sequences,
+\[
+ c_{q,B}V_{n,q}
+ \le\sup_{\mathcal C_q(B,p_n)}\rh(W_n,Z_n)
+ \le C_qV_{n,q}\{\log(en)\}^{\alpha_q}.
+\]
+\end{theorem}
+
+The lower bound has the same power of \(n\) as the transfer bound in
+Theorem~\ref{poly:transfer}. For fixed \(B\) and \(q>4\), the remaining
+factor is at most \(\{\log(en)\}^{\alpha_q}\).
+
+\subsection{Sparse observations and the Bennett denominator}
+
+When \(\mathcal K_q\) is large, a dense rare component would spend too much of
+the coordinate fourth-moment budget. Independent masks across coordinates
+reduce that expenditure. The price is that more coordinates are needed
+to find one that captures all active positive spikes. This price produces
+the logarithm in the denominator of the upper bound.
+
+\begin{theorem}[Sparse polynomial-moment lower bound]\label{lower:sparse}
+Fix \(q>2\). Let \(B_n\ge2\), let \(m_n\to\infty\) be integers,
+and put \(p_n:=m_n^2\), \(L_n:=\log(ep_n)\), and
+\[
+ \mathcal K_{n,q}:=B_n(n/L_n)^{2/q-1/2},\qquad
+ R_{n,q}:=\frac{B_n n^{-\alpha_q}L_n^{1+\alpha_q}}
+                    {\{\log(e+\mathcal K_{n,q})\}^{1-1/q}}.
+\]
+Suppose
+\begin{equation}
+ \mathcal K_{n,q}\longrightarrow\infty,\qquad
+ \log \mathcal K_{n,q}=o(L_n),\qquad R_{n,q}\longrightarrow0.
+ \label{lower:sparse-regime}
+\end{equation}
+For all sufficiently large \(n\), there are i.i.d.\ centrally symmetric
+observations in \(\mathcal C_q(B_n,p_n)\) with covariance rank
+\(2m_n-1\) and correlation gap tending to zero, such that
+\begin{equation}
+ \rh(W_n,Z_n)\ge c_qR_{n,q}.
+ \label{lower:sparse-rate}
+\end{equation}
+Together with Theorem~\ref{poly:bennett}, this gives
+\(\sup_{\mathcal C_q(B_n,p_n)}\rh(W_n,Z_n)\asymp_q R_{n,q}\)
+under \eqref{lower:sparse-regime}, including when the supremum is
+restricted to centrally symmetric observations.
+\end{theorem}
+
+For fixed \(B\) and \(2<q<4\), the extra dimension condition in
+\eqref{lower:sparse-regime} is satisfied, for example, when
+\(\log n=o(L_n)\). At \(q=4\), it reduces to the growing-envelope
+conditions \(B_n\to\infty\) and \(\log B_n=o(L_n)\), together
+with \(R_{n,4}\to0\). The theorem also applies to \(q>4\) when
+\(B_n\) grows sufficiently quickly that \(\mathcal K_{n,q}\to\infty\).
+It does not establish a minimax formula for all smaller dimensions
+or every intermediate sequence of \(\mathcal K_{n,q}\).
 
 \subsection{Remaining questions for bounded observations}
 
@@ -1463,9 +1746,11 @@ cannot generally be improved, even for centrally symmetric observations.
 Resolving the conjecture may require sharper control of the cumulative
 error along the comparison path. An obstruction to an individual proof
 estimate, such as those in~\cite{Obstruction}, does not rule out
-cancellation over the full path. The sharp
-zero-skewness rate at a fixed positive gap, and how it changes as the
-gap shrinks, also remain unresolved.
+cancellation over the full path. At a fixed positive gap, Corollary~\ref{opt:zero-log} determines
+the smallest possible order of the dimension factor in a uniform
+zero-skewness bound proportional to \(n^{-1/2}\). The exact minimax
+error throughout the subcritical range and its dependence on a shrinking
+gap remain open.
 
 For sub-exponential observations, stronger assumptions on small
 covariance submatrices can improve the logarithmic factors.
@@ -1709,6 +1994,16 @@ of Comparative Judgment, and the double exponential distribution}.
 Journal of Mathematical Psychology \textbf{15}(2), 109--144.
 \href{https://doi.org/10.1016/0022-2496(77)90026-8}{doi:10.1016/0022-2496(77)90026-8}.
 
+\bibitem{BK2025}
+S. Basu and A. K. Kuchibhotla (2025).
+Maximal inequalities for independent random vectors.
+\href{https://arxiv.org/abs/2504.17885}{arXiv:2504.17885}, version~1.
+
+\bibitem{BennettNote}
+\emph{A Bennett refinement of Gaussian approximation under polynomial
+moment conditions}. Research note prepared by Astra and circulated by
+Yuta Koike on 2 November 2026 (document dated 3 November 2026).
+\texttt{Rectangle\_CLT\_Bennett\_Refinement.pdf}.
 \end{thebibliography}
 
 \clearpage
@@ -1720,6 +2015,7 @@ Journal of Mathematical Psychology \textbf{15}(2), 109--144.
 \numberwithin{corollary}{section}
 \numberwithin{remark}{section}
 
+\addtocontents{toc}{\protect\newpage}
 \section*{How to read the appendices}
 \addcontentsline{toc}{section}{How to read the appendices}
 Appendix~\ref{sec:main-proof} derives the main bounds from the smoothing
@@ -1746,9 +2042,13 @@ collects the proofs for Section~\ref{opt:section}. A uniform scalar
 tail estimate gives the skewed lower bound, and a Rademacher tail
 calculation supplies the obstruction under third-moment cancellation.
 These estimates yield both consistency criteria. The appendix then
-proves the centrally symmetric lower bounds under bounded and
-fourth-moment envelopes, reusing the scalar tail estimate to control
-the leading maximum in each construction.
+proves the symmetric lower bounds by varying the amplitude and
+sparsity of the same rare component. Appendix~\ref{app:conditional}
+proves Theorem~\ref{poly:transfer} by conditioning on the exceptional
+observations. Appendix~\ref{app:bennett} proves
+Theorem~\ref{poly:bennett} by controlling the variance and the size of
+large increments separately. Appendix~\ref{app:h3} proves the
+positive-gap estimate used in Appendix~\ref{sec:main-proof}.
 
 \section*{Notation in the appendices}
 \addcontentsline{toc}{section}{Notation in the appendices}
@@ -1756,7 +2056,7 @@ The following symbols are introduced in Section~\ref{sec:smoothing}
 and the appendix proofs. They are used throughout
 Appendices~\ref{sec:main-proof}, \ref{appx-sec:smoothing},
 and~\ref{appx-sec:support}.
-Appendices~\ref{appx-app:concentration}--\ref{app:sharpness-proofs}
+Appendices~\ref{appx-app:concentration}--\ref{app:h3}
 use additional local symbols, introduced
 where they occur.
 
@@ -1767,7 +2067,7 @@ where they occur.
 \begin{longtable}{@{}p{0.27\textwidth}p{0.68\textwidth}@{}}
 \textbf{Symbol} & \textbf{Meaning}\\
 \endhead
-\(\delta,\ L,\ c,\ \kappa,\ E_\kappa\) & summand envelope,
+\(\delta,\ L,\ c,\ \kappa,\ E_\kappa,\ H_c\) & summand envelope,
 \(\log(ep)\), correlation gap, and the parameters
 of~\eqref{eq:parameters}\\
 \(F_{a,h},\ M_h\) & logistic approximation of \(A_a\) at scale
@@ -1842,27 +2142,29 @@ First suppose \(Lh^2<1/4\), and choose
 \(\varepsilon=Lh^2\) and \(v_\varepsilon=\varepsilon/(1+\varepsilon)\).
 The short Slepian path ends at the starting law of the normalized
 seeded path, so~\eqref{eq:roadmap} and
-Proposition~\ref{an:prop:derivative} give
+Proposition~\ref{an:prop:derivative} bound the cubic contribution by
+\(C\delta L^{3/2}\). It vanishes when \(K_3=0\).
+The fourth-order initialization error is at most
+\(C\delta^2 L^{3/2}/h\). For \(c>0\), take the smaller of the two
+pointwise remainder estimates. After factoring out the same quantity
+\(C\delta^2 L^{3/2}/h\), we must bound
 \begin{align*}
- M_h
- &\le C\delta L^{3/2}+\frac{C\delta^2L^{3/2}}h
-   +C\delta L^{3/2}\int_0^1\frac{t\dd t}{t+\varepsilon}
-   +\frac{C\delta^2L^{3/2}}h\int_0^1\frac{\dd t}{t+\varepsilon}\\
- &\le C\delta L^{3/2}
-   +\frac{C\delta^2L^{3/2}}h
-       \left[1+\log\left(1+\frac1\varepsilon\right)\right].
+ I&=\int_0^1\frac1{t+\varepsilon}
+ \min\left\{1,\frac{\sqrt{\varepsilon}}{d_c\sqrt{t+\varepsilon}}\right\}\dd t\\
+ &=\int_0^{\log(1+1/\varepsilon)}\min\{1,e^{-s/2}/d_c\}\dd s
+ \le\min\{\log(1+1/\varepsilon),\,2\log(1/d_c)+2\}.
 \end{align*}
-The two terms proportional to \(\delta\) are cubic contributions,
-and both are absent under the zero-skewness condition
-\eqref{eq:zero-third-support}, which gives \(K_3=0\). The derivative bounds are integrable
-for fixed \(h\), and boundedness and continuity of the smooth test
-function give convergence at both endpoints. Thus the fundamental
-theorem of calculus applies on the full intervals. Since
-\(\log(1+1/\varepsilon)\le C[1+\log_+(1/\varepsilon)]\), we obtain
+Indeed \(s=\log((t+\varepsilon)/\varepsilon)\), and the second
+bound follows by splitting the integral at \(2\log(1/d_c)\) and
+extending the exponential tail to infinity. At \(c=0\) we use only
+\eqref{eq:seeded-derivatives}, which gives \(I=\log(1+1/\varepsilon)\).
+The derivative is integrable for fixed \(h\), and the bounded smooth
+test converges at both endpoints. Hence the fundamental theorem of
+calculus on both intervals gives
 \begin{equation}
  M_h\le C\delta L^{3/2}
   +\frac{C\delta^2L^{3/2}}h
-       \left[1+\log_+\frac1{Lh^2}\right],
+       \bigl[1+\ell_c(h)\bigr],
  \label{eq:unified-smooth}
 \end{equation}
 with the first term omitted under aggregate third-moment cancellation.
@@ -1888,26 +2190,26 @@ the original sum and Gaussian target gives
 \begin{equation}
  \rho\le C\left\{\delta L^{3/2}
   +\frac{\delta^2L^{3/2}}h
-      \left[1+\log_+\frac1{Lh^2}\right]
+      \bigl[1+\ell_c(h)\bigr]
   +h\sqrt L\,\kappa\right\},
  \label{eq:variational}
 \end{equation}
 again with the first term absent under~\eqref{eq:zero-third}.
-Choose \(h=\mathsf A\delta\sqrt{LE_\kappa/\kappa}\), as in
-\eqref{eq:optimal-scale}, with \(\mathsf A\ge1\). Then
+Choose \(h=\mathsf A\delta\sqrt{LH_c/\kappa}\), as in
+\eqref{eq:optimal-scale}. Since \(\mathsf A,H_c\ge1\),
 \[
  1+\log_+\frac1{Lh^2}
- =1+2\log_+\frac{\sqrt\kappa}
-                 {\mathsf A\delta L\sqrt{E_\kappa}}
+ =1+2\log_+\frac{\sqrt\kappa}{\mathsf A\delta L\sqrt{H_c}}
  \le2E_\kappa.
 \]
-The endpoint term in~\eqref{eq:variational} equals
-\(\mathsf A\delta L\sqrt{\kappa E_\kappa}\), and its fourth-order
-term is at most \((2/\mathsf A)\delta L\sqrt{\kappa E_\kappa}\).
+By definition \(1+\ell_c(h)\le J_c\) as well, so
+\(1+\ell_c(h)\le2H_c\). The endpoint and fourth-order terms
+in~\eqref{eq:variational} are therefore both bounded by a constant
+times \(\delta L\sqrt{\kappa H_c}\).
 This proves Theorem~\ref{thm:optimized}, and omitting the cubic term
 proves Theorem~\ref{thm:zero-skew}. Finally,
 \(\kappa\le L\), \(E_\kappa\le D_L\), and \(D_L\ge1\) give
-\(L^{3/2}+L\sqrt{\kappa E_\kappa}\le2L^{3/2}\sqrt{D_L}\),
+\(L^{3/2}+L\sqrt{\kappa H_c}\le2L^{3/2}\sqrt{D_L}\),
 which proves Theorem~\ref{thm:unrestricted}. Taking the minimum
 with \(1\) is justified by \(\rho\le1\).
 \end{proof}
@@ -1992,7 +2294,7 @@ probabilities unchanged. If \(a_\alpha<0\), both probabilities
 are zero. The corollary applies to the remaining inequalities when
 they satisfy its stated conditions.
 
-\section{\texorpdfstring{The logistic approximation: proof of Lemma~\ref{lem:endpoint}}{The logistic approximation: proof of Lemma 2}}\label{appx-sec:smoothing}
+\section{Proof of Lemma~\ref*{lem:endpoint} (logistic approximation)}\label{appx-sec:smoothing}
 
 We work in \(\R^r\), with the \(m=2p\) unit face normals,
 threshold sets \(A_a\), and logistic approximation \(F_{a,h}\) from
@@ -2302,7 +2604,7 @@ Taking the supremum over \(a\in\R^m\) yields
 \(\rho\le M_h+Ch\sqrt L\,\kappa\), as in~\eqref{eq:endpoint-min}.
 \end{proof}
 
-\section{Comparison along the path: proof of Proposition~\ref{an:prop:derivative}}
+\section{Proof of Proposition~\ref*{an:prop:derivative} (comparison along the path)}
 \label{appx-sec:support}
 
 The direct and Gaussian estimates control the same cubic contraction
@@ -2862,9 +3164,9 @@ summed fourth derivative is bounded by
 \(C\sigma_t^{-2}\delta^2\widetilde h^{-1}L^{3/2}\).
 Integrating the uniformly bounded calibrated kernels and using
 \(\widetilde h\ge h\) proves the remainder estimate in
-\eqref{eq:seeded-derivatives}. Together with the direct estimates and the matrix estimate proved
-in the next subsection, this establishes
-Proposition~\ref{an:prop:derivative}.
+\eqref{eq:seeded-derivatives}. The same conditional second-moment
+bound, concentrated base, and translated directions are used for
+the positive-gap refinement~\eqref{eq:gap-pointwise} in Appendix~\ref{app:h3}.
 \end{proof}
 
 \subsection{A matrix estimate for the logistic weights}
@@ -3665,7 +3967,7 @@ Only positive marginal variances are required, so the face components
 may have singular covariance. Condition on the independent shift
 and take the minimum with \(1\) to complete the proof.
 
-\section{\texorpdfstring{Sub-exponential transfer: proof of Corollary~\ref{cor:subexponential}}{Sub-exponential transfer: proof of Corollary 3}}\label{app:subexponential}
+\section{Proof of Corollary~\ref*{cor:subexponential} (sub-exponential transfer)}\label{app:subexponential}
 \begin{proof}[Proof of Corollary~\ref{cor:subexponential}]
 We first prove the rectangle bounds by clipping each coordinate,
 applying the bounded theorem after marginal standardization, and
@@ -3837,8 +4139,7 @@ Thus the covariance matrices differ entrywise by at most \(4\tau\). Since
 has correlation gap at least \(c_0/2\).
 Theorem~\ref{thm:optimized} applied with envelope \(16b\) now gives
 \[
- \rh(W_T,Z_T)\le C_{c_0}\min\left\{1,
- b\left[L^{3/2}+L\sqrt{1+\log_+\frac1{bL}}\right]\right\}.
+ \rh(W_T,Z_T)\le C_{c_0}\min\{1,bL^{3/2}\}.
 \]
 The transfer error in \eqref{tail:transfer} is bounded by the
 \(CbL^{3/2}\) term. This proves \eqref{eq:subexponential-gap}.
@@ -3916,7 +4217,7 @@ the elementary fourth-moment consequence is \(B_4\le C K^2\).
 The tail bound alone does not justify taking \(B_4=K\).
 \end{remark}
 
-\section{\texorpdfstring{Proofs for Section~\ref{opt:section}}{Proofs for Section 3}}
+\section{Proofs of the lower bounds and consistency criteria in Section~\ref*{opt:section}}
 \label{app:sharpness-proofs}
 The lower bounds in Section~\ref{opt:section} arise from small errors
 in scalar tails that become visible when we take coordinate maxima.
@@ -3925,10 +4226,11 @@ it for Theorem~\ref{opt:skew-lower}. For symmetric signs, a more
 precise calculation identifies the fourth-order correction. Together,
 these two estimates prove the consistency criteria in
 Theorem~\ref{opt:consistency}. We then prove
-Theorems~\ref{opt:symmetric-lower} and~\ref{opt:q4-lower} by comparing
-two maxima with small independent shifts. A sparse modification
-proves Theorem~\ref{opt:q4-growing}, including the two fourth-moment
-conditions needed for the CCKK comparison. Throughout, \(\Phi\) and \(\varphi\) denote the
+Theorems~\ref{opt:symmetric-lower}, \ref{opt:q4-lower},
+and~\ref{lower:dense} by comparing two maxima with small independent
+shifts. Adding independent masks to the construction proves the sparse
+lower bounds of Theorems~\ref{opt:q4-growing} and~\ref{lower:sparse}.
+Throughout, \(\Phi\) and \(\varphi\) denote the
 standard normal distribution function and density, and
 \(\bar\Phi\coloneqq1-\Phi\).
 
@@ -3938,27 +4240,6 @@ intersecting these sets with \([-R,R]^p\) and letting \(R\to\infty\)
 recovers their discrepancies by continuity of probability from below.
 Thus all the lower bounds also hold when the supremum is taken only
 over bounded closed rectangles.
-
-We first verify the rectangle form of the cited fourth-moment bound.
-\begin{proof}[Derivation of Proposition~\ref{opt:q4-upper}]
-The moment conditions~\eqref{opt:eq:q4-class} are Condition M and
-condition (18) of~\cite[Theorem~2.5]{CCKK2022}, with \(q=4\)
-and \(b_1=b_2=1\). In particular, the coordinate fourth moments
-are bounded on the scale \(B^2\), and the envelope fourth moment
-on the scale \(B^4\). Neither condition requires covariance
-nondegeneracy. Equation~(51) in the proof of that theorem gives a
-uniform lower-orthant bound. Apply it to \((X_i,-X_i)\in\R^{2p}\).
-This preserves all the moment bounds and turns each rectangle into
-a lower orthant. The two terms in the resulting bound are
-\[
- \left(\frac{B^2\log^5(2p)}n\right)^{1/4}
- \quad\text{and}\quad
- \left(\frac{B^2\{\log(2p)\}^{5/2}}{n^{1/2}}\right)^{1/2}.
-\]
-Using \(\log(2p)\le C\log(ep)\), \(B\ge2\), and \(\rh\le1\)
-gives~\eqref{opt:eq:q4-upper}. The finitely many sample sizes
-excluded by the cited theorem are covered by increasing the constant.
-\end{proof}
 
 \subsection{A uniform scalar tail estimate}
 \label{app:moderate-tail-proof}
@@ -4136,23 +4417,12 @@ requires no further restriction on \(B_n\). Dividing by \(r_n\) and
 using \(\liminf s_n/r_n\ge\sqrt2/4\) proves~\eqref{opt:lower-constant}.
 \end{proof}
 
-To prove Corollary~\ref{opt:matching-rates}, put
-\(\delta_n\coloneqq B_n/\sqrt n\) and \(L_n\coloneqq\log(ep_n)\).
-On the class defining \(M_n(c_0;B_n,p_n)\), we have
-\(\kappa\le c_0^{-1}\), so
-\[
- E_\kappa=1+\log_+\frac{\sqrt\kappa}{\delta_nL_n}
- \le C_{c_0}+\log_+(1/\delta_n).
-\]
-The assumed comparison of logarithms therefore gives
-\(\kappa E_\kappa\le C_{c_0,\Lambda}L_n\). Theorem~\ref{thm:optimized}
-now bounds the supremum error by
-\(C_{c_0,\Lambda}\delta_nL_n^{3/2}\), and
-Theorem~\ref{opt:skew-lower} gives the matching lower bound because
-its covariance is the identity and \(L_n\sim\log p_n\).
-For \(p_n\asymp n^a\), \(a>0\), the logarithmic condition holds with
-a constant depending only on \(a\), since \(B_n\ge2\) implies
-\(\log_+(\sqrt n/B_n)\le\tfrac12\log n\).
+For Corollary~\ref{opt:matching-rates}, the fixed-gap bound
+\eqref{eq:observations-fixed} gives the upper rate for every member of
+the class. The example in Theorem~\ref{opt:skew-lower} has identity
+covariance and hence gap \(1\), so it belongs to the class for every
+\(c_0\le1\). Since \(\log(ep_n)\sim\log p_n\), its lower rate agrees
+with the upper rate.
 
 \subsection{Rademacher tails and the fourth-order correction}
 \label{app:rademacher-tail}
@@ -4261,7 +4531,8 @@ These arrays have envelope \(1\) and identity covariance. Their rows
 are centrally symmetric, so their full third-moment tensors vanish.
 
 For the lower scale below this threshold, suppose instead
-\(n^{1/3}\ll L_n\coloneqq\log(ep_n)\ll\sqrt n\), and take the exact
+\(L_n\coloneqq\log(ep_n)\) satisfies \(n^{1/3}=o(L_n)\) and
+\(L_n=o(\sqrt n)\), and take the exact
 Gaussian maximum quantile \(x_n\coloneqq\Phi^{-1}(e^{-1/p_n})\).
 Put \(t_n\coloneqq1-\Phi(x_n)\),
 \(q_n\coloneqq\Pp(S_n/\sqrt n>x_n)\), and
@@ -4279,7 +4550,17 @@ The mean value theorem, with \(u_n\) between \(q_n\) and \(t_n\), gives
 Here \(p_nt_n\to1\) and \(q_n/t_n\to1\), so the prefactor tends
 to \(e^{-1}\). Hence this bounded symmetric example attains the
 \(L_n^2/n\) lower scale discussed in Section~\ref{opt:section}.
-This scale also appears in~\cite[Proposition~4.1]{CCK}. A bound
+This proves~\eqref{opt:rad-subcritical}. To obtain the last assertion
+of Corollary~\ref{opt:zero-log}, take any integers \(p\to\infty\),
+write \(L=\log(ep)\), and set
+\[
+ b_L:=\max\{g(L)/L,L^{-1/2}\},\qquad n:=\lceil L^2/b_L\rceil.
+\]
+Then \(b_L\to0\), \(n^{1/3}=o(L)\), and \(L=o(\sqrt n)\).
+The orthant
+discrepancy is asymptotic to \(b_L/(3e)\). But
+\(g(L)/\sqrt n\le b_L^{3/2}\), which proves the assertion.
+The scale \(L^2/n\) also appears in~\cite[Proposition~4.1]{CCK}. A bound
 valid in fixed dimension must additionally retain the
 \(n^{-1/2}\) lattice obstruction proved below.
 
@@ -4312,16 +4593,9 @@ parity of \(n\).
 \begin{proof}[Proof of Theorem~\ref{opt:consistency}]
 First consider the class without cancellation, and put
 \(\delta_n\coloneqq B_n/\sqrt n\) and
-\(L_n\coloneqq\log(ep_n)\). At a fixed gap \(c_0\),
-Theorem~\ref{thm:optimized} bounds its supremum error by
-\[
- C_{c_0}\left\{\delta_nL_n^{3/2}
-  +t_n\sqrt{1+\log_+(C_{c_0}/t_n)}\right\},
- \qquad t_n\coloneqq\delta_nL_n.
-\]
-If \(\delta_nL_n^{3/2}\to0\), then \(t_n\to0\), and the second
-term also tends to zero. This proves sufficiency for arbitrary
-dimension and envelope sequences.
+\(L_n\coloneqq\log(ep_n)\). At a fixed gap \(c_0\), \eqref{eq:observations-fixed} bounds the
+supremum error by \(C_{c_0}\delta_nL_n^{3/2}\). This proves sufficiency
+for arbitrary dimension and envelope sequences.
 
 For necessity, we first use one coordinate to rule out large
 summands. If \(\delta_n\) does not tend to zero,
@@ -4369,8 +4643,7 @@ Now impose cancellation and fix \(B\ge1\). Theorem~\ref{thm:zero-skew}
 gives, uniformly over the class,
 \[
  M_n^0(c_0;B,p_n)\le C_{B,c_0}\min\!\left\{1,
- \frac{L_n}{\sqrt n}
-       \sqrt{1+\log_+\frac{\sqrt n}{L_n}}\right\}.
+ \frac{L_n}{\sqrt n}\right\}.
 \]
 If \(\log p_n=o(\sqrt n)\), then \(L_n/\sqrt n\to0\), so this
 bound tends to zero. Conversely, if that dimension condition fails,
@@ -4384,11 +4657,11 @@ convergence. These arrays are admissible for every \(B\ge1\) and
 This proves the second equivalence.
 \end{proof}
 
-\subsection{Centrally symmetric lower bounds}
+\subsection{Proofs of Theorems~\ref*{opt:symmetric-lower}, \ref*{opt:q4-lower}, and~\ref*{lower:dense} (unmasked lower bounds)}
 \label{app:symmetric-lower}
-The preceding examples have identity covariance. We now allow the
-correlation gap to shrink and prove Theorems~\ref{opt:symmetric-lower}
-and~\ref{opt:q4-lower} using a common centrally symmetric construction. Its maximum and the Gaussian
+The independent-coordinate examples above have identity covariance. We now allow the
+correlation gap to shrink and prove Theorems~\ref{opt:symmetric-lower},
+\ref{opt:q4-lower}, and~\ref{lower:dense} using a common centrally symmetric construction. Its maximum and the Gaussian
 maximum have leading components close in law and small independent
 shifts. The Gaussian shift has a larger mean. Taylor expansion at a threshold
 where the leading maximum has a large density turns this mean difference
@@ -4485,17 +4758,17 @@ by an absolute constant, treating \(m=2,3\) separately. For
 \(m=2,3\) separately. For larger \(x\), the bound
 \(C(m^2e^{-x^2}+mx e^{-x^2/2})\le C\log(em)\) suffices.
 
-\subsubsection{A common construction for the bounded and fourth-moment cases}
+\subsubsection{A common construction for bounded and polynomial envelopes}
 
-We prove Theorems~\ref{opt:symmetric-lower} and~\ref{opt:q4-lower}
-by varying the amplitude of the same activated sign component.
+We prove all three results by varying the amplitude of the same activated sign component.
 The common activation mechanism is adapted from
 \cite[Proposition~E.1]{FKLZ}. Suppress the subscript \(n\), write
 \(\ell:=\log m\), and set
 \[
  \theta:=\frac{\ell}{2n},\qquad
  a:=\begin{cases}1,&\text{for Theorem~\ref{opt:symmetric-lower}},\\
-                 \theta^{-1/4},&\text{for Theorem~\ref{opt:q4-lower}},
+                 \theta^{-1/4},&\text{for Theorem~\ref{opt:q4-lower}},\\
+                 (B/2)\theta^{-1/q},&\text{for Theorem~\ref{lower:dense}},
     \end{cases}
  \qquad v:=\theta a^2,\qquad s:=\sqrt{1-v}.
 \]
@@ -4542,9 +4815,15 @@ scales. Here \(v=\sqrt\theta\), and independence of the signs gives
    \le8(s^4+\theta a^4)\le16.
  \label{sym:eq:q4-moments}
 \end{align}
-Thus the fourth-moment observations belong to
-\(\mathcal C_4(2,m^2)\). These calculations verify all the
-normalization, moment, rank, and gap assertions in the two theorems.
+Thus the fourth-moment observations belong to \(\mathcal C_4(2,m^2)\).
+For the third amplitude, Minkowski's inequality gives
+\((\E\norm{X_i}_\infty^q)^{1/q}\le s+a\theta^{1/q}\le1+B/2\le B\).
+The coordinate fourth moment equals
+\[
+  1+4v-5v^2+(B^4/16)\theta^{1-4/q}.
+\]
+It converges to \(1\) for fixed \(B\) and \(q>4\), so the observations
+belong to \(\mathcal C_q(B,m^2)\) for all sufficiently large \(n\).
 
 We compare the maxima by separating the sign component present in
 every row from the activated component. Put
@@ -4591,7 +4870,7 @@ counterpart. By~\eqref{sym:eq:rademacher-max}, the uniform error
  \le C\left(\frac1{a\ell}
                   +\frac{\sqrt\ell}{a\sqrt n}\right)\longrightarrow0.
 \]
-This holds for both amplitudes and imposes no lower growth condition
+This holds for all three amplitudes and imposes no lower growth condition
 on \(\ell\). Define
 \[
  V_W:=\frac{aT_*}{s\sqrt n},\qquad
@@ -4641,34 +4920,50 @@ For \(a=(2n/\ell)^{1/4}\),
 \]
 Thus~\eqref{sym:eq:common-discrepancy} gives the constant
 \(1/(2\sqrt2\,e)\) in Theorem~\ref{opt:q4-lower}.
+Together with~\eqref{poly:q4}, this also proves~\eqref{lower:q4-fixed}.
+Finally, for \(a=(B/2)\theta^{-1/q}\), we have
+\(R_n=2^{1/q-1}Bn^{-\alpha_q}\ell^{1+\alpha_q}\asymp_q V_{n,q}\).
+Equation~\eqref{sym:eq:common-discrepancy} now proves
+Theorem~\ref{lower:dense}, including its two-sided comparison by
+Theorem~\ref{poly:transfer}.
 
 
-\subsection{The lower bound for a growing fourth-moment envelope}
+\subsection{Proofs of Theorems~\ref*{opt:q4-growing} and~\ref*{lower:sparse} (sparse lower bounds)}
 \label{app:q4-growing}
 
-We now prove Theorem~\ref{opt:q4-growing}. The common activation
-in~\eqref{sym:eq:common-construction} is supplemented by independent
-column masks. These masks reduce each coordinate's fourth moment
-without imposing the same reduction on the maximum over coordinates.
-This permits the two moment scales \(B^2\) and \(B^4\) required
-by~\eqref{opt:eq:q4-class}.
+We use the same masked construction for all \(q>2\). The mask
+probability controls the coordinate fourth moments, and the amplitude
+of an active row controls the \(q\)th moment of its envelope. Keeping
+the constants in the comparison gives the explicit fourth-moment
+lower bound as well.
 
-Suppress the subscript \(n\), retaining \(\ell=\log m\),
-\(\Lambda=\log(2B^2)\), and \(r=r_{n,B}\) from the theorem.
-Define
+Suppress the subscript \(n\) and put \(\ell:=\log m\). Since
+\(L=1+2\ell\), the quantity
+\(\widehat K:=B(n/\ell)^{2/q-1/2}\) is comparable to \(\mathcal K_{n,q}\).
+Under~\eqref{lower:sparse-regime}, \(\widehat K\to\infty\). Set
+\[
+ \Lambda:=\log(2\widehat K^2),\qquad k:=\frac{\ell}{4\Lambda},
+ \qquad \theta:=\frac{k}{n}.
+\]
+Then \(\Lambda=o(\ell)\) and \(k\to\infty\).
+At \(q=4\), \(\widehat K=B\), so these choices give exactly
+the \(\Lambda_n\) of Theorem~\ref{opt:q4-growing}. Define
 \begin{equation}
- k:=\frac{\ell}{4\Lambda},\qquad
- \theta:=\frac{k}{n},\qquad \pi:=B^{-2},\qquad
- a:=\frac B2\theta^{-1/4},\qquad
- v:=\theta\pi a^2=\frac{\sqrt\theta}{4},\qquad
- s:=\sqrt{1-v}.
+ \pi:=B^{-2}\theta^{4/q-1},\qquad a:=\frac B2\theta^{-1/q},
+ \qquad v:=\theta\pi a^2=\frac14\theta^{2/q},\qquad s:=\sqrt{1-v}.
  \label{q4:eq:sparse-parameters}
 \end{equation}
-The assumption \(\Lambda=o(\ell)\) gives \(k\to\infty\).
-Also, with \(r_0:=n^{-1/4}\ell^{5/4}\), we have
-\(r/r_0=B/\Lambda^{3/4}\to\infty\). Thus \(r\to0\)
-implies \(\ell^5/n\to0\), \(\theta\to0\), and \(v\to0\).
-All parameters are admissible for sufficiently large \(n\).
+To verify admissibility, write \(r:=ak\sqrt\ell/\sqrt n\) and
+\(U_\ell:=B^{1/2}n^{-1/4}\ell^{5/4}\). Substitution gives
+\[
+ r=\frac{B n^{-\alpha_q}\ell^{1+\alpha_q}}{2(4\Lambda)^{1-1/q}}
+ \asymp_q R_{n,q},\qquad
+ \frac r{U_\ell}=\frac{\sqrt{\widehat K}}{2(4\Lambda)^{1-1/q}}\to\infty.
+\]
+Hence \(r\to0\) and \(U_\ell\to0\), so \(\ell^5/n\to0\),
+\(\theta\to0\), and \(v\to0\). Moreover,
+\(\pi=\widehat K^{-2}(4\Lambda)^{1-4/q}\) implies \(\pi\Lambda\to0\).
+Thus \(0<\pi<1\) and \(0<v<1/2\) for all sufficiently large \(n\).
 
 Let \(\eta_{ij}\) and \(\varepsilon_{iu}\) be independent Rademacher
 signs, \(I_i\) independent Bernoulli\((\theta)\) variables, and
@@ -4692,11 +4987,11 @@ calculation gives
 The last inequality holds for \(B\ge2\). Since
 \(\norm{X_i}_\infty\le s+aI_i\), Minkowski's inequality gives
 \begin{equation}
- (\E\norm{X_i}_\infty^4)^{1/4}
- \le s+a\theta^{1/4}\le1+B/2\le B.
+ (\E\norm{X_i}_\infty^q)^{1/q}
+ \le s+a\theta^{1/q}\le1+B/2\le B.
  \label{q4:eq:sparse-envelope-moment}
 \end{equation}
-Thus these observations belong to \(\mathcal C_4(B,m^2)\).
+Thus these observations belong to \(\mathcal C_q(B,m^2)\).
 The covariance entries are
 \[
  \Sigma_{(j,u),(j',u')}=s^2\ind\{j=j'\}+v\ind\{u=u'\}.
@@ -4722,12 +5017,12 @@ Writing \(A_*:=\max_jA_j\), \(G_*:=\max_jG_j\), and
 Each decomposition has independent components. Conditional on the
 active rows, a given column has \(J_{iu}\varepsilon_{iu}=1\)
 on all of them with probability \((\pi/2)^N\). These events are
-independent across columns. Because
-\(\log(2/\pi)=\Lambda\), on \(N\le2k\) we have
-\(m(\pi/2)^N\ge e^{\ell/2}\). Therefore
+independent across columns. Since
+\(\log(2/\pi)=\Lambda-(1-4/q)\log(4\Lambda)\sim\Lambda\),
+on \(N\le2k\) we have \(m(\pi/2)^N\ge e^{\ell/4}\) eventually. Thus
 \[
- \Pp(Q_*\ne N)\le\Pp(N>2k)+e^{-e^{\ell/2}}
- \le k^{-1}+e^{-e^{\ell/2}}\longrightarrow0.
+ \Pp(Q_*\ne N)\le\Pp(N>2k)+e^{-e^{\ell/4}}
+ \le k^{-1}+e^{-e^{\ell/4}}\longrightarrow0.
 \]
 Here \(\E N=k\) and \(\Var(N)\le k\).
 Using \(|Q_*|\le N\) and \(\E N^2\le k^2+k\), the
@@ -4740,7 +5035,7 @@ Cauchy--Schwarz argument from the preceding proof gives
 The leading Rademacher maximum can again be replaced by a Gaussian
 maximum. By~\eqref{sym:eq:rademacher-max},
 \[
- \frac{\epsilon_{n,m}}{r_0}
+ \frac{\epsilon_{n,m}}{U_\ell}
  \le C\left(n^{-1/4}\ell^{-3/4}
                  +n^{-3/4}\ell^{3/4}\right)\longrightarrow0,
 \]
@@ -4754,7 +5049,7 @@ mean shift. Indeed, by~\eqref{sym:eq:gaussian-max},
 \[
  \frac{\sqrt v\,\E H_*}{ak/\sqrt n}
  =\sqrt{\frac\pi k}\,\E H_*
- \sim\frac{\sqrt{8\Lambda}}B\longrightarrow0.
+ \sim\sqrt{8\pi\Lambda}\longrightarrow0.
 \]
 Together with~\eqref{q4:eq:sparse-max-moments}, this yields
 \begin{equation}
@@ -4762,13 +5057,11 @@ Together with~\eqref{q4:eq:sparse-max-moments}, this yields
  \label{q4:eq:sparse-mean-gap}
 \end{equation}
 
-The parameter choices also give the exact identities
-\[
- \frac{\ell a^2k^2}{n}=\frac{r^2}{32},\qquad
- \ell^2v=\frac{\Lambda}{8B^2}r^2,\qquad
- \sqrt{2\ell}\frac{ak}{\sqrt n}=\frac r4.
-\]
-Thus \(\ell\,\E(V_W^2+V_G^2)=O(r^2)\). 
+By definition, \(\ell a^2 k^2/n=r^2\), and
+\(\ell^2v=(\pi\ell/k)r^2=4\pi\Lambda r^2\).
+The second-moment bounds in~\eqref{q4:eq:sparse-max-moments}
+and~\eqref{sym:eq:gaussian-max} therefore give
+\(\ell\,\E(V_W^2+V_G^2)=O(r^2)\).
 Set \(t_n:=su_m\), where
 \(m\bar\Phi(u_m)=1\). 
 Applying the Taylor comparison used
@@ -4779,10 +5072,19 @@ mean difference, gives
        -\Pp(\max_{j,u}W_{ju}\le t_n)\notag\\
  &\qquad
  =F_m'(u_m)(\E V_W-\E V_G)+O(r^2)+o(r)
- =\left\{\frac1{4e}+o(1)\right\}r.
+ =\left\{\frac{\sqrt2}{e}+o(1)\right\}r.
  \label{q4:eq:sparse-orthant}
 \end{align}
-This proves~\eqref{opt:eq:q4-growing}. Since
+Since \(r\asymp_q R_{n,q}\), this proves~\eqref{lower:sparse-rate}.
+In~\eqref{poly:bennett-bound}, the ratio of the envelope term to \(U\)
+is \(\sqrt{\mathcal K_{n,q}}/\{\log(e+\mathcal K_{n,q})\}^{1-1/q}\to\infty\).
+The upper bound thus has the same order, even when the supremum is
+restricted to symmetric observations.
+
+For \(q=4\), we have \(\pi=B^{-2}\), \(v=\sqrt{\ell/(4n\Lambda)}/4\),
+and \(r=r_{n,B}/(4\sqrt2)\). Substituting into
+\eqref{q4:eq:sparse-orthant} proves the constant \(1/(4e)\) in
+Theorem~\ref{opt:q4-growing}. Since
 \(\ell=(\log p)/2\) and \(\Lambda\sim2\log B\), the orthant
 discrepancy in~\eqref{q4:eq:sparse-orthant} is equivalently
 \[
@@ -4805,7 +5107,834 @@ For every fixed \(\beta<1\), the ratio of the lower bound to
 \]
 Thus no fixed smaller power can replace the linear power of \(B_n\)
 uniformly while the sample-size and dimension powers are retained.
-The logarithmic difference from~\eqref{opt:eq:q4-upper} remains.
+The logarithmic denominator agrees in order with that in~\eqref{poly:q4}.
+
+\section{Proof of Theorem~\ref*{poly:transfer} (polynomial envelope transfer)}\label{app:conditional}
+
+We first record the bounded theorem used in the transfer. By Theorem~\ref{thm:unrestricted}, independent
+centered vectors \(Y_i\) satisfying \(\norm{Y_i}_\infty\le M\)
+and \(n^{-1}\sum_i\E Y_{ij}^2\ge1/2\) obey
+\begin{equation}
+ \rh\left(n^{-1/2}\sum_iY_i,G_Y\right)
+ \le C\min\{1,ML^{3/2}\sqrt{\log(en)}/\sqrt n\},\qquad M\ge1,
+ \label{app:bounded-input}
+\end{equation}
+where \(G_Y\) is Gaussian with the same covariance. Indeed, normalize
+each marginal variance and use the envelope bound \(\sqrt2 M/\sqrt n\).
+The logarithm in the bounded theorem is at most a constant times
+\(\log(en)\). This argument only requires a lower bound on the marginal
+variances, not an upper bound or covariance nondegeneracy.
+
+We will also use a simple maximal inequality, whose proof is included
+to specify the moment assumption precisely.
+
+\begin{lemma}[An expected maximum under an envelope moment]\label{lem:maximum}
+Let \(Y_1,\ldots,Y_n\) be independent centered vectors in \(\R^p\).
+If
+\[
+ \max_j\sum_i\E Y_{ij}^2\le v,\qquad
+ \sum_i\E\norm{Y_i}_\infty^q\le A^q,\qquad q>2,
+\]
+then
+\begin{equation}
+ \E\norm{\sum_iY_i}_\infty
+ \le C_q\{\sqrt{vL}+AL^{1-1/q}\}.
+ \label{app:maximal}
+\end{equation}
+\end{lemma}
+\begin{proof}
+If \(A=0\), the conclusion is immediate. Otherwise, truncate at
+\(u:=AL^{-1/q}\), and center both pieces. The truncated centered
+vectors have envelope at most \(2u\) and total coordinate variance at
+most \(v\). The exponential Bernstein inequality, applied to the
+\(2p\) signed coordinates and integrated, bounds their expected maximum
+by \(C(\sqrt{vL}+uL)\). The remaining centered sum has expected norm
+at most
+\[
+ 2\sum_i\E[\norm{Y_i}_\infty\ind\{\norm{Y_i}_\infty>u\}]
+ \le2A^qu^{1-q}.
+\]
+Both \(uL\) and \(A^qu^{1-q}\) equal \(AL^{1-1/q}\).
+\end{proof}
+
+For any truncation threshold \(T\ge2B\), we shall prove
+\begin{equation}
+ \rh(W,Z)\le C_q\min\left\{1,
+ \frac{T}{\sqrt n}L^{3/2}\sqrt{\log(en)}
+ +B^{q/2}T^{1-q/2}L+V_q\right\}.
+ \label{poly:threshold}
+\end{equation}
+The first term measures the error for the bounded component, the
+second measures the change in covariance, and the third comes from
+the exceptional rows. Define
+\[
+ I_i:=\ind\{\norm{X_i}_\infty>T\},\qquad
+ p_i:=\Pp(I_i=1),\qquad \mu_i:=\E[X_i\mid I_i=0].
+\]
+Markov's inequality gives \(p_i\le(B/T)^q<1/4\), so the conditional
+mean is well defined. Decompose each observation as
+\begin{equation}
+ Y_i:=(1-I_i)(X_i-\mu_i),\qquad
+ R_i:=I_iX_i+(1-I_i)\mu_i,\qquad X_i=Y_i+R_i.
+ \label{app:decomposition}
+\end{equation}
+The vectors \(R_i\) are independent across rows and centered, because
+\(\E R_i=\E X_i=0\). Let \(\mathcal F\) be the sigma-field generated
+by all \(I_i\) and \(I_iX_i\). Conditional on \(\mathcal F\), the
+vectors \(Y_i\) are independent, centered, and bounded by \(2T\),
+and \(R:=n^{-1/2}\sum_iR_i\) is fixed. These are the independence
+properties needed to treat the exceptional part as a shift.
+
+Set \(v_T:=B^qT^{2-q}\). Since \(\E X_i=0\),
+\begin{equation}
+ \norm{\mu_i}_\infty
+ \le\frac{\E[\norm{X_i}_\infty I_i]}{1-p_i}
+ \le2B^qT^{1-q},\qquad
+ \E[\norm{X_i}_\infty^2 I_i]\le v_T.
+ \label{app:tail-moments}
+\end{equation}
+As \(B/T\le1/2\), these inequalities imply
+\[
+ \max_j\frac1n\sum_i\E R_{ij}^2\le C v_T,\qquad
+ \max_i\E\norm{R_i}_\infty^q\le C_qB^q.
+\]
+Applying Lemma~\ref{lem:maximum} to \(R_i/\sqrt n\) gives
+\begin{equation}
+ \sqrt L\,\E\norm R_\infty
+ \le C_q\{L\sqrt{v_T}+V_q\}.
+ \label{app:shift}
+\end{equation}
+
+The conditional covariance varies with the set of exceptional rows.
+We next bound its expected deviation from \(\Sigma\). Put
+\[
+ C_i^0:=\Cov(X_i\mid I_i=0),\qquad
+ Q:=\Cov\left(n^{-1/2}\sum_iY_i\,\middle|\,\mathcal F\right)
+   =\frac1n\sum_i(1-I_i)C_i^0,
+\]
+and write \(\maxnorm M:=\max_{j,k}|M_{jk}|\) for a matrix \(M\).
+If \(C_i:=\E X_iX_i^\top\), then
+\[
+ C_i^0=\frac{C_i-\E[X_iX_i^\top I_i]}{1-p_i}
+          -\mu_i\mu_i^\top.
+\]
+Here \(\maxnorm{C_i}\le\E\norm{X_i}_\infty^2\le B^2\).
+Using \eqref{app:tail-moments} therefore gives
+\[
+ \maxnorm{C_i^0-C_i}\le C v_T,
+ \qquad \maxnorm{C_i^0}\le2B^2.
+\]
+The second bound also follows directly from conditional second moments.
+Consequently, with \(\Delta:=\maxnorm{Q-\Sigma}\),
+\begin{equation}
+ \E\Delta
+ \le\maxnorm{\frac1n\sum_i C_i^0-\Sigma}
+       +\frac1n\sum_i p_i\maxnorm{C_i^0}
+ \le C v_T.
+ \label{app:conditional-covariance}
+\end{equation}
+In particular, on the event \(\mathcal G:=\{\Delta\le1/2\}\), all
+diagonal entries of \(Q\) are at least \(1/2\), and
+\(\Pp(\mathcal G^c)\le C v_T\).
+
+Conditional on \(\mathcal F\), let \(G_Q\sim N(0,Q)\). On
+\(\mathcal G\), the bounded input \eqref{app:bounded-input}, applied
+to the shifted rectangle, and Gaussian rectangle anti-concentration
+give, for each rectangle \(A\),
+\begin{align*}
+ &|\Pp(W\in A\mid\mathcal F)-\Pp(G_Q\in A\mid\mathcal F)|\\
+ &\hspace{2em}\le
+ C\min\{1,TL^{3/2}\sqrt{\log(en)}/\sqrt n\}
+       +C\min\{1,\sqrt L\norm R_\infty\}.
+\end{align*}
+For rectangles with finite lower and upper endpoints, apply the
+anti-concentration inequality to the \(2p\) signed faces. The bound
+is unchanged up to an absolute constant. The Gaussian comparison in
+\cite[Proposition~2.1]{CCKK2022} gives
+\(\rh(G_Q,Z)\le C\min\{1,L\sqrt\Delta\}\).
+Take expectations, use Jensen's inequality and
+\eqref{app:shift}--\eqref{app:conditional-covariance}, and bound the
+contribution of \(\mathcal G^c\) by its probability. We obtain
+\[
+ \rh(W,Z)\le C_q\left\{
+ \frac{T}{\sqrt n}L^{3/2}\sqrt{\log(en)}
+ +L\sqrt{v_T}+V_q+v_T\right\}.
+\]
+If \(v_T\le1\), its last term is absorbed by \(L\sqrt{v_T}\).
+If \(v_T>1\), the bound capped at one is immediate. This proves
+\eqref{poly:threshold}.
+
+When \(n\ge L\log(en)\), take \(T:=2B\{n/(L\log(en))\}^{1/q}\).
+Then \(T\ge2B\), and the first two terms in~\eqref{poly:threshold}
+have order \(V_q\{\log(en)\}^{\alpha_q}\). If \(n<L\log(en)\), then
+\(V_q\{\log(en)\}^{\alpha_q}=BL(L\log(en)/n)^{\alpha_q}\ge1\), so \(\rh\le1\)
+suffices. This proves Theorem~\ref{poly:transfer}. If
+Conjecture~\ref{conj:sharp-unrestricted} holds, the first term of
+\eqref{poly:threshold} loses its factor \(\sqrt{\log(en)}\).
+Choosing \(T:=2B(n/L)^{1/q}\) when \(n\ge L\) then gives
+\(C_q\min\{1,V_q\}\). When \(n<L\), we have \(V_q\ge1\).
+
+\section{Proof of Theorem~\ref*{poly:bennett} (Bennett refinement)}\label{app:bennett}
+
+We use the Stein estimate of Chernozhukov, Chetverikov, Kato, and
+Koike~\cite{CCKK2022}. The improvement comes from applying a Bennett
+inequality to the contribution of large increments. Let \(\widetilde X_i\) be mutually
+independent copies of \(X_i\), independent of the original array, and
+put
+\[
+ Y_i:=(\widetilde X_i-X_i)/\sqrt n,\qquad
+ \Delta_1:=\frac1{n^2}\max_j\sum_i\E X_{ij}^4.
+\]
+The vectors \(Y_i\) are independent and centrally symmetric. For \(t>0\),
+define
+\[
+ v_t:=\max_j\sum_i\E[Y_{ij}^2\ind\{\norm{Y_i}_\infty>t\}],
+ \qquad M_t:=\E\norm{\sum_iY_i\ind\{\norm{Y_i}_\infty>t\}}_\infty.
+\]
+In Appendix~H of the supplement to~\cite{CCKK2022}, the proof of
+Lemma~A.1 gives the following estimate before it bounds the maximum of
+the large increments.
+\begin{equation}
+ \rh(W,Z)\le C\left\{
+ \frac{\sqrt L}{\phi}+\phi L^2\sqrt{\Delta_1}
+ +\phi^3L^{7/2}\Delta_1+\phi L^{3/2}v_t+\sqrt L M_t\right\},
+ \qquad t:=(\phi L)^{-1},\quad\phi>0.
+ \label{ben:master}
+\end{equation}
+For clarity, the ingredients retained from that proof are
+\(H_1\le M_t\),
+\(H_2\lesssim\sqrt{L\Delta_1}+t^2L+v_t\), and
+\(|\mathcal R|\lesssim\phi^3L^{7/2}(\Delta_1+t^4L)\), together
+with smoothing error \(\sqrt L/\phi\). The two terms involving
+\(t^2L\) and \(t^4L\) are absorbed by this smoothing error.
+To see why the sharper variance $v_t$ suffices here, put
+$Y_i':=Y_i\ind\{\norm{Y_i}_\infty\le t\}$. The conditional second-moment matrix
+in the exchangeable-pair argument is
+$\frac12\sum_i\E[Y_i'(Y_i')^\top\mid X_1,\ldots,X_n]$.
+Since $\frac12\sum_i\E[Y_iY_i^\top]=\Sigma$, omitting the large
+increments changes its mean entrywise by at most $v_t/2$, by
+Cauchy--Schwarz. Conditional Jensen and Bernstein's inequality over
+the $p^2$ entries bound its expected fluctuation in the maximum entry
+norm by $C(\sqrt{L\Delta_1}+t^2L)$. Indeed,
+$|Y'_{ij}Y'_{ik}|\le t^2$, and
+$\max_{j,k}\sum_i\E[(Y'_{ij}Y'_{ik})^2]\le C\Delta_1$
+by Cauchy--Schwarz and the fourth-moment bound for the symmetrized
+increments. This gives the stated estimate for $H_2$.
+The covariance comparator is exact, so the covariance-mismatch term
+is zero. Passing from lower orthants to rectangles replaces \(X_i\)
+by \((X_i,-X_i)\), preserving the moment conditions.
+
+The following elementary Bennett calculation controls the remaining
+large-increment term.
+
+\begin{lemma}[A truncated Bennett maximum]\label{ben:maximum}
+Suppose independent centrally symmetric vectors \(T_i\in\R^p\)
+satisfy \(\max_j\sum_i\E T_{ij}^2\le v\) and
+\(\sum_i\E\norm{T_i}_\infty^q\le A^q\), with \(q>1\).
+For every \(u>0\) and \(v>0\),
+\begin{equation}
+ \E\norm{\sum_iT_i}_\infty
+ \le C\frac{uL}{\log(1+u^2L/v)}+\frac{A^q}{u^{q-1}}.
+ \label{ben:maximum-bound}
+\end{equation}
+If \(v=0\), the sum is zero almost surely.
+\end{lemma}
+\begin{proof}
+The truncated vectors \(T_i^{(u)}:=T_i\ind\{\norm{T_i}_\infty\le u\}\)
+are centered by symmetry. Bennett's exponential bound yields
+\[
+ \log\E\exp\left(\pm\lambda\sum_iT_{ij}^{(u)}\right)
+ \le\frac v{u^2}(e^{\lambda u}-1-\lambda u),\qquad\lambda>0.
+\]
+Applying log-sum-exp to the \(2p\) signed coordinates and choosing
+\(\lambda:=u^{-1}\log(1+u^2\log(2p)/v)\) gives the first term in
+\eqref{ben:maximum-bound}, since \(\log(2p)\asymp L\).
+The expected norm of the omitted sum is at most
+\(\sum_i\E[\norm{T_i}_\infty\ind\{\norm{T_i}_\infty>u\}]
+\le A^qu^{1-q}\).
+\end{proof}
+
+Put \(A:=Bn^{-1/2+1/q}\) and \(d:=B/\sqrt n\). The moment
+conditions give
+\[
+ \Delta_1\lesssim d^2,\qquad
+ \max_j\sum_i\E Y_{ij}^4\lesssim d^2,\qquad
+ \sum_i\E\norm{Y_i}_\infty^q\lesssim_q A^q.
+\]
+Cauchy--Schwarz within each expectation and then across rows gives
+\begin{equation}
+ v_t\le
+ \max_j\left(\sum_i\E Y_{ij}^4\right)^{1/2}
+       \left(\sum_i\Pp(\norm{Y_i}_\infty>t)\right)^{1/2}
+ \lesssim_q d(A/t)^{q/2}.
+ \label{ben:mixed}
+\end{equation}
+This is where the coordinate fourth-moment budget is used. Lemma
+\ref{ben:maximum} and the direct triangle inequality imply, respectively,
+\begin{equation}
+ M_t\lesssim_q\frac{uL}{\log(1+u^2L/v_t)}+\frac{A^q}{u^{q-1}},
+ \qquad M_t\lesssim_q A^qt^{1-q}.
+ \label{ben:tail}
+\end{equation}
+
+We finish the proof of Theorem~\ref{poly:bennett} by choosing the
+smoothing bandwidth \(\phi^{-1}\). The identities
+\[
+ U^2=dL^{5/2},\qquad V_q=AL^{3/2-1/q},\qquad
+ \mathcal K_q=(V_q/U)^2
+\]
+make the two cases transparent. If \(\mathcal K_q\le1\), take
+\(\phi^{-1}:=U/\sqrt L\), so that \(t=U/L^{3/2}\).
+The first three terms of \eqref{ben:master} are bounded by \(CU\).
+The remaining terms, by \eqref{ben:mixed} and the direct bound in
+\eqref{ben:tail}, are at most
+\[
+ C_qU \mathcal K_q^{q/4},\qquad C_qU \mathcal K_q^{q/2},
+\]
+and hence are also bounded by \(C_qU\).
+
+If \(\mathcal K_q>1\), put \(b:=1-1/q\) and set
+\[
+ r:=V_q \mathcal{L}_q^{-b},\qquad \phi^{-1}:=r/\sqrt L,\qquad
+ t:=AL^{-1/q}\mathcal{L}_q^{-b},\qquad u:=A(\mathcal{L}_q/L)^{1/q}=\mathcal{L}_q t.
+\]
+Equation~\eqref{ben:mixed} gives
+\(v_t\lesssim_q dL^{1/2}\mathcal{L}_q^{(q-1)/2}\), and therefore
+\[
+ \frac{u^2L}{v_t}\gtrsim_q
+ \mathcal K_q \mathcal{L}_q^{2/q-(q-1)/2}.
+\]
+For every fixed real \(c\) and fixed \(c_0>0\),
+\(\log(1+c_0K\{\log(e+K)\}^c)\gtrsim_{c,c_0}\log(e+K)\)
+on \(K\ge1\). This follows by continuity on compact intervals and
+by dividing both sides by \(\log K\) at infinity. Thus
+\eqref{ben:tail} gives \(\sqrt L M_t\lesssim_q r\).
+The other four terms of \eqref{ben:master} are bounded, in order, by
+\[
+ r,\qquad C r\frac{\mathcal{L}_q^{2b}}{\mathcal K_q},\qquad
+ C r\frac{\mathcal{L}_q^{4b}}{\mathcal K_q^2},\qquad
+ C_q r\frac{\mathcal{L}_q^{2b+(q-1)/2}}{\mathcal K_q}.
+\]
+Each ratio is bounded on \(\mathcal K_q\ge1\), with a constant depending only
+on \(q\). Combining the cases and using \(\rh\le1\) proves the
+theorem.
+
+
+\clearpage
+\section{Proof of the positive-gap remainder bound in Proposition~\ref*{an:prop:derivative}}\label{app:h3}
+
+The remainder in Proposition~\ref{an:prop:derivative} is a sum of
+fourth derivatives. Integrating twice in a repeated direction gives the
+matrix \(GG^\top-I_r\). If both remaining derivatives act on a single
+face, one more Gaussian integration by parts gives a cubic polynomial.
+If they act on distinct faces, we keep the angle between the two
+normals. Both operations gain a factor of the inverse Gaussian scale,
+which makes the later part of the time integral finite.
+
+Throughout this appendix, \(V\) is a concentrated base satisfying
+\eqref{appx-an:concentration} with constant \(C_0\), \(G\sim N(0,I_r)\)
+is independent of \(V\), and \(U=V+\sigma G\). We use
+\(\delta\sqrt L\le\sigma\le1\) and a smoothing width \(h\ge\delta\),
+except that the surface estimates below also apply when
+\(0<\sigma<\delta\sqrt L\). Write \([m]=\{1,\ldots,m\}\) for the
+indices of the \(m=2p\) signed face normals.
+
+For a threshold list $a$, define the logistic weights by
+\[
+ q_j(x):=\frac{u_j\cdot x-a_j}{h},\qquad
+ F(x):=\frac1{1+\sum_j e^{q_j(x)}},\qquad
+ \pi_j(x):=e^{q_j(x)}F(x),\qquad \theta(x):=1-F(x).
+\]
+For an ordered tuple $\alpha=(\alpha_1,\ldots,\alpha_k)$, let
+$W_\alpha:=F\prod_{b=1}^k\pi_{\alpha_b}$.
+The notation $\norm{\cdot}_*$ denotes the nuclear norm of a matrix.
+The correlation gap $c>0$ means
+$|u_j\cdot u_k|\le1-c$ for normals from distinct original coordinates.
+The antipodal normals of a single coordinate are excepted. For
+linearly independent normals, write
+\[
+ \vartheta_{jk}:=\arccos(u_j\cdot u_k),\qquad
+ \lambda_{jk}:=\vartheta_{jk}\sin\vartheta_{jk},\qquad
+ d_c:=c(2-c),
+\]
+and let $\cD$ be the set of their ordered index pairs. Then
+\begin{equation}
+ \lambda_{jk}\ge\sin^2\vartheta_{jk}\ge d_c
+ \qquad((j,k)\in\cD).
+ \label{h3:eq:gap}
+\end{equation}
+
+\subsection{Gaussian surface estimates on facets and ridges}
+The additional surface estimates exploit two different cancellations.
+A Lipschitz weight on the facet thresholds preserves the paired-ridge
+cancellation from Lemma~\ref{appx-an:lem:surface}. At the next codimension, weighting
+each ridge by its exterior angle produces a spherical divergence identity.
+Both estimates can therefore be localized to short outward tubes.
+
+For a proper full-dimensional polyhedron $P$ with the specified normals,
+write $F_j$ for its actual facets, with supporting equation
+$u_j\cdot g=b_j$. Let $E$ run over its faces of codimension $2$.
+Such a face is shared by exactly two facets, and $\vartheta_E$ denotes
+the angle between their outward normals. Put
+\begin{align}
+ J_{\mathrm f}(P)&:=\sum_j |b_j|
+   \int_{F_j}(\norm g^2-r)\varphi_r(g)\dd\mathcal H^{r-1}(g),
+ \label{h3:eq:Jf}\\
+ J_{\mathrm e}(P)&:=\sum_E \vartheta_E
+   \int_E(\norm g^2-r)\varphi_r(g)\dd\mathcal H^{r-2}(g).
+ \label{h3:eq:Je}
+\end{align}
+Empty sets and the whole space have both quantities equal to $0$.
+There are no codimension-$2$ faces when $r=1$.
+
+\begin{lemma}[Two localized surface estimates]\label{h3:lem:surfaces}
+For every target $Q$, empty or full dimensional, with these face normals,
+and every $0<\sigma\le1$,
+\begin{equation}
+ \E\bigl|J_{\mathrm f}((Q-V)/\sigma)\bigr|
+ +\E\bigl|J_{\mathrm e}((Q-V)/\sigma)\bigr|
+ \le C\bigl(\sigma L^2+\delta L^{5/2}\bigr).
+ \label{h3:eq:surface-bounds}
+\end{equation}
+The constant depends only on $C_0$, and no angle separation is needed.
+\end{lemma}
+
+\begin{proof}
+Let $R(g)$ be $1$ plus the largest length of the projection of $g$
+onto a span of at most three linearly independent face normals.
+This is a $1$-Lipschitz function. A union bound over at most
+$m+m^2+m^3$ Gaussian projections of dimension at most $3$ gives
+\begin{equation}
+ \E R(G)^q\le C_qL^{q/2},\qquad q=1,2,3,4.
+ \label{h3:eq:R-moments}
+\end{equation}
+We show that each absolute surface quantity is bounded by
+\begin{equation}
+ C\E_G\left[R(G)^4
+       \ind\{G\in P^{1/R(G)}\setminus P\}\right].
+ \label{h3:eq:localized}
+\end{equation}
+
+For the facet quantity, put $s_j:=\int_{F_j}\varphi_r$ and
+$\rho_{jk}:=\int_{E_{jk}}\varphi_r$.
+The facetwise Gauss--Green calculation in the proof of Lemma~\ref{appx-an:lem:surface} gives
+\[
+ J_{\mathrm f}(P)
+ =\sum_j |b_j|(b_j^2-1)s_j
+ -\sum_{\{j,k\}}
+   \bigl(|b_j|d_{k\mid j}+|b_k|d_{j\mid k}\bigr)\rho_{jk},
+\]
+where $d_{k\mid j}$ is the outward signed conormal distance within
+$F_j$. On the ridge, let $z$ be the projection onto
+$\operatorname{span}(u_j,u_k)$. Then
+\[
+ |d_{k\mid j}|\le\norm z,\quad
+ |d_{k\mid j}+d_{j\mid k}|\le\vartheta_{jk}\norm z,\quad
+ \bigl||b_j|-|b_k|\bigr|\le\vartheta_{jk}\norm z.
+\]
+The last inequality follows from
+$|b_j-b_k|=|(u_j-u_k)\cdot z|$.
+Pairing the two ridge terms therefore yields
+\begin{equation}
+ \bigl||b_j|d_{k\mid j}+|b_k|d_{j\mid k}\bigr|
+ \le 2\vartheta_{jk}\norm z^2.
+ \label{h3:eq:weighted-pair}
+\end{equation}
+On a facet the coefficient $|b_j|(b_j^2-1)$ in the
+Gauss--Green formula has absolute value at most $CR(x)^3$.
+
+For the ridge quantity, let $z_E$ be the projection onto the
+two-dimensional normal space of $E$, and write $\rho_E:=\int_E\varphi_r$.
+Gauss--Green within each ridge gives
+\begin{equation}
+ J_{\mathrm e}(P)
+ =\sum_E\vartheta_E(\norm{z_E}^2-2)\rho_E
+ -\sum_H\left\langle z_H,
+        \sum_{E\supset H}\vartheta_E n_{E,H}\right\rangle\rho_H.
+ \label{h3:eq:edge-identity}
+\end{equation}
+Here $H$ runs over codimension-$3$ faces, $z_H$ is the projection onto
+their normal space, and $n_{E,H}$ is the outward unit conormal to $H$
+within $E$. The second sum is absent for $r\le2$.
+
+To bound that sum, let $C_H$ be the three-dimensional normal cone at
+$H$, and set $\Omega_H:=C_H\cap S^2$ in its normal space. Each edge
+of this spherical polygon has length $\vartheta_E$. Its outward
+conormal is $-n_{E,H}$. For a constant vector $v$, the tangential
+field $v-(v\cdot\omega)\omega$ on $S^2$ has divergence
+$-2v\cdot\omega$. The spherical divergence theorem consequently gives
+\begin{equation}
+ \sum_{E\supset H}\vartheta_E n_{E,H}
+ =2\int_{\Omega_H}\omega\dd\mathcal H^2(\omega).
+ \label{h3:eq:spherical-balance}
+\end{equation}
+In particular, its norm is at most $2|\Omega_H|$. This identity holds
+for a spherical polygon with any number of edges, so no simplicity
+assumption on the codimension-$3$ face is required.
+
+At a point $x$ in the relative interior of a face, use outward normal
+displacements of length less than $1/(4R(x))$. The nearest-point
+projection is $x$, so tubes belonging to distinct faces are disjoint.
+The Gaussian density and $R$ vary by absolute factors in each tube,
+because $|x\cdot y|\le R(x)\norm y\le1/4$.
+An integral of $R^4\varphi_r$ over these tubes dominates respectively
+\[
+ R^3\varphi_r\quad\hbox{on a facet},\qquad
+ \vartheta_E R^2\varphi_r\quad\hbox{on a ridge},\qquad
+ |\Omega_H|R\varphi_r\quad\hbox{on a codimension-$3$ face}.
+\]
+Equations~\eqref{h3:eq:weighted-pair}--\eqref{h3:eq:spherical-balance}
+therefore give~\eqref{h3:eq:localized}. Every tube is contained in the
+threshold layer displayed there. Cutoffs followed by Gaussian dominated
+convergence justify Gauss--Green for unbounded faces.
+
+Finally, for $P=(Q-V)/\sigma$, the layer event implies
+$V+\sigma G\in Q^{\sigma/R(G)}\setminus Q$.
+Conditioning on $G$ and applying~\eqref{appx-an:concentration} bounds
+the average in~\eqref{h3:eq:localized} by
+\[
+ C\sqrt L\{\sigma\E R(G)^3+\delta\E R(G)^4\}
+ \le C(\sigma L^2+\delta L^{5/2}).
+\]
+This proves both assertions.
+\end{proof}
+
+We will also use the positive versions of the same tube estimates.
+They follow by applying the tube construction directly to the indicated
+nonnegative integrands, without integration by parts. With $P=(Q-V)/\sigma$
+and $\sigma\ge\delta\sqrt L$, they give
+\begin{align}
+ \E\sum_E\vartheta_E\rho_E&\le C\sigma L,
+ &\E\sum_E\vartheta_E\norm{z_E}^2\rho_E&\le C\sigma L^2.
+ \label{h3:eq:positive-edge}
+\end{align}
+The first uses $R^2$ on the tubes, and the second uses $R^4$.
+
+\subsection{Two matrix estimates for the logistic weights}
+We next transfer these estimates to the logistic weights. For an integer
+$q\ge1$, let $T_q$ be Gamma with shape $q$ and rate $1$, and let
+$\omega_1,\ldots,\omega_m$ be independent exponentials of mean $1$,
+independent of $T_q,V,G$. The elementary Laplace-transform identity is
+\begin{equation}
+ F(x)^q=\Pp\{u_j\cdot x\le a_j+h\log(\omega_j/T_q),\ j\le m\}.
+ \label{h3:eq:mixture}
+\end{equation}
+Differentiating with respect to one threshold produces a facet integral
+with factor $\sigma^{-1}$. Differentiating with respect to thresholds
+$a_j,a_k$ for independent normals produces a ridge integral with factor
+$\sigma^{-2}/\sin\vartheta_{jk}$. For fixed values of the mixing variables, these identities follow
+by integrating in the normal coordinates. To justify averaging the
+derivatives, first take a threshold difference quotient, or a rectangular
+difference quotient for two thresholds. Its absolute value is bounded
+by the supremum of the corresponding Gaussian slice integral with the
+absolute weight. At fixed rank this supremum is finite for every weight
+used below because the Gaussian density in the normal coordinates dominates
+its polynomial growth, and the remaining Gaussian coordinates have
+finite moments. The factors from the linear change of variables are
+$1/\sigma$ and $1/(\sigma^2\sin\vartheta_{jk})$, respectively.
+Conditional on $T_q$, the independent threshold shifts have densities,
+so the quotients converge at almost every shifted threshold. Dominated
+convergence therefore permits averaging. Only linearly independent
+pairs enter the mixed identity.
+
+For later use, write $H_2(g):=\norm g^2-r$ and introduce the
+\emph{cubic Hermite matrix in direction $u$}
+\begin{equation}
+ \mathcal H_{3,u}(g):=(u\cdot g)(gg^\top-I_r)-ug^\top-gu^\top.
+ \label{h3:eq:H3}
+\end{equation}
+The next result includes arbitrary additional face factors. This
+uniformity is needed to restore derivatives evaluated at translated bases.
+
+\begin{proposition}[Single-face cubic matrix estimate]\label{h3:prop:cubic}
+For every integer $k\ge1$,
+\begin{equation}
+ \E_V\sum_{\alpha\in[m]^k}
+ \left\|\E_G\bigl[\mathcal H_{3,u_{\alpha_1}}(G)
+                    W_\alpha(U)\bigr]\right\|_*
+ \le C^{k+1}hL^2.
+ \label{h3:eq:cubic-matrix}
+\end{equation}
+No correlation gap is needed for this estimate.
+\end{proposition}
+
+\begin{proof}
+For any integrable nonnegative log-concave weight $w$, let
+$p:=\E w(G)$ and let $\mu,K$ be the mean and covariance under its
+normalized Gaussian tilt. Gaussian covariance contraction gives $K\preceq I_r$,
+and therefore
+\begin{equation}
+ \left\|\E[(GG^\top-I_r)w(G)]\right\|_*
+ \le 2p\norm\mu^2-\E[H_2(G)w(G)].
+ \label{h3:eq:matrix-reduction}
+\end{equation}
+As in Appendix~\ref{appx-an:sec:matrix}, covariance contraction follows by applying Pr\'ekopa's
+theorem to Gaussian convolution and differentiating its logarithm.
+The argument does not require $w\le1$. For the weights used below,
+$w(g)\le1+\norm g$, so Gaussian integrability justifies the
+differentiation, including when the weight vanishes on a halfspace.
+
+For a tuple with first index $j$, split
+$(u_j\cdot g)W_\alpha(U)$ into the difference of the weights
+\[
+ w_{\alpha,+}(g):=(u_j\cdot g)_+W_\alpha(V+\sigma g),\qquad
+ w_{\alpha,-}(g):=(-u_j\cdot g)_+W_\alpha(V+\sigma g).
+\]
+Each weight is log-concave because the logarithm of its linear factor
+is concave on the supporting halfspace. Apply~\eqref{h3:eq:matrix-reduction}
+to each and use the triangle inequality. Their trace terms add to
+$-\E[H_2(G)|u_j\cdot G|W_\alpha(U)]$.
+
+Here are the mean bounds needed in this application. With $V$ held fixed, define
+$b_j(g):=e^{q_j(V+\sigma g)}/(1+e^{q_j(V+\sigma g)})^2$ and use
+$(\pm u_j\cdot g)_+b_j(g)$ as reference weights. They dominate
+$w_{\alpha,\pm}$ and depend only on $u_j\cdot g$.
+For any reference $b$ depending only on a Gaussian projection $\Pi G$,
+and $0\le w\le b$, independence of the orthogonal Gaussian component
+and Jensen's inequality give
+\begin{equation}
+ p_w\norm{\mu_w}^2
+ \le\E[w(G)\norm{\Pi G}^2]+2p_w\log(p_b/p_w).
+ \label{h3:eq:relative-mean}
+\end{equation}
+This remains valid for the unbounded reference weights just used,
+whose Gaussian integrals are finite.
+Indeed, for $v$ orthogonal to the range of $\Pi$,
+\[
+ p_we^{v\cdot\mu_w}\le\E[w(G)e^{v\cdot G}]
+ \le\E[b(G)e^{v\cdot G}]=p_be^{\norm v^2/2}.
+\]
+Take $v$ to be the orthogonal component of $\mu_w$, and bound its
+component in the range of $\Pi$ by Cauchy--Schwarz.
+
+The usual logistic boundary estimate from~\eqref{appx-an:concentration}
+is $\sup_z\E_V F(V+z)\theta(V+z)\le Ch\sqrt L$.
+Summing the first term in~\eqref{h3:eq:relative-mean} and conditioning on
+$G$ bounds it by $Ch\sqrt L\,\E\max_j|u_j\cdot G|^3\le ChL^2$.
+The total averaged mass of $w_{\alpha,\pm}$ is at most $ChL$.
+The total reference mass, counting the $m^{k-1}$ tuples with each
+first index, is at most $Cm^kh\sqrt L$.
+The log-sum inequality consequently bounds the summed entropy terms
+by $C(k+1)hL^2$. This proves
+\begin{equation}
+ \E_V\sum_{\alpha,\pm}p_{\alpha,\pm}
+                   \norm{\mu_{\alpha,\pm}}^2\le C(k+1)hL^2.
+ \label{h3:eq:cubic-means}
+\end{equation}
+
+For the trace, summing tuples leaves
+$\sum_j|u_j\cdot G|F\pi_j\theta^{k-1}$.
+Use
+$F\pi_j\theta^{k-1}=-(h/k)\partial_{a_j}\theta^k$ and expand
+$\theta^k=\sum_{q=0}^k(-1)^q\binom{k}{q}F^q$.
+Applying~\eqref{h3:eq:mixture} and the facet coarea identity turns the
+sum of the trace integrals into signed mixtures of $J_{\mathrm f}(P)$.
+Lemma~\ref{h3:lem:surfaces} therefore gives
+\begin{equation}
+ \left|\E H_2(G)\sum_j|u_j\cdot G|F(U)\pi_j(U)\theta(U)^{k-1}\right|
+ \le C2^khL^2.
+ \label{h3:eq:cubic-trace}
+\end{equation}
+Finally, the two remaining terms of~\eqref{h3:eq:H3} have nuclear norm
+at most $2\norm{\E_G[G W_\alpha(U)]}$.
+Applying~\eqref{h3:eq:relative-mean} with $b_j$, rather than its linear
+multiple, gives the bounds
+\[
+ \E_V\sum_\alpha p_\alpha\le Ch\sqrt L,\qquad
+ \E_V\sum_\alpha p_\alpha\norm{\mu_\alpha}^2
+ \le C(k+1)hL^{3/2}.
+\]
+Cauchy--Schwarz bounds their contribution by $C\sqrt{k+1}\,hL$.
+Together with~\eqref{h3:eq:cubic-means}--\eqref{h3:eq:cubic-trace}, this
+proves~\eqref{h3:eq:cubic-matrix}.
+\end{proof}
+
+For the two-face term, the angle must be retained until after the
+matrix inequality is applied. Its role is to make the trace become
+$J_{\mathrm e}$, whose codimension-$3$ contributions cancel by
+\eqref{h3:eq:spherical-balance}.
+
+\begin{proposition}[Angle-weighted two-face matrix estimate]\label{h3:prop:pair}
+For every integer $K\ge2$,
+\begin{equation}
+ \E_V\sum_{\substack{\alpha\in[m]^K\\(\alpha_1,\alpha_2)\in\cD}}
+ \lambda_{\alpha_1\alpha_2}
+ \left\|\E_G[(GG^\top-I_r)W_\alpha(U)]\right\|_*
+ \le C^{K+1}\frac{h^2L^2}{\sigma}.
+ \label{h3:eq:weighted-pair-matrix}
+\end{equation}
+In particular, under the correlation gap the same sum without the
+weights $\lambda$ is at most $C^{K+1}h^2L^2/(d_c\sigma)$.
+\end{proposition}
+
+\begin{proof}
+Apply~\eqref{h3:eq:matrix-reduction} to each $W_\alpha$, and multiply
+by $\lambda_{jk}$ for $j=\alpha_1,k=\alpha_2$.
+To bound its mean, take $\Pi$ to be the projection onto
+$\operatorname{span}(u_j,u_k)$, denoted by $\Pi_{jk}$,
+in~\eqref{h3:eq:relative-mean}, with the reference weight
+\[
+ b_{jk}(g):=\frac{e^{q_j(V+\sigma g)+q_k(V+\sigma g)}}
+                  {(1+e^{q_j(V+\sigma g)}+e^{q_k(V+\sigma g)})^3}
+                  \ge W_\alpha(V+\sigma g).
+\]
+The elementary score integral of $b_{jk}$ over $\R^2$ is $1/2$.
+The joint density of $(u_j\cdot U,u_k\cdot U)$ is at most
+$C\sqrt L/(\sigma\sin\vartheta_{jk})$.
+Indeed, condition on $V$ and the first Gaussian projection, bound the
+remaining Gaussian density by $C/(\sigma\sin\vartheta_{jk})$, and use
+the marginal version of~\eqref{appx-an:concentration} to bound the first
+convolved density by $C\sqrt L$.
+Multiplying by $\lambda_{jk}$ cancels this sine denominator.
+Thus the total reference mass is at most $Cm^Kh^2\sqrt L/\sigma$.
+
+The positive ridge estimates~\eqref{h3:eq:positive-edge}, combined with
+$\partial_{a_j}\partial_{a_k}F=2h^{-2}W_{jk}$ and~\eqref{h3:eq:mixture}, give
+\begin{align}
+ \E\sum_{(j,k)\in\cD}\lambda_{jk}W_{jk}(U)
+   &\le C h^2L/\sigma,\label{h3:eq:pair-mass}\\
+ \E\sum_{(j,k)\in\cD}\lambda_{jk}W_{jk}(U)\norm{\Pi_{jk}G}^2
+   &\le C h^2L^2/\sigma.\label{h3:eq:pair-projection}
+\end{align}
+Counting the two orders of each pair changes only the absolute constant.
+The factor $1/\sin\vartheta_{jk}$ in coarea leaves exactly
+$\vartheta_{jk}$. Additional face factors sum to $\theta^{K-2}\le1$,
+so the same upper bounds apply after summing all tuples.
+For clarity, multiply both masses by the same angle weight before
+applying the log-sum inequality. If
+$M:=\E_V\sum_\alpha\lambda_{\alpha_1\alpha_2}p_\alpha$ and
+$B:=\E_V\sum_\alpha\lambda_{\alpha_1\alpha_2}p_{b_{\alpha_1\alpha_2}}$,
+where the sums are over tuples with independent first two normals, then
+\[
+ \E_V\sum_\alpha\lambda_{\alpha_1\alpha_2}p_\alpha
+       \log\frac{p_{b_{\alpha_1\alpha_2}}}{p_\alpha}
+ \le M\log(B/M).
+\]
+Here $M\le Ch^2L/\sigma$ and $B\le Cm^Kh^2\sqrt L/\sigma$.
+Writing $M=(h^2L/\sigma)x$ shows that the right side is at most
+$C(K+1)h^2L^2/\sigma$, including the zero-mass case by continuity.
+Thus no logarithm of an angle or of $h$ enters this step.
+Together with~\eqref{h3:eq:pair-projection}, this gives
+\begin{equation}
+ \E_V\sum_{\alpha:\,(\alpha_1,\alpha_2)\in\cD}
+ \lambda_{\alpha_1\alpha_2}p_\alpha\norm{\mu_\alpha}^2
+ \le C(K+1)h^2L^2/\sigma.
+ \label{h3:eq:pair-means}
+\end{equation}
+
+It remains to control the summed trace. Summing the extra indices
+leaves the weight
+\[
+ \sum_{(j,k)\in\cD}\lambda_{jk}F\pi_j\pi_k\theta^{K-2}.
+\]
+Expand
+$\theta^{K-2}=\sum_{q=0}^{K-2}(-1)^q\binom{K-2}{q}F^q$ and use
+\[
+ F^{q+1}\pi_j\pi_k
+ =\frac{h^2}{(q+1)(q+2)}
+       \partial_{a_j}\partial_{a_k}F^{q+1}.
+\]
+The mixed coarea formula and~\eqref{h3:eq:mixture} turn the trace into
+signed mixtures of $J_{\mathrm e}((Q-V)/\sigma)$, with total absolute
+coefficient at most $C2^K h^2/\sigma^2$.
+By Lemma~\ref{h3:lem:surfaces}, its magnitude is at most
+$C2^K h^2L^2/\sigma$. Combining this with~\eqref{h3:eq:pair-means}
+and~\eqref{h3:eq:matrix-reduction} proves~\eqref{h3:eq:weighted-pair-matrix}.
+The unweighted conclusion follows from~\eqref{h3:eq:gap}.
+\end{proof}
+
+\subsection{Fourth derivatives along the regularized path}
+We now apply the two estimates to the actual fourth derivatives.
+The algebraic decomposition retains cancellation within the Hessian.
+For $z_j:=u_j\cdot z$, $w_j:=u_j\cdot w$, and
+$\rho_{jk}:=u_j\cdot u_k$,
+\begin{equation}
+ D^2F(x)[z,w]
+ =-\frac1h\sum_j z_jw_jD_{u_j}W_j(x)
+ +\frac2{h^2}\sum_{j\ne k}W_{jk}(x)z_j(w_k-\rho_{jk}w_j).
+ \label{h3:eq:hessian}
+\end{equation}
+To verify it, use
+$D_{u_j}W_j=h^{-1}W_j(1-2\sum_k\rho_{jk}\pi_k)$ and collect terms.
+If $u_k=\pm u_j$, the corresponding coefficient in the second sum is
+$0$. Thus only pairs in $\cD$ contribute.
+
+\begin{theorem}[Fourth derivatives at translated concentrated bases]
+\label{h3:thm:fourth}
+Let $\mathcal H$ be a sigma-field, let $V$ be an $\mathcal H$-measurable
+concentrated base, and let $G$ be independent of $\mathcal H$.
+Suppose arrays $(Z_i,z_i,w_i,v_i)_i$ are independent of $G$
+conditional on $\mathcal H$ and satisfy
+\[
+ \sum_i\E[Z_iZ_i^\top\mid\mathcal H]\preceq I_r,\qquad
+ \norm{z_i}_U,\norm{w_i}_U\le\delta,\qquad
+ \norm{v_i}_U\le b\delta.
+\]
+There are constants $A_b,C_b$ such that $h\ge A_b\delta$ implies
+\begin{equation}
+ \left|\sum_i\E D^4F(V+\sigma G+v_i)[Z_i,Z_i,z_i,w_i]\right|
+ \le \frac{C_b}{d_c}\frac{\delta^2L^2}{\sigma^3}.
+ \label{h3:eq:fourth-bound}
+\end{equation}
+The constants depend only on $b,C_0$, and not on the rank.
+\end{theorem}
+
+\begin{proof}
+Two Gaussian integrations by parts in the repeated direction $Z_i$
+produce $\sigma^{-2}\tr((GG^\top-I_r)Z_iZ_i^\top)D^2F[z_i,w_i]$.
+Insert~\eqref{h3:eq:hessian}. For its first term, integrate once more
+in the unit direction $u_j$ to obtain
+\[
+ \E_G[(GG^\top-I_r)D_{u_j}W_j(U+v_i)]
+ =\sigma^{-1}\E_G[\mathcal H_{3,u_j}(G)W_j(U+v_i)].
+\]
+The coefficient matrices have operator norm at most $\delta^2$
+after conditional averaging, by the aggregate second-moment bound.
+For the second term of~\eqref{h3:eq:hessian}, the corresponding bound is
+$2\delta^2$, since $|w_{i,k}-\rho_{jk}w_{i,j}|\le2\delta$.
+
+To sum the matrices at a common base, expand each translated weight as in~\eqref{eq:weight-translation}. Put
+$d_j(v):=e^{u_j\cdot v/h}-1$ and
+$\eta_b:=e^{b\delta/h}-1$. For a weight with $K=1$ or $2$ face factors,
+\begin{align*}
+ W_\alpha(x+v)
+ &=W_\alpha(x)e^{\sum_{a=1}^K u_{\alpha_a}\cdot v/h}
+     \bigl(1+\sum_j\pi_j(x)d_j(v)\bigr)^{-K-1}\\
+ &=e^{\sum_{a=1}^K u_{\alpha_a}\cdot v/h}
+   \sum_{\ell\ge0}(-1)^\ell\binom{K+\ell}{\ell}
+   \sum_{\beta\in[m]^\ell}W_{\alpha,\beta}(x)
+                       \prod_{a=1}^\ell d_{\beta_a}(v).
+\end{align*}
+The conditional coefficient matrices in level $\ell$ are bounded
+in operator norm by $2\delta^2 e^{Kb\delta/h}\eta_b^\ell$.
+Apply Proposition~\ref{h3:prop:cubic} when $K=1$, and
+Proposition~\ref{h3:prop:pair} when $K=2$.
+Choose $A_b$ so that $C\eta_b\le1/2$.
+The resulting binomial series converges with an absolute bound.
+The first term costs $C_b\delta^2\sigma^{-3}h^{-1}(hL^2)$,
+and the second costs
+$C_b\delta^2\sigma^{-2}h^{-2}(h^2L^2/(d_c\sigma))$.
+Their sum is~\eqref{h3:eq:fourth-bound}.
+Finite-rank Gaussian integrability justifies the initial interchanges,
+and the estimates above remove rank from the final bound.
+\end{proof}
+
+To finish the proof of Proposition~\ref{an:prop:derivative}, take
+\(V=V_{0,t}\) and \(\sigma=\sigma_t\) in the Gaussian decomposition
+\eqref{eq:seeded-gaussian-split}. The proof following that display
+verifies the concentration condition and the bounds
+\(\delta\sqrt L\le\sigma_t\le1\). Conditional on the original
+summands, masks, and \(G_0\), the copy array in each repeated pair
+has aggregate second-moment matrix \(I_r\). The remaining directions
+have face norm at most \(\delta\), and the shifts in
+\eqref{appx-an:translates} have face norm at most \(4\delta\).
+The rescaled test in~\eqref{eq:seeded-test} has width
+\(\widetilde h\ge h\). With \(\mathsf A\ge A_4\),
+Theorem~\ref{h3:thm:fourth} therefore bounds each summed derivative
+by \(C\delta^2L^2/(d_c\sigma_t^3)\), uniformly in the segment
+parameter. The calibrated kernels have bounded integrals, and
+\(\sigma_t^2=(t+\varepsilon)/2\). Substitution gives
+\eqref{eq:gap-pointwise}.
 
 \end{document}
 
