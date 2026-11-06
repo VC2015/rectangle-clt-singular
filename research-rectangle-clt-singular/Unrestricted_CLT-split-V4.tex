@@ -2328,7 +2328,7 @@ and let \(\mu_w\coloneqq\E[Gw(G)]/p_w\). Then
 \begin{proof}
 Let $P_w$ be the probability measure on $\R^r$ with density
 \[
-\frac{P_w(dg)}{dg}\coloneqq \frac{w(g)\varphi_r(g)}{p_w},
+\frac{d P_w(g)}{dg}\coloneqq \frac{w(g)\varphi_r(g)}{p_w},
 \]
 where $\varphi_r$ denotes the standard Gaussian density
 on $\R^r$. Let $G_w\sim P_w$. By the definition of
@@ -2426,7 +2426,7 @@ Let \(w:\R^r\to[0,1]\) be a log-concave function
 satisfying \(p_w\coloneqq\E[w(G)]>0\) and let
 \(P_w\) be the probability measure on \(\R^r\) with density
 \[
-\frac{P_w(dg)}{dg}
+\frac{d P_w(g)}{dg}
 \coloneqq\frac{w(g)\varphi_r(g)}{p_w},
 \]
 where \(\varphi_r\) denotes the standard Gaussian density.
@@ -2533,7 +2533,7 @@ In the remainder of the proof, we use the general bound \eqref{appx-an:matrix-tr
 p_\alpha\coloneqq \E_G[w_\alpha(G)],
  \quad \mu_\alpha\coloneqq \frac{\E_G[Gw_\alpha(G)]}{p_\alpha}.
 \]
-Here, $\E_Gw_\alpha(G)>0$. The definitions of the logistic weights give
+Here, $\E_G[w_\alpha(G)]>0$. The definitions of the logistic weights give
 \[
  \log w_\alpha(g)
  =\sum_{a=1}^k q_{\alpha_a}(V_0+\sigma g)
@@ -2555,7 +2555,8 @@ where the sum is over all $\alpha\in\{1,\dots,m\}^k$. Applying \eqref{appx-an:ma
 & \qquad\qquad\qquad \le  2\sum_\alpha \E[p_\alpha\norm{\mu_\alpha}^2]
 - \E[H_2(G)F(U)\theta(U)^k]. \label{appx-an:matrix-main-split}
 \end{align}
-We first bound the mean term in \eqref{appx-an:matrix-main-split}.
+
+We first bound the first term on the right-hand side of \eqref{appx-an:matrix-main-split}, i.e. the mean term.
 For each $j=1,\dots, m$, set
 \[
  b_j(g)\coloneqq
@@ -2582,9 +2583,7 @@ Thus,
  \log(p_{b_{\alpha_1}}/p_\alpha)],
  \label{appx-an:entropy-sum}
 \end{equation}
-where we used \eqref{appx-an:total-product-weight}. 
-
-The first term on the right-hand side of \eqref{appx-an:entropy-sum} is at most
+where we used \eqref{appx-an:total-product-weight}.  The first term on the right-hand side of \eqref{appx-an:entropy-sum} is at most
 $ChL^{3/2}$: note that $\theta(U)^k \leq \theta(U)$, apply
 \eqref{appx-an:weight-concentration} conditional on $G$, and then use $\E\norm G_U^2\le CL$.
 To bound the second term on the right-hand side of \eqref{appx-an:entropy-sum}, 
@@ -2613,29 +2612,28 @@ and using $\log m\le CL$, we obtain
 Substituting these bounds into \eqref{appx-an:entropy-sum} yields
 \begin{equation}
   \sum_\alpha \E[p_\alpha\norm{\mu_\alpha}^2]
- \le C(k+1)hL^{3/2}.
+ \le C(k+1)hL^{3/2},
  \label{appx-an:tilted-mean-bound}
 \end{equation}
+yielding the required bound for the first term on the right-hand side of \eqref{appx-an:matrix-main-split}.
 
-We next bound the signed trace term in \eqref{appx-an:matrix-main-split}.
-First suppose that the normals are linearly independent. For
+We next bound the second term on the right-hand side of \eqref{appx-an:matrix-main-split}, i.e. the signed trace term.
+First, suppose that the normals $u_1,\dots, u_m$ are linearly independent. For
 \(s\in\R\), put \(F_s:=F_{a+s\mathbf1,h}\) and
-\(\theta_s:=1-F_s\), so that \(s\) shifts every threshold by the
-same amount.
+\(\theta_s:=1-F_s\).
 Since
 \( \partial_s F_s= F_s\theta_s/h\) and \(\partial_s\theta_s^k=-kF_s\theta_s^k/h\),
 we have
-\[
+\begin{equation}\label{eq: F theta k trick}
  F\theta^k=-\frac hk
  \left.\partial_s\theta_s^k\right|_{s=0}.
-\]
+\end{equation}
 Also,
-\[
+\begin{equation}\label{eq: theta expansion}
  \theta_s^k
  =\sum_{\ell=0}^k(-1)^\ell\binom{k}{\ell}F_s^\ell.
-\]
-
-Now, fix $\ell\ge1$ and let $T_\ell$ have the Gamma
+\end{equation}
+Here, $\partial_s F_s^0 = 0$, and so we only need to consider $\partial_s F_s^{\ell}$ for $\ell\geq 1$. To do so, fix $\ell\ge1$ and let $T_\ell$ have the Gamma
 distribution with shape $\ell$ and rate \(1\), independent of $V_0$ and $G$. Also, let $\omega_1,\ldots,\omega_m$ be independent exponential random variables with mean \(1\), independent of $T_\ell$, $V_0$, and $G$.
 Define
 \[
@@ -2653,50 +2651,48 @@ Then
  =\exp\{-T_\ell e^{-s/h}T(x)\},
  \end{aligned}
 \]
-where $T(x) = \sum_{j=1}^m e^{q_j(x)}$. Thus, by the law of iterated expectations,
+where $T(x) = \sum_{j=1}^m e^{(u_j\cdot x-a_j)/h}$. Thus, by the law of iterated expectations,
 \begin{equation}
 \Pp(x\in Q_s) = \E[\exp\{-T_\ell e^{-s/h}T(x)\}] = \bigl(1+e^{-s/h}T(x)\bigr)^{-\ell} = F_s(x)^\ell,
  \label{appx-an:gamma-mixture}
 \end{equation}
 where the second equality follows from the Gamma Laplace transform formula.
 
-To differentiate this mixture, condition on \(V_0,T_\ell,\omega\) and put
+Further, put
 \[
- b_j:=\{a_j+h\log(\omega_j/T_\ell)-u_j\cdot V_0\}/\sigma.
+ b_j:=\{a_j+h\log(\omega_j/T_\ell)-u_j\cdot V_0\}/\sigma,\quad j=1,\dots,m.
 \]
 The event \(U\in Q_s\) is then equivalent to
-\(u_j\cdot G\le b_j+s/\sigma\) for every \(j\). Define the
+\(u_j\cdot G\le b_j+s/\sigma\) for every \(j\) since $U = V_0 + \sigma G$. Also, define the
 Gaussian trace function and its common-threshold derivative by
 \begin{equation}
  J(b):=\E_G[H_2(G)\ind\{u_j\cdot G\le b_j,\ j\le m\}],
- \qquad \mathcal D(b):=\sum_j\partial_jJ(b).
+ \quad \mathcal D(b):=\sum_j\partial_jJ(b),\quad b=(b_1,\dots,b_m)\in\R^m.
  \label{appx-an:threshold-functions}
 \end{equation}
-Thus
+Then, by the law of iterated expectations,
 \[
- \E[H_2(G)F_s(U)^\ell]
- =\E_{V_0,T_\ell,\omega}J(b+s\mathbf1/\sigma),
+ \E[H_2(G)F_s(U)^\ell] = \E[H_2(G)\ind\{U\in Q_s\}]
+ =\E[J(b+s\mathbf1/\sigma)],
 \]
 and hence
 \[
  \frac{d}{ds}\E[H_2(G)F_s(U)^\ell]
- =\frac1\sigma\E_{V_0,T_\ell,\omega}
-                    \mathcal D(b+s\mathbf1/\sigma).
+ =\frac1\sigma\E[\mathcal D(b+s\mathbf1/\sigma)].
 \]
-To justify differentiation under the expectation, condition on
-\(u_j\cdot G=b_j\). This bounds \(|\partial_jJ(b)|\) by
-\(\varphi(b_j)(b_j^2+2r)\), uniformly in the other thresholds.
-Its supremum is finite, which gives a dominating bound for each fixed
-\(r,m\). For the quantitative estimate, condition instead on the
-Gamma and exponential variables and apply
-Lemma~\ref{appx-an:lem:threshold}. Its bound is uniform in the thresholds,
-so
-\[
+To justify differentiation under the expectation, conditioning on
+$u_j\cdot G=b_j$ gives
+$|\partial_jJ(b)|\le\varphi(b_j)(b_j^2+2r)$, where $\varphi$ is the
+standard Gaussian density. This bound has a finite supremum over $b$,
+so dominated convergence applies for fixed $r$ and $m$. Moreover,
+\begin{equation}\label{eq: key bound for surface integrals}
  \left|\frac{d}{ds}\E[H_2(G)F_s(U)^\ell]\right|
- \le C\left(L^{3/2}+\frac\delta\sigma L^2\right).
-\]
-The constant term in the expansion of \(\theta_s^k\) has zero
-derivative. Summing the remaining binomial coefficients and using
+ \le\frac1\sigma\E[|\mathcal D(b+s\mathbf1/\sigma)|]
+ \le C\left(L^{3/2}+\frac\delta\sigma L^2\right),
+\end{equation}
+where the last inequality follows by conditioning on $T_\ell$ and
+$\omega$ and applying Lemma~\ref{appx-an:lem:threshold} below, whose
+bound is uniform in the thresholds. Combining \eqref{eq: F theta k trick}, \eqref{eq: theta expansion}, and \eqref{eq: key bound for surface integrals} and using
 \(\sum_{\ell=1}^k\binom{k}{\ell}\le2^k\), we obtain
 \[
  \left|\E[H_2(G)F(U)\theta(U)^k]\right|
@@ -2704,41 +2700,50 @@ derivative. Summing the remaining binomial coefficients and using
        \left(L^{3/2}+\frac\delta\sigma L^2\right)
  \le\frac{C2^k}{k}hL^{3/2},
 \]
-where the last inequality uses \(\sigma\ge\delta\sqrt L\).
-Combining this bound with \eqref{appx-an:matrix-main-split} and
-\eqref{appx-an:tilted-mean-bound}, and absorbing \(k+1\) and
-\(2^k/k\) into \(C_1^{k+1}\), proves
+where the second inequality follows from \(\sigma\ge\delta\sqrt L\).
+This gives the required bound for the second term on the right-hand side of \eqref{appx-an:matrix-main-split} when the normals $u_1,\dots, u_m$ are linearly independent. Combining it with \eqref{appx-an:matrix-main-split} and
+\eqref{appx-an:tilted-mean-bound} proves
 \eqref{appx-an:matrix-bound} for linearly independent normals.
 
-For arbitrary normals, take \(\lambda\in(0,1)\) and work in
-\(\R^{r+m}\) with
+
+
+For arbitrary normals, take \(\lambda\in(0,1)\) and define the following vectors in $\R^{r+m}$:
 \[
  u_j^\lambda:=(\sqrt{1-\lambda^2}\,u_j,\lambda e_j),\qquad
  V_0^\lambda:=(V_0/\sqrt{1-\lambda^2},0),\qquad
  \widehat G:=(G,G'),
 \]
 where \(e_j\) is the \(j\)th coordinate vector in \(\R^m\), and
-\(G'\sim N(0,I_m)\) is independent of \(V_0,G\).
-The \(u_j^\lambda\) are linearly independent unit vectors and
-\(u_j^\lambda\cdot V_0^\lambda=u_j\cdot V_0\), so
-\eqref{appx-an:concentration} holds with the same constant.
-The preceding argument uses only this concentration property, the
-unit lengths, and the number of normals. Its matrix bound therefore
-applies in the enlarged space uniformly in \(\lambda\).
-
-Take the upper-left \(r\times r\) block of each matrix expectation.
-Compression cannot increase the nuclear norm. As \(\lambda\downarrow0\),
-the weights converge to their original values because
+\(G'\sim N(0,I_m)\) is independent of $V_0$ and $G$. Also, define
+\[
+Q^\lambda(a):=\{z\in\mathbb R^{r+m}:u_j^\lambda\cdot z\le a_j,\ j\le m\},\quad a=(a_1,\dots,a_m)\in\R^m.
+\]
+Then the \(u_j^\lambda\) are linearly independent unit vectors in $\R^{r+m}$ and
+since \(u_j^\lambda\cdot V_0^\lambda=u_j\cdot V_0\) for every \(j\), it follows from \eqref{appx-an:concentration} that for all \(a\in\mathbb R^m\) and \(s>0\),
+\[
+\begin{aligned}
+\mathbb P\{V_0^\lambda\in Q^\lambda(a)^s\setminus Q^\lambda(a)^{-s}\}
+&=\mathbb P\{V_0\in A_a^s\setminus A_a^{-s}\} \le C_0(s+\delta)\sqrt L.
+\end{aligned}
+\]
+We therefore obtain \eqref{appx-an:matrix-bound} with $V_0$, $G$, $I_r$, and $U=V_0+\sigma G$ replaced by $V_0^{\lambda}$, $\widehat G$, $I_{r+m}$, and $U^{\lambda} = V_0^{\lambda} + \sigma \widehat G$, respectively, and appropriately adjusted $F_{a, h}$ and $\pi_{\alpha}$. Also, as \(\lambda\downarrow0\),
 \[
  u_j^\lambda\cdot(V_0^\lambda+\sigma\widehat G)
  =u_j\cdot V_0+\sigma\sqrt{1-\lambda^2}\,u_j\cdot G
                   +\sigma\lambda G'_j
  \longrightarrow u_j\cdot U.
 \]
-Boundedness of the weights and Gaussian second moments give conditional
-dominated convergence for each matrix entry. Continuity of the nuclear
-norm and Fatou's lemma for the expectation over \(V_0\) then prove
-\eqref{appx-an:matrix-bound} for arbitrary normals.
+The weights therefore converge to their original values. Their
+boundedness and the Gaussian second moments allow conditional dominated
+convergence in each matrix entry. Continuity of the nuclear norm and
+Fatou's lemma for the expectation over $V_0$ then give
+\[
+ \E_{V_0}\sum_{\alpha_1,\ldots,\alpha_k=1}^m
+ \left\|\E_{\widehat G}\left[(\widehat G\widehat G^\top-I_{r+m})F_{a, h}(U)
+              \prod_{b=1}^k\pi_{\alpha_b}(U)\right]\right\|_*
+ \le C_1^{k+1}hL^{3/2}.
+\]
+In turn, this gives \eqref{appx-an:matrix-bound} since replacing any $(r+m)\times(r+m)$ matrix by its $r\times r$ upper-left block cannot make the nuclear norm larger.
 \end{proof}
 
 \begin{remark}[Gaussian covariance contraction]\label{appx-rem:covariance-contraction}
