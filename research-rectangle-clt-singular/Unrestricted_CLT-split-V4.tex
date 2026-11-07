@@ -7,7 +7,7 @@
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{longtable,booktabs,tabularx}
 \usepackage{xcolor}
-% Magenta marks the current Section 2 exposition recovery.
+% Magenta marks the retained Section 2 revisions and Appendix F language edits.
 \newenvironment{recovered}{\color{magenta}}{}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
@@ -4013,9 +4013,13 @@ For integers \(n\ge1\) and \(m\ge2\), let
 where the \(\eta_i\) are independent signs taking the values
 \(-1\) and \(1\) with equal probability. Let
 \(A_{n,1},\ldots,A_{n,m}\) be independent copies of \(A_n\), and put
-\(\Lambda_m:=\log(em)\). Define their maximum's approximation error
-by the supremum below. There are absolute constants \(a_1,C>0\)
-such that, for large \(n\) and \(\Lambda_m\le a_1\sqrt n\),
+\(\Lambda_m:=\log(em)\).
+\begin{recovered}
+We denote the Kolmogorov distance between this maximum and its
+Gaussian counterpart by \(\epsilon_{n,m}\). For absolute constants
+\(a_1,C>0\), this error satisfies, for large \(n\) and
+\(\Lambda_m\le a_1\sqrt n\),
+\end{recovered}
 \begin{equation}
  \epsilon_{n,m}:=\sup_x\left|\Pp\{\max_{j\le m}A_{n,j}\le x\}-\Phi(x)^m\right|
  \le C\left(\frac{\sqrt{\Lambda_m}}{\sqrt n}
@@ -4114,10 +4118,12 @@ We require \(0<v<1/2\). Here \(v\) will be the variance of the
 activated component, and \(s\) normalizes each coordinate to variance
 \(1\). The parameters may depend on \(n\). Within this construction,
 we omit the subscript \(n\) from \(m,p,X_i,W,\Sigma\), and \(Z\).
-Let \(\eta_{ij}\) and \(\varepsilon_{iu}\) be independent Rademacher
-signs, \(I_i\) independent Bernoulli\((\theta)\) variables, and
-\(J_{iu}\) independent Bernoulli\((\pi)\) variables. All these
-variables are mutually independent. Define \(m^2\) coordinates by
+\begin{recovered}
+For \(1\le i\le n\) and \(1\le j,u\le m\), let \(\eta_{ij}\) and
+\(\varepsilon_{iu}\) be Rademacher signs, \(I_i\) Bernoulli\((\theta)\)
+variables, and \(J_{iu}\) Bernoulli\((\pi)\) variables. All these
+variables are mutually independent.
+\end{recovered} Define \(m^2\) coordinates by
 \begin{equation}
  X_{i,ju}:=s\eta_{ij}+aI_iJ_{iu}\varepsilon_{iu},
  \qquad 1\le j,u\le m,\quad 1\le i\le n.
@@ -4185,8 +4191,11 @@ The largest column sum \(Q_*\) equals \(N\) whenever some column
 has a positive activated sign in every active row.
 Conditional on the active rows, a given column has
 \(J_{iu}\varepsilon_{iu}=1\) on all of them with probability
-\((\pi/2)^N\), independently across columns. Since \(|Q_*|\le N\),
-for any \(b\ge0\),
+\((\pi/2)^N\), independently across columns.
+\begin{recovered}
+To bound the probability that no column attains \(N\), first restrict
+the number of active rows to \(N\le b\). For any \(b\ge0\), this gives
+\end{recovered}
 \begin{equation}
  \Pp(Q_*\ne N)\le \Pp(N>b)+\exp\{-m(\pi/2)^b\}.
  \label{lower:eq:all-active}
@@ -4199,7 +4208,9 @@ some choice \(b=b_n\),
  \E Q_*=(1+o(1))k,\qquad \E Q_*^2\le k^2+k.
  \label{lower:eq:activation-moments}
 \end{equation}
-Indeed, \(\E N=k\), \(\E N^2\le k^2+k\), and
+\begin{recovered}
+Indeed, \(|Q_*|\le N\), \(\E N=k\), \(\E N^2\le k^2+k\), and
+\end{recovered}
 \(\E|N-Q_*|\le2(\E N^2)^{1/2}\Pp(Q_*\ne N)^{1/2}=o(k)\).
 
 To apply the shifted-variable comparison, divide both maxima
@@ -4209,14 +4220,17 @@ in~\eqref{sym:eq:common-maxima} by \(s\) and define
  V_G:=\frac{\sqrt v}{s}H_*.
 \]
 Thus \(s^{-1}\max_{j,u}W_{ju}=A_*+V_W\), while
-\(s^{-1}\max_{j,u}Z_{ju}=G_*+V_G\). We evaluate both distribution
-functions of the original maxima at \(t_n:=su_m\), where
-\(m\bar\Phi(u_m)=1\).
-Using the approximation error \(\epsilon_{n,m}\) defined
-in~\eqref{sym:eq:rademacher-max},
-Lemma~\ref{lower:shift-comparison} and
-\eqref{sym:eq:gaussian-smoothness} give, whenever
+\(s^{-1}\max_{j,u}Z_{ju}=G_*+V_G\).
+\begin{recovered}
+The shifts \(V_W\) and \(V_G\) are independent of \(A_*\) and
+\(G_*\), respectively. We apply Lemma~\ref{lower:shift-comparison}
+to these scaled maxima at the threshold \(u_m\), defined by
+\(m\bar\Phi(u_m)=1\). This amounts to evaluating the original maxima
+at \(t_n:=su_m\). The approximation bound
+\eqref{sym:eq:rademacher-max} and the derivative bound
+\eqref{sym:eq:gaussian-smoothness} then give, whenever
 \(\log(em)\le a_1\sqrt n\),
+\end{recovered}
 \begin{equation}
 \begin{split}
  &\Pp(\max_{j,u}W_{ju}\le t_n)-\Pp(\max_{j,u}Z_{ju}\le t_n)\\
@@ -4299,14 +4313,20 @@ belong to \(\mathcal C_q(B,m^2)\) eventually.
 
 The active-row count \(N=\sum_iI_i\) has mean \(\ell/2\)
 and variance at most \(\ell/2\).
-Taking \(b=\ell\) in~\eqref{lower:eq:all-active} gives
+\begin{recovered}
+Chebyshev's inequality bounds \(\Pp(N>\ell)\) by \(2/\ell\).
+Taking \(b=\ell\) in~\eqref{lower:eq:all-active} therefore gives
+\end{recovered}
 \[
  \Pp(Q_*\ne N)\le 2/\ell+
        \exp\{-e^{(1-\log2)\ell}\}\longrightarrow0.
 \]
 Consequently, \(\E Q_*=(1/2+o(1))\ell\) and
-\(\E Q_*^2=O(\ell^2)\). Together with
-\eqref{sym:eq:gaussian-max}, these estimates yield
+\(\E Q_*^2=O(\ell^2)\).
+\begin{recovered}
+Using \(s\to1\), \(v=\theta a^2\), and the Gaussian maximum
+estimates in~\eqref{sym:eq:gaussian-max}, we obtain
+\end{recovered}
 \[
  \E V_G-\E V_W=(1/2+o(1))\frac{a\ell}{\sqrt n},
  \qquad
@@ -4318,8 +4338,11 @@ The error from replacing the Rademacher maximum satisfies
  \frac{\epsilon_{n,m}}{d_n}
  \le C\left(\frac1{a\ell}+\frac{\sqrt\ell}{a\sqrt n}\right)\to0.
 \]
+\begin{recovered}
 The second-moment remainder in~\eqref{lower:eq:master-comparison}
-is \(O(d_n^2)\). We obtain
+is \(O(d_n^2)=o(d_n)\), since \(d_n\to0\).
+At the threshold \(t_n=su_m\) defined there, we therefore obtain
+\end{recovered}
 \begin{equation}
  \Pp(\max_{j,u}W_{ju}\le t_n)-\Pp(\max_{j,u}Z_{ju}\le t_n)
  =\left\{\frac{\sqrt2}{e}+o(1)\right\}d_n.
@@ -4444,7 +4467,11 @@ note that
 \(\log(2/\pi)=\Lambda-(1-4/q)\log(4\Lambda)\sim\Lambda\).
 Since \(k=\ell/(4\Lambda)\), this gives
 \(m(\pi/2)^{2k}\ge e^{\ell/4}\) eventually.
-Equation~\eqref{lower:eq:all-active}, with \(b=2k\), gives
+\begin{recovered}
+Since \(\Var(N)\le k\), Chebyshev's inequality gives
+\(\Pp(N>2k)\le k^{-1}\). Equation~\eqref{lower:eq:all-active},
+with \(b=2k\), therefore yields
+\end{recovered}
 \[
  \Pp(Q_*\ne N)\le k^{-1}+\exp\{-e^{\ell/4}\}\longrightarrow0.
 \]
@@ -4453,8 +4480,11 @@ By~\eqref{lower:eq:activation-moments},
  \E Q_*=(1+o(1))k,\qquad \E Q_*^2=O(k^2).
  \label{q4:eq:sparse-max-moments}
 \end{equation}
-For this parameter choice, the Gaussian shift is negligible
-relative to the shift in the normalized sum. Indeed,
+\begin{recovered}
+For this parameter choice, the Gaussian shift has a smaller mean
+than the shift in the normalized sum, and their ratio tends to zero.
+Indeed,
+\end{recovered}
 \[
  \frac{\sqrt v\,\E H_*}{ak/\sqrt n}
  =\sqrt{\frac\pi k}\,\E H_*
@@ -4480,9 +4510,13 @@ For the second-moment remainder,
  \frac{\ell a^2k^2}{n}=d_n^2,\qquad
  \ell^2v=4\pi\Lambda d_n^2.
 \]
+\begin{recovered}
 The second-moment estimates for \(Q_*\) and \(H_*\) therefore give
-\(\ell\,\E(V_W^2+V_G^2)=O(d_n^2)\). Reversing the sign in
-\eqref{lower:eq:master-comparison} now yields
+\(\ell\,\E(V_W^2+V_G^2)=O(d_n^2)=o(d_n)\).
+At the threshold \(t_n=su_m\) from~\eqref{lower:eq:master-comparison},
+the larger mean of \(V_W\) reverses the sign of the leading
+probability difference. We obtain
+\end{recovered}
 \begin{equation}
  \Pp(\max_{j,u}Z_{ju}\le t_n)-\Pp(\max_{j,u}W_{ju}\le t_n)
  =\left\{\frac{\sqrt2}{e}+o(1)\right\}d_n.
