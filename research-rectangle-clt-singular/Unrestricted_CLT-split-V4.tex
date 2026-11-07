@@ -7,7 +7,7 @@
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{longtable,booktabs,tabularx}
 \usepackage{xcolor}
-% Magenta marks the retained Section 2 revisions and Appendix F language edits.
+% Magenta marks the retained exposition revisions and preparatory lemmas in Appendices F and G.
 \newenvironment{recovered}{\color{magenta}}{}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
@@ -166,7 +166,7 @@ We call $s_3,s_4\ge0$ \emph{relative moment bounds} if
  Q_j\preceq s_4\Sigma,\qquad \widetilde Q_j\preceq s_4\Sigma
  \qquad (1\le j\le p).
 \end{equation}
-For a contrast $u$ of variance $u^\top\Sigma u=1$, the first inequality bounds the absolute signed sum $\sum_i\E[\xi_{ij}(u^\top\xi_i)^2]$. The next two inequalities bound the fourth moments when the coordinate and the contrast come from the same row or from independent copies of it. These comparisons require no inverse of $\Sigma$. The envelope always permits $s_3=\delta$ and $s_4=\delta^2$, by testing on any $u$ and using $|\xi_{ij}|\le\delta$.
+For a contrast $u$ of variance $u^\top\Sigma u=1$, the first inequality bounds the absolute signed sum $\sum_i\E[\xi_{ij}(u^\top\xi_i)^2]$. The next two inequalities bound the fourth moments when the coordinate and the contrast come from the same \textcolor{magenta}{summand} or from independent copies of it. These comparisons require no inverse of $\Sigma$. The envelope always permits $s_3=\delta$ and $s_4=\delta^2$, by testing on any $u$ and using $|\xi_{ij}|\le\delta$.
 
 \begin{theorem}[Unrestricted covariance]\label{thm:unrestricted}
 Under~\eqref{eq:setup}, for every admissible $s_4$ in \eqref{eq:relative-moments},
@@ -181,7 +181,7 @@ In particular, the envelope alone gives
 \end{theorem}
 The rate in \eqref{eq:relative-unrestricted} is $O(\delta L^{3/2})$ whenever $s_4D_L\lesssim\delta^2$. Aggregate third moments enter the proof through $s_3L^{3/2}$. Even at exact cancellation, smoothing still costs order $\delta L^{3/2}$ in this argument. A smaller $s_3$ alone therefore yields no gain in the order of the unrestricted bound.
 
-For example, let $\xi_i=a_i R_i$ for independent copies of a centered sign vector with covariance $\Sigma$, where $\sum_i a_i^2=1$. Since $R_{ij}^2=1$, both fourth-moment matrices equal $(\sum_i a_i^4)\Sigma$. Give one row weight proportional to $\sqrt{\log n}$ and the other $n-1$ rows weight proportional to one. After normalization, $\delta\asymp\sqrt{(\log n)/n}$ and $s_4\asymp1/n$. For $p\asymp n^a$ with fixed $a>0$, \eqref{eq:relative-unrestricted} gains a factor of order $\sqrt{\log n}$ over \eqref{eq:unrestricted}, for every covariance of the sign vector.
+For example, let $\xi_i=a_i R_i$ for independent copies of a centered sign vector with covariance $\Sigma$, where $\sum_i a_i^2=1$. Since $R_{ij}^2=1$, both fourth-moment matrices equal $(\sum_i a_i^4)\Sigma$. \textcolor{magenta}{Give one summand a weight proportional to $\sqrt{\log n}$ and each of the other $n-1$ summands a weight proportional to $1$.} After normalization, $\delta\asymp\sqrt{(\log n)/n}$ and $s_4\asymp1/n$. For $p\asymp n^a$ with fixed $a>0$, \eqref{eq:relative-unrestricted} gains a factor of order $\sqrt{\log n}$ over \eqref{eq:unrestricted}, for every covariance of the sign vector.
 
 For normalized observations, Theorem~\ref{thm:unrestricted} gives
 the following dependence on the sample size.
@@ -323,89 +323,58 @@ remaining logarithmic gaps are given in Section~\ref{opt:section}.
 
 A polyhedron is specified by inequalities along its face normals.
 Collecting these projections into a vector turns membership into a
-lower-orthant event, as in~\cite[Section~3.1]{CCK2017}. The following
-lemma therefore transfers a rectangle bound once the moments of the
-standardized projections have been checked.
+lower-orthant event, as in~\cite[Section~3.1]{CCK2017}.
+\begin{recovered}
+The following corollary extends our Gaussian approximation bounds to
+polyhedra. Its condition on the normals limits the amplification caused
+by standardizing the projections and permits singular covariance matrices.
+\end{recovered}
 
-\begin{lemma}[Polyhedral transfer]\label{lem:polyhedral-transfer}
+\begin{recovered}
+\begin{corollary}[Polyhedral transfer]\label{cor:polyhedral-transfer}
 Let \(W\in\R^p\) be centered with covariance \(\Sigma\), and let
 \(Z\sim N(0,\Sigma)\). For normals \(\nu_1,\ldots,\nu_m\in\R^p\)
 with \(\sigma_\alpha^2:=\nu_\alpha^\top\Sigma\nu_\alpha>0\), define
 \[
  P_a:=\bigcap_{\alpha=1}^m\{x:\nu_\alpha^\top x\le a_\alpha\},
  \qquad
- M_{\alpha j}:=\frac{\nu_{\alpha j}}{\sigma_\alpha}.
+ \Delta_m(W,Z):=\sup_{a\in\R^m}
+ \bigl|\Pp(W\in P_a)-\Pp(Z\in P_a)\bigr|.
 \]
-Then \(MW\) has unit marginal variances, \(MZ\) is its matching
-Gaussian vector, and
+Suppose that, for some \(J\ge1\),
 \begin{equation}
- \sup_{a\in\R^m}
- \bigl|\Pp(W\in P_a)-\Pp(Z\in P_a)\bigr|
- \le \rh(MW,MZ).
- \label{eq:polyhedral-transfer}
-\end{equation}
-Zero-variance inequalities may be deleted unless they exclude both
-vectors almost surely, in which case the probability difference is zero.
-\end{lemma}
-
-\begin{proof}
-The event \(W\in P_a\) is exactly
-\(\{(MW)_\alpha\le a_\alpha/\sigma_\alpha\text{ for all }\alpha\}\),
-and the same identity holds for \(Z\). This is a lower orthant in
-\(\R^m\), so~\eqref{eq:polyhedral-transfer} follows from the
-definition of \(\rh\). The covariance of both transformed vectors
-is \(M\Sigma M^\top\), whose diagonal entries are \(1\).
-A centered projection with variance zero is zero almost surely,
-which proves the last assertion.
-\end{proof}
-
-To apply the lemma using coordinate bounds, suppose that
-\begin{equation}
- \|\nu_\alpha\|_1\le J\sigma_\alpha\quad(\alpha\le m),
- \qquad J\ge1.
+ \|\nu_\alpha\|_1\le J\sigma_\alpha\quad(\alpha\le m).
  \label{eq:polyhedral-normal-condition}
 \end{equation}
-This condition limits the amplification caused by standardization,
-and it permits singular covariance matrices. Under the assumptions
-of Theorem~\ref{thm:unrestricted}, the transformed summands
-\(M\xi_i\) have envelope \(J\delta\) and relative fourth-moment
-bound \(J^2s_4\). Indeed, \(\sum_j|M_{\alpha j}|\le J\) gives
-\[
- |(Mx)_\alpha|\le J\norm{x}_\infty,
- \qquad
- (Mx)_\alpha^2\le J\sum_j|M_{\alpha j}|x_j^2.
-\]
-The second inequality transfers both fourth-moment matrix comparisons
-in~\eqref{eq:relative-moments}, including the comparison using
-independent copies. Thus Theorem~\ref{thm:unrestricted} gives the
-polyhedral bound with the substitutions
+Under the bounded-summand assumptions of Theorem~\ref{thm:unrestricted},
+the bounds \eqref{eq:relative-unrestricted} and~\eqref{eq:unrestricted}
+hold for \(\Delta_m(W,Z)\) with the substitutions
 \[
  p\mapsto m,\qquad \delta\mapsto J\delta,\qquad s_4\mapsto J^2s_4.
 \]
-
-For Theorem~\ref{thm:polynomial}, suppose that the observations belong
-to \(\mathcal C_q(B,p)\). The projected observations satisfy
-\[
- \max_{i\le n}\E\norm{MX_i}_\infty^q\le (JB)^q,
- \qquad
- \max_{\alpha\le m}\frac1n\sum_i\E(MX_i)_\alpha^4
- \le J^4B^2.
-\]
-The first inequality uses the envelope bound above, and the second
-follows by convexity from the coordinate fourth-moment condition.
-Since \(J\ge1\), these observations belong to
-\(\mathcal C_q(J^2B,m)\). Theorem~\ref{thm:polynomial} therefore
-gives the polyhedral bound with
+Under the polynomial-moment assumptions of Theorem~\ref{thm:polynomial},
+the bound \eqref{poly:combined} holds for \(\Delta_m(W,Z)\), uniformly
+over observations in \(\mathcal C_q(B,p)\), with
 \[
  p\mapsto m,\qquad B\mapsto J^2B.
 \]
-In both applications, \(L\) becomes \(\log(em)\). The resulting
-bounds are uniform over thresholds and normals satisfying
-\eqref{eq:polyhedral-normal-condition}.
+Under the assumptions of Corollary~\ref{cor:subexponential},
+the bound \eqref{eq:subexponential} holds for \(\Delta_m(W_n,Z_n)\) with
+\[
+ p\mapsto m,\qquad K\mapsto JK.
+\]
+In each case, \(L\) becomes \(\log(em)\), and the auxiliary quantities
+in the cited bound are recomputed using the substituted parameters.
+The bounds are uniform over normals satisfying
+\eqref{eq:polyhedral-normal-condition} for the given \(J\).
+Zero-variance inequalities may be deleted unless they exclude both
+vectors almost surely, in which case the probability difference is zero.
+\end{corollary}
+\end{recovered}
 
-For sub-exponential observations, the triangle inequality gives
-\(\|(MX_i)_\alpha\|_{\psi_1}\le JK\), so Corollary~\ref{cor:subexponential}
-also transfers with \(p\mapsto m\) and \(K\mapsto JK\).
+\begin{recovered}
+The proof is given in Appendix~\ref{app:polyhedral-transfer}.
+\end{recovered}
 
 
 \subsection{Relationship to the Prior Literature}\label{sec:literature}
@@ -1050,10 +1019,10 @@ may depend on it, and the bounds are not asserted uniformly as
 
 \subsection{Transfer from bounded observations}\label{poly:transfer-sec}
 
-Truncating all rows and paying the probability that any row changes
+Truncating all \textcolor{magenta}{summands} and paying the probability that any \textcolor{magenta}{summand} changes
 loses information about the size of the exceptional observations.
-Instead, we condition on which rows are exceptional. Given this
-information, the remaining rows are independent and bounded, and the
+Instead, we condition on which \textcolor{magenta}{summands} are exceptional. Given this
+information, the remaining \textcolor{magenta}{summands} are independent and bounded, and the
 exceptional part can be treated as a random shift. The bounded-summand
 theorem and Gaussian anti-concentration then control the two parts.
 
@@ -1111,10 +1080,14 @@ every array in \(\mathcal C_q(B,p)\),
 The observations need not be identically distributed or symmetric.
 \end{proposition}
 
-The proof replaces the maximal inequality for large exchangeable-pair
-increments in the CCKK argument by a Bennett bound. Its variance estimate
-uses both \eqref{poly:envelope} and \eqref{poly:fourth}.
-Appendix~\ref{app:bennett} gives the proof.
+\begin{recovered}
+The proof compares logistic approximations along a Slepian path.
+Interchanging each summand with an independent copy gives a
+fourth-order remainder, and a Bennett inequality controls the large
+increments. The variance estimate uses both \eqref{poly:envelope}
+and \eqref{poly:fourth}. Appendix~\ref{app:bennett} gives a
+self-contained proof of the comparison estimate and the refinement.
+\end{recovered}
 Basu and Kuchibhotla use a related truncation
 argument for maxima of independent sums~\cite[Proposition~4.2]{BK2025}.
 
@@ -1143,8 +1116,8 @@ Theorem~\ref{lower:dense}. The remaining gap is
 Proposition~\ref{poly:bennett}\newline
 Appendix~\ref{app:bennett}\newline
 \(U+V_q/\mathcal{L}_q^{1-1/q}\)
-& The CCKK Stein estimate, a variance bound using both moment budgets,
-and a Bennett inequality for large increments.
+& \textcolor{magenta}{Logistic smoothing, Slepian interpolation with
+paired increments, and a Bennett inequality using both moment budgets.}
 & Matching rates in the large-\(\mathcal K_q\) regime of
 Theorem~\ref{lower:sparse}, and for fixed \(B\ge2\) at \(q=4\)
 by Theorem~\ref{opt:q4-lower}. The term \(U\) remains when \(q>4\)
@@ -2223,9 +2196,9 @@ to that component and conditional on the other, gives
  \label{eq:slepian-weight}
 \end{equation}
 
-Apply Lemma~\ref{appx-an:lem:identity} with seed zero and the Slepian amplitude. In the cubic term every derivative is evaluated at the common point $T_v$. Sum the signed row coefficients first. A coefficient with face labels $j,k,l$ is, up to face signs, $e_k^\top T_j e_l$. Its magnitude is at most $s_3$ because the bilinear form for $T_j$ has norm at most $s_3$ in the $\Sigma$ seminorm, and both coordinate directions have variance one. This follows by restricting \eqref{eq:relative-moments} to the range of $\Sigma$ and applying the operator norm inequality there.
+Apply Lemma~\ref{appx-an:lem:identity} with seed zero and the Slepian amplitude. In the cubic term every derivative is evaluated at the common point $T_v$. \textcolor{magenta}{First sum the signed coefficients over the summands.} A coefficient with face labels $j,k,l$ is, up to face signs, $e_k^\top T_j e_l$. Its magnitude is at most $s_3$ because the bilinear form for $T_j$ has norm at most $s_3$ in the $\Sigma$ seminorm, and both coordinate directions have variance one. This follows by restricting \eqref{eq:relative-moments} to the range of $\Sigma$ and applying the operator norm inequality there.
 
-In a fourth derivative the row can also enter the evaluation point. Compare each positive logistic weight at that point with its weight at $T_v$ using \eqref{appx-eq:local-envelope}. The bounded logit shift costs an absolute constant for $h\ge\mathsf A\delta$. The restored weight is independent of the copy variables. For each fixed list of four face labels, H\"older's inequality on the joint measure given by counting rows and averaging copies bounds the sum of the absolute coordinate products by
+\textcolor{magenta}{In a fourth derivative the summand can also enter the evaluation point.} Compare each positive logistic weight at that point with its weight at $T_v$ using \eqref{appx-eq:local-envelope}. The bounded logit shift costs an absolute constant for $h\ge\mathsf A\delta$. The restored weight is independent of the copy variables. For each fixed list of four face labels, H\"older's inequality on the joint measure given by \textcolor{magenta}{counting summand indices and averaging over copies} bounds the sum of the absolute coordinate products by
 \[
  \max_j\sum_i\E\xi_{ij}^4=\max_j e_j^\top Q_j e_j\le s_4.
 \]
@@ -2364,7 +2337,7 @@ This is the matrix use of the second-moment bound underlying
 \eqref{appx-an:pair-contraction}. Replacing it by a trace bound
 would introduce the rank.
 
-Under the extra bound for $s=1$ the shift is zero. Only level $\ell=0$ survives, and its signed coefficient matrix has norm at most $M_1$. For $s=2$, test $\Xi_{\alpha,\beta}$ on a unit vector and remove the translation multipliers using their absolute bound $e^{kb\delta/h}\eta_b^\ell$. The remaining product of two face coordinates satisfies $|xy|\le(x^2+y^2)/2$, so the two conditional quadratic-form bounds give $\|\Xi_{\alpha,\beta}\|_{\op}\le M_2 e^{kb\delta/h}\eta_b^\ell$. This use of absolute values permits row-dependent shifts even when a copy appears in both the shift and the coefficient.
+Under the extra bound for $s=1$ the shift is zero. Only level $\ell=0$ survives, and its signed coefficient matrix has norm at most $M_1$. For $s=2$, test $\Xi_{\alpha,\beta}$ on a unit vector and remove the translation multipliers using their absolute bound $e^{kb\delta/h}\eta_b^\ell$. The remaining product of two face coordinates satisfies $|xy|\le(x^2+y^2)/2$, so the two conditional quadratic-form bounds give $\|\Xi_{\alpha,\beta}\|_{\op}\le M_2 e^{kb\delta/h}\eta_b^\ell$. This use of absolute values permits \textcolor{magenta}{shifts that depend on the summand, even when a copy appears} in both the shift and the coefficient.
 
 Apply the operator--nuclear norm inequality
 \(|\tr(\Xi M)|\le\norm\Xi_\op\norm M_*\)
@@ -3447,7 +3420,14 @@ Taking the minimum with \(1\) completes the proof.
 \end{proof}
 
 
-\section{Proof of Corollary~\ref*{cor:subexponential} (sub-exponential transfer)}\label{app:subexponential}
+\section{Proofs of the transfer corollaries}\label{app:transfers}
+
+\begin{recovered}
+We first prove the sub-exponential bound and then transfer the bounds
+for rectangles to polyhedra by standardized projections.
+\end{recovered}
+
+\subsection{Proof of Corollary~\ref*{cor:subexponential} (sub-exponential transfer)}\label{app:subexponential}
 \begin{proof}[Proof of Corollary~\ref{cor:subexponential}]
 
 We clip each coordinate, standardize its variance, and then compare the
@@ -3595,6 +3575,67 @@ to prove \eqref{eq:subexponential}.
 
 \end{proof}
 
+\subsection{Proof of Corollary~\ref*{cor:polyhedral-transfer} (polyhedral transfer)}
+\label{app:polyhedral-transfer}
+
+\begin{proof}[Proof of Corollary~\ref{cor:polyhedral-transfer}]
+\begin{recovered}
+Define the standardized projection matrix by
+\(M_{\alpha j}:=\nu_{\alpha j}/\sigma_\alpha\).
+\end{recovered}
+The event \(W\in P_a\) is exactly
+\(\{(MW)_\alpha\le a_\alpha/\sigma_\alpha\text{ for all }\alpha\}\),
+and the same identity holds for \(Z\). This is a lower orthant in
+\(\R^m\), so the definition of \(\rh\) gives
+\begin{equation}
+ \Delta_m(W,Z)\le\rh(MW,MZ).
+ \label{eq:polyhedral-transfer}
+\end{equation}
+The covariance of both transformed vectors
+is \(M\Sigma M^\top\), whose diagonal entries are \(1\).
+A centered projection with variance zero is zero almost surely,
+which proves the assertion about zero-variance inequalities.
+
+Under the assumptions of Theorem~\ref{thm:unrestricted}, the
+transformed summands \(M\xi_i\) have envelope \(J\delta\) and
+relative fourth-moment bound \(J^2s_4\).
+Indeed, \(\sum_j|M_{\alpha j}|\le J\) gives
+\[
+ |(Mx)_\alpha|\le J\norm{x}_\infty,
+ \qquad
+ (Mx)_\alpha^2\le J\sum_j|M_{\alpha j}|x_j^2.
+\]
+The second inequality transfers both fourth-moment matrix comparisons
+in~\eqref{eq:relative-moments}, including the comparison using
+independent copies. \begin{recovered}Applying
+Theorem~\ref{thm:unrestricted} to the transformed summands proves the
+bounded-summand conclusion.\end{recovered}
+
+For Theorem~\ref{thm:polynomial}, suppose that the observations belong
+to \(\mathcal C_q(B,p)\). The projected observations satisfy
+\[
+ \max_{i\le n}\E\norm{MX_i}_\infty^q\le (JB)^q,
+ \qquad
+ \max_{\alpha\le m}\frac1n\sum_i\E(MX_i)_\alpha^4
+ \le J^4B^2.
+\]
+The first inequality uses the envelope bound above, and the second
+follows by convexity from the coordinate fourth-moment condition.
+Since \(J\ge1\), these observations belong to
+\(\mathcal C_q(J^2B,m)\).
+\begin{recovered}
+Theorem~\ref{thm:polynomial} therefore proves the polynomial-moment
+conclusion.
+\end{recovered}
+
+For sub-exponential observations, the triangle inequality gives
+\(\|(MX_i)_\alpha\|_{\psi_1}\le JK\).
+\begin{recovered}
+Applying Corollary~\ref{cor:subexponential} to these projections proves
+the remaining conclusion.
+\end{recovered}
+\end{proof}
+
 \section{Proof of Proposition~\ref*{poly:transfer} (polynomial envelope transfer)}\label{app:conditional}
 
 We first record the bounded theorem used in the transfer. By Theorem~\ref{thm:unrestricted}, independent
@@ -3652,7 +3693,7 @@ For any truncation threshold \(T\ge2B\), we shall prove
 \end{equation}
 The first term measures the error for the bounded component, the
 second measures the change in covariance, and the third comes from
-the exceptional rows. Define
+the exceptional \textcolor{magenta}{summands}. Define
 \[
  I_i:=\ind\{\norm{X_i}_\infty>T\},\qquad
  p_i:=\Pp(I_i=1),\qquad \mu_i:=\E[X_i\mid I_i=0].
@@ -3664,7 +3705,7 @@ mean is well defined. Decompose each observation as
  R_i:=I_iX_i+(1-I_i)\mu_i,\qquad X_i=Y_i+R_i.
  \label{app:decomposition}
 \end{equation}
-The vectors \(R_i\) are independent across rows and centered, because
+The vectors \(R_i\) are \textcolor{magenta}{independent over \(i\)} and centered, because
 \(\E R_i=\E X_i=0\). Let \(\mathcal F\) be the sigma-field generated
 by all \(I_i\) and \(I_iX_i\). Conditional on \(\mathcal F\), the
 vectors \(Y_i\) are independent, centered, and bounded by \(2T\),
@@ -3691,7 +3732,7 @@ Applying Lemma~\ref{lem:maximum} to \(R_i/\sqrt n\) gives
  \label{app:shift}
 \end{equation}
 
-The conditional covariance varies with the set of exceptional rows.
+The conditional covariance varies with the set of exceptional \textcolor{magenta}{summands}.
 We next bound its expected deviation from \(\Sigma\). Put
 \[
  C_i^0:=\Cov(X_i\mid I_i=0),\qquad
@@ -4104,10 +4145,12 @@ by an absolute constant, treating \(m=2,3\) separately. For
 \subsection{The common symmetric construction}
 \label{app:lower-family}
 
-The symmetric observations consist of a Rademacher component and
-an independent component that is present only in selected rows and
-coordinates. The row activation follows the construction
-in~\cite[Proposition~E.1]{FKLZ}.
+\begin{recovered}
+Each symmetric summand consists of a Rademacher component and an
+independent component that is present only for selected summand and
+coordinate indices. The activation of this second component follows
+the construction in~\cite[Proposition~E.1]{FKLZ}.
+\end{recovered}
 Fix integers \(n\ge1\), \(m\ge2\), activation probabilities
 \(0<\theta,\pi\le1\), and an amplitude \(a>0\). Write
 \[
@@ -4129,44 +4172,79 @@ variables are mutually independent.
  \qquad 1\le j,u\le m,\quad 1\le i\le n.
  \label{sym:eq:common-construction}
 \end{equation}
-The variable \(I_i\) activates a row, and \(J_{iu}\) selects its
-active columns. We call \(J_{iu}\) a \emph{coordinate mask}. Taking
-\(\pi=1\) removes the masks. The rows are i.i.d. and centered.
-Reversing every sign in a row preserves its distribution and negates
-it, so its law is centrally symmetric.
+\begin{recovered}
+The index \(i\) labels summands, and the pair \((j,u)\) labels a
+coordinate within each summand. The first component depends on \(j\),
+whereas the second depends on \(u\) and is shared by all coordinates
+with that value of \(u\). The indicator \(I_i\) switches on the second
+component of summand \(X_i\), and \(J_{iu}\) selects which indices
+\(u\) contribute. We call \(J_{iu}\) a \emph{coordinate mask}.
+Taking \(\pi=1\) removes the masks.
+\end{recovered}
+\begin{recovered}
+The next lemma collects the properties used to choose the amplitude
+and activation probabilities in each lower-bound example.
+\end{recovered}
 
-Independence of the signs gives the covariance
+\begin{recovered}
+\begin{lemma}[Properties of the common symmetric construction]
+\label{lower:family-properties}
+For the parameters and independent variables specified above, suppose
+\(0<v=\theta\pi a^2<1/2\) and let \(s=\sqrt{1-v}\).
+The observations \(X_1,\ldots,X_n\in\R^{m^2}\) defined
+in~\eqref{sym:eq:common-construction} are i.i.d., centered, and
+centrally symmetric, with unit marginal variances. Their covariance
+matrix, which is also the covariance of \(W=n^{-1/2}\sum_iX_i\), is
 \begin{equation}
  \Sigma_{(j,u),(j',u')}=(1-v)\ind\{j=j'\}+v\ind\{u=u'\}.
  \label{sym:eq:common-covariance}
 \end{equation}
-Every marginal variance is \(1\). The covariance range consists of
-arrays \((b_j+d_u)_{j,u}\), with \(b,d\in\R^m\).
-Adding a constant to all \(b_j\) and subtracting it from all \(d_u\)
-is the only redundancy, so this space has dimension \(2m-1\).
-Both components have positive variance, so the rank is \(2m-1\).
-The largest off-diagonal correlation is \(1-v\). Thus the
-\emph{correlation gap}, defined as \(1\) minus the largest absolute
-correlation between distinct coordinates, equals \(v\).
-
-The coordinate fourth moment and the envelope satisfy
+It has rank \(2m-1\), and its largest absolute off-diagonal
+correlation is \(1-v\). Thus its \emph{correlation gap}, defined as
+\(1\) minus that largest correlation, is \(v\).
+For every \(i\le n\), every coordinate \((j,u)\), and every \(q\ge1\),
 \begin{align}
  \E X_{i,ju}^4
  &=s^4+6s^2v+\theta\pi a^4
    =1+4v-5v^2+\theta\pi a^4,\label{lower:eq:family-fourth}\\
- \norm{X_i}_\infty&\le s+aI_i,\qquad
- (\E\norm{X_i}_\infty^q)^{1/q}\le s+a\theta^{1/q},
- \quad q\ge1.
+ \norm{X_i}_\infty&\le s+aI_i\quad\text{almost surely},\qquad
+ (\E\norm{X_i}_\infty^q)^{1/q}\le s+a\theta^{1/q}.
  \label{lower:eq:family-envelope}
 \end{align}
-The first identity follows by expanding the fourth power and averaging
-over the signs. The last inequality is Minkowski's inequality.
-We use these formulas to verify the moment conditions
-\eqref{poly:envelope} and~\eqref{poly:fourth}.
+\end{lemma}
+\end{recovered}
 
+\begin{proof}
+\begin{recovered}
+Independence over \(i\) and the common laws of the component variables
+make the summands i.i.d. Averaging over the signs gives centering.
+Reversing every sign in a summand preserves its distribution and
+negates it, so its law is centrally symmetric.
+Independence of the signs gives~\eqref{sym:eq:common-covariance},
+whose diagonal entries are \(s^2+v=1\).
+\end{recovered}
+The covariance range consists of
+arrays \((b_j+d_u)_{j,u}\), with \(b,d\in\R^m\).
+Adding a constant to all \(b_j\) and subtracting it from all \(d_u\)
+is the only redundancy, so this space has dimension \(2m-1\).
+Both components have positive variance, so the rank is \(2m-1\).
+\begin{recovered}
+For distinct coordinates, the covariance is \(1-v\), \(v\), or
+\(0\), according to which indices coincide. Since \(m\ge2\) and
+\(0<v<1/2\), the largest of these values is \(1-v\).
+Expanding the fourth power and averaging over the signs proves
+\eqref{lower:eq:family-fourth}. Finally, \(|\eta_{ij}|=1\) and
+\(|J_{iu}\varepsilon_{iu}|\le1\) give the almost-sure envelope,
+and Minkowski's inequality gives its moment bound
+in~\eqref{lower:eq:family-envelope}.
+\end{recovered}
+\end{proof}
+
+\begin{recovered}
 Let \(A_j\) denote the normalized sum of the Rademacher components,
-\(N\) the number of active rows, and \(Q_u\) the sum of the
-activated signs in column \(u\). Explicitly,
+\(N\) the number of summands with \(I_i=1\), and \(Q_u\) the sum
+over \(i\) of the selected signs at index \(u\). Explicitly,
+\end{recovered}
 \[
  A_j:=n^{-1/2}\sum_i\eta_{ij},\qquad
  N:=\sum_iI_i,\qquad Q_u:=\sum_iI_iJ_{iu}\varepsilon_{iu},
@@ -4187,20 +4265,19 @@ for \(W=n^{-1/2}\sum_iX_i\),
 \end{equation}
 Each sum on the right has independent components.
 
-The largest column sum \(Q_*\) equals \(N\) whenever some column
-has a positive activated sign in every active row.
-Conditional on the active rows, a given column has
-\(J_{iu}\varepsilon_{iu}=1\) on all of them with probability
-\((\pi/2)^N\), independently across columns.
 \begin{recovered}
-To bound the probability that no column attains \(N\), first restrict
-the number of active rows to \(N\le b\). For any \(b\ge0\), this gives
+The maximum \(Q_*\) equals \(N\) whenever some index \(u\) satisfies
+\(J_{iu}\varepsilon_{iu}=1\) for every summand with \(I_i=1\).
+Conditional on \((I_1,\ldots,I_n)\), this event has probability
+\((\pi/2)^N\) for each fixed \(u\), and these events are independent
+over \(u\). To bound the probability that no \(Q_u\) attains \(N\),
+first restrict to \(N\le b\). For any \(b\ge0\), this gives
 \end{recovered}
 \begin{equation}
  \Pp(Q_*\ne N)\le \Pp(N>b)+\exp\{-m(\pi/2)^b\}.
  \label{lower:eq:all-active}
 \end{equation}
-The expected number of active rows is \(k:=\E N=n\theta\).
+\textcolor{magenta}{The expected number of summands with \(I_i=1\) is \(k:=\E N=n\theta\).}
 Along any parameter sequence for which \(k\to\infty\) and the
 right-hand side of~\eqref{lower:eq:all-active} tends to zero for
 some choice \(b=b_n\),
@@ -4292,7 +4369,10 @@ eventually. Consequently, \(\ell^3/n\to0\) and
 Thus the probabilities and variances in the construction are valid
 for large \(n\), and~\eqref{sym:eq:rademacher-max} applies.
 
-The moment conditions follow from the chosen amplitude.
+\begin{recovered}
+Lemma~\ref{lower:family-properties} lets us check the moment
+conditions by substituting the chosen amplitude.
+\end{recovered}
 For \(a=1\), the observations are bounded by \(s+1\le2\).
 For \(a=\theta^{-1/4}\), we have \(v=\sqrt\theta\), and
 \eqref{lower:eq:family-fourth}--\eqref{lower:eq:family-envelope} give
@@ -4311,8 +4391,7 @@ norm at most \(1+B/2\le B\), and the coordinate fourth moment is
 It tends to \(1\) for fixed \(B\) and \(q>4\), so the observations
 belong to \(\mathcal C_q(B,m^2)\) eventually.
 
-The active-row count \(N=\sum_iI_i\) has mean \(\ell/2\)
-and variance at most \(\ell/2\).
+\textcolor{magenta}{The count \(N=\sum_iI_i\) of summands with \(I_i=1\) has mean \(\ell/2\) and variance at most \(\ell/2\).}
 \begin{recovered}
 Chebyshev's inequality bounds \(\Pp(N>\ell)\) by \(2/\ell\).
 Taking \(b=\ell\) in~\eqref{lower:eq:all-active} therefore gives
@@ -4446,9 +4525,11 @@ Hence \(d_n\to0\) and \(U_\ell\to0\), so \(\ell^5/n\to0\),
 \(0<v<1/2\) eventually, and the leading-maximum estimate
 \eqref{sym:eq:rademacher-max} applies.
 
-The coordinate fourth-moment formula
-\eqref{lower:eq:family-fourth} and
-\(\theta\pi a^4=B^2/16\) give
+\begin{recovered}
+The coordinate fourth-moment formula of
+Lemma~\ref{lower:family-properties}, together with
+\end{recovered}
+\(\theta\pi a^4=B^2/16\), gives
 \begin{equation}
  \E X_{i,ju}^4
  =1+4v-5v^2+B^2/16\le9/5+B^2/16\le B^2.
@@ -4563,53 +4644,314 @@ fourth-moment construction.
 
 \section{Proof of Proposition~\ref*{poly:bennett} (Bennett refinement)}\label{app:bennett}
 
-We use the Stein estimate of Chernozhukov, Chetverikov, Kato, and
-Koike~\cite{CCKK2022}. The improvement comes from applying a Bennett
-inequality to the contribution of large increments. Let \(\widetilde X_i\) be mutually
-independent copies of \(X_i\), independent of the original array, and
-put
+\begin{recovered}
+We first isolate the Gaussian comparison estimate that retains the
+variance and expected maximum of the large increments. A Bennett
+inequality will then control that maximum using both moment budgets.
+
+\begin{lemma}[Gaussian comparison with large-increment remainders]
+\label{ben:comparison}
+There is an absolute constant \(C>0\) with the following property.
+Let \(n,p\ge1\), and let \(X_1,\ldots,X_n\in\R^p\) be independent
+centered random vectors with finite coordinate fourth moments and
+\(n^{-1}\sum_i\E X_{ij}^2=1\) for every \(j\le p\). Put
+\[
+ W:=n^{-1/2}\sum_iX_i,\qquad \Sigma:=\Cov(W),\qquad
+ Z\sim N(0,\Sigma),\qquad L:=\log(ep).
+\]
+Let \(\widetilde X_i\) be mutually independent copies of \(X_i\),
+independent of the original array, and define
 \[
  Y_i:=(\widetilde X_i-X_i)/\sqrt n,\qquad
  \Delta_1:=\frac1{n^2}\max_j\sum_i\E X_{ij}^4.
 \]
-The vectors \(Y_i\) are independent and centrally symmetric. For \(t>0\),
-define
+For \(t>0\), define
 \[
  v_t:=\max_j\sum_i\E[Y_{ij}^2\ind\{\norm{Y_i}_\infty>t\}],
  \qquad M_t:=\E\norm{\sum_iY_i\ind\{\norm{Y_i}_\infty>t\}}_\infty.
 \]
-In Appendix~H of the supplement to~\cite{CCKK2022}, the proof of
-Lemma~A.1 gives the following estimate before it bounds the maximum of
-the large increments.
+Then, for every \(\phi>0\),
 \begin{equation}
  \rh(W,Z)\le C\left\{
  \frac{\sqrt L}{\phi}+\phi L^2\sqrt{\Delta_1}
  +\phi^3L^{7/2}\Delta_1+\phi L^{3/2}v_t+\sqrt L M_t\right\},
- \qquad t:=(\phi L)^{-1},\quad\phi>0.
+ \qquad t:=(\phi L)^{-1}.
  \label{ben:master}
 \end{equation}
-For clarity, the ingredients retained from that proof are
-\(H_1\le M_t\),
-\(H_2\lesssim\sqrt{L\Delta_1}+t^2L+v_t\), and
-\(|\mathcal R|\lesssim\phi^3L^{7/2}(\Delta_1+t^4L)\), together
-with smoothing error \(\sqrt L/\phi\). The two terms involving
-\(t^2L\) and \(t^4L\) are absorbed by this smoothing error.
-To see why the sharper variance $v_t$ suffices here, put
-$Y_i':=Y_i\ind\{\norm{Y_i}_\infty\le t\}$. The conditional second-moment matrix
-in the exchangeable-pair argument is
-$\frac12\sum_i\E[Y_i'(Y_i')^\top\mid X_1,\ldots,X_n]$.
-Since $\frac12\sum_i\E[Y_iY_i^\top]=\Sigma$, omitting the large
-increments changes its mean entrywise by at most $v_t/2$, by
-Cauchy--Schwarz. Conditional Jensen and Bernstein's inequality over
-the $p^2$ entries bound its expected fluctuation in the maximum entry
-norm by $C(\sqrt{L\Delta_1}+t^2L)$. Indeed,
-$|Y'_{ij}Y'_{ik}|\le t^2$, and
-$\max_{j,k}\sum_i\E[(Y'_{ij}Y'_{ik})^2]\le C\Delta_1$
-by Cauchy--Schwarz and the fourth-moment bound for the symmetrized
-increments. This gives the stated estimate for $H_2$.
-The covariance comparator is exact, so the covariance-mismatch term
-is zero. Passing from lower orthants to rectangles replaces \(X_i\)
-by \((X_i,-X_i)\), preserving the moment conditions.
+The covariance may be singular, and the observations need not be
+identically distributed or symmetric.
+\end{lemma}
+\end{recovered}
+
+\begin{recovered}
+Lemma~\ref{ben:comparison} is a version of the matching-covariance
+case of Lemma~A.1 in the supplement to~\cite{CCKK2022}, with a
+self-contained proof using logistic smoothing and Slepian interpolation
+that retains the expected maximum \(M_t\) of the large increments
+for the Bennett refinement below. The proof uses the same symmetry
+under interchanging a summand and its independent copy as Appendix~H
+of that supplement. A trapezoidal Taylor identity expresses its
+consequence directly as a fourth-order remainder.
+
+Throughout this appendix, we use the logistic approximation in the
+original space \(\R^p\), with coordinate face normals
+\(u_j:=e_j\) and \(u_{p+j}:=-e_j\), for \(j\le p\).
+Thus \(m=2p\), \(\norm x_U=\norm x_\infty\), and
+\[
+ A_a:=\{x:u_\alpha\cdot x\le a_\alpha,\ \alpha\le2p\},\qquad
+ F_{a,h}(x):=\left(1+\sum_{\alpha=1}^{2p}
+          e^{(u_\alpha\cdot x-a_\alpha)/h}\right)^{-1}.
+\]
+These sets represent bounded closed rectangles and the empty set.
+Limits of thresholds cover unbounded rectangles. The mixture and
+derivative formulas in Appendix~\ref{appx-sec:smoothing} apply to
+these normals as well.
+
+The observations may be unbounded, so we first relate the rectangle
+distance to the smooth comparison using concentration only at the
+Gaussian endpoint.
+
+\begin{lemma}[Smoothing from the Gaussian endpoint]\label{ben:smoothing}
+Let \(V\in\R^p\) be any random vector, and let \(Z\in\R^p\)
+be centered Gaussian with \(\Var(Z_j)=1\) for every \(j\le p\).
+Then, for every \(h>0\),
+\begin{equation}\label{ben:gaussian-smoothing}
+ \rh(V,Z)\le C\left\{
+ \sup_{a\in\R^{2p}}|\E F_{a,h}(V)-\E F_{a,h}(Z)|
+       +hL^{3/2}\right\},\qquad L:=\log(ep),
+\end{equation}
+where \(C\) is absolute.
+\end{lemma}
+\begin{proof}
+Put \(H(a):=\Pp(V\in A_a)-\Pp(Z\in A_a)\),
+\(\rho:=\sup_a|H(a)|\), and let \(D\) denote the supremum of
+the smooth discrepancies. In the mixture representation
+\eqref{eq:mixture}, write
+\(\eta_\alpha:=h\log(\omega_\alpha/\omega_0)\) and
+\(R_h:=\norm\eta_\infty\). The estimate at the start of
+Appendix~\ref{appx-sec:smoothing} gives \(\E R_h\le ChL\).
+Choose \(d:=KhL\) with a universal \(K\) large enough that
+\(\Pp(R_h>d)\le1/4\).
+
+On \(\{R_h\le d\}\), every coordinate of
+\(d\mathbf1+\eta\) is nonnegative. Monotonicity in the thresholds
+and the Gaussian bound in Lemma~\ref{lem:concentration} give
+\[
+ H(a+d\mathbf1+\eta)
+ \ge H(a)-C(d+R_h)\sqrt L.
+\]
+On the complementary event, the left side is at least \(-\rho\).
+If \(\sup_aH(a)=\rho\), take \(a\) arbitrarily close to this
+supremum and average. The mixture representation gives
+\[
+ D\ge\tfrac12\rho-C(d+\E R_h)\sqrt L.
+\]
+If \(\sup_a(-H(a))=\rho\), use \(-H\) and
+\(a-d\mathbf1+\eta\) instead. Since \(\rho=\rh(V,Z)\),
+the result follows.
+\end{proof}
+
+We next compare the smooth expectations. Pairing a summand with its
+copy lets us average the Hessian at the two ends of a short segment.
+The trapezoidal identity then leaves a fourth derivative, without a
+zero-skewness assumption.
+
+\begin{lemma}[Slepian interpolation with paired increments]
+\label{ben:paired-interpolation}
+Under the assumptions and notation of Lemma~\ref{ben:comparison},
+take \(Z\) independent of the original array and its copies. For
+\(h>0\), put \(\mathcal X:=\sigma(X_1,\ldots,X_n)\), and define
+\[
+ \bar Y_i:=Y_i\ind\{\norm{Y_i}_\infty\le h\},\qquad
+ b_h:=\E\left[\sum_iY_i\ind\{\norm{Y_i}_\infty>h\}
+                    \mid\mathcal X\right],\qquad
+ T_h:=\frac12\sum_i\E[\bar Y_i\bar Y_i^\top\mid\mathcal X].
+\]
+Along the Slepian path
+\(W_s:=\sqrt s\,W+\sqrt{1-s}\,Z\), \(0\le s\le1\),
+every \(C^4\) function \(f:\R^p\to\R\) with bounded derivatives
+of orders \(1\) through \(4\) satisfies, for \(0<s<1\),
+\begin{align}
+ \frac d{ds}\E f(W_s)
+ ={}&\frac12\E[(T_h-\Sigma):D^2f(W_s)]
+       -\frac1{2\sqrt s}\E[b_h\cdot\nabla f(W_s)]\notag\\
+ &-\frac{s}{8}\sum_i\E\int_0^1 r(1-r)
+ D^4f(W_s+r\sqrt s\,\bar Y_i)
+          [\bar Y_i,\bar Y_i,\bar Y_i,\bar Y_i]\,dr.
+ \label{ben:slepian-identity}
+\end{align}
+Here \(A:B:=\sum_{j,k}A_{jk}B_{jk}\) for matrices \(A,B\).
+\end{lemma}
+\begin{proof}
+Differentiating along the path and applying Gaussian integration by
+parts gives
+\begin{equation}\label{ben:slepian-initial}
+ \frac d{ds}\E f(W_s)
+ =\frac1{2\sqrt s}\E[W\cdot\nabla f(W_s)]
+       -\frac12\E[\Sigma:D^2f(W_s)].
+\end{equation}
+This remains valid for singular \(\Sigma\): write \(Z=AG\) with
+\(G\) standard Gaussian and apply integration by parts to its
+independent coordinates.
+
+Interchanging \(X_i\) and \(\widetilde X_i\) preserves their joint
+law, changes \(Y_i\) to \(-Y_i\), and changes \(W_s\) to
+\(W_s+\sqrt s\,Y_i\). The truncation event is unchanged, so
+\[
+ \E[\bar Y_i\cdot\nabla f(W_s)]
+ =-\E[\bar Y_i\cdot\nabla f(W_s+\sqrt s\,\bar Y_i)].
+\]
+Off the truncation event, both sides have zero multiplier. Since
+\(\E[\sum_iY_i\mid\mathcal X]=-W\), we obtain
+\begin{align*}
+ \E[W\cdot\nabla f(W_s)]
+ ={}&\frac12\sum_i\E\big[\bar Y_i\cdot
+       \{\nabla f(W_s+\sqrt s\,\bar Y_i)-\nabla f(W_s)\}\big]\\
+ &-\E[b_h\cdot\nabla f(W_s)].
+\end{align*}
+For a twice continuously differentiable scalar function \(g\),
+two integrations by parts give
+\[
+ \int_0^1g(r)\,dr
+ =\frac{g(0)+g(1)}2-\frac12\int_0^1r(1-r)g''(r)\,dr.
+\]
+Apply this identity to
+\(g(r):=D^2f(W_s+r\sqrt s\,\bar Y_i)[\bar Y_i,\bar Y_i]\).
+The copy interchange also gives \(\E g(1)=\E g(0)\).
+The fundamental theorem of calculus therefore yields
+\begin{align*}
+ &\E\big[\bar Y_i\cdot
+   \{\nabla f(W_s+\sqrt s\,\bar Y_i)-\nabla f(W_s)\}\big]\\
+ &\quad=\sqrt s\,\E D^2f(W_s)[\bar Y_i,\bar Y_i]
+ -\frac{s^{3/2}}2\E\int_0^1r(1-r)
+       D^4f(W_s+r\sqrt s\,\bar Y_i)[\bar Y_i^{\otimes4}]\,dr.
+\end{align*}
+Substitute into \eqref{ben:slepian-initial} and condition the
+second-order coefficient on \(\mathcal X\). This proves
+\eqref{ben:slepian-identity}.
+\end{proof}
+
+\begin{proof}[Proof of Lemma~\ref{ben:comparison}]
+Fix \(\phi>0\), set \(h:=t=(\phi L)^{-1}\), and use the
+notation of Lemma~\ref{ben:paired-interpolation}. The vectors
+\(Y_i\) are independent and centrally symmetric, although they
+need not be independent of \(W\).
+
+We first bound the random coefficients in
+\eqref{ben:slepian-identity}. Conditional Jensen gives
+\(\E\norm{b_h}_\infty\le M_h\). Also,
+\(\frac12\sum_i\E Y_iY_i^\top=\Sigma\), so Cauchy--Schwarz
+gives \(\norm{\E T_h-\Sigma}_{\max}\le v_h/2\).
+The fourth moments satisfy
+\[
+ \max_j\sum_i\E Y_{ij}^4\le16\Delta_1,\qquad
+ |\bar Y_{ij}\bar Y_{ik}|\le h^2,\qquad
+ \max_{j,k}\sum_i\E\bar Y_{ij}^2\bar Y_{ik}^2\le16\Delta_1.
+\]
+To bound the fluctuation of \(T_h\), conditional Jensen reduces it
+to the maximum of the centered sums
+\(\sum_i\{\bar Y_{ij}\bar Y_{ik}-\E\bar Y_{ij}\bar Y_{ik}\}\).
+For independent centered scalars \(U_i\) with \(|U_i|\le b\)
+and \(\sum_i\E U_i^2\le v\), expansion of the exponential gives
+\[
+ \E e^{\lambda\sum_iU_i}
+ \le\exp\!\left\{\frac{\lambda^2v}{2(1-|\lambda|b/3)}\right\},
+ \qquad |\lambda|b<3.
+\]
+Sum this bound over both signs and the \(p^2\) entries, then
+optimize \(\lambda\). The expected maximum is at most
+\(C(\sqrt{vL}+bL)\). Taking \(b=2h^2\) and
+\(v\le16\Delta_1\) proves
+\begin{equation}\label{ben:conditional-matrix}
+ \E\norm{T_h-\Sigma}_{\max}
+ \le C\{\sqrt{L\Delta_1}+h^2L+v_h\}.
+\end{equation}
+
+The fourth-order coefficient is controlled by
+\(Q_h:=\max_j\sum_i\bar Y_{ij}^4\). For \(0\le U\le b\),
+convexity gives \(\E e^{U/b}\le1+(e-1)\E U/b\).
+Apply this to \(U=\bar Y_{ij}^4\) and \(b=h^4\), use
+independence over \(i\), and sum the bounds over \(j\).
+Jensen's inequality then gives
+\begin{equation}\label{ben:fourth-maximum}
+ \E Q_h\le h^4\log p+(e-1)\max_j\sum_i\E\bar Y_{ij}^4
+       \le C(\Delta_1+h^4L).
+\end{equation}
+
+We next control the derivatives at the random points in
+\eqref{ben:slepian-identity}. Fix a threshold vector \(a\), and
+write \(F:=F_{a,h}\) and \(\Psi:=F(1-F)\).
+The positive weight formula \eqref{appx-eq:partition-derivative},
+with face normals \(\pm e_j\), gives
+\[
+ \sum_j|\partial_jF(x)|\le h^{-1}\Psi(x),\qquad
+ \sum_{j,k}|\partial_{jk}F(x)|\le Ch^{-2}\Psi(x).
+\]
+For vectors \(y_i\) and shifts \(z_i\) with
+\(\norm{z_i}_\infty\le h\), it also gives
+\begin{equation}\label{ben:fourth-contraction}
+ \sum_i|D^4F(x+z_i)[y_i,y_i,y_i,y_i]|
+ \le Ch^{-4}\Psi(x)\max_j\sum_i|y_{ij}|^4.
+\end{equation}
+Indeed, each positive weight product at \(x+z_i\) is bounded by
+a universal multiple of its value at \(x\), as in
+\eqref{appx-eq:local-envelope}. For every four coordinate indices,
+H\"older's inequality bounds the sum over \(i\) of their absolute
+coordinate products by \(\max_j\sum_i|y_{ij}|^4\). Summing the
+positive weights proves \eqref{ben:fourth-contraction}.
+
+Gaussian anti-concentration supplies the small expectation of
+\(\Psi\). For deterministic \(x\) and \(0<s<1\),
+\begin{equation}\label{ben:gaussian-envelope}
+ \E_Z\Psi(x+\sqrt{1-s}\,Z)
+ \le C\frac{h\sqrt L}{\sqrt{1-s}}.
+\end{equation}
+To verify this, write \(F_r:=F_{a+r\mathbf1,h}\).
+As in the proof of Lemma~\ref{appx-lem:envelope},
+\(\partial_rF_r=F_r(1-F_r)/h\) and
+\(\Psi\le(e/2)(F_h-F_{-h})\).
+The mixture representation \eqref{eq:mixture} writes the difference
+as an average of layer indicators. Apply the Gaussian part of
+Lemma~\ref{lem:concentration} with face variance \(1-s\).
+
+Apply Lemma~\ref{ben:paired-interpolation} to \(F\), condition on
+the original observations in the first two terms, and condition on
+both arrays in the remainder. The preceding derivative bounds imply
+\begin{align*}
+ \left|\frac d{ds}\E F(W_s)\right|
+ \le{}&C\frac{\sqrt L}{h\sqrt{1-s}}
+                \E\norm{T_h-\Sigma}_{\max}
+       +C\frac{\sqrt L}{\sqrt{s(1-s)}}M_h\\
+ &+C\frac{s\sqrt L}{h^3\sqrt{1-s}}\E Q_h.
+\end{align*}
+In the last term, \eqref{ben:fourth-contraction} brings every
+derivative to the common point \(W_s\) before averaging over \(Z\).
+This retains the maximum of the coordinate fourth-moment sums.
+The time factors are integrable:
+\[
+ \int_0^1\frac{ds}{\sqrt{1-s}}=2,\qquad
+ \int_0^1\frac{ds}{\sqrt{s(1-s)}}=\pi,\qquad
+ \int_0^1\frac{s\,ds}{\sqrt{1-s}}=\frac43.
+\]
+Integrate first over \([\varepsilon,1-\varepsilon]\), then pass
+to the endpoints by dominated convergence. Uniformly in \(a\),
+\[
+ |\E F_{a,h}(W)-\E F_{a,h}(Z)|
+ \le C\sqrt L\left\{
+ h^{-1}\E\norm{T_h-\Sigma}_{\max}+M_h+h^{-3}\E Q_h\right\}.
+\]
+Use \eqref{ben:conditional-matrix} and \eqref{ben:fourth-maximum},
+then apply Lemma~\ref{ben:smoothing}. The result is
+\[
+ \rh(W,Z)\le C\left\{
+ hL^{3/2}+\frac{L\sqrt{\Delta_1}}h
+ +\frac{\sqrt L\,\Delta_1}{h^3}
+ +\frac{\sqrt L\,v_h}h+\sqrt L\,M_h\right\}.
+\]
+Substituting \(h=t=(\phi L)^{-1}\) gives \eqref{ben:master}.
+\end{proof}
+\end{recovered}
+
 
 The following elementary Bennett calculation controls the remaining
 large-increment term.
@@ -4641,14 +4983,18 @@ The expected norm of the omitted sum is at most
 \le A^qu^{1-q}\).
 \end{proof}
 
-Put \(A:=Bn^{-1/2+1/q}\) and \(d:=B/\sqrt n\). The moment
-conditions give
+\begin{recovered}
+We now apply Lemma~\ref{ben:comparison} under the assumptions of
+Proposition~\ref{poly:bennett}, using its notation for the symmetrized
+increments and their tail quantities. Put
+\(A:=Bn^{-1/2+1/q}\) and \(d:=B/\sqrt n\). The moment conditions give
+\end{recovered}
 \[
  \Delta_1\lesssim d^2,\qquad
  \max_j\sum_i\E Y_{ij}^4\lesssim d^2,\qquad
  \sum_i\E\norm{Y_i}_\infty^q\lesssim_q A^q.
 \]
-Cauchy--Schwarz within each expectation and then across rows gives
+Cauchy--Schwarz within each expectation and then \textcolor{magenta}{in the sum over \(i\)} gives
 \begin{equation}
  v_t\le
  \max_j\left(\sum_i\E Y_{ij}^4\right)^{1/2}
@@ -4703,7 +5049,7 @@ The other four terms of \eqref{ben:master} are bounded, in order, by
  C_q r\frac{\mathcal{L}_q^{2b+(q-1)/2}}{\mathcal K_q}.
 \]
 Each ratio is bounded on \(\mathcal K_q\ge1\), with a constant depending only
-on \(q\). Combining the cases and using \(\rh\le1\) proves the
-theorem.
+on \(q\). \begin{recovered}Combining the cases and using \(\rh\le1\)
+proves Proposition~\ref{poly:bennett}.\end{recovered}
 
 \end{document}
