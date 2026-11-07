@@ -1,0 +1,307 @@
+def RectangleCLT.Companion.SplitV4.conditionalVectorLaw : {p : ℕ} →
+  MeasureTheory.Measure (RectangleCLT.Vector p) →
+    Set (RectangleCLT.Vector p) → MeasureTheory.Measure (RectangleCLT.Vector p) :=
+fun {p} μ S => if μ S = 0 then MeasureTheory.Measure.dirac 0 else μ[|S]
+def RectangleCLT.Companion.SplitV4.goodConditionalLaw : {p : ℕ} →
+  MeasureTheory.Measure (RectangleCLT.Vector p) → ℝ → MeasureTheory.Measure (RectangleCLT.Vector p) :=
+fun {p} μ T =>
+  RectangleCLT.Companion.SplitV4.conditionalVectorLaw μ (RectangleCLT.Companion.SplitV4.goodTruncationSet T)
+def RectangleCLT.Companion.SplitV4.conditionalGoodMean : {p : ℕ} →
+  MeasureTheory.Measure (RectangleCLT.Vector p) → ℝ → RectangleCLT.Vector p :=
+fun {p} μ T j => ∫ (x : RectangleCLT.Vector p), x j ∂RectangleCLT.Companion.SplitV4.goodConditionalLaw μ T
+def RectangleCLT.Companion.SplitV4.conditionalGoodProductLaw : {p n : ℕ} →
+  (Fin n → MeasureTheory.Measure (RectangleCLT.Vector p)) → ℝ → MeasureTheory.Measure (Fin n → RectangleCLT.Vector p) :=
+fun {p n} μ T => MeasureTheory.Measure.pi fun i => RectangleCLT.Companion.SplitV4.goodConditionalLaw (μ i) T
+def RectangleCLT.Companion.SplitV4.conditionalRetainedSummand : {p n : ℕ} →
+  (Fin n → MeasureTheory.Measure (RectangleCLT.Vector p)) →
+    ℝ → (Fin n → Bool) → Fin n → (Fin n → RectangleCLT.Vector p) → RectangleCLT.Vector p :=
+fun {p n} μ T mask i x => if mask i = true then 0 else x i - RectangleCLT.Companion.SplitV4.conditionalGoodMean (μ i) T
+RectangleCLT.Companion.SplitV4.conditional_good_bad_mixture {p : Nat}
+  (μ :
+    @MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+  [@MeasureTheory.IsProbabilityMeasure.{0} (RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) μ]
+  (S : Set.{0} (RectangleCLT.Vector p))
+  (hS :
+    @MeasurableSet.{0} (RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) S) :
+  @Eq.{1}
+    (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+    (@HAdd.hAdd.{0, 0, 0}
+      (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+      (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+      (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+      (@instHAdd.{0}
+        (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (@MeasureTheory.Measure.instAdd.{0} (RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)))
+      (@HSMul.hSMul.{0, 0, 0} ENNReal
+        (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (@instHSMul.{0, 0} ENNReal
+          (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+          (@MeasureTheory.Measure.instSMul.{0, 0} (RectangleCLT.Vector p) ENNReal
+            (@Algebra.toSMul.{0, 0} ENNReal ENNReal ENNReal.instCommSemiring
+              (@CommSemiring.toSemiring.{0} ENNReal ENNReal.instCommSemiring)
+              (@Algebra.id.{0} ENNReal ENNReal.instCommSemiring))
+            (@IsScalarTower.right.{0, 0} ENNReal ENNReal ENNReal.instCommSemiring
+              (@CommSemiring.toSemiring.{0} ENNReal ENNReal.instCommSemiring)
+              (@Algebra.id.{0} ENNReal ENNReal.instCommSemiring))
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)))
+        (@DFunLike.coe.{1, 1, 1}
+          (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+          (Set.{0} (RectangleCLT.Vector p)) (fun (x : Set.{0} (RectangleCLT.Vector p)) => ENNReal)
+          (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+          μ S)
+        (@RectangleCLT.Companion.SplitV4.conditionalVectorLaw p μ S))
+      (@HSMul.hSMul.{0, 0, 0} ENNReal
+        (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (@instHSMul.{0, 0} ENNReal
+          (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+          (@MeasureTheory.Measure.instSMul.{0, 0} (RectangleCLT.Vector p) ENNReal
+            (@Algebra.toSMul.{0, 0} ENNReal ENNReal ENNReal.instCommSemiring
+              (@CommSemiring.toSemiring.{0} ENNReal ENNReal.instCommSemiring)
+              (@Algebra.id.{0} ENNReal ENNReal.instCommSemiring))
+            (@IsScalarTower.right.{0, 0} ENNReal ENNReal ENNReal.instCommSemiring
+              (@CommSemiring.toSemiring.{0} ENNReal ENNReal.instCommSemiring)
+              (@Algebra.id.{0} ENNReal ENNReal.instCommSemiring))
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)))
+        (@DFunLike.coe.{1, 1, 1}
+          (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+          (Set.{0} (RectangleCLT.Vector p)) (fun (x : Set.{0} (RectangleCLT.Vector p)) => ENNReal)
+          (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+          μ (@HasCompl.compl.{0} (Set.{0} (RectangleCLT.Vector p)) (@Set.instHasCompl.{0} (RectangleCLT.Vector p)) S))
+        (@RectangleCLT.Companion.SplitV4.conditionalVectorLaw p μ
+          (@HasCompl.compl.{0} (Set.{0} (RectangleCLT.Vector p)) (@Set.instHasCompl.{0} (RectangleCLT.Vector p)) S))))
+    μ
+RectangleCLT.Companion.SplitV4.exceptional_probability_lt_quarter {p : Nat}
+  (μ :
+    @MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+  [@MeasureTheory.IsProbabilityMeasure.{0} (RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) μ]
+  (B T q : Real) (hB : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) B)
+  (hT :
+    @LE.le.{0} Real Real.instLE
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        B)
+      T)
+  (hq :
+    @LT.lt.{0} Real Real.instLT
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      q)
+  (hint :
+    @MeasureTheory.Integrable.{0, 0} Real
+      (@ContinuousENorm.toENorm.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real
+          (@PseudoMetricSpace.toUniformSpace.{0} Real
+            (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+              (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                  (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                    (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                      (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+        (@SeminormedAddGroup.toContinuousENorm.{0} Real
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+            (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+              (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                  (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      (fun (x : RectangleCLT.Vector p) =>
+        @HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+          (@Norm.norm.{0} (RectangleCLT.Vector p)
+            (@NormedRing.toNorm.{0} (RectangleCLT.Vector p)
+              (@Pi.normedRing.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                @NormedCommRing.toNormedRing.{0} Real Real.normedCommRing))
+            x)
+          q)
+      μ)
+  (hmoment :
+    @LE.le.{0} Real Real.instLE
+      (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector p) Real Real.normedAddCommGroup
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) μ
+        fun (x : RectangleCLT.Vector p) =>
+        @HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+          (@Norm.norm.{0} (RectangleCLT.Vector p)
+            (@NormedRing.toNorm.{0} (RectangleCLT.Vector p)
+              (@Pi.normedRing.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                @NormedCommRing.toNormedRing.{0} Real Real.normedCommRing))
+            x)
+          q)
+      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) B q)) :
+  @LT.lt.{0} Real Real.instLT
+    (@MeasureTheory.Measure.real.{0} (RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) μ
+      (@HasCompl.compl.{0} (Set.{0} (RectangleCLT.Vector p)) (@Set.instHasCompl.{0} (RectangleCLT.Vector p))
+        (@RectangleCLT.Companion.SplitV4.goodTruncationSet p T)))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+      (@OfNat.ofNat.{0} Real 4
+        (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))))
+RectangleCLT.Companion.SplitV4.goodConditional_covariance_tail {p : Nat}
+  (μ :
+    @MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+  [@MeasureTheory.IsProbabilityMeasure.{0} (RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) μ]
+  (T : Real)
+  (hS :
+    @Ne.{1} ENNReal
+      (@DFunLike.coe.{1, 1, 1}
+        (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (Set.{0} (RectangleCLT.Vector p)) (fun (x : Set.{0} (RectangleCLT.Vector p)) => ENNReal)
+        (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        μ (@RectangleCLT.Companion.SplitV4.goodTruncationSet p T))
+      (@OfNat.ofNat.{0} ENNReal 0 (@Zero.toOfNat0.{0} ENNReal instENNRealZero)))
+  (j k : Fin p)
+  (hint :
+    @MeasureTheory.Integrable.{0, 0} Real
+      (@ContinuousENorm.toENorm.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real
+          (@PseudoMetricSpace.toUniformSpace.{0} Real
+            (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+              (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                  (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                    (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                      (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+        (@SeminormedAddGroup.toContinuousENorm.{0} Real
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+            (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+              (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                  (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      (fun (x : RectangleCLT.Vector p) =>
+        @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (x j) (x k))
+      μ) :
+  @Eq.{1} Real
+    (@RectangleCLT.covariance.{0} (RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) p
+      (@RectangleCLT.Companion.SplitV4.goodConditionalLaw p μ T) (@id.{1} (RectangleCLT.Vector p)) j k)
+    (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@Inv.inv.{0} Real Real.instInv
+          (@MeasureTheory.Measure.real.{0} (RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) μ
+            (@RectangleCLT.Companion.SplitV4.goodTruncationSet p T)))
+        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+          (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector p) Real Real.normedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) μ
+            fun (x : RectangleCLT.Vector p) =>
+            @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (x j) (x k))
+          (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector p) Real Real.normedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@MeasureTheory.Measure.restrict.{0} (RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) μ
+              (@HasCompl.compl.{0} (Set.{0} (RectangleCLT.Vector p)) (@Set.instHasCompl.{0} (RectangleCLT.Vector p))
+                (@RectangleCLT.Companion.SplitV4.goodTruncationSet p T)))
+            fun (x : RectangleCLT.Vector p) =>
+            @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (x j) (x k))))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@RectangleCLT.Companion.SplitV4.conditionalGoodMean p μ T j)
+        (@RectangleCLT.Companion.SplitV4.conditionalGoodMean p μ T k)))
+RectangleCLT.Companion.SplitV4.conditionalRetained_normalized_covariance {p n : Nat}
+  (μ :
+    Fin n →
+      @MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+  [∀ (i : Fin n),
+      @MeasureTheory.IsProbabilityMeasure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (μ i)]
+  {T : Real} (hT : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) T)
+  (mask : Fin n → Bool) (j k : Fin p) :
+  @Eq.{1} Real
+    (@RectangleCLT.covariance.{0} (Fin n → RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      p (@RectangleCLT.Companion.SplitV4.conditionalGoodProductLaw p n μ T)
+      (@RectangleCLT.Companion.normalizedObservationSum.{0} (Fin n → RectangleCLT.Vector p) p n
+        (@RectangleCLT.Companion.SplitV4.conditionalRetainedSummand p n μ T mask))
+      j k)
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) (@Nat.cast.{0} Real Real.instNatCast n))
+      (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+        fun (i : Fin n) =>
+        @ite.{1} Real (@Eq.{1} Bool (mask i) Bool.true) (instDecidableEqBool (mask i) Bool.true)
+          (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+          (@RectangleCLT.covariance.{0} (RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) p
+            (@RectangleCLT.Companion.SplitV4.goodConditionalLaw p (μ i) T) (@id.{1} (RectangleCLT.Vector p)) j k)))
+RectangleCLT.Companion.SplitV4.originalGoodPart_boundedIndependent.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {p n : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (X : Fin n → Ω → RectangleCLT.Vector p)
+  (hX :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (X i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      X μ)
+  {T : Real} (hT : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) T) :
+  @RectangleCLT.BoundedIndependentHypotheses.{u_1} Ω inst✝ p n μ
+    (fun (i : Fin n) (ω : Ω) =>
+      @RectangleCLT.Companion.SplitV4.conditionalGoodPart p
+        (@MeasureTheory.Measure.map.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (X i)
+          μ)
+        T (X i ω))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      T)
+'RectangleCLT.Companion.SplitV4.conditional_good_bad_mixture' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.goodConditional_covariance_tail' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.conditionalRetained_normalized_covariance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.originalGoodPart_boundedIndependent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited 45 conditional-truncation theorem and probability-instance declarations; only the permitted three axioms.
+Full conditioning on the mask/exceptional-value sigma-field and the polynomial CLT endpoint are not asserted.

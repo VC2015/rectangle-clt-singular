@@ -1,0 +1,183 @@
+structure RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.{u} {Ω : Type u} [MeasurableSpace Ω] {p n : ℕ}
+  (μ : MeasureTheory.Measure Ω) (X : Fin n → Ω → RectangleCLT.Vector p) (q B : ℝ) : Prop
+number of parameters: 8
+fields:
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.measurable : ∀ (i : Fin n), Measurable (X i)
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.independent : ProbabilityTheory.iIndepFun X μ
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.centered : ∀ (i : Fin n) (j : Fin p),
+      ∫ (ω : Ω), X i ω j ∂μ = 0
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.envelope_integrable : ∀ (i : Fin n),
+      MeasureTheory.Integrable (fun ω => ‖X i ω‖ ^ q) μ
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.fourth_integrable : ∀ (i : Fin n) (j : Fin p),
+      MeasureTheory.Integrable (fun ω => X i ω j ^ 4) μ
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.average_second : ∀ (j : Fin p),
+      1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 2 ∂μ = 1
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.envelope_moment : ∀ (i : Fin n),
+      ∫ (ω : Ω), ‖X i ω‖ ^ q ∂μ ≤ B ^ q
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.average_fourth : ∀ (j : Fin p),
+      1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 4 ∂μ ≤ B ^ 2
+constructor:
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.mk.{u} {Ω : Type u} [MeasurableSpace Ω] {p n : ℕ}
+    {μ : MeasureTheory.Measure Ω} {X : Fin n → Ω → RectangleCLT.Vector p} {q B : ℝ}
+    (measurable : ∀ (i : Fin n), Measurable (X i)) (independent : ProbabilityTheory.iIndepFun X μ)
+    (centered : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), X i ω j ∂μ = 0)
+    (envelope_integrable : ∀ (i : Fin n), MeasureTheory.Integrable (fun ω => ‖X i ω‖ ^ q) μ)
+    (fourth_integrable : ∀ (i : Fin n) (j : Fin p), MeasureTheory.Integrable (fun ω => X i ω j ^ 4) μ)
+    (average_second : ∀ (j : Fin p), 1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 2 ∂μ = 1)
+    (envelope_moment : ∀ (i : Fin n), ∫ (ω : Ω), ‖X i ω‖ ^ q ∂μ ≤ B ^ q)
+    (average_fourth : ∀ (j : Fin p), 1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 4 ∂μ ≤ B ^ 2) :
+    RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses μ X q B
+RectangleCLT.Companion.SplitV4.polynomial_projected_average_fourth.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {p m n : Nat} {μ : @MeasureTheory.Measure.{u_1} Ω inst✝} [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  {X : Fin n → Ω → RectangleCLT.Vector p} {q B : Real}
+  (h : @RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.{u_1} Ω inst✝ p n μ X q B)
+  (M : Matrix.{0, 0, 0} (Fin m) (Fin p) Real) {J : Real}
+  (hJ : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) J)
+  (hM :
+    ∀ (α : Fin m),
+      @LE.le.{0} Real Real.instLE
+        (@Finset.sum.{0, 0} (Fin p) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin p) (Fin.fintype p))
+          fun (j : Fin p) => @abs.{0} Real Real.lattice Real.instAddGroup (M α j))
+        J)
+  (α : Fin m) :
+  @LE.le.{0} Real Real.instLE
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) (@Nat.cast.{0} Real Real.instNatCast n))
+      (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+        fun (i : Fin n) =>
+        @MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst✝ μ fun (ω : Ω) =>
+          @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (@Matrix.mulVec.{0, 0, 0} (Fin m) (Fin p) Real
+              (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+                (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+                  (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                    (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                      (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing)))))
+              (Fin.fintype p) M (X i ω) α)
+            (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))))
+    (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) J
+          (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+        B)
+      (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+RectangleCLT.Companion.SplitV4.polynomialIndependent_projected.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {p m n : Nat} {μ : @MeasureTheory.Measure.{u_1} Ω inst✝} [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  {X : Fin n → Ω → RectangleCLT.Vector p} {q B : Real}
+  (h : @RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.{u_1} Ω inst✝ p n μ X q B)
+  (hq : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) q)
+  (hB : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) B)
+  (M : Matrix.{0, 0, 0} (Fin m) (Fin p) Real) {J : Real}
+  (hJ : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) J)
+  (hM :
+    ∀ (α : Fin m),
+      @LE.le.{0} Real Real.instLE
+        (@Finset.sum.{0, 0} (Fin p) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin p) (Fin.fintype p))
+          fun (j : Fin p) => @abs.{0} Real Real.lattice Real.instAddGroup (M α j))
+        J)
+  (hunit :
+    ∀ (α : Fin m),
+      @Eq.{1} Real
+        (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin m) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin m) Real)
+          (Matrix.{0, 0, 0} (Fin m) (Fin m) Real)
+          (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin m) (Fin p) (Fin m) Real (Fin.fintype p)
+            Real.instMul Real.instAddCommMonoid)
+          (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin m) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+            (Matrix.{0, 0, 0} (Fin m) (Fin p) Real)
+            (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin m) (Fin p) (Fin p) Real (Fin.fintype p)
+              Real.instMul Real.instAddCommMonoid)
+            M
+            (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ
+              (@RectangleCLT.Companion.normalizedObservationSum.{u_1} Ω p n X)))
+          (@Matrix.transpose.{0, 0, 0} (Fin m) (Fin p) Real M) α α)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) :
+  @RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.{u_1} Ω inst✝ m n μ
+    (fun (i : Fin n) (ω : Ω) =>
+      @Matrix.mulVec.{0, 0, 0} (Fin m) (Fin p) Real
+        (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+          (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+            (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+              (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing)))))
+        (Fin.fintype p) M (X i ω))
+    q
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) J
+        (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+      B)
+RectangleCLT.Companion.SplitV4.polynomialPolyhedralCLT.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω] {p m n : Nat}
+  (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (hm : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) m)
+  (hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n) (X : Fin n → Ω → RectangleCLT.Vector p)
+  {q B : Real}
+  (hq :
+    @LT.lt.{0} Real Real.instLT
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      q)
+  (hB : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) B)
+  (h : @RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.{u_1} Ω inst✝ p n μ X q B)
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.Companion.normalizedObservationSum.{u_1} Ω p n X)))
+  (ν : Matrix.{0, 0, 0} (Fin m) (Fin p) Real) (σ : RectangleCLT.Vector m) (J : Real)
+  (hσ :
+    ∀ (α : Fin m), @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) (σ α))
+  (hν :
+    ∀ (α : Fin m),
+      @LE.le.{0} Real Real.instLE
+        (@Finset.sum.{0, 0} (Fin p) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin p) (Fin.fintype p))
+          fun (j : Fin p) => @abs.{0} Real Real.lattice Real.instAddGroup (ν α j))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) J (σ α)))
+  (hvariance :
+    ∀ (α : Fin m),
+      @Eq.{1} Real
+        (@dotProduct.{0, 0} (Fin p) Real (Fin.fintype p) Real.instMul Real.instAddCommMonoid (ν α)
+          (@Matrix.mulVec.{0, 0, 0} (Fin p) (Fin p) Real
+            (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+                (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                  (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                    (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing)))))
+            (Fin.fintype p)
+            (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ
+              (@RectangleCLT.Companion.normalizedObservationSum.{u_1} Ω p n X))
+            (ν α)))
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+          (σ α) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))) :
+  @LE.le.{0} Real Real.instLE
+    (@RectangleCLT.Companion.SplitV4.polyhedralDistance.{u_1} Ω inst✝ p m μ
+      (@RectangleCLT.Companion.normalizedObservationSum.{u_1} Ω p n X) A ν)
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (RectangleCLT.Companion.SplitV4.polynomialUniversalConstant q)
+      (@Min.min.{0} Real Real.instMin (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+        (RectangleCLT.Companion.SplitV4.polynomialCombinedRate n m
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+              J (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+            B)
+          q)))
+'RectangleCLT.Companion.SplitV4.polynomial_projected_average_fourth' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.one_le_polynomial_projection_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.polynomialIndependent_projected' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.polynomialPolyhedralCLT' depends on axioms: [propext, Classical.choice, Quot.sound]
+Audited 12 polynomial face-transfer declarations, including the actual polyhedral supremum endpoint.
+Fourth moments are averaged before applying coordinate budgets; no coordinate independence, rank condition, or logarithmic growth restriction is assumed.

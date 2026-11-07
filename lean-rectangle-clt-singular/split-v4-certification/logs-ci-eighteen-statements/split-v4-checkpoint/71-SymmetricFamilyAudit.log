@@ -1,0 +1,398 @@
+structure RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters : Type
+number of parameters: 0
+fields:
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta_pos : 0 < self.theta
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta_le_one : self.theta ≤ 1
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi_pos : 0 < self.pi
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi_le_one : self.pi ≤ 1
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude_pos : 0 < self.amplitude
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.variance_lt_half : self.theta * self.pi *
+        self.amplitude ^ 2 <
+      1 / 2
+constructor:
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.mk (theta pi amplitude : ℝ) (theta_pos : 0 < theta)
+    (theta_le_one : theta ≤ 1) (pi_pos : 0 < pi) (pi_le_one : pi ≤ 1) (amplitude_pos : 0 < amplitude)
+    (variance_lt_half : theta * pi * amplitude ^ 2 < 1 / 2) : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters
+def RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.variance : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters →
+  ℝ :=
+fun P => P.theta * P.pi * P.amplitude ^ 2
+def RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.scale : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters →
+  ℝ :=
+fun P => √(1 - P.variance)
+def RectangleCLT.Companion.SplitV4.familyBernoulli : RectangleCLT.Companion.SplitV4.FamilyProbability →
+  MeasureTheory.Measure Bool :=
+fun t =>
+  ENNReal.ofReal (1 - ↑t) • MeasureTheory.Measure.dirac false + ENNReal.ofReal ↑t • MeasureTheory.Measure.dirac true
+def RectangleCLT.Companion.SplitV4.familySignLaw : (m : ℕ) →
+  MeasureTheory.Measure (RectangleCLT.Companion.SplitV4.FamilySigns m) :=
+fun m =>
+  MeasureTheory.Measure.pi fun x =>
+    RectangleCLT.Companion.SplitV4.familyBernoulli RectangleCLT.Companion.SplitV4.familyHalf
+def RectangleCLT.Companion.SplitV4.familyMaskLaw : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters →
+  (m : ℕ) → MeasureTheory.Measure (RectangleCLT.Companion.SplitV4.FamilySigns m) :=
+fun P m =>
+  MeasureTheory.Measure.pi fun x =>
+    RectangleCLT.Companion.SplitV4.familyBernoulli (RectangleCLT.Companion.SplitV4.familyPi P)
+def RectangleCLT.Companion.SplitV4.familyRestLaw : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters →
+  (m : ℕ) →
+    MeasureTheory.Measure
+      (RectangleCLT.Companion.SplitV4.FamilySigns m × Bool × RectangleCLT.Companion.SplitV4.FamilySigns m) :=
+fun P m =>
+  (RectangleCLT.Companion.SplitV4.familySignLaw m).prod
+    ((RectangleCLT.Companion.SplitV4.familyBernoulli (RectangleCLT.Companion.SplitV4.familyTheta P)).prod
+      (RectangleCLT.Companion.SplitV4.familyMaskLaw P m))
+def RectangleCLT.Companion.SplitV4.familySeedLaw : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters →
+  (m : ℕ) → MeasureTheory.Measure (RectangleCLT.Companion.SplitV4.FamilySeed m) :=
+fun P m => (RectangleCLT.Companion.SplitV4.familySignLaw m).prod (RectangleCLT.Companion.SplitV4.familyRestLaw P m)
+def RectangleCLT.Companion.SplitV4.familyArrayLaw : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters →
+  (n m : ℕ) → MeasureTheory.Measure (Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m) :=
+fun P n m => MeasureTheory.Measure.pi fun x => RectangleCLT.Companion.SplitV4.familySeedLaw P m
+def RectangleCLT.Companion.SplitV4.familyActivated : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters →
+  {m : ℕ} →
+    RectangleCLT.Companion.SplitV4.FamilySigns m × Bool × RectangleCLT.Companion.SplitV4.FamilySigns m → Fin m → ℝ :=
+fun P {m} z u =>
+  P.amplitude * RectangleCLT.Companion.SplitV4.familyIndicator z.2.1 *
+      RectangleCLT.Companion.SplitV4.familyIndicator (z.2.2 u) *
+    RectangleCLT.Companion.SplitV4.familySign (z.1 u)
+def RectangleCLT.Companion.SplitV4.familyObservation : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters →
+  {m : ℕ} → RectangleCLT.Companion.SplitV4.FamilySeed m → RectangleCLT.Vector (m * m) :=
+fun P {m} z r =>
+  let ju := finProdFinEquiv.symm r;
+  P.scale * RectangleCLT.Companion.SplitV4.familySign (z.1 ju.1) +
+    RectangleCLT.Companion.SplitV4.familyActivated P z.2 ju.2
+def RectangleCLT.Companion.SplitV4.familyRawObservations : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters →
+  {n m : ℕ} → Fin n → (Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m) → RectangleCLT.Vector (m * m) :=
+fun P {n m} i z => RectangleCLT.Companion.SplitV4.familyObservation P (z i)
+def RectangleCLT.Companion.SplitV4.familyNormalizedObservations : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters →
+  {n m : ℕ} → Fin n → (Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m) → RectangleCLT.Vector (m * m) :=
+fun P {n m} i z => (1 / √↑n) • RectangleCLT.Companion.SplitV4.familyRawObservations P i z
+def RectangleCLT.Companion.SplitV4.familyCovariance : (m : ℕ) → ℝ → Matrix (Fin (m * m)) (Fin (m * m)) ℝ :=
+fun m v r r' =>
+  let ju := finProdFinEquiv.symm r;
+  let ju' := finProdFinEquiv.symm r';
+  ((1 - v) * if ju.1 = ju'.1 then 1 else 0) + v * if ju.2 = ju'.2 then 1 else 0
+structure RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (n m : ℕ) : Prop
+number of parameters: 3
+fields:
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.independent : ProbabilityTheory.iIndepFun
+      (RectangleCLT.Companion.SplitV4.familyRawObservations P) (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.identicallyDistributed : ∀ (i k : Fin n),
+      ProbabilityTheory.IdentDistrib (RectangleCLT.Companion.SplitV4.familyRawObservations P i)
+        (RectangleCLT.Companion.SplitV4.familyRawObservations P k) (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+        (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.centered : ∀ (i : Fin n) (r : Fin (m * m)),
+      ∫ (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m),
+          RectangleCLT.Companion.SplitV4.familyRawObservations P i z
+            r ∂RectangleCLT.Companion.SplitV4.familyArrayLaw P n m =
+        0
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.centrallySymmetric : ∀ (i : Fin n),
+      ProbabilityTheory.IdentDistrib (RectangleCLT.Companion.SplitV4.familyRawObservations P i)
+        (fun z => -RectangleCLT.Companion.SplitV4.familyRawObservations P i z)
+        (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m) (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.covariance : ∀ (i : Fin n),
+      RectangleCLT.covariance (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+          (RectangleCLT.Companion.SplitV4.familyRawObservations P i) =
+        RectangleCLT.Companion.SplitV4.familyCovariance m P.variance
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.unitVariance : ∀ (i : Fin n) (r : Fin (m * m)),
+      RectangleCLT.covariance (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+          (RectangleCLT.Companion.SplitV4.familyRawObservations P i) r r =
+        1
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.sumCovariance : RectangleCLT.covariance
+        (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+        (RectangleCLT.sumVector (RectangleCLT.Companion.SplitV4.familyNormalizedObservations P)) =
+      RectangleCLT.Companion.SplitV4.familyCovariance m P.variance
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.rank : (RectangleCLT.Companion.SplitV4.familyCovariance
+          m P.variance).rank =
+      2 * m - 1
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.maxCorrelation : RectangleCLT.maxOffDiagonal
+        (RectangleCLT.Companion.SplitV4.familyCovariance m P.variance) =
+      1 - P.variance
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.correlationGap : RectangleCLT.pairGap
+        (RectangleCLT.Companion.SplitV4.familyCovariance m P.variance) =
+      P.variance
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.fourthScale : ∀ (i : Fin n) (r : Fin (m * m)),
+      ∫ (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m),
+          RectangleCLT.Companion.SplitV4.familyRawObservations P i z r ^
+            4 ∂RectangleCLT.Companion.SplitV4.familyArrayLaw P n m =
+        P.scale ^ 4 + 6 * P.scale ^ 2 * P.variance + P.theta * P.pi * P.amplitude ^ 4
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.fourth : ∀ (i : Fin n) (r : Fin (m * m)),
+      ∫ (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m),
+          RectangleCLT.Companion.SplitV4.familyRawObservations P i z r ^
+            4 ∂RectangleCLT.Companion.SplitV4.familyArrayLaw P n m =
+        1 + 4 * P.variance - 5 * P.variance ^ 2 + P.theta * P.pi * P.amplitude ^ 4
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.envelope : ∀ (i : Fin n)
+      (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m),
+      ‖RectangleCLT.Companion.SplitV4.familyRawObservations P i z‖ ≤
+        P.scale + P.amplitude * RectangleCLT.Companion.SplitV4.familyIndicator (z i).2.2.1
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.momentIntegrable : ∀ (i : Fin n) (q : ℝ),
+      MeasureTheory.Integrable (fun z => ‖RectangleCLT.Companion.SplitV4.familyRawObservations P i z‖ ^ q)
+        (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.LqEnvelope : ∀ (i : Fin n) (q : ℝ),
+      1 ≤ q →
+        (∫ (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m),
+              ‖RectangleCLT.Companion.SplitV4.familyRawObservations P i z‖ ^
+                q ∂RectangleCLT.Companion.SplitV4.familyArrayLaw P n m) ^
+            (1 / q) ≤
+          P.scale + P.amplitude * P.theta ^ (1 / q)
+constructor:
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties.mk
+    {P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters} {n m : ℕ}
+    (independent :
+      ProbabilityTheory.iIndepFun (RectangleCLT.Companion.SplitV4.familyRawObservations P)
+        (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m))
+    (identicallyDistributed :
+      ∀ (i k : Fin n),
+        ProbabilityTheory.IdentDistrib (RectangleCLT.Companion.SplitV4.familyRawObservations P i)
+          (RectangleCLT.Companion.SplitV4.familyRawObservations P k)
+          (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m) (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m))
+    (centered :
+      ∀ (i : Fin n) (r : Fin (m * m)),
+        ∫ (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m),
+            RectangleCLT.Companion.SplitV4.familyRawObservations P i z
+              r ∂RectangleCLT.Companion.SplitV4.familyArrayLaw P n m =
+          0)
+    (centrallySymmetric :
+      ∀ (i : Fin n),
+        ProbabilityTheory.IdentDistrib (RectangleCLT.Companion.SplitV4.familyRawObservations P i)
+          (fun z => -RectangleCLT.Companion.SplitV4.familyRawObservations P i z)
+          (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m) (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m))
+    (covariance :
+      ∀ (i : Fin n),
+        RectangleCLT.covariance (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+            (RectangleCLT.Companion.SplitV4.familyRawObservations P i) =
+          RectangleCLT.Companion.SplitV4.familyCovariance m P.variance)
+    (unitVariance :
+      ∀ (i : Fin n) (r : Fin (m * m)),
+        RectangleCLT.covariance (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+            (RectangleCLT.Companion.SplitV4.familyRawObservations P i) r r =
+          1)
+    (sumCovariance :
+      RectangleCLT.covariance (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+          (RectangleCLT.sumVector (RectangleCLT.Companion.SplitV4.familyNormalizedObservations P)) =
+        RectangleCLT.Companion.SplitV4.familyCovariance m P.variance)
+    (rank : (RectangleCLT.Companion.SplitV4.familyCovariance m P.variance).rank = 2 * m - 1)
+    (maxCorrelation :
+      RectangleCLT.maxOffDiagonal (RectangleCLT.Companion.SplitV4.familyCovariance m P.variance) = 1 - P.variance)
+    (correlationGap : RectangleCLT.pairGap (RectangleCLT.Companion.SplitV4.familyCovariance m P.variance) = P.variance)
+    (fourthScale :
+      ∀ (i : Fin n) (r : Fin (m * m)),
+        ∫ (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m),
+            RectangleCLT.Companion.SplitV4.familyRawObservations P i z r ^
+              4 ∂RectangleCLT.Companion.SplitV4.familyArrayLaw P n m =
+          P.scale ^ 4 + 6 * P.scale ^ 2 * P.variance + P.theta * P.pi * P.amplitude ^ 4)
+    (fourth :
+      ∀ (i : Fin n) (r : Fin (m * m)),
+        ∫ (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m),
+            RectangleCLT.Companion.SplitV4.familyRawObservations P i z r ^
+              4 ∂RectangleCLT.Companion.SplitV4.familyArrayLaw P n m =
+          1 + 4 * P.variance - 5 * P.variance ^ 2 + P.theta * P.pi * P.amplitude ^ 4)
+    (envelope :
+      ∀ (i : Fin n) (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m),
+        ‖RectangleCLT.Companion.SplitV4.familyRawObservations P i z‖ ≤
+          P.scale + P.amplitude * RectangleCLT.Companion.SplitV4.familyIndicator (z i).2.2.1)
+    (momentIntegrable :
+      ∀ (i : Fin n) (q : ℝ),
+        MeasureTheory.Integrable (fun z => ‖RectangleCLT.Companion.SplitV4.familyRawObservations P i z‖ ^ q)
+          (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m))
+    (LqEnvelope :
+      ∀ (i : Fin n) (q : ℝ),
+        1 ≤ q →
+          (∫ (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m),
+                ‖RectangleCLT.Companion.SplitV4.familyRawObservations P i z‖ ^
+                  q ∂RectangleCLT.Companion.SplitV4.familyArrayLaw P n m) ^
+              (1 / q) ≤
+            P.scale + P.amplitude * P.theta ^ (1 / q)) :
+    RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties P n m
+RectangleCLT.Companion.SplitV4.symmetricFamilyProperties (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {n m : Nat} (hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n)
+  (hm : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) m) :
+  RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties P n m
+RectangleCLT.Companion.SplitV4.familyRawObservations_fourth
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n m : Nat} (i : Fin n)
+  (r : Fin (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m)) :
+  @Eq.{1} Real
+    (@MeasureTheory.integral.{0, 0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m) Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Companion.SplitV4.FamilySeed m)
+        fun (a : Fin n) =>
+        @Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+          (Prod.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+            (Prod.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m)))
+          (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) => Bool.instMeasurableSpace)
+          (@Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+            (Prod.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m))
+            (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) => Bool.instMeasurableSpace)
+            (@Prod.instMeasurableSpace.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m)
+              Bool.instMeasurableSpace
+              (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) =>
+                Bool.instMeasurableSpace))))
+      (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+      fun (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m) =>
+      @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+        (@RectangleCLT.Companion.SplitV4.familyRawObservations P n m i z r) (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+        (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+          (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@OfNat.ofNat.{0} Real 4
+              (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+            (RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.variance P)))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@OfNat.ofNat.{0} Real 5
+            (@instOfNatAtLeastTwo.{0} Real 5 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)))))
+          (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.variance P)
+            (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta P)
+          (RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi P))
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+          (RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude P)
+          (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))))
+RectangleCLT.Companion.SplitV4.familyRawObservations_Lq_envelope
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n m : Nat} (i : Fin n) {q : Real}
+  (hq : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) q) :
+  @LE.le.{0} Real Real.instLE
+    (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+      (@MeasureTheory.integral.{0, 0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m) Real Real.normedAddCommGroup
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Companion.SplitV4.FamilySeed m)
+          fun (a : Fin n) =>
+          @Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+            (Prod.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+              (Prod.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m)))
+            (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) => Bool.instMeasurableSpace)
+            (@Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+              (Prod.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m))
+              (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) => Bool.instMeasurableSpace)
+              (@Prod.instMeasurableSpace.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m)
+                Bool.instMeasurableSpace
+                (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) =>
+                  Bool.instMeasurableSpace))))
+        (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+        fun (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m) =>
+        @HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+          (@Norm.norm.{0} (RectangleCLT.Vector (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m))
+            (@NormedRing.toNorm.{0}
+              (RectangleCLT.Vector (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m))
+              (@Pi.normedRing.{0, 0} (Fin (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m))
+                (fun (a : Fin (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m)) => Real)
+                (Fin.fintype (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m))
+                fun (i : Fin (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m)) =>
+                @NormedCommRing.toNormedRing.{0} Real Real.normedCommRing))
+            (@RectangleCLT.Companion.SplitV4.familyRawObservations P n m i z))
+          q)
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) q))
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+      (RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.scale P)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude P)
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+          (RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta P)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) q))))
+RectangleCLT.Companion.SplitV4.familyNormalizedObservations_covariance
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n m : Nat}
+  (hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n) :
+  @Eq.{1}
+    (Matrix.{0, 0, 0} (Fin (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m))
+      (Fin (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m)) Real)
+    (@RectangleCLT.covariance.{0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Companion.SplitV4.FamilySeed m)
+        fun (a : Fin n) =>
+        @Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+          (Prod.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+            (Prod.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m)))
+          (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) => Bool.instMeasurableSpace)
+          (@Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+            (Prod.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m))
+            (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) => Bool.instMeasurableSpace)
+            (@Prod.instMeasurableSpace.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m)
+              Bool.instMeasurableSpace
+              (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) =>
+                Bool.instMeasurableSpace))))
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m)
+      (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+      (@RectangleCLT.sumVector.{0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m)
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m) n
+        (@RectangleCLT.Companion.SplitV4.familyNormalizedObservations P n m)))
+    (RectangleCLT.Companion.SplitV4.familyCovariance m
+      (RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.variance P))
+RectangleCLT.Companion.SplitV4.familyNormalizedObservations_rank
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n m : Nat}
+  (hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n)
+  (hm : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) m) :
+  @Eq.{1} Nat
+    (@Matrix.rank.{0, 0, 0} (Fin (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m))
+      (Fin (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m)) Real
+      (Fin.fintype (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m)) Real.commRing
+      (@RectangleCLT.covariance.{0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m)
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Companion.SplitV4.FamilySeed m)
+          fun (a : Fin n) =>
+          @Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+            (Prod.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+              (Prod.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m)))
+            (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) => Bool.instMeasurableSpace)
+            (@Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+              (Prod.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m))
+              (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) => Bool.instMeasurableSpace)
+              (@Prod.instMeasurableSpace.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m)
+                Bool.instMeasurableSpace
+                (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) =>
+                  Bool.instMeasurableSpace))))
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m)
+        (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+        (@RectangleCLT.sumVector.{0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m)
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m) n
+          (@RectangleCLT.Companion.SplitV4.familyNormalizedObservations P n m))))
+    (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) m)
+      (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+RectangleCLT.Companion.SplitV4.familyNormalizedObservations_pairGap
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n m : Nat}
+  (hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n)
+  (hm : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) m) :
+  @Eq.{1} Real
+    (@RectangleCLT.pairGap (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m)
+      (@RectangleCLT.covariance.{0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m)
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Companion.SplitV4.FamilySeed m)
+          fun (a : Fin n) =>
+          @Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+            (Prod.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+              (Prod.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m)))
+            (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) => Bool.instMeasurableSpace)
+            (@Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns m)
+              (Prod.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m))
+              (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) => Bool.instMeasurableSpace)
+              (@Prod.instMeasurableSpace.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns m)
+                Bool.instMeasurableSpace
+                (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) =>
+                  Bool.instMeasurableSpace))))
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m)
+        (RectangleCLT.Companion.SplitV4.familyArrayLaw P n m)
+        (@RectangleCLT.sumVector.{0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySeed m)
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m) n
+          (@RectangleCLT.Companion.SplitV4.familyNormalizedObservations P n m))))
+    (RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.variance P)
+'RectangleCLT.Companion.SplitV4.symmetricFamilyProperties' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.integral_familyObservation_fourth' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.familyObservation_Lq_envelope' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited 117 symmetric-family theorem declarations; only the permitted three axioms.
+Lemma F.3 uses the actual finite product law with independent signs, common activation and coordinate masks; exact covariance, fourth moments, Lq envelope and covariance rank are conclusions.

@@ -1,0 +1,172 @@
+def RectangleCLT.Companion.SplitV4.logisticMatrixConstant : ℝ :=
+16 * (Real.exp (13 / 2) + 8) + 2 * RectangleCLT.Companion.SplitV4.averagedThresholdPaperConstant + 4
+def RectangleCLT.Companion.SplitV4.logisticGaussianScore : {m r k : ℕ} →
+  (Fin m → RectangleCLT.Vector r) →
+    RectangleCLT.Vector m → ℝ → ℝ → (Fin k → Fin m) → RectangleCLT.Vector r → Matrix (Fin r) (Fin r) ℝ :=
+fun {m r k} u a h σ α x =>
+  RectangleCLT.Companion.weightedScore (RectangleCLT.standardGaussian r) id fun g =>
+    RectangleCLT.Companion.SplitV4.logisticTupleWeight u a h α (x + σ • g)
+def RectangleCLT.Companion.SplitV4.PolyhedralBaseConcentration : {r m : ℕ} →
+  MeasureTheory.Measure (RectangleCLT.Vector r) → (Fin m → RectangleCLT.Vector r) → ℝ → ℝ → ℝ → Prop :=
+fun {r m} μ u C δ L =>
+  ∀ (a : RectangleCLT.Vector m) (s : ℝ),
+    0 < s → μ.real (RectangleCLT.Companion.SplitV4.gaussianPolyhedronLayer u a s) ≤ C * (s + δ) * √L
+RectangleCLT.Companion.SplitV4.logistic_matrix_estimate {m r : Nat}
+  (hm : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) m)
+  (μ :
+    @MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+      (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+  [@MeasureTheory.IsProbabilityMeasure.{0} (RectangleCLT.Vector r)
+      (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace) μ]
+  (u : Fin m → RectangleCLT.Vector r) (a : RectangleCLT.Vector m)
+  (hu :
+    ∀ (j : Fin m),
+      @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u j)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (opposite : Fin m → Fin m)
+  (hopp :
+    ∀ (j : Fin m),
+      @Eq.{1} (RectangleCLT.Vector r) (u (opposite j))
+        (@Neg.neg.{0} (RectangleCLT.Vector r)
+          (@Pi.instNeg.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instNeg) (u j)))
+  {C δ L h σ : Real}
+  (hC : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) C)
+  (hδ : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) δ)
+  (hh : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h)
+  (hδh : @LE.le.{0} Real Real.instLE δ h)
+  (hσ : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) σ)
+  (hL :
+    @LE.le.{0} Real Real.instLE (RectangleCLT.dimensionLog m)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        L))
+  (hscale :
+    @LE.le.{0} Real Real.instLE (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) δ (Real.sqrt L))
+      σ)
+  (hc : @RectangleCLT.Companion.SplitV4.PolyhedralBaseConcentration r m μ u C δ L) (k : Nat)
+  (hk : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) k) :
+  @LE.le.{0} Real Real.instLE
+    (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector r) Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace) μ
+      fun (x : RectangleCLT.Vector r) =>
+      @Finset.sum.{0, 0} (Fin k → Fin m) Real Real.instAddCommMonoid
+        (@Finset.univ.{0} (Fin k → Fin m)
+          (@Pi.instFintype.{0, 0} (Fin k) (fun (a : Fin k) => Fin m) (instDecidableEqFin k) (Fin.fintype k)
+            fun (a : Fin k) => Fin.fintype m))
+        fun (α : Fin k → Fin m) =>
+        @RectangleCLT.Companion.SplitV4.symmetricNuclearNorm r
+          (@RectangleCLT.Companion.SplitV4.logisticGaussianScore m r k u a h σ α x))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+          RectangleCLT.Companion.SplitV4.logisticMatrixConstant
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+        C)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) h L) (Real.sqrt L)))
+RectangleCLT.Companion.SplitV4.logistic_matrix_estimate_rectangle {m r p : Nat}
+  (hm : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) m)
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p)
+  (hmp :
+    @LE.le.{0} Nat instLENat m
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) p))
+  (μ :
+    @MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+      (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+  [@MeasureTheory.IsProbabilityMeasure.{0} (RectangleCLT.Vector r)
+      (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace) μ]
+  (u : Fin m → RectangleCLT.Vector r) (a : RectangleCLT.Vector m)
+  (hu :
+    ∀ (j : Fin m),
+      @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u j)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (opposite : Fin m → Fin m)
+  (hopp :
+    ∀ (j : Fin m),
+      @Eq.{1} (RectangleCLT.Vector r) (u (opposite j))
+        (@Neg.neg.{0} (RectangleCLT.Vector r)
+          (@Pi.instNeg.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instNeg) (u j)))
+  {C δ h σ : Real}
+  (hC : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) C)
+  (hδ : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) δ)
+  (hh : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h)
+  (hδh : @LE.le.{0} Real Real.instLE δ h)
+  (hσ : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) σ)
+  (hscale :
+    @LE.le.{0} Real Real.instLE
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) δ
+        (Real.sqrt (RectangleCLT.dimensionLog p)))
+      σ)
+  (hc : @RectangleCLT.Companion.SplitV4.PolyhedralBaseConcentration r m μ u C δ (RectangleCLT.dimensionLog p)) (k : Nat)
+  (hk : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) k) :
+  @LE.le.{0} Real Real.instLE
+    (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector r) Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace) μ
+      fun (x : RectangleCLT.Vector r) =>
+      @Finset.sum.{0, 0} (Fin k → Fin m) Real Real.instAddCommMonoid
+        (@Finset.univ.{0} (Fin k → Fin m)
+          (@Pi.instFintype.{0, 0} (Fin k) (fun (a : Fin k) => Fin m) (instDecidableEqFin k) (Fin.fintype k)
+            fun (a : Fin k) => Fin.fintype m))
+        fun (α : Fin k → Fin m) =>
+        @RectangleCLT.Companion.SplitV4.symmetricNuclearNorm r
+          (@RectangleCLT.Companion.SplitV4.logisticGaussianScore m r k u a h σ α x))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+          RectangleCLT.Companion.SplitV4.logisticMatrixConstant
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+        C)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) h (RectangleCLT.dimensionLog p))
+        (Real.sqrt (RectangleCLT.dimensionLog p))))
+RectangleCLT.Companion.SplitV4.abs_trace_mul_le_nuclear_of_quadratic {r : Nat}
+  (B M : Matrix.{0, 0, 0} (Fin r) (Fin r) Real)
+  (hM :
+    @Matrix.IsHermitian.{0, 0} Real (Fin r)
+      (@InvolutiveStar.toStar.{0} Real
+        (@StarAddMonoid.toInvolutiveStar.{0} Real
+          (@AddCommMonoid.toAddMonoid.{0} Real
+            (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+              (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+                (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+                  (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                    (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                      (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing)))))))
+          (@StarRing.toStarAddMonoid.{0} Real
+            (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+                (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                  (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                    (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing)))))
+            instStarRingReal)))
+      M)
+  {b : Real}
+  (hb :
+    ∀ (z : Fin r → Real),
+      @LE.le.{0} Real Real.instLE (@abs.{0} Real Real.lattice Real.instAddGroup (@RectangleCLT.matrixQuadratic r B z))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) b (@RectangleCLT.vectorNormSq r z))) :
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@Matrix.trace.{0, 0} (Fin r) Real (Fin.fintype r) Real.instAddCommMonoid
+        (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin r) (Fin r) Real) (Matrix.{0, 0, 0} (Fin r) (Fin r) Real)
+          (Matrix.{0, 0, 0} (Fin r) (Fin r) Real)
+          (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin r) (Fin r) (Fin r) Real (Fin.fintype r)
+            Real.instMul Real.instAddCommMonoid)
+          B M)))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) b
+      (@RectangleCLT.Companion.SplitV4.symmetricNuclearNorm r M))
+'RectangleCLT.Companion.SplitV4.logistic_matrix_estimate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.logistic_matrix_estimate_rectangle' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.abs_trace_mul_le_nuclear_of_quadratic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited 55 actual common-shift, signed Gamma, nuclear matrix and regularization theorem declarations; only the permitted three axioms.
+The terminal native Gaussian matrix estimate uses only the actual uniform concentrated-base law, positive C0, h≥δ and δ√L≤σ. Repeated normals and singular Gram matrices are permitted; no final trace or matrix estimate is assumed.

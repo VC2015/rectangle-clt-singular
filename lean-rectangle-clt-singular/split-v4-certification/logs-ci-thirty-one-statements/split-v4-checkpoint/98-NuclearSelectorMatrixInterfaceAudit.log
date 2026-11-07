@@ -1,0 +1,54 @@
+def RectangleCLT.Companion.SplitV4.logisticPrivateBase : {r m : ℕ} →
+  ℝ → RectangleCLT.Vector m → RectangleCLT.Vector (r + m) :=
+fun {r m} lam v => Fin.append 0 (lam⁻¹ • v)
+def RectangleCLT.Companion.SplitV4.activeFaceProjection : {p : ℕ} →
+  (s : RectangleCLT.FaceSmoother p) → RectangleCLT.Vector p → RectangleCLT.Vector s.faces.card :=
+fun {p} s x j => RectangleCLT.FaceSmoother.normalDot (↑((RectangleCLT.Companion.SplitV4.activeFaceEquiv s) j)) x
+def RectangleCLT.Companion.SplitV4.RectangleBaseConcentration : {p : ℕ} →
+  MeasureTheory.Measure (RectangleCLT.Vector p) → ℝ → ℝ → ℝ → Prop :=
+fun {p} μ C δ L =>
+  ∀ (t : RectangleCLT.FaceSmoother p) (z : RectangleCLT.Vector p) (s : ℝ),
+    0 < s → μ.real {x | x + z ∈ t.boundaryLayer s} ≤ C * (s + δ) * √L
+RectangleCLT.Companion.SplitV4.averagedSelectorMatrixEstimate_of_rectangle_concentration.{u_1} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] {p r : Nat} (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p)
+  (ν : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ ν]
+  (V : Ω → RectangleCLT.Vector p)
+  (hV :
+    @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) V)
+  (s : RectangleCLT.FaceSmoother p) (A : Matrix.{0, 0, 0} (Fin p) (Fin r) Real)
+  (hA :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.vectorNormSq r (A j)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  {C δ σ : Real} (hC : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) C)
+  (hδ : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) δ)
+  (hδh : @LE.le.{0} Real Real.instLE δ (@RectangleCLT.FaceSmoother.bandwidth p s))
+  (hσ : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) σ)
+  (hscale :
+    @LE.le.{0} Real Real.instLE
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) δ
+        (Real.sqrt (RectangleCLT.dimensionLog p)))
+      σ)
+  (hc :
+    @RectangleCLT.Companion.SplitV4.RectangleBaseConcentration p
+      (@MeasureTheory.Measure.map.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) V ν)
+      C δ (RectangleCLT.dimensionLog p)) :
+  @RectangleCLT.Companion.AveragedSelectorMatrixEstimate.{u_1} p r Ω inst✝ s ν
+    (@HSMul.hSMul.{0, 0, 0} Real (Matrix.{0, 0, 0} (Fin p) (Fin r) Real) (Matrix.{0, 0, 0} (Fin p) (Fin r) Real)
+      (@instHSMul.{0, 0} Real (Matrix.{0, 0, 0} (Fin p) (Fin r) Real)
+        (@Matrix.smul.{0, 0, 0, 0} (Fin p) (Fin r) Real Real
+          (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+            (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring) (@Algebra.id.{0} Real Real.instCommSemiring))))
+      σ A)
+    V RectangleCLT.Companion.SplitV4.logisticMatrixConstant
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) C
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@RectangleCLT.FaceSmoother.bandwidth p s) (RectangleCLT.dimensionLog p))
+        (Real.sqrt (RectangleCLT.dimensionLog p))))
+'RectangleCLT.Companion.SplitV4.averagedSelectorMatrixEstimate_of_rectangle_concentration' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited 60 private-padding, active-face and actual selector matrix interface theorem declarations; only the permitted three axioms.
+The final historical matrix interface consumes only genuine original rectangle base concentration, unit factor rows and the displayed scale conditions. Arbitrary projected bases, rectangular singular factors, omitted faces, zero Gaussian scale and measurable nonsymmetric coefficients are included.

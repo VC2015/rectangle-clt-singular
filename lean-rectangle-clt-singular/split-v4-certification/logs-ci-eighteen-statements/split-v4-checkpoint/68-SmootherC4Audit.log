@@ -1,0 +1,89 @@
+structure RectangleCLT.Companion.SplitV4.C4Test (p : ℕ) : Type
+number of parameters: 1
+fields:
+  RectangleCLT.Companion.SplitV4.C4Test.value : RectangleCLT.Vector p → ℝ
+  RectangleCLT.Companion.SplitV4.C4Test.gradient : RectangleCLT.Vector p →
+      RectangleCLT.Companion.SplitV4.DerivativeOne p
+  RectangleCLT.Companion.SplitV4.C4Test.hessian : RectangleCLT.Vector p → RectangleCLT.Companion.SplitV4.DerivativeTwo p
+  RectangleCLT.Companion.SplitV4.C4Test.third : RectangleCLT.Vector p → RectangleCLT.Companion.SplitV4.DerivativeThree p
+  RectangleCLT.Companion.SplitV4.C4Test.fourth : RectangleCLT.Vector p → RectangleCLT.Companion.SplitV4.DerivativeFour p
+  RectangleCLT.Companion.SplitV4.C4Test.has_gradient : ∀ (x : RectangleCLT.Vector p),
+      HasFDerivAt self.value (self.gradient x) x
+  RectangleCLT.Companion.SplitV4.C4Test.has_hessian : ∀ (x v : RectangleCLT.Vector p),
+      HasFDerivAt (fun z => (self.gradient z) v)
+        (ContinuousMultilinearMap.toContinuousLinearMap (self.hessian x) (fun x => v) 0) x
+  RectangleCLT.Companion.SplitV4.C4Test.has_third : ∀ (x v : RectangleCLT.Vector p),
+      HasFDerivAt (fun z => (self.hessian z) fun x => v)
+        (ContinuousMultilinearMap.toContinuousLinearMap (self.third x) (fun x => v) 0) x
+  RectangleCLT.Companion.SplitV4.C4Test.has_fourth : ∀ (x v : RectangleCLT.Vector p),
+      HasFDerivAt (fun z => (self.third z) fun x => v)
+        (ContinuousMultilinearMap.toContinuousLinearMap (self.fourth x) (fun x => v) 0) x
+  RectangleCLT.Companion.SplitV4.C4Test.continuous_gradient : Continuous self.gradient
+  RectangleCLT.Companion.SplitV4.C4Test.continuous_hessian : Continuous self.hessian
+  RectangleCLT.Companion.SplitV4.C4Test.continuous_third : Continuous self.third
+  RectangleCLT.Companion.SplitV4.C4Test.continuous_fourth : Continuous self.fourth
+  RectangleCLT.Companion.SplitV4.C4Test.bound : ℝ
+  RectangleCLT.Companion.SplitV4.C4Test.bound_nonneg : 0 ≤ self.bound
+  RectangleCLT.Companion.SplitV4.C4Test.norm_gradient_le : ∀ (x : RectangleCLT.Vector p), ‖self.gradient x‖ ≤ self.bound
+  RectangleCLT.Companion.SplitV4.C4Test.norm_hessian_le : ∀ (x : RectangleCLT.Vector p), ‖self.hessian x‖ ≤ self.bound
+  RectangleCLT.Companion.SplitV4.C4Test.norm_third_le : ∀ (x : RectangleCLT.Vector p), ‖self.third x‖ ≤ self.bound
+  RectangleCLT.Companion.SplitV4.C4Test.norm_fourth_le : ∀ (x : RectangleCLT.Vector p), ‖self.fourth x‖ ≤ self.bound
+constructor:
+  RectangleCLT.Companion.SplitV4.C4Test.mk {p : ℕ} (value : RectangleCLT.Vector p → ℝ)
+    (gradient : RectangleCLT.Vector p → RectangleCLT.Companion.SplitV4.DerivativeOne p)
+    (hessian : RectangleCLT.Vector p → RectangleCLT.Companion.SplitV4.DerivativeTwo p)
+    (third : RectangleCLT.Vector p → RectangleCLT.Companion.SplitV4.DerivativeThree p)
+    (fourth : RectangleCLT.Vector p → RectangleCLT.Companion.SplitV4.DerivativeFour p)
+    (has_gradient : ∀ (x : RectangleCLT.Vector p), HasFDerivAt value (gradient x) x)
+    (has_hessian :
+      ∀ (x v : RectangleCLT.Vector p),
+        HasFDerivAt (fun z => (gradient z) v)
+          (ContinuousMultilinearMap.toContinuousLinearMap (hessian x) (fun x => v) 0) x)
+    (has_third :
+      ∀ (x v : RectangleCLT.Vector p),
+        HasFDerivAt (fun z => (hessian z) fun x => v)
+          (ContinuousMultilinearMap.toContinuousLinearMap (third x) (fun x => v) 0) x)
+    (has_fourth :
+      ∀ (x v : RectangleCLT.Vector p),
+        HasFDerivAt (fun z => (third z) fun x => v)
+          (ContinuousMultilinearMap.toContinuousLinearMap (fourth x) (fun x => v) 0) x)
+    (continuous_gradient : Continuous gradient) (continuous_hessian : Continuous hessian)
+    (continuous_third : Continuous third) (continuous_fourth : Continuous fourth) (bound : ℝ) (bound_nonneg : 0 ≤ bound)
+    (norm_gradient_le : ∀ (x : RectangleCLT.Vector p), ‖gradient x‖ ≤ bound)
+    (norm_hessian_le : ∀ (x : RectangleCLT.Vector p), ‖hessian x‖ ≤ bound)
+    (norm_third_le : ∀ (x : RectangleCLT.Vector p), ‖third x‖ ≤ bound)
+    (norm_fourth_le : ∀ (x : RectangleCLT.Vector p), ‖fourth x‖ ≤ bound) : RectangleCLT.Companion.SplitV4.C4Test p
+def RectangleCLT.Companion.SplitV4.smootherC4Bound : {p : ℕ} → RectangleCLT.FaceSmoother p → ℝ :=
+fun {p} s =>
+  ↑p ^ 1 * (1 / s.bandwidth) + ↑p ^ 2 * (3 / s.bandwidth ^ 2) + ↑p ^ 3 * (13 / s.bandwidth ^ 3) +
+    ↑p ^ 4 * (75 / s.bandwidth ^ 4)
+RectangleCLT.Companion.SplitV4.smootherC4Test {p : Nat} (s : RectangleCLT.FaceSmoother p) :
+  RectangleCLT.Companion.SplitV4.C4Test p
+RectangleCLT.Companion.SplitV4.multilinear_norm_le_coordinate_bound {p k : ℕ}
+  (M : ContinuousMultilinearMap ℝ (fun x => RectangleCLT.Vector p) ℝ) {B : ℝ} (hB : 0 ≤ B)
+  (hM : ∀ (α : Fin k → Fin p), ‖M fun i => RectangleCLT.FaceSmoother.coordinateDirection (α i)‖ ≤ B) : ‖M‖ ≤ ↑p ^ k * B
+RectangleCLT.Companion.SplitV4.smoother_iteratedFDeriv_norm_le {p : ℕ} (s : RectangleCLT.FaceSmoother p) (k : ℕ)
+  (hk : 1 ≤ k) (hk' : k ≤ 4) (x : RectangleCLT.Vector p) :
+  ‖iteratedFDeriv ℝ k s.F x‖ ≤ RectangleCLT.Companion.SplitV4.smootherC4Bound s
+RectangleCLT.Companion.SplitV4.smootherC4Test_value {p : ℕ} (s : RectangleCLT.FaceSmoother p) :
+  (RectangleCLT.Companion.SplitV4.smootherC4Test s).value = s.F
+RectangleCLT.Companion.SplitV4.smootherC4Test_gradient_eq_translationD1 {p : ℕ} (s : RectangleCLT.FaceSmoother p)
+  (x y : RectangleCLT.Vector p) : ((RectangleCLT.Companion.SplitV4.smootherC4Test s).gradient x) y = s.translationD1 x y
+RectangleCLT.Companion.SplitV4.smootherC4Test_secondDiagonal_eq_translationD2 {p : ℕ} (s : RectangleCLT.FaceSmoother p)
+  (x y : RectangleCLT.Vector p) :
+  (RectangleCLT.Companion.SplitV4.smootherC4Test s).secondDiagonal x y = s.translationD2 x y
+RectangleCLT.Companion.SplitV4.smootherC4Test_thirdDiagonal_eq_translationD3 {p : ℕ} (s : RectangleCLT.FaceSmoother p)
+  (x y : RectangleCLT.Vector p) :
+  (RectangleCLT.Companion.SplitV4.smootherC4Test s).thirdDiagonal x y = s.translationD3 x y
+RectangleCLT.Companion.SplitV4.smootherC4Test_fourthDiagonal_eq_translationD4 {p : ℕ} (s : RectangleCLT.FaceSmoother p)
+  (x y : RectangleCLT.Vector p) :
+  (RectangleCLT.Companion.SplitV4.smootherC4Test s).fourthDiagonal x y = s.translationD4 x y
+RectangleCLT.Companion.SplitV4.smootherC4Test_fourthDiagonal_eq_diagonalFourth {p : ℕ} (s : RectangleCLT.FaceSmoother p)
+  (x y : RectangleCLT.Vector p) :
+  (RectangleCLT.Companion.SplitV4.smootherC4Test s).fourthDiagonal x y =
+    RectangleCLT.Companion.SplitV4.diagonalFourth s x y
+'RectangleCLT.Companion.SplitV4.smootherC4Test' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.smootherC4Test_fourthDiagonal_eq_diagonalFourth' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited the actual smoother C4 constructor and 24 theorem declarations; only propext, Classical.choice and Quot.sound.

@@ -1,0 +1,170 @@
+RectangleCLT.Companion.SplitV4.seeded_copy_conditional_third_budget.{u_1, u_2} {Β : Type u_1} {Ω : Type u_2}
+  [MeasurableSpace.{u_1} Β] [MeasurableSpace.{u_2} Ω] {p r n : Nat} (ρ : @MeasureTheory.Measure.{u_1} Β inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Β inst✝ ρ] (μ : @MeasureTheory.Measure.{u_2} Ω inst✝¹)
+  [@MeasureTheory.IsProbabilityMeasure.{u_2} Ω inst✝¹ μ] (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ M₃ M₄ : Real}
+  (h : @RectangleCLT.BoundedIndependentHypotheses.{u_2} Ω inst✝¹ p n μ ξ δ)
+  (hrel : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_2} Ω inst✝¹ p n μ ξ M₃ M₄)
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin r) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin r) Real) (Matrix.{0, 0, 0} (Fin r) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin r) (Fin p) Real (Fin.fintype r)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin r) Real A))
+      (@RectangleCLT.covariance.{u_2} Ω inst✝¹ p μ (@RectangleCLT.sumVector.{u_2} Ω p n ξ)))
+  (f : RectangleCLT.Face p) :
+  @Filter.Eventually.{max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+    (fun (z : Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω)) =>
+      ∀ (u : Fin r → Real),
+        @LE.le.{0} Real Real.instLE
+          (@abs.{0} Real Real.lattice Real.instAddGroup
+            (@RectangleCLT.matrixQuadratic r
+              (@RectangleCLT.Companion.SplitV4.conditionalRestorationCoefficient.{max u_1 u_2}
+                (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+                (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+                  (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹))
+                n r
+                (@MeasureTheory.Measure.prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+                  (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹) ρ
+                  (@MeasureTheory.Measure.prod.{u_2, u_2} Ω Ω inst✝¹ inst✝¹ μ μ))
+                (@RectangleCLT.Companion.SplitV4.originalSigma.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+                  (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹))
+                (@RectangleCLT.Companion.SplitV4.seededCopyWhitened.{u_1, u_2} Β Ω p r n A ξ)
+                (fun (i : Fin n) (z : Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω)) =>
+                  @RectangleCLT.FaceSmoother.normalDot p f
+                    (@RectangleCLT.Companion.SplitV4.seededCopyOriginal.{u_1, u_2} Β Ω p n ξ i z))
+                z)
+              u))
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) M₃ (@RectangleCLT.vectorNormSq r u)))
+    (@MeasureTheory.ae.{max u_1 u_2, max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+      (@MeasureTheory.Measure.{max u_2 u_1} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+        (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+          (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹)))
+      (@MeasureTheory.Measure.instFunLike.{max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+        (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+          (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹)))
+      (@MeasureTheory.Measure.instOuterMeasureClass.{max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+        (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+          (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹)))
+      (@MeasureTheory.Measure.prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+        (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹) ρ
+        (@MeasureTheory.Measure.prod.{u_2, u_2} Ω Ω inst✝¹ inst✝¹ μ μ)))
+RectangleCLT.Companion.SplitV4.seeded_copy_conditional_fourth_budget.{u_1, u_2} {Β : Type u_1} {Ω : Type u_2}
+  [MeasurableSpace.{u_1} Β] [MeasurableSpace.{u_2} Ω] {p r n : Nat} (ρ : @MeasureTheory.Measure.{u_1} Β inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Β inst✝ ρ] (μ : @MeasureTheory.Measure.{u_2} Ω inst✝¹)
+  [@MeasureTheory.IsProbabilityMeasure.{u_2} Ω inst✝¹ μ] (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ M₃ M₄ : Real}
+  (h : @RectangleCLT.BoundedIndependentHypotheses.{u_2} Ω inst✝¹ p n μ ξ δ)
+  (hrel : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_2} Ω inst✝¹ p n μ ξ M₃ M₄)
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin r) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin r) Real) (Matrix.{0, 0, 0} (Fin r) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin r) (Fin p) Real (Fin.fintype r)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin r) Real A))
+      (@RectangleCLT.covariance.{u_2} Ω inst✝¹ p μ (@RectangleCLT.sumVector.{u_2} Ω p n ξ)))
+  (f : RectangleCLT.Face p) :
+  @Filter.Eventually.{max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+    (fun (z : Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω)) =>
+      ∀ (u : Fin r → Real),
+        @LE.le.{0} Real Real.instLE
+          (@RectangleCLT.matrixQuadratic r
+            (@RectangleCLT.Companion.SplitV4.conditionalRestorationCoefficient.{max u_1 u_2}
+              (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+              (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+                (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹))
+              n r
+              (@MeasureTheory.Measure.prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+                (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹) ρ
+                (@MeasureTheory.Measure.prod.{u_2, u_2} Ω Ω inst✝¹ inst✝¹ μ μ))
+              (@RectangleCLT.Companion.SplitV4.originalSigma.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+                (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹))
+              (@RectangleCLT.Companion.SplitV4.seededCopyWhitened.{u_1, u_2} Β Ω p r n A ξ)
+              (fun (i : Fin n) (z : Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω)) =>
+                @HPow.hPow.{0, 0, 0} Real Nat Real
+                  (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+                  (@RectangleCLT.FaceSmoother.normalDot p f
+                    (@RectangleCLT.Companion.SplitV4.seededCopyOriginal.{u_1, u_2} Β Ω p n ξ i z))
+                  (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+              z)
+            u)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) M₄ (@RectangleCLT.vectorNormSq r u)))
+    (@MeasureTheory.ae.{max u_1 u_2, max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+      (@MeasureTheory.Measure.{max u_2 u_1} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+        (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+          (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹)))
+      (@MeasureTheory.Measure.instFunLike.{max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+        (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+          (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹)))
+      (@MeasureTheory.Measure.instOuterMeasureClass.{max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+        (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+          (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹)))
+      (@MeasureTheory.Measure.prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+        (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹) ρ
+        (@MeasureTheory.Measure.prod.{u_2, u_2} Ω Ω inst✝¹ inst✝¹ μ μ)))
+RectangleCLT.Companion.SplitV4.seeded_copy_conditional_fresh_fourth_budget.{u_1, u_2} {Β : Type u_1} {Ω : Type u_2}
+  [MeasurableSpace.{u_1} Β] [MeasurableSpace.{u_2} Ω] {p r n : Nat} (ρ : @MeasureTheory.Measure.{u_1} Β inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Β inst✝ ρ] (μ : @MeasureTheory.Measure.{u_2} Ω inst✝¹)
+  [@MeasureTheory.IsProbabilityMeasure.{u_2} Ω inst✝¹ μ] (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ M₃ M₄ : Real}
+  (h : @RectangleCLT.BoundedIndependentHypotheses.{u_2} Ω inst✝¹ p n μ ξ δ)
+  (hrel : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_2} Ω inst✝¹ p n μ ξ M₃ M₄)
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin r) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin r) Real) (Matrix.{0, 0, 0} (Fin r) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin r) (Fin p) Real (Fin.fintype r)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin r) Real A))
+      (@RectangleCLT.covariance.{u_2} Ω inst✝¹ p μ (@RectangleCLT.sumVector.{u_2} Ω p n ξ)))
+  (f : RectangleCLT.Face p) :
+  @Filter.Eventually.{max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+    (fun (z : Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω)) =>
+      ∀ (u : Fin r → Real),
+        @LE.le.{0} Real Real.instLE
+          (@RectangleCLT.matrixQuadratic r
+            (@RectangleCLT.Companion.SplitV4.conditionalRestorationCoefficient.{max u_1 u_2}
+              (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+              (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+                (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹))
+              n r
+              (@MeasureTheory.Measure.prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+                (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹) ρ
+                (@MeasureTheory.Measure.prod.{u_2, u_2} Ω Ω inst✝¹ inst✝¹ μ μ))
+              (@RectangleCLT.Companion.SplitV4.originalSigma.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+                (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹))
+              (@RectangleCLT.Companion.SplitV4.seededCopyWhitened.{u_1, u_2} Β Ω p r n A ξ)
+              (fun (i : Fin n) (z : Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω)) =>
+                @HPow.hPow.{0, 0, 0} Real Nat Real
+                  (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+                  (@RectangleCLT.FaceSmoother.normalDot p f
+                    (@RectangleCLT.Companion.SplitV4.seededCopyFresh.{u_1, u_2} Β Ω p n ξ i z))
+                  (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+              z)
+            u)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) M₄ (@RectangleCLT.vectorNormSq r u)))
+    (@MeasureTheory.ae.{max u_1 u_2, max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+      (@MeasureTheory.Measure.{max u_2 u_1} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+        (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+          (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹)))
+      (@MeasureTheory.Measure.instFunLike.{max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+        (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+          (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹)))
+      (@MeasureTheory.Measure.instOuterMeasureClass.{max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+        (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+          (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹)))
+      (@MeasureTheory.Measure.prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+        (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹) ρ
+        (@MeasureTheory.Measure.prod.{u_2, u_2} Ω Ω inst✝¹ inst✝¹ μ μ)))
+'RectangleCLT.Companion.SplitV4.seeded_copy_conditional_third_budget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.seeded_copy_conditional_fourth_budget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.seeded_copy_conditional_fresh_fourth_budget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited all 25 seeded relative copy budget theorem declarations.

@@ -1,0 +1,30 @@
+RectangleCLT.Companion.SplitV4.relativeFourthAdmissible_projected.{u} {Ω : Type u} [MeasurableSpace.{u} Ω] {p m n : Nat}
+  {μ : @MeasureTheory.Measure.{u} Ω inst✝} [@MeasureTheory.IsProbabilityMeasure.{u} Ω inst✝ μ]
+  {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ s₄ : Real}
+  (h : @RectangleCLT.BoundedIndependentHypotheses.{u} Ω inst✝ p n μ ξ δ)
+  (hr : @RectangleCLT.Companion.SplitV4.RelativeFourthAdmissible.{u} Ω inst✝ p n μ ξ s₄)
+  (M : Matrix.{0, 0, 0} (Fin m) (Fin p) Real) (J : Real)
+  (hJ : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) J)
+  (hM :
+    ∀ (α : Fin m),
+      @LE.le.{0} Real Real.instLE
+        (@Finset.sum.{0, 0} (Fin p) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin p) (Fin.fintype p))
+          fun (j : Fin p) => @abs.{0} Real Real.lattice Real.instAddGroup (M α j))
+        J) :
+  @RectangleCLT.Companion.SplitV4.RelativeFourthAdmissible.{u} Ω inst✝ m n μ
+    (fun (i : Fin n) (ω : Ω) =>
+      @Matrix.mulVec.{0, 0, 0} (Fin m) (Fin p) Real
+        (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+          (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+            (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+              (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing)))))
+        (Fin.fintype p) M (ξ i ω))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) J
+        (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+      s₄)
+'RectangleCLT.Companion.SplitV4.relativeFourthAdmissible_projected' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited 7 RelativeUniform declarations; only the three standard axioms are permitted.

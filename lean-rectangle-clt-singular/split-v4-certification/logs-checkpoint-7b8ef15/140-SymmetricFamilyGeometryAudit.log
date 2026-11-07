@@ -1,0 +1,193 @@
+def RectangleCLT.Companion.SplitV4.additiveGridFactor : (m : ℕ) → ℝ → ℝ → Matrix (Fin m × Fin m) (Fin m ⊕ Fin m) ℝ :=
+fun m a b ju => Sum.elim (fun j => if ju.1 = j then a else 0) fun u => if ju.2 = u then b else 0
+def RectangleCLT.Companion.SplitV4.additiveGridKernelVector : (m : ℕ) → ℝ → ℝ → Fin m ⊕ Fin m → ℝ :=
+fun m a b => Sum.elim (fun x => -b) fun x => a
+def RectangleCLT.Companion.SplitV4.familyPairCovariance : (m : ℕ) → ℝ → Matrix (Fin m × Fin m) (Fin m × Fin m) ℝ :=
+fun m v ju ju' => ((1 - v) * if ju.1 = ju'.1 then 1 else 0) + v * if ju.2 = ju'.2 then 1 else 0
+def RectangleCLT.Companion.SplitV4.familyCovariance : (m : ℕ) → ℝ → Matrix (Fin (m * m)) (Fin (m * m)) ℝ :=
+fun m v r r' =>
+  let ju := finProdFinEquiv.symm r;
+  let ju' := finProdFinEquiv.symm r';
+  ((1 - v) * if ju.1 = ju'.1 then 1 else 0) + v * if ju.2 = ju'.2 then 1 else 0
+RectangleCLT.Companion.SplitV4.additiveGridFactor_ker {m : Nat}
+  (hm : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) m) {a b : Real}
+  (ha : @Ne.{1} Real a (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+  (hb : @Ne.{1} Real b (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))) :
+  @Eq.{1}
+    (@Submodule.{0, 0} Real (Sum.{0, 0} (Fin m) (Fin m) → Real)
+      (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+      (@Pi.addCommMonoid.{0, 0} (Sum.{0, 0} (Fin m) (Fin m)) (fun (a : Sum.{0, 0} (Fin m) (Fin m)) => Real)
+        fun (i : Sum.{0, 0} (Fin m) (Fin m)) =>
+        @NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+          (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+            (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+      (@Pi.Function.module.{0, 0, 0} (Sum.{0, 0} (Fin m) (Fin m)) Real Real
+        (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+        (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+          (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+            (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+        (@Semiring.toModule.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+    (@LinearMap.ker.{0, 0, 0, 0, 0} Real Real (Sum.{0, 0} (Fin m) (Fin m) → Real) (Prod.{0, 0} (Fin m) (Fin m) → Real)
+      (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+      (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+      (@Pi.addCommMonoid.{0, 0} (Sum.{0, 0} (Fin m) (Fin m)) (fun (a : Sum.{0, 0} (Fin m) (Fin m)) => Real)
+        fun (i : Sum.{0, 0} (Fin m) (Fin m)) =>
+        @NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+          (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+            (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+      (@Pi.addCommMonoid.{0, 0} (Prod.{0, 0} (Fin m) (Fin m)) (fun (a : Prod.{0, 0} (Fin m) (Fin m)) => Real)
+        fun (i : Prod.{0, 0} (Fin m) (Fin m)) =>
+        @NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+          (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+            (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+      (@Pi.Function.module.{0, 0, 0} (Sum.{0, 0} (Fin m) (Fin m)) Real Real
+        (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+        (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+          (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+            (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+        (@Semiring.toModule.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)))
+      (@Pi.Function.module.{0, 0, 0} (Prod.{0, 0} (Fin m) (Fin m)) Real Real
+        (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+        (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+          (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+            (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+        (@Semiring.toModule.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)))
+      (@RingHom.id.{0} Real
+        (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)))
+      (@LinearMap.{0, 0, 0, 0} Real Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+        (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+        (@RingHom.id.{0} Real
+          (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)))
+        (Sum.{0, 0} (Fin m) (Fin m) → Real) (Prod.{0, 0} (Fin m) (Fin m) → Real)
+        (@Pi.addCommMonoid.{0, 0} (Sum.{0, 0} (Fin m) (Fin m)) (fun (a : Sum.{0, 0} (Fin m) (Fin m)) => Real)
+          fun (i : Sum.{0, 0} (Fin m) (Fin m)) =>
+          @NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+            (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+        (@Pi.addCommMonoid.{0, 0} (Prod.{0, 0} (Fin m) (Fin m)) (fun (a : Prod.{0, 0} (Fin m) (Fin m)) => Real)
+          fun (i : Prod.{0, 0} (Fin m) (Fin m)) =>
+          @NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+            (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+        (@Pi.Function.module.{0, 0, 0} (Sum.{0, 0} (Fin m) (Fin m)) Real Real
+          (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+          (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+            (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+          (@Semiring.toModule.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)))
+        (@Pi.Function.module.{0, 0, 0} (Prod.{0, 0} (Fin m) (Fin m)) Real Real
+          (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+          (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+            (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+          (@Semiring.toModule.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+      (@LinearMap.instFunLike.{0, 0, 0, 0} Real Real (Sum.{0, 0} (Fin m) (Fin m) → Real)
+        (Prod.{0, 0} (Fin m) (Fin m) → Real) (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+        (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+        (@Pi.addCommMonoid.{0, 0} (Sum.{0, 0} (Fin m) (Fin m)) (fun (a : Sum.{0, 0} (Fin m) (Fin m)) => Real)
+          fun (i : Sum.{0, 0} (Fin m) (Fin m)) =>
+          @NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+            (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+        (@Pi.addCommMonoid.{0, 0} (Prod.{0, 0} (Fin m) (Fin m)) (fun (a : Prod.{0, 0} (Fin m) (Fin m)) => Real)
+          fun (i : Prod.{0, 0} (Fin m) (Fin m)) =>
+          @NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+            (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+        (@Pi.Function.module.{0, 0, 0} (Sum.{0, 0} (Fin m) (Fin m)) Real Real
+          (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+          (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+            (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+          (@Semiring.toModule.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)))
+        (@Pi.Function.module.{0, 0, 0} (Prod.{0, 0} (Fin m) (Fin m)) Real Real
+          (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+          (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+            (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+          (@Semiring.toModule.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)))
+        (@RingHom.id.{0} Real
+          (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+      (@LinearMap.semilinearMapClass.{0, 0, 0, 0} Real Real (Sum.{0, 0} (Fin m) (Fin m) → Real)
+        (Prod.{0, 0} (Fin m) (Fin m) → Real) (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+        (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+        (@Pi.addCommMonoid.{0, 0} (Sum.{0, 0} (Fin m) (Fin m)) (fun (a : Sum.{0, 0} (Fin m) (Fin m)) => Real)
+          fun (i : Sum.{0, 0} (Fin m) (Fin m)) =>
+          @NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+            (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+        (@Pi.addCommMonoid.{0, 0} (Prod.{0, 0} (Fin m) (Fin m)) (fun (a : Prod.{0, 0} (Fin m) (Fin m)) => Real)
+          fun (i : Prod.{0, 0} (Fin m) (Fin m)) =>
+          @NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+            (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+        (@Pi.Function.module.{0, 0, 0} (Sum.{0, 0} (Fin m) (Fin m)) Real Real
+          (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+          (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+            (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+          (@Semiring.toModule.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)))
+        (@Pi.Function.module.{0, 0, 0} (Prod.{0, 0} (Fin m) (Fin m)) Real Real
+          (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+          (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Real
+            (@NonAssocSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+          (@Semiring.toModule.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)))
+        (@RingHom.id.{0} Real
+          (@Semiring.toNonAssocSemiring.{0} Real (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring))))
+      (@Matrix.mulVecLin.{0, 0, 0} Real Real.instCommSemiring (Prod.{0, 0} (Fin m) (Fin m)) (Sum.{0, 0} (Fin m) (Fin m))
+        (@instFintypeSum.{0, 0} (Fin m) (Fin m) (Fin.fintype m) (Fin.fintype m))
+        (RectangleCLT.Companion.SplitV4.additiveGridFactor m a b)))
+    (@Submodule.span.{0, 0} Real (Sum.{0, 0} (Fin m) (Fin m) → Real) Real.semiring
+      (@Pi.addCommMonoid.{0, 0} (Sum.{0, 0} (Fin m) (Fin m)) (fun (a : Sum.{0, 0} (Fin m) (Fin m)) => Real)
+        fun (i : Sum.{0, 0} (Fin m) (Fin m)) => Real.instAddCommMonoid)
+      (@Pi.Function.module.{0, 0, 0} (Sum.{0, 0} (Fin m) (Fin m)) Real Real Real.semiring Real.instAddCommMonoid
+        (@NormedSpace.toModule.{0, 0} Real Real Real.normedField
+          (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+            (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+              (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+              (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                  (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))))
+      (@Singleton.singleton.{0, 0} (Sum.{0, 0} (Fin m) (Fin m) → Real) (Set.{0} (Sum.{0, 0} (Fin m) (Fin m) → Real))
+        (@Set.instSingletonSet.{0} (Sum.{0, 0} (Fin m) (Fin m) → Real))
+        (RectangleCLT.Companion.SplitV4.additiveGridKernelVector m a b)))
+RectangleCLT.Companion.SplitV4.familyCovariance_rank {m : Nat}
+  (hm : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) m) {v : Real}
+  (hv : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) v)
+  (hv1 : @LT.lt.{0} Real Real.instLT v (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) :
+  @Eq.{1} Nat
+    (@Matrix.rank.{0, 0, 0} (Fin (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m))
+      (Fin (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m)) Real
+      (Fin.fintype (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m)) Real.commRing
+      (RectangleCLT.Companion.SplitV4.familyCovariance m v))
+    (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) m)
+      (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+RectangleCLT.Companion.SplitV4.familyCovariance_pairGap {m : Nat}
+  (hm : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) m) {v : Real}
+  (hv : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) v)
+  (hvhalf :
+    @LT.lt.{0} Real Real.instLT v
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))) :
+  @Eq.{1} Real
+    (@RectangleCLT.pairGap (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m m)
+      (RectangleCLT.Companion.SplitV4.familyCovariance m v))
+    v
+'RectangleCLT.Companion.SplitV4.additiveGridFactor_ker' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.additiveGridFactor_rank' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.familyCovariance_rank' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.familyCovariance_maxOffDiagonal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.familyCovariance_pairGap' depends on axioms: [propext, Classical.choice, Quot.sound]
+Audited 26 symmetric-family geometry theorem declarations; only the permitted three axioms.
+Actual covariance rank is 2*m-1 and the pair gap is v, with no rank assumption as a premise.

@@ -1,0 +1,152 @@
+def RectangleCLT.Companion.SkewedTwoPointLowerScale : Prop :=
+∀ (B : ℕ → ℝ) (p : ℕ → ℕ),
+  Filter.Tendsto p Filter.atTop Filter.atTop →
+    (∀ (n : ℕ), 2 ≤ B n) →
+      Filter.Tendsto (fun n => RectangleCLT.Companion.lowerSkewRate (B n) (p n) n) Filter.atTop (nhds 0) →
+        (∀ (n : ℕ), 1 ≤ n → 1 ≤ p n → RectangleCLT.Companion.LowerConstructionProperties (B n) n (p n)) ∧
+          RectangleCLT.Companion.skewLowerScaleConstant ≤
+            Filter.liminf
+              (fun n =>
+                RectangleCLT.Companion.lowerConstructionDistance (B n) n (p n) /
+                  RectangleCLT.Companion.lowerSkewRate (B n) (p n) n)
+              Filter.atTop
+structure RectangleCLT.Companion.LowerConstructionProperties (B : ℝ) (n p : ℕ) : Prop
+number of parameters: 3
+fields:
+  RectangleCLT.Companion.LowerConstructionProperties.data : RectangleCLT.BoundedIndependentHypotheses
+      (RectangleCLT.Companion.lowerArrayLaw B n p) RectangleCLT.Companion.lowerRawRows B
+  RectangleCLT.Companion.LowerConstructionProperties.iid : ∀ (i : Fin n),
+      MeasureTheory.Measure.map (RectangleCLT.Companion.lowerRawRows i) (RectangleCLT.Companion.lowerArrayLaw B n p) =
+        MeasureTheory.Measure.pi fun x => RectangleCLT.Companion.lowerTwoPointLaw B
+  RectangleCLT.Companion.LowerConstructionProperties.independent_coordinates : ∀ (i : Fin n),
+      ProbabilityTheory.iIndepFun (fun j z => RectangleCLT.Companion.lowerRawRows i z j)
+        (RectangleCLT.Companion.lowerArrayLaw B n p)
+  RectangleCLT.Companion.LowerConstructionProperties.row_covariance : ∀ (i : Fin n),
+      RectangleCLT.covariance (RectangleCLT.Companion.lowerArrayLaw B n p) (RectangleCLT.Companion.lowerRawRows i) = 1
+  RectangleCLT.Companion.LowerConstructionProperties.attained : ∀ (i : Fin n),
+      0 < (RectangleCLT.Companion.lowerArrayLaw B n p).real {z | ‖RectangleCLT.Companion.lowerRawRows i z‖ = B}
+  RectangleCLT.Companion.LowerConstructionProperties.normalized_covariance : RectangleCLT.covariance
+        (RectangleCLT.Companion.lowerArrayLaw B n p)
+        (RectangleCLT.sumVector RectangleCLT.Companion.lowerNormalizedRows) =
+      1
+constructor:
+  RectangleCLT.Companion.LowerConstructionProperties.mk {B : ℝ} {n p : ℕ}
+    (data :
+      RectangleCLT.BoundedIndependentHypotheses (RectangleCLT.Companion.lowerArrayLaw B n p)
+        RectangleCLT.Companion.lowerRawRows B)
+    (iid :
+      ∀ (i : Fin n),
+        MeasureTheory.Measure.map (RectangleCLT.Companion.lowerRawRows i) (RectangleCLT.Companion.lowerArrayLaw B n p) =
+          MeasureTheory.Measure.pi fun x => RectangleCLT.Companion.lowerTwoPointLaw B)
+    (independent_coordinates :
+      ∀ (i : Fin n),
+        ProbabilityTheory.iIndepFun (fun j z => RectangleCLT.Companion.lowerRawRows i z j)
+          (RectangleCLT.Companion.lowerArrayLaw B n p))
+    (row_covariance :
+      ∀ (i : Fin n),
+        RectangleCLT.covariance (RectangleCLT.Companion.lowerArrayLaw B n p) (RectangleCLT.Companion.lowerRawRows i) =
+          1)
+    (attained :
+      ∀ (i : Fin n),
+        0 < (RectangleCLT.Companion.lowerArrayLaw B n p).real {z | ‖RectangleCLT.Companion.lowerRawRows i z‖ = B})
+    (normalized_covariance :
+      RectangleCLT.covariance (RectangleCLT.Companion.lowerArrayLaw B n p)
+          (RectangleCLT.sumVector RectangleCLT.Companion.lowerNormalizedRows) =
+        1) :
+    RectangleCLT.Companion.LowerConstructionProperties B n p
+def RectangleCLT.Companion.rectangleDistance.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p : ℕ} → MeasureTheory.Measure Ω → (Ω → RectangleCLT.Vector p) → Matrix (Fin p) (Fin p) ℝ → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p} μ W A => sSup (Set.range (RectangleCLT.rectangleError μ W A))
+def RectangleCLT.Companion.lowerConstructionDistance : ℝ → ℕ → ℕ → ℝ :=
+fun B n p =>
+  RectangleCLT.Companion.rectangleDistance (RectangleCLT.Companion.lowerArrayLaw B n p)
+    (RectangleCLT.sumVector RectangleCLT.Companion.lowerNormalizedRows) 1
+def RectangleCLT.Companion.lowerSkewRate : ℝ → ℕ → ℕ → ℝ :=
+fun B p n => B * Real.log ↑p ^ (3 / 2) / √↑n
+def RectangleCLT.Companion.skewLowerScaleConstant : ℝ :=
+√2 / (4 * Real.exp 1)
+def RectangleCLT.Companion.uniformClassErrors.{u} : Bool → ℝ → ℝ → ℕ → ℕ → Set ℝ :=
+fun zeroSkew c₀ B p n =>
+  {e |
+    e = 0 ∨
+      ∃ Ω mΩ μ,
+        MeasureTheory.IsProbabilityMeasure μ ∧
+          ∃ ξ A R,
+            RectangleCLT.BoundedIndependentHypotheses μ ξ (B / √↑n) ∧
+              (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) ∧
+                c₀ ≤ RectangleCLT.pairGap (RectangleCLT.covariance μ (RectangleCLT.sumVector ξ)) ∧
+                  A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) ∧
+                    (zeroSkew = true → RectangleCLT.Companion.AggregateThirdMomentsVanish μ ξ) ∧
+                      e = RectangleCLT.rectangleError μ (RectangleCLT.sumVector ξ) A R}
+def RectangleCLT.Companion.uniformWorstError.{u} : Bool → ℝ → ℝ → ℕ → ℕ → ℝ :=
+fun zeroSkew c₀ B p n => sSup (RectangleCLT.Companion.uniformClassErrors zeroSkew c₀ B p n)
+def RectangleCLT.Companion.fixedGapWorstError.{u} : ℝ → ℝ → ℕ → ℕ → ℝ :=
+fun c₀ B p n => RectangleCLT.Companion.uniformWorstError false c₀ B p n
+def RectangleCLT.Companion.zeroSkewFixedGapWorstError.{u} : ℝ → ℝ → ℕ → ℕ → ℝ :=
+fun c₀ B p n => RectangleCLT.Companion.uniformWorstError true c₀ B p n
+def RectangleCLT.Companion.UniformConsistencyTheorem.{u} : Prop :=
+∀ (c₀ : ℝ),
+  0 < c₀ →
+    c₀ ≤ 1 →
+      (∀ (B : ℕ → ℝ) (p : ℕ → ℕ),
+          (∀ (n : ℕ), 2 ≤ B n) →
+            (∀ (n : ℕ), 1 ≤ p n) →
+              (Filter.Tendsto (fun n => RectangleCLT.Companion.fixedGapWorstError c₀ (B n) (p n) n) Filter.atTop
+                  (nhds 0) ↔
+                Filter.Tendsto (fun n => B n * RectangleCLT.dimensionLog (p n) ^ (3 / 2) / √↑n) Filter.atTop
+                  (nhds 0))) ∧
+        ∀ (B : ℝ) (p : ℕ → ℕ),
+          1 ≤ B →
+            (∀ (n : ℕ), 1 ≤ p n) →
+              (Filter.Tendsto (fun n => RectangleCLT.Companion.zeroSkewFixedGapWorstError c₀ B (p n) n) Filter.atTop
+                  (nhds 0) ↔
+                Filter.Tendsto (fun n => Real.log ↑(p n) / √↑n) Filter.atTop (nhds 0))
+theorem RectangleCLT.Companion.skewedTwoPointLowerScale : RectangleCLT.Companion.SkewedTwoPointLowerScale :=
+⋯
+theorem RectangleCLT.Companion.lowerScaleRectangleDistance_liminf : ∀ {B : ℕ → ℝ} {p : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    Filter.Tendsto p Filter.atTop Filter.atTop →
+      Filter.Tendsto (fun n => RectangleCLT.Companion.lowerSkewRate (B n) (p n) n) Filter.atTop (nhds 0) →
+        RectangleCLT.Companion.skewLowerScaleConstant ≤
+          Filter.liminf
+            (fun n =>
+              RectangleCLT.Companion.lowerConstructionDistance (B n) n (p n) /
+                RectangleCLT.Companion.lowerSkewRate (B n) (p n) n)
+            Filter.atTop :=
+⋯
+theorem RectangleCLT.Companion.fixedGapWorstError_iff_rate.{u} : ∀ {c₀ : ℝ} {B : ℕ → ℝ} {p : ℕ → ℕ},
+  0 < c₀ →
+    c₀ ≤ 1 →
+      (∀ (n : ℕ), 2 ≤ B n) →
+        (∀ (n : ℕ), 1 ≤ p n) →
+          (Filter.Tendsto (fun n => RectangleCLT.Companion.fixedGapWorstError c₀ (B n) (p n) n) Filter.atTop (nhds 0) ↔
+            Filter.Tendsto (fun n => B n * RectangleCLT.dimensionLog (p n) ^ (3 / 2) / √↑n) Filter.atTop (nhds 0)) :=
+⋯
+theorem RectangleCLT.Companion.zeroSkewWorstError_iff_log_rate.{u} : ∀ {c₀ B : ℝ} {p : ℕ → ℕ},
+  0 < c₀ →
+    c₀ ≤ 1 →
+      1 ≤ B →
+        (∀ (n : ℕ), 1 ≤ p n) →
+          (Filter.Tendsto (fun n => RectangleCLT.Companion.zeroSkewFixedGapWorstError c₀ B (p n) n) Filter.atTop
+              (nhds 0) ↔
+            Filter.Tendsto (fun n => Real.log ↑(p n) / √↑n) Filter.atTop (nhds 0)) :=
+⋯
+theorem RectangleCLT.Companion.uniformConsistencyTheorem.{u} : RectangleCLT.Companion.UniformConsistencyTheorem :=
+⋯
+'RectangleCLT.Companion.skewedTwoPointLowerScale' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.lowerScaleRectangleDistance_liminf' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.fixedGapWorstError_iff_rate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.zeroSkewWorstError_iff_log_rate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.uniformConsistencyTheorem' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.lowerConstructionProperties' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.lowerSkewTail_sharp_facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.lowerScaleRectangle_liminf' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.fixedGapUniformConsistency_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.zeroSkewFixedGapUniformConsistency_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.fixedGapWorstError_tendsto_zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.zeroSkewFixedGapWorstError_tendsto_zero_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

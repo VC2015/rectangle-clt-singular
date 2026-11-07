@@ -1,5 +1,15 @@
 # Unrestricted-covariance rectangle CLTs in Lean
 
+The November split-V4 manuscript is certified for **all 31 proved named
+statements**, including the relative theorem and its analytic proof chain,
+all polyhedral transfers, both polynomial routes and all six lower theorems.
+Conjecture 1 is excluded. The final 167-command isolated run and independent
+CI checks passed; only `propext`, `Classical.choice` and `Quot.sound` occur.
+See [the verification record](SPLIT_V4_VERIFICATION.json),
+[statement map](split-v4-certification/statement-map.json), and
+[proof-route review](split-v4-certification/CORRESPONDENCE_REVIEW.md).
+The historical theorem numbering and October records below are preserved.
+
 The three bounded-observation CLTs in the supplied companion manuscript
 are proved in
 [`SharpMain.lean`](RectangleCLTCompanion/SharpMain.lean): the unrestricted

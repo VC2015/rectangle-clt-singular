@@ -1,0 +1,48 @@
+RectangleCLT.Companion.SplitV4.relativeFourthMomentCLT.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω] {p n : Nat}
+  (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p) (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  {δ s₄ : Real} (h : @RectangleCLT.BoundedIndependentHypotheses.{u_1} Ω inst✝ p n μ ξ δ)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (hs₄ : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) s₄)
+  (hQ :
+    ∀ (j : Fin p),
+      @RectangleCLT.Companion.SplitV4.QuadraticLE p
+        (@RectangleCLT.Companion.SplitV4.relativeFourthMatrix.{u_1} Ω inst✝ p n μ ξ j)
+        (@HSMul.hSMul.{0, 0, 0} Real (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+          (@instHSMul.{0, 0} Real (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+            (@Matrix.smul.{0, 0, 0, 0} (Fin p) (Fin p) Real Real
+              (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                (@Algebra.id.{0} Real Real.instCommSemiring))))
+          s₄ (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ))))
+  (hQfresh :
+    ∀ (j : Fin p),
+      @RectangleCLT.Companion.SplitV4.QuadraticLE p
+        (@RectangleCLT.Companion.SplitV4.relativeFreshFourthMatrix.{u_1} Ω inst✝ p n μ ξ j)
+        (@HSMul.hSMul.{0, 0, 0} Real (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+          (@instHSMul.{0, 0} Real (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+            (@Matrix.smul.{0, 0, 0, 0} (Fin p) (Fin p) Real Real
+              (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                (@Algebra.id.{0} Real Real.instCommSemiring))))
+          s₄ (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ))))
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ))) :
+  @LE.le.{0} Real Real.instLE
+    (@RectangleCLT.Companion.rectangleDistance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) A)
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      RectangleCLT.Companion.SplitV4.relativeUniversalConstant
+      (@Min.min.{0} Real Real.instMin (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+        (RectangleCLT.Companion.SplitV4.relativeRate δ s₄ (RectangleCLT.dimensionLog p))))
+'RectangleCLT.Companion.SplitV4.relativeFourthMomentCLT' depends on axioms: [propext, Classical.choice, Quot.sound]
+Audited 13 RelativeMain declarations; only the three standard axioms are permitted.

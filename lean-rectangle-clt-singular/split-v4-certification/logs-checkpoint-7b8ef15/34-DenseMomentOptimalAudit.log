@@ -1,0 +1,532 @@
+def RectangleCLT.Companion.SplitV4.denseFamilyParameters : ℝ →
+  ℝ → ℕ → ℕ → RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters :=
+fun q B n m =>
+  if h :
+      0 < RectangleCLT.Companion.SplitV4.fourthLowerTheta n (Real.log ↑m) ∧
+        RectangleCLT.Companion.SplitV4.fourthLowerTheta n (Real.log ↑m) ≤ 1 ∧
+          0 < RectangleCLT.Companion.SplitV4.denseLowerAmplitude n (Real.log ↑m) q B ∧
+            RectangleCLT.Companion.SplitV4.fourthLowerTheta n (Real.log ↑m) *
+                RectangleCLT.Companion.SplitV4.denseLowerAmplitude n (Real.log ↑m) q B ^ 2 <
+              1 / 2 then
+    RectangleCLT.Companion.SplitV4.unmaskedAmplitudeParameters
+      (RectangleCLT.Companion.SplitV4.fourthLowerTheta n (Real.log ↑m))
+      (RectangleCLT.Companion.SplitV4.denseLowerAmplitude n (Real.log ↑m) q B) ⋯ ⋯ ⋯ ⋯
+  else
+    RectangleCLT.Companion.SplitV4.unmaskedUnitParameters (1 / 4)
+      RectangleCLT.Companion.SplitV4.denseFamilyParameters._proof_10
+      RectangleCLT.Companion.SplitV4.denseFamilyParameters._proof_11
+def RectangleCLT.Companion.SplitV4.unmaskedAmplitudeParameters : (θ a : ℝ) →
+  0 < θ → θ ≤ 1 → 0 < a → θ * a ^ 2 < 1 / 2 → RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters :=
+fun θ a hθ hθ1 ha hv =>
+  { theta := θ, pi := 1, amplitude := a, theta_pos := hθ, theta_le_one := hθ1,
+    pi_pos := RectangleCLT.Companion.SplitV4.unmaskedAmplitudeParameters._proof_2,
+    pi_le_one := RectangleCLT.Companion.SplitV4.unmaskedAmplitudeParameters._proof_3, amplitude_pos := ha,
+    variance_lt_half := ⋯ }
+def RectangleCLT.Companion.SplitV4.denseMomentLowerRate : ℕ → ℕ → ℝ → ℝ → ℝ :=
+fun n m q B => B * RectangleCLT.dimensionLog (m * m) ^ (3 / 2 - 1 / q) / ↑n ^ (1 / 2 - 1 / q)
+def RectangleCLT.Companion.SplitV4.denseLowerRateConversion : ℝ → ℝ → ℝ :=
+fun q B => B / (B - 1) * 2 ^ (5 / 2 - 2 / q)
+def RectangleCLT.Companion.SplitV4.denseLowerConstant : ℝ → ℝ → ℝ :=
+fun q B => √2 * Real.exp (-1) / RectangleCLT.Companion.SplitV4.denseLowerRateConversion q B
+structure RectangleCLT.Companion.SplitV4.DenseMomentLowerConstruction (q B : ℝ) (m : ℕ → ℕ) : Prop
+number of parameters: 3
+fields:
+  RectangleCLT.Companion.SplitV4.DenseMomentLowerConstruction.properties : ∀ᶠ (n : ℕ) in Filter.atTop,
+      RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties
+        (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n)
+  RectangleCLT.Companion.SplitV4.DenseMomentLowerConstruction.polynomialClass : ∀ᶠ (n : ℕ) in Filter.atTop,
+      RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses
+        (RectangleCLT.Companion.SplitV4.familyArrayLaw
+          (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n))
+        (RectangleCLT.Companion.SplitV4.familyRawObservations
+          (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)))
+        q B
+  RectangleCLT.Companion.SplitV4.DenseMomentLowerConstruction.matchingGaussianCovariance : ∀ᶠ (n : ℕ) in Filter.atTop,
+      RectangleCLT.Companion.SplitV4.familyGaussianSquareFactor
+            (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) (m n) *
+          (RectangleCLT.Companion.SplitV4.familyGaussianSquareFactor
+              (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) (m n)).transpose =
+        RectangleCLT.covariance
+          (RectangleCLT.Companion.SplitV4.familyArrayLaw
+            (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n))
+          (RectangleCLT.sumVector
+            (RectangleCLT.Companion.SplitV4.familyNormalizedObservations
+              (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n))))
+  RectangleCLT.Companion.SplitV4.DenseMomentLowerConstruction.orthantLimit : Filter.Tendsto
+      (fun n =>
+        RectangleCLT.rectangleError
+            (RectangleCLT.Companion.SplitV4.familyArrayLaw
+              (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n))
+            (RectangleCLT.sumVector
+              (RectangleCLT.Companion.SplitV4.familyNormalizedObservations
+                (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n))))
+            (RectangleCLT.Companion.SplitV4.familyGaussianSquareFactor
+              (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) (m n))
+            (RectangleCLT.Companion.SplitV4.familyOrthant (m n * m n)
+              ((RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)).scale *
+                RectangleCLT.Companion.normalMaxThreshold (m n))) /
+          RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B)
+      Filter.atTop (nhds (RectangleCLT.Companion.SplitV4.denseLowerConstant q B))
+  RectangleCLT.Companion.SplitV4.DenseMomentLowerConstruction.positiveConstant : 0 <
+      RectangleCLT.Companion.SplitV4.denseLowerConstant q B
+  RectangleCLT.Companion.SplitV4.DenseMomentLowerConstruction.distanceLiminf : ↑(RectangleCLT.Companion.SplitV4.denseLowerConstant
+          q B) ≤
+      Filter.liminf
+        (fun n =>
+          ↑(RectangleCLT.Companion.SplitV4.familyComparisonDistance
+                (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n) /
+              RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B))
+        Filter.atTop
+constructor:
+  RectangleCLT.Companion.SplitV4.DenseMomentLowerConstruction.mk {q B : ℝ} {m : ℕ → ℕ}
+    (properties :
+      ∀ᶠ (n : ℕ) in Filter.atTop,
+        RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties
+          (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n))
+    (polynomialClass :
+      ∀ᶠ (n : ℕ) in Filter.atTop,
+        RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses
+          (RectangleCLT.Companion.SplitV4.familyArrayLaw
+            (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n))
+          (RectangleCLT.Companion.SplitV4.familyRawObservations
+            (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)))
+          q B)
+    (matchingGaussianCovariance :
+      ∀ᶠ (n : ℕ) in Filter.atTop,
+        RectangleCLT.Companion.SplitV4.familyGaussianSquareFactor
+              (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) (m n) *
+            (RectangleCLT.Companion.SplitV4.familyGaussianSquareFactor
+                (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) (m n)).transpose =
+          RectangleCLT.covariance
+            (RectangleCLT.Companion.SplitV4.familyArrayLaw
+              (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n))
+            (RectangleCLT.sumVector
+              (RectangleCLT.Companion.SplitV4.familyNormalizedObservations
+                (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)))))
+    (orthantLimit :
+      Filter.Tendsto
+        (fun n =>
+          RectangleCLT.rectangleError
+              (RectangleCLT.Companion.SplitV4.familyArrayLaw
+                (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n))
+              (RectangleCLT.sumVector
+                (RectangleCLT.Companion.SplitV4.familyNormalizedObservations
+                  (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n))))
+              (RectangleCLT.Companion.SplitV4.familyGaussianSquareFactor
+                (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) (m n))
+              (RectangleCLT.Companion.SplitV4.familyOrthant (m n * m n)
+                ((RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)).scale *
+                  RectangleCLT.Companion.normalMaxThreshold (m n))) /
+            RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B)
+        Filter.atTop (nhds (RectangleCLT.Companion.SplitV4.denseLowerConstant q B)))
+    (positiveConstant : 0 < RectangleCLT.Companion.SplitV4.denseLowerConstant q B)
+    (distanceLiminf :
+      ↑(RectangleCLT.Companion.SplitV4.denseLowerConstant q B) ≤
+        Filter.liminf
+          (fun n =>
+            ↑(RectangleCLT.Companion.SplitV4.familyComparisonDistance
+                  (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n) /
+                RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B))
+          Filter.atTop) :
+    RectangleCLT.Companion.SplitV4.DenseMomentLowerConstruction q B m
+structure RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.{u} {Ω : Type u} [MeasurableSpace Ω] {p n : ℕ}
+  (μ : MeasureTheory.Measure Ω) (X : Fin n → Ω → RectangleCLT.Vector p) (q B : ℝ) : Prop
+number of parameters: 8
+fields:
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.measurable : ∀ (i : Fin n), Measurable (X i)
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.independent : ProbabilityTheory.iIndepFun X μ
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.centered : ∀ (i : Fin n) (j : Fin p),
+      ∫ (ω : Ω), X i ω j ∂μ = 0
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.envelope_integrable : ∀ (i : Fin n),
+      MeasureTheory.Integrable (fun ω => ‖X i ω‖ ^ q) μ
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.fourth_integrable : ∀ (i : Fin n) (j : Fin p),
+      MeasureTheory.Integrable (fun ω => X i ω j ^ 4) μ
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.average_second : ∀ (j : Fin p),
+      1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 2 ∂μ = 1
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.envelope_moment : ∀ (i : Fin n),
+      ∫ (ω : Ω), ‖X i ω‖ ^ q ∂μ ≤ B ^ q
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.average_fourth : ∀ (j : Fin p),
+      1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 4 ∂μ ≤ B ^ 2
+constructor:
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.mk.{u} {Ω : Type u} [MeasurableSpace Ω] {p n : ℕ}
+    {μ : MeasureTheory.Measure Ω} {X : Fin n → Ω → RectangleCLT.Vector p} {q B : ℝ}
+    (measurable : ∀ (i : Fin n), Measurable (X i)) (independent : ProbabilityTheory.iIndepFun X μ)
+    (centered : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), X i ω j ∂μ = 0)
+    (envelope_integrable : ∀ (i : Fin n), MeasureTheory.Integrable (fun ω => ‖X i ω‖ ^ q) μ)
+    (fourth_integrable : ∀ (i : Fin n) (j : Fin p), MeasureTheory.Integrable (fun ω => X i ω j ^ 4) μ)
+    (average_second : ∀ (j : Fin p), 1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 2 ∂μ = 1)
+    (envelope_moment : ∀ (i : Fin n), ∫ (ω : Ω), ‖X i ω‖ ^ q ∂μ ≤ B ^ q)
+    (average_fourth : ∀ (j : Fin p), 1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 4 ∂μ ≤ B ^ 2) :
+    RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses μ X q B
+def RectangleCLT.Companion.SplitV4.polynomialClassDistances.{u} : ℝ → ℝ → ℕ → ℕ → Set ℝ :=
+fun q B p n =>
+  {e |
+    e = 0 ∨
+      ∃ Ω mΩ μ,
+        MeasureTheory.IsProbabilityMeasure μ ∧
+          ∃ X A,
+            RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses μ X q B ∧
+              A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X) ∧
+                e = RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.Companion.normalizedObservationSum X) A}
+def RectangleCLT.Companion.SplitV4.polynomialSymmetricClassDistances.{u} : ℝ → ℝ → ℕ → ℕ → Set ℝ :=
+fun q B p n =>
+  {e |
+    e = 0 ∨
+      ∃ Ω mΩ μ,
+        MeasureTheory.IsProbabilityMeasure μ ∧
+          ∃ X A,
+            RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses μ X q B ∧
+              (∀ (i : Fin n), ProbabilityTheory.IdentDistrib (X i) (fun ω => -X i ω) μ μ) ∧
+                A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X) ∧
+                  e = RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.Companion.normalizedObservationSum X) A}
+RectangleCLT.Companion.SplitV4.denseMomentOptimal {m : Nat → Nat} {q B : Real}
+  (hq :
+    @LT.lt.{0} Real Real.instLT
+      (@OfNat.ofNat.{0} Real 4
+        (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+      q)
+  (hB :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      B)
+  (hmTop :
+    @Filter.Tendsto.{0, 0} Nat Nat m (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Nat Nat.instPreorder))
+  (hrate :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B)
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  And (RectangleCLT.Companion.SplitV4.DenseMomentLowerConstruction q B m)
+    (And
+      (@LT.lt.{0} EReal (@Preorder.toLT.{0} EReal (@PartialOrder.toPreorder.{0} EReal instERealPartialOrder))
+        (@OfNat.ofNat.{0} EReal 0 (@Zero.toOfNat0.{0} EReal instERealZero))
+        (@Filter.liminf.{0, 0} EReal Nat
+          (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice.{0} EReal
+            (@ConditionallyCompleteLinearOrderBot.toConditionallyCompleteLinearOrder.{0} EReal
+              (@CompleteLinearOrder.toConditionallyCompleteLinearOrderBot.{0} EReal instCompleteLinearOrderEReal)))
+          (fun (n : Nat) =>
+            Real.toEReal
+              (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                (RectangleCLT.Companion.SplitV4.familyComparisonDistance
+                  (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n))
+                (RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B)))
+          (@Filter.atTop.{0} Nat Nat.instPreorder)))
+      (And
+        (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+          (RectangleCLT.Companion.SplitV4.polynomialUniversalConstant q))
+        (@Exists.{1} Real fun (c : Real) =>
+          And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) c)
+            (@Filter.Eventually.{0} Nat
+              (fun (n : Nat) =>
+                And
+                  (@LE.le.{0} Real Real.instLE
+                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) c
+                      (RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B))
+                    (RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance.{0} q B
+                      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (m n) (m n)) n))
+                  (And
+                    (@LE.le.{0} Real Real.instLE
+                      (RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance.{0} q B
+                        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (m n) (m n)) n)
+                      (RectangleCLT.Companion.SplitV4.polynomialWorstDistance.{0} q B
+                        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (m n) (m n)) n))
+                    (@LE.le.{0} Real Real.instLE
+                      (RectangleCLT.Companion.SplitV4.polynomialWorstDistance.{0} q B
+                        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (m n) (m n)) n)
+                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                          (RectangleCLT.Companion.SplitV4.polynomialUniversalConstant q)
+                          (RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B))
+                        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+                          (RectangleCLT.dimensionLog n)
+                          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+                              (@OfNat.ofNat.{0} Real 2
+                                (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                                  (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))
+                            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) q)))))))
+              (@Filter.atTop.{0} Nat Nat.instPreorder)))))
+RectangleCLT.Companion.SplitV4.denseMomentLower {m : Nat → Nat} {q B : Real}
+  (hq :
+    @LT.lt.{0} Real Real.instLT
+      (@OfNat.ofNat.{0} Real 4
+        (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+      q)
+  (hB :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      B)
+  (hmTop :
+    @Filter.Tendsto.{0, 0} Nat Nat m (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Nat Nat.instPreorder))
+  (hrate :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B)
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  RectangleCLT.Companion.SplitV4.DenseMomentLowerConstruction q B m
+RectangleCLT.Companion.SplitV4.denseMoment_uniform_comparison {m : Nat → Nat} {q B : Real}
+  (hq :
+    @LT.lt.{0} Real Real.instLT
+      (@OfNat.ofNat.{0} Real 4
+        (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+      q)
+  (hB :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      B)
+  (hmTop :
+    @Filter.Tendsto.{0, 0} Nat Nat m (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Nat Nat.instPreorder))
+  (hrate :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B)
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @Exists.{1} Real fun (c : Real) =>
+    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) c)
+      (@Filter.Eventually.{0} Nat
+        (fun (n : Nat) =>
+          And
+            (@LE.le.{0} Real Real.instLE
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) c
+                (RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B))
+              (RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance.{0} q B
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (m n) (m n)) n))
+            (And
+              (@LE.le.{0} Real Real.instLE
+                (RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance.{0} q B
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (m n) (m n)) n)
+                (RectangleCLT.Companion.SplitV4.polynomialWorstDistance.{0} q B
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (m n) (m n)) n))
+              (@LE.le.{0} Real Real.instLE
+                (RectangleCLT.Companion.SplitV4.polynomialWorstDistance.{0} q B
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (m n) (m n)) n)
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                    (RectangleCLT.Companion.SplitV4.polynomialUniversalConstant q)
+                    (RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B))
+                  (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+                    (RectangleCLT.dimensionLog n)
+                    (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                      (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                        (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+                        (@OfNat.ofNat.{0} Real 2
+                          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))
+                      (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                        (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) q)))))))
+        (@Filter.atTop.{0} Nat Nat.instPreorder))
+RectangleCLT.Companion.SplitV4.tendsto_denseFamily_orthantError_div_rate {m : Nat → Nat}
+  [∀ (n : Nat), @NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) (m n)] {q B : Real}
+  (hq :
+    @LT.lt.{0} Real Real.instLT
+      (@OfNat.ofNat.{0} Real 4
+        (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+      q)
+  (hB :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      B)
+  (hm : ∀ (n : Nat), @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) (m n))
+  (hmTop :
+    @Filter.Tendsto.{0, 0} Nat Nat m (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Nat Nat.instPreorder))
+  (hrate :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B)
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @Filter.Tendsto.{0, 0} Nat Real
+    (fun (n : Nat) =>
+      @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@RectangleCLT.rectangleError.{0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySeed (m n))
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Companion.SplitV4.FamilySeed (m n))
+            fun (a : Fin n) =>
+            @Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns (m n))
+              (Prod.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns (m n))
+                (Prod.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns (m n))))
+              (@MeasurableSpace.pi.{0, 0} (Fin (m n)) (fun (a : Fin (m n)) => Bool) fun (a : Fin (m n)) =>
+                Bool.instMeasurableSpace)
+              (@Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns (m n))
+                (Prod.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns (m n)))
+                (@MeasurableSpace.pi.{0, 0} (Fin (m n)) (fun (a : Fin (m n)) => Bool) fun (a : Fin (m n)) =>
+                  Bool.instMeasurableSpace)
+                (@Prod.instMeasurableSpace.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns (m n))
+                  Bool.instMeasurableSpace
+                  (@MeasurableSpace.pi.{0, 0} (Fin (m n)) (fun (a : Fin (m n)) => Bool) fun (a : Fin (m n)) =>
+                    Bool.instMeasurableSpace))))
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (m n) (m n))
+          (RectangleCLT.Companion.SplitV4.familyArrayLaw
+            (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n))
+          (@RectangleCLT.sumVector.{0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySeed (m n))
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (m n) (m n)) n
+            (@RectangleCLT.Companion.SplitV4.familyNormalizedObservations
+              (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n)))
+          (RectangleCLT.Companion.SplitV4.familyGaussianSquareFactor
+            (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) (m n))
+          (RectangleCLT.Companion.SplitV4.familyOrthant
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (m n) (m n))
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.scale
+                (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)))
+              (RectangleCLT.Companion.normalMaxThreshold (m n)))))
+        (RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+    (@nhds.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (RectangleCLT.Companion.SplitV4.denseLowerConstant q B))
+RectangleCLT.Companion.SplitV4.denseFamily_distance_ereal_liminf {m : Nat → Nat}
+  [∀ (n : Nat), @NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) (m n)] {q B : Real}
+  (hq :
+    @LT.lt.{0} Real Real.instLT
+      (@OfNat.ofNat.{0} Real 4
+        (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+      q)
+  (hB :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      B)
+  (hm : ∀ (n : Nat), @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) (m n))
+  (hmTop :
+    @Filter.Tendsto.{0, 0} Nat Nat m (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Nat Nat.instPreorder))
+  (hrate :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B)
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @LE.le.{0} EReal (@Preorder.toLE.{0} EReal (@PartialOrder.toPreorder.{0} EReal instERealPartialOrder))
+    (Real.toEReal (RectangleCLT.Companion.SplitV4.denseLowerConstant q B))
+    (@Filter.liminf.{0, 0} EReal Nat
+      (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice.{0} EReal
+        (@ConditionallyCompleteLinearOrderBot.toConditionallyCompleteLinearOrder.{0} EReal
+          (@CompleteLinearOrder.toConditionallyCompleteLinearOrderBot.{0} EReal instCompleteLinearOrderEReal)))
+      (fun (n : Nat) =>
+        Real.toEReal
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (RectangleCLT.Companion.SplitV4.familyComparisonDistance
+              (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n))
+            (RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B)))
+      (@Filter.atTop.{0} Nat Nat.instPreorder))
+RectangleCLT.Companion.SplitV4.eventually_denseFamily_polynomialIndependent {m : Nat → Nat} {q B : Real}
+  (hq :
+    @LT.lt.{0} Real Real.instLT
+      (@OfNat.ofNat.{0} Real 4
+        (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+      q)
+  (hB :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      B)
+  (hm : ∀ (n : Nat), @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) (m n))
+  (hmTop :
+    @Filter.Tendsto.{0, 0} Nat Nat m (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Nat Nat.instPreorder))
+  (hrate :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B)
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @Filter.Eventually.{0} Nat
+    (fun (n : Nat) =>
+      @RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.{0}
+        (Fin n → RectangleCLT.Companion.SplitV4.FamilySeed (m n))
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Companion.SplitV4.FamilySeed (m n))
+          fun (a : Fin n) =>
+          @Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns (m n))
+            (Prod.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns (m n))
+              (Prod.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns (m n))))
+            (@MeasurableSpace.pi.{0, 0} (Fin (m n)) (fun (a : Fin (m n)) => Bool) fun (a : Fin (m n)) =>
+              Bool.instMeasurableSpace)
+            (@Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.FamilySigns (m n))
+              (Prod.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns (m n)))
+              (@MeasurableSpace.pi.{0, 0} (Fin (m n)) (fun (a : Fin (m n)) => Bool) fun (a : Fin (m n)) =>
+                Bool.instMeasurableSpace)
+              (@Prod.instMeasurableSpace.{0, 0} Bool (RectangleCLT.Companion.SplitV4.FamilySigns (m n))
+                Bool.instMeasurableSpace
+                (@MeasurableSpace.pi.{0, 0} (Fin (m n)) (fun (a : Fin (m n)) => Bool) fun (a : Fin (m n)) =>
+                  Bool.instMeasurableSpace))))
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (m n) (m n)) n
+        (RectangleCLT.Companion.SplitV4.familyArrayLaw
+          (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n))
+        (@RectangleCLT.Companion.SplitV4.familyRawObservations
+          (RectangleCLT.Companion.SplitV4.denseFamilyParameters q B n (m n)) n (m n))
+        q B)
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+RectangleCLT.Companion.SplitV4.denseFamilyCalibration {m : Nat → Nat} {q B : Real}
+  (hq :
+    @LT.lt.{0} Real Real.instLT
+      (@OfNat.ofNat.{0} Real 4
+        (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+      q)
+  (hB :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      B)
+  (hm : ∀ (n : Nat), @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) (m n))
+  (hmTop :
+    @Filter.Tendsto.{0, 0} Nat Nat m (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Nat Nat.instPreorder))
+  (hrate :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.denseMomentLowerRate n (m n) q B)
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  RectangleCLT.Companion.SplitV4.DenseFamilyCalibration q B m
+RectangleCLT.Companion.SplitV4.polynomialWorstDistance_envelope_le {p n : Nat}
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p)
+  (hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n) {q B : Real}
+  (hq :
+    @LT.lt.{0} Real Real.instLT
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      q)
+  (hB : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) B) :
+  @LE.le.{0} Real Real.instLE (RectangleCLT.Companion.SplitV4.polynomialWorstDistance.{0} q B p n)
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (RectangleCLT.Companion.SplitV4.polynomialUniversalConstant q)
+        (RectangleCLT.Companion.SplitV4.polynomialEnvelopeV n p B q))
+      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) (RectangleCLT.dimensionLog n)
+        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+            (@OfNat.ofNat.{0} Real 2
+              (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) q))))
+'RectangleCLT.Companion.SplitV4.denseMomentOptimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+Audited 56 fixed-envelope q>4 lower theorem declarations, each transitively; only the permitted three axioms.
+Theorem 7 is proved for actual iid centrally symmetric observations in the literal polynomial class. Its terminal hypotheses are only q>4, B>=2, m tending to infinity and V tending to zero. The full rectangle-distance lower limit is strictly positive; both actual suprema satisfy the stated lower rate and the upper logarithmic comparison, with upper coefficient depending only on q.

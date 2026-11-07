@@ -1,0 +1,96 @@
+RectangleCLT.Companion.SplitV4.selectorThirdDerivativeAverage_eq_seeded_integral.{u_1} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] {p n : Nat} (s : RectangleCLT.FaceSmoother p) (μ : @MeasureTheory.Measure.{u_1} Ω inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ] (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (x : RectangleCLT.Vector p) {ε t : Real}
+  (hε : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) ε)
+  (ht : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) t)
+  (ht1 : @LE.le.{0} Real Real.instLE t (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (j k l : Fin p) :
+  @Eq.{1} Real
+    (@RectangleCLT.FaceSmoother.selectorThirdDerivativeAverage.{u_1} p s
+      (@RectangleCLT.gaussianLaw p
+        (@HSMul.hSMul.{0, 0, 0} Real (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+          (@instHSMul.{0, 0} Real (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+            (@Matrix.smul.{0, 0, 0, 0} (Fin p) (Fin p) Real Real
+              (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                (@Algebra.id.{0} Real Real.instCommSemiring))))
+          (Real.sqrt (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) t ε)) A))
+      Ω inst✝ n μ ξ x (RectangleCLT.thinningProbability t)
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) t)
+      j k l)
+    (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector p) Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      (@RectangleCLT.Companion.SplitV4.seededInterpolationLaw.{u_1} Ω inst✝ p n μ ξ A ε t)
+      fun (y : RectangleCLT.Vector p) =>
+      @RectangleCLT.FaceSmoother.mixedThirdDerivativeF p s
+        (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+          (@instHAdd.{0} (RectangleCLT.Vector p)
+            (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+          x y)
+        j k l)
+RectangleCLT.Companion.SplitV4.relativeThirdMatrix_eq_coordinate_third_moment.{u_1} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] {p n : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝)
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) (j k l : Fin p) :
+  @Eq.{1} Real (@RectangleCLT.Companion.SplitV4.relativeThirdMatrix.{u_1} Ω inst✝ p n μ ξ j k l)
+    (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+      fun (i : Fin n) =>
+      @MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+        inst✝ μ fun (ω : Ω) =>
+        @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (ξ i ω j) (ξ i ω k)) (ξ i ω l))
+RectangleCLT.Companion.SplitV4.variableSignedCubicPathTerm_eq_seeded_integral.{u_1} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] {p n : Nat} (s : RectangleCLT.FaceSmoother p) (μ : @MeasureTheory.Measure.{u_1} Ω inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ] (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ M₃ M₄ : Real}
+  (h : @RectangleCLT.BoundedIndependentHypotheses.{u_1} Ω inst✝ p n μ ξ δ)
+  (_hrel : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ M₃ M₄)
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (x : RectangleCLT.Vector p) {ε t : Real}
+  (hε : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) ε)
+  (ht : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) t)
+  (ht1 : @LE.le.{0} Real Real.instLE t (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) :
+  @Eq.{1} Real
+    (@RectangleCLT.FaceSmoother.variableSignedCubicPathTerm.{u_1} p s
+      (@RectangleCLT.gaussianLaw p
+        (@HSMul.hSMul.{0, 0, 0} Real (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+          (@instHSMul.{0, 0} Real (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+            (@Matrix.smul.{0, 0, 0, 0} (Fin p) (Fin p) Real Real
+              (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                (@Algebra.id.{0} Real Real.instCommSemiring))))
+          (Real.sqrt (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) t ε)) A))
+      Ω inst✝ n μ ξ x (RectangleCLT.thinningProbability t)
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) t))
+    (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector p) Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      (@RectangleCLT.Companion.SplitV4.seededInterpolationLaw.{u_1} Ω inst✝ p n μ ξ A ε t)
+      fun (y : RectangleCLT.Vector p) =>
+      @RectangleCLT.Companion.SplitV4.relativeCubicContraction.{u_1} Ω inst✝ p n s μ ξ
+        (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+          (@instHAdd.{0} (RectangleCLT.Vector p)
+            (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+          x y))
+RectangleCLT.Companion.SplitV4.selectorThirdDerivativeAverage_eq_seeded_integral: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.relativeThirdMatrix_eq_coordinate_third_moment: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.variableSignedCubicPathTerm_eq_seeded_integral: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+Audited exact calibrated selector cubic expectation under the genuine seeded interpolation law, retaining signed third moments and both time endpoints without covariance premises.

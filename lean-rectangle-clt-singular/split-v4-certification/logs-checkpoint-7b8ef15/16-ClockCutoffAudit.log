@@ -1,0 +1,52 @@
+def RectangleCLT.Companion.SplitV4.clockGood : (p : ℕ) → Set (ℝ × (RectangleCLT.Face p → ℝ)) :=
+fun p =>
+  {e |
+    e.1 ∈ Set.Icc (RectangleCLT.Companion.SplitV4.clockBound p)⁻¹ (RectangleCLT.Companion.SplitV4.clockBound p) ∧
+      ∀ (f : RectangleCLT.Face p),
+        e.2 f ∈ Set.Icc (RectangleCLT.Companion.SplitV4.clockBound p)⁻¹ (RectangleCLT.Companion.SplitV4.clockBound p)}
+def RectangleCLT.Companion.SplitV4.clockRadius : ℕ → ℝ → ℝ :=
+fun p h => 2 * h * Real.log (RectangleCLT.Companion.SplitV4.clockBound p)
+RectangleCLT.Companion.SplitV4.clockGood_compl_probability_le (p : Nat) :
+  @LE.le.{0} Real Real.instLE
+    (@MeasureTheory.Measure.real.{0} (Prod.{0, 0} Real (RectangleCLT.Face p → Real))
+      (@Prod.instMeasurableSpace.{0, 0} Real (RectangleCLT.Face p → Real) Real.measurableSpace
+        (@MeasurableSpace.pi.{0, 0} (RectangleCLT.Face p) (fun (a : RectangleCLT.Face p) => Real)
+          fun (a : RectangleCLT.Face p) => Real.measurableSpace))
+      (RectangleCLT.exponentialRectangleLaw p)
+      (@HasCompl.compl.{0} (Set.{0} (Prod.{0, 0} Real (RectangleCLT.Face p → Real)))
+        (@Set.instHasCompl.{0} (Prod.{0, 0} Real (RectangleCLT.Face p → Real)))
+        (RectangleCLT.Companion.SplitV4.clockGood p)))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+      (@OfNat.ofNat.{0} Real 4
+        (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))))
+RectangleCLT.Companion.SplitV4.clockGood_shift_abs_le {p : Nat} {h : Real}
+  (hh : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h)
+  {e : Prod.{0, 0} Real (RectangleCLT.Face p → Real)}
+  (he :
+    @Membership.mem.{0, 0} (Prod.{0, 0} Real (RectangleCLT.Face p → Real))
+      (Set.{0} (Prod.{0, 0} Real (RectangleCLT.Face p → Real)))
+      (@Set.instMembership.{0} (Prod.{0, 0} Real (RectangleCLT.Face p → Real)))
+      (RectangleCLT.Companion.SplitV4.clockGood p) e)
+  (f : RectangleCLT.Face p) :
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) h
+        (Real.log
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@Prod.snd.{0, 0} Real (RectangleCLT.Face p → Real) e f)
+            (@Prod.fst.{0, 0} Real (RectangleCLT.Face p → Real) e)))))
+    (RectangleCLT.Companion.SplitV4.clockRadius p h)
+RectangleCLT.Companion.SplitV4.clockRadius_le {p : Nat}
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p) {h : Real}
+  (hh : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h) :
+  @LE.le.{0} Real Real.instLE (RectangleCLT.Companion.SplitV4.clockRadius p h)
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 12
+          (@instOfNatAtLeastTwo.{0} Real 12 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 10 (instOfNatNat 10)))))
+        h)
+      (RectangleCLT.dimensionLog p))
+Audited 19 actual exponential clock cutoff theorem declarations.

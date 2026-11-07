@@ -1,0 +1,236 @@
+RectangleCLT.Companion.UnrestrictedCLT.{u} (C : ℝ) : Prop
+RectangleCLT.Companion.GapSensitiveCLT.{u} (C : ℝ) : Prop
+RectangleCLT.Companion.ZeroSkewCLT.{u} (C : ℝ) : Prop
+RectangleCLT.Companion.rectangleError_le_coarse_bandwidth.{u_1} {Ω : Type u_1} [MeasurableSpace Ω] {p n : ℕ}
+  {μ : MeasureTheory.Measure Ω} [MeasureTheory.IsProbabilityMeasure μ] {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : ℝ}
+  (hdata : RectangleCLT.BoundedIndependentHypotheses μ ξ δ) (hp : 1 ≤ p)
+  (hunit : ∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) (A : Matrix (Fin p) (Fin p) ℝ)
+  (hA : A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ)) (R : RectangleCLT.Rect p) (h : ℝ)
+  (hband : 12 * δ ≤ h) :
+  RectangleCLT.rectangleError μ (RectangleCLT.sumVector ξ) A R ≤
+    RectangleCLT.Companion.coarseBandwidthConstant * √(RectangleCLT.dimensionLog p) *
+      (RectangleCLT.gamma3 μ ξ / h ^ 2 + RectangleCLT.gamma4 μ ξ / h ^ 3 + h * RectangleCLT.dimensionLog p)
+RectangleCLT.Companion.gapSensitiveCLT_of_variational.{u} {a C : ℝ} (ha : 1 ≤ a) (hC : 0 ≤ C)
+  (hmaster : RectangleCLT.Companion.VariationalEstimate a C) :
+  RectangleCLT.Companion.GapSensitiveCLT (max 1 (C * (a + 3 / a)))
+RectangleCLT.Companion.zeroSkewCLT_of_variational.{u} {a C : ℝ} (ha : 1 ≤ a) (hC : 0 ≤ C)
+  (hmaster : RectangleCLT.Companion.ZeroSkewVariationalEstimate a C) :
+  RectangleCLT.Companion.ZeroSkewCLT (max 1 (C * (a + 3 / a)))
+'RectangleCLT.Companion.gamma3_eq_zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.integral_triple_eq_zero_of_centrallySymmetric' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.thirdMomentCancellation_of_centrallySymmetric' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.gamma3_eq_zero_of_centrallySymmetric' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.integral_mulVec_triple' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.ThirdMomentCancellation.mulVec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.gamma3_mulVec_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.AggregateThirdMomentsVanish.mulVec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.aggregateThirdMomentsVanish_pairedObservation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.integral_signPairLaw' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignVector_centered' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignVector_marginal_third_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignVector_mixed_third_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignVector_abs_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignVector_norm_le_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignVector_covariance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignObservation_boundedIndependentHypotheses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.mixedSignVector_abs_integral_triple_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.mixedSignObservation_gamma3_eq_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignObservation_not_cancellation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.mixedSignObservation_gamma3_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.marginal_third_moments_insufficient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.integral_endpoint_error_le_integral_abs' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.FaceSmoother.probability_gap_le_smoother_gap_add_endpoint_errors' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.coarseComparisonConstant_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.coarseBandwidthConstant_ge_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.rectangleError_le_coarse_bandwidth' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.bounded_boundary_concentration' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.bounded_boundary_concentration_product' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.restoredCovariance_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.jointCovariance_factor_exists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.sumJointFactor_gram' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.jointCovariance_restoration_exists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.restoredCovariance_posSemidef' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.ClippingCounterexample.signedVector_centered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.ClippingCounterexample.twoPointCovariance_eq_outer' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.ClippingCounterexample.clipped_signedVector' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.ClippingCounterexample.originalCovariance_eq_twoPoint' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.ClippingCounterexample.clippedCovariance_eq_twoPoint' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.ClippingCounterexample.originalCovariance_posSemidef' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.ClippingCounterexample.clippedCovariance_posSemidef' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.ClippingCounterexample.covariance_difference_not_posSemidef' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.ClippingCounterexample.no_independent_covariance_restoration' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.endpointBoundedConstant_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.endpointGaussianConstant_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.endpointConstant_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.shiftOffsets_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.shiftOffsets_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.offsetVariance_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.shiftOffsets_increment_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.shiftOffsets_F_nat_sub_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.half_le_shiftOffsets_F_inside' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.endpoint_error_le_offsetVariances' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.integrable_offsetVariance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.integral_endpoint_error_le_of_offsetVariance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.FaceSmoother.bounded_endpoint_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.gaussian_endpoint_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.bounded_gaussian_endpoint_error_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.Examples.gapFactor_gram' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.gapMatrix_posSemidef' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.gapMatrix_unit_diagonal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.gapMatrix_maxOffDiagonal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.gapMatrix_pairGap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.gapMatrix_pairGap_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.nullVector_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.gapMatrix_nullVector' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.nullVector_normSq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.nullVector_quadratic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.nullVector_support_card_le_three' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.Examples.gapMatrix_localEigenvalue_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.Examples.gapMatrix_a3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.gapMatrix_a4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.gapMatrix_not_localCovarianceHypotheses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.Examples.positive_pairGap_not_local_nondegeneracy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.FaceSmoother.hasDerivAt_shiftOffsets_F' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.shiftOffsets_F_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.hasDerivAt_integral_shiftOffsets_F' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.FaceSmoother.gaussian_integral_shiftOffsets_F_sub_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.FaceSmoother.gaussian_boundary_probability_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.FaceSmoother.gaussian_boundary_probability_independent_shift_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.switchTime_ge_derivative_cutoff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.abs_sub_le_of_two_ranges' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.smoothed_gap_le_of_early_late' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.zero_cubic_gap_le_of_early_late' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.saturate_rate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.gapSensitiveCLT_of_variational' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.zeroSkewCLT_of_variational' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.trace_mul_gram_eq_sum_quadratic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.trace_gram_eq_sum_normSq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.abs_trace_mul_le_of_posSemidef' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.trace_rankOne' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.trace_mul_rankOne' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.trace_tiltScore' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.abs_trace_mul_tiltScore_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.abs_sum_trace_mul_tiltScore_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.weightCovariance_eq_centered' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.weightedScore_eq_tiltScore' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.abs_trace_mul_weightedScore_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.standardGaussian_integrable_bounded_weight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.standardGaussian_integrable_weighted_coordinate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.standardGaussian_integrable_weighted_product' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.standardGaussian_weightedScore_reduction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.Examples.gapObservation_centered' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.gapObservation_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.gapObservation_data' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.gapObservation_covariance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.Examples.bounded_model_with_positive_gap_and_zero_local_minima' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.optimalBandwidth_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.optimalBandwidth_admissible' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.comparisonLog_optimalBandwidth_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.bandwidth_error_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.zeroSkew_rate_of_variational' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.gap_rate_of_variational' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.logPlus_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.logPlus_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.one_le_D_L' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.D_L_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.one_le_gapLog' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.gapLog_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.kappa_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.kappa_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.kappa_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.kappa_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.one_le_kappa' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.kappa_le_inv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.unrestrictedRate_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.zeroSkewRate_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.gapRate_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.gapRate_eq_cubic_add_zeroSkewRate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.gapLog_le_D_L' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.rpow_three_halves_eq_mul_sqrt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.gapRate_le_two_unrestrictedRate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.zeroSkewRate_le_gapRate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.min_one_gapRate_le_two_min_one_unrestrictedRate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.GapSensitiveCLT.toUnrestrictedCLT' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.unrestrictedCLTExists_of_gapSensitiveCLTExists' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.translationZ_eq_denominator_difference' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.one_add_translationZ_eq_ratio' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.one_add_translationZ_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.F_translation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.pi_translation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.F_mul_prod_pi_translation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.abs_translationIncrement_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.abs_translationZ_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.abs_translationZ_lt_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.hasSum_translationZ_binomial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.hasSum_abs_translationZ_binomial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.tsum_abs_translationZ_binomial_le' depends on axioms: [propext, Classical.choice, Quot.sound]

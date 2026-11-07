@@ -1,0 +1,52 @@
+RectangleCLT.Companion.UnrestrictedCLT.{u} (C : ℝ) : Prop
+RectangleCLT.Companion.GapSensitiveCLT.{u} (C : ℝ) : Prop
+RectangleCLT.Companion.ZeroSkewCLT.{u} (C : ℝ) : Prop
+RectangleCLT.Companion.rectangleError_le_coarse_bandwidth.{u_1} {Ω : Type u_1} [MeasurableSpace Ω] {p n : ℕ}
+  {μ : MeasureTheory.Measure Ω} [MeasureTheory.IsProbabilityMeasure μ] {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : ℝ}
+  (hdata : RectangleCLT.BoundedIndependentHypotheses μ ξ δ) (hp : 1 ≤ p)
+  (hunit : ∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) (A : Matrix (Fin p) (Fin p) ℝ)
+  (hA : A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ)) (R : RectangleCLT.Rect p) (h : ℝ)
+  (hband : 12 * δ ≤ h) :
+  RectangleCLT.rectangleError μ (RectangleCLT.sumVector ξ) A R ≤
+    RectangleCLT.Companion.coarseBandwidthConstant * √(RectangleCLT.dimensionLog p) *
+      (RectangleCLT.gamma3 μ ξ / h ^ 2 + RectangleCLT.gamma4 μ ξ / h ^ 3 + h * RectangleCLT.dimensionLog p)
+RectangleCLT.Companion.gapSensitiveCLT_of_variational.{u} {a C : ℝ} (ha : 1 ≤ a) (hC : 0 ≤ C)
+  (hmaster : RectangleCLT.Companion.VariationalEstimate a C) :
+  RectangleCLT.Companion.GapSensitiveCLT (max 1 (C * (a + 3 / a)))
+RectangleCLT.Companion.zeroSkewCLT_of_variational.{u} {a C : ℝ} (ha : 1 ≤ a) (hC : 0 ≤ C)
+  (hmaster : RectangleCLT.Companion.ZeroSkewVariationalEstimate a C) :
+  RectangleCLT.Companion.ZeroSkewCLT (max 1 (C * (a + 3 / a)))
+'RectangleCLT.Companion.gamma3_eq_zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.integral_triple_eq_zero_of_centrallySymmetric' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.thirdMomentCancellation_of_centrallySymmetric' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.gamma3_eq_zero_of_centrallySymmetric' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.integral_mulVec_triple' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.ThirdMomentCancellation.mulVec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.gamma3_mulVec_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.AggregateThirdMomentsVanish.mulVec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.aggregateThirdMomentsVanish_pairedObservation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.integral_signPairLaw' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignVector_centered' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignVector_marginal_third_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignVector_mixed_third_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignVector_abs_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignVector_norm_le_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignVector_covariance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignObservation_boundedIndependentHypotheses' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.mixedSignVector_abs_integral_triple_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.mixedSignObservation_gamma3_eq_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.mixedSignObservation_not_cancellation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.mixedSignObservation_gamma3_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.marginal_third_moments_insufficient' depends on axioms: [propext, Classical.choice, Quot.so
