@@ -47,6 +47,24 @@ import RectangleCLTCompanion.SplitV4.RelativeFourthRefinement
 import RectangleCLTCompanion.SplitV4.SeededInterpolation
 import RectangleCLTCompanion.SplitV4.VariableAmplitudeInterpolation
 import RectangleCLTCompanion.SplitV4.GaussianMaximumLimits
+import RectangleCLTCompanion.SplitV4.AveragedThresholdBound
+import RectangleCLTCompanion.SplitV4.SymmetricBoundedLower
+import RectangleCLTCompanion.SplitV4.LogisticMatrixRegularizedBound
+import RectangleCLTCompanion.SplitV4.NuclearTraceDual
+import RectangleCLTCompanion.SplitV4.GenericC4Heat
+import RectangleCLTCompanion.SplitV4.GenericC4FourthRows
+import RectangleCLTCompanion.SplitV4.GenericBernoulliAveraging
+import RectangleCLTCompanion.SplitV4.RestorationPairedBounds
+import RectangleCLTCompanion.SplitV4.DerivativeEnvelopeAverage34
+import RectangleCLTCompanion.SplitV4.DerivativeEnvelopeStability
+import RectangleCLTCompanion.SplitV4.CoordinateDuplication
+import RectangleCLTCompanion.SplitV4.GaussianExtremeMoments
+import RectangleCLTCompanion.SplitV4.LowerCalibrationScales
+import RectangleCLTCompanion.SplitV4.GenericC4Symmetry
+import RectangleCLTCompanion.SplitV4.LogisticScalarJets
+import RectangleCLTCompanion.SplitV4.LogisticMatrixPaper
+import RectangleCLTCompanion.SplitV4.GenericC4DerivativeOperator
+import RectangleCLTCompanion.SplitV4.RestorationProductBounds
 import RectangleCLTCompanion.SubexponentialMain
 import RectangleCLTCompanion.LowerScaleMain
 import RectangleCLTCompanion.FactorExistence
@@ -98,6 +116,13 @@ The current statement correspondences are:
   concentration classes with a universal constant fixed before the models.
 * `opt:moderate-tail`: `uniformScalarModerateTail` proves the strict-tail
   expansion for arbitrary independent bounded scalar variables.
+* `appx-an:lem:threshold`: `averagedGaussianThresholdDerivative_rectangle_bound`
+  proves the actual averaged hard Gaussian threshold derivative estimate.
+* `opt:symmetric-lower`: `boundedSymmetricLower` constructs the actual
+  symmetric bounded model and proves the full-distance lower constant.
+* `appx-an:lem:matrix`: `exists_logistic_matrix_paper_constant`
+  fixes the matrix constant before every model and handles zero noise,
+  repeated normals, and singular covariance.
 * The envelope specialization of `thm:unrestricted` is `unrestrictedCLT`.
   It does not have a relative fourth-moment parameter and therefore does
   not prove all of Theorem 1.

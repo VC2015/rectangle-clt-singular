@@ -118,6 +118,15 @@ set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.uniformScalarModerateTail
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.relativeMomentBounds_of_fourth_admissibility
+#print RectangleCLT.Companion.SplitV4.ConcentratedThresholdBase
+#print RectangleCLT.Companion.SplitV4.BoundedSymmetricLowerConstruction
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.averagedGaussianThresholdDerivative_rectangle_bound
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.boundedSymmetricLower
+#print RectangleCLT.Companion.SplitV4.PolyhedralBaseConcentration
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.exists_logistic_matrix_paper_constant
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.normalizedObservationsRectangleDistanceCLT
 set_option pp.all true in
