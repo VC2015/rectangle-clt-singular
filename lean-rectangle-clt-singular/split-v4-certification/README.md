@@ -1,0 +1,57 @@
+# Split-V4 certification checkpoint
+
+The target is the split-V4 manuscript at handoff commit
+`2bd43fd98d2a8687ccdda3745f9ac8eac96260dd`, with SHA-256
+`f2c1252531e21642c5e1e6ca99e2b32a5ae63895d9e51ff075a8f23505eea2b1`.
+The handoff, original inventory, manuscript, analytic audit, and October
+verification records remain separate sources of evidence. An analytic review
+does not prove a Lean theorem.
+
+Run from `lean-rectangle-clt-singular/`, with Lean's `lake` on `PATH`:
+
+```sh
+python3 split-v4-certification/run.py baseline
+python3 split-v4-certification/run.py checkpoint
+```
+
+`baseline` executes the handoff's version, optional cache, package build, and
+five audit commands in that order. `checkpoint` builds the package and every
+new module under `RectangleCLTCompanion/SplitV4/`, then directly executes each
+new `*Audit.lean` file. Direct execution regenerates theorem-type and axiom
+output even when Lake can reuse the compiled module.
+
+Use `--plan` to inspect commands without running them. `--skip-cache` omits
+the optional cache download. `--output PATH` selects a new or empty directory;
+the runner refuses to overwrite previous evidence. No invocation runs
+`lake update` or changes the toolchain. The checked-in manifest must keep
+mathlib at `c44e0c8ee63ca166450922a373c7409c5d26b00b` and the toolchain at
+Lean 4.19.0.
+
+Each output directory contains complete command logs and `run.json`, including
+command arguments, working directory, UTC timestamps, durations, exit codes,
+log hashes, Git commit and dirty state, Lean source hashes, manifest hashes,
+actual dependency revisions, manuscript identity, and frozen-record hashes.
+The record is saved after each command. A toolchain or proof-build failure
+stops subsequent commands. A cache failure is recorded separately and allows
+the proof build to proceed. Audit failures are recorded while remaining
+audits continue for diagnosis. Any changed proof input, dependency revision
+mismatch, or failed required command makes the runner exit unsuccessfully.
+
+When the root package has no SplitV4 imports, a baseline's proof-input
+fingerprint excludes the new, unimported SplitV4 modules. Their full hashes
+are still recorded. This permits independent development while the original
+package is being rebuilt. A checkpoint includes all new modules; after root
+imports are added, a baseline does too. Avoid modifying inputs during a
+checkpoint run.
+
+`required_commands_passed=true` means only that the recorded commands passed
+on the recorded input state. Every runner record keeps
+`paper_certified=false`: certification of each manuscript statement also
+requires exact contract correspondence, a permitted transitive axiom closure,
+and separate evidence for the revised proof routes. The statement map must
+retain pending obligations rather than infer completion from old theorem
+names or a successful package build.
+
+CI uses `.github/workflows/rectangle-clt-split-v4.yml` and uploads the command
+evidence even on failure. Its success covers the checked sources and audits;
+it does not assert that every pending manuscript target has been proved.
