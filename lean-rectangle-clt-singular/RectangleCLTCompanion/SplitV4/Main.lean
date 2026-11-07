@@ -28,6 +28,12 @@ import RectangleCLTCompanion.SplitV4.ConditionalMatrixFluctuation
 import RectangleCLTCompanion.SplitV4.PairedMoments
 import RectangleCLTCompanion.SplitV4.PairedTailBudgets
 import RectangleCLTCompanion.SplitV4.ConditionalTruncationKernel
+import RectangleCLTCompanion.SplitV4.GaussianDerivativeContractions
+import RectangleCLTCompanion.SplitV4.GaussianRemainder
+import RectangleCLTCompanion.SplitV4.LargeIncrementBudgets
+import RectangleCLTCompanion.SplitV4.LargeIncrementComparison
+import RectangleCLTCompanion.SplitV4.PairedNormalization
+import RectangleCLTCompanion.SplitV4.ShiftComparison
 import RectangleCLTCompanion.SubexponentialMain
 import RectangleCLTCompanion.LowerScaleMain
 import RectangleCLTCompanion.FactorExistence
@@ -61,6 +67,11 @@ The current statement correspondences are:
 * `ben:paired-interpolation`: `C4Test.hasDerivAt_arraySlepian_of_coordinate_fourths` contains
   the actual conditional copy coefficients and the signed fourth remainder.
   `C4Test.ofContDiff` supplies canonical witnesses for ordinary C4 inputs.
+* `ben:comparison`: `gaussianComparisonWithLargeIncrementRemainders`
+  proves the full five-term master bound with the actual tail quantities.
+* `lower:shift-comparison`: `independent_shift_comparison` proves the
+  actual CDF comparison with signed shifts and the two stated
+  independence assumptions.
 * The envelope specialization of `thm:unrestricted` is `unrestrictedCLT`.
   It does not have a relative fourth-moment parameter and therefore does
   not prove all of Theorem 1.
@@ -68,8 +79,7 @@ The current statement correspondences are:
 The unrestricted Gaussian comparison input of Appendix E and the bounded
 and Orlicz polyhedral branches are also connected. The paired calculus,
 conditional coefficients, fourth-coordinate maximum and common-point
-contraction are proof components; their inclusion does not by itself certify
-the full paired comparison, polynomial CLT, relative theorem, intrinsic
-anti-concentration, or new lower constructions. The statement map retains
-these obligations explicitly.
+contraction assemble the Appendix G comparison. The polynomial CLT,
+relative theorem, intrinsic anti-concentration, and new lower constructions
+remain separate targets in the statement map.
 -/

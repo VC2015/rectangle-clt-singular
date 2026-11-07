@@ -73,6 +73,17 @@ set_option pp.universes true
 #print RectangleCLT.Companion.SplitV4.conditionalGoodProductLaw
 #print RectangleCLT.Companion.SplitV4.conditionalRetainedSummand
 #print RectangleCLT.Companion.SplitV4.conditionalTruncationKernel
+#print RectangleCLT.Companion.SplitV4.normalizedSummands
+#print RectangleCLT.Companion.SplitV4.coordinateFourthMomentSums
+#print RectangleCLT.Companion.SplitV4.arrayFourthMomentBudget
+#print RectangleCLT.Companion.SplitV4.deltaOne
+#print RectangleCLT.Companion.SplitV4.largeIncrementMasterConstant
+#print RectangleCLT.Companion.SplitV4.largeIncrementMasterRate
+#print RectangleCLT.Companion.SplitV4.pairedTailVariance
+#print RectangleCLT.Companion.SplitV4.pairedTailExpectedMaximum
+#print RectangleCLT.Companion.SplitV4.realCDF
+#print RectangleCLT.Companion.SplitV4.realCDFDistance
+#print RectangleCLT.Companion.SplitV4.secondDerivativeSupNorm
 
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.normalizedObservationsCLT
@@ -124,6 +135,10 @@ set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.copyAverage_ae_eq_condExp
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.conditionalRetained_normalized_covariance
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.gaussianComparisonWithLargeIncrementRemainders
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.independent_shift_comparison
 
 #check RectangleCLT.Companion.unrestrictedCLTExists
 #check RectangleCLT.Companion.gaussian_factor_exists_of_boundedIndependent
