@@ -1,0 +1,40 @@
+def RectangleCLT.Companion.SplitV4.gaussianTimeWeight : ℝ → ℝ :=
+fun s => 1 / √(1 - s)
+def RectangleCLT.Companion.SplitV4.pairedTimeWeight : ℝ → ℝ :=
+fun s => 1 / √(s * (1 - s))
+def RectangleCLT.Companion.SplitV4.fourthTimeWeight : ℝ → ℝ :=
+fun s => s / √(1 - s)
+RectangleCLT.Companion.SplitV4.intervalIntegrable_gaussianTimeWeight :
+  IntervalIntegrable RectangleCLT.Companion.SplitV4.gaussianTimeWeight MeasureTheory.volume 0 1
+RectangleCLT.Companion.SplitV4.intervalIntegrable_pairedTimeWeight :
+  IntervalIntegrable RectangleCLT.Companion.SplitV4.pairedTimeWeight MeasureTheory.volume 0 1
+RectangleCLT.Companion.SplitV4.intervalIntegrable_fourthTimeWeight :
+  IntervalIntegrable RectangleCLT.Companion.SplitV4.fourthTimeWeight MeasureTheory.volume 0 1
+RectangleCLT.Companion.SplitV4.gaussianTimePrimitive_endpoint_limits :
+  Filter.Tendsto RectangleCLT.Companion.SplitV4.gaussianTimePrimitive (nhdsWithin 0 (Set.Ioi 0)) (nhds (-2)) ∧
+    Filter.Tendsto RectangleCLT.Companion.SplitV4.gaussianTimePrimitive (nhdsWithin 1 (Set.Iio 1)) (nhds 0)
+RectangleCLT.Companion.SplitV4.pairedTimePrimitive_endpoint_limits :
+  Filter.Tendsto RectangleCLT.Companion.SplitV4.pairedTimePrimitive (nhdsWithin 0 (Set.Ioi 0)) (nhds (-(Real.pi / 2))) ∧
+    Filter.Tendsto RectangleCLT.Companion.SplitV4.pairedTimePrimitive (nhdsWithin 1 (Set.Iio 1)) (nhds (Real.pi / 2))
+RectangleCLT.Companion.SplitV4.fourthTimePrimitive_endpoint_limits :
+  Filter.Tendsto RectangleCLT.Companion.SplitV4.fourthTimePrimitive (nhdsWithin 0 (Set.Ioi 0)) (nhds (-(4 / 3))) ∧
+    Filter.Tendsto RectangleCLT.Companion.SplitV4.fourthTimePrimitive (nhdsWithin 1 (Set.Iio 1)) (nhds 0)
+RectangleCLT.Companion.SplitV4.integral_gaussianTimeWeight :
+  ∫ (s : ℝ) in 0 ..1, RectangleCLT.Companion.SplitV4.gaussianTimeWeight s = 2
+RectangleCLT.Companion.SplitV4.integral_pairedTimeWeight :
+  ∫ (s : ℝ) in 0 ..1, RectangleCLT.Companion.SplitV4.pairedTimeWeight s = Real.pi
+RectangleCLT.Companion.SplitV4.integral_fourthTimeWeight :
+  ∫ (s : ℝ) in 0 ..1, RectangleCLT.Companion.SplitV4.fourthTimeWeight s = 4 / 3
+RectangleCLT.Companion.SplitV4.truncated_gaussianTimeWeight_tendsto :
+  Filter.Tendsto (fun ε => ∫ (s : ℝ) in ε..1 - ε, RectangleCLT.Companion.SplitV4.gaussianTimeWeight s)
+    (nhdsWithin 0 (Set.Icc 0 1)) (nhds 2)
+RectangleCLT.Companion.SplitV4.truncated_pairedTimeWeight_tendsto :
+  Filter.Tendsto (fun ε => ∫ (s : ℝ) in ε..1 - ε, RectangleCLT.Companion.SplitV4.pairedTimeWeight s)
+    (nhdsWithin 0 (Set.Icc 0 1)) (nhds Real.pi)
+RectangleCLT.Companion.SplitV4.truncated_fourthTimeWeight_tendsto :
+  Filter.Tendsto (fun ε => ∫ (s : ℝ) in ε..1 - ε, RectangleCLT.Companion.SplitV4.fourthTimeWeight s)
+    (nhdsWithin 0 (Set.Icc 0 1)) (nhds (4 / 3))
+'RectangleCLT.Companion.SplitV4.integral_gaussianTimeWeight' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.integral_pairedTimeWeight' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.integral_fourthTimeWeight' depends on axioms: [propext, Classical.choice, Quot.sound]
+Audited 30 split-V4 time-integral theorem declarations; only propext, Classical.choice and Quot.sound.

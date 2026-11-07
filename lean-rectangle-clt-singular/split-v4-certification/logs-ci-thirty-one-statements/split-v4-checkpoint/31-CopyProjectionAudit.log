@@ -1,0 +1,45 @@
+RectangleCLT.Companion.SplitV4.copyGaussianProjection_measurePreserving.{u_1, u_2} {G : Type u_1} {Ω : Type u_2}
+  [MeasurableSpace.{u_1} G] [MeasurableSpace.{u_2} Ω] (γ : @MeasureTheory.Measure.{u_1} G inst✝)
+  [@MeasureTheory.SFinite.{u_1} G inst✝ γ] (μ : @MeasureTheory.Measure.{u_2} Ω inst✝¹)
+  [@MeasureTheory.IsProbabilityMeasure.{u_2} Ω inst✝¹ μ] :
+  @MeasureTheory.MeasurePreserving.{max u_1 u_2, max u_1 u_2} (Prod.{u_1, u_2} G (Prod.{u_2, u_2} Ω Ω))
+    (Prod.{u_2, u_1} Ω G)
+    (@Prod.instMeasurableSpace.{u_1, u_2} G (Prod.{u_2, u_2} Ω Ω) inst✝
+      (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹))
+    (@Prod.instMeasurableSpace.{u_2, u_1} Ω G inst✝¹ inst✝)
+    (fun (z : Prod.{u_1, u_2} G (Prod.{u_2, u_2} Ω Ω)) =>
+      @Prod.mk.{u_2, u_1} Ω G (@Prod.fst.{u_2, u_2} Ω Ω (@Prod.snd.{u_1, u_2} G (Prod.{u_2, u_2} Ω Ω) z))
+        (@Prod.fst.{u_1, u_2} G (Prod.{u_2, u_2} Ω Ω) z))
+    (@MeasureTheory.Measure.prod.{u_1, u_2} G (Prod.{u_2, u_2} Ω Ω) inst✝
+      (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹) γ
+      (@MeasureTheory.Measure.prod.{u_2, u_2} Ω Ω inst✝¹ inst✝¹ μ μ))
+    (@MeasureTheory.Measure.prod.{u_2, u_1} Ω G inst✝¹ inst✝ μ γ)
+RectangleCLT.Companion.SplitV4.integral_copyGaussianProjection.{u_1, u_2, u_3} {G : Type u_1} {Ω : Type u_2}
+  {E : Type u_3} [MeasurableSpace.{u_1} G] [MeasurableSpace.{u_2} Ω] [NormedAddCommGroup.{u_3} E]
+  [@NormedSpace.{0, u_3} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝)]
+  (γ : @MeasureTheory.Measure.{u_1} G inst✝¹) [@MeasureTheory.SFinite.{u_1} G inst✝¹ γ]
+  (μ : @MeasureTheory.Measure.{u_2} Ω inst✝²) [@MeasureTheory.IsProbabilityMeasure.{u_2} Ω inst✝² μ]
+  (K : Prod.{u_2, u_1} Ω G → E)
+  (hK :
+    @MeasureTheory.AEStronglyMeasurable.{max u_1 u_2, u_3} (Prod.{u_2, u_1} Ω G) E
+      (@UniformSpace.toTopologicalSpace.{u_3} E
+        (@PseudoMetricSpace.toUniformSpace.{u_3} E
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      (@Prod.instMeasurableSpace.{u_2, u_1} Ω G inst✝² inst✝¹) (@Prod.instMeasurableSpace.{u_2, u_1} Ω G inst✝² inst✝¹)
+      K (@MeasureTheory.Measure.prod.{u_2, u_1} Ω G inst✝² inst✝¹ μ γ)) :
+  @Eq.{u_3 + 1} E
+    (@MeasureTheory.integral.{max u_1 u_2, u_3} (Prod.{u_1, u_2} G (Prod.{u_2, u_2} Ω Ω)) E inst✝ inst✝³
+      (@Prod.instMeasurableSpace.{u_1, u_2} G (Prod.{u_2, u_2} Ω Ω) inst✝¹
+        (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝² inst✝²))
+      (@MeasureTheory.Measure.prod.{u_1, u_2} G (Prod.{u_2, u_2} Ω Ω) inst✝¹
+        (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝² inst✝²) γ
+        (@MeasureTheory.Measure.prod.{u_2, u_2} Ω Ω inst✝² inst✝² μ μ))
+      fun (z : Prod.{u_1, u_2} G (Prod.{u_2, u_2} Ω Ω)) =>
+      K
+        (@Prod.mk.{u_2, u_1} Ω G (@Prod.fst.{u_2, u_2} Ω Ω (@Prod.snd.{u_1, u_2} G (Prod.{u_2, u_2} Ω Ω) z))
+          (@Prod.fst.{u_1, u_2} G (Prod.{u_2, u_2} Ω Ω) z)))
+    (@MeasureTheory.integral.{max u_2 u_1, u_3} (Prod.{u_2, u_1} Ω G) E inst✝ inst✝³
+      (@Prod.instMeasurableSpace.{u_2, u_1} Ω G inst✝² inst✝¹)
+      (@MeasureTheory.Measure.prod.{u_2, u_1} Ω G inst✝² inst✝¹ μ γ) fun (z : Prod.{u_2, u_1} Ω G) => K z)
+Audited 3 copy/Gaussian projection theorem declarations.

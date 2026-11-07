@@ -1,0 +1,2546 @@
+RectangleCLT.Companion.SplitV4.randomCubeSelectedArray.{u_1} {Ω : Type u_1} {n p : Nat}
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) (z : Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) :
+  Fin n → RectangleCLT.Vector p
+RectangleCLT.Companion.SplitV4.cubePairMidpoint.{u_1} {Ω : Type u_1} {n p : Nat} (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (ω : Prod.{u_1, u_1} Ω Ω) (i : Fin n) : RectangleCLT.Vector p
+RectangleCLT.Companion.SplitV4.cubePairDifference.{u_1} {Ω : Type u_1} {n p : Nat}
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) (ω : Prod.{u_1, u_1} Ω Ω) (i : Fin n) : RectangleCLT.Vector p
+RectangleCLT.Companion.SplitV4.measurable_randomCubeSelectedArray.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {n p : Nat} (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i)) :
+  @Measurable.{u_1, 0} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) (Fin n → RectangleCLT.Vector p)
+    (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+      (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+    (@RectangleCLT.Companion.SplitV4.randomCubeSelectedArray.{u_1} Ω n p ξ)
+RectangleCLT.Companion.SplitV4.measurePreserving_random_countable_selector.{u_1, u_3, u_4} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] {S : Type u_3} {E : Type u_4} [MeasurableSpace.{u_3} S] [Countable.{u_3 + 1} S]
+  [@MeasurableSingletonClass.{u_3} S inst✝] [MeasurableSpace.{u_4} E] (μ : @MeasureTheory.Measure.{u_1} Ω inst✝¹)
+  [@MeasureTheory.SFinite.{u_1} Ω inst✝¹ μ] (ν : @MeasureTheory.Measure.{u_3} S inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_3} S inst✝ ν] (τ : @MeasureTheory.Measure.{u_4} E inst✝²)
+  (f : Prod.{u_1, u_3} Ω S → E)
+  (hf : ∀ (s : S), @Measurable.{u_1, u_4} Ω E inst✝¹ inst✝² fun (ω : Ω) => f (@Prod.mk.{u_1, u_3} Ω S ω s))
+  (hlaw :
+    ∀ (s : S),
+      @Eq.{u_4 + 1} (@MeasureTheory.Measure.{u_4} E inst✝²)
+        (@MeasureTheory.Measure.map.{u_1, u_4} Ω E inst✝¹ inst✝² (fun (ω : Ω) => f (@Prod.mk.{u_1, u_3} Ω S ω s)) μ)
+        τ) :
+  @MeasureTheory.MeasurePreserving.{max u_1 u_3, u_4} (Prod.{u_1, u_3} Ω S) E
+    (@Prod.instMeasurableSpace.{u_1, u_3} Ω S inst✝¹ inst✝) inst✝² f
+    (@MeasureTheory.Measure.prod.{u_1, u_3} Ω S inst✝¹ inst✝ μ ν) τ
+RectangleCLT.Companion.SplitV4.fixedCubeSelectedArray_measurePreserving.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {n p : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (x : Kane.Cube n) :
+  @MeasureTheory.MeasurePreserving.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Fin n → RectangleCLT.Vector p)
+    (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+    (@RectangleCLT.selectedArray.{u_1} Ω p n ξ x) (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ)
+    (@MeasureTheory.Measure.map.{u_1, 0} Ω (Fin n → RectangleCLT.Vector p) inst✝
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+RectangleCLT.Companion.SplitV4.fixedCubeSelectedArray_identDistrib.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {n p : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (x : Kane.Cube n) :
+  @ProbabilityTheory.IdentDistrib.{u_1, u_1, 0} (Prod.{u_1, u_1} Ω Ω) Ω (Fin n → RectangleCLT.Vector p)
+    (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝) inst✝
+    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+    (@RectangleCLT.selectedArray.{u_1} Ω p n ξ x) (fun (ω : Ω) (i : Fin n) => ξ i ω)
+    (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ) μ
+RectangleCLT.Companion.SplitV4.fixedCubeSelectedPair_identDistrib.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {n p : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (x : Kane.Cube n) :
+  @ProbabilityTheory.IdentDistrib.{u_1, u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Prod.{u_1, u_1} Ω Ω)
+    (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+    (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝) (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+    (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+    (fun (ω : Prod.{u_1, u_1} Ω Ω) =>
+      @Prod.mk.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+        (@RectangleCLT.selectedArray.{u_1} Ω p n ξ x ω)
+        (@RectangleCLT.selectedArray.{u_1} Ω p n ξ (fun (i : Fin n) => Bool.not (x i)) ω))
+    (fun (ω : Prod.{u_1, u_1} Ω Ω) =>
+      @Prod.mk.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+        (fun (i : Fin n) => ξ i (@Prod.fst.{u_1, u_1} Ω Ω ω)) fun (i : Fin n) => ξ i (@Prod.snd.{u_1, u_1} Ω Ω ω))
+    (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ)
+    (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ)
+RectangleCLT.Companion.SplitV4.randomCubeSelectedArray_measurePreserving.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {n p : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (ν :
+    @MeasureTheory.Measure.{0} (Kane.Cube n)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+  [@MeasureTheory.IsProbabilityMeasure.{0} (Kane.Cube n)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace) ν] :
+  @MeasureTheory.MeasurePreserving.{u_1, 0} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n))
+    (Fin n → RectangleCLT.Vector p)
+    (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+      (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+    (@RectangleCLT.Companion.SplitV4.randomCubeSelectedArray.{u_1} Ω n p ξ)
+    (@MeasureTheory.Measure.prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+      (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+      (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ) ν)
+    (@MeasureTheory.Measure.map.{u_1, 0} Ω (Fin n → RectangleCLT.Vector p) inst✝
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+RectangleCLT.Companion.SplitV4.randomCubeSelectedArray_identDistrib.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {n p : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (ν :
+    @MeasureTheory.Measure.{0} (Kane.Cube n)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+  [@MeasureTheory.IsProbabilityMeasure.{0} (Kane.Cube n)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace) ν] :
+  @ProbabilityTheory.IdentDistrib.{u_1, u_1, 0} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Ω
+    (Fin n → RectangleCLT.Vector p)
+    (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+      (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+    inst✝
+    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+    (@RectangleCLT.Companion.SplitV4.randomCubeSelectedArray.{u_1} Ω n p ξ) (fun (ω : Ω) (i : Fin n) => ξ i ω)
+    (@MeasureTheory.Measure.prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+      (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+      (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ) ν)
+    μ
+RectangleCLT.Companion.SplitV4.uniformCubeSelectedArray_identDistrib.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {n p : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ) :
+  @ProbabilityTheory.IdentDistrib.{u_1, u_1, 0} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Ω
+    (Fin n → RectangleCLT.Vector p)
+    (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+      (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+    inst✝
+    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+    (@RectangleCLT.Companion.SplitV4.randomCubeSelectedArray.{u_1} Ω n p ξ) (fun (ω : Ω) (i : Fin n) => ξ i ω)
+    (@MeasureTheory.Measure.prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+      (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+      (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ) (RectangleCLT.Companion.SplitV4.cubeUniformLaw n))
+    μ
+RectangleCLT.Companion.SplitV4.selectedArray_eq_midpoint_add_signed_difference.{u_1} {Ω : Type u_1} {n p : Nat}
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) (x : Kane.Cube n) (ω : Prod.{u_1, u_1} Ω Ω) (i : Fin n) :
+  @Eq.{1} (RectangleCLT.Vector p) (@RectangleCLT.selectedArray.{u_1} Ω p n ξ x ω i)
+    (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+      (@instHAdd.{0} (RectangleCLT.Vector p)
+        (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+      (@RectangleCLT.Companion.SplitV4.cubePairMidpoint.{u_1} Ω n p ξ ω i)
+      (@HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+        (@instHSMul.{0, 0} Real (RectangleCLT.Vector p)
+          (@Function.hasSMul.{0, 0, 0} (Fin p) Real Real
+            (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+              (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring) (@Algebra.id.{0} Real Real.instCommSemiring))))
+        (@RectangleCLT.Companion.SplitV4.cubeSign n x i)
+        (@RectangleCLT.Companion.SplitV4.cubePairDifference.{u_1} Ω n p ξ ω i)))
+RectangleCLT.Companion.SplitV4.selectedSum_eq_midpoint_add_signed_difference.{u_1} {Ω : Type u_1} {n p : Nat}
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) (x : Kane.Cube n) (ω : Prod.{u_1, u_1} Ω Ω) :
+  @Eq.{1} (RectangleCLT.Vector p)
+    (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+      (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+      (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) => @RectangleCLT.selectedArray.{u_1} Ω p n ξ x ω i)
+    (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+      (@instHAdd.{0} (RectangleCLT.Vector p)
+        (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+      (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+        (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+        (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+        @RectangleCLT.Companion.SplitV4.cubePairMidpoint.{u_1} Ω n p ξ ω i)
+      (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+        (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+        (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+        @HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+          (@instHSMul.{0, 0} Real (RectangleCLT.Vector p)
+            (@Function.hasSMul.{0, 0, 0} (Fin p) Real Real
+              (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                (@Algebra.id.{0} Real Real.instCommSemiring))))
+          (@RectangleCLT.Companion.SplitV4.cubeSign n x i)
+          (@RectangleCLT.Companion.SplitV4.cubePairDifference.{u_1} Ω n p ξ ω i)))
+RectangleCLT.Companion.SplitV4.measurable_cubeArraySum {n p : Nat} :
+  @Measurable.{0, 0} (Fin n → RectangleCLT.Vector p) (RectangleCLT.Vector p)
+    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+    (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+    fun (a : Fin n → RectangleCLT.Vector p) =>
+    @Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+      (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+      (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) => a i
+RectangleCLT.Companion.SplitV4.uniformCubeSelectedSum_identDistrib.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {n p : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ) :
+  @ProbabilityTheory.IdentDistrib.{u_1, u_1, 0} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Ω
+    (RectangleCLT.Vector p)
+    (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+      (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+    inst✝ (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+    (fun (z : Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) =>
+      @Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+        (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+        (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+        @RectangleCLT.Companion.SplitV4.randomCubeSelectedArray.{u_1} Ω n p ξ z i)
+    (fun (ω : Ω) =>
+      @Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+        (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+        (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) => ξ i ω)
+    (@MeasureTheory.Measure.prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+      (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+      (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ) (RectangleCLT.Companion.SplitV4.cubeUniformLaw n))
+    μ
+RectangleCLT.Companion.SplitV4.fixedCubeSignedDifference_identDistrib.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {n p : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (x : Kane.Cube n) :
+  @ProbabilityTheory.IdentDistrib.{u_1, u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Prod.{u_1, u_1} Ω Ω)
+    (Fin n → RectangleCLT.Vector p) (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+    (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+    (fun (ω : Prod.{u_1, u_1} Ω Ω) (i : Fin n) =>
+      @HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+        (@instHSMul.{0, 0} Real (RectangleCLT.Vector p)
+          (@Function.hasSMul.{0, 0, 0} (Fin p) Real Real
+            (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+              (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring) (@Algebra.id.{0} Real Real.instCommSemiring))))
+        (@RectangleCLT.Companion.SplitV4.cubeSign n x i)
+        (@HSub.hSub.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+          (@instHSub.{0} (RectangleCLT.Vector p)
+            (@Pi.instSub.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instSub))
+          (ξ i (@Prod.fst.{u_1, u_1} Ω Ω ω)) (ξ i (@Prod.snd.{u_1, u_1} Ω Ω ω))))
+    (fun (ω : Prod.{u_1, u_1} Ω Ω) (i : Fin n) =>
+      @HSub.hSub.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+        (@instHSub.{0} (RectangleCLT.Vector p)
+          (@Pi.instSub.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instSub))
+        (ξ i (@Prod.fst.{u_1, u_1} Ω Ω ω)) (ξ i (@Prod.snd.{u_1, u_1} Ω Ω ω)))
+    (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ)
+    (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ)
+RectangleCLT.Companion.SplitV4.randomCubeSignedDifference_identDistrib.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {n p : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (ν :
+    @MeasureTheory.Measure.{0} (Kane.Cube n)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+  [@MeasureTheory.IsProbabilityMeasure.{0} (Kane.Cube n)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace) ν] :
+  @ProbabilityTheory.IdentDistrib.{u_1, u_1, 0} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n))
+    (Prod.{u_1, u_1} Ω Ω) (Fin n → RectangleCLT.Vector p)
+    (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+      (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+    (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+    (fun (z : Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) (i : Fin n) =>
+      @HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+        (@instHSMul.{0, 0} Real (RectangleCLT.Vector p)
+          (@Function.hasSMul.{0, 0, 0} (Fin p) Real Real
+            (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+              (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring) (@Algebra.id.{0} Real Real.instCommSemiring))))
+        (@RectangleCLT.Companion.SplitV4.cubeSign n (@Prod.snd.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n) z) i)
+        (@HSub.hSub.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+          (@instHSub.{0} (RectangleCLT.Vector p)
+            (@Pi.instSub.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instSub))
+          (ξ i (@Prod.fst.{u_1, u_1} Ω Ω (@Prod.fst.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n) z)))
+          (ξ i (@Prod.snd.{u_1, u_1} Ω Ω (@Prod.fst.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n) z)))))
+    (fun (ω : Prod.{u_1, u_1} Ω Ω) (i : Fin n) =>
+      @HSub.hSub.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+        (@instHSub.{0} (RectangleCLT.Vector p)
+          (@Pi.instSub.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instSub))
+        (ξ i (@Prod.fst.{u_1, u_1} Ω Ω ω)) (ξ i (@Prod.snd.{u_1, u_1} Ω Ω ω)))
+    (@MeasureTheory.Measure.prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+      (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+      (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ) ν)
+    (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ)
+RectangleCLT.Companion.SplitV4.identDistrib_prod_independent.{u_1, u_2, u_3, u_4} {Ω : Type u_1} {Γ : Type u_2}
+  [MeasurableSpace.{u_1} Ω] [MeasurableSpace.{u_2} Γ] {E : Type u_3} [MeasurableSpace.{u_3} E] {f : Ω → E} {g : Γ → E}
+  {μ : @MeasureTheory.Measure.{u_1} Ω inst✝} {ν : @MeasureTheory.Measure.{u_2} Γ inst✝¹}
+  [@MeasureTheory.SFinite.{u_1} Ω inst✝ μ] [@MeasureTheory.SFinite.{u_2} Γ inst✝¹ ν]
+  (h : @ProbabilityTheory.IdentDistrib.{u_1, u_2, u_3} Ω Γ E inst✝ inst✝¹ inst✝² f g μ ν)
+  (hf : @Measurable.{u_1, u_3} Ω E inst✝ inst✝² f) (hg : @Measurable.{u_2, u_3} Γ E inst✝¹ inst✝² g) {T : Type u_4}
+  [MeasurableSpace.{u_4} T] (τ : @MeasureTheory.Measure.{u_4} T inst✝³) [@MeasureTheory.SFinite.{u_4} T inst✝³ τ] :
+  @ProbabilityTheory.IdentDistrib.{max u_1 u_4, max u_2 u_4, max u_4 u_3} (Prod.{u_1, u_4} Ω T) (Prod.{u_2, u_4} Γ T)
+    (Prod.{u_3, u_4} E T) (@Prod.instMeasurableSpace.{u_1, u_4} Ω T inst✝ inst✝³)
+    (@Prod.instMeasurableSpace.{u_2, u_4} Γ T inst✝¹ inst✝³) (@Prod.instMeasurableSpace.{u_3, u_4} E T inst✝² inst✝³)
+    (fun (z : Prod.{u_1, u_4} Ω T) =>
+      @Prod.mk.{u_3, u_4} E T (f (@Prod.fst.{u_1, u_4} Ω T z)) (@Prod.snd.{u_1, u_4} Ω T z))
+    (fun (z : Prod.{u_2, u_4} Γ T) =>
+      @Prod.mk.{u_3, u_4} E T (g (@Prod.fst.{u_2, u_4} Γ T z)) (@Prod.snd.{u_2, u_4} Γ T z))
+    (@MeasureTheory.Measure.prod.{u_1, u_4} Ω T inst✝ inst✝³ μ τ)
+    (@MeasureTheory.Measure.prod.{u_2, u_4} Γ T inst✝¹ inst✝³ ν τ)
+RectangleCLT.Companion.SplitV4.uniformCubeSelectedSum_with_independent_shift_identDistrib.{u_1, u_2} {Ω : Type u_1}
+  {Γ : Type u_2} [MeasurableSpace.{u_1} Ω] [MeasurableSpace.{u_2} Γ] {n p : Nat}
+  (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (ν : @MeasureTheory.Measure.{u_2} Γ inst✝¹) [@MeasureTheory.SFinite.{u_2} Γ inst✝¹ ν] (R : Γ → RectangleCLT.Vector p)
+  (hR :
+    @Measurable.{u_2, 0} Γ (RectangleCLT.Vector p) inst✝¹
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) R) :
+  @ProbabilityTheory.IdentDistrib.{max u_1 u_2, max u_1 u_2, 0}
+    (Prod.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ) (Prod.{u_1, u_2} Ω Γ)
+    (RectangleCLT.Vector p)
+    (@Prod.instMeasurableSpace.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ
+      (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+        (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+      inst✝¹)
+    (@Prod.instMeasurableSpace.{u_1, u_2} Ω Γ inst✝ inst✝¹)
+    (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+    (fun (z : Prod.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ) =>
+      @HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+        (@instHAdd.{0} (RectangleCLT.Vector p)
+          (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+        (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+          (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+          (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+          @RectangleCLT.Companion.SplitV4.randomCubeSelectedArray.{u_1} Ω n p ξ
+            (@Prod.fst.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ z) i)
+        (R (@Prod.snd.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ z)))
+    (fun (z : Prod.{u_1, u_2} Ω Γ) =>
+      @HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+        (@instHAdd.{0} (RectangleCLT.Vector p)
+          (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+        (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+          (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+          (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) => ξ i (@Prod.fst.{u_1, u_2} Ω Γ z))
+        (R (@Prod.snd.{u_1, u_2} Ω Γ z)))
+    (@MeasureTheory.Measure.prod.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ
+      (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+        (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+      inst✝¹
+      (@MeasureTheory.Measure.prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+        (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+        (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ) (RectangleCLT.Companion.SplitV4.cubeUniformLaw n))
+      ν)
+    (@MeasureTheory.Measure.prod.{u_1, u_2} Ω Γ inst✝ inst✝¹ μ ν)
+RectangleCLT.Companion.SplitV4.uniformCubeSelectedSum_test_transport.{u_1, u_3} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {n p : Nat} {E : Type u_3} [NormedAddCommGroup.{u_3} E]
+  [@NormedSpace.{0, u_3} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝)]
+  [MeasurableSpace.{u_3} E]
+  [@BorelSpace.{u_3} E
+      (@UniformSpace.toTopologicalSpace.{u_3} E
+        (@PseudoMetricSpace.toUniformSpace.{u_3} E
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      inst✝¹]
+  (μ : @MeasureTheory.Measure.{u_1} Ω inst✝²) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝² μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝²
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝² (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (F : RectangleCLT.Vector p → E)
+  (hF :
+    @Measurable.{0, u_3} (RectangleCLT.Vector p) E
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) inst✝¹ F)
+  (hFi :
+    @MeasureTheory.Integrable.{u_3, u_1} E
+      (@ContinuousENorm.toENorm.{u_3} E
+        (@UniformSpace.toTopologicalSpace.{u_3} E
+          (@PseudoMetricSpace.toUniformSpace.{u_3} E
+            (@SeminormedAddGroup.toPseudoMetricSpace.{u_3} E
+              (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} E
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝)))))
+        (@SeminormedAddGroup.toContinuousENorm.{u_3} E
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      (@UniformSpace.toTopologicalSpace.{u_3} E
+        (@PseudoMetricSpace.toUniformSpace.{u_3} E
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      Ω inst✝²
+      (fun (ω : Ω) =>
+        F
+          (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+            (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+            (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) => ξ i ω))
+      μ) :
+  And
+    (@MeasureTheory.Integrable.{u_3, u_1} E
+      (@ContinuousENorm.toENorm.{u_3} E
+        (@UniformSpace.toTopologicalSpace.{u_3} E
+          (@PseudoMetricSpace.toUniformSpace.{u_3} E
+            (@SeminormedAddGroup.toPseudoMetricSpace.{u_3} E
+              (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} E
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝)))))
+        (@SeminormedAddGroup.toContinuousENorm.{u_3} E
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      (@UniformSpace.toTopologicalSpace.{u_3} E
+        (@PseudoMetricSpace.toUniformSpace.{u_3} E
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n))
+      (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+        (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+      (fun (z : Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) =>
+        F
+          (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+            (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+            (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+            @RectangleCLT.Companion.SplitV4.randomCubeSelectedArray.{u_1} Ω n p ξ z i))
+      (@MeasureTheory.Measure.prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+        (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+        (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝² inst✝² μ μ)
+        (RectangleCLT.Companion.SplitV4.cubeUniformLaw n)))
+    (@Eq.{u_3 + 1} E
+      (@MeasureTheory.integral.{u_1, u_3} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) E inst✝ inst✝³
+        (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+          (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+        (@MeasureTheory.Measure.prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+          (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+          (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝² inst✝² μ μ)
+          (RectangleCLT.Companion.SplitV4.cubeUniformLaw n))
+        fun (z : Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) =>
+        F
+          (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+            (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+            (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+            @RectangleCLT.Companion.SplitV4.randomCubeSelectedArray.{u_1} Ω n p ξ z i))
+      (@MeasureTheory.integral.{u_1, u_3} Ω E inst✝ inst✝³ inst✝² μ fun (ω : Ω) =>
+        F
+          (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+            (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+            (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) => ξ i ω)))
+RectangleCLT.Companion.SplitV4.uniformCubeSignedDifference_test_transport.{u_1, u_3} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] {n p : Nat} {E : Type u_3} [NormedAddCommGroup.{u_3} E]
+  [@NormedSpace.{0, u_3} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝)]
+  [MeasurableSpace.{u_3} E]
+  [@BorelSpace.{u_3} E
+      (@UniformSpace.toTopologicalSpace.{u_3} E
+        (@PseudoMetricSpace.toUniformSpace.{u_3} E
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      inst✝¹]
+  (μ : @MeasureTheory.Measure.{u_1} Ω inst✝²) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝² μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝²
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝² (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (F : (Fin n → RectangleCLT.Vector p) → E)
+  (hF :
+    @Measurable.{0, u_3} (Fin n → RectangleCLT.Vector p) E
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      inst✝¹ F)
+  (hFi :
+    @MeasureTheory.Integrable.{u_3, u_1} E
+      (@ContinuousENorm.toENorm.{u_3} E
+        (@UniformSpace.toTopologicalSpace.{u_3} E
+          (@PseudoMetricSpace.toUniformSpace.{u_3} E
+            (@SeminormedAddGroup.toPseudoMetricSpace.{u_3} E
+              (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} E
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝)))))
+        (@SeminormedAddGroup.toContinuousENorm.{u_3} E
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      (@UniformSpace.toTopologicalSpace.{u_3} E
+        (@PseudoMetricSpace.toUniformSpace.{u_3} E
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      (Prod.{u_1, u_1} Ω Ω) (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+      (fun (ω : Prod.{u_1, u_1} Ω Ω) =>
+        F fun (i : Fin n) =>
+          @HSub.hSub.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@instHSub.{0} (RectangleCLT.Vector p)
+              (@Pi.instSub.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instSub))
+            (ξ i (@Prod.fst.{u_1, u_1} Ω Ω ω)) (ξ i (@Prod.snd.{u_1, u_1} Ω Ω ω)))
+      (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝² inst✝² μ μ)) :
+  And
+    (@MeasureTheory.Integrable.{u_3, u_1} E
+      (@ContinuousENorm.toENorm.{u_3} E
+        (@UniformSpace.toTopologicalSpace.{u_3} E
+          (@PseudoMetricSpace.toUniformSpace.{u_3} E
+            (@SeminormedAddGroup.toPseudoMetricSpace.{u_3} E
+              (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} E
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝)))))
+        (@SeminormedAddGroup.toContinuousENorm.{u_3} E
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      (@UniformSpace.toTopologicalSpace.{u_3} E
+        (@PseudoMetricSpace.toUniformSpace.{u_3} E
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n))
+      (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+        (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+      (fun (z : Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) =>
+        F fun (i : Fin n) =>
+          @HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@instHSMul.{0, 0} Real (RectangleCLT.Vector p)
+              (@Function.hasSMul.{0, 0, 0} (Fin p) Real Real
+                (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                  (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                  (@Algebra.id.{0} Real Real.instCommSemiring))))
+            (@RectangleCLT.Companion.SplitV4.cubeSign n (@Prod.snd.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n) z) i)
+            (@HSub.hSub.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+              (@instHSub.{0} (RectangleCLT.Vector p)
+                (@Pi.instSub.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instSub))
+              (ξ i (@Prod.fst.{u_1, u_1} Ω Ω (@Prod.fst.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n) z)))
+              (ξ i (@Prod.snd.{u_1, u_1} Ω Ω (@Prod.fst.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n) z)))))
+      (@MeasureTheory.Measure.prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+        (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+        (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝² inst✝² μ μ)
+        (RectangleCLT.Companion.SplitV4.cubeUniformLaw n)))
+    (@Eq.{u_3 + 1} E
+      (@MeasureTheory.integral.{u_1, u_3} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) E inst✝ inst✝³
+        (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+          (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+        (@MeasureTheory.Measure.prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+          (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+          (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝² inst✝² μ μ)
+          (RectangleCLT.Companion.SplitV4.cubeUniformLaw n))
+        fun (z : Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) =>
+        F fun (i : Fin n) =>
+          @HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@instHSMul.{0, 0} Real (RectangleCLT.Vector p)
+              (@Function.hasSMul.{0, 0, 0} (Fin p) Real Real
+                (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                  (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                  (@Algebra.id.{0} Real Real.instCommSemiring))))
+            (@RectangleCLT.Companion.SplitV4.cubeSign n (@Prod.snd.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n) z) i)
+            (@HSub.hSub.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+              (@instHSub.{0} (RectangleCLT.Vector p)
+                (@Pi.instSub.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instSub))
+              (ξ i (@Prod.fst.{u_1, u_1} Ω Ω (@Prod.fst.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n) z)))
+              (ξ i (@Prod.snd.{u_1, u_1} Ω Ω (@Prod.fst.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n) z)))))
+      (@MeasureTheory.integral.{u_1, u_3} (Prod.{u_1, u_1} Ω Ω) E inst✝ inst✝³
+        (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+        (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝² inst✝² μ μ) fun (ω : Prod.{u_1, u_1} Ω Ω) =>
+        F fun (i : Fin n) =>
+          @HSub.hSub.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@instHSub.{0} (RectangleCLT.Vector p)
+              (@Pi.instSub.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instSub))
+            (ξ i (@Prod.fst.{u_1, u_1} Ω Ω ω)) (ξ i (@Prod.snd.{u_1, u_1} Ω Ω ω))))
+RectangleCLT.Companion.SplitV4.uniformCubeSignedDifference_iterated_integral.{u_1, u_3} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] {n p : Nat} {E : Type u_3} [NormedAddCommGroup.{u_3} E]
+  [@NormedSpace.{0, u_3} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝)]
+  [MeasurableSpace.{u_3} E]
+  [@BorelSpace.{u_3} E
+      (@UniformSpace.toTopologicalSpace.{u_3} E
+        (@PseudoMetricSpace.toUniformSpace.{u_3} E
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      inst✝¹]
+  (μ : @MeasureTheory.Measure.{u_1} Ω inst✝²) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝² μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝²
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝² (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (F : (Fin n → RectangleCLT.Vector p) → E)
+  (hF :
+    @Measurable.{0, u_3} (Fin n → RectangleCLT.Vector p) E
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      inst✝¹ F)
+  (hFi :
+    @MeasureTheory.Integrable.{u_3, u_1} E
+      (@ContinuousENorm.toENorm.{u_3} E
+        (@UniformSpace.toTopologicalSpace.{u_3} E
+          (@PseudoMetricSpace.toUniformSpace.{u_3} E
+            (@SeminormedAddGroup.toPseudoMetricSpace.{u_3} E
+              (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} E
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝)))))
+        (@SeminormedAddGroup.toContinuousENorm.{u_3} E
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      (@UniformSpace.toTopologicalSpace.{u_3} E
+        (@PseudoMetricSpace.toUniformSpace.{u_3} E
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      (Prod.{u_1, u_1} Ω Ω) (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+      (fun (ω : Prod.{u_1, u_1} Ω Ω) =>
+        F fun (i : Fin n) =>
+          @HSub.hSub.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@instHSub.{0} (RectangleCLT.Vector p)
+              (@Pi.instSub.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instSub))
+            (ξ i (@Prod.fst.{u_1, u_1} Ω Ω ω)) (ξ i (@Prod.snd.{u_1, u_1} Ω Ω ω)))
+      (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝² inst✝² μ μ)) :
+  @Eq.{u_3 + 1} E
+    (@MeasureTheory.integral.{0, u_3} (Kane.Cube n) E inst✝ inst✝³
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+      (RectangleCLT.Companion.SplitV4.cubeUniformLaw n) fun (x : Kane.Cube n) =>
+      @MeasureTheory.integral.{u_1, u_3} (Prod.{u_1, u_1} Ω Ω) E inst✝ inst✝³
+        (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+        (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝² inst✝² μ μ) fun (ω : Prod.{u_1, u_1} Ω Ω) =>
+        F fun (i : Fin n) =>
+          @HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@instHSMul.{0, 0} Real (RectangleCLT.Vector p)
+              (@Function.hasSMul.{0, 0, 0} (Fin p) Real Real
+                (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                  (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                  (@Algebra.id.{0} Real Real.instCommSemiring))))
+            (@RectangleCLT.Companion.SplitV4.cubeSign n x i)
+            (@HSub.hSub.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+              (@instHSub.{0} (RectangleCLT.Vector p)
+                (@Pi.instSub.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instSub))
+              (ξ i (@Prod.fst.{u_1, u_1} Ω Ω ω)) (ξ i (@Prod.snd.{u_1, u_1} Ω Ω ω))))
+    (@MeasureTheory.integral.{u_1, u_3} (Prod.{u_1, u_1} Ω Ω) E inst✝ inst✝³
+      (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+      (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝² inst✝² μ μ) fun (ω : Prod.{u_1, u_1} Ω Ω) =>
+      F fun (i : Fin n) =>
+        @HSub.hSub.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+          (@instHSub.{0} (RectangleCLT.Vector p)
+            (@Pi.instSub.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instSub))
+          (ξ i (@Prod.fst.{u_1, u_1} Ω Ω ω)) (ξ i (@Prod.snd.{u_1, u_1} Ω Ω ω)))
+RectangleCLT.Companion.SplitV4.uniformCubeMidpointSignedSum_identDistrib.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {n p : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ) :
+  @ProbabilityTheory.IdentDistrib.{u_1, u_1, 0} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Ω
+    (RectangleCLT.Vector p)
+    (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+      (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+    inst✝ (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+    (fun (z : Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) =>
+      @HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+        (@instHAdd.{0} (RectangleCLT.Vector p)
+          (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+        (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+          (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+          (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+          @RectangleCLT.Companion.SplitV4.cubePairMidpoint.{u_1} Ω n p ξ
+            (@Prod.fst.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n) z) i)
+        (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+          (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+          (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+          @HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@instHSMul.{0, 0} Real (RectangleCLT.Vector p)
+              (@Function.hasSMul.{0, 0, 0} (Fin p) Real Real
+                (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                  (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                  (@Algebra.id.{0} Real Real.instCommSemiring))))
+            (@RectangleCLT.Companion.SplitV4.cubeSign n (@Prod.snd.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n) z) i)
+            (@RectangleCLT.Companion.SplitV4.cubePairDifference.{u_1} Ω n p ξ
+              (@Prod.fst.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n) z) i)))
+    (fun (ω : Ω) =>
+      @Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+        (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+        (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) => ξ i ω)
+    (@MeasureTheory.Measure.prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+      (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+      (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ) (RectangleCLT.Companion.SplitV4.cubeUniformLaw n))
+    μ
+RectangleCLT.Companion.SplitV4.uniformCubeSelectedSum_with_independent_shift_test_transport.{u_1, u_2, u_3}
+  {Ω : Type u_1} {Γ : Type u_2} [MeasurableSpace.{u_1} Ω] [MeasurableSpace.{u_2} Γ] {n p : Nat} {E : Type u_3}
+  [NormedAddCommGroup.{u_3} E]
+  [@NormedSpace.{0, u_3} Real E Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝)]
+  [MeasurableSpace.{u_3} E]
+  [@BorelSpace.{u_3} E
+      (@UniformSpace.toTopologicalSpace.{u_3} E
+        (@PseudoMetricSpace.toUniformSpace.{u_3} E
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      inst✝¹]
+  (μ : @MeasureTheory.Measure.{u_1} Ω inst✝²) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝² μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝²
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝² (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (ν : @MeasureTheory.Measure.{u_2} Γ inst✝³) [@MeasureTheory.SFinite.{u_2} Γ inst✝³ ν] (R : Γ → RectangleCLT.Vector p)
+  (hR :
+    @Measurable.{u_2, 0} Γ (RectangleCLT.Vector p) inst✝³
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) R)
+  (F : RectangleCLT.Vector p → E)
+  (hF :
+    @Measurable.{0, u_3} (RectangleCLT.Vector p) E
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) inst✝¹ F)
+  (hFi :
+    @MeasureTheory.Integrable.{u_3, max u_1 u_2} E
+      (@ContinuousENorm.toENorm.{u_3} E
+        (@UniformSpace.toTopologicalSpace.{u_3} E
+          (@PseudoMetricSpace.toUniformSpace.{u_3} E
+            (@SeminormedAddGroup.toPseudoMetricSpace.{u_3} E
+              (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} E
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝)))))
+        (@SeminormedAddGroup.toContinuousENorm.{u_3} E
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      (@UniformSpace.toTopologicalSpace.{u_3} E
+        (@PseudoMetricSpace.toUniformSpace.{u_3} E
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      (Prod.{u_1, u_2} Ω Γ) (@Prod.instMeasurableSpace.{u_1, u_2} Ω Γ inst✝² inst✝³)
+      (fun (z : Prod.{u_1, u_2} Ω Γ) =>
+        F
+          (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@instHAdd.{0} (RectangleCLT.Vector p)
+              (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+            (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+              (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+              (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) => ξ i (@Prod.fst.{u_1, u_2} Ω Γ z))
+            (R (@Prod.snd.{u_1, u_2} Ω Γ z))))
+      (@MeasureTheory.Measure.prod.{u_1, u_2} Ω Γ inst✝² inst✝³ μ ν)) :
+  And
+    (@MeasureTheory.Integrable.{u_3, max u_1 u_2} E
+      (@ContinuousENorm.toENorm.{u_3} E
+        (@UniformSpace.toTopologicalSpace.{u_3} E
+          (@PseudoMetricSpace.toUniformSpace.{u_3} E
+            (@SeminormedAddGroup.toPseudoMetricSpace.{u_3} E
+              (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} E
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝)))))
+        (@SeminormedAddGroup.toContinuousENorm.{u_3} E
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      (@UniformSpace.toTopologicalSpace.{u_3} E
+        (@PseudoMetricSpace.toUniformSpace.{u_3} E
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} E
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} E inst✝))))
+      (Prod.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ)
+      (@Prod.instMeasurableSpace.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ
+        (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+          (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+        inst✝³)
+      (fun (z : Prod.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ) =>
+        F
+          (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@instHAdd.{0} (RectangleCLT.Vector p)
+              (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+            (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+              (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+              (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+              @RectangleCLT.Companion.SplitV4.randomCubeSelectedArray.{u_1} Ω n p ξ
+                (@Prod.fst.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ z) i)
+            (R (@Prod.snd.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ z))))
+      (@MeasureTheory.Measure.prod.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ
+        (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+          (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+        inst✝³
+        (@MeasureTheory.Measure.prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+          (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+          (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝² inst✝² μ μ)
+          (RectangleCLT.Companion.SplitV4.cubeUniformLaw n))
+        ν))
+    (@Eq.{u_3 + 1} E
+      (@MeasureTheory.integral.{max u_1 u_2, u_3}
+        (Prod.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ) E inst✝ inst✝⁴
+        (@Prod.instMeasurableSpace.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ
+          (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+            (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+          inst✝³)
+        (@MeasureTheory.Measure.prod.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ
+          (@Prod.instMeasurableSpace.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+            (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace))
+          inst✝³
+          (@MeasureTheory.Measure.prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)
+            (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝² inst✝²)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+            (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝² inst✝² μ μ)
+            (RectangleCLT.Companion.SplitV4.cubeUniformLaw n))
+          ν)
+        fun (z : Prod.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ) =>
+        F
+          (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@instHAdd.{0} (RectangleCLT.Vector p)
+              (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+            (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+              (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+              (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+              @RectangleCLT.Companion.SplitV4.randomCubeSelectedArray.{u_1} Ω n p ξ
+                (@Prod.fst.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ z) i)
+            (R (@Prod.snd.{u_1, u_2} (Prod.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (Kane.Cube n)) Γ z))))
+      (@MeasureTheory.integral.{max u_1 u_2, u_3} (Prod.{u_1, u_2} Ω Γ) E inst✝ inst✝⁴
+        (@Prod.instMeasurableSpace.{u_1, u_2} Ω Γ inst✝² inst✝³)
+        (@MeasureTheory.Measure.prod.{u_1, u_2} Ω Γ inst✝² inst✝³ μ ν) fun (z : Prod.{u_1, u_2} Ω Γ) =>
+        F
+          (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@instHAdd.{0} (RectangleCLT.Vector p)
+              (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+            (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+              (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+              (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) => ξ i (@Prod.fst.{u_1, u_2} Ω Γ z))
+            (R (@Prod.snd.{u_1, u_2} Ω Γ z)))))
+theorem RectangleCLT.selectedArray_law_eq_original.{u} : ∀ {Ω : Type u} [inst : MeasurableSpace.{u} Ω] {p n : Nat}
+  (μ : @MeasureTheory.Measure.{u} Ω inst) [inst_1 : @MeasureTheory.IsProbabilityMeasure.{u} Ω inst μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p),
+  (∀ (i : Fin n),
+      @Measurable.{u, 0} Ω (RectangleCLT.Vector p) inst
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i)) →
+    @ProbabilityTheory.iIndepFun.{u, 0, 0} Ω (Fin n) inst (fun (x : Fin n) => RectangleCLT.Vector p)
+        (fun (x : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        ξ μ →
+      ∀ (x : Kane.Cube n),
+        @Eq.{1}
+          (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+          (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+            (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@RectangleCLT.selectedArray.{u} Ω p n ξ x) (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+          (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (fun (ω : Ω) (i : Fin n) => ξ i ω) μ) :=
+fun {Ω : ⋯} [inst : ⋯] {p n : ⋯} (μ : ⋯) [inst_1 : ⋯] (ξ : ⋯) (hξ : ⋯) (hind : ⋯) (x : ⋯) =>
+  @letFun.{0, 0}
+    (@Eq.{1}
+      (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+      (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+      (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+        (fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        fun (i : Fin n) =>
+        @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i)
+          μ))
+    (fun
+        (horiginal :
+          @Eq.{1}
+            (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+            (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+            (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+              (fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              fun (i : Fin n) =>
+              @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (ξ i) μ)) =>
+      @Eq.{1}
+        (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+          (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (@RectangleCLT.selectedArray.{u} Ω p n ξ x) (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+        (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (fun (ω : Ω) (i : Fin n) => ξ i ω) μ))
+    (@Iff.mp
+      (@ProbabilityTheory.iIndepFun.{u, 0, 0} Ω (Fin n) inst (fun (i : Fin n) => RectangleCLT.Vector p)
+        (fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        ξ μ)
+      (@Eq.{1}
+        (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+        (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+          (fun (i : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          fun (i : Fin n) =>
+          @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i)
+            μ))
+      (@ProbabilityTheory.iIndepFun_iff_map_fun_eq_pi_map.{u, 0, 0} Ω (Fin n) inst μ (Fin.fintype n)
+        (fun (i : Fin n) => RectangleCLT.Vector p)
+        (fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        ξ inst_1 fun (i : Fin n) =>
+        @Measurable.aemeasurable.{u, 0} Ω (RectangleCLT.Vector p) inst
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i) μ
+          (hξ i))
+      hind)
+    fun (horiginal : ⋯) =>
+    @Eq.mpr.{0}
+      (@Eq.{1}
+        (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+          (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (@RectangleCLT.selectedArray.{u} Ω p n ξ x) (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+        (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (fun (ω : Ω) (i : Fin n) => ξ i ω) μ))
+      (@Eq.{1}
+        (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+          (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (@RectangleCLT.selectedArray.{u} Ω p n ξ x) (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+        (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+          (fun (i : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          fun (i : Fin n) =>
+          @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i)
+            μ))
+      (@id.{0}
+        (@Eq.{1} Prop
+          (@Eq.{1}
+            (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+            (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+              (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@RectangleCLT.selectedArray.{u} Ω p n ξ x) (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+            (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (fun (ω : Ω) (i : Fin n) => ξ i ω) μ))
+          (@Eq.{1}
+            (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+            (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+              (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@RectangleCLT.selectedArray.{u} Ω p n ξ x) (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+            (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+              (fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              fun (i : Fin n) =>
+              @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (ξ i) μ)))
+        (@congrArg.{1, 1}
+          (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+          Prop
+          (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+          (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+            (fun (i : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            fun (i : Fin n) =>
+            @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (ξ i) μ)
+          (fun
+              (_a :
+                @MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)) =>
+            @Eq.{1}
+              (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+              (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+                (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (@RectangleCLT.selectedArray.{u} Ω p n ξ x) (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+              _a)
+          horiginal))
+      (@Eq.symm.{1}
+        (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+          (fun (i : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          fun (i : Fin n) =>
+          @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i)
+            μ)
+        (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+          (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (@RectangleCLT.selectedArray.{u} Ω p n ξ x) (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+        (@MeasureTheory.Measure.pi_eq.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+          (fun (i : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (fun (i : Fin n) =>
+            @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (ξ i) μ)
+          (fun (i : Fin n) =>
+            @MeasureTheory.SigmaFinite.of_isFiniteMeasureOnCompacts.{0} (RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@Pi.topologicalSpace.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) =>
+                @UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              (@instSigmaCompactSpaceForallOfFinite.{0, 0} (Fin p) (@Finite.of_fintype.{0} (Fin p) (Fin.fintype p))
+                (fun (a : Fin p) => Real)
+                (fun (i : Fin p) =>
+                  @UniformSpace.toTopologicalSpace.{0} Real
+                    (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                fun (i : Fin p) =>
+                @SeparableWeaklyLocallyCompactAddGroup.sigmaCompactSpace.{0} Real
+                  (@UniformSpace.toTopologicalSpace.{0} Real
+                    (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                  Real.instAddGroup instIsTopologicalAddGroupReal
+                  (@TopologicalSpace.SecondCountableTopology.to_separableSpace.{0} Real
+                    (@UniformSpace.toTopologicalSpace.{0} Real
+                      (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                    instSecondCountableTopologyReal)
+                  (@instWeaklyLocallyCompactSpaceOfLocallyCompactSpace.{0} Real
+                    (@UniformSpace.toTopologicalSpace.{0} Real
+                      (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                    (@locallyCompact_of_proper.{0} Real Real.pseudoMetricSpace instProperSpaceReal)))
+              (@MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (ξ i) μ)
+              (@MeasureTheory.Measure.Regular.toIsFiniteMeasureOnCompacts.{0} (RectangleCLT.Vector p)
+                (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (@Pi.topologicalSpace.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) =>
+                  @UniformSpace.toTopologicalSpace.{0} Real
+                    (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                (@MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                  (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                  (ξ i) μ)
+                (@MeasureTheory.Measure.InnerRegularCompactLTTop.instRegularOfBorelSpaceOfR1SpaceOfIsFiniteMeasure.{0}
+                  (RectangleCLT.Vector p)
+                  (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                  (@MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                    (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                    (ξ i) μ)
+                  (@Pi.topologicalSpace.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) =>
+                    @UniformSpace.toTopologicalSpace.{0} Real
+                      (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                  (@Pi.borelSpace.{0, 0} (Fin p) (fun (a : Fin p) => Real) (@instCountableFin p)
+                    (fun (i : Fin p) =>
+                      @UniformSpace.toTopologicalSpace.{0} Real
+                        (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                    (fun (a : Fin p) => Real.measurableSpace) (fun (i : Fin p) => instSecondCountableTopologyReal)
+                    fun (i : Fin p) => Real.borelSpace)
+                  (@instR1SpaceForall.{0, 0} (Fin p) (fun (a : Fin p) => Real)
+                    (fun (i : Fin p) =>
+                      @UniformSpace.toTopologicalSpace.{0} Real
+                        (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                    fun (i : Fin p) =>
+                    @instR1Space.{0} Real
+                      (@UniformSpace.toTopologicalSpace.{0} Real
+                        (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                      (@T3Space.toRegularSpace.{0} Real
+                        (@UniformSpace.toTopologicalSpace.{0} Real
+                          (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                        (@T4Space.t3Space.{0} Real
+                          (@UniformSpace.toTopologicalSpace.{0} Real
+                            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                          (@T5Space.toT4Space.{0} Real
+                            (@UniformSpace.toTopologicalSpace.{0} Real
+                              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                            (@OrderTopology.t5Space.{0} Real Real.linearOrder
+                              (@UniformSpace.toTopologicalSpace.{0} Real
+                                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                              instOrderTopologyReal)))))
+                  (@MeasureTheory.InnerRegularCompactLTTop_of_polishSpace.{0} (RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                    (@Pi.topologicalSpace.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) =>
+                      @UniformSpace.toTopologicalSpace.{0} Real
+                        (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                    (@instPolishSpaceOfSeparableSpaceOfIsCompletelyMetrizableSpace.{0} (RectangleCLT.Vector p)
+                      (@Pi.topologicalSpace.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) =>
+                        @UniformSpace.toTopologicalSpace.{0} Real
+                          (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                      (@TopologicalSpace.instSeparableSpaceForallOfCountable.{0, 0} (Fin p) (fun (a : Fin p) => Real)
+                        (fun (i : Fin p) =>
+                          @UniformSpace.toTopologicalSpace.{0} Real
+                            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                        (fun (i : Fin p) =>
+                          @TopologicalSpace.SecondCountableTopology.to_separableSpace.{0} Real
+                            (@UniformSpace.toTopologicalSpace.{0} Real
+                              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                            instSecondCountableTopologyReal)
+                        (@instCountableFin p))
+                      (@TopologicalSpace.IsCompletelyMetrizableSpace.pi_countable.{0, 0} (Fin p) (@instCountableFin p)
+                        (fun (a : Fin p) => Real)
+                        (fun (i : Fin p) =>
+                          @UniformSpace.toTopologicalSpace.{0} Real
+                            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                        fun (i : Fin p) =>
+                        @TopologicalSpace.IsCompletelyMetrizableSpace.of_completeSpace_metrizable.{0} Real
+                          (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace) Real.instCompleteSpace
+                          (@EMetric.instIsCountablyGeneratedUniformity.{0} Real
+                            (@EMetricSpace.toPseudoEMetricSpace.{0} Real
+                              (@MetricSpace.toEMetricSpace.{0} Real Real.metricSpace)))
+                          (@T3Space.toT0Space.{0} Real
+                            (@UniformSpace.toTopologicalSpace.{0} Real
+                              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                            (@T4Space.t3Space.{0} Real
+                              (@UniformSpace.toTopologicalSpace.{0} Real
+                                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                              (@T5Space.toT4Space.{0} Real
+                                (@UniformSpace.toTopologicalSpace.{0} Real
+                                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                                (@OrderTopology.t5Space.{0} Real Real.linearOrder
+                                  (@UniformSpace.toTopologicalSpace.{0} Real
+                                    (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                                  instOrderTopologyReal))))))
+                    (@Pi.borelSpace.{0, 0} (Fin p) (fun (a : Fin p) => Real) (@instCountableFin p)
+                      (fun (i : Fin p) =>
+                        @UniformSpace.toTopologicalSpace.{0} Real
+                          (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                      (fun (a : Fin p) => Real.measurableSpace) (fun (i : Fin p) => instSecondCountableTopologyReal)
+                      fun (i : Fin p) => Real.borelSpace)
+                    (@MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                      (ξ i) μ))
+                  (@MeasureTheory.Measure.isFiniteMeasure_map.{u, 0} Ω (RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                    inst μ
+                    (@MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure.{u} Ω inst μ
+                      (@MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure.{u} Ω inst μ inst_1))
+                    (ξ i)))))
+          (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+            (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@RectangleCLT.selectedArray.{u} Ω p n ξ x) (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+          fun (s : ⋯) (hs : ⋯) =>
+          @Eq.mpr.{0}
+            (@Eq.{1} ENNReal
+              (@DFunLike.coe.{1, 1, 1}
+                (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace))
+                (Set.{0} (Fin n → RectangleCLT.Vector p)) (fun (x : Set.{0} (Fin n → RectangleCLT.Vector p)) => ENNReal)
+                (@MeasureTheory.Measure.instFunLike.{0} (Fin n → RectangleCLT.Vector p)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace))
+                (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+                  (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                  (@RectangleCLT.selectedArray.{u} Ω p n ξ x) (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+                (@Set.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (@Set.univ.{0} (Fin n)) s))
+              (@Finset.prod.{0, 0} (Fin n) ENNReal (@CommSemiring.toCommMonoid.{0} ENNReal ENNReal.instCommSemiring)
+                (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+                @DFunLike.coe.{1, 1, 1}
+                  (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace))
+                  (Set.{0} (RectangleCLT.Vector p)) (fun (x : Set.{0} (RectangleCLT.Vector p)) => ENNReal)
+                  (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace))
+                  (@MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                    (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                    (ξ i) μ)
+                  (s i)))
+            (@Eq.{1} ENNReal
+              (@DFunLike.coe.{u + 1, u + 1, 1}
+                (@MeasureTheory.Measure.{u} (Prod.{u, u} Ω Ω) (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst))
+                (Set.{u} (Prod.{u, u} Ω Ω)) (fun (x : Set.{u} (Prod.{u, u} Ω Ω)) => ENNReal)
+                (@MeasureTheory.Measure.instFunLike.{u} (Prod.{u, u} Ω Ω)
+                  (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst))
+                (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ)
+                (@Set.preimage.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+                  (@RectangleCLT.selectedArray.{u} Ω p n ξ x)
+                  (@Set.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (@Set.univ.{0} (Fin n)) s)))
+              (@Finset.prod.{0, 0} (Fin n) ENNReal (@CommSemiring.toCommMonoid.{0} ENNReal ENNReal.instCommSemiring)
+                (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+                @DFunLike.coe.{1, 1, 1}
+                  (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace))
+                  (Set.{0} (RectangleCLT.Vector p)) (fun (x : Set.{0} (RectangleCLT.Vector p)) => ENNReal)
+                  (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace))
+                  (@MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                    (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                    (ξ i) μ)
+                  (s i)))
+            (@id.{0}
+              (@Eq.{1} Prop
+                (@Eq.{1} ENNReal
+                  (@DFunLike.coe.{1, 1, 1}
+                    (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+                      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace))
+                    (Set.{0} (Fin n → RectangleCLT.Vector p))
+                    (fun (x : Set.{0} (Fin n → RectangleCLT.Vector p)) => ENNReal)
+                    (@MeasureTheory.Measure.instFunLike.{0} (Fin n → RectangleCLT.Vector p)
+                      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace))
+                    (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+                      (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+                      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace)
+                      (@RectangleCLT.selectedArray.{u} Ω p n ξ x)
+                      (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+                    (@Set.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (@Set.univ.{0} (Fin n)) s))
+                  (@Finset.prod.{0, 0} (Fin n) ENNReal (@CommSemiring.toCommMonoid.{0} ENNReal ENNReal.instCommSemiring)
+                    (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+                    @DFunLike.coe.{1, 1, 1}
+                      (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+                        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace))
+                      (Set.{0} (RectangleCLT.Vector p)) (fun (x : Set.{0} (RectangleCLT.Vector p)) => ENNReal)
+                      (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector p)
+                        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace))
+                      (@MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace)
+                        (ξ i) μ)
+                      (s i)))
+                (@Eq.{1} ENNReal
+                  (@DFunLike.coe.{u + 1, u + 1, 1}
+                    (@MeasureTheory.Measure.{u} (Prod.{u, u} Ω Ω) (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst))
+                    (Set.{u} (Prod.{u, u} Ω Ω)) (fun (x : Set.{u} (Prod.{u, u} Ω Ω)) => ENNReal)
+                    (@MeasureTheory.Measure.instFunLike.{u} (Prod.{u, u} Ω Ω)
+                      (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst))
+                    (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ)
+                    (@Set.preimage.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+                      (@RectangleCLT.selectedArray.{u} Ω p n ξ x)
+                      (@Set.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (@Set.univ.{0} (Fin n)) s)))
+                  (@Finset.prod.{0, 0} (Fin n) ENNReal (@CommSemiring.toCommMonoid.{0} ENNReal ENNReal.instCommSemiring)
+                    (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+                    @DFunLike.coe.{1, 1, 1}
+                      (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+                        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace))
+                      (Set.{0} (RectangleCLT.Vector p)) (fun (x : Set.{0} (RectangleCLT.Vector p)) => ENNReal)
+                      (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector p)
+                        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace))
+                      (@MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace)
+                        (ξ i) μ)
+                      (s i))))
+              (@congrArg.{1, 1} ENNReal Prop
+                (@DFunLike.coe.{1, 1, 1}
+                  (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace))
+                  (Set.{0} (Fin n → RectangleCLT.Vector p))
+                  (fun (x : Set.{0} (Fin n → RectangleCLT.Vector p)) => ENNReal)
+                  (@MeasureTheory.Measure.instFunLike.{0} (Fin n → RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace))
+                  (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+                    (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    (@RectangleCLT.selectedArray.{u} Ω p n ξ x) (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+                  (@Set.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (@Set.univ.{0} (Fin n)) s))
+                (@DFunLike.coe.{u + 1, u + 1, 1}
+                  (@MeasureTheory.Measure.{u} (Prod.{u, u} Ω Ω) (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst))
+                  (Set.{u} (Prod.{u, u} Ω Ω)) (fun (x : Set.{u} (Prod.{u, u} Ω Ω)) => ENNReal)
+                  (@MeasureTheory.Measure.instFunLike.{u} (Prod.{u, u} Ω Ω)
+                    (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst))
+                  (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ)
+                  (@Set.preimage.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+                    (@RectangleCLT.selectedArray.{u} Ω p n ξ x)
+                    (@Set.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (@Set.univ.{0} (Fin n)) s)))
+                (fun (_a : ENNReal) =>
+                  @Eq.{1} ENNReal _a
+                    (@Finset.prod.{0, 0} (Fin n) ENNReal
+                      (@CommSemiring.toCommMonoid.{0} ENNReal ENNReal.instCommSemiring)
+                      (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+                      @DFunLike.coe.{1, 1, 1}
+                        (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+                          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                            Real.measurableSpace))
+                        (Set.{0} (RectangleCLT.Vector p)) (fun (x : Set.{0} (RectangleCLT.Vector p)) => ENNReal)
+                        (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector p)
+                          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                            Real.measurableSpace))
+                        (@MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                            Real.measurableSpace)
+                          (ξ i) μ)
+                        (s i)))
+                (@MeasureTheory.Measure.map_apply.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+                  (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                  (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ) (@RectangleCLT.selectedArray.{u} Ω p n ξ x)
+                  (@RectangleCLT.measurable_selectedArray.{u} Ω inst p n ξ hξ x)
+                  (@Set.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (@Set.univ.{0} (Fin n)) s)
+                  (@MeasurableSet.univ_pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p)
+                    (fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    (@instCountableFin n) s hs))))
+            (let lsets : ⋯ := fun (i : Fin n) =>
+              @ite.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                (instDecidableEqBool (x i) Bool.true) (s i) (@Set.univ.{0} (RectangleCLT.Vector p));
+            let rsets : ⋯ := fun (i : Fin n) =>
+              @ite.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                (instDecidableEqBool (x i) Bool.true) (@Set.univ.{0} (RectangleCLT.Vector p)) (s i);
+            @letFun.{0, 0}
+              (∀ (i : Fin n),
+                @MeasurableSet.{0} (RectangleCLT.Vector p)
+                  (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                  (lsets i))
+              (fun
+                  (hlmeas :
+                    ∀ (i : Fin n),
+                      @MeasurableSet.{0} (RectangleCLT.Vector p)
+                        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace)
+                        (lsets i)) =>
+                @Eq.{1} ENNReal
+                  (@DFunLike.coe.{u + 1, u + 1, 1}
+                    (@MeasureTheory.Measure.{u} (Prod.{u, u} Ω Ω) (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst))
+                    (Set.{u} (Prod.{u, u} Ω Ω)) (fun (x : Set.{u} (Prod.{u, u} Ω Ω)) => ENNReal)
+                    (@MeasureTheory.Measure.instFunLike.{u} (Prod.{u, u} Ω Ω)
+                      (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst))
+                    (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ)
+                    (@Set.preimage.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+                      (@RectangleCLT.selectedArray.{u} Ω p n ξ x)
+                      (@Set.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (@Set.univ.{0} (Fin n)) s)))
+                  (@Finset.prod.{0, 0} (Fin n) ENNReal (@CommSemiring.toCommMonoid.{0} ENNReal ENNReal.instCommSemiring)
+                    (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+                    @DFunLike.coe.{1, 1, 1}
+                      (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+                        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace))
+                      (Set.{0} (RectangleCLT.Vector p)) (fun (x : Set.{0} (RectangleCLT.Vector p)) => ENNReal)
+                      (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector p)
+                        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace))
+                      (@MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace)
+                        (ξ i) μ)
+                      (s i)))
+              (fun (i : Fin n) =>
+                @Bool.casesOn.{0}
+                  (fun (t : Bool) =>
+                    @Eq.{1} Bool (x i) t →
+                      @MeasurableSet.{0} (RectangleCLT.Vector p)
+                        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace)
+                        (lsets i))
+                  (x i)
+                  (fun (h : @Eq.{1} Bool (x i) Bool.false) =>
+                    @Eq.ndrec.{0, 1} Bool Bool.false
+                      (fun (x_1 : Bool) =>
+                        @Eq.{1} Bool (x i) x_1 →
+                          @MeasurableSet.{0} (RectangleCLT.Vector p)
+                            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                              Real.measurableSpace)
+                            (lsets i))
+                      (fun (hi : @Eq.{1} Bool (x i) Bool.false) =>
+                        @of_eq_true
+                          (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                              Real.measurableSpace)
+                            (@ite.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                              (instDecidableEqBool (x i) Bool.true) (s i) (@Set.univ.{0} (RectangleCLT.Vector p))))
+                          (@Eq.trans.{1} Prop
+                            (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                Real.measurableSpace)
+                              (@ite.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                                (instDecidableEqBool (x i) Bool.true) (s i) (@Set.univ.{0} (RectangleCLT.Vector p))))
+                            (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                Real.measurableSpace)
+                              (@Set.univ.{0} (RectangleCLT.Vector p)))
+                            True
+                            (@congrArg.{1, 1} (Set.{0} (RectangleCLT.Vector p)) Prop
+                              (@ite.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                                (instDecidableEqBool (x i) Bool.true) (s i) (@Set.univ.{0} (RectangleCLT.Vector p)))
+                              (@Set.univ.{0} (RectangleCLT.Vector p))
+                              (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                                (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                  Real.measurableSpace))
+                              (@ite_cond_eq_false.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                                (instDecidableEqBool (x i) Bool.true) (s i) (@Set.univ.{0} (RectangleCLT.Vector p))
+                                (@Eq.trans.{1} Prop (@Eq.{1} Bool (x i) Bool.true) (@Eq.{1} Bool Bool.false Bool.true)
+                                  False
+                                  (@congrArg.{1, 1} Bool Prop (x i) Bool.false
+                                    (fun (x : Bool) => @Eq.{1} Bool x Bool.true) hi)
+                                  Bool.false_eq_true)))
+                            (@_private.Mathlib.MeasureTheory.MeasurableSpace.Defs.0._proof_3.{0} (RectangleCLT.Vector p)
+                              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                Real.measurableSpace))))
+                      (x i) (@Eq.symm.{1} Bool (x i) Bool.false h) (@Eq.refl.{1} Bool (x i)))
+                  (fun (h : @Eq.{1} Bool (x i) Bool.true) =>
+                    @Eq.ndrec.{0, 1} Bool Bool.true
+                      (fun (x_1 : Bool) =>
+                        @Eq.{1} Bool (x i) x_1 →
+                          @MeasurableSet.{0} (RectangleCLT.Vector p)
+                            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                              Real.measurableSpace)
+                            (lsets i))
+                      (fun (hi : @Eq.{1} Bool (x i) Bool.true) =>
+                        @of_eq_true
+                          (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                              Real.measurableSpace)
+                            (@ite.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                              (instDecidableEqBool (x i) Bool.true) (s i) (@Set.univ.{0} (RectangleCLT.Vector p))))
+                          (@Eq.trans.{1} Prop
+                            (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                Real.measurableSpace)
+                              (@ite.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                                (instDecidableEqBool (x i) Bool.true) (s i) (@Set.univ.{0} (RectangleCLT.Vector p))))
+                            (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                Real.measurableSpace)
+                              (s i))
+                            True
+                            (@congrArg.{1, 1} (Set.{0} (RectangleCLT.Vector p)) Prop
+                              (@ite.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                                (instDecidableEqBool (x i) Bool.true) (s i) (@Set.univ.{0} (RectangleCLT.Vector p)))
+                              (s i)
+                              (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                                (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                  Real.measurableSpace))
+                              (@ite_cond_eq_true.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                                (instDecidableEqBool (x i) Bool.true) (s i) (@Set.univ.{0} (RectangleCLT.Vector p))
+                                (@Eq.trans.{1} Prop (@Eq.{1} Bool (x i) Bool.true) (@Eq.{1} Bool Bool.true Bool.true)
+                                  True
+                                  (@congrArg.{1, 1} Bool Prop (x i) Bool.true
+                                    (fun (x : Bool) => @Eq.{1} Bool x Bool.true) hi)
+                                  (@eq_self.{1} Bool Bool.true))))
+                            (@eq_true
+                              (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                                (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                  Real.measurableSpace)
+                                (s i))
+                              (hs i))))
+                      (x i) (@Eq.symm.{1} Bool (x i) Bool.true h) (@Eq.refl.{1} Bool (x i)))
+                  (@Eq.refl.{1} Bool (x i)))
+              fun (hlmeas : ⋯) =>
+              @letFun.{0, 0}
+                (∀ (i : Fin n),
+                  @MeasurableSet.{0} (RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                    (rsets i))
+                (fun
+                    (hrmeas :
+                      ∀ (i : Fin n),
+                        @MeasurableSet.{0} (RectangleCLT.Vector p)
+                          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                            Real.measurableSpace)
+                          (rsets i)) =>
+                  @Eq.{1} ENNReal
+                    (@DFunLike.coe.{u + 1, u + 1, 1}
+                      (@MeasureTheory.Measure.{u} (Prod.{u, u} Ω Ω) (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst))
+                      (Set.{u} (Prod.{u, u} Ω Ω)) (fun (x : Set.{u} (Prod.{u, u} Ω Ω)) => ENNReal)
+                      (@MeasureTheory.Measure.instFunLike.{u} (Prod.{u, u} Ω Ω)
+                        (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst))
+                      (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ)
+                      (@Set.preimage.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+                        (@RectangleCLT.selectedArray.{u} Ω p n ξ x)
+                        (@Set.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (@Set.univ.{0} (Fin n)) s)))
+                    (@Finset.prod.{0, 0} (Fin n) ENNReal
+                      (@CommSemiring.toCommMonoid.{0} ENNReal ENNReal.instCommSemiring)
+                      (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+                      @DFunLike.coe.{1, 1, 1}
+                        (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+                          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                            Real.measurableSpace))
+                        (Set.{0} (RectangleCLT.Vector p)) (fun (x : Set.{0} (RectangleCLT.Vector p)) => ENNReal)
+                        (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector p)
+                          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                            Real.measurableSpace))
+                        (@MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                            Real.measurableSpace)
+                          (ξ i) μ)
+                        (s i)))
+                (fun (i : Fin n) =>
+                  @Bool.casesOn.{0}
+                    (fun (t : Bool) =>
+                      @Eq.{1} Bool (x i) t →
+                        @MeasurableSet.{0} (RectangleCLT.Vector p)
+                          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                            Real.measurableSpace)
+                          (rsets i))
+                    (x i)
+                    (fun (h : @Eq.{1} Bool (x i) Bool.false) =>
+                      @Eq.ndrec.{0, 1} Bool Bool.false
+                        (fun (x_1 : Bool) =>
+                          @Eq.{1} Bool (x i) x_1 →
+                            @MeasurableSet.{0} (RectangleCLT.Vector p)
+                              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                Real.measurableSpace)
+                              (rsets i))
+                        (fun (hi : @Eq.{1} Bool (x i) Bool.false) =>
+                          @of_eq_true
+                            (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                Real.measurableSpace)
+                              (@ite.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                                (instDecidableEqBool (x i) Bool.true) (@Set.univ.{0} (RectangleCLT.Vector p)) (s i)))
+                            (@Eq.trans.{1} Prop
+                              (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                                (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                  Real.measurableSpace)
+                                (@ite.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                                  (instDecidableEqBool (x i) Bool.true) (@Set.univ.{0} (RectangleCLT.Vector p)) (s i)))
+                              (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                                (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                  Real.measurableSpace)
+                                (s i))
+                              True
+                              (@congrArg.{1, 1} (Set.{0} (RectangleCLT.Vector p)) Prop
+                                (@ite.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                                  (instDecidableEqBool (x i) Bool.true) (@Set.univ.{0} (RectangleCLT.Vector p)) (s i))
+                                (s i)
+                                (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                                  (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                    Real.measurableSpace))
+                                (@ite_cond_eq_false.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                                  (instDecidableEqBool (x i) Bool.true) (@Set.univ.{0} (RectangleCLT.Vector p)) (s i)
+                                  (@Eq.trans.{1} Prop (@Eq.{1} Bool (x i) Bool.true) (@Eq.{1} Bool Bool.false Bool.true)
+                                    False
+                                    (@congrArg.{1, 1} Bool Prop (x i) Bool.false
+                                      (fun (x : Bool) => @Eq.{1} Bool x Bool.true) hi)
+                                    Bool.false_eq_true)))
+                              (@eq_true
+                                (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                                  (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                    Real.measurableSpace)
+                                  (s i))
+                                (hs i))))
+                        (x i) (@Eq.symm.{1} Bool (x i) Bool.false h) (@Eq.refl.{1} Bool (x i)))
+                    (fun (h : @Eq.{1} Bool (x i) Bool.true) =>
+                      @Eq.ndrec.{0, 1} Bool Bool.true
+                        (fun (x_1 : Bool) =>
+                          @Eq.{1} Bool (x i) x_1 →
+                            @MeasurableSet.{0} (RectangleCLT.Vector p)
+                              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                Real.measurableSpace)
+                              (rsets i))
+                        (fun (hi : @Eq.{1} Bool (x i) Bool.true) =>
+                          @of_eq_true
+                            (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                Real.measurableSpace)
+                              (@ite.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                                (instDecidableEqBool (x i) Bool.true) (@Set.univ.{0} (RectangleCLT.Vector p)) (s i)))
+                            (@Eq.trans.{1} Prop
+                              (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                                (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                  Real.measurableSpace)
+                                (@ite.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                                  (instDecidableEqBool (x i) Bool.true) (@Set.univ.{0} (RectangleCLT.Vector p)) (s i)))
+                              (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                                (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                  Real.measurableSpace)
+                                (@Set.univ.{0} (RectangleCLT.Vector p)))
+                              True
+                              (@congrArg.{1, 1} (Set.{0} (RectangleCLT.Vector p)) Prop
+                                (@ite.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                                  (instDecidableEqBool (x i) Bool.true) (@Set.univ.{0} (RectangleCLT.Vector p)) (s i))
+                                (@Set.univ.{0} (RectangleCLT.Vector p))
+                                (@MeasurableSet.{0} (RectangleCLT.Vector p)
+                                  (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                    Real.measurableSpace))
+                                (@ite_cond_eq_true.{1} (Set.{0} (RectangleCLT.Vector p)) (@Eq.{1} Bool (x i) Bool.true)
+                                  (instDecidableEqBool (x i) Bool.true) (@Set.univ.{0} (RectangleCLT.Vector p)) (s i)
+                                  (@Eq.trans.{1} Prop (@Eq.{1} Bool (x i) Bool.true) (@Eq.{1} Bool Bool.true Bool.true)
+                                    True
+                                    (@congrArg.{1, 1} Bool Prop (x i) Bool.true
+                                      (fun (x : Bool) => @Eq.{1} Bool x Bool.true) hi)
+                                    (@eq_self.{1} Bool Bool.true))))
+                              (@_private.Mathlib.MeasureTheory.MeasurableSpace.Defs.0._proof_3.{0}
+                                (RectangleCLT.Vector p)
+                                (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                                  Real.measurableSpace))))
+                        (x i) (@Eq.symm.{1} Bool (x i) Bool.true h) (@Eq.refl.{1} Bool (x i)))
+                    (@Eq.refl.{1} Bool (x i)))
+                fun (hrmeas : ⋯) =>
+                @letFun.{0, 0}
+                  (@Eq.{u + 1} (Set.{u} (Prod.{u, u} Ω Ω))
+                    (@Set.preimage.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+                      (@RectangleCLT.selectedArray.{u} Ω p n ξ x)
+                      (@Set.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (@Set.univ.{0} (Fin n)) s))
+                    (@SProd.sprod.{u, u, u} (Set.{u} Ω) (Set.{u} Ω) (Set.{u} (Prod.{u, u} Ω Ω))
+                      (@Set.instSProd.{u, u} Ω Ω)
+                      (@Set.iInter.{u, 1} Ω (Fin n) fun (i : Fin n) =>
+                        @Set.preimage.{u, 0} Ω (RectangleCLT.Vector p) (ξ i) (lsets i))
+                      (@Set.iInter.{u, 1} Ω (Fin n) fun (i : Fin n) =>
+                        @Set.preimage.{u, 0} Ω (RectangleCLT.Vector p) (ξ i) (rsets i))))
+                  (fun
+                      (hpre :
+                        @Eq.{u + 1} (Set.{u} (Prod.{u, u} Ω Ω))
+                          (@Set.preimage.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+                            (@RectangleCLT.selectedArray.{u} Ω p n ξ x)
+                            (@Set.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (@Set.univ.{0} (Fin n))
+                              s))
+                          (@SProd.sprod.{u, u, u} (Set.{u} Ω) (Set.{u} Ω) (Set.{u} (Prod.{u, u} Ω Ω))
+                            (@Set.instSProd.{u, u} Ω Ω)
+                            (@Set.iInter.{u, 1} Ω (Fin n) fun (i : Fin n) =>
+                              @Set.preimage.{u, 0} Ω (RectangleCLT.Vector p) (ξ i) (lsets i))
+                            (@Set.iInter.{u, 1} Ω (Fin n) fun (i : Fin n) =>
+                              @Set.preimage.{u, 0} Ω (RectangleCLT.Vector p) (ξ i) (rsets i)))) =>
+                    @Eq.{1} ENNReal
+                      (@DFunLike.coe.{u + 1, u + 1, 1}
+                        (@MeasureTheory.Measure.{u} (Prod.{u, u} Ω Ω) (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst))
+                        (Set.{u} (Prod.{u, u} Ω Ω)) (fun (x : Set.{u} (Prod.{u, u} Ω Ω)) => ENNReal)
+                        (@MeasureTheory.Measure.instFunLike.{u} (Prod.{u, u} Ω Ω)
+                          (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst))
+                        (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ)
+                        (@Set.preimage.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+                          (@RectangleCLT.selectedArray.{u} Ω p n ξ x)
+                          (@Set.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (@Set.univ.{0} (Fin n))
+                            s)))
+                      (@Finset.prod.{0, 0} (Fin n) ENNReal
+                        (@CommSemiring.toCommMonoid.{0} ENNReal ENNReal.instCommSemiring)
+                        (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+                        @DFunLike.coe.{1, 1, 1}
+                          (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+                            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                              Real.measurableSpace))
+                          (Set.{0} (RectangleCLT.Vector p)) (fun (x : Set.{0} (RectangleCLT.Vector p)) => ENNReal)
+                          (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector p)
+                            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                              Real.measurableSpace))
+                          (@MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                              Real.measurableSpace)
+                            (ξ i) μ)
+                          (s i)))
+                  (@Set.ext.{u} (Prod.{u, u} Ω Ω)
+                    (@Set.preimage.{u, 0} (Prod.{u, u} Ω Ω) (Fin n → RectangleCLT.Vector p)
+                      (@RectangleCLT.selectedArray.{u} Ω p n ξ x)
+                      (@Set.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (@Set.univ.{0} (Fin n)) s))
+                    (@SProd.sprod.{u, u, u} (Set.{u} Ω) (Set.{u} Ω) (Set.{u} (Prod.{u, u} Ω Ω))
+                      (@Set.instSProd.{u, u} Ω Ω)
+                      (@Set.iInter.{u, 1} Ω (Fin n) fun (i : Fin n) =>
+                        @Set.preimage.{u, 0} Ω (RectangleCLT.Vector p) (ξ i) (lsets i))
+                      (@Set.iInter.{u, 1} Ω (Fin n) fun (i : Fin n) =>
+                        @Set.preimage.{u, 0} Ω (RectangleCLT.Vector p) (ξ i) (rsets i)))
+                    fun (ω : ⋯) =>
+                    @Eq.mpr.{0} (Iff (@Membership.mem.{u, u} (Prod.{u, u} Ω Ω) (Set.{u} (Prod.{u, u} Ω ⋯)) ⋯ ⋯ ⋯) ⋯) ⋯ ⋯
+                      ⋯)
+                  ⋯)))
+theorem RectangleCLT.selectedPair_law_eq_original.{u} : ∀ {Ω : Type u} [inst : MeasurableSpace.{u} Ω] {p n : Nat}
+  (μ : @MeasureTheory.Measure.{u} Ω inst) [inst_1 : @MeasureTheory.IsProbabilityMeasure.{u} Ω inst μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p),
+  (∀ (i : Fin n),
+      @Measurable.{u, 0} Ω (RectangleCLT.Vector p) inst
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i)) →
+    @ProbabilityTheory.iIndepFun.{u, 0, 0} Ω (Fin n) inst (fun (x : Fin n) => RectangleCLT.Vector p)
+        (fun (x : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        ξ μ →
+      ∀ (x : Kane.Cube n),
+        @Eq.{1}
+          (@MeasureTheory.Measure.{0} (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+            (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)))
+          (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω)
+            (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+            (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+            (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+            (fun (ω : Prod.{u, u} Ω Ω) =>
+              @Prod.mk.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                (@RectangleCLT.selectedArray.{u} Ω p n ξ x ω)
+                (@RectangleCLT.selectedArray.{u} Ω p n ξ (fun (i : Fin n) => Bool.not (x i)) ω))
+            (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+          (@MeasureTheory.Measure.prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+            (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)) :=
+fun {Ω : ⋯} [inst : ⋯] {p n : ⋯} (μ : ⋯) [inst_1 : ⋯] (ξ : ⋯) (hξ : ⋯) (hind : ⋯) (x : ⋯) =>
+  let ν : ⋯ := fun (i : Fin n) =>
+    @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i) μ;
+  @letFun.{0, 0}
+    (@Eq.{1}
+      (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+      (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+      (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+        (fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        fun (i : Fin n) =>
+        @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i)
+          μ))
+    (fun
+        (hlaw :
+          @Eq.{1}
+            (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+            (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+            (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+              (fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              fun (i : Fin n) =>
+              @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (ξ i) μ)) =>
+      @Eq.{1}
+        (@MeasureTheory.Measure.{0} (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+          (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)))
+        (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω)
+          (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+          (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+          (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+          (fun (ω : Prod.{u, u} Ω Ω) =>
+            @Prod.mk.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+              (@RectangleCLT.selectedArray.{u} Ω p n ξ x ω)
+              (@RectangleCLT.selectedArray.{u} Ω p n ξ (fun (i : Fin n) => Bool.not (x i)) ω))
+          (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+        (@MeasureTheory.Measure.prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+          (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)))
+    (@Iff.mp
+      (@ProbabilityTheory.iIndepFun.{u, 0, 0} Ω (Fin n) inst (fun (i : Fin n) => RectangleCLT.Vector p)
+        (fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        ξ μ)
+      (@Eq.{1}
+        (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+        (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+          (fun (i : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          fun (i : Fin n) =>
+          @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i)
+            μ))
+      (@ProbabilityTheory.iIndepFun_iff_map_fun_eq_pi_map.{u, 0, 0} Ω (Fin n) inst μ (Fin.fintype n)
+        (fun (i : Fin n) => RectangleCLT.Vector p)
+        (fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        ξ inst_1 fun (i : Fin n) =>
+        @Measurable.aemeasurable.{u, 0} Ω (RectangleCLT.Vector p) inst
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i) μ
+          (hξ i))
+      hind)
+    fun (hlaw : ⋯) =>
+    @letFun.{0, 0}
+      (@MeasureTheory.MeasurePreserving.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        (fun (ω : Ω) (i : Fin n) => ξ i ω) μ
+        (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+          (fun (i : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          ν))
+      (fun
+          (ha :
+            @MeasureTheory.MeasurePreserving.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (fun (ω : Ω) (i : Fin n) => ξ i ω) μ
+              (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+                (fun (i : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                ν)) =>
+        @Eq.{1}
+          (@MeasureTheory.Measure.{0} (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+            (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)))
+          (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω)
+            (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+            (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+            (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+            (fun (ω : Prod.{u, u} Ω Ω) =>
+              @Prod.mk.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                (@RectangleCLT.selectedArray.{u} Ω p n ξ x ω)
+                (@RectangleCLT.selectedArray.{u} Ω p n ξ (fun (i : Fin n) => Bool.not (x i)) ω))
+            (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+          (@MeasureTheory.Measure.prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+            (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)))
+      (@MeasureTheory.MeasurePreserving.mk.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        (fun (ω : Ω) (i : Fin n) => ξ i ω) μ
+        (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+          (fun (i : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          ν)
+        (@measurable_pi_lambda.{u, 0, 0} Ω (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) inst
+          (fun (i : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (fun (ω : Ω) (i : Fin n) => ξ i ω) hξ)
+        hlaw)
+      fun (ha : ⋯) =>
+      @letFun.{0, 0}
+        (@Eq.{1}
+          (@MeasureTheory.Measure.{0} (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+            (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)))
+          (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω)
+            (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+            (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+            (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+            (@Function.comp.{u + 1, 1, 1} (Prod.{u, u} Ω Ω)
+              (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+              (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+              (@RectangleCLT.swapArrays p n x)
+              (@Prod.map.{u, 0, u, 0} Ω (Fin n → RectangleCLT.Vector p) Ω (Fin n → RectangleCLT.Vector p)
+                (fun (ω : Ω) (i : Fin n) => ξ i ω) fun (ω : Ω) (i : Fin n) => ξ i ω))
+            (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+          (@MeasureTheory.Measure.prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+              (fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              ν)
+            (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+              (fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              ν)))
+        (fun
+            (hh :
+              @Eq.{1}
+                (@MeasureTheory.Measure.{0}
+                  (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+                  (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)))
+                (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω)
+                  (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+                  (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+                  (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace))
+                  (@Function.comp.{u + 1, 1, 1} (Prod.{u, u} Ω Ω)
+                    (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+                    (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+                    (@RectangleCLT.swapArrays p n x)
+                    (@Prod.map.{u, 0, u, 0} Ω (Fin n → RectangleCLT.Vector p) Ω (Fin n → RectangleCLT.Vector p)
+                      (fun (ω : Ω) (i : Fin n) => ξ i ω) fun (ω : Ω) (i : Fin n) => ξ i ω))
+                  (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+                (@MeasureTheory.Measure.prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                  (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+                    (fun (i : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    ν)
+                  (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+                    (fun (i : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    ν))) =>
+          @Eq.{1}
+            (@MeasureTheory.Measure.{0} (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+              (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                    Real.measurableSpace)))
+            (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω)
+              (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+              (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+              (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+              (fun (ω : Prod.{u, u} Ω Ω) =>
+                @Prod.mk.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                  (@RectangleCLT.selectedArray.{u} Ω p n ξ x ω)
+                  (@RectangleCLT.selectedArray.{u} Ω p n ξ (fun (i : Fin n) => Bool.not (x i)) ω))
+              (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+            (@MeasureTheory.Measure.prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+              (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)))
+        (@MeasureTheory.MeasurePreserving.map_eq.{u, 0} (Prod.{u, u} Ω Ω)
+          (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+          (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+          (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+          (@Function.comp.{u + 1, 1, 1} (Prod.{u, u} Ω Ω)
+            (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+            (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+            (@RectangleCLT.swapArrays p n x)
+            (@Prod.map.{u, 0, u, 0} Ω (Fin n → RectangleCLT.Vector p) Ω (Fin n → RectangleCLT.Vector p)
+              (fun (ω : Ω) (i : Fin n) => ξ i ω) fun (ω : Ω) (i : Fin n) => ξ i ω))
+          (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ)
+          (@MeasureTheory.Measure.prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+              (fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              ν)
+            (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+              (fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              ν))
+          (@MeasureTheory.MeasurePreserving.comp.{u, 0, 0} (Prod.{u, u} Ω Ω)
+            (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+            (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+            (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+            (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+            (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+            (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ)
+            (@MeasureTheory.Measure.prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+                (fun (i : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                ν)
+              (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+                (fun (i : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                ν))
+            (@MeasureTheory.Measure.prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+                (fun (i : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                ν)
+              (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+                (fun (i : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                ν))
+            (@RectangleCLT.swapArrays p n x)
+            (@Prod.map.{u, 0, u, 0} Ω (Fin n → RectangleCLT.Vector p) Ω (Fin n → RectangleCLT.Vector p)
+              (fun (ω : Ω) (i : Fin n) => ξ i ω) fun (ω : Ω) (i : Fin n) => ξ i ω)
+            (@RectangleCLT.measurePreserving_swapArrays p n ν
+              (fun (i : Fin n) =>
+                @MeasureTheory.isProbabilityMeasure_map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                  (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                  μ inst_1 (ξ i)
+                  (@Measurable.aemeasurable.{u, 0} Ω (RectangleCLT.Vector p) inst
+                    (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                    (ξ i) μ (hξ i)))
+              x)
+            (@MeasureTheory.MeasurePreserving.prod.{u, 0, u, 0} Ω (Fin n → RectangleCLT.Vector p) Ω inst
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              inst (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              μ
+              (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+                (fun (i : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                ν)
+              μ
+              (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+                (fun (i : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                ν)
+              (@MeasureTheory.instSFiniteOfSigmaFinite.{u} Ω inst μ
+                (@MeasureTheory.IsFiniteMeasure.toSigmaFinite.{u} Ω inst μ
+                  (@MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure.{u} Ω inst μ
+                    (@MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure.{u} Ω inst μ inst_1))))
+              (@MeasureTheory.instSFiniteOfSigmaFinite.{u} Ω inst μ
+                (@MeasureTheory.IsFiniteMeasure.toSigmaFinite.{u} Ω inst μ
+                  (@MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure.{u} Ω inst μ
+                    (@MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure.{u} Ω inst μ inst_1))))
+              (fun (ω : Ω) (i : Fin n) => ξ i ω) (fun (ω : Ω) (i : Fin n) => ξ i ω) ha ha)))
+        fun (hh : ⋯) =>
+        @Eq.mpr.{0}
+          (@Eq.{1}
+            (@MeasureTheory.Measure.{0} (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+              (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                    Real.measurableSpace)))
+            (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω)
+              (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+              (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+              (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+              (fun (ω : Prod.{u, u} Ω Ω) =>
+                @Prod.mk.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                  (@RectangleCLT.selectedArray.{u} Ω p n ξ x ω)
+                  (@RectangleCLT.selectedArray.{u} Ω p n ξ (fun (i : Fin n) => Bool.not (x i)) ω))
+              (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+            (@MeasureTheory.Measure.prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+              (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)))
+          (@Eq.{1}
+            (@MeasureTheory.Measure.{0} (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+              (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                    Real.measurableSpace)))
+            (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω)
+              (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+              (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+              (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+              (fun (ω : Prod.{u, u} Ω Ω) =>
+                @Prod.mk.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                  (@RectangleCLT.selectedArray.{u} Ω p n ξ x ω)
+                  (@RectangleCLT.selectedArray.{u} Ω p n ξ (fun (i : Fin n) => Bool.not (x i)) ω))
+              (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+            (@MeasureTheory.Measure.prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+                (fun (i : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                fun (i : Fin n) =>
+                @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                  (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                  (ξ i) μ)
+              (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+                (fun (i : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                fun (i : Fin n) =>
+                @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                  (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                  (ξ i) μ)))
+          (@id.{0}
+            (@Eq.{1} Prop
+              (@Eq.{1}
+                (@MeasureTheory.Measure.{0}
+                  (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+                  (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)))
+                (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω)
+                  (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+                  (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+                  (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace))
+                  (fun (ω : Prod.{u, u} Ω Ω) =>
+                    @Prod.mk.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                      (@RectangleCLT.selectedArray.{u} Ω p n ξ x ω)
+                      (@RectangleCLT.selectedArray.{u} Ω p n ξ (fun (i : Fin n) => Bool.not (x i)) ω))
+                  (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+                (@MeasureTheory.Measure.prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                  (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+                  (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)))
+              (@Eq.{1}
+                (@MeasureTheory.Measure.{0}
+                  (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+                  (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)))
+                (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω)
+                  (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+                  (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+                  (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace))
+                  (fun (ω : Prod.{u, u} Ω Ω) =>
+                    @Prod.mk.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                      (@RectangleCLT.selectedArray.{u} Ω p n ξ x ω)
+                      (@RectangleCLT.selectedArray.{u} Ω p n ξ (fun (i : Fin n) => Bool.not (x i)) ω))
+                  (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+                (@MeasureTheory.Measure.prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                  (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+                    (fun (i : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    fun (i : Fin n) =>
+                    @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                      (ξ i) μ)
+                  (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+                    (fun (i : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    fun (i : Fin n) =>
+                    @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                      (ξ i) μ))))
+            (@congrArg.{1, 1}
+              (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+              Prop
+              (@MeasureTheory.Measure.map.{u, 0} Ω (Fin n → RectangleCLT.Vector p) inst
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                (fun (ω : Ω) (i : Fin n) => ξ i ω) μ)
+              (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+                (fun (i : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                fun (i : Fin n) =>
+                @MeasureTheory.Measure.map.{u, 0} Ω (RectangleCLT.Vector p) inst
+                  (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                  (ξ i) μ)
+              (fun
+                  (_a :
+                    @MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+                      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+                        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace)) =>
+                @Eq.{1}
+                  (@MeasureTheory.Measure.{0}
+                    (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+                    (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace)
+                      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace)))
+                  (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω)
+                    (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+                    (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+                    (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace)
+                      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                          Real.measurableSpace))
+                    (fun (ω : Prod.{u, u} Ω Ω) =>
+                      @Prod.mk.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                        (@RectangleCLT.selectedArray.{u} Ω p n ξ x ω)
+                        (@RectangleCLT.selectedArray.{u} Ω p n ξ (fun (i : Fin n) => Bool.not (x i)) ω))
+                    (@MeasureTheory.Measure.prod.{u, u} Ω Ω inst inst μ μ))
+                  (@MeasureTheory.Measure.prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                        Real.measurableSpace)
+                    _a _a))
+              hlaw))
+          (@Eq.mpr.{0}
+            (@Eq.{1}
+              (@MeasureTheory.Measure.{0} (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+                (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)))
+              (@MeasureTheory.Measure.map.{u, 0} (Prod.{u, u} Ω Ω)
+                (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p))
+                (@Prod.instMeasurableSpace.{u, u} Ω Ω inst inst)
+                (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : ⋯) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin ⋯) => Real) ⋯))
+                ⋯ ⋯)
+              ⋯)
+            ⋯ ⋯ ⋯)
+RectangleCLT.Companion.SplitV4.randomCubeSelectedArray: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.cubePairMidpoint: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.cubePairDifference: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.measurable_randomCubeSelectedArray: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.measurePreserving_random_countable_selector: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.fixedCubeSelectedArray_measurePreserving: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.fixedCubeSelectedArray_identDistrib: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.fixedCubeSelectedPair_identDistrib: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.randomCubeSelectedArray_measurePreserving: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.randomCubeSelectedArray_identDistrib: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.uniformCubeSelectedArray_identDistrib: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.selectedArray_eq_midpoint_add_signed_difference: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.selectedSum_eq_midpoint_add_signed_difference: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.measurable_cubeArraySum: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.uniformCubeSelectedSum_identDistrib: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.fixedCubeSignedDifference_identDistrib: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.randomCubeSignedDifference_identDistrib: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.identDistrib_prod_independent: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.uniformCubeSelectedSum_with_independent_shift_identDistrib: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.uniformCubeSelectedSum_test_transport: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.uniformCubeSignedDifference_test_transport: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.uniformCubeSignedDifference_iterated_integral: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.uniformCubeMidpointSignedSum_identDistrib: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.uniformCubeSelectedSum_with_independent_shift_test_transport: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+Audited actual product-law selection, independent copy swaps, signed differences, midpoint representation, and integrable-test transports.

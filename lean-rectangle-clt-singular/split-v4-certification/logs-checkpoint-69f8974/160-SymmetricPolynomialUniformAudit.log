@@ -1,0 +1,229 @@
+RectangleCLT.Companion.SplitV4.polynomialSymmetricClassDistances.{u} (q B : Real) (p n : Nat) : Set.{0} Real
+RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance.{u} (q B : Real) (p n : Nat) : Real
+RectangleCLT.Companion.SplitV4.zero_mem_polynomialSymmetricClassDistances.{u} (q B : Real) (p n : Nat) :
+  @Membership.mem.{0, 0} Real (Set.{0} Real) (@Set.instMembership.{0} Real)
+    (RectangleCLT.Companion.SplitV4.polynomialSymmetricClassDistances.{u} q B p n)
+    (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+RectangleCLT.Companion.SplitV4.polynomialSymmetricClassDistances_subset.{u} (q B : Real) (p n : Nat) :
+  @HasSubset.Subset.{0} (Set.{0} Real) (@Set.instHasSubset.{0} Real)
+    (RectangleCLT.Companion.SplitV4.polynomialSymmetricClassDistances.{u} q B p n)
+    (RectangleCLT.Companion.SplitV4.polynomialClassDistances.{u} q B p n)
+RectangleCLT.Companion.SplitV4.polynomialSymmetricClassDistances_bddAbove.{u} (q B : Real) (p n : Nat) :
+  @BddAbove.{0} Real Real.instLE (RectangleCLT.Companion.SplitV4.polynomialSymmetricClassDistances.{u} q B p n)
+RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance_nonneg.{u} (q B : Real) (p n : Nat) :
+  @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+    (RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance.{u} q B p n)
+RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance_le.{u} (q B : Real) (p n : Nat) :
+  @LE.le.{0} Real Real.instLE (RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance.{u} q B p n)
+    (RectangleCLT.Companion.SplitV4.polynomialWorstDistance.{u} q B p n)
+RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance_le_one.{u} (q B : Real) (p n : Nat) :
+  @LE.le.{0} Real Real.instLE (RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance.{u} q B p n)
+    (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+RectangleCLT.Companion.SplitV4.rectangleDistance_mem_polynomialSymmetricClassDistances.{u} {Ω : Type u}
+  [MeasurableSpace.{u} Ω] (μ : @MeasureTheory.Measure.{u} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u} Ω inst✝ μ]
+  {p n : Nat} {q B : Real} (X : Fin n → Ω → RectangleCLT.Vector p) (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (h : @RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.{u} Ω inst✝ p n μ X q B)
+  (hsym :
+    ∀ (i : Fin n),
+      @ProbabilityTheory.IdentDistrib.{u, u, 0} Ω Ω (RectangleCLT.Vector p) inst✝ inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (X i)
+        (fun (ω : Ω) =>
+          @Neg.neg.{0} (RectangleCLT.Vector p)
+            (@Pi.instNeg.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instNeg) (X i ω))
+        μ μ)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u} Ω inst✝ p μ (@RectangleCLT.Companion.normalizedObservationSum.{u} Ω p n X))) :
+  @Membership.mem.{0, 0} Real (Set.{0} Real) (@Set.instMembership.{0} Real)
+    (RectangleCLT.Companion.SplitV4.polynomialSymmetricClassDistances.{u} q B p n)
+    (@RectangleCLT.Companion.rectangleDistance.{u} Ω inst✝ p μ
+      (@RectangleCLT.Companion.normalizedObservationSum.{u} Ω p n X) A)
+RectangleCLT.Companion.SplitV4.rectangleDistance_le_polynomialSymmetricWorstDistance.{u} {Ω : Type u}
+  [MeasurableSpace.{u} Ω] (μ : @MeasureTheory.Measure.{u} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u} Ω inst✝ μ]
+  {p n : Nat} {q B : Real} (X : Fin n → Ω → RectangleCLT.Vector p) (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (h : @RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.{u} Ω inst✝ p n μ X q B)
+  (hsym :
+    ∀ (i : Fin n),
+      @ProbabilityTheory.IdentDistrib.{u, u, 0} Ω Ω (RectangleCLT.Vector p) inst✝ inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (X i)
+        (fun (ω : Ω) =>
+          @Neg.neg.{0} (RectangleCLT.Vector p)
+            (@Pi.instNeg.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instNeg) (X i ω))
+        μ μ)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u} Ω inst✝ p μ (@RectangleCLT.Companion.normalizedObservationSum.{u} Ω p n X))) :
+  @LE.le.{0} Real Real.instLE
+    (@RectangleCLT.Companion.rectangleDistance.{u} Ω inst✝ p μ
+      (@RectangleCLT.Companion.normalizedObservationSum.{u} Ω p n X) A)
+    (RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance.{u} q B p n)
+RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.mono_envelope.{u} {Ω : Type u} [MeasurableSpace.{u} Ω]
+  {μ : @MeasureTheory.Measure.{u} Ω inst✝} {p n : Nat} {X : Fin n → Ω → RectangleCLT.Vector p} {q B B' : Real}
+  (h : @RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.{u} Ω inst✝ p n μ X q B)
+  (hq : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) q)
+  (hB : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) B)
+  (hBB' : @LE.le.{0} Real Real.instLE B B') :
+  @RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.{u} Ω inst✝ p n μ X q B'
+RectangleCLT.Companion.SplitV4.polynomialFourthUniformConstant (B : Real) : Real
+RectangleCLT.Companion.SplitV4.polynomialFourthUniformConstant_pos {B : Real}
+  (hB : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) B) :
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+    (RectangleCLT.Companion.SplitV4.polynomialFourthUniformConstant B)
+RectangleCLT.Companion.SplitV4.polynomialBennettObservationRate_four_factor (n p : Nat) (B : Real) :
+  @Eq.{1} Real
+    (RectangleCLT.Companion.SplitV4.polynomialBennettObservationRate n p B
+      (@OfNat.ofNat.{0} Real 4
+        (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) B
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+            (@OfNat.ofNat.{0} Real 2
+              (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))))
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) B
+          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+            (Real.log
+              (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+                (Real.exp (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) B))
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@OfNat.ofNat.{0} Real 3
+                (@instOfNatAtLeastTwo.{0} Real 3 Real.instNatCast
+                  (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))))
+              (@OfNat.ofNat.{0} Real 4
+                (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+                  (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))))))
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) (RectangleCLT.dimensionLog p)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 5
+              (@instOfNatAtLeastTwo.{0} Real 5 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)))))
+            (@OfNat.ofNat.{0} Real 4
+              (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))))
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+          (@Nat.cast.{0} Real Real.instNatCast n)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+            (@OfNat.ofNat.{0} Real 4
+              (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))))))
+RectangleCLT.Companion.SplitV4.polynomialWorstDistance_four_le.{u} {p n : Nat}
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p)
+  (hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n) {B : Real}
+  (hB : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) B) :
+  @LE.le.{0} Real Real.instLE
+    (RectangleCLT.Companion.SplitV4.polynomialWorstDistance.{u}
+      (@OfNat.ofNat.{0} Real 4
+        (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+      B p n)
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (RectangleCLT.Companion.SplitV4.polynomialFourthUniformConstant B)
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) (RectangleCLT.dimensionLog p)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 5
+              (@instOfNatAtLeastTwo.{0} Real 5 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)))))
+            (@OfNat.ofNat.{0} Real 4
+              (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))))))
+      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+        (@Nat.cast.{0} Real Real.instNatCast n)
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+          (@OfNat.ofNat.{0} Real 4
+            (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))))))
+RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance_four_le.{u} {p n : Nat}
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p)
+  (hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n) {B : Real}
+  (hB : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) B) :
+  @LE.le.{0} Real Real.instLE
+    (RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance.{u}
+      (@OfNat.ofNat.{0} Real 4
+        (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+      B p n)
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (RectangleCLT.Companion.SplitV4.polynomialFourthUniformConstant B)
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) (RectangleCLT.dimensionLog p)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 5
+              (@instOfNatAtLeastTwo.{0} Real 5 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)))))
+            (@OfNat.ofNat.{0} Real 4
+              (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))))))
+      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+        (@Nat.cast.{0} Real Real.instNatCast n)
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+          (@OfNat.ofNat.{0} Real 4
+            (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))))))
+RectangleCLT.Companion.SplitV4.polynomialSymmetricClassDistances: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.zero_mem_polynomialSymmetricClassDistances: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.polynomialSymmetricClassDistances_subset: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.polynomialSymmetricClassDistances_bddAbove: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance_nonneg: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance_le: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance_le_one: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.rectangleDistance_mem_polynomialSymmetricClassDistances: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.rectangleDistance_le_polynomialSymmetricWorstDistance: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.mono_envelope: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.polynomialFourthUniformConstant: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.polynomialFourthUniformConstant_pos: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.polynomialBennettObservationRate_four_factor: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.polynomialWorstDistance_four_le: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance_four_le: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+Audited literal centrally symmetric polynomial-model supremum, class inclusion, model domination, monotone envelope transfer and genuine q=4 all-model uniform rate.

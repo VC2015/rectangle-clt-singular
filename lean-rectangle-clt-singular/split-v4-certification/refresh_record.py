@@ -10,6 +10,7 @@ ap.add_argument('--extra',action='append',default=[])
 ap.add_argument('--validate-only',action='store_true')
 ap.add_argument('--baseline',default='split-v4-certification/logs-ci-eighteen-statements/split-v4-baseline/run.json')
 ap.add_argument('--baseline-workflow-id',type=int,default=42398843876)
+ap.add_argument('--ci-provenance',help='Validated downloaded CI artifact provenance for the same proof source.')
 ap.add_argument('--certify-complete',action='store_true',
     help='Require all 31 statements and all required analytic helper obligations before issuing a complete receipt.')
 args=ap.parse_args()
@@ -111,7 +112,7 @@ audit=logfile('Audit'); audittext=audit.read_text()
 am=re.search(r'Audited (\d+) split-V4 checkpoint',audittext);assert am
 
 dep=json.loads((cert/'checkpoints/fad0623/dependency-map.json').read_text())
-dep.update(proof_commit=proof,scope=f'{len(records)} selected kernel-checked declarations: {len(newthms)} new theorem declarations, {len(constructors)} explicitly checked C4 constructors, and {len(old)} historical endpoints. This is a partial manuscript checkpoint.',declarations=sorted(records.values(),key=lambda d:d['declaration']))
+dep.update(proof_commit=proof,scope=f'{len(records)} selected kernel-checked declarations: {len(newthms)} theorems attributed by Lean to SplitV4 modules, {len(constructors)} explicitly checked C4 constructors, and {len(old)} explicitly selected historical endpoints. This is a partial manuscript checkpoint.',declarations=sorted(records.values(),key=lambda d:d['declaration']))
 dep['axiom_policy']['observed_union']=sorted({a for d in records.values() for a in d['transitive_axioms']})
 dep['extraction'].update(source=rel(logfile('DependencyAudit')),source_sha256=sha(logfile('DependencyAudit')),build_crosscheck=rel(logfile('split-v4-build')),build_crosscheck_sha256=sha(logfile('split-v4-build')),all_records_identical_across_build_and_direct_audit=True,deduplicated_record_count=len(records),raw_direct_record_count=rawcount)
 edgecount=sum(len(d[k]) for d in records.values() for k in ['type_used_constants','value_used_constants'])
@@ -161,6 +162,10 @@ def attach(item,key='declaration'):
     if name in records:
         d=records[name]
         item.update(expanded_lean_type=d['expanded_lean_type'],expanded_type_status='actual_elaborated_type_from_successful_dependency_audit',transitive_axioms=d['transitive_axioms'],axiom_audit_status='passed_only_permitted_axioms',fresh_evidence=evidence(name))
+    elif name in definitions:
+        item.update(expanded_type_status='actual_printed_contract_definition_available',
+            definition_expansion_evidence=definitions[name],
+            axiom_audit_status='definition_used_transitively_by_checked_endpoints; no_separate_proof_endpoint_claim')
 
 # Recover the actual printed definitions, keeping the source text and proof types separate.
 definition_starts=[]
@@ -197,7 +202,7 @@ helper_modules={
 helper_modules.update({
  'appx-an:lem:threshold':['AveragedThresholdBound','AveragedThresholdCoarea','GaussianThresholdPairCoarea','GaussianThresholdPairTubes','GaussianThresholdTubes','GaussianThresholdIdentity','GaussianRadialScaling'],
  'opt:symmetric-lower':['SymmetricBoundedLower','SymmetricBoundedCalibration','SymmetricBoundedRemainder','SymmetricBoundedFamily','ModerateTailGeneral','LowerCalibrationScales'],
- 'appx-an:lem:matrix':['LogisticMatrixPaper','LogisticMatrixRegularizedBound','LogisticMatrixRegularized','LogisticMatrixRegularization','LogisticMatrixPadding','LogisticGammaTrace','LogisticLimits','NuclearTraceDual'],
+ 'appx-an:lem:matrix':['LogisticMatrixPaper','LogisticMatrixRegularizedBound','LogisticNormalRegularization','LogisticPaddingLimits','LogisticMatrixLimits','LogisticMatrixBound','LogisticMatrixEstimate','LogisticMatrixIntegrability','LogisticGammaTrace','NuclearTraceDual'],
  'opt:q4-lower':['FourthMomentFamily','FourthMomentCalibration','FourthMomentLower','FourthMomentOptimal','UniformLowerConstants','FourthLowerCalibrationScales','SymmetricPolynomialUniform'],
  'lower:sparse':['SparseFamily','SparseFamilyMoments','SparseFamilyCalibration','SparseMomentLower','SparseMomentOptimal','SparseUniformBounds','UniformLowerConstants','SparseLowerLogScales','SparseLowerPaperRate','SparseCoordinateNegligible','SparseLowerCalibrationScales','SparseLowerCalibrationLimits','SparseMaskLogAsymptotics'],
  'opt:q4-growing':['MaskedFourthFamily','MaskedFourthCalibration','MaskedFourthLower','MaskedFourthLowerCalibrationScales','RareFamilyComparison'],
@@ -295,7 +300,7 @@ for h in statement['additional_required_helpers']:
     if h['id']=='coordinate_duplication' and ns+'rectangleDistance_duplicateCoordinates' in records:
         h.update(status='proved_and_freshly_checked',proof_commit=proof,evidence_module='RectangleCLTCompanion.SplitV4.CoordinateDuplication',remaining=None)
     if h['id']=='threshold_regularization' and 'appx-an:lem:matrix' in completed:
-        h.update(status='proved_and_assembled_in_B4',proof_commit=proof,evidence_modules=['RectangleCLTCompanion.SplitV4.LogisticMatrixPaper','RectangleCLTCompanion.SplitV4.LogisticMatrixRegularizedBound','RectangleCLTCompanion.SplitV4.LogisticMatrixRegularization'],remaining=None)
+        h.update(status='proved_and_assembled_in_B4',proof_commit=proof,evidence_modules=['RectangleCLTCompanion.SplitV4.LogisticMatrixPaper','RectangleCLTCompanion.SplitV4.LogisticMatrixRegularizedBound','RectangleCLTCompanion.SplitV4.LogisticNormalRegularization','RectangleCLTCompanion.SplitV4.LogisticPaddingLimits','RectangleCLTCompanion.SplitV4.LogisticMatrixLimits'],remaining=None)
     if h['id']=='calibrated_path_identities' and 'appx-an:lem:identity' in completed:
         h.update(status='proved_generic_C4_interpolation_and_calibration',proof_commit=proof,limitation='Assembly in Proposition 1 is a separate inventory target.',remaining=None)
     if h['id']=='relative_moment_matrices' and 'appx-an:lem:restoration' in completed:
@@ -329,14 +334,67 @@ for c in base['commands']: assert sha(baseline.parent/c['log'])==c['log_sha256']
 receipt['fresh_baseline'].update(workflow_run_id=args.baseline_workflow_id,record=local(baseline),record_sha256=sha(baseline))
 receipt['fresh_checkpoint'].update(source_commit=proof,record=local(logs/'run.json'),record_sha256=sha(logs/'run.json'),required_commands_passed=True,zero_exit_code_commands=len(cmds),inputs_changed_during_run=False,full_package_build_passed=True,all_new_modules_and_audits_built=True)
 receipt['axiom_policy'].update(dependency_records=len(records),new_theorem_declarations=len(newthms),checked_constructor_definitions=len(constructors),reused_endpoints=len(old),combined_audit_entries=int(am[1]))
+receipt['axiom_policy']['theorem_count_policy']='The SplitV4 theorem count follows Lean module attribution and can include lazily generated equations in historical namespaces. Combined and imported-closure audit counts overlap and must not be added.'
 receipt['complete_import_closure_audit'].update(cwd=cmds['build']['cwd'],theorem_declarations=closure_count,log=local(closure),log_sha256=sha(closure),exit_code=0,source_commit=proof)
 receipt['proof_sources_sha256']=run['before']['sources_sha256']
 receipt['frozen_october_verification_records_sha256']=run['before']['frozen_records_sha256']
 receipt['manifest_and_toolchain_sha256']=run['before']['manifests_sha256']
 receipt['dependency_revisions_and_state']=run['before']['dependencies']
 receipt['completed_current_routes']=[e['label'] for e in checked if e.get('current_proof_route_status','').startswith('proved_')]
+receipt['explicit_proof_route_variants']=[{'label':e['label'],'route_status':e['current_proof_route_status'],
+    'explanation':e.get('route_correspondence_review',e.get('notes',''))}
+    for e in checked if e.get('current_proof_route_status')!='proved_current_route']
+receipt['analytic_route_policy']='The required analytic chains are proved as formal mathematical arguments, with the listed equivalent steps and alternative routes. This does not assert literal identity with every printed proof step.'
 receipt['remaining_core_blockers']=[e['label']+': '+(e.get('title') or e['kind']+' '+e['number']) for e in statement['entries'] if e.get('in_scope') and e.get('current_statement_status')!='proved_and_freshly_checked']
 receipt['metadata_note']='Receipt generated after the proof commit from an isolated detached checkout with separate project builds. Every recorded Lean source hash is checked against that commit. Later in-progress files and manuscripts are outside this receipt.'
+receipt['receipt_generator']={'path':local(Path(__file__)),'sha256':sha(Path(__file__))}
+if args.ci_provenance:
+    provenance=Path(args.ci_provenance).resolve()
+    ci=json.loads(provenance.read_text())
+    assert ci['conclusion']=='success' and ci['proof_commit']==proof
+    ci_runs={mode:json.loads((provenance.parent/f'split-v4-{mode}/run.json').read_text())
+        for mode in ['baseline','checkpoint']}
+    for mode,cr in ci_runs.items():
+        directory=provenance.parent/f'split-v4-{mode}'
+        reference=base if mode=='baseline' else run
+        assert cr['mode']==mode and cr['handoff_commit']==run['handoff_commit']
+        assert cr['before']['git_commit']==cr['after']['git_commit']==ci[mode]['checkout_commit']
+        assert cr['before']['dependencies'].keys()==cr['after']['dependencies'].keys()==reference['before']['dependencies'].keys()
+        assert cr['required_commands_passed'] and cr['exit_code']==0
+        assert not cr.get('inputs_changed_during_run') and not cr.get('dependency_revision_mismatches')
+        assert sha(directory/'run.json')==ci[mode]['run_sha256']
+        for c in cr['commands']:
+            assert c['exit_code']==0 and sha(directory/c['log'])==c['log_sha256']
+        for key in ['sources_sha256','manifests_sha256','frozen_records_sha256']:
+            assert cr['before'][key]==cr['after'][key]
+        for key in ['manuscript_sha256','manuscript_git_blob']:
+            assert cr['before'][key]==cr['after'][key]==reference['before'][key]
+        for snapshot in [cr['before'],cr['after']]:
+            for d in snapshot['dependencies'].values():
+                if d['type']=='git': assert not d['dirty'] and d['actual_revision']==d['manifest_revision']
+    cc=ci_runs['checkpoint']; bc=ci_runs['baseline']
+    assert cc['runner_sha256']==run['runner_sha256']
+    assert bc['before']['git_commit']==run['handoff_commit'] and len(bc['commands'])==8
+    assert [(c['name'],c['argv'],c['kind']) for c in bc['commands']]==[(c['name'],c['argv'],c['kind']) for c in base['commands']]
+    assert [(c['name'],c['argv'],c['kind']) for c in cc['commands']]==[(c['name'],c['argv'],c['kind']) for c in run['commands']]
+    for key in ['sources_sha256','manifests_sha256','frozen_records_sha256']:
+        assert cc['before'][key]==run['before'][key]
+        assert bc['before'][key]==base['before'][key]
+    ci_commands={c['name']:c for c in cc['commands']}
+    for name in ['DependencyAudit','split-v4-build']:
+        ci_records,_,_=extract(provenance.parent/'split-v4-checkpoint'/ci_commands[name]['log'])
+        assert ci_records==records,('CI/local kernel dependency records differ',name)
+    if 'CompleteAudit' in ci_commands:
+        ci_closure=provenance.parent/'split-v4-checkpoint'/ci_commands['CompleteAudit']['log']
+        match=re.search(r'Audited (\d+) companion theorem declarations',ci_closure.read_text())
+        assert match and int(match[1])==closure_count
+    receipt['independent_ci']={'workflow_run_id':ci['workflow_run_id'],'workflow_run_url':ci['workflow_run_url'],
+        'artifact_id':ci['artifact_id'],'conclusion':'success','proof_source_commit':proof,
+        'checkout_commit':cc['before']['git_commit'],
+        'provenance':local(provenance),'provenance_sha256':sha(provenance),
+        'baseline_commands_passed':len(bc['commands']),'checkpoint_commands_passed':len(cc['commands']),
+        'all_log_hashes_verified':True,'proof_fingerprints_identical_to_frozen_local_run':True,
+        'kernel_dependency_records_identical_to_frozen_local_run':True}
 if args.certify_complete:
     assert 'CompleteAudit' in cmds
     assert {ns+'fourthMoment_uniform_constants',ns+'denseMoment_uniform_constants',

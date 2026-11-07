@@ -1,0 +1,162 @@
+def RectangleCLT.Companion.SplitV4.relativeDerivativeBandwidth : ℝ :=
+max 4 RectangleCLT.Companion.SplitV4.seededRestorationBandwidth
+def RectangleCLT.Companion.SplitV4.relativeDerivativeConstant : ℝ :=
+RectangleCLT.Companion.SplitV4.directInitializationConstant + RectangleCLT.Companion.SplitV4.seededDerivativeConstant
+def RectangleCLT.Companion.SplitV4.RelativeDerivativePropositionContract.{u} : ℝ → ℝ → Prop :=
+fun A₀ C =>
+  ∀ (Ω : Type u) [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+    [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (p n : ℕ) [inst_2 : NeZero p]
+    (ξ : Fin n → Ω → RectangleCLT.Vector p) (δ s₃ s₄ : ℝ),
+    RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+      RectangleCLT.Companion.SplitV4.RelativeMomentBounds μ ξ s₃ s₄ →
+        (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+          ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+            A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+              ∀ (s : RectangleCLT.FaceSmoother p),
+                s.faces = Finset.univ →
+                  A₀ * δ ≤ s.bandwidth →
+                    (∀ v ∈ Set.Ioo 0 1,
+                        |RectangleCLT.Companion.SplitV4.directSlepianCubicTerm s μ ξ A v| ≤
+                            C * s₃ * √(RectangleCLT.dimensionLog p) / s.bandwidth ^ 2 ∧
+                          |RectangleCLT.Companion.SplitV4.directSlepianFourthRemainder s μ ξ A v| ≤
+                            C * s₄ * √(RectangleCLT.dimensionLog p) / s.bandwidth ^ 3) ∧
+                      (RectangleCLT.dimensionLog p * s.bandwidth ^ 2 < 1 / 4 →
+                        RectangleCLT.Companion.SplitV4.initializationDiscrepancy μ ξ A s.bandwidth ⋯ ≤
+                            C * s₃ * RectangleCLT.dimensionLog p ^ (3 / 2) +
+                              C * s₄ * RectangleCLT.dimensionLog p ^ (3 / 2) / s.bandwidth ∧
+                          let ε := RectangleCLT.dimensionLog p * s.bandwidth ^ 2;
+                          let hp := ⋯;
+                          let hε := ⋯;
+                          ∀ t ∈ Set.Ioo 0 1,
+                            HasDerivAt (RectangleCLT.Companion.SplitV4.normalizedSeededExpectation s μ ξ A ε)
+                                (-(t / (3 * (1 + ε) ^ (3 / 2))) *
+                                    RectangleCLT.Companion.SplitV4.normalizedSeededCubicTerm s μ ξ A ε t +
+                                  RectangleCLT.Companion.SplitV4.normalizedSeededFourthRemainder s μ ξ A ε hε t)
+                                t ∧
+                              |t / (3 * (1 + ε) ^ (3 / 2)) *
+                                      RectangleCLT.Companion.SplitV4.normalizedSeededCubicTerm s μ ξ A ε t| ≤
+                                  C * s₃ * RectangleCLT.dimensionLog p ^ (3 / 2) * t / (t + ε) ∧
+                                |RectangleCLT.Companion.SplitV4.normalizedSeededFourthRemainder s μ ξ A ε hε t| ≤
+                                  C * s₄ * RectangleCLT.dimensionLog p ^ (3 / 2) / (s.bandwidth * (t + ε)))
+def RectangleCLT.Companion.SplitV4.initializationDiscrepancy.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p n : ℕ} →
+      MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → Matrix (Fin p) (Fin p) ℝ → (h : ℝ) → 0 < h → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} μ ξ A h hh =>
+  sSup (Set.range (RectangleCLT.Companion.SplitV4.directInitializationGap μ ξ A h hh))
+def RectangleCLT.Companion.SplitV4.directInitializationGap.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p n : ℕ} →
+      MeasureTheory.Measure Ω →
+        (Fin n → Ω → RectangleCLT.Vector p) →
+          Matrix (Fin p) (Fin p) ℝ → (h : ℝ) → 0 < h → RectangleCLT.Vector p × RectangleCLT.Vector p → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} μ ξ A h hh bounds =>
+  let s := RectangleCLT.FaceSmoother.closedBox bounds.1 bounds.2 h hh;
+  |∫ (ω : Ω), s.F (RectangleCLT.sumVector ξ ω) ∂μ -
+      RectangleCLT.Companion.SplitV4.directSlepianExpectation s μ ξ A
+        (RectangleCLT.Companion.SplitV4.seededInitializationTime (RectangleCLT.dimensionLog p * h ^ 2))|
+def RectangleCLT.Companion.SplitV4.normalizedSeededCubicTerm.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p n : ℕ} →
+      RectangleCLT.FaceSmoother p →
+        MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → Matrix (Fin p) (Fin p) ℝ → ℝ → ℝ → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} s μ ξ A ε t =>
+  ∫ (y : RectangleCLT.Vector p),
+    RectangleCLT.Companion.SplitV4.relativeCubicContraction s μ ξ
+      y ∂RectangleCLT.Companion.SplitV4.normalizedSeededInterpolationLaw μ ξ A ε t
+def RectangleCLT.Companion.SplitV4.normalizedSeededFourthRemainder.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p n : ℕ} →
+      RectangleCLT.FaceSmoother p →
+        MeasureTheory.Measure Ω →
+          (Fin n → Ω → RectangleCLT.Vector p) → Matrix (Fin p) (Fin p) ℝ → (ε : ℝ) → 0 ≤ ε → ℝ → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} s μ ξ A ε hε t =>
+  RectangleCLT.Companion.SplitV4.seededFourthRemainder (RectangleCLT.Companion.SplitV4.seededRescaledSmoother s ε hε) μ
+    ξ A 0 ε t
+def RectangleCLT.Companion.SplitV4.normalizedSeededExpectation.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p n : ℕ} →
+      RectangleCLT.FaceSmoother p →
+        MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → Matrix (Fin p) (Fin p) ℝ → ℝ → ℝ → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} s μ ξ A ε t =>
+  ∫ (y : RectangleCLT.Vector p), s.F y ∂RectangleCLT.Companion.SplitV4.normalizedSeededInterpolationLaw μ ξ A ε t
+RectangleCLT.Companion.SplitV4.proposition_relative_derivatives.{u_1} :
+  @Exists.{1} Real fun (A₀ : Real) =>
+    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) A₀)
+      (@Exists.{1} Real fun (C : Real) =>
+        And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) C)
+          (RectangleCLT.Companion.SplitV4.RelativeDerivativePropositionContract.{u_1} A₀ C))
+RectangleCLT.Companion.SplitV4.relative_derivative_proposition.{u_1} :
+  RectangleCLT.Companion.SplitV4.RelativeDerivativePropositionContract.{u_1}
+    RectangleCLT.Companion.SplitV4.relativeDerivativeBandwidth RectangleCLT.Companion.SplitV4.relativeDerivativeConstant
+RectangleCLT.Companion.SplitV4.relative_smooth_comparison_bound.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {p n : Nat} [@NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) p]
+  (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ s₃ s₄ : Real}
+  (h : @RectangleCLT.BoundedIndependentHypotheses.{u_1} Ω inst✝ p n μ ξ δ)
+  (hrel : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ s₃ s₄)
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ)))
+  (s : RectangleCLT.FaceSmoother p)
+  (hfaces :
+    @Eq.{1} (Finset.{0} (RectangleCLT.Face p)) (@RectangleCLT.FaceSmoother.faces p s)
+      (@Finset.univ.{0} (RectangleCLT.Face p) (@instFintypeProd.{0, 0} (Fin p) Bool (Fin.fintype p) Bool.fintype)))
+  (hband :
+    @LE.le.{0} Real Real.instLE
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        RectangleCLT.Companion.SplitV4.relativeDerivativeBandwidth δ)
+      (@RectangleCLT.FaceSmoother.bandwidth p s)) :
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+        (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst✝ μ fun (ω : Ω) => @RectangleCLT.FaceSmoother.F p s (@RectangleCLT.sumVector.{u_1} Ω p n ξ ω))
+        (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector p) Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (@RectangleCLT.gaussianLaw p A) fun (g : RectangleCLT.Vector p) => @RectangleCLT.FaceSmoother.F p s g)))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        RectangleCLT.Companion.SplitV4.relativeDerivativeConstant
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (RectangleCLT.dimensionLog p)
+          (Real.sqrt (RectangleCLT.dimensionLog p))))
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) s₃
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            s₄ (@RectangleCLT.FaceSmoother.bandwidth p s))
+          (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+            (Real.log
+              (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+                (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+                (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                  (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (RectangleCLT.dimensionLog p)
+                    (@HPow.hPow.{0, 0, 0} Real Nat Real
+                      (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+                      (@RectangleCLT.FaceSmoother.bandwidth p s) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))))))))
+'RectangleCLT.Companion.SplitV4.proposition_relative_derivatives' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.relative_smooth_comparison_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited all 16 whole relative derivative proposition theorem declarations.

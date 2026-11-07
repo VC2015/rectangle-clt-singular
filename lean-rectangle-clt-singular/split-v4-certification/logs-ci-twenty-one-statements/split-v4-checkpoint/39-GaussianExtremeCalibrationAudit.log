@@ -1,0 +1,51 @@
+RectangleCLT.Companion.SplitV4.tendsto_normalMaximumDensity_at_threshold_div_sqrt_log :
+  @Filter.Tendsto.{0, 0} Nat Real
+    (fun (m : Nat) =>
+      @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (RectangleCLT.Companion.SplitV4.normalMaximumDensity m (RectangleCLT.Companion.normalMaxThreshold m))
+        (Real.sqrt
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@OfNat.ofNat.{0} Real 2
+              (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+            (Real.log (@Nat.cast.{0} Real Real.instNatCast m)))))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+    (@nhds.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (Real.exp (@Neg.neg.{0} Real Real.instNeg (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))))
+RectangleCLT.Companion.SplitV4.eventually_normalMaximumDensity_local_derivative_bound :
+  @Exists.{1} Real fun (C : Real) =>
+    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) C)
+      (@Filter.Eventually.{0} Nat
+        (fun (m : Nat) =>
+          ∀ (t : Real),
+            @LE.le.{0} Real Real.instLE
+                (@abs.{0} Real Real.lattice Real.instAddGroup
+                  (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) t
+                    (RectangleCLT.Companion.normalMaxThreshold m)))
+                (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                  (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+                  (Real.sqrt (Real.log (@Nat.cast.{0} Real Real.instNatCast m)))) →
+              @LE.le.{0} Real Real.instLE
+                (@abs.{0} Real Real.lattice Real.instAddGroup
+                  (@deriv.{0, 0} Real (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField)
+                    Real Real.instAddCommGroup
+                    (@NormedSpace.toModule.{0, 0} Real Real Real.normedField
+                      (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                            (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                        (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                              (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+                    (@UniformSpace.toTopologicalSpace.{0} Real
+                      (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                    (RectangleCLT.Companion.SplitV4.normalMaximumDensity m) t))
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) C
+                  (Real.log (@Nat.cast.{0} Real Real.instNatCast m))))
+        (@Filter.atTop.{0} Nat Nat.instPreorder))
+Audited 24 Gaussian extreme calibration declarations; only the three permitted axioms.

@@ -1,95 +1,73 @@
-# Split-V4 proof status and open obligations
+# Split-V4 completed scope
 
-The frozen proof checkpoint is `7bf2325`. Twenty-one of the 31 proved named
-statements are checked; ten remain pending in this snapshot. The whole
-manuscript is not certified. Conjecture 1 is excluded and is never an assumption.
-Later work is outside this receipt until it has its own frozen build.
+All 31 proved named statements are checked at frozen proof source
+`69f89747f4b845491b75cb23134c056bfbcd40f7`. No in-scope proved statement or
+required analytic helper remains open. Conjecture 1 is excluded and is
+never an assumption.
 
-The exact declarations, expanded types, source context and kernel dependencies
-are in [statement-map.json](statement-map.json) and
-[dependency-map.json](dependency-map.json). The
-[verification record](../SPLIT_V4_VERIFICATION.json) records all 119 successful
-commands, 2,750 dependency records, and the strict audit of 4,756 imported
-companion theorem declarations. A fresh pristine baseline passed all eight
-handoff commands in GitHub CI run `42398843876`.
+The complete scope comprises Theorems 1–8, Corollaries 1–3, Propositions 1–3,
+Lemmas 1–2, Lemma A.1, Lemmas B.1–B.5, Lemma C.1, Lemma E.1,
+Lemmas F.1–F.3 and Lemmas G.1–G.4.
 
-The target is handoff commit `2bd43fd98d2a8687ccdda3745f9ac8eac96260dd`, with
+The [verification record](../SPLIT_V4_VERIFICATION.json),
+[statement map](statement-map.json), [kernel dependency map](dependency-map.json),
+and [correspondence review](CORRESPONDENCE_REVIEW.md) give exact declarations,
+actual expanded contracts, proof routes and execution evidence. The final
+isolated run passed all 167 required commands with unchanged proof inputs.
+It recorded 3,751 dependency declarations and audited 5,757 imported
+companion theorem declarations. These counts follow Lean module attribution
+and overlap; they must not be added.
+
+The independent CI run for the same proof source passed the eight-command
+pristine handoff baseline and all 167 checkpoint commands. Its downloaded
+artifact is checked against the local source fingerprints, command plans,
+raw log hashes and actual kernel dependency records.
+
+The target remains handoff `2bd43fd98d2a8687ccdda3745f9ac8eac96260dd`, with
 manuscript SHA-256
 `f2c1252531e21642c5e1e6ca99e2b32a5ae63895d9e51ff075a8f23505eea2b1`.
-The manuscript and frozen October verification records are unchanged. Only
-`propext`, `Classical.choice`, and `Quot.sound` are permitted transitively.
-Statement completion and the manuscript proof route are recorded separately.
+The manuscript, magenta markings, original inventory, analytic audit and
+three October verification records are unchanged. Lean 4.19.0 and mathlib
+`c44e0c8ee63ca166450922a373c7409c5d26b00b` remain pinned.
 
-## Checked statements
+## Checked analytic chains
 
-- Corollaries 1–2, Theorems 2–3, Propositions 2–3, and Lemmas 1–2.
-- Theorem 4: the actual symmetric bounded construction, exact orthant constant
-  `1/(8*exp 1)`, and the full rectangle-distance lower conclusion.
-- Lemmas B.3–B.5: actual Gaussian mean; logistic nuclear-norm estimate with a
-  constant chosen before all models, every tuple length and zero noise;
-  actual averaged hard Gaussian threshold derivative with generic base
-  concentration, including the facet/ridge cancellation used in the proof.
-- Lemma C.1, Lemma E.1, Lemmas F.1–F.3, and Lemmas G.1–G.4.
+- Theorem 1 retains both actual fourth matrices and derives its signed
+  third bound from the bounded independent array. Its envelope consequence
+  uses the same universal constant. Constants precede every model.
+- Proposition 1 contains the actual initial Slepian and normalized seeded
+  estimates, derivative identity, threshold supremum and time integrals.
+  A.1 and B.1–B.5 are proved inputs, including all positive derivative orders,
+  arbitrary C4 tests, joint conditional independence, generic base
+  concentration, nuclear norms, regularization and hard threshold derivatives.
+- C.1 and Lemma 1 retain intrinsic expected maxima. G.1–G.4 retain signed
+  aggregation, actual copy conditional expectations, all large-increment
+  quantities, common-point contraction and endpoint limits.
+- Polynomial routes use actual conditional laws and retain the separate
+  fourth moments for `2 < q < 4`, with full class suprema and q-dependent
+  constants. Every polyhedral branch and zero-variance deletion is checked.
+- All lower models, moment classes, covariance matches and asymptotic rates
+  are actual probability constructions. Theorems 5, 7 and 8 have explicit
+  constant-first uniform formulations and genuine symmetric/unrestricted
+  class suprema. Growing-envelope and fixed-envelope assumptions are distinct.
 
-All upper bounds retain their actual probability classes, exact Gaussian
-covariance and singular cases. Polynomial bounds retain the separate fourth
-moment condition for `2 < q < 4`, constants depending only on fixed `q`, and
-the literal supremum over the full array class. F.1 permits independent
-nonidentical scalar laws and strict tails including atoms at zero. F.3 proves
-the actual masked symmetric finite-product model, moments, rank and gap.
+## Proof-route distinctions
 
-The cube proof handles ties directly using selected supporting branches.
-G.2 uses a proved good-clock cutoff in place of the printed expected-clock
-width step. These route distinctions are explicit in the statement map.
+Statement completion is recorded separately from literal printed proof steps.
+The normalization and Orlicz corollaries use checked historical bounded inputs;
+Lemma 2 uses deterministic common-threshold shifts; Theorem 3 uses a specialized
+proved two-point tilt bound. B.3 follows the substantive entropy/face argument
+with equivalent formal steps. C.1 handles ties directly through supporting
+branches. G.2 uses a proved good-clock cutoff. These distinctions are explicit
+in the statement map and correspondence review. The revised relative and
+large-increment analytic chains have their own independent proofs.
 
-## Relative theorem and analytic chain: five pending statements
+## Axiom and evidence policy
 
-Theorem 1 (`thm:unrestricted`), Proposition 1 (`an:prop:derivative`),
-Lemma A.1 (`appx-lem:envelope`), and Lemmas B.1–B.2
-(`appx-an:lem:identity`, `appx-an:lem:restoration`) remain pending here.
-
-The existing `unrestrictedCLT` proves the envelope specialization and has no
-relative `s4` parameter. The checked relative moment helpers retain signed
-cubic aggregation and both distinct fourth matrices, derive third bounds
-from fourth-only admissibility, and transfer the exact matrices through face
-maps without positive eigenvalue assumptions.
-
-The calibrated FaceSmoother seeded identity and arbitrary-amplitude finite
-mask differentiation are checked components. The remaining B.1 contract
-requires the full ordinary bounded-derivative C4 test class and literal
-fourth-order kernels. B.2 still requires the final conditional original-space
-contract with joint auxiliary dependence, signed zero-shift refinement and
-both squared-face fourth budgets. A.1 still requires all positive derivative
-orders and the actual translated supremum with genuine integrability.
-
-Proposition 1 must assemble these actual estimates along the initial Slepian
-and seeded paths, preserve the generic concentration constant, and justify
-time integration with `epsilon=L*h^2`. Theorem 1 must then optimize to
-`C*min(1,L^(3/2)*(delta+sqrt(s4*D_L)))`, retaining `s4` throughout.
-
-## Polyhedral transfer: one pending statement
-
-Corollary 3 (`cor:polyhedral-transfer`) remains pending only through the
-relative-moment endpoint of Theorem 1. Actual Gaussian pushforward, bounded,
-Orlicz and polynomial final bounds are checked. The polynomial transfer
-proves `B -> J^2*B`; exact zero-variance face deletion includes negative
-thresholds and empty face families. The relative branch must retain
-`delta -> J*delta` and `s4 -> J^2*s4`.
-
-## Lower calibrations: four pending statements
-
-Theorems 5–8 (`opt:q4-lower`, `opt:q4-growing`, `lower:dense`, `lower:sparse`)
-remain pending in this snapshot. F.1–F.3 and the genuine Gaussian extreme
-value helpers are checked inputs. The final calibrations must prove eventual
-parameter validity, rounded mask coverage, negligible remainders, and full
-rectangle-distance lower conclusions under the exact growth assumptions.
-Fixed `B` and growing `B_n` must remain distinct, and Theorems 5 and 7 must
-include the actual class supremum conclusions.
-
-## Evidence policy
-
-Every certified entry requires an expanded actual Lean type, a successful
-frozen source build, and its permitted transitive axiom closure. A helper's
-compilation is not whole-statement completion. The excluded conjecture is
-never a premise. The original October records remain unchanged, and previous
-partial checkpoints are retained under `checkpoints/`.
+Only `propext`, `Classical.choice` and `Quot.sound` occur transitively.
+The complete receipt requires every current endpoint, all required helper
+modules, expanded actual contracts, a recorded complete-import audit, all
+intended commands, exact committed source/configuration hashes and clean
+pinned dependencies before and after execution. Historical candidates remain
+separate from the current certified endpoints. Earlier partial receipts and
+execution evidence are retained under `checkpoints/` and the named log folders.

@@ -1,0 +1,49 @@
+def RectangleCLT.Companion.SplitV4.cubeSign : {n : ℕ} → Kane.Cube n → Fin n → ℝ :=
+fun {n} x i => if x i = true then 1 else -1
+def RectangleCLT.Companion.SplitV4.cubeLinear : {n : ℕ} → (Fin n → ℝ) → Kane.Cube n → ℝ :=
+fun {n} b x => ∑ i, b i * RectangleCLT.Companion.SplitV4.cubeSign x i
+def RectangleCLT.Companion.SplitV4.positiveLinearMaximum : {m n : ℕ} → (Fin m → Fin n → ℝ) → Kane.Cube n → ℝ :=
+fun {m n} b x => Finset.univ.sup' ⋯ fun i => Fin.cases 0 (fun α => RectangleCLT.Companion.SplitV4.cubeLinear (b α) x) i
+def RectangleCLT.Companion.SplitV4.intrinsicCubeMean : {m n : ℕ} → (Fin m → Fin n → ℝ) → ℝ :=
+fun {m n} b => Kane.avg (RectangleCLT.Companion.SplitV4.positiveLinearMaximum b)
+RectangleCLT.Companion.SplitV4.avg_exp_cubeLinear_le {n : Nat} (b : Fin n → Real) (t : Real) :
+  @LE.le.{0} Real Real.instLE
+    (@Kane.avg.{0} (Kane.Cube n)
+      (@Pi.instFintype.{0, 0} (Fin n) (fun (a : Fin n) => Bool) (instDecidableEqFin n) (Fin.fintype n)
+        fun (a : Fin n) => Bool.fintype)
+      fun (x : Kane.Cube n) =>
+      Real.exp
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) t
+          (@RectangleCLT.Companion.SplitV4.cubeLinear n b x)))
+    (Real.exp
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) t
+            (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+          (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+            fun (i : Fin n) =>
+            @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+              (b i) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))))
+RectangleCLT.Companion.SplitV4.intrinsicCubeMean_le_sqrt_log {m n : Nat} (b : Fin m → Fin n → Real)
+  (hrow :
+    ∀ (α : Fin m),
+      @LE.le.{0} Real Real.instLE
+        (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+          fun (i : Fin n) =>
+          @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (b α i) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) :
+  @LE.le.{0} Real Real.instLE (@RectangleCLT.Companion.SplitV4.intrinsicCubeMean m n b)
+    (Real.sqrt
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (Real.log
+          (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) (@Nat.cast.{0} Real Real.instNatCast m)
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))))
+Audited 14 sign-cube data and maximum theorem declarations.
+The intrinsic cube boundary probability estimate is a separate endpoint.

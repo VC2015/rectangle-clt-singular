@@ -1,0 +1,190 @@
+def RectangleCLT.Companion.SplitV4.bennettTruncate : {p : ℕ} → ℝ → RectangleCLT.Vector p → RectangleCLT.Vector p :=
+fun {p} u x => if ‖x‖ ≤ u then x else 0
+RectangleCLT.Companion.SplitV4.measurable_bennettTruncate {p : ℕ} (u : ℝ) :
+  Measurable (RectangleCLT.Companion.SplitV4.bennettTruncate u)
+RectangleCLT.Companion.SplitV4.identDistrib_bennettTruncate_neg.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} {p : ℕ} {T : Ω → RectangleCLT.Vector p} {u : ℝ}
+  (hsym : ProbabilityTheory.IdentDistrib T (fun ω => -T ω) μ μ) :
+  ProbabilityTheory.IdentDistrib (fun ω => RectangleCLT.Companion.SplitV4.bennettTruncate u (T ω))
+    (fun ω => -RectangleCLT.Companion.SplitV4.bennettTruncate u (T ω)) μ μ
+RectangleCLT.Companion.SplitV4.integrable_bennettTruncate_coordinate.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} {p : ℕ} {T : Ω → RectangleCLT.Vector p} {u : ℝ} [MeasureTheory.IsFiniteMeasure μ]
+  (hT : Measurable T) (hu : 0 ≤ u) (j : Fin p) :
+  MeasureTheory.Integrable (fun ω => RectangleCLT.Companion.SplitV4.bennettTruncate u (T ω) j) μ
+RectangleCLT.Companion.SplitV4.integrable_bennettTruncate_coordinate_sq.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} {p : ℕ} {T : Ω → RectangleCLT.Vector p} {u : ℝ} (hT : Measurable T) (j : Fin p)
+  (hsecond : MeasureTheory.Integrable (fun ω => T ω j ^ 2) μ) :
+  MeasureTheory.Integrable (fun ω => RectangleCLT.Companion.SplitV4.bennettTruncate u (T ω) j ^ 2) μ
+RectangleCLT.Companion.SplitV4.integral_bennettTruncate_coordinate_sq_le.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} {p : ℕ} {T : Ω → RectangleCLT.Vector p} {u : ℝ} (hT : Measurable T) (j : Fin p)
+  (hsecond : MeasureTheory.Integrable (fun ω => T ω j ^ 2) μ) :
+  ∫ (ω : Ω), RectangleCLT.Companion.SplitV4.bennettTruncate u (T ω) j ^ 2 ∂μ ≤ ∫ (ω : Ω), T ω j ^ 2 ∂μ
+RectangleCLT.Companion.SplitV4.iIndepFun_bennettTruncate.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} {p n : ℕ} {u : ℝ} {Ts : Fin n → Ω → RectangleCLT.Vector p}
+  (hind : ProbabilityTheory.iIndepFun Ts μ) :
+  ProbabilityTheory.iIndepFun (fun i ω => RectangleCLT.Companion.SplitV4.bennettTruncate u (Ts i ω)) μ
+RectangleCLT.Companion.SplitV4.integrable_of_bennett_norm_moment.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} {p : ℕ} {T : Ω → RectangleCLT.Vector p} {q : ℝ} [MeasureTheory.IsFiniteMeasure μ]
+  (hT : Measurable T) (hq : 1 < q) (hmoment : MeasureTheory.Integrable (fun ω => ‖T ω‖ ^ q) μ) :
+  MeasureTheory.Integrable T μ
+RectangleCLT.Companion.SplitV4.integral_bennettTruncate_coordinate_eq_zero.{u_1} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] {μ : @MeasureTheory.Measure.{u_1} Ω inst✝} {p : Nat} {T : Ω → RectangleCLT.Vector p}
+  {u : Real} [@MeasureTheory.IsFiniteMeasure.{u_1} Ω inst✝ μ]
+  (hT :
+    @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) T)
+  (hu : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) u)
+  (hsym :
+    @ProbabilityTheory.IdentDistrib.{u_1, u_1, 0} Ω Ω (RectangleCLT.Vector p) inst✝ inst✝
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) T
+      (fun (ω : Ω) =>
+        @Neg.neg.{0} (RectangleCLT.Vector p)
+          (@Pi.instNeg.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instNeg) (T ω))
+      μ μ)
+  (j : Fin p) :
+  @Eq.{1} Real
+    (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      inst✝ μ fun (ω : Ω) => @RectangleCLT.Companion.SplitV4.bennettTruncate p u (T ω) j)
+    (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+RectangleCLT.Companion.SplitV4.integral_norm_sum_bennettRemainder_le_budget.{u_1} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] {μ : @MeasureTheory.Measure.{u_1} Ω inst✝} {p n : Nat} {u q : Real}
+  {Ts : Fin n → Ω → RectangleCLT.Vector p}
+  (hT :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (Ts i))
+  (hu : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) u)
+  (hq : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) q)
+  (hmoment :
+    ∀ (i : Fin n),
+      @MeasureTheory.Integrable.{0, u_1} Real
+        (@ContinuousENorm.toENorm.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real
+              (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+                (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+          (@SeminormedAddGroup.toContinuousENorm.{0} Real
+            (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        Ω inst✝
+        (fun (ω : Ω) =>
+          @HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+            (@Norm.norm.{0} (RectangleCLT.Vector p)
+              (@NormedRing.toNorm.{0} (RectangleCLT.Vector p)
+                (@Pi.normedRing.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                  @NormedCommRing.toNormedRing.{0} Real Real.normedCommRing))
+              (Ts i ω))
+            q)
+        μ)
+  (A : Real)
+  (hbudget :
+    @LE.le.{0} Real Real.instLE
+      (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+        fun (i : Fin n) =>
+        @MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst✝ μ fun (ω : Ω) =>
+          @HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+            (@Norm.norm.{0} (RectangleCLT.Vector p)
+              (@NormedRing.toNorm.{0} (RectangleCLT.Vector p)
+                (@Pi.normedRing.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                  @NormedCommRing.toNormedRing.{0} Real Real.normedCommRing))
+              (Ts i ω))
+            q)
+      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) A q)) :
+  @LE.le.{0} Real Real.instLE
+    (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      inst✝ μ fun (ω : Ω) =>
+      @Norm.norm.{0} (RectangleCLT.Vector p)
+        (@NormedRing.toNorm.{0} (RectangleCLT.Vector p)
+          (@Pi.normedRing.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+            @NormedCommRing.toNormedRing.{0} Real Real.normedCommRing))
+        (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+          (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+          (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+          @HSub.hSub.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@instHSub.{0} (RectangleCLT.Vector p)
+              (@Pi.instSub.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instSub))
+            (Ts i ω) (@RectangleCLT.Companion.SplitV4.bennettTruncate p u (Ts i ω))))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) A q)
+      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) u
+        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) q
+          (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))))
+RectangleCLT.Companion.SplitV4.sum_ae_eq_zero_of_coordinate_second_moment_budget_zero.{u_1} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] {μ : @MeasureTheory.Measure.{u_1} Ω inst✝} {p n : Nat}
+  {Ts : Fin n → Ω → RectangleCLT.Vector p}
+  (hsecond :
+    ∀ (i : Fin n) (j : Fin p),
+      @MeasureTheory.Integrable.{0, u_1} Real
+        (@ContinuousENorm.toENorm.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real
+              (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+                (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+          (@SeminormedAddGroup.toContinuousENorm.{0} Real
+            (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        Ω inst✝
+        (fun (ω : Ω) =>
+          @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (Ts i ω j) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+        μ)
+  (hbudget :
+    ∀ (j : Fin p),
+      @LE.le.{0} Real Real.instLE
+        (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+          fun (i : Fin n) =>
+          @MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+            inst✝ μ fun (ω : Ω) =>
+            @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+              (Ts i ω j) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))) :
+  @Filter.EventuallyEq.{u_1, 0} Ω (RectangleCLT.Vector p)
+    (@MeasureTheory.ae.{u_1, u_1} Ω (@MeasureTheory.Measure.{u_1} Ω inst✝)
+      (@MeasureTheory.Measure.instFunLike.{u_1} Ω inst✝) (@MeasureTheory.Measure.instOuterMeasureClass.{u_1} Ω inst✝) μ)
+    (fun (ω : Ω) =>
+      @Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+        (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+        (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) => Ts i ω)
+    (@OfNat.ofNat.{u_1} (Ω → RectangleCLT.Vector p) 0
+      (@Zero.toOfNat0.{u_1} (Ω → RectangleCLT.Vector p)
+        (@Pi.instZero.{u_1, 0} Ω (fun (a : Ω) => RectangleCLT.Vector p) fun (i : Ω) =>
+          @Pi.instZero.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instZero)))
+'RectangleCLT.Companion.SplitV4.integral_bennettTruncate_coordinate_eq_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.integral_norm_sum_bennettRemainder_le_budget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.sum_ae_eq_zero_of_coordinate_second_moment_budget_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited 24 Bennett truncation theorem declarations; only propext, Classical.choice and Quot.sound.

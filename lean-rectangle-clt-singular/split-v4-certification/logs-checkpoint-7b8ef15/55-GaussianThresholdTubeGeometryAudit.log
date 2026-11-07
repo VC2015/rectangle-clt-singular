@@ -1,0 +1,458 @@
+def RectangleCLT.Companion.SplitV4.thresholdPairBisector : {m r : ℕ} →
+  (Fin m → RectangleCLT.Vector r) → Fin m → Fin m → RectangleCLT.Vector r :=
+fun {m r} u j l k =>
+  RectangleCLT.Companion.SignedSurface.bisector (RectangleCLT.projectionEuclideanVector (u j))
+    (RectangleCLT.projectionEuclideanVector (u l)) k
+def RectangleCLT.Companion.SplitV4.thresholdPairDifference : {m r : ℕ} →
+  (Fin m → RectangleCLT.Vector r) → Fin m → Fin m → RectangleCLT.Vector r :=
+fun {m r} u j l k =>
+  RectangleCLT.Companion.SignedSurface.differenceDirection (RectangleCLT.projectionEuclideanVector (u j))
+    (RectangleCLT.projectionEuclideanVector (u l)) k
+def RectangleCLT.Companion.SplitV4.gaussianPairBase : {m r : ℕ} →
+  (Fin m → RectangleCLT.Vector r) →
+    RectangleCLT.Vector m → Fin m → Fin m → RectangleCLT.Vector r → RectangleCLT.Vector r :=
+fun {m r} u b j l g =>
+  RectangleCLT.Companion.SplitV4.gaussianPairSectionPoint (RectangleCLT.Companion.SplitV4.thresholdPairBisector u j l)
+    (RectangleCLT.Companion.SplitV4.thresholdPairDifference u j l)
+    (RectangleCLT.Companion.SplitV4.thresholdPairFirstLevel u b j l)
+    (RectangleCLT.Companion.SplitV4.thresholdPairSecondLevel u b j l) g
+def RectangleCLT.Companion.SplitV4.gaussianThresholdStratumEvent : {r m : ℕ} →
+  (Fin m → RectangleCLT.Vector r) → RectangleCLT.Vector m → Fin m × Fin m → Set (RectangleCLT.Vector r) :=
+fun {r m} u b q =>
+  if q.1 = q.2 then RectangleCLT.Companion.SplitV4.gaussianFacetEvent u b q.1
+  else RectangleCLT.Companion.SplitV4.gaussianPairEvent u b q.1 q.2
+RectangleCLT.Companion.SplitV4.thresholdPair_residualNormal_eq {r m : Nat} (u : Fin m → RectangleCLT.Vector r)
+  (j l : Fin m)
+  (hu :
+    @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u j)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (hv :
+    @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u l)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (hp :
+    @Ne.{1} (EuclideanSpace.{0, 0} Real (Fin r))
+      (@HAdd.hAdd.{0, 0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (EuclideanSpace.{0, 0} Real (Fin r))
+        (EuclideanSpace.{0, 0} Real (Fin r))
+        (@instHAdd.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@AddCommMagma.toAdd.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@AddCommSemigroup.toAddCommMagma.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@AddCommMonoid.toAddCommSemigroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@ENormedAddCommMonoid.toAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@UniformSpace.toTopologicalSpace.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@PiLp.uniformSpace.{0, 0}
+                      (@OfNat.ofNat.{0} ENNReal 2
+                        (@instOfNatAtLeastTwo.{0} ENNReal 2
+                          (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                            (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                          PiLp.innerProductSpace._proof_2))
+                      (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                      @PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                  (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@PiLp.normedAddCommGroup.{0, 0}
+                      (@OfNat.ofNat.{0} ENNReal 2
+                        (@instOfNatAtLeastTwo.{0} ENNReal 2
+                          (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                            (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                          PiLp.innerProductSpace._proof_2))
+                      (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+                      Real.normedAddCommGroup)))))))
+        (@RectangleCLT.projectionEuclideanVector r (u j)) (@RectangleCLT.projectionEuclideanVector r (u l)))
+      (@OfNat.ofNat.{0} (EuclideanSpace.{0, 0} Real (Fin r)) 0
+        (@Zero.toOfNat0.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@NegZeroClass.toZero.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@SubNegZeroMonoid.toNegZeroClass.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@SubtractionMonoid.toSubNegZeroMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@SubtractionCommMonoid.toSubtractionMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@AddCommGroup.toDivisionAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@WithLp.instAddCommGroup.{0}
+                      (@OfNat.ofNat.{0} ENNReal 2
+                        (@instOfNatAtLeastTwo.{0} ENNReal 2
+                          (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                            (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                          PiLp.innerProductSpace._proof_2))
+                      ((i : Fin r) → (fun (x : Fin r) => Real) i)
+                      (@Pi.addCommGroup.{0, 0} (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                        Real.instAddCommGroup))))))))))
+  (hm :
+    @Ne.{1} (EuclideanSpace.{0, 0} Real (Fin r))
+      (@HSub.hSub.{0, 0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (EuclideanSpace.{0, 0} Real (Fin r))
+        (EuclideanSpace.{0, 0} Real (Fin r))
+        (@instHSub.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@SubNegMonoid.toSub.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@AddGroup.toSubNegMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@NormedAddGroup.toAddGroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@NormedAddCommGroup.toNormedAddGroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@PiLp.normedAddCommGroup.{0, 0}
+                    (@OfNat.ofNat.{0} ENNReal 2
+                      (@instOfNatAtLeastTwo.{0} ENNReal 2
+                        (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                          (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                        PiLp.innerProductSpace._proof_2))
+                    (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+                    Real.normedAddCommGroup))))))
+        (@RectangleCLT.projectionEuclideanVector r (u j)) (@RectangleCLT.projectionEuclideanVector r (u l)))
+      (@OfNat.ofNat.{0} (EuclideanSpace.{0, 0} Real (Fin r)) 0
+        (@Zero.toOfNat0.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@NegZeroClass.toZero.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@SubNegZeroMonoid.toNegZeroClass.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@SubtractionMonoid.toSubNegZeroMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@SubtractionCommMonoid.toSubtractionMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@AddCommGroup.toDivisionAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@WithLp.instAddCommGroup.{0}
+                      (@OfNat.ofNat.{0} ENNReal 2
+                        (@instOfNatAtLeastTwo.{0} ENNReal 2
+                          (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                            (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                          PiLp.innerProductSpace._proof_2))
+                      ((i : Fin r) → (fun (x : Fin r) => Real) i)
+                      (@Pi.addCommGroup.{0, 0} (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                        Real.instAddCommGroup)))))))))) :
+  @Eq.{1} (RectangleCLT.Vector r)
+    (@HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector r) (RectangleCLT.Vector r)
+      (@instHSMul.{0, 0} Real (RectangleCLT.Vector r)
+        (@Function.hasSMul.{0, 0, 0} (Fin r) Real Real
+          (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+            (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring) (@Algebra.id.{0} Real Real.instCommSemiring))))
+      (@Inv.inv.{0} Real Real.instInv (@RectangleCLT.Companion.SplitV4.gaussianThresholdResidualScale m r u j l))
+      (@RectangleCLT.Companion.SplitV4.gaussianNormalProjection r (u j) (u l)))
+    (@HSub.hSub.{0, 0, 0} (RectangleCLT.Vector r) (RectangleCLT.Vector r) (RectangleCLT.Vector r)
+      (@instHSub.{0} (RectangleCLT.Vector r)
+        (@Pi.instSub.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instSub))
+      (@HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector r) (RectangleCLT.Vector r)
+        (@instHSMul.{0, 0} Real (RectangleCLT.Vector r)
+          (@Function.hasSMul.{0, 0, 0} (Fin r) Real Real
+            (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+              (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring) (@Algebra.id.{0} Real Real.instCommSemiring))))
+        (@RectangleCLT.Companion.SplitV4.thresholdPairSecondCoefficient r m u j l)
+        (@RectangleCLT.Companion.SplitV4.thresholdPairBisector m r u j l))
+      (@HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector r) (RectangleCLT.Vector r)
+        (@instHSMul.{0, 0} Real (RectangleCLT.Vector r)
+          (@Function.hasSMul.{0, 0, 0} (Fin r) Real Real
+            (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+              (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring) (@Algebra.id.{0} Real Real.instCommSemiring))))
+        (@RectangleCLT.Companion.SplitV4.thresholdPairFirstCoefficient r m u j l)
+        (@RectangleCLT.Companion.SplitV4.thresholdPairDifference m r u j l)))
+RectangleCLT.Companion.SplitV4.gaussianPairBase_frame_levels {r m : Nat} (u : Fin m → RectangleCLT.Vector r)
+  (b : RectangleCLT.Vector m) (j l : Fin m)
+  (hu :
+    @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u j)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (hv :
+    @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u l)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (hp :
+    @Ne.{1} (EuclideanSpace.{0, 0} Real (Fin r))
+      (@HAdd.hAdd.{0, 0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (EuclideanSpace.{0, 0} Real (Fin r))
+        (EuclideanSpace.{0, 0} Real (Fin r))
+        (@instHAdd.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@AddCommMagma.toAdd.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@AddCommSemigroup.toAddCommMagma.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@AddCommMonoid.toAddCommSemigroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@ENormedAddCommMonoid.toAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@UniformSpace.toTopologicalSpace.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@PiLp.uniformSpace.{0, 0}
+                      (@OfNat.ofNat.{0} ENNReal 2
+                        (@instOfNatAtLeastTwo.{0} ENNReal 2
+                          (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                            (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                          PiLp.innerProductSpace._proof_2))
+                      (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                      @PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                  (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@PiLp.normedAddCommGroup.{0, 0}
+                      (@OfNat.ofNat.{0} ENNReal 2
+                        (@instOfNatAtLeastTwo.{0} ENNReal 2
+                          (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                            (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                          PiLp.innerProductSpace._proof_2))
+                      (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+                      Real.normedAddCommGroup)))))))
+        (@RectangleCLT.projectionEuclideanVector r (u j)) (@RectangleCLT.projectionEuclideanVector r (u l)))
+      (@OfNat.ofNat.{0} (EuclideanSpace.{0, 0} Real (Fin r)) 0
+        (@Zero.toOfNat0.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@NegZeroClass.toZero.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@SubNegZeroMonoid.toNegZeroClass.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@SubtractionMonoid.toSubNegZeroMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@SubtractionCommMonoid.toSubtractionMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@AddCommGroup.toDivisionAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@WithLp.instAddCommGroup.{0}
+                      (@OfNat.ofNat.{0} ENNReal 2
+                        (@instOfNatAtLeastTwo.{0} ENNReal 2
+                          (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                            (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                          PiLp.innerProductSpace._proof_2))
+                      ((i : Fin r) → (fun (x : Fin r) => Real) i)
+                      (@Pi.addCommGroup.{0, 0} (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                        Real.instAddCommGroup))))))))))
+  (hm :
+    @Ne.{1} (EuclideanSpace.{0, 0} Real (Fin r))
+      (@HSub.hSub.{0, 0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (EuclideanSpace.{0, 0} Real (Fin r))
+        (EuclideanSpace.{0, 0} Real (Fin r))
+        (@instHSub.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@SubNegMonoid.toSub.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@AddGroup.toSubNegMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@NormedAddGroup.toAddGroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@NormedAddCommGroup.toNormedAddGroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@PiLp.normedAddCommGroup.{0, 0}
+                    (@OfNat.ofNat.{0} ENNReal 2
+                      (@instOfNatAtLeastTwo.{0} ENNReal 2
+                        (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                          (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                        PiLp.innerProductSpace._proof_2))
+                    (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+                    Real.normedAddCommGroup))))))
+        (@RectangleCLT.projectionEuclideanVector r (u j)) (@RectangleCLT.projectionEuclideanVector r (u l)))
+      (@OfNat.ofNat.{0} (EuclideanSpace.{0, 0} Real (Fin r)) 0
+        (@Zero.toOfNat0.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@NegZeroClass.toZero.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@SubNegZeroMonoid.toNegZeroClass.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@SubtractionMonoid.toSubNegZeroMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@SubtractionCommMonoid.toSubtractionMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@AddCommGroup.toDivisionAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@WithLp.instAddCommGroup.{0}
+                      (@OfNat.ofNat.{0} ENNReal 2
+                        (@instOfNatAtLeastTwo.{0} ENNReal 2
+                          (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                            (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                          PiLp.innerProductSpace._proof_2))
+                      ((i : Fin r) → (fun (x : Fin r) => Real) i)
+                      (@Pi.addCommGroup.{0, 0} (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                        Real.instAddCommGroup))))))))))
+  (g : RectangleCLT.Vector r) :
+  And
+    (@Eq.{1} Real
+      (@RectangleCLT.faceDot r (@RectangleCLT.Companion.SplitV4.thresholdPairBisector m r u j l)
+        (@RectangleCLT.Companion.SplitV4.gaussianPairBase m r u b j l g))
+      (@RectangleCLT.Companion.SplitV4.thresholdPairFirstLevel m r u b j l))
+    (@Eq.{1} Real
+      (@RectangleCLT.faceDot r (@RectangleCLT.Companion.SplitV4.thresholdPairDifference m r u j l)
+        (@RectangleCLT.Companion.SplitV4.gaussianPairBase m r u b j l g))
+      (@RectangleCLT.Companion.SplitV4.thresholdPairSecondLevel m r u b j l))
+RectangleCLT.Companion.SplitV4.gaussianPairEvent_mem_adaptiveOutwardTube {r m : Nat} (u : Fin m → RectangleCLT.Vector r)
+  (b : RectangleCLT.Vector m) (j l : Fin m)
+  (hu :
+    @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u j)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (hv :
+    @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u l)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (hp :
+    @Ne.{1} (EuclideanSpace.{0, 0} Real (Fin r))
+      (@HAdd.hAdd.{0, 0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (EuclideanSpace.{0, 0} Real (Fin r))
+        (EuclideanSpace.{0, 0} Real (Fin r))
+        (@instHAdd.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@AddCommMagma.toAdd.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@AddCommSemigroup.toAddCommMagma.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@AddCommMonoid.toAddCommSemigroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@ENormedAddCommMonoid.toAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@UniformSpace.toTopologicalSpace.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@PiLp.uniformSpace.{0, 0}
+                      (@OfNat.ofNat.{0} ENNReal 2
+                        (@instOfNatAtLeastTwo.{0} ENNReal 2
+                          (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                            (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                          PiLp.innerProductSpace._proof_2))
+                      (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                      @PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                  (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@PiLp.normedAddCommGroup.{0, 0}
+                      (@OfNat.ofNat.{0} ENNReal 2
+                        (@instOfNatAtLeastTwo.{0} ENNReal 2
+                          (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                            (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                          PiLp.innerProductSpace._proof_2))
+                      (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+                      Real.normedAddCommGroup)))))))
+        (@RectangleCLT.projectionEuclideanVector r (u j)) (@RectangleCLT.projectionEuclideanVector r (u l)))
+      (@OfNat.ofNat.{0} (EuclideanSpace.{0, 0} Real (Fin r)) 0
+        (@Zero.toOfNat0.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@NegZeroClass.toZero.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@SubNegZeroMonoid.toNegZeroClass.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@SubtractionMonoid.toSubNegZeroMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@SubtractionCommMonoid.toSubtractionMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@AddCommGroup.toDivisionAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@WithLp.instAddCommGroup.{0}
+                      (@OfNat.ofNat.{0} ENNReal 2
+                        (@instOfNatAtLeastTwo.{0} ENNReal 2
+                          (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                            (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                          PiLp.innerProductSpace._proof_2))
+                      ((i : Fin r) → (fun (x : Fin r) => Real) i)
+                      (@Pi.addCommGroup.{0, 0} (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                        Real.instAddCommGroup))))))))))
+  (hm :
+    @Ne.{1} (EuclideanSpace.{0, 0} Real (Fin r))
+      (@HSub.hSub.{0, 0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (EuclideanSpace.{0, 0} Real (Fin r))
+        (EuclideanSpace.{0, 0} Real (Fin r))
+        (@instHSub.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@SubNegMonoid.toSub.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@AddGroup.toSubNegMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@NormedAddGroup.toAddGroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@NormedAddCommGroup.toNormedAddGroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@PiLp.normedAddCommGroup.{0, 0}
+                    (@OfNat.ofNat.{0} ENNReal 2
+                      (@instOfNatAtLeastTwo.{0} ENNReal 2
+                        (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                          (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                        PiLp.innerProductSpace._proof_2))
+                    (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+                    Real.normedAddCommGroup))))))
+        (@RectangleCLT.projectionEuclideanVector r (u j)) (@RectangleCLT.projectionEuclideanVector r (u l)))
+      (@OfNat.ofNat.{0} (EuclideanSpace.{0, 0} Real (Fin r)) 0
+        (@Zero.toOfNat0.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@NegZeroClass.toZero.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@SubNegZeroMonoid.toNegZeroClass.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@SubtractionMonoid.toSubNegZeroMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@SubtractionCommMonoid.toSubtractionMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@AddCommGroup.toDivisionAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@WithLp.instAddCommGroup.{0}
+                      (@OfNat.ofNat.{0} ENNReal 2
+                        (@instOfNatAtLeastTwo.{0} ENNReal 2
+                          (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                            (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                          PiLp.innerProductSpace._proof_2))
+                      ((i : Fin r) → (fun (x : Fin r) => Real) i)
+                      (@Pi.addCommGroup.{0, 0} (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                        Real.instAddCommGroup))))))))))
+  {g : RectangleCLT.Vector r}
+  (hg :
+    @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+      (@Set.instMembership.{0} (RectangleCLT.Vector r)) (@RectangleCLT.Companion.SplitV4.gaussianPairEvent m r u b j l)
+      g) :
+  @Membership.mem.{0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (Set.{0} (EuclideanSpace.{0, 0} Real (Fin r)))
+    (@Set.instMembership.{0} (EuclideanSpace.{0, 0} Real (Fin r)))
+    (@RectangleCLT.Companion.SplitV4.adaptiveOutwardTube.{0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (Fin m)
+      (@PiLp.normedAddCommGroup.{0, 0}
+        (@OfNat.ofNat.{0} ENNReal 2
+          (@instOfNatAtLeastTwo.{0} ENNReal 2
+            (@AddMonoidWithOne.toNatCast.{0} ENNReal
+              (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+            PiLp.innerProductSpace._proof_2))
+        (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+        Real.normedAddCommGroup)
+      (@PiLp.innerProductSpace.{0, 0, 0} Real Real.instRCLike (Fin r) (Fin.fintype r) (fun (x : Fin r) => Real)
+        (fun (i : Fin r) => Real.normedAddCommGroup) fun (i : Fin r) =>
+        @RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)
+      (fun (k : Fin m) => @RectangleCLT.projectionEuclideanVector r (u k)) b
+      (@RectangleCLT.Companion.SplitV4.euclideanThresholdRadius m r u)
+      (@Insert.insert.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instInsert.{0} (Fin m) (instDecidableEqFin m)) j
+        (@Singleton.singleton.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instSingleton.{0} (Fin m)) l)))
+    (@RectangleCLT.projectionEuclideanVector r g)
+RectangleCLT.Companion.SplitV4.gaussianThresholdStratumEvent_indicator_sum_le {r m : Nat}
+  (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m)
+  (hu :
+    ∀ (j : Fin m),
+      @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u j)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (hp :
+    ∀ (j l : Fin m),
+      @Ne.{1} (Fin m) j l →
+        @Ne.{1} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@HAdd.hAdd.{0, 0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (EuclideanSpace.{0, 0} Real (Fin r))
+            (EuclideanSpace.{0, 0} Real (Fin r))
+            (@instHAdd.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@AddCommMagma.toAdd.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@AddCommSemigroup.toAddCommMagma.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@AddCommMonoid.toAddCommSemigroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@ENormedAddCommMonoid.toAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@UniformSpace.toTopologicalSpace.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@PiLp.uniformSpace.{0, 0}
+                          (@OfNat.ofNat.{0} ENNReal 2
+                            (@instOfNatAtLeastTwo.{0} ENNReal 2
+                              (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                              PiLp.innerProductSpace._proof_2))
+                          (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                          @PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                      (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@PiLp.normedAddCommGroup.{0, 0}
+                          (@OfNat.ofNat.{0} ENNReal 2
+                            (@instOfNatAtLeastTwo.{0} ENNReal 2
+                              (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                              PiLp.innerProductSpace._proof_2))
+                          (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+                          Real.normedAddCommGroup)))))))
+            (@RectangleCLT.projectionEuclideanVector r (u j)) (@RectangleCLT.projectionEuclideanVector r (u l)))
+          (@OfNat.ofNat.{0} (EuclideanSpace.{0, 0} Real (Fin r)) 0
+            (@Zero.toOfNat0.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@NegZeroClass.toZero.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@SubNegZeroMonoid.toNegZeroClass.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@SubtractionMonoid.toSubNegZeroMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@SubtractionCommMonoid.toSubtractionMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@AddCommGroup.toDivisionAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@WithLp.instAddCommGroup.{0}
+                          (@OfNat.ofNat.{0} ENNReal 2
+                            (@instOfNatAtLeastTwo.{0} ENNReal 2
+                              (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                              PiLp.innerProductSpace._proof_2))
+                          ((i : Fin r) → (fun (x : Fin r) => Real) i)
+                          (@Pi.addCommGroup.{0, 0} (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                            Real.instAddCommGroup))))))))))
+  (hm :
+    ∀ (j l : Fin m),
+      @Ne.{1} (Fin m) j l →
+        @Ne.{1} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@HSub.hSub.{0, 0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (EuclideanSpace.{0, 0} Real (Fin r))
+            (EuclideanSpace.{0, 0} Real (Fin r))
+            (@instHSub.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@SubNegMonoid.toSub.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@AddGroup.toSubNegMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@NormedAddGroup.toAddGroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@NormedAddCommGroup.toNormedAddGroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@PiLp.normedAddCommGroup.{0, 0}
+                        (@OfNat.ofNat.{0} ENNReal 2
+                          (@instOfNatAtLeastTwo.{0} ENNReal 2
+                            (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                              (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                            PiLp.innerProductSpace._proof_2))
+                        (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+                        Real.normedAddCommGroup))))))
+            (@RectangleCLT.projectionEuclideanVector r (u j)) (@RectangleCLT.projectionEuclideanVector r (u l)))
+          (@OfNat.ofNat.{0} (EuclideanSpace.{0, 0} Real (Fin r)) 0
+            (@Zero.toOfNat0.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@NegZeroClass.toZero.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@SubNegZeroMonoid.toNegZeroClass.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@SubtractionMonoid.toSubNegZeroMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@SubtractionCommMonoid.toSubtractionMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@AddCommGroup.toDivisionAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@WithLp.instAddCommGroup.{0}
+                          (@OfNat.ofNat.{0} ENNReal 2
+                            (@instOfNatAtLeastTwo.{0} ENNReal 2
+                              (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                              PiLp.innerProductSpace._proof_2))
+                          ((i : Fin r) → (fun (x : Fin r) => Real) i)
+                          (@Pi.addCommGroup.{0, 0} (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                            Real.instAddCommGroup))))))))))
+  (g : RectangleCLT.Vector r) :
+  @LE.le.{0} Real Real.instLE
+    (@Finset.sum.{0, 0} (Prod.{0, 0} (Fin m) (Fin m)) Real Real.instAddCommMonoid
+      (@Finset.univ.{0} (Prod.{0, 0} (Fin m) (Fin m))
+        (@instFintypeProd.{0, 0} (Fin m) (Fin m) (Fin.fintype m) (Fin.fintype m)))
+      fun (q : Prod.{0, 0} (Fin m) (Fin m)) =>
+      @Set.indicator.{0, 0} (RectangleCLT.Vector r) Real Real.instZero
+        (@RectangleCLT.Companion.SplitV4.gaussianThresholdStratumEvent r m u b q)
+        (fun (x : RectangleCLT.Vector r) => @OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) g)
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      (@Set.indicator.{0, 0} (RectangleCLT.Vector r) Real Real.instZero
+        (@RectangleCLT.Companion.SplitV4.thresholdOuterLayer m r u b
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+            (@RectangleCLT.Companion.SplitV4.thresholdProjectionRadius m r u g)))
+        (fun (x : RectangleCLT.Vector r) => @OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) g))
+'RectangleCLT.Companion.SplitV4.thresholdPair_residualNormal_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.gaussianPairBase_frame_levels' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.gaussianPairBase_reconstruct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.gaussianFacetEvent_mem_adaptiveOutwardTube' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.gaussianPairEvent_mem_adaptiveOutwardTube' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.gaussianThresholdStratumEvent_indicator_sum_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited 46 Gaussian threshold tube geometry theorem declarations; only the permitted three axioms.
+The actual facet and pair events enter disjoint adaptive outward tubes. Ordered pair multiplicity contributes only the universal incidence factor two. No desired threshold estimate, covariance gap, or coarea premise is assumed.
