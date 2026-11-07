@@ -1,0 +1,47 @@
+RectangleCLT.Companion.SplitV4.rectangleDistance_duplicateCoordinates_of_covariance.{u_1} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] {p q : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ] (W : Ω → RectangleCLT.Vector p) (r : Fin q → Fin p)
+  (hr : @Function.Surjective.{1, 1} (Fin q) (Fin p) r) (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (B : Matrix.{0, 0, 0} (Fin q) (Fin q) Real)
+  (hcov :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin q) (Fin q) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin q) (Fin q) Real) (Matrix.{0, 0, 0} (Fin q) (Fin q) Real)
+        (Matrix.{0, 0, 0} (Fin q) (Fin q) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin q) (Fin q) (Fin q) Real (Fin.fintype q)
+          Real.instMul Real.instAddCommMonoid)
+        B (@Matrix.transpose.{0, 0, 0} (Fin q) (Fin q) Real B))
+      fun (j k : Fin q) =>
+      @HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A) (r j) (r k)) :
+  @Eq.{1} Real
+    (@RectangleCLT.Companion.rectangleDistance.{u_1} Ω inst✝ q μ
+      (@Function.comp.{u_1 + 1, 1, 1} Ω (RectangleCLT.Vector p) (RectangleCLT.Vector q)
+        (@RectangleCLT.Companion.SplitV4.duplicateCoordinates p q r) W)
+      B)
+    (@RectangleCLT.Companion.rectangleDistance.{u_1} Ω inst✝ p μ W A)
+RectangleCLT.Companion.SplitV4.coordinatePadding_pairGap_zero_of_unit_gram {p q : Nat}
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p) (hpq : @LT.lt.{0} Nat instLTNat p q)
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hdiag :
+    ∀ (j : Fin p),
+      @Eq.{1} Real
+        (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+          (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+          (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+            Real.instMul Real.instAddCommMonoid)
+          A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) :
+  @Eq.{1} Real
+    (@RectangleCLT.pairGap q fun (j k : Fin q) =>
+      @HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A)
+        (@RectangleCLT.Companion.SplitV4.coordinatePaddingMap p q hp j)
+        (@RectangleCLT.Companion.SplitV4.coordinatePaddingMap p q hp k))
+    (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+Audited 35 coordinate duplication declarations; only the three permitted axioms.

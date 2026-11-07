@@ -1,14 +1,14 @@
 # Split-V4 certification checkpoint
 
-The proof checkpoint is `88157fe`. Eighteen current statements have checked
-Lean proofs; thirteen proved statements remain pending. The manuscript is
+The proof checkpoint is `7bf2325`. Twenty-one current statements have checked
+Lean proofs; ten proved statements remain pending. The manuscript is
 not certified. The complete imported companion theorem closure passed its
 strict axiom audit. The pristine baseline also passed all eight commands in
 GitHub CI. Exact command counts, execution outcomes, source hashes and raw
 logs are recorded in [the verification record](../SPLIT_V4_VERIFICATION.json).
 
 The checked scope comprises Corollaries 1–2, Theorems 2–3, Propositions 2–3,
-Lemmas 1–2, Lemma B.3, Lemma C.1, Lemma E.1, Lemmas F.1–F.3 and G.1–G.4.
+Lemmas 1–2, Theorem 4, Lemmas B.3–B.5, Lemma C.1, Lemma E.1, Lemmas F.1–F.3 and G.1–G.4.
 The [statement map](statement-map.json), [kernel dependency map](dependency-map.json),
 and [open obligations](OPEN_OBLIGATIONS.md) give exact endpoint declarations,
 proof-route distinctions, and the remaining mathematical work.

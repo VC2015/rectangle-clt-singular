@@ -1,9 +1,9 @@
 # Unrestricted-covariance rectangle CLTs in Lean
 
-The November split-V4 checkpoint is **partial**: eighteen of its 31 proved
+The November split-V4 checkpoint is **partial**: twenty-one of its 31 proved
 statements have checked Lean proofs. The relative theorem, its remaining
-Appendix B inputs, the relative polyhedral transfer, and five symmetric
-lower-bound calibrations remain open.
+analytic inputs, the relative polyhedral transfer, and four lower-bound
+calibrations remain open in this frozen snapshot.
 See [the current verification record](SPLIT_V4_VERIFICATION.json) and
 [statement map](split-v4-certification/statement-map.json). The historical
 theorem numbering and October records below are preserved.

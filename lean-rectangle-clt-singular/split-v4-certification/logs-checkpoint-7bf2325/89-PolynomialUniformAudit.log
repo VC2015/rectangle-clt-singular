@@ -1,0 +1,54 @@
+structure RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.{u} {Ω : Type u} [MeasurableSpace Ω] {p n : ℕ}
+  (μ : MeasureTheory.Measure Ω) (X : Fin n → Ω → RectangleCLT.Vector p) (q B : ℝ) : Prop
+number of parameters: 8
+fields:
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.measurable : ∀ (i : Fin n), Measurable (X i)
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.independent : ProbabilityTheory.iIndepFun X μ
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.centered : ∀ (i : Fin n) (j : Fin p),
+      ∫ (ω : Ω), X i ω j ∂μ = 0
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.envelope_integrable : ∀ (i : Fin n),
+      MeasureTheory.Integrable (fun ω => ‖X i ω‖ ^ q) μ
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.fourth_integrable : ∀ (i : Fin n) (j : Fin p),
+      MeasureTheory.Integrable (fun ω => X i ω j ^ 4) μ
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.average_second : ∀ (j : Fin p),
+      1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 2 ∂μ = 1
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.envelope_moment : ∀ (i : Fin n),
+      ∫ (ω : Ω), ‖X i ω‖ ^ q ∂μ ≤ B ^ q
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.average_fourth : ∀ (j : Fin p),
+      1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 4 ∂μ ≤ B ^ 2
+constructor:
+  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses.mk.{u} {Ω : Type u} [MeasurableSpace Ω] {p n : ℕ}
+    {μ : MeasureTheory.Measure Ω} {X : Fin n → Ω → RectangleCLT.Vector p} {q B : ℝ}
+    (measurable : ∀ (i : Fin n), Measurable (X i)) (independent : ProbabilityTheory.iIndepFun X μ)
+    (centered : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), X i ω j ∂μ = 0)
+    (envelope_integrable : ∀ (i : Fin n), MeasureTheory.Integrable (fun ω => ‖X i ω‖ ^ q) μ)
+    (fourth_integrable : ∀ (i : Fin n) (j : Fin p), MeasureTheory.Integrable (fun ω => X i ω j ^ 4) μ)
+    (average_second : ∀ (j : Fin p), 1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 2 ∂μ = 1)
+    (envelope_moment : ∀ (i : Fin n), ∫ (ω : Ω), ‖X i ω‖ ^ q ∂μ ≤ B ^ q)
+    (average_fourth : ∀ (j : Fin p), 1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 4 ∂μ ≤ B ^ 2) :
+    RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses μ X q B
+def RectangleCLT.Companion.SplitV4.polynomialClassDistances.{u} : ℝ → ℝ → ℕ → ℕ → Set ℝ :=
+fun q B p n =>
+  {e |
+    e = 0 ∨
+      ∃ Ω mΩ μ,
+        MeasureTheory.IsProbabilityMeasure μ ∧
+          ∃ X A,
+            RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses μ X q B ∧
+              A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X) ∧
+                e = RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.Companion.normalizedObservationSum X) A}
+def RectangleCLT.Companion.SplitV4.polynomialWorstDistance.{u} : ℝ → ℝ → ℕ → ℕ → ℝ :=
+fun q B p n => sSup (RectangleCLT.Companion.SplitV4.polynomialClassDistances q B p n)
+def RectangleCLT.Companion.SplitV4.PolynomialModelBound.{u} : ℝ → ℝ → ℕ → ℕ → ℝ → Prop :=
+fun q B p n R =>
+  ∀ {Ω : Type u} [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+    [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (X : Fin n → Ω → RectangleCLT.Vector p)
+    (A : Matrix (Fin p) (Fin p) ℝ),
+    RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses μ X q B →
+      A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X) →
+        RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.Companion.normalizedObservationSum X) A ≤ R
+RectangleCLT.Companion.SplitV4.polynomialWorstDistance_le_iff_modelBound.{u} (q B : Real) (p n : Nat) {R : Real}
+  (hR : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) R) :
+  Iff (@LE.le.{0} Real Real.instLE (RectangleCLT.Companion.SplitV4.polynomialWorstDistance.{u} q B p n) R)
+    (RectangleCLT.Companion.SplitV4.PolynomialModelBound.{u} q B p n R)
+Audited 15 polynomial-class supremum theorem declarations.
