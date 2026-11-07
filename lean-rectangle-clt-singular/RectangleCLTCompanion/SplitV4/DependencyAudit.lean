@@ -8,7 +8,8 @@ this checkpoint.  Each output line begins `SPLITV4_DEPENDENCY ` and contains
 one JSON object.  The actual elaborated type is printed with `pp.all`; type
 and proof-value dependencies are separate.  Proof expressions themselves
 are never printed.  Every declaration also receives
-an independent transitive axiom audit against the handoff's exact allowlist.
+its exact transitive axiom set, obtained from the checked dependency graph
+and checked against the handoff's exact allowlist.
 
 The direct edges are syntactic constant occurrences, not a claim that every
 edge is analytically essential.  Reused historical endpoints are included
@@ -47,6 +48,53 @@ run_cmd do
   let encodeNames := fun ns : Array Name =>
     Json.arr ((ns.qsort (fun a b => a.toString < b.toString)).map
       (fun n => Json.str n.toString))
+  -- Read every reachable checked declaration once. Reverse edges let each
+  -- axiom propagate to exactly the declarations that depend on it, including
+  -- recursive/mutually recursive definition cycles.
+  let mut parents : NameMap (Array Name) := {}
+  let mut visited : NameSet := {}
+  let mut pending := names
+  let mut axioms : Array Name := #[]
+  let mut index := 0
+  while index < pending.size do
+    let c := pending[index]!
+    index := index + 1
+    unless visited.contains c do
+      visited := visited.insert c
+      let mut edges : Array Name := #[]
+      match env.checked.get.find? c with
+      | some (.axiomInfo _) => axioms := axioms.push c
+      | some (.defnInfo v) => edges := v.type.getUsedConstants ++ v.value.getUsedConstants
+      | some (.thmInfo v) => edges := v.type.getUsedConstants ++ v.value.getUsedConstants
+      | some (.opaqueInfo v) => edges := v.type.getUsedConstants ++ v.value.getUsedConstants
+      | some (.ctorInfo v) => edges := v.type.getUsedConstants
+      | some (.recInfo v) => edges := v.type.getUsedConstants
+      | some (.inductInfo v) => edges := v.type.getUsedConstants ++ v.ctors.toArray
+      | some (.quotInfo _) => pure ()
+      | none => pure ()
+      for child in edges do
+        parents := parents.insert child ((parents.find? child).getD #[] |>.push c)
+        pending := pending.push child
+  let mut axiomSets : NameMap (Array Name) := {}
+  for ax in axioms do
+    unless ax == ``propext || ax == ``Classical.choice || ax == ``Quot.sound do
+      throwError "Unexpected axiom {ax} in the checked dependency graph"
+    let mut reached : NameSet := {}
+    let mut queue := #[ax]
+    let mut offset := 0
+    while offset < queue.size do
+      let c := queue[offset]!
+      offset := offset + 1
+      unless reached.contains c do
+        reached := reached.insert c
+        axiomSets := axiomSets.insert c ((axiomSets.find? c).getD #[] |>.push ax)
+        queue := queue ++ (parents.find? c).getD #[]
+  -- Cross-check the graph's axiom union with Lean's official collector, using
+  -- one shared visited set. Each output still contains its own exact closure.
+  let (_, unionState) := ((names.forM CollectAxioms.collect).run env).run {}
+  unless (encodeNames axioms).compress == (encodeNames unionState.axioms).compress do
+    throwError "Checked graph and Lean CollectAxioms disagree on the axiom union"
+  logInfo m!"Scanned {visited.size} reachable checked constants; exact per-declaration axiom sets computed by reverse reachability."
   for n in names do
     let some ci := env.checked.get.find? n
       | throwError "Declaration {n} is absent from the checked kernel environment"
@@ -55,10 +103,7 @@ run_cmd do
       throwError "Expected a theorem or explicitly audited C4 constructor at endpoint {n}"
     let some value := ci.value?
       | throwError "The checked theorem {n} has no proof value"
-    let (_, axiomState) := ((CollectAxioms.collect n).run env).run {}
-    for ax in axiomState.axioms do
-      unless ax == ``propext || ax == ``Classical.choice || ax == ``Quot.sound do
-        throwError "Unexpected axiom {ax} in dependency closure of {n}"
+    let declarationAxioms := (axiomSets.find? n).getD #[]
     let moduleName := match env.getModuleIdxFor? n with
       | some idx => env.header.moduleNames[idx.toNat]!.toString
       | none => ""
@@ -72,6 +117,6 @@ run_cmd do
       ("expanded_lean_type", Json.str expandedType),
       ("type_used_constants", encodeNames ci.type.getUsedConstants),
       ("value_used_constants", encodeNames value.getUsedConstants),
-      ("transitive_axioms", encodeNames axiomState.axioms)]
+      ("transitive_axioms", encodeNames declarationAxioms)]
     liftIO <| IO.println ("SPLITV4_DEPENDENCY " ++ record.compress)
   logInfo m!"Emitted and axiom-audited {names.size} split-V4 checkpoint dependency records."
