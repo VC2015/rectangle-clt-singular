@@ -6,6 +6,9 @@
 \usepackage{lmodern,microtype}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{longtable,booktabs,tabularx}
+\usepackage{xcolor}
+% Magenta marks the current Section 2 exposition recovery.
+\newenvironment{recovered}{\color{magenta}}{}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
 \usepackage[hidelinks,hypertexnames=false,linktoc=all]{hyperref}
@@ -517,24 +520,49 @@ give the proofs of the auxiliary estimates and the lower bounds.
 \section{Outline of the Proof of Theorem~\ref*{thm:unrestricted}}\label{sec:smoothing}
 Throughout this section we use the bounded-summand setup~\eqref{eq:setup},
 with \(W=\sum_i\xi_i\) and \(Z\sim N(0,\Sigma)\).
-We replace the rectangle indicator by a smooth function and compare its
-expectations along a path from the sum to its Gaussian counterpart.
-There are two costs to balance. A wider transition layer increases the
-error in approximating the indicator, but reduces the derivatives that
-enter the comparison. We carry out the calculation on the covariance
-support so that it applies even when coordinates coincide.
+We replace each rectangle indicator by a smooth approximation and compare
+its expectations along a path from the sum to its Gaussian counterpart.
+The smoothing parameter balances the error in approximating the indicator
+against the derivative bounds needed for this comparison.
+We first make a change of coordinates that represents both random vectors
+in \(\R^r\), where \(r:=\operatorname{rank}(\Sigma)\), and gives each
+identity covariance. This allows us to carry out the comparison even
+when \(\Sigma\) is singular.
+
+\begin{recovered}
+Subsection~\ref{sec:outline-smoothing} expresses rectangles as linear
+inequalities in these coordinates and bounds the error from smoothing
+their indicators. Subsection~\ref{sec:outline-path} constructs the
+comparison in two stages, first adding a small Gaussian component and
+then gradually replacing the summands by Gaussian noise while preserving
+covariance. Subsection~\ref{sec:outline-seeded} controls the change in
+the smoothed expectations using aggregate covariance and Gaussian matrix
+and threshold estimates. Finally, Subsection~\ref{sec:proof-theorem-one}
+integrates these bounds and chooses the smoothing parameter.
+Appendices~\ref{appx-sec:smoothing}--\ref{appx-app:concentration}
+give the auxiliary estimates and their proofs.
+\end{recovered}
 
 \subsection{Support coordinates and smoothing}\label{sec:outline-smoothing}
 It suffices to consider bounded closed rectangles, since the result for
-general rectangles follows by monotone approximation. Put
-\(r:=\operatorname{rank}(\Sigma)\), and choose a \(p\times r\) matrix
-\(\Gamma\) of full column rank such that \(\Sigma=\Gamma\Gamma^\top\).
-Each summand lies in its range almost surely. Indeed, for every vector
-\(z\) in a basis of the null space of \(\Sigma\),
-\(\sum_i\E(z^\top\xi_i)^2=z^\top\Sigma z=0\). Define the
-\emph{support coordinates} and the Gaussian comparison vector by
+general rectangles follows by monotone approximation. Choose a \(p\times r\)
+matrix \(\Gamma\) of full column rank such that \(\Sigma=\Gamma\Gamma^\top\).
+The two matrices have the same column space:
 \[
- \zeta_i^0:=(\Gamma^\top\Gamma)^{-1}\Gamma^\top\xi_i,\qquad
+ \operatorname{range}(\Sigma)=\operatorname{range}(\Gamma)\subseteq\R^p.
+\]
+Indeed, the first space is contained in the second, and both have dimension
+\(r\). Each summand lies in this common subspace almost surely. To see this,
+take any vector \(z\) in a basis of the null space of \(\Sigma\). Then
+\[
+ \sum_i\E(z^\top\xi_i)^2=z^\top\Sigma z=0,
+\]
+so every summand is orthogonal to that null space. The columns of \(\Gamma\)
+form a basis of the common subspace, and each summand therefore has a unique
+vector of coefficients in this basis. Define these \emph{support coordinates}
+and the Gaussian comparison vector by
+\[
+ \zeta_i^0:=(\Gamma^\top\Gamma)^{-1}\Gamma^\top\xi_i\in\R^r,\qquad
  S:=\sum_i\zeta_i^0,\qquad G\sim N(0,I_r),
 \]
 where \(G\) is independent of the summands. Thus \(\xi_i=\Gamma\zeta_i^0\),
@@ -547,7 +575,8 @@ A point \(\Gamma x\) belongs to the rectangle
 \(B=\prod_{j=1}^p[\ell_j,b_j]\) exactly when
 \((\Gamma^\top e_j)\cdot x\le b_j\) and
 \(-(\Gamma^\top e_j)\cdot x\le-\ell_j\) for every \(j\), where \(e_j\)
-is the \(j\)th coordinate vector. We collect these \(m:=2p\)
+is the \(j\)th coordinate vector and the dot denotes the usual inner product.
+We collect these \(m:=2p\)
 inequalities by setting
 \[
  u_j:=\Gamma^\top e_j,\qquad u_{p+j}:=-u_j,\qquad
@@ -557,19 +586,63 @@ In support coordinates the rectangle is therefore the set
 \[
  A_a:=\{x:u_\alpha\cdot x\le a_\alpha\ \text{for all }\alpha\le m\}.
 \]
-The \emph{face normals} are unit vectors because
-\(\|\Gamma^\top e_j\|^2=\Sigma_{jj}=1\). Repeated normals cause no
-difficulty. Since \(u_j\cdot\zeta_i^0=\xi_{ij}\), the \emph{face norm}
-\(\|x\|_U:=\max_{\alpha\le m}|u_\alpha\cdot x|\) satisfies
-\(\|\zeta_i^0\|_U\le\delta\), regardless of the positive eigenvalues
-of \(\Sigma\). This support reduction also appears in~\cite[Section~2.3]{GaoZhang}.
-The rectangle distance is now
-\(\rho:=\sup_{a\in\R^m}|\Pp(S\in A_a)-\Pp(G\in A_a)|=\rh(W,Z)\).
-Inconsistent inequalities give the empty set.
+For each defining inequality \(u_\alpha\cdot x\le a_\alpha\), the vector
+\(u_\alpha\) is perpendicular to the boundary hyperplane
+\(u_\alpha\cdot x=a_\alpha\) and points outward from the allowed halfspace.
+We call these vectors \emph{face normals}, including those associated
+with redundant inequalities. They are unit vectors, since
+\[
+ \|u_j\|^2=e_j^\top\Gamma\Gamma^\top e_j=\Sigma_{jj}=1,
+ \qquad u_{p+j}=-u_j.
+\]
+Some face normals may repeat, but this creates no difficulty.
+
+The original coordinate bound also controls the components of each
+transformed summand along these normals. Indeed, since
+\(\Gamma\zeta_i^0=\xi_i\),
+\[
+ u_j\cdot\zeta_i^0=e_j^\top\Gamma\zeta_i^0=\xi_{ij},
+ \qquad u_{p+j}\cdot\zeta_i^0=-\xi_{ij}.
+\]
+Writing \(U:=(u_\alpha)_{\alpha=1}^m\), we define the \emph{face norm} by
+\[
+ \|x\|_U:=\max_{\alpha\le m}|u_\alpha\cdot x|.
+\]
+\begin{recovered}
+For every \(x\in\R^r\), this equals \(\|\Gamma x\|_\infty\).
+Since \(\Gamma\) has full column rank, \(\Gamma x=0\) implies \(x=0\),
+so the face norm is indeed a norm on \(\R^r\).
+\end{recovered}
+The preceding identities give
+\[
+ \|\zeta_i^0\|_U=\max_{j\le p}|\xi_{ij}|
+ =\|\xi_i\|_\infty\le\delta\qquad\text{almost surely},
+\]
+where the last inequality is the bounded-summand assumption~\eqref{eq:setup}.
+Thus the transformation preserves the envelope \(\delta\), regardless
+of how small the positive eigenvalues of \(\Sigma\) are. This support reduction also appears in~\cite[Section~2.3]{GaoZhang}.
+
+\begin{recovered}
+The equivalence between \(\Gamma x\in B\) and \(x\in A_a\) also
+transfers the probability comparison to \(\R^r\). Since
+\(W=\Gamma S\) and \(Z=\Gamma G\),
+\[
+ \Pp(W\in B)=\Pp(S\in A_a),\qquad
+ \Pp(Z\in B)=\Pp(G\in A_a).
+\]
+Every bounded closed rectangle is represented by such a threshold
+vector. We allow arbitrary \(a\in\R^m\), interpreting inconsistent
+inequalities as the empty set. Including these empty sets does not
+change the supremum, and hence
+\[
+ \rho:=\sup_{a\in\R^m}
+ |\Pp(S\in A_a)-\Pp(G\in A_a)|=\rh(W,Z).
+\]
+\end{recovered}
 
 To compare these probabilities by differentiation, we introduce the
-\emph{logistic approximation} to the indicator of \(A_a\). At smoothing
-width \(h>0\) it is
+\emph{logistic approximation} to the indicator of \(A_a\). For a smoothing
+parameter \(h>0\), define
 \begin{equation}
  F_{a,h}(x)\coloneqq
  \left(1+\sum_{\alpha=1}^m
@@ -577,16 +650,47 @@ width \(h>0\) it is
  \qquad x\in\R^r.
  \label{eq:selector}
 \end{equation}
+\begin{recovered}
+We index the approximation by the threshold vector \(a\), keeping the
+full list of inequalities. A redundant inequality can change the
+smoothing formula even when it does not change the set \(A_a\).
+\end{recovered}
 
-In the multinomial logit interpretation, \(F_{a,h}(x)\) is the probability
-of a baseline option with weight proportional to \(1\). Each face has
-weight proportional to the exponential of its threshold violation divided
-by \(h\). This smoother for simultaneous inequalities appears
-in~\cite[p.~1001]{McFadden1989} and~\cite[eq.~(5)]{GaoZhang}.
+For each fixed \(x\), this formula induces a probability distribution
+over the \(m\) faces and an additional \emph{baseline option}. Face
+\(\alpha\) receives weight proportional to
+\(e^{(u_\alpha\cdot x-a_\alpha)/h}\), while the baseline option receives
+weight proportional to \(1\). After normalization, the baseline
+probability is \(F_{a,h}(x)\), and the \emph{face probabilities} sum to
+\(1-F_{a,h}(x)\). We use these probabilities below to express and bound
+the derivatives of the logistic approximation.
+
+Membership in \(A_a\) requires
+\(\max_{\alpha\le m}(u_\alpha\cdot x-a_\alpha)\le0\).
+The logistic approximation smooths both this maximum and the indicator
+that tests whether it is nonpositive. We can write
+\[
+ F_{a,h}(x)=g_h\!\left(h\log\sum_{\alpha=1}^m
+ e^{(u_\alpha\cdot x-a_\alpha)/h}\right),
+ \qquad g_h(s):=\frac1{1+e^{s/h}}.
+\]
+The inner function smoothly approximates the maximum violation, while
+\(g_h\) approximates the indicator of \(({-\infty},0]\). We use the
+same scale \(h\) for both steps. The construction of Chernozhukov,
+Chetverikov, and Kato~\cite{CCK2013} allows the cutoff function and
+its scale to be chosen separately from the smooth maximum. The
+multinomial logistic form, with a baseline score of zero, was used by
+McFadden~\cite[p.~1001]{McFadden1989} to smooth indicators of simultaneous
+inequalities and also appears in~\cite[eq.~(5)]{GaoZhang}.
+For every \(h>0\), the approximation is smooth, allowing us to
+differentiate along the interpolation path. As \(h\) decreases to
+zero, it approaches the indicator away from the boundary, but the
+uniform bounds on its derivatives increase.
 
 Its \emph{random-threshold representation} describes how far smoothing
 can move a boundary. Let \(\omega_0,\ldots,\omega_m\) be independent
-unit exponentials, independent of \(S,G\). Then
+exponential random variables with mean \(1\), independent of \(S\) and
+\(G\). Then
 \begin{equation}
  \begin{split}
  F_{a,h}(x)&=\Pp_\omega(x\in A_{a,\omega}),\\
@@ -598,16 +702,27 @@ unit exponentials, independent of \(S,G\). Then
 \end{equation}
 where $\Pp_\omega$ denotes probability over $\omega$ alone. 
 
-Conditioning on \(\omega_0\) gives this formula directly. Equivalently,
-the variables \(-\log\omega_\alpha\) give the Gumbel random-utility
-representation of multinomial logit~\cite[Section~2.6]{Yellott1977}.
+Conditioning on \(\omega_0\) gives this formula directly. This is also
+the classical \emph{random-utility representation} underlying
+multinomial logit probabilities, as described by
+Yellott~\cite[Section~2.6]{Yellott1977}. Indeed, the variables
+\(-\log\omega_\beta\), \(0\le\beta\le m\), are independent
+\emph{standard Gumbel variables}, and \(F_{a,h}(x)\) is the probability
+that the baseline utility \(-h\log\omega_0\) exceeds all face utilities
+\(u_\alpha\cdot x-a_\alpha-h\log\omega_\alpha\).
+Rearranging these utility comparisons gives the inequalities defining
+\(A_{a,\omega}\).
+
+For the smoothing bound, we use~\eqref{eq:mixture} as a representation
+by random threshold shifts with the face normals fixed.
 The largest absolute threshold shift has expectation at most \(ChL\).
 To convert this width into an error in probability, put
 \(A_a^s:=\{x:u_\alpha\cdot x\le a_\alpha+s,\ \alpha\le m\}\) for
 real \(s\). The following inequality applies to the original sum and
 also after independent noise has been added along the comparison path.
-Both parts retain the expected largest absolute projection, which
-can be more informative than the number of faces.
+The lemma is of independent interest. Both parts retain the expected
+largest absolute projection, which can be more informative than the
+number of faces.
 
 \begin{lemma}[Rectangle anti-concentration]\label{lem:concentration}
 Let \(X_1,\ldots,X_n\in\R^r\) be independent centered random
@@ -643,13 +758,15 @@ If all the original coordinates coincide, then
 \(\E\norm{V}_U\le\sqrt v\), regardless of \(p\), and in the
 Gaussian case it equals \(\sqrt{2v/\pi}\).
 The first inequality in~\eqref{eq:gaussian-intrinsic-concentration}
-is the \emph{dimension-free Nazarov bound} developed in
+is a \emph{dimension-free alternative to Nazarov bounds} developed in
 Chernozhukov~\cite{ChernozhukovAC2026}.
 
 Appendix~\ref{appx-app:concentration} gives a self-contained proof.
 Convexity along edges of the discrete cube supplies the Rademacher
-boundary estimate, and conditioning on pairs of independent copies
-gives the bounded-sum assertion. For the corresponding Rademacher
+boundary estimate. Pairing each summand with an independent copy gives
+a conditional Rademacher representation. Symmetrization and a contraction
+inequality control the fluctuations of its conditional variances,
+completing the bounded-sum argument. For the dimension-dependent Rademacher
 anti-concentration inequality, see O'Donnell, Servedio, and
 Tan~\cite{OST} and~\cite[Lemma~J.4]{CCKK2022}. The logarithmic bounded-sum
 estimate also appears in~\cite[Lemma~2.1]{AL}, where it is obtained
@@ -659,27 +776,47 @@ Nazarov's inequality~\cite[Lemma~A.1]{CCK2017}. A direct
 integration-by-parts argument proves the stronger geometric form
 in~\eqref{eq:gaussian-intrinsic-concentration}.
 
-Write \(M_h:=\sup_a|\E F_{a,h}(S)-\E F_{a,h}(G)|\).
+To measure the discrepancy after smoothing, write
+\[
+ M_h:=\sup_a|\E F_{a,h}(S)-\E F_{a,h}(G)|.
+\]
 The expected width of the random shift and the preceding lemma give
 the following reduction.
 \begin{lemma}[Smoothing error]\label{lem:endpoint}
-Under~\eqref{eq:setup}, for \(h\ge\delta\),
+Under~\eqref{eq:setup}, for \(h\ge\delta\), the rectangular distance is bounded as
 \begin{equation}
  \rho\le M_h+ChL^{3/2}.
  \label{eq:endpoint-min}
 \end{equation}
 \end{lemma}
 Appendix~\ref{appx-sec:smoothing} proves this bound and records the
-derivative formulas used below. The factor \(L^{3/2}\) comes from
-multiplying the \(O(hL)\) displacement by the \(O(\sqrt L)\) boundary
-concentration factor.
+derivative formulas used below. Here the \emph{displacement} is the
+largest absolute change in the face thresholds in~\eqref{eq:mixture}.
+Each threshold \(a_\alpha\) is shifted by
+\(h\log(\omega_\alpha/\omega_0)\), and
+\[
+ \E_\omega\max_{\alpha\le m}
+ \bigl|h\log(\omega_\alpha/\omega_0)\bigr|\le ChL.
+\]
+The logarithmic factor arises from taking the maximum over the
+\(m=2p\) faces. Lemma~\ref{lem:concentration} converts a threshold
+shift of size \(d\) into a probability error at most
+\(C(d+\delta)\sqrt L\). Averaging over the shifts gives an error
+at most \(C(hL+\delta)\sqrt L\le ChL^{3/2}\), since
+\(h\ge\delta\) and \(L\ge1\).
+
 
 \subsection{Calibrated dropout with Slepian regularization}
 \label{sec:outline-path}
 
-We compare the smoothed expectations by gradually deleting the bounded
-summands and replacing them with Gaussian noise. For a fixed
-\(\varepsilon>0\) and time index \(t\in[0,1]\), consider the path
+We first add a small independent Gaussian component and normalize
+the result to preserve covariance. We then gradually delete summands
+and rescale those retained while increasing the Gaussian variance.
+The initial Gaussian component permits Gaussian integration by parts
+throughout the main comparison, and our choice of rescaling controls
+the third-moment contribution near the starting point.
+
+For a fixed \(\varepsilon>0\) and time \(t\in[0,1]\), consider the path
 \begin{equation}
  U_t\coloneqq
  \frac{(1+t)\sum_{i=1}^n\mathbb B_{i,t}\zeta_i^0
@@ -756,7 +893,7 @@ we do not need to couple the Bernoulli masks across different times.
 \draw[->,thick,drop] (U) -- node[above=9pt,align=center] {Calibrated dropout with a Gaussian seed} node[below=8pt] {$0\le t\le1$} (G);
 \node[anchor=north,align=center] at (6.2,-0.85) {$\displaystyle U_0=\frac{S+\sqrt\varepsilon\,G}{\sqrt{1+\varepsilon}}$
 \\[5pt] $\displaystyle v_\varepsilon=\frac{\varepsilon}{1+\varepsilon}$};
-\node[anchor=north,align=center,text width=6.1cm] at (2.8,-2.9) {Rescale all summands and add Gaussian noise.\\[9pt]
+\node[anchor=north,align=center,text width=6.1cm] at (2.8,-2.9) {Rescale all summands\\and add Gaussian noise.\\[9pt]
  $\displaystyle T_v=\sqrt{1-v}\,S+\sqrt v\,G$};
 \node[anchor=north,align=center,text width=7.0cm] at (10,-2.9) {Randomly delete summands, amplify survivors,\\and increase the Gaussian variance.\\[9pt]
  $\displaystyle U_t=\frac{(1+t)\sum_i\mathbb B_{i,t}\zeta_i^0+\sqrt{t+\varepsilon}\,G}{\sqrt{1+\varepsilon}}$\\[9pt]
@@ -777,13 +914,23 @@ For fixed thresholds, write
 \]
 The quantity \(I_h\) measures the error from introducing the seed.
 
-Consequently,
+\begin{recovered}
+The triangle inequality followed by integration along \(U_t\) gives
+\end{recovered}
 \begin{equation}
  M_h\le I_h+\sup_a\int_0^1|P_a'(t)|\,dt .
  \label{eq:roadmap}
 \end{equation}
 Here \(P_a'(t)\) is the rate at which the smoothed probability changes
-at time \(t\). The small initial Gaussian component allows us to
+at time \(t\).
+\begin{recovered}
+The smoothing error in Lemma~\ref{lem:endpoint} is evaluated at the
+original endpoints \(S\) and \(G\). The intermediate vector \(U_0\)
+enters only in comparing the smoothed expectations: \(I_h\) controls
+the passage from \(S\) to \(U_0\), and the integral controls the passage
+from \(U_0\) to \(G\).
+\end{recovered}
+The small initial Gaussian component allows us to
 integrate by parts twice on the second stage, including near \(t=0\).
 
 \subsection{Controlling the comparison error}
