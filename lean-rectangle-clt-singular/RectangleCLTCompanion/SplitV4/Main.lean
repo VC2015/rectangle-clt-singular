@@ -65,6 +65,13 @@ import RectangleCLTCompanion.SplitV4.LogisticScalarJets
 import RectangleCLTCompanion.SplitV4.LogisticMatrixPaper
 import RectangleCLTCompanion.SplitV4.GenericC4DerivativeOperator
 import RectangleCLTCompanion.SplitV4.RestorationProductBounds
+import RectangleCLTCompanion.SplitV4.GenericC4CubicTensor
+import RectangleCLTCompanion.SplitV4.Restoration
+import RectangleCLTCompanion.SplitV4.DerivativeEnvelopeAllOrders
+import RectangleCLTCompanion.SplitV4.FourthMomentOptimal
+import RectangleCLTCompanion.SplitV4.DenseMomentOptimal
+import RectangleCLTCompanion.SplitV4.MaskedFourthLower
+import RectangleCLTCompanion.SplitV4.SparseCoordinateNegligible
 import RectangleCLTCompanion.SubexponentialMain
 import RectangleCLTCompanion.LowerScaleMain
 import RectangleCLTCompanion.FactorExistence
@@ -123,6 +130,15 @@ The current statement correspondences are:
 * `appx-an:lem:matrix`: `exists_logistic_matrix_paper_constant`
   fixes the matrix constant before every model and handles zero noise,
   repeated normals, and singular covariance.
+* `appx-an:lem:identity`: the genuine generic C4 seeded interpolation
+  derivative has the literal signed third tensor and ordinary fourth slots.
+* `appx-an:lem:restoration`: `lemma_paired_restoration` proves the
+  conditional concentrated-base contract and both relative refinements.
+* `appx-lem:envelope`: `lemma_derivative_envelope` fixes its constants
+  before every model and proves the actual translated supremum at all orders.
+* The fourth, dense polynomial and masked fourth lower constructions prove
+  their stated asymptotic constants for the actual full rectangle distance;
+  `fourthMomentOptimal` and `denseMomentOptimal` also prove class suprema.
 * The envelope specialization of `thm:unrestricted` is `unrestrictedCLT`.
   It does not have a relative fourth-moment parameter and therefore does
   not prove all of Theorem 1.

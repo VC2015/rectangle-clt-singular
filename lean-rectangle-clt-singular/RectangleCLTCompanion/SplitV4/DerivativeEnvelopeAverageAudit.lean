@@ -1,10 +1,11 @@
 import RectangleCLTCompanion.SplitV4.DerivativeEnvelopeAverage34
 import RectangleCLTCompanion.SplitV4.DerivativeEnvelopeStability
+import RectangleCLTCompanion.SplitV4.DerivativeEnvelopeAllOrders
 import Lean.Util.CollectAxioms
 
-/-! Strict audit of actual smaller-envelope averaging and canonical D3/D4
-translated-supremum specializations. The arbitrary-positive-order A.1
-assertion needs its separate all-order derivative proof. -/
+/-! Strict audit of whole Lemma A.1: actual smaller-envelope averaging,
+every positive canonical derivative order and the genuine translated
+supremum. The independent-component contract is printed explicitly. -/
 
 #print RectangleCLT.Companion.SplitV4.DerivativeEnvelopeComponent
 #print RectangleCLT.Companion.SplitV4.translatedFaceDerivativeSupremum
@@ -12,6 +13,8 @@ assertion needs its separate all-order derivative proof. -/
 #print RectangleCLT.Companion.SplitV4.derivativeEnvelopeSignedAverageConstant
 #print RectangleCLT.Companion.SplitV4.thirdDerivativeEnvelopeConstant
 #print RectangleCLT.Companion.SplitV4.fourthDerivativeEnvelopeConstant
+#print RectangleCLT.Companion.SplitV4.averagedSignedDerivativeEnvelopeConstant
+#print RectangleCLT.Companion.SplitV4.DerivativeEnvelopeAverageContract
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.logistic_smallerEnvelope_shift_le
 set_option pp.all true in
@@ -24,8 +27,15 @@ set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.averaged_translated_third_derivative_signed_faces
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.averaged_translated_fourth_derivative_signed_faces
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.averaged_translated_derivative_signed_faces
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.derivative_envelope_inverse_power_eq_rpow
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.lemma_derivative_envelope
 #print axioms RectangleCLT.Companion.SplitV4.averaged_translated_third_derivative_signed_faces
 #print axioms RectangleCLT.Companion.SplitV4.averaged_translated_fourth_derivative_signed_faces
+#print axioms RectangleCLT.Companion.SplitV4.lemma_derivative_envelope
 
 open Lean Elab Command in
 run_cmd do
@@ -38,7 +48,8 @@ run_cmd do
     `RectangleCLTCompanion.SplitV4.DerivativeEnvelopeModels,
     `RectangleCLTCompanion.SplitV4.DerivativeEnvelopeLocal34,
     `RectangleCLTCompanion.SplitV4.DerivativeEnvelopeAverage34,
-    `RectangleCLTCompanion.SplitV4.DerivativeEnvelopeStability]
+    `RectangleCLTCompanion.SplitV4.DerivativeEnvelopeStability,
+    `RectangleCLTCompanion.SplitV4.DerivativeEnvelopeAllOrders]
   for (n, ci) in env.constants.toList do
     if ci.isThm then
       if let some idx := env.getModuleIdxFor? n then
@@ -49,4 +60,4 @@ run_cmd do
   for ax in state.axioms do
     unless ax == ``propext || ax == ``Classical.choice || ax == ``Quot.sound do
       throwError "Unexpected axiom {ax} in derivative-envelope averaging closure"
-  logInfo m!"Audited {names.size} actual envelope-averaging and translated D3/D4 theorems."
+  logInfo m!"Audited {names.size} whole-A1 envelope-averaging and all-order translated-supremum theorems."
