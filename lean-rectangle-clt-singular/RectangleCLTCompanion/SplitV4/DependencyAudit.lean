@@ -5,8 +5,9 @@ import Lean.Util.CollectAxioms
 /-!
 Machine-readable direct dependencies of the kernel-checked declarations in
 this checkpoint.  Each output line begins `SPLITV4_DEPENDENCY ` and contains
-one JSON object.  Type and proof-value dependencies are separate; the proof
-expressions themselves are never printed.  Every declaration also receives
+one JSON object.  The actual elaborated type is printed with `pp.all`; type
+and proof-value dependencies are separate.  Proof expressions themselves
+are never printed.  Every declaration also receives
 an independent transitive axiom audit against the handoff's exact allowlist.
 
 The direct edges are syntactic constant occurrences, not a claim that every
@@ -58,9 +59,13 @@ run_cmd do
     let moduleName := match env.getModuleIdxFor? n with
       | some idx => env.header.moduleNames[idx.toNat]!.toString
       | none => ""
+    let expandedType ← liftTermElabM do
+      withOptions (fun opts => opts.setBool `pp.all true) do
+        return (← Meta.ppExpr ci.type).pretty
     let record := Json.mkObj [
       ("declaration", Json.str n.toString),
       ("module", Json.str moduleName),
+      ("expanded_lean_type", Json.str expandedType),
       ("type_used_constants", encodeNames ci.type.getUsedConstants),
       ("value_used_constants", encodeNames value.getUsedConstants),
       ("transitive_axioms", encodeNames axiomState.axioms)]

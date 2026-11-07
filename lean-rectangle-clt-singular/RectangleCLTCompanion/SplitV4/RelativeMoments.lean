@@ -172,9 +172,10 @@ theorem ae_coordinate_sq_le (h : BoundedIndependentHypotheses μ ξ δ)
 theorem integrable_relativeFourth_entry (h : BoundedIndependentHypotheses μ ξ δ)
     (i : Fin n) (j k l : Fin p) :
     Integrable (fun ω => ξ i ω j ^ 2 * (ξ i ω k * ξ i ω l)) μ := by
-  apply (h.integrable_coordinate_pair i k l).bdd_mul'
+  apply (h.integrable_coordinate_pair i k l).bdd_mul' (c := δ ^ 2)
     ((((measurable_pi_apply j).comp (h.measurable i)).pow_const 2).aestronglyMeasurable)
-  simpa only [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _)] using ae_coordinate_sq_le h i j
+  filter_upwards [ae_coordinate_sq_le h i j] with ω hω
+  simpa only [Real.norm_eq_abs, Function.comp_apply, abs_sq] using hω
 
 theorem integrable_relativeFreshFourth_entry
     (h : BoundedIndependentHypotheses μ ξ δ) (i : Fin n) (j k l : Fin p) :
@@ -207,9 +208,12 @@ theorem relativeFreshFourthMatrix_quadratic (h : BoundedIndependentHypotheses μ
       restorationCoefficient μ ξ (fun i _ => ∫ ω, ξ i ω j ^ 2 ∂μ) := by
     ext k l
     simp only [relativeFreshFourthMatrix, restorationCoefficient, integral_const_mul]
-  rw [hm, matrixQuadratic_restorationCoefficient_of_integrable μ ξ _
-    (fun i k l => (h.integrable_coordinate_pair i k l).const_mul _) u]
-  simp only [integral_const_mul]
+  rw [hm]
+  have hform := matrixQuadratic_restorationCoefficient_of_integrable μ ξ
+    (fun i (_ : Ω) => ∫ ω, ξ i ω j ^ 2 ∂μ)
+    (fun i k l => (h.integrable_coordinate_pair i k l).const_mul
+      (∫ ω, ξ i ω j ^ 2 ∂μ)) u
+  simpa only [integral_const_mul] using hform
 
 /-- The envelope controls the quadratic form of the signed aggregated
 third matrix. The matrix definition retains all cancellation. -/
@@ -234,7 +238,7 @@ theorem envelope_relativeThirdMatrix_abs (h : BoundedIndependentHypotheses μ ξ
         _ ≤ ∫ ω, δ * (dotProduct u (ξ i ω)) ^ 2 ∂μ := by
           apply integral_mono_ae hi.abs (hp.const_mul δ)
           filter_upwards [h.abs_coordinate_le i j] with ω hω
-          rw [abs_mul, abs_of_nonneg (sq_nonneg _)]
+          rw [abs_mul, abs_sq]
           exact mul_le_mul_of_nonneg_right hω (sq_nonneg _)
         _ = _ := integral_const_mul _ _
     _ = δ * (∑ i, ∫ ω, (dotProduct u (ξ i ω)) ^ 2 ∂μ) := (Finset.mul_sum ..).symm
@@ -251,9 +255,10 @@ theorem envelope_relativeFourthMatrix_le (h : BoundedIndependentHypotheses μ ξ
       intro i _
       have hp := integrable_observation_projection_sq h i u
       have hi : Integrable (fun ω => ξ i ω j ^ 2 * (dotProduct u (ξ i ω)) ^ 2) μ := by
-        apply hp.bdd_mul'
+        apply hp.bdd_mul' (c := δ ^ 2)
           ((((measurable_pi_apply j).comp (h.measurable i)).pow_const 2).aestronglyMeasurable)
-        simpa only [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _)] using ae_coordinate_sq_le h i j
+        filter_upwards [ae_coordinate_sq_le h i j] with ω hω
+        simpa only [Real.norm_eq_abs, Function.comp_apply, abs_sq] using hω
       rw [← integral_const_mul]
       apply integral_mono_ae hi (hp.const_mul (δ ^ 2))
       filter_upwards [ae_coordinate_sq_le h i j] with ω hω

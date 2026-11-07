@@ -37,13 +37,17 @@ def lowerOrthant {m : ℕ} (a : Vector m) : Rect m where
 
 theorem mem_lowerOrthant {m : ℕ} (a x : Vector m) :
     x ∈ (lowerOrthant a).carrier ↔ ∀ α, x α ≤ a α := by
-  simp [lowerOrthant, Rect.carrier, Set.mem_pi]
+  change (∀ α, α ∈ (Set.univ : Set (Fin m)) → x α ≤ a α) ↔ _
+  simp only [Set.mem_univ, true_implies]
 
 theorem standardizedFaceMap_apply {p m : ℕ}
     (ν : Matrix (Fin m) (Fin p) ℝ) (σ : Vector m) (x : Vector p) (α : Fin m) :
     (standardizedFaceMap ν σ).mulVec x α = dotProduct (ν α) x / σ α := by
   simp only [standardizedFaceMap, Matrix.mulVec, dotProduct,
-    div_mul_eq_mul_div, Finset.sum_div]
+    div_eq_mul_inv, Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro j _
+  ring
 
 /-- Exact event identity, without a covariance-rank hypothesis. -/
 theorem mem_facePolyhedron_iff_standardized {p m : ℕ}
@@ -70,23 +74,25 @@ theorem standardizedFaceMap_row_l1_le {p m : ℕ}
     (hσ : ∀ α, 0 < σ α)
     (hν : ∀ α, (∑ j, |ν α j|) ≤ J * σ α) (α : Fin m) :
     (∑ j, |standardizedFaceMap ν σ α j|) ≤ J := by
-  simp only [standardizedFaceMap, abs_div, abs_of_pos (hσ α), Finset.sum_div]
-  exact (div_le_iff₀ (hσ α)).mpr (hν α)
+  simp only [standardizedFaceMap, abs_div, abs_of_pos (hσ α)]
+  simp only [div_eq_mul_inv]
+  rw [← Finset.sum_mul]
+  simpa only [div_eq_mul_inv] using (div_le_iff₀ (hσ α)).mpr (hν α)
 
 theorem faceCovariance_diagonal {p m : ℕ}
-    (M : Matrix (Fin m) (Fin p) ℝ) (Σ : Matrix (Fin p) (Fin p) ℝ) (α : Fin m) :
-    (M * Σ * M.transpose) α α = dotProduct (M α) (Σ.mulVec (M α)) := by
-  change dotProduct ((M α) ᵥ* Σ) (M α) = _
-  exact (Matrix.dotProduct_mulVec (M α) Σ (M α)).symm
+    (M : Matrix (Fin m) (Fin p) ℝ) (Sigma : Matrix (Fin p) (Fin p) ℝ) (α : Fin m) :
+    (M * Sigma * M.transpose) α α = dotProduct (M α) (Sigma.mulVec (M α)) := by
+  change dotProduct (Matrix.vecMul (M α) Sigma) (M α) = _
+  exact (Matrix.dotProduct_mulVec (M α) Sigma (M α)).symm
 
 /-- Standardization gives unit variances. The input is the actual face
 variance identity, without requiring the full covariance to be invertible. -/
 theorem standardizedFaceMap_covariance_unit_diagonal {p m : ℕ}
     (ν : Matrix (Fin m) (Fin p) ℝ) (σ : Vector m)
-    (Σ : Matrix (Fin p) (Fin p) ℝ) (hσ : ∀ α, 0 < σ α)
-    (hvariance : ∀ α, dotProduct (ν α) (Σ.mulVec (ν α)) = (σ α) ^ 2)
+    (Sigma : Matrix (Fin p) (Fin p) ℝ) (hσ : ∀ α, 0 < σ α)
+    (hvariance : ∀ α, dotProduct (ν α) (Sigma.mulVec (ν α)) = (σ α) ^ 2)
     (α : Fin m) :
-    (standardizedFaceMap ν σ * Σ * (standardizedFaceMap ν σ).transpose) α α = 1 := by
+    (standardizedFaceMap ν σ * Sigma * (standardizedFaceMap ν σ).transpose) α α = 1 := by
   rw [faceCovariance_diagonal]
   have hrow : standardizedFaceMap ν σ α = (σ α)⁻¹ • ν α := by
     ext j
@@ -94,6 +100,7 @@ theorem standardizedFaceMap_covariance_unit_diagonal {p m : ℕ}
   rw [hrow, Matrix.mulVec_smul, smul_dotProduct, dotProduct_smul, hvariance]
   simp only [smul_eq_mul]
   field_simp [ne_of_gt (hσ α)]
+  ring
 
 /-- A row l1 bound controls each projection in the maximum norm. -/
 theorem abs_mulVec_le_of_row_l1 {p m : ℕ}
@@ -101,7 +108,9 @@ theorem abs_mulVec_le_of_row_l1 {p m : ℕ}
     (hM : ∀ α, (∑ j, |M α j|) ≤ J) (x : Vector p) (α : Fin m) :
     |M.mulVec x α| ≤ J * ‖x‖ := by
   calc
-    |M.mulVec x α| ≤ ∑ j, |M α j * x j| := Finset.abs_sum_le_sum_abs _ _
+    |M.mulVec x α| ≤ ∑ j, |M α j * x j| := by
+      simpa only [Matrix.mulVec, dotProduct] using
+        Finset.abs_sum_le_sum_abs (fun j : Fin p => M α j * x j) Finset.univ
     _ = ∑ j, |M α j| * |x j| := by simp only [abs_mul]
     _ ≤ ∑ j, |M α j| * ‖x‖ := Finset.sum_le_sum fun j _ =>
       mul_le_mul_of_nonneg_left

@@ -67,5 +67,7 @@ shares the three package caches with the branch checkout. The checkpoint then
 builds the current branch sources separately. Cache restoration also accepts
 the historical `rectangle-subexp` prefix with the same toolchain and manifest
 hashes, retaining the pinned dependencies and prior compiled proofs.
+An explicit cache-save step runs even if a later proof or audit fails, so
+completed dependency builds remain available for the next run.
 The branch and its pull request share a concurrency group, so a newer run
 cancels superseded runs for that branch.

@@ -69,6 +69,7 @@ theorem closedBoxSmoothingGap_le_one
   let s := FaceSmoother.closedBox bounds.1 bounds.2 h hh
   have hm := smoother_mean_mem_Icc s μ W hW
   have hg := smoother_mean_mem_Icc s (gaussianLaw A) id measurable_id
+  change (∫ z, s.F z ∂gaussianLaw A) ∈ Set.Icc (0 : ℝ) 1 at hg
   change |(∫ ω, s.F (W ω) ∂μ) - (∫ z, s.F z ∂gaussianLaw A)| ≤ 1
   apply abs_le.mpr
   constructor <;> linarith [hm.1, hm.2, hg.1, hg.2]
@@ -182,6 +183,25 @@ theorem rectangleDistance_le_smoothingDiscrepancy_add_endpoint
   intro lo hi
   exact closedBoxSmoothingGap_le_smoothingDiscrepancy
     μ (sumVector ξ) hdata.measurable_sum A h hh (lo, hi)
+
+/-- The current manuscript's Lemma 2 without a separate positive-bandwidth
+assumption: unit marginal variance forces `delta > 0`, so `h ≥ delta`
+supplies the positivity required by the actual logistic smoother. -/
+theorem smoothingLemma2
+    {Ω : Type*} [MeasurableSpace Ω] {p n : ℕ}
+    {μ : Measure Ω} [IsProbabilityMeasure μ]
+    {ξ : Fin n → Ω → Vector p} {δ : ℝ}
+    (hdata : BoundedIndependentHypotheses μ ξ δ) (hp : 1 ≤ p)
+    (hunit : ∀ j, covariance μ (sumVector ξ) j j = 1)
+    (A : Matrix (Fin p) (Fin p) ℝ)
+    (hA : A * A.transpose = covariance μ (sumVector ξ))
+    (h : ℝ) (hband : δ ≤ h) :
+    rectangleDistance μ (sumVector ξ) A ≤
+      smoothingDiscrepancy μ (sumVector ξ) A h
+        (lt_of_lt_of_le (hdata.delta_pos hp hunit) hband) +
+          sharpEndpointConstant * h * Real.sqrt (dimensionLog p) * dimensionLog p :=
+  rectangleDistance_le_smoothingDiscrepancy_add_endpoint hdata hp hunit A hA h
+    (lt_of_lt_of_le (hdata.delta_pos hp hunit) hband) hband
 
 end
 end RectangleCLT.Companion.SplitV4

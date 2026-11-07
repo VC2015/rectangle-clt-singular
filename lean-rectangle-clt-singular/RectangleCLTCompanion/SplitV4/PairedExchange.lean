@@ -1,6 +1,7 @@
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 import Mathlib.MeasureTheory.Integral.Prod
 import Mathlib.Analysis.Normed.Group.Constructions
+import Mathlib.Analysis.Calculus.Deriv.Mul
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
@@ -40,8 +41,9 @@ theorem integral_trapezoidal (g g' g'' : ℝ → ℝ)
     have hleft := hi.sub_const (1 / 2 : ℝ)
     have hone := (hasDerivAt_const t (1 : ℝ)).sub hi
     have hright := (hi.mul hone).div_const 2
-    convert (hleft.mul (hg t)).add (hright.mul (hg' t)) using 1 <;>
-      dsimp only [H] <;> ring
+    convert (hleft.mul (hg t)).add (hright.mul (hg' t)) using 1
+    simp only [H, id_eq]
+    ring
   have hcg : Continuous g := continuous_iff_continuousAt.mpr
     (fun t => (hg t).continuousAt)
   have hcr : Continuous (fun r : ℝ => r * (1 - r) * g'' r) :=
@@ -72,7 +74,7 @@ theorem pairedTruncatedIncrement_swap {p : ℕ} (x y : Fin p → ℝ) (h : ℝ) 
   classical
   unfold pairedTruncatedIncrement
   rw [norm_sub_rev y x]
-  split_ifs <;> ext j <;> simp <;> ring
+  split_ifs <;> ext j <;> simp
 
 /-- On the cutoff event, swapping the original observation replaces the
 path point by the endpoint of the short truncated segment. Off that event
@@ -206,7 +208,7 @@ theorem paired_fourth_remainder_coefficient (s : ℝ) (hs : 0 < s) :
       (-(s * Real.sqrt s) / 2) = -s / 8 := by
   have hn : Real.sqrt s ≠ 0 := ne_of_gt (Real.sqrt_pos.2 hs)
   field_simp [hn]
-  <;> ring
+  ring
 
 end
 

@@ -16,6 +16,9 @@ set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.rectangleDistance_le_smoothingDiscrepancy_add_endpoint
 
 set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.smoothingLemma2
+
+set_option pp.all true in
 #check RectangleCLT.Companion.gaussian_mean_relative_to_one_face
 
 open Lean Elab Command in
@@ -33,6 +36,7 @@ run_cmd do
     ``RectangleCLT.Companion.SplitV4.smoothingDiscrepancy_le_iff,
     ``RectangleCLT.Companion.SplitV4.rectangleError_le_uniform_smoothing_add_endpoint,
     ``RectangleCLT.Companion.SplitV4.rectangleDistance_le_smoothingDiscrepancy_add_endpoint,
+    ``RectangleCLT.Companion.SplitV4.smoothingLemma2,
     ``RectangleCLT.Companion.gaussian_mean_relative_to_one_face]
   for name in names do
     let action : CollectAxioms.M Unit := CollectAxioms.collect name
@@ -41,4 +45,4 @@ run_cmd do
       unless ax == ``propext || ax == ``Classical.choice || ax == ``Quot.sound do
         throwError "Unexpected axiom {ax} in smoothing/reuse endpoint {name}"
     logInfo m!"{name}: transitive axioms {state.axioms.toList}"
-  logInfo "Audited current Lemma 2, ten smoothing helpers, and the B.3 reuse candidate."
+  logInfo "Audited current Lemma 2 without extra bandwidth positivity, eleven smoothing helpers, and the B.3 reuse candidate."

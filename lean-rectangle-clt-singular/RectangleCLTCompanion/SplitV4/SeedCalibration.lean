@@ -156,6 +156,10 @@ theorem slepian_fourth_kernel (gamma s : ℝ) :
 theorem calibrated_fourth_kernel_abs_le_one {t s : ℝ}
     (ht : t ∈ Set.Icc (0 : ℝ) 1) (hs : s ∈ Set.Icc (0 : ℝ) 1) :
     |seededFourthKernel (thinningScale t) (calibratedEta t) s| ≤ 1 := by
+  have ht0 : 0 ≤ t := ht.1
+  have ht1 : t ≤ 1 := ht.2
+  have hs0 : 0 ≤ s := hs.1
+  have hs1 : s ≤ 1 := hs.2
   rw [calibrated_fourth_kernel ht.1]
   have hsq : (1 - s) ^ 2 ≤ 1 := by
     nlinarith [mul_nonneg hs.1 (show 0 ≤ 1 - s by linarith)]

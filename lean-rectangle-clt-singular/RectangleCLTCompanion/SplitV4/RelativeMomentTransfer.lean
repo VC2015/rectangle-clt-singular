@@ -53,9 +53,10 @@ private theorem integrable_cubic_projection
 private theorem integrable_fourth_projection
     (h : BoundedIndependentHypotheses μ ξ δ) (i : Fin n) (j : Fin p) (v : Vector p) :
     Integrable (fun ω => ξ i ω j ^ 2 * (dotProduct v (ξ i ω)) ^ 2) μ := by
-  apply (integrable_observation_projection_sq h i v).bdd_mul'
+  apply (integrable_observation_projection_sq h i v).bdd_mul' (c := δ ^ 2)
     ((((measurable_pi_apply j).comp (h.measurable i)).pow_const 2).aestronglyMeasurable)
-  simpa only [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _)] using ae_coordinate_sq_le h i j
+  filter_upwards [ae_coordinate_sq_le h i j] with ω hω
+  simpa only [Real.norm_eq_abs, Function.comp_apply, abs_sq] using hω
 
 private theorem integral_projected_linear_weight
     (M : Matrix (Fin m) (Fin p) ℝ) (i : Fin n) (α : Fin m) (g : Ω → ℝ)
@@ -127,7 +128,7 @@ theorem covariance_projected_sum
     (hM : ∀ α, (∑ j, |M α j|) ≤ J) :
     covariance μ (sumVector (fun i ω => M.mulVec (ξ i ω))) =
       M * covariance μ (sumVector ξ) * M.transpose := by
-  apply matrix_eq_of_symmetric_quadratic _ _ (covariance_transpose _ _) _
+  refine matrix_eq_of_symmetric_quadratic _ _ (covariance_transpose _ _) ?_ ?_
   · simp only [Matrix.transpose_mul, Matrix.transpose_transpose, covariance_transpose,
       Matrix.mul_assoc]
   · intro u
@@ -203,8 +204,9 @@ theorem projected_relativeFreshFourthMatrix_quadratic_le
         (fun _ => zero_le_one) (by simpa only [mul_one] using hleft)
         (fun j => by simpa only [mul_one] using hright j)
       simp only [mul_one] at hb
-      have hh := mul_le_mul_of_nonneg_right hb
-        (integral_nonneg (fun ω => sq_nonneg (dotProduct (M.transpose.mulVec u) (ξ i ω))))
+      have hnonneg : 0 ≤ ∫ ω, (dotProduct (M.transpose.mulVec u) (ξ i ω)) ^ 2 ∂μ :=
+        integral_nonneg (fun ω => sq_nonneg (dotProduct (M.transpose.mulVec u) (ξ i ω)))
+      have hh := mul_le_mul_of_nonneg_right hb hnonneg
       convert hh using 1
       simp only [Finset.sum_mul, mul_assoc]
     _ = _ := by
@@ -221,7 +223,7 @@ theorem relativeMomentBounds_projected
     (hM : ∀ α, (∑ j, |M α j|) ≤ J) :
     RelativeMomentBounds μ (fun i ω => M.mulVec (ξ i ω)) (J * s₃) (J ^ 2 * s₄) := by
   let hp := boundedIndependent_projected h M J hJ hM
-  have hΣ (v : Vector p) : 0 ≤ matrixQuadratic (covariance μ (sumVector ξ)) v := by
+  have hcovnonneg (v : Vector p) : 0 ≤ matrixQuadratic (covariance μ (sumVector ξ)) v := by
     rw [← sum_integral_observation_projection_sq h]
     exact Finset.sum_nonneg (fun _ _ => integral_nonneg (fun _ => sq_nonneg _))
   have hthird (α : Fin m) (u : Vector m) :
@@ -251,7 +253,7 @@ theorem relativeMomentBounds_projected
           (s₃ * matrixQuadratic (covariance μ (sumVector ξ)) (M.transpose.mulVec u)) :=
         (Finset.sum_mul ..).symm
       _ ≤ J * (s₃ * matrixQuadratic (covariance μ (sumVector ξ)) (M.transpose.mulVec u)) :=
-        mul_le_mul_of_nonneg_right (hM α) (mul_nonneg hr.s₃_nonneg (hΣ _))
+        mul_le_mul_of_nonneg_right (hM α) (mul_nonneg hr.s₃_nonneg (hcovnonneg _))
       _ = _ := by ring
   have hfourth (α : Fin m) (u : Vector m)
       (Q : Fin p → Matrix (Fin p) (Fin p) ℝ)
@@ -276,7 +278,7 @@ theorem relativeMomentBounds_projected
         simp only [Finset.mul_sum, Finset.sum_mul, mul_assoc]
       _ ≤ J * (J * (s₄ * matrixQuadratic (covariance μ (sumVector ξ)) (M.transpose.mulVec u))) :=
         mul_le_mul_of_nonneg_left
-          (mul_le_mul_of_nonneg_right (hM α) (mul_nonneg hr.s₄_nonneg (hΣ _))) hJ
+          (mul_le_mul_of_nonneg_right (hM α) (mul_nonneg hr.s₄_nonneg (hcovnonneg _))) hJ
       _ = _ := by ring
   refine
     { measurable := hp.measurable

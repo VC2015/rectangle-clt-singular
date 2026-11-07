@@ -76,6 +76,10 @@ theorem hasDerivAt_pairedTimePrimitive {s : ℝ} (hs : s ∈ Ioo (0 : ℝ) 1) :
   convert hd using 1 <;> dsimp [pairedTimePrimitive, pairedTimeWeight]
   rw [show 1 - (2 * s - 1) ^ 2 = 4 * (s * (1 - s)) by ring,
     Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 4)]
+  have hfour : Real.sqrt (4 : ℝ) = 2 := by
+    apply (Real.sqrt_eq_iff_eq_sq (by norm_num) (by norm_num)).mpr
+    norm_num
+  rw [hfour]
   norm_num
   field_simp [hroot]
 
@@ -87,7 +91,9 @@ theorem hasDerivAt_fourthTimePrimitive {s : ℝ} (hs : s ∈ Ioo (0 : ℝ) 1) :
   have hr := ((hasDerivAt_const s (1 : ℝ)).sub (hasDerivAt_id s)).sqrt hpos.ne'
   convert hd.mul hr using 1 <;> dsimp [fourthTimePrimitive, fourthTimeWeight]
   field_simp [hroot]
-  nlinarith [Real.sq_sqrt hpos.le]
+  have hcube : Real.sqrt (1 - s) ^ 3 = (1 - s) * Real.sqrt (1 - s) := by
+    rw [pow_succ, Real.sq_sqrt hpos.le]
+  nlinarith [hcube]
 
 theorem intervalIntegrable_gaussianTimeWeight :
     IntervalIntegrable gaussianTimeWeight volume (0 : ℝ) 1 := by
@@ -135,9 +141,10 @@ theorem pairedTimePrimitive_endpoint_limits :
   · simpa [pairedTimePrimitive] using
       continuous_pairedTimePrimitive.continuousAt.continuousWithinAt.tendsto
         (s := Ioi (0 : ℝ)) (x := (0 : ℝ))
-  · simpa [pairedTimePrimitive] using
+  · convert
       continuous_pairedTimePrimitive.continuousAt.continuousWithinAt.tendsto
-        (s := Iio (1 : ℝ)) (x := (1 : ℝ))
+        (s := Iio (1 : ℝ)) (x := (1 : ℝ)) using 1 <;>
+      norm_num [pairedTimePrimitive]
 
 theorem fourthTimePrimitive_endpoint_limits :
     Tendsto fourthTimePrimitive (𝓝[>] (0 : ℝ)) (𝓝 (-(4 / 3 : ℝ))) ∧
@@ -188,7 +195,8 @@ theorem truncated_time_integral_tendsto {w : ℝ → ℝ}
       (by simp : (0 : ℝ) ∈ uIcc (0 : ℝ) 1)
   have hmap : MapsTo (fun ε : ℝ => 1 - ε) (Icc (0 : ℝ) 1) (Icc (0 : ℝ) 1) := by
     intro ε hε
-    exact ⟨by linarith [hε.2], by linarith [hε.1]⟩
+    change 0 ≤ 1 - ε ∧ 1 - ε ≤ 1
+    exact ⟨sub_nonneg.mpr hε.2, sub_le_self _ hε.1⟩
   have hd : ContinuousOn (fun ε => ∫ s in (0 : ℝ)..(1 - ε), w s)
       (Icc (0 : ℝ) 1) :=
     hc.comp (continuous_const.sub continuous_id).continuousOn hmap

@@ -1,10 +1,12 @@
 # Split-V4 open proof obligations
 
-Validation checkpoint: all newly proposed split-V4 proof modules are awaiting
-fresh compilation, expanded-type inspection, and transitive axiom audits.
-Their presence in the checkout is not a successful Lean check. The source
-correspondences below are provisional until those checks are recorded. This
-report does not change any inventory entry to certified.
+Validation checkpoint: all eight handoff baseline commands passed in a fresh
+CI run. The first build of the newly proposed split-V4 modules reported
+compilation errors, which are being corrected. New statements and helpers
+still await successful compilation, expanded-type inspection, and transitive
+axiom audits. The source correspondences below remain provisional until
+those checks are recorded. This report does not change any inventory entry
+to certified.
 
 The target is repository commit
 `2bd43fd98d2a8687ccdda3745f9ac8eac96260dd`, with manuscript SHA-256
