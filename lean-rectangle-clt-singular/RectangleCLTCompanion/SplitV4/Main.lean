@@ -72,6 +72,8 @@ import RectangleCLTCompanion.SplitV4.FourthMomentOptimal
 import RectangleCLTCompanion.SplitV4.DenseMomentOptimal
 import RectangleCLTCompanion.SplitV4.MaskedFourthLower
 import RectangleCLTCompanion.SplitV4.SparseCoordinateNegligible
+import RectangleCLTCompanion.SplitV4.UniformLowerConstants
+import RectangleCLTCompanion.SplitV4.RestorationAE
 import RectangleCLTCompanion.SubexponentialMain
 import RectangleCLTCompanion.LowerScaleMain
 import RectangleCLTCompanion.FactorExistence
@@ -139,6 +141,10 @@ The current statement correspondences are:
 * The fourth, dense polynomial and masked fourth lower constructions prove
   their stated asymptotic constants for the actual full rectangle distance;
   `fourthMomentOptimal` and `denseMomentOptimal` also prove class suprema.
+* `lower:sparse`: `sparseMoment_uniform_constants` proves the actual sparse
+  construction and matching class suprema, with both constants fixed before
+  all envelope and dimension sequences. The fourth and dense uniform wrappers
+  put their constants before all sequences as well.
 * The envelope specialization of `thm:unrestricted` is `unrestrictedCLT`.
   It does not have a relative fourth-moment parameter and therefore does
   not prove all of Theorem 1.
@@ -147,6 +153,7 @@ The unrestricted Gaussian comparison input of Appendix E and the bounded
 and Orlicz polyhedral branches are also connected. The paired calculus,
 conditional coefficients, fourth-coordinate maximum and common-point
 contraction assemble the Appendix G comparison. The polynomial theorem and
-its two proof routes are connected as well. The relative theorem and lower-bound calibrations remain
-separate targets in the statement map.
+its two proof routes are connected as well. The relative theorem, its seeded
+proposition, and its relative face-transfer consequence remain separate
+targets in the statement map.
 -/

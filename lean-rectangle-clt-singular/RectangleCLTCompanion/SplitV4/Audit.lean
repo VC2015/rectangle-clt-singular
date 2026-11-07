@@ -129,14 +129,32 @@ set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.exists_logistic_matrix_paper_constant
 #print RectangleCLT.Companion.SplitV4.signedCubicTensor
 #print RectangleCLT.Companion.SplitV4.canonicalSignedCubicContraction
+#print RectangleCLT.Companion.SplitV4.variableRetention
+#print RectangleCLT.Companion.SplitV4.variableEta
+#print RectangleCLT.Companion.SplitV4.variableSeededInterpolationLaw
+#print RectangleCLT.Companion.SplitV4.genericManuscriptFourthCombination
+#print RectangleCLT.Companion.SplitV4.genericManuscriptFourthPathIntegrand
 #print RectangleCLT.Companion.SplitV4.restorationOriginalThird
 #print RectangleCLT.Companion.SplitV4.restorationOriginalFourth
 #print RectangleCLT.Companion.SplitV4.PairedRestorationConclusion
 #print RectangleCLT.Companion.SplitV4.PairedRestorationContract
+#print RectangleCLT.Companion.SplitV4.ConditionalEventIndependence
+#print RectangleCLT.Companion.SplitV4.conditionalRestorationCoefficient
+#print RectangleCLT.Companion.SplitV4.RectangleBaseConcentration
 #print RectangleCLT.Companion.SplitV4.DerivativeEnvelopeComponent
 #print RectangleCLT.Companion.SplitV4.translatedFaceDerivativeSupremum
 #print RectangleCLT.Companion.SplitV4.DerivativeEnvelopeAverageContract
+#print RectangleCLT.Companion.SplitV4.FourthMomentLowerConstruction
+#print RectangleCLT.Companion.SplitV4.DenseMomentLowerConstruction
 #print RectangleCLT.Companion.SplitV4.MaskedFourthLowerConstruction
+#print RectangleCLT.Companion.SplitV4.polynomialSymmetricClassDistances
+#print RectangleCLT.Companion.SplitV4.polynomialSymmetricWorstDistance
+#print RectangleCLT.Companion.SplitV4.polynomialFourthUniformConstant
+#print RectangleCLT.Companion.SplitV4.SparseMomentLowerConstruction
+#print RectangleCLT.Companion.SplitV4.sparseMomentK
+#print RectangleCLT.Companion.SplitV4.sparseMomentLowerRate
+#print RectangleCLT.Companion.SplitV4.sparseMomentLowerCoefficient
+#print RectangleCLT.Companion.SplitV4.sparseMomentUpperCoefficient
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.hasDerivAt_integral_genericVariableSeededInterpolationLaw_tensor
 set_option pp.all true in
@@ -149,6 +167,14 @@ set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.denseMomentOptimal
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.maskedFourthLower
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.fourthMoment_uniform_constants
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.denseMoment_uniform_constants
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.sparseMoment_uniform_constants
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.restoration_signed_relative_ae_zero
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.normalizedObservationsRectangleDistanceCLT
 set_option pp.all true in
