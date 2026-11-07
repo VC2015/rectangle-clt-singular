@@ -34,6 +34,13 @@ import RectangleCLTCompanion.SplitV4.LargeIncrementBudgets
 import RectangleCLTCompanion.SplitV4.LargeIncrementComparison
 import RectangleCLTCompanion.SplitV4.PairedNormalization
 import RectangleCLTCompanion.SplitV4.ShiftComparison
+import RectangleCLTCompanion.SplitV4.PolynomialMain
+import RectangleCLTCompanion.SplitV4.PolynomialFaceTransfer
+import RectangleCLTCompanion.SplitV4.IntrinsicCubeBoundary
+import RectangleCLTCompanion.SplitV4.CubeContraction
+import RectangleCLTCompanion.SplitV4.CubeCopySelection
+import RectangleCLTCompanion.SplitV4.SymmetricFamilyCertification
+import RectangleCLTCompanion.SplitV4.ZeroVarianceFaces
 import RectangleCLTCompanion.SubexponentialMain
 import RectangleCLTCompanion.LowerScaleMain
 import RectangleCLTCompanion.FactorExistence
@@ -72,6 +79,15 @@ The current statement correspondences are:
 * `lower:shift-comparison`: `independent_shift_comparison` proves the
   actual CDF comparison with signed shifts and the two stated
   independence assumptions.
+* `poly:transfer` and `poly:bennett`: the actual polynomial observation
+  bounds are `polynomialEnvelopeTransfer` and
+  `bennettPolynomialCLT_observations`.
+* `thm:polynomial`: `polynomialMomentCLTExists` combines both rates and
+  proves the literal supremum over the full polynomial array class.
+* `appx-lem:cube-boundary`: `intrinsic_cube_boundary` retains the actual
+  expected positive maximum; its logarithmic specialization is proved too.
+* `lower:family-properties`: `symmetricFamilyProperties` proves the actual
+  masked finite-product model, moments, rank, and correlation gap.
 * The envelope specialization of `thm:unrestricted` is `unrestrictedCLT`.
   It does not have a relative fourth-moment parameter and therefore does
   not prove all of Theorem 1.
@@ -79,7 +95,8 @@ The current statement correspondences are:
 The unrestricted Gaussian comparison input of Appendix E and the bounded
 and Orlicz polyhedral branches are also connected. The paired calculus,
 conditional coefficients, fourth-coordinate maximum and common-point
-contraction assemble the Appendix G comparison. The polynomial CLT,
-relative theorem, intrinsic anti-concentration, and new lower constructions
-remain separate targets in the statement map.
+contraction assemble the Appendix G comparison. The polynomial theorem and
+its two proof routes are connected as well. The relative theorem, full
+intrinsic anti-concentration lemma, and lower-bound calibrations remain
+separate targets in the statement map.
 -/

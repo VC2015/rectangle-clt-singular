@@ -84,6 +84,26 @@ set_option pp.universes true
 #print RectangleCLT.Companion.SplitV4.realCDF
 #print RectangleCLT.Companion.SplitV4.realCDFDistance
 #print RectangleCLT.Companion.SplitV4.secondDerivativeSupNorm
+#print RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses
+#print RectangleCLT.Companion.SplitV4.polynomialClassDistances
+#print RectangleCLT.Companion.SplitV4.polynomialWorstDistance
+#print RectangleCLT.Companion.SplitV4.PolynomialModelBound
+#print RectangleCLT.Companion.SplitV4.polynomialBennettObservationRate
+#print RectangleCLT.Companion.SplitV4.polynomialEnvelopeTransferRate
+#print RectangleCLT.Companion.SplitV4.polynomialCombinedRate
+#print RectangleCLT.Companion.SplitV4.polynomialUniversalConstant
+#print RectangleCLT.Companion.SplitV4.cubeUniformLaw
+#print RectangleCLT.Companion.SplitV4.affineCubeMaximum
+#print RectangleCLT.Companion.SplitV4.positiveLinearMaximum
+#print RectangleCLT.Companion.SplitV4.intrinsicCubeMean
+#print RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters
+#print RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.variance
+#print RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.scale
+#print RectangleCLT.Companion.SplitV4.familySeedLaw
+#print RectangleCLT.Companion.SplitV4.familyArrayLaw
+#print RectangleCLT.Companion.SplitV4.familyObservation
+#print RectangleCLT.Companion.SplitV4.familyRawObservations
+#print RectangleCLT.Companion.SplitV4.CommonSymmetricFamilyProperties
 
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.normalizedObservationsCLT
@@ -139,6 +159,22 @@ set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.gaussianComparisonWithLargeIncrementRemainders
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.independent_shift_comparison
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.polynomialMomentCLTExists
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.polynomialEnvelopeTransfer
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.bennettPolynomialCLT_observations
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.polynomialWorstDistance_le_iff_modelBound
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.intrinsic_cube_boundary
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.intrinsic_cube_mean_le_sqrt_log
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.symmetricFamilyProperties
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.polynomialPolyhedralCLT
 
 #check RectangleCLT.Companion.unrestrictedCLTExists
 #check RectangleCLT.Companion.gaussian_factor_exists_of_boundedIndependent
