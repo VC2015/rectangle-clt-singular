@@ -1,12 +1,17 @@
 # Split-V4 open proof obligations
 
 Validation checkpoint: all eight handoff baseline commands passed in a fresh
-CI run. The first build of the newly proposed split-V4 modules reported
-compilation errors, which are being corrected. New statements and helpers
-still await successful compilation, expanded-type inspection, and transitive
-axiom audits. The source correspondences below remain provisional until
-those checks are recorded. This report does not change any inventory entry
-to certified.
+CI run. At proof commit `fad0623b9cca7b9a158c79e1c9fd70f50178ba43`, the full
+package build, new audit-module build, combined split-V4 audit, and dependency
+audit passed. The checked declarations use only `propext`, `Classical.choice`,
+and `Quot.sound` in their transitive axiom closures.
+
+Five whole current statements are checked: Corollaries 1 and 2, Theorem 3,
+Lemma 2, and Lemma B.3. The remaining 26 proved statements are pending.
+The revised core proof chains in Appendices B, C, G, E, and F remain open.
+The dependency audit covers 135 new theorem declarations and 11 reused
+endpoints in 146 kernel records. The combined audit reports 142 entries,
+including seven reused endpoints; these overlapping counts must not be added.
 
 The target is repository commit
 `2bd43fd98d2a8687ccdda3745f9ac8eac96260dd`, with manuscript SHA-256
@@ -27,18 +32,18 @@ Targets: Theorem 1 (`thm:unrestricted`), Proposition 1
 (`appx-an:lem:identity`, `appx-an:lem:restoration`, `appx-an:lem:mean`,
 `appx-an:lem:matrix`, `appx-an:lem:threshold`).
 
-The existing `RectangleCLT.Companion.unrestrictedCLT` is a candidate for
-the envelope specialization of Theorem 1. Its type has no `s4` parameter.
+The existing `RectangleCLT.Companion.unrestrictedCLT` has been freshly
+checked for the envelope specialization of Theorem 1. Its type has no `s4` parameter.
 It does not supply the relative fourth-moment conclusion
 `C min(1, L^(3/2) (delta + sqrt(s4 D_L)))`, or certify the revised proof
 route by itself.
 
-Proposed components are in [RelativeMoments.lean](../RectangleCLTCompanion/SplitV4/RelativeMoments.lean)
+Checked components are in [RelativeMoments.lean](../RectangleCLTCompanion/SplitV4/RelativeMoments.lean)
 and [SeedCalibration.lean](../RectangleCLTCompanion/SplitV4/SeedCalibration.lean).
 The former defines signed cubic and two distinct fourth-moment matrices,
 includes genuine entrywise integrability, identifies the fresh-copy matrix
-with a product-law integral, and proposes envelope consequences. The latter
-proposes the calibrated moment identities, signed-density moments, and
+with a product-law integral, and proves envelope consequences. The latter
+proves the calibrated moment identities, signed-density moments, and
 kernel calculations. These components still need the analytic assembly:
 
 1. For Lemma B.1, construct the actual masked Gaussian path for arbitrary
@@ -55,10 +60,12 @@ kernel calculations. These components still need the analytic assembly:
    signed `s=1` refinement at zero translation and both `s=2` squared-face
    budgets. The arrays may depend on the conditioning sigma-field and on
    one another; mutual array independence is not an available hypothesis.
-3. Lemma B.3 has a historical weighted-Gaussian-mean candidate. Expand
-   `weightMass`, `weightMean`, `vectorNormSq`, and the face contraction,
-   then check the positive masses and the precise entropy inequality.
-   Fresh imports and axiom closure are still required.
+3. Lemma B.3's current contract is checked through
+   `RectangleCLT.Companion.gaussian_mean_relative_to_one_face`, with the
+   positive masses, `weightMass`, `weightMean`, `vectorNormSq`, face
+   contraction, and precise entropy inequality inspected. Its use in the
+   revised B.4 argument still needs to be assembled with the new threshold
+   estimate.
 4. For Lemma B.5, define the actual averaged threshold derivative and
    prove `E |D(b(V0))| <= C (sigma L^(3/2) + delta L^2)` first for
    independent unit normals. The missing geometric step is the written
@@ -69,8 +76,9 @@ kernel calculations. These components still need the analytic assembly:
 5. Derive Lemma B.4's nuclear-norm sum over every ordered face tuple from
    B.3, B.5, and the logistic selector tilt. Keep the dependence on the
    generic concentration constant until the actual application fixes it.
-   Historical Prékopa and selector-contraction modules are reuse candidates
-   whose expanded contracts and axiom closures must be checked.
+   Historical Prékopa and selector-contraction modules are checked
+   infrastructure; their exact contracts must still be matched to each
+   application in this new proof chain.
 6. Match Lemma A.1's arbitrary face norm and derivative supremum over
    translated points, then propagate the moment budgets through Proposition
    1. Separate the initial Slepian step from the seeded path, integrate
@@ -104,18 +112,18 @@ Targets: Lemmas G.1–G.4 (`ben:comparison`, `ben:smoothing`,
 `ben:paired-interpolation`, `ben:maximum`) and Proposition 3 (`poly:bennett`).
 
 [PairedExchange.lean](../RectangleCLTCompanion/SplitV4/PairedExchange.lean)
-proposes a scalar trapezoidal identity proved by FTC, cutoff-preserving
+proves a scalar trapezoidal identity by FTC, cutoff-preserving
 copy exchange, odd and even endpoint integral pairings with genuine
 integrability, and the scalar coefficient `-s/8`.
 [TimeWeights.lean](../RectangleCLTCompanion/SplitV4/TimeWeights.lean)
-proposes integrability, endpoint limits, and the three time integrals
-`2`, `pi`, and `4/3`. These are ingredients of the comparison proof.
+proves integrability, endpoint limits, and the three time integrals
+`2`, `pi`, and `4/3`. These checked helpers are ingredients of the comparison proof.
 
 For G.2, the remaining smoothing input must apply to every measurable
 vector `V`, without a boundedness or moment assumption on `V`. Prove the
 Gaussian-endpoint absorption using the logistic mixture and the Gaussian
 shell estimate, then extend to the full rectangle class. The bounded-array
-smoothing proposal in `Smoothing.lean` does not have this contract.
+smoothing result in `Smoothing.lean` does not have this contract.
 
 For G.3, construct all copies on actual product probability spaces and
 differentiate the Slepian expectation for finite-moment summands. Supply
@@ -179,24 +187,29 @@ permitted dependence on fixed `q` may remain.
 Targets: Corollaries 1–3 (`cor:observations`, `cor:subexponential`,
 `cor:polyhedral-transfer`) and Lemma 2 (`lem:endpoint`).
 
-Proposed endpoints in `ObservationNormalization.lean`,
+Checked endpoints in `ObservationNormalization.lean`,
 `SubexponentialTransfer.lean`, and `Smoothing.lean` use the actual supremum
 rectangle distance and choose constants before the probability model.
-Check their expanded types against the exact rates and normalize average
-marginal second moments into the covariance of the normalized sum.
-For Corollary 2, check the genuine Orlicz definition and its integrable
-exponential-moment bridge; the Gaussian restoration must preserve the
-cross-covariance blocks of the clipped and residual vectors. Lemma 2's
-proposed reuse follows the older endpoint proof, so statement correspondence
-and the current proof route must be recorded separately.
+Their expanded types establish Corollaries 1 and 2 and Lemma 2, including
+the exact rates, average marginal normalization, and full rectangle class.
+Corollary 2 retains the genuine Orlicz definition and integrable
+exponential-moment bridge, with cross-covariance blocks preserved in the
+joint Gaussian restoration. These statements use the historical bounded
+proof infrastructure; checking their conclusions does not close the revised
+relative-moment or intrinsic anti-concentration proof routes.
 
-`PolyhedralGeometry.lean` proposes the standardized face-map membership
+`PolyhedralGeometry.lean` proves the standardized face-map membership
 equivalence, unit face covariance diagonal, bounded-array projection, and
-deterministic envelope and weighted-moment inequalities. Corollary 3 still
-needs the actual probability/Gaussian pushforward correspondence and all
-moment-class transfers. Verify the substitutions `delta -> J*delta`,
-`s4 -> J^2*s4`, `K -> J*K`, and `B -> J^2*B`, as well as the dimension
-logarithm. Treat zero-variance faces according to the paper's contract;
+deterministic envelope and weighted-moment inequalities.
+[RelativeMomentTransfer.lean](../RectangleCLTCompanion/SplitV4/RelativeMomentTransfer.lean)
+proves the actual transformed covariance and transfers both `Q_j` and
+`Qtilde_j`, with genuine integrability, under the row `l1` bound. Thus the
+bounded envelope substitution `delta -> J*delta` and the relative-moment
+substitution `s4 -> J^2*s4` are checked prerequisites. Corollary 3 still
+needs the actual probability/Gaussian-law pushforward correspondence,
+Orlicz transfer `K -> J*K`, polynomial-class transfer `B -> J^2*B`, and
+the resulting parameter and dimension-logarithm assembly. Treat
+zero-variance faces according to the paper's contract;
 do not add a covariance rank, eigenvalue, or correlation-gap assumption.
 
 ## Appendix F: lower constructions and calibrations
@@ -206,10 +219,11 @@ Targets: Theorems 3–8 (`opt:skew-lower`, `opt:symmetric-lower`,
 F.1–F.3 (`opt:moderate-tail`, `lower:shift-comparison`,
 `lower:family-properties`).
 
-Theorem 3 has the historical candidate `skewedTwoPointLowerScale`.
-Check growing `B_n` quantifiers, attained envelope, full rectangle
-distance, and the constant `sqrt(2)/(4*exp(1))` by a fresh expanded-type
-and axiom audit. This candidate does not certify the new symmetric laws.
+Theorem 3 is freshly checked through `skewedTwoPointLowerScale`, including
+the growing `B_n` quantifiers, attained envelope, full rectangle distance,
+and constant `sqrt(2)/(4*exp(1))`. It uses the historical two-point route.
+This statement check does not prove the full general Lemma F.1 or the new
+symmetric laws.
 
 For Lemma F.1, extend the tilted-law calculation to arbitrary independent,
 possibly nonidentically distributed bounded scalar summands with total
@@ -242,15 +256,17 @@ full rectangle distance while giving correlation gap zero.
 
 ## Certification gates
 
-Every proposed module must be imported by the intended terminal module and
-covered by the package build. Save exact commands, exit codes, versions,
-dependency revisions, expanded endpoint types, and transitive axiom lists.
-Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. A successful
-build alone does not establish the axiom condition or source correspondence.
+The checkpoint modules are imported by the intended terminal module and
+covered by the successful package build and strict audits. The verification
+record retains exact commands, exit codes, versions, dependency revisions,
+expanded endpoint types, and transitive axiom lists. Only `propext`,
+`Classical.choice`, and `Quot.sound` are permitted in future additions as
+well. A successful build alone does not establish source correspondence or
+close an unimplemented analytic proof route.
 
-The new verification record must identify the actual proof commit and
-manuscript hash, keep provisional helpers separate from certified endpoints,
-and retain statement status separately from current-proof-route status.
+The verification record identifies the actual proof commit and manuscript
+hash, distinguishes checked helpers from the five whole checked statements,
+and retains statement status separately from current-proof-route status.
 Cache or network failures are infrastructure evidence, rather than analytic
 counterexamples. Preserve the working checkpoint and historical records while
 continuing independent obligations.

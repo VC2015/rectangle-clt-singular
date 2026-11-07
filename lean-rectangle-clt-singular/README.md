@@ -1,5 +1,11 @@
 # Unrestricted-covariance rectangle CLTs in Lean
 
+The November split-V4 checkpoint is **partial**: five of its 31 proved
+statements are checked, with the revised analytic proof chains still open.
+See [the current verification record](SPLIT_V4_VERIFICATION.json) and
+[statement map](split-v4-certification/statement-map.json). The historical
+theorem numbering and October records below are preserved.
+
 The three bounded-observation CLTs in the supplied companion manuscript
 are proved in
 [`SharpMain.lean`](RectangleCLTCompanion/SharpMain.lean): the unrestricted

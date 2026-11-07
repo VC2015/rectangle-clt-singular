@@ -1,5 +1,16 @@
 # Split-V4 certification checkpoint
 
+The checked proof commit is `fad0623b9cca7b9a158c79e1c9fd70f50178ba43`.
+The pristine baseline passed all eight commands; the new checkpoint passed
+all 14 commands, and the complete imported closure audit checked 2,155
+companion theorem declarations against the three permitted axioms.
+
+Five current statements are checked: Corollaries 1–2, Theorem 3, Lemma 2,
+and Lemma B.3. The other 26 proved statements and the revised analytic
+chains remain pending. [The verification record](../SPLIT_V4_VERIFICATION.json),
+[statement map](statement-map.json), [kernel dependency map](dependency-map.json),
+and [open obligations](OPEN_OBLIGATIONS.md) describe the exact scope.
+
 The target is the split-V4 manuscript at handoff commit
 `2bd43fd98d2a8687ccdda3745f9ac8eac96260dd`, with SHA-256
 `f2c1252531e21642c5e1e6ca99e2b32a5ae63895d9e51ff075a8f23505eea2b1`.
