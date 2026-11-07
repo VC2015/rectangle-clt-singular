@@ -1,0 +1,163 @@
+def RectangleCLT.Companion.SplitV4.truncationMaskWeight : {p n : ℕ} →
+  (Fin n → MeasureTheory.Measure (RectangleCLT.Vector p)) → ℝ → (Fin n → Bool) → ENNReal :=
+fun {p n} μ T mask => ∏ i, (μ i) (RectangleCLT.Companion.SplitV4.truncationMaskSet T (mask i))
+def RectangleCLT.Companion.SplitV4.selectedConditionalProduct : {p n : ℕ} →
+  (Fin n → MeasureTheory.Measure (RectangleCLT.Vector p)) →
+    ℝ → (Fin n → Bool) → MeasureTheory.Measure (Fin n → RectangleCLT.Vector p) :=
+fun {p n} μ T mask =>
+  MeasureTheory.Measure.pi fun i => RectangleCLT.Companion.SplitV4.selectedConditionalLaw (μ i) T (mask i)
+def RectangleCLT.Companion.SplitV4.conditionalTruncationKernel : {p n : ℕ} →
+  (μ : Fin n → MeasureTheory.Measure (RectangleCLT.Vector p)) →
+    [inst : ∀ (i : Fin n), MeasureTheory.IsProbabilityMeasure (μ i)] →
+      ℝ → ProbabilityTheory.Kernel (RectangleCLT.Companion.SplitV4.TruncationTag p n) (Fin n → RectangleCLT.Vector p) :=
+fun {p n} μ [∀ (i : Fin n), MeasureTheory.IsProbabilityMeasure (μ i)] T =>
+  (ProbabilityTheory.Kernel.id.prod
+        (ProbabilityTheory.Kernel.const (RectangleCLT.Companion.SplitV4.TruncationTag p n)
+          (RectangleCLT.Companion.SplitV4.conditionalGoodProductLaw μ T))).map
+    RectangleCLT.Companion.SplitV4.reconstructConditionalArray
+def RectangleCLT.Companion.SplitV4.conditionalExceptionalShift : {p n : ℕ} →
+  (Fin n → MeasureTheory.Measure (RectangleCLT.Vector p)) →
+    ℝ → (Fin n → Bool) → (Fin n → RectangleCLT.Vector p) → Fin n → RectangleCLT.Vector p :=
+fun {p n} μ T mask b i => if mask i = true then b i else RectangleCLT.Companion.SplitV4.conditionalGoodMean (μ i) T
+RectangleCLT.Companion.SplitV4.productLaw_eq_truncationMaskMixture {p n : Nat}
+  (μ :
+    Fin n →
+      @MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+  [∀ (i : Fin n),
+      @MeasureTheory.IsProbabilityMeasure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (μ i)]
+  (T : Real) :
+  @Eq.{1}
+    (@MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+    (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+      (fun (i : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      μ)
+    (@RectangleCLT.Companion.SplitV4.truncationMaskMixture p n μ T)
+RectangleCLT.Companion.SplitV4.integral_product_conditionalTruncationKernel {p n : Nat}
+  (μ :
+    Fin n →
+      @MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+  [∀ (i : Fin n),
+      @MeasureTheory.IsProbabilityMeasure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (μ i)]
+  (T : Real) (F : Prod.{0, 0} (RectangleCLT.Companion.SplitV4.TruncationTag p n) (Fin n → RectangleCLT.Vector p) → Real)
+  (hF :
+    @Measurable.{0, 0} (Prod.{0, 0} (RectangleCLT.Companion.SplitV4.TruncationTag p n) (Fin n → RectangleCLT.Vector p))
+      Real
+      (@Prod.instMeasurableSpace.{0, 0} (RectangleCLT.Companion.SplitV4.TruncationTag p n)
+        (Fin n → RectangleCLT.Vector p)
+        (@Prod.instMeasurableSpace.{0, 0} (Fin n → Bool) (Fin n → RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+      Real.measurableSpace F)
+  (C : Real)
+  (hbound :
+    ∀ (z : Prod.{0, 0} (RectangleCLT.Companion.SplitV4.TruncationTag p n) (Fin n → RectangleCLT.Vector p)),
+      @LE.le.{0} Real Real.instLE (@abs.{0} Real Real.lattice Real.instAddGroup (F z)) C) :
+  @Eq.{1} Real
+    (@MeasureTheory.integral.{0, 0} (Fin n → RectangleCLT.Vector p) Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+        (fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        μ)
+      fun (x : Fin n → RectangleCLT.Vector p) =>
+      F
+        (@Prod.mk.{0, 0} (RectangleCLT.Companion.SplitV4.TruncationTag p n) (Fin n → RectangleCLT.Vector p)
+          (@Prod.mk.{0, 0} (Fin n → Bool) (Fin n → RectangleCLT.Vector p)
+            (@RectangleCLT.Companion.SplitV4.observedTruncationMask p n T x)
+            (@RectangleCLT.Companion.SplitV4.observedExceptionalArray p n T x))
+          x))
+    (@Finset.sum.{0, 0} (Fin n → Bool) Real Real.instAddCommMonoid
+      (@Finset.univ.{0} (Fin n → Bool)
+        (@Pi.instFintype.{0, 0} (Fin n) (fun (a : Fin n) => Bool) (instDecidableEqFin n) (Fin.fintype n)
+          fun (a : Fin n) => Bool.fintype))
+      fun (mask : Fin n → Bool) =>
+      @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (ENNReal.toReal (@RectangleCLT.Companion.SplitV4.truncationMaskWeight p n μ T mask))
+        (@MeasureTheory.integral.{0, 0} (Fin n → RectangleCLT.Vector p) Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (@RectangleCLT.Companion.SplitV4.badConditionalProduct p n μ T) fun (b : Fin n → RectangleCLT.Vector p) =>
+          @MeasureTheory.integral.{0, 0} (Fin n → RectangleCLT.Vector p) Real Real.normedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@DFunLike.coe.{1, 1, 1}
+              (@ProbabilityTheory.Kernel.{0, 0} (RectangleCLT.Companion.SplitV4.TruncationTag p n)
+                (Fin n → RectangleCLT.Vector p)
+                (@Prod.instMeasurableSpace.{0, 0} (Fin n → Bool) (Fin n → RectangleCLT.Vector p)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) =>
+                    Bool.instMeasurableSpace)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace))
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+              (RectangleCLT.Companion.SplitV4.TruncationTag p n)
+              (fun (x : RectangleCLT.Companion.SplitV4.TruncationTag p n) =>
+                @MeasureTheory.Measure.{0} (Fin n → RectangleCLT.Vector p)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace))
+              (@ProbabilityTheory.Kernel.instFunLike.{0, 0} (RectangleCLT.Companion.SplitV4.TruncationTag p n)
+                (Fin n → RectangleCLT.Vector p)
+                (@Prod.instMeasurableSpace.{0, 0} (Fin n → Bool) (Fin n → RectangleCLT.Vector p)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) =>
+                    Bool.instMeasurableSpace)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace))
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+              (@RectangleCLT.Companion.SplitV4.conditionalTruncationKernel p n μ inst✝ T)
+              (@Prod.mk.{0, 0} (Fin n → Bool) (Fin n → RectangleCLT.Vector p) mask
+                (@RectangleCLT.Companion.SplitV4.maskedExceptionalArray p n mask b)))
+            fun (x : Fin n → RectangleCLT.Vector p) =>
+            F
+              (@Prod.mk.{0, 0} (RectangleCLT.Companion.SplitV4.TruncationTag p n) (Fin n → RectangleCLT.Vector p)
+                (@Prod.mk.{0, 0} (Fin n → Bool) (Fin n → RectangleCLT.Vector p) mask
+                  (@RectangleCLT.Companion.SplitV4.maskedExceptionalArray p n mask b))
+                x)))
+RectangleCLT.Companion.SplitV4.selectConditionalArrays_eq_retained_add_shift {p n : Nat}
+  (μ :
+    Fin n →
+      @MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+  (T : Real) (mask : Fin n → Bool) (b g : Fin n → RectangleCLT.Vector p) :
+  @Eq.{1} (Fin n → RectangleCLT.Vector p)
+    (@RectangleCLT.Companion.SplitV4.selectConditionalArrays p n mask
+      (@Prod.mk.{0, 0} (Fin n → RectangleCLT.Vector p) (Fin n → RectangleCLT.Vector p) b g))
+    fun (i : Fin n) =>
+    @HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+      (@instHAdd.{0} (RectangleCLT.Vector p)
+        (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+      (@RectangleCLT.Companion.SplitV4.conditionalRetainedSummand p n μ T mask i g)
+      (@RectangleCLT.Companion.SplitV4.conditionalExceptionalShift p n μ T mask b i)
+'RectangleCLT.Companion.SplitV4.productLaw_eq_truncationMaskMixture' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.conditionalArrays_select_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.observed_selected_tag_ae' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.integral_product_conditionalTruncationKernel' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited 30 conditional-truncation kernel theorem and probability-instance declarations; only the permitted three axioms.
+The actual exceptional-data disintegration is reconstructed explicitly. Numeric covariance estimates and the polynomial CLT endpoint remain separate.

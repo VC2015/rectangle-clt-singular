@@ -1,0 +1,87 @@
+def RectangleCLT.Companion.SplitV4.cubeUniformLaw : (n : ℕ) → MeasureTheory.Measure (Kane.Cube n) :=
+fun n => (PMF.uniformOfFintype (Kane.Cube n)).toMeasure
+def RectangleCLT.Companion.SplitV4.cubeSign : {n : ℕ} → Kane.Cube n → Fin n → ℝ :=
+fun {n} x i => if x i = true then 1 else -1
+def RectangleCLT.Companion.SplitV4.cubeLinear : {n : ℕ} → (Fin n → ℝ) → Kane.Cube n → ℝ :=
+fun {n} b x => ∑ i, b i * RectangleCLT.Companion.SplitV4.cubeSign x i
+def RectangleCLT.Companion.SplitV4.affineCubeMaximum : {m n : ℕ} →
+  [inst : NeZero m] → (Fin m → Fin n → ℝ) → (Fin m → ℝ) → Kane.Cube n → ℝ :=
+fun {m n} [NeZero m] b a x => Finset.univ.sup' ⋯ fun α => RectangleCLT.Companion.SplitV4.cubeLinear (b α) x - a α
+def RectangleCLT.Companion.SplitV4.positiveLinearMaximum : {m n : ℕ} → (Fin m → Fin n → ℝ) → Kane.Cube n → ℝ :=
+fun {m n} b x => Finset.univ.sup' ⋯ fun i => Fin.cases 0 (fun α => RectangleCLT.Companion.SplitV4.cubeLinear (b α) x) i
+def RectangleCLT.Companion.SplitV4.activeCubeBranch : {m n : ℕ} →
+  [inst : NeZero m] → (Fin m → Fin n → ℝ) → (Fin m → ℝ) → Kane.Cube n → Fin m :=
+fun {m n} [NeZero m] b a x => Classical.choose ⋯
+RectangleCLT.Companion.SplitV4.intrinsic_cube_boundary {m n : Nat}
+  [@NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) m] (B : Fin m → Fin n → Real) (a : Fin m → Real)
+  (t h b v : Real)
+  (hh : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h)
+  (hv : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) v)
+  (hcoeff :
+    ∀ (α : Fin m) (i : Fin n), @LE.le.{0} Real Real.instLE (@abs.{0} Real Real.lattice Real.instAddGroup (B α i)) b)
+  (hrow :
+    ∀ (α : Fin m),
+      @LE.le.{0} Real Real.instLE v
+        (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+          fun (i : Fin n) =>
+          @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (B α i) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))) :
+  @LE.le.{0} Real Real.instLE
+    (@MeasureTheory.Measure.real.{0} (Kane.Cube n)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+      (RectangleCLT.Companion.SplitV4.cubeUniformLaw n)
+      (@setOf.{0} (Kane.Cube n) fun (x : Kane.Cube n) =>
+        And (@LE.le.{0} Real Real.instLE t (@RectangleCLT.Companion.SplitV4.affineCubeMaximum m n inst✝ B a x))
+          (@LE.le.{0} Real Real.instLE (@RectangleCLT.Companion.SplitV4.affineCubeMaximum m n inst✝ B a x)
+            (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) t h))))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) h
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@OfNat.ofNat.{0} Real 8
+              (@instOfNatAtLeastTwo.{0} Real 8 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 6 (instOfNatNat 6)))))
+            b))
+        v)
+      (@MeasureTheory.integral.{0, 0} (Kane.Cube n) Real Real.normedAddCommGroup
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+        (RectangleCLT.Companion.SplitV4.cubeUniformLaw n) fun (x : Kane.Cube n) =>
+        @RectangleCLT.Companion.SplitV4.positiveLinearMaximum m n B x))
+RectangleCLT.Companion.SplitV4.intrinsic_cube_mean_le_sqrt_log {m n : Nat} (B : Fin m → Fin n → Real)
+  (hrow :
+    ∀ (α : Fin m),
+      @LE.le.{0} Real Real.instLE
+        (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+          fun (i : Fin n) =>
+          @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (B α i) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) :
+  @LE.le.{0} Real Real.instLE
+    (@MeasureTheory.integral.{0, 0} (Kane.Cube n) Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+      (RectangleCLT.Companion.SplitV4.cubeUniformLaw n) fun (x : Kane.Cube n) =>
+      @RectangleCLT.Companion.SplitV4.positiveLinearMaximum m n B x)
+    (Real.sqrt
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (Real.log
+          (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) (@Nat.cast.{0} Real Real.instNatCast m)
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))))
+'RectangleCLT.Companion.SplitV4.cube_avg_signed_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.affineCube_edge_support' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.cubeEdgeFlux_controls_squares' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.intrinsic_cube_boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.intrinsic_cube_mean_le_sqrt_log' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited all 44 intrinsic-cube theorem declarations; only the three permitted axioms.

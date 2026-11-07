@@ -1,0 +1,472 @@
+def RectangleCLT.Companion.SplitV4.largeIncrementComparisonConstant : ℝ :=
+3 * Real.exp (3 / 2) + Real.pi * Real.exp (3 / 2) + RectangleCLT.Companion.SplitV4.largeIncrementFourthConstant
+def RectangleCLT.Companion.SplitV4.largeIncrementBudgetConstant : ℝ :=
+2 * RectangleCLT.Companion.SplitV4.matrixFluctuationConstant + 16 * (Real.exp 1 - 1) + 1
+def RectangleCLT.Companion.SplitV4.largeIncrementMasterConstant : ℝ :=
+RectangleCLT.Companion.SplitV4.gaussianSmoothingConstant *
+  (1 +
+    RectangleCLT.Companion.SplitV4.largeIncrementComparisonConstant *
+      RectangleCLT.Companion.SplitV4.largeIncrementBudgetConstant)
+def RectangleCLT.Companion.SplitV4.largeIncrementBandwidthRate : ℝ → ℝ → ℝ → ℝ → ℝ → ℝ :=
+fun L D v M h => h * √L * L + L * √D / h + √L * D / h ^ 3 + √L * v / h + √L * M
+def RectangleCLT.Companion.SplitV4.largeIncrementMasterRate : ℝ → ℝ → ℝ → ℝ → ℝ → ℝ :=
+fun L D v M φ => √L / φ + φ * L ^ 2 * √D + φ ^ 3 * L ^ (7 / 2) * D + φ * L ^ (3 / 2) * v + √L * M
+def RectangleCLT.Companion.SplitV4.largeIncrementMatrixCost.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p n : ℕ} → MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → Matrix (Fin p) (Fin p) ℝ → ℝ → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} μ ξ A h =>
+  ∫ (ω : Ω),
+    RectangleCLT.Companion.SplitV4.matrixMaxEntryNorm
+      (RectangleCLT.Companion.SplitV4.copyArrayTruncatedCovariance μ ξ ω h - A * A.transpose) ∂μ
+def RectangleCLT.Companion.SplitV4.largeIncrementMeanCost.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] → {p n : ℕ} → MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → ℝ → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} μ ξ h => ∫ (ω : Ω), ‖RectangleCLT.Companion.SplitV4.copyArrayLargeMean μ ξ ω h‖ ∂μ
+def RectangleCLT.Companion.SplitV4.largeIncrementFourthCost.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] → {p n : ℕ} → MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → ℝ → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} μ ξ h =>
+  ∫ (z : Ω × Ω),
+    RectangleCLT.Companion.SplitV4.coordinateFourthBudget fun i =>
+      RectangleCLT.Companion.SplitV4.pairedTruncatedIncrement (ξ i z.1) (ξ i z.2) h ∂μ.prod μ
+def RectangleCLT.Companion.SplitV4.pairedTailExpectedMaximum.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] → {p n : ℕ} → MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → ℝ → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} μ ξ h =>
+  ∫ (z : Ω × Ω), ‖RectangleCLT.Companion.SplitV4.arrayLargeIncrementIntegrand ξ h z‖ ∂μ.prod μ
+def RectangleCLT.Companion.SplitV4.pairedTailVariance.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] → {p n : ℕ} → MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → ℝ → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} μ ξ h =>
+  Finset.fold max 0 (RectangleCLT.Companion.SplitV4.pairedTailCoordinateSecond μ ξ h) Finset.univ
+def RectangleCLT.Companion.SplitV4.deltaOne.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] → {p n : ℕ} → MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} μ X => 1 / ↑n ^ 2 * RectangleCLT.Companion.SplitV4.arrayFourthMomentBudget μ X
+def RectangleCLT.Companion.SplitV4.normalizedSummands.{u_1} : {Ω : Type u_1} →
+  {p n : ℕ} → (Fin n → Ω → RectangleCLT.Vector p) → Fin n → Ω → RectangleCLT.Vector p :=
+fun {Ω} {p n} X i ω => (√↑n)⁻¹ • X i ω
+RectangleCLT.Companion.SplitV4.one_le_largeIncrementMasterConstant :
+  1 ≤ RectangleCLT.Companion.SplitV4.largeIncrementMasterConstant
+RectangleCLT.Companion.SplitV4.normalizedSummands_gaussian_factor_exists.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  {p n : ℕ} {μ : MeasureTheory.Measure Ω} [MeasureTheory.IsProbabilityMeasure μ] {X : Fin n → Ω → RectangleCLT.Vector p}
+  (hL2 : ∀ (i : Fin n) (j : Fin p), MeasureTheory.MemLp (fun ω => X i ω j) 2 μ)
+  (hc : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), X i ω j ∂μ = 0) :
+  ∃ A,
+    A * A.transpose =
+      RectangleCLT.covariance μ (RectangleCLT.sumVector (RectangleCLT.Companion.SplitV4.normalizedSummands X))
+RectangleCLT.Companion.SplitV4.abs_sub_le_three_time_weights {φ D : ℝ → ℝ} (hφ : ContinuousOn φ (Set.Icc 0 1))
+  (hd : ∀ t ∈ Set.Ioo 0 1, HasDerivAt φ (D t) t) (a b c : ℝ)
+  (hbound :
+    ∀ t ∈ Set.Ioo 0 1,
+      |D t| ≤
+        a * RectangleCLT.Companion.SplitV4.gaussianTimeWeight t +
+            b * RectangleCLT.Companion.SplitV4.pairedTimeWeight t +
+          c * RectangleCLT.Companion.SplitV4.fourthTimeWeight t) :
+  |φ 1 - φ 0| ≤ 2 * a + Real.pi * b + 4 / 3 * c
+RectangleCLT.Companion.SplitV4.abs_largeIncrementHessianTerm_le.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  (μ : MeasureTheory.Measure Ω) [MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ} (hp : 1 ≤ p)
+  (s : RectangleCLT.FaceSmoother p) (ξ : Fin n → Ω → RectangleCLT.Vector p) (hξ : ∀ (i : Fin n), Measurable (ξ i))
+  (hind : ProbabilityTheory.iIndepFun ξ μ) (A : Matrix (Fin p) (Fin p) ℝ)
+  (hdiag : ∀ (j : Fin p), (A * A.transpose) j j = 1) {h t : ℝ} (hh : 0 ≤ h) (ht : t < 1) :
+  |RectangleCLT.Companion.SplitV4.largeIncrementHessianTerm μ ξ A s h t| ≤
+    3 * Real.exp (3 / 2) / s.bandwidth * √(RectangleCLT.dimensionLog p / (1 - t)) *
+      RectangleCLT.Companion.SplitV4.largeIncrementMatrixCost μ ξ A h
+RectangleCLT.Companion.SplitV4.abs_largeIncrementGradientTerm_le.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  (μ : MeasureTheory.Measure Ω) [MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ} (hp : 1 ≤ p)
+  (s : RectangleCLT.FaceSmoother p) (ξ : Fin n → Ω → RectangleCLT.Vector p) (hξ : ∀ (i : Fin n), Measurable (ξ i))
+  (hξi : ∀ (i : Fin n), MeasureTheory.Integrable (ξ i) μ) (A : Matrix (Fin p) (Fin p) ℝ)
+  (hdiag : ∀ (j : Fin p), (A * A.transpose) j j = 1) {h t : ℝ} (hh : 0 ≤ h) (ht : t < 1) :
+  |RectangleCLT.Companion.SplitV4.largeIncrementGradientTerm μ ξ A s h t| ≤
+    Real.exp (3 / 2) * √(RectangleCLT.dimensionLog p / (1 - t)) *
+      RectangleCLT.Companion.SplitV4.largeIncrementMeanCost μ ξ h
+RectangleCLT.Companion.SplitV4.abs_largeIncrementRemainderTerm_le.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  (μ : MeasureTheory.Measure Ω) [MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ} (hp : 1 ≤ p)
+  (s : RectangleCLT.FaceSmoother p) (ξ : Fin n → Ω → RectangleCLT.Vector p) (hξ : ∀ (i : Fin n), Measurable (ξ i))
+  (A : Matrix (Fin p) (Fin p) ℝ) (hdiag : ∀ (j : Fin p), (A * A.transpose) j j = 1) {h t : ℝ} (hh : 0 ≤ h)
+  (hband : h ≤ s.bandwidth) (ht : 0 < t) (ht1 : t < 1) :
+  |RectangleCLT.Companion.SplitV4.largeIncrementRemainderTerm μ ξ A s h t| ≤
+    RectangleCLT.Companion.SplitV4.largeIncrementFourthConstant * √(RectangleCLT.dimensionLog p / (1 - t)) /
+        s.bandwidth ^ 3 *
+      RectangleCLT.Companion.SplitV4.largeIncrementFourthCost μ ξ h
+RectangleCLT.Companion.SplitV4.largeIncrement_smooth_expectation_comparison_conditional.{u_1} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] (μ : @MeasureTheory.Measure.{u_1} Ω inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ] {p n : Nat}
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p) (s : RectangleCLT.FaceSmoother p)
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (hξi :
+    ∀ (i : Fin n),
+      @MeasureTheory.Integrable.{0, u_1} (RectangleCLT.Vector p)
+        (@ContinuousENorm.toENorm.{0} (RectangleCLT.Vector p)
+          (@UniformSpace.toTopologicalSpace.{0} (RectangleCLT.Vector p)
+            (@PseudoMetricSpace.toUniformSpace.{0} (RectangleCLT.Vector p)
+              (@SeminormedAddGroup.toPseudoMetricSpace.{0} (RectangleCLT.Vector p)
+                (@Pi.seminormedAddGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                  @SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                    (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                      (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                        (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                          (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+          (@SeminormedAddGroup.toContinuousENorm.{0} (RectangleCLT.Vector p)
+            (@Pi.seminormedAddGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+              @SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                  (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                    (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                      (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+        (@Pi.topologicalSpace.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) =>
+          @UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        Ω inst✝ (ξ i) μ)
+  (hmean :
+    ∀ (i : Fin n),
+      @Eq.{1} (RectangleCLT.Vector p)
+        (@MeasureTheory.integral.{u_1, 0} Ω (RectangleCLT.Vector p)
+          (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+            Real.normedAddCommGroup)
+          (@Pi.normedSpace.{0, 0, 0} Real Real.normedField (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+            (fun (i : Fin p) =>
+              @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+            fun (i : Fin p) =>
+            @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst✝ μ fun (ω : Ω) => ξ i ω)
+        (@OfNat.ofNat.{0} (RectangleCLT.Vector p) 0
+          (@Zero.toOfNat0.{0} (RectangleCLT.Vector p)
+            (@Pi.instZero.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instZero))))
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hdiag :
+    ∀ (j : Fin p),
+      @Eq.{1} Real
+        (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+          (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+          (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+            Real.instMul Real.instAddCommMonoid)
+          A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  {h : Real} (hh : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h)
+  (hband : @LE.le.{0} Real Real.instLE h (@RectangleCLT.FaceSmoother.bandwidth p s)) :
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+        (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst✝ μ fun (ω : Ω) => @RectangleCLT.FaceSmoother.F p s (@RectangleCLT.sumVector.{u_1} Ω p n ξ ω))
+        (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector p) Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (@RectangleCLT.gaussianLaw p A) fun (g : RectangleCLT.Vector p) => @RectangleCLT.FaceSmoother.F p s g)))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        RectangleCLT.Companion.SplitV4.largeIncrementComparisonConstant (Real.sqrt (RectangleCLT.dimensionLog p)))
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+        (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@RectangleCLT.Companion.SplitV4.largeIncrementMatrixCost.{u_1} Ω inst✝ p n μ ξ A h)
+            (@RectangleCLT.FaceSmoother.bandwidth p s))
+          (@RectangleCLT.Companion.SplitV4.largeIncrementMeanCost.{u_1} Ω inst✝ p n μ ξ h))
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@RectangleCLT.Companion.SplitV4.largeIncrementFourthCost.{u_1} Ω inst✝ p n μ ξ h)
+          (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (@RectangleCLT.FaceSmoother.bandwidth p s) (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))))))
+RectangleCLT.Companion.SplitV4.largeIncrement_smooth_expectation_comparison.{u_1} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] (μ : @MeasureTheory.Measure.{u_1} Ω inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ] {p n : Nat}
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p) (s : RectangleCLT.FaceSmoother p)
+  (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (hcenter :
+    ∀ (i : Fin n) (j : Fin p),
+      @Eq.{1} Real
+        (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst✝ μ fun (ω : Ω) => ξ i ω j)
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+  (hfourth :
+    ∀ (i : Fin n) (j : Fin p),
+      @MeasureTheory.Integrable.{0, u_1} Real
+        (@ContinuousENorm.toENorm.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real
+              (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+                (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+          (@SeminormedAddGroup.toContinuousENorm.{0} Real
+            (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        Ω inst✝
+        (fun (ω : Ω) =>
+          @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (ξ i ω j) (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))
+        μ)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ))) :
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+        (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst✝ μ fun (ω : Ω) => @RectangleCLT.FaceSmoother.F p s (@RectangleCLT.sumVector.{u_1} Ω p n ξ ω))
+        (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector p) Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (@RectangleCLT.gaussianLaw p A) fun (g : RectangleCLT.Vector p) => @RectangleCLT.FaceSmoother.F p s g)))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        RectangleCLT.Companion.SplitV4.largeIncrementComparisonConstant (Real.sqrt (RectangleCLT.dimensionLog p)))
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+        (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@RectangleCLT.Companion.SplitV4.largeIncrementMatrixCost.{u_1} Ω inst✝ p n μ ξ A
+              (@RectangleCLT.FaceSmoother.bandwidth p s))
+            (@RectangleCLT.FaceSmoother.bandwidth p s))
+          (@RectangleCLT.Companion.SplitV4.pairedTailExpectedMaximum.{u_1} Ω inst✝ p n μ ξ
+            (@RectangleCLT.FaceSmoother.bandwidth p s)))
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@RectangleCLT.Companion.SplitV4.largeIncrementFourthCost.{u_1} Ω inst✝ p n μ ξ
+            (@RectangleCLT.FaceSmoother.bandwidth p s))
+          (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (@RectangleCLT.FaceSmoother.bandwidth p s) (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))))))
+RectangleCLT.Companion.SplitV4.largeIncrementGaussianComparison_bandwidth.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  (μ : MeasureTheory.Measure Ω) [MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ} (hp : 1 ≤ p)
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) (hξ : ∀ (i : Fin n), Measurable (ξ i))
+  (hind : ProbabilityTheory.iIndepFun ξ μ) (hcenter : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), ξ i ω j ∂μ = 0)
+  (hfourth : ∀ (i : Fin n) (j : Fin p), MeasureTheory.Integrable (fun ω => ξ i ω j ^ 4) μ)
+  (hunit : ∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) (A : Matrix (Fin p) (Fin p) ℝ)
+  (hA : A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ)) {D h : ℝ} (hD : 0 ≤ D)
+  (hbudget : ∀ (j : Fin p), ∑ i, ∫ (ω : Ω), ξ i ω j ^ 4 ∂μ ≤ D) (hh : 0 < h) :
+  RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.sumVector ξ) A ≤
+    RectangleCLT.Companion.SplitV4.largeIncrementMasterConstant *
+      RectangleCLT.Companion.SplitV4.largeIncrementBandwidthRate (RectangleCLT.dimensionLog p) D
+        (RectangleCLT.Companion.SplitV4.pairedTailVariance μ ξ h)
+        (RectangleCLT.Companion.SplitV4.pairedTailExpectedMaximum μ ξ h) h
+RectangleCLT.Companion.SplitV4.bandwidthRate_inv_mul_eq_master {L D v M φ : ℝ} (hL : 0 < L) (hφ : 0 < φ) :
+  RectangleCLT.Companion.SplitV4.largeIncrementBandwidthRate L D v M (φ * L)⁻¹ =
+    RectangleCLT.Companion.SplitV4.largeIncrementMasterRate L D v M φ
+RectangleCLT.Companion.SplitV4.largeIncrementGaussianComparison.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ] {p n : Nat}
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p) (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (hcenter :
+    ∀ (i : Fin n) (j : Fin p),
+      @Eq.{1} Real
+        (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst✝ μ fun (ω : Ω) => ξ i ω j)
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+  (hfourth :
+    ∀ (i : Fin n) (j : Fin p),
+      @MeasureTheory.Integrable.{0, u_1} Real
+        (@ContinuousENorm.toENorm.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real
+              (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+                (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+          (@SeminormedAddGroup.toContinuousENorm.{0} Real
+            (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        Ω inst✝
+        (fun (ω : Ω) =>
+          @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (ξ i ω j) (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))
+        μ)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ)))
+  {D φ : Real} (hD : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) D)
+  (hbudget :
+    ∀ (j : Fin p),
+      @LE.le.{0} Real Real.instLE
+        (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+          fun (i : Fin n) =>
+          @MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+            inst✝ μ fun (ω : Ω) =>
+            @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+              (ξ i ω j) (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))
+        D)
+  (hφ : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) φ) :
+  @LE.le.{0} Real Real.instLE
+    (@RectangleCLT.Companion.rectangleDistance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) A)
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      RectangleCLT.Companion.SplitV4.largeIncrementMasterConstant
+      (RectangleCLT.Companion.SplitV4.largeIncrementMasterRate (RectangleCLT.dimensionLog p) D
+        (@RectangleCLT.Companion.SplitV4.pairedTailVariance.{u_1} Ω inst✝ p n μ ξ
+          (@Inv.inv.{0} Real Real.instInv
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) φ (RectangleCLT.dimensionLog p))))
+        (@RectangleCLT.Companion.SplitV4.pairedTailExpectedMaximum.{u_1} Ω inst✝ p n μ ξ
+          (@Inv.inv.{0} Real Real.instInv
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) φ (RectangleCLT.dimensionLog p))))
+        φ))
+RectangleCLT.Companion.SplitV4.gaussianComparisonWithLargeIncrementRemainders.{u_1} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] (μ : @MeasureTheory.Measure.{u_1} Ω inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ] {p n : Nat}
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p)
+  (_hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n) (X : Fin n → Ω → RectangleCLT.Vector p)
+  (hX :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (X i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      X μ)
+  (hcenter :
+    ∀ (i : Fin n) (j : Fin p),
+      @Eq.{1} Real
+        (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst✝ μ fun (ω : Ω) => X i ω j)
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+  (hfourth :
+    ∀ (i : Fin n) (j : Fin p),
+      @MeasureTheory.Integrable.{0, u_1} Real
+        (@ContinuousENorm.toENorm.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real
+              (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+                (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+          (@SeminormedAddGroup.toContinuousENorm.{0} Real
+            (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        Ω inst✝
+        (fun (ω : Ω) =>
+          @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (X i ω j) (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))
+        μ)
+  (haverage :
+    ∀ (j : Fin p),
+      @Eq.{1} Real
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) (@Nat.cast.{0} Real Real.instNatCast n))
+          (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+            fun (i : Fin n) =>
+            @MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+              (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+              inst✝ μ fun (ω : Ω) =>
+              @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+                (X i ω j) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.Companion.normalizedObservationSum.{u_1} Ω p n X)))
+  {φ : Real} (hφ : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) φ) :
+  @LE.le.{0} Real Real.instLE
+    (@RectangleCLT.Companion.rectangleDistance.{u_1} Ω inst✝ p μ
+      (@RectangleCLT.Companion.normalizedObservationSum.{u_1} Ω p n X) A)
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      RectangleCLT.Companion.SplitV4.largeIncrementMasterConstant
+      (RectangleCLT.Companion.SplitV4.largeIncrementMasterRate (RectangleCLT.dimensionLog p)
+        (@RectangleCLT.Companion.SplitV4.deltaOne.{u_1} Ω inst✝ p n μ X)
+        (@RectangleCLT.Companion.SplitV4.pairedTailVariance.{u_1} Ω inst✝ p n μ
+          (@RectangleCLT.Companion.SplitV4.normalizedSummands.{u_1} Ω p n X)
+          (@Inv.inv.{0} Real Real.instInv
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) φ (RectangleCLT.dimensionLog p))))
+        (@RectangleCLT.Companion.SplitV4.pairedTailExpectedMaximum.{u_1} Ω inst✝ p n μ
+          (@RectangleCLT.Companion.SplitV4.normalizedSummands.{u_1} Ω p n X)
+          (@Inv.inv.{0} Real Real.instInv
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) φ (RectangleCLT.dimensionLog p))))
+        φ))
+'RectangleCLT.Companion.SplitV4.largeIncrement_smooth_expectation_comparison' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.gaussianComparisonWithLargeIncrementRemainders' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited 27 large-increment smooth comparison theorem declarations; only propext, Classical.choice and Quot.sound.

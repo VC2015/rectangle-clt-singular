@@ -1,0 +1,163 @@
+def RectangleCLT.Companion.SplitV4.exceptionalArray : {p n : ℕ} →
+  (Fin n → MeasureTheory.Measure (RectangleCLT.Vector p)) →
+    ℝ → Fin n → (Fin n → RectangleCLT.Vector p) → RectangleCLT.Vector p :=
+fun {p n} μ T i x => RectangleCLT.Companion.SplitV4.conditionalExceptionalPart (μ i) T (x i)
+def RectangleCLT.Companion.SplitV4.exceptionalMomentScale : ℕ → ℝ → ℝ → ℝ :=
+fun n B q => 2 * B * ↑n ^ (1 / q)
+def RectangleCLT.Companion.SplitV4.polynomialEnvelopeV : ℕ → ℕ → ℝ → ℝ → ℝ :=
+fun n p B q => B * RectangleCLT.dimensionLog p ^ (3 / 2 - 1 / q) / ↑n ^ (1 / 2 - 1 / q)
+RectangleCLT.Companion.SplitV4.exceptionalArray_raw_maximum_le {p n : Nat}
+  (μ :
+    Fin n →
+      @MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+  [∀ (i : Fin n),
+      @MeasureTheory.IsProbabilityMeasure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (μ i)]
+  {B T q : Real}
+  (h : ∀ (i : Fin n), @RectangleCLT.Companion.SplitV4.ConditionalTruncationMomentHypotheses p (μ i) B T q)
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p)
+  (hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n) :
+  @LE.le.{0} Real Real.instLE
+    (@MeasureTheory.integral.{0, 0} (Fin n → RectangleCLT.Vector p) Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+        (fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        μ)
+      fun (x : Fin n → RectangleCLT.Vector p) =>
+      @Norm.norm.{0} (RectangleCLT.Vector p)
+        (@NormedRing.toNorm.{0} (RectangleCLT.Vector p)
+          (@Pi.normedRing.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+            @NormedCommRing.toNormedRing.{0} Real Real.normedCommRing))
+        (@RectangleCLT.sumVector.{0} (Fin n → RectangleCLT.Vector p) p n
+          (@RectangleCLT.Companion.SplitV4.exceptionalArray p n μ T) x))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      RectangleCLT.Companion.SplitV4.envelopeMaximumConstant
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+        (Real.sqrt
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@OfNat.ofNat.{0} Real 2
+                  (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                    (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+                (@Nat.cast.{0} Real Real.instNatCast n))
+              (RectangleCLT.Companion.SplitV4.truncationVarianceBudget B T q))
+            (RectangleCLT.dimensionLog p)))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (RectangleCLT.Companion.SplitV4.exceptionalMomentScale n B q)
+          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) (RectangleCLT.dimensionLog p)
+            (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+              (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) q))))))
+RectangleCLT.Companion.SplitV4.exceptional_normalized_norm_integrable {p n : Nat}
+  (μ :
+    Fin n →
+      @MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+  [∀ (i : Fin n),
+      @MeasureTheory.IsProbabilityMeasure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (μ i)]
+  {B T q : Real}
+  (h : ∀ (i : Fin n), @RectangleCLT.Companion.SplitV4.ConditionalTruncationMomentHypotheses p (μ i) B T q) :
+  @MeasureTheory.Integrable.{0, 0} Real
+    (@ContinuousENorm.toENorm.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real
+        (@PseudoMetricSpace.toUniformSpace.{0} Real
+          (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+            (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+      (@SeminormedAddGroup.toContinuousENorm.{0} Real
+        (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+          (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+            (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+              (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+    (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+    (Fin n → RectangleCLT.Vector p)
+    (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+      @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+    (fun (x : Fin n → RectangleCLT.Vector p) =>
+      @Norm.norm.{0} (RectangleCLT.Vector p)
+        (@NormedRing.toNorm.{0} (RectangleCLT.Vector p)
+          (@Pi.normedRing.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+            @NormedCommRing.toNormedRing.{0} Real Real.normedCommRing))
+        (@RectangleCLT.Companion.normalizedObservationSum.{0} (Fin n → RectangleCLT.Vector p) p n
+          (@RectangleCLT.Companion.SplitV4.exceptionalArray p n μ T) x))
+    (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+      (fun (i : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      μ)
+RectangleCLT.Companion.SplitV4.observed_exceptional_shift_maximum_le {p n : Nat}
+  (μ :
+    Fin n →
+      @MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+  [∀ (i : Fin n),
+      @MeasureTheory.IsProbabilityMeasure.{0} (RectangleCLT.Vector p)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (μ i)]
+  {B T q : Real}
+  (h : ∀ (i : Fin n), @RectangleCLT.Companion.SplitV4.ConditionalTruncationMomentHypotheses p (μ i) B T q)
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p)
+  (hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n) :
+  @LE.le.{0} Real Real.instLE
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (Real.sqrt (RectangleCLT.dimensionLog p))
+      (@MeasureTheory.integral.{0, 0} (Fin n → RectangleCLT.Vector p) Real Real.normedAddCommGroup
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) fun (i : Fin n) =>
+          @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+        (@MeasureTheory.Measure.pi.{0, 0} (Fin n) (fun (i : Fin n) => RectangleCLT.Vector p) (Fin.fintype n)
+          (fun (i : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          μ)
+        fun (x : Fin n → RectangleCLT.Vector p) =>
+        @Norm.norm.{0} (RectangleCLT.Vector p)
+          (@NormedRing.toNorm.{0} (RectangleCLT.Vector p)
+            (@Pi.normedRing.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+              @NormedCommRing.toNormedRing.{0} Real Real.normedCommRing))
+          (@HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@instHSMul.{0, 0} Real (RectangleCLT.Vector p)
+              (@Function.hasSMul.{0, 0, 0} (Fin p) Real Real
+                (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                  (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                  (@Algebra.id.{0} Real Real.instCommSemiring))))
+            (@Inv.inv.{0} Real Real.instInv (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n)))
+            (@Finset.sum.{0, 0} (Fin n) (RectangleCLT.Vector p)
+              (@Pi.addCommMonoid.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAddCommMonoid)
+              (@Finset.univ.{0} (Fin n) (Fin.fintype n)) fun (i : Fin n) =>
+              @RectangleCLT.Companion.SplitV4.conditionalExceptionalShift p n μ T
+                (@RectangleCLT.Companion.SplitV4.observedTruncationMask p n T x)
+                (@RectangleCLT.Companion.SplitV4.observedExceptionalArray p n T x) i))))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        RectangleCLT.Companion.SplitV4.envelopeMaximumConstant)
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (RectangleCLT.dimensionLog p)
+          (Real.sqrt (RectangleCLT.Companion.SplitV4.truncationVarianceBudget B T q)))
+        (RectangleCLT.Companion.SplitV4.polynomialEnvelopeV n p B q)))
+'RectangleCLT.Companion.SplitV4.exceptionalArray_raw_maximum_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.exceptional_normalized_maximum_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.observed_exceptional_shift_maximum_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited 22 actual exceptional-maximum theorem declarations; only the permitted three axioms.
+The observed exceptional shift satisfies sqrt(L)*E||R|| <= 2*C_E*(L*sqrt(v_T)+V_q).

@@ -1,0 +1,67 @@
+def RectangleCLT.Companion.UnrestrictedCLT.{u} : ℝ → Prop :=
+fun C =>
+  ∀ {Ω : Type u} [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+    [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (p n : ℕ),
+    1 ≤ p →
+      1 ≤ n →
+        ∀ (ξ : Fin n → Ω → RectangleCLT.Vector p) (δ : ℝ) (A : Matrix (Fin p) (Fin p) ℝ),
+          RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+            (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+              A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+                ∀ (R : RectangleCLT.Rect p),
+                  RectangleCLT.rectangleError μ (RectangleCLT.sumVector ξ) A R ≤
+                    C * min 1 (RectangleCLT.Companion.unrestrictedRate δ (RectangleCLT.dimensionLog p))
+def RectangleCLT.Companion.GapSensitiveCLT.{u} : ℝ → Prop :=
+fun C =>
+  ∀ {Ω : Type u} [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+    [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (p n : ℕ),
+    1 ≤ p →
+      1 ≤ n →
+        ∀ (ξ : Fin n → Ω → RectangleCLT.Vector p) (δ : ℝ) (A : Matrix (Fin p) (Fin p) ℝ),
+          RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+            (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+              A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+                ∀ (R : RectangleCLT.Rect p),
+                  RectangleCLT.rectangleError μ (RectangleCLT.sumVector ξ) A R ≤
+                    C *
+                      min 1
+                        (RectangleCLT.Companion.gapRate δ (RectangleCLT.dimensionLog p)
+                          (RectangleCLT.pairGap (RectangleCLT.covariance μ (RectangleCLT.sumVector ξ))))
+def RectangleCLT.Companion.ZeroSkewCLT.{u} : ℝ → Prop :=
+fun C =>
+  ∀ {Ω : Type u} [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+    [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (p n : ℕ),
+    1 ≤ p →
+      1 ≤ n →
+        ∀ (ξ : Fin n → Ω → RectangleCLT.Vector p) (δ : ℝ) (A : Matrix (Fin p) (Fin p) ℝ),
+          RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+            (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+              A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+                RectangleCLT.Companion.AggregateThirdMomentsVanish μ ξ →
+                  ∀ (R : RectangleCLT.Rect p),
+                    RectangleCLT.rectangleError μ (RectangleCLT.sumVector ξ) A R ≤
+                      C *
+                        min 1
+                          (RectangleCLT.Companion.zeroSkewRate δ (RectangleCLT.dimensionLog p)
+                            (RectangleCLT.pairGap (RectangleCLT.covariance μ (RectangleCLT.sumVector ξ))))
+RectangleCLT.Companion.unrestrictedCLT.{u} :
+  RectangleCLT.Companion.UnrestrictedCLT (2 * RectangleCLT.Companion.companionUniversalConstant)
+RectangleCLT.Companion.gapSensitiveCLT.{u} :
+  RectangleCLT.Companion.GapSensitiveCLT RectangleCLT.Companion.companionUniversalConstant
+RectangleCLT.Companion.zeroSkewCLT.{u} :
+  RectangleCLT.Companion.ZeroSkewCLT RectangleCLT.Companion.companionUniversalConstant
+RectangleCLT.Companion.companionCLTExists.{u} :
+  RectangleCLT.Companion.UnrestrictedCLTExists ∧
+    RectangleCLT.Companion.GapSensitiveCLTExists ∧ RectangleCLT.Companion.ZeroSkewCLTExists
+RectangleCLT.Companion.companionCLTExists_common.{u} :
+  ∃ C,
+    1 ≤ C ∧
+      RectangleCLT.Companion.UnrestrictedCLT C ∧
+        RectangleCLT.Companion.GapSensitiveCLT C ∧ RectangleCLT.Companion.ZeroSkewCLT C
+'RectangleCLT.Companion.variationalEstimate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.zeroSkewVariationalEstimate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.unrestrictedCLT' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.gapSensitiveCLT' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.zeroSkewCLT' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.companionCLTExists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.companionCLTExists_common' depends on axioms: [propext, Classical.choice, Quot.sound]
