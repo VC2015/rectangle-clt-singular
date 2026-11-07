@@ -74,6 +74,8 @@ import RectangleCLTCompanion.SplitV4.MaskedFourthLower
 import RectangleCLTCompanion.SplitV4.SparseCoordinateNegligible
 import RectangleCLTCompanion.SplitV4.UniformLowerConstants
 import RectangleCLTCompanion.SplitV4.RestorationAE
+import RectangleCLTCompanion.SplitV4.RelativeDerivativeProposition
+import RectangleCLTCompanion.SplitV4.RelativeFaceTransfer
 import RectangleCLTCompanion.SubexponentialMain
 import RectangleCLTCompanion.LowerScaleMain
 import RectangleCLTCompanion.FactorExistence
@@ -145,15 +147,20 @@ The current statement correspondences are:
   construction and matching class suprema, with both constants fixed before
   all envelope and dimension sequences. The fourth and dense uniform wrappers
   put their constants before all sequences as well.
-* The envelope specialization of `thm:unrestricted` is `unrestrictedCLT`.
-  It does not have a relative fourth-moment parameter and therefore does
-  not prove all of Theorem 1.
+* `an:prop:derivative`: `proposition_relative_derivatives` proves the
+  initialization and actual seeded derivative contract with constants
+  fixed before every dimension, model and relative moment budget.
+* `thm:unrestricted`: `relativeFourthMomentCLT` retains both actual fourth
+  matrices; `relativeEnvelopeCLT` proves the envelope specialization using
+  the same universal constant.
+* `cor:polyhedral-transfer`: `relativePolyhedralCLT` supplies the relative
+  branch, with exact substitutions and deletion of zero-variance faces.
 
 The unrestricted Gaussian comparison input of Appendix E and the bounded
 and Orlicz polyhedral branches are also connected. The paired calculus,
 conditional coefficients, fourth-coordinate maximum and common-point
 contraction assemble the Appendix G comparison. The polynomial theorem and
-its two proof routes are connected as well. The relative theorem, its seeded
-proposition, and its relative face-transfer consequence remain separate
-targets in the statement map.
+its two proof routes are connected as well. Whole-manuscript certification
+also requires the successful frozen execution and exact correspondences
+recorded in the separate verification record and statement map.
 -/

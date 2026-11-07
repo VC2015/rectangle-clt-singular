@@ -175,6 +175,29 @@ set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.sparseMoment_uniform_constants
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.restoration_signed_relative_ae_zero
+#print RectangleCLT.Companion.SplitV4.RelativeFourthAdmissible
+#print RectangleCLT.Companion.SplitV4.RelativeIndependentHypotheses
+#print RectangleCLT.Companion.SplitV4.standardizedFaceMap
+#print RectangleCLT.Companion.SplitV4.relativeRate
+#print RectangleCLT.Companion.SplitV4.relativeUniversalConstant
+#print RectangleCLT.Companion.SplitV4.RelativeDerivativePropositionContract
+#print RectangleCLT.Companion.SplitV4.initializationDiscrepancy
+#print RectangleCLT.Companion.SplitV4.normalizedSeededInterpolationLaw
+#print RectangleCLT.Companion.SplitV4.normalizedSeededExpectation
+#print RectangleCLT.Companion.SplitV4.normalizedSeededCubicTerm
+#print RectangleCLT.Companion.SplitV4.normalizedSeededFourthRemainder
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.proposition_relative_derivatives
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.relativeFourthMomentCLT
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.relativeEnvelopeCLT
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.relativePolyhedralCLT
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.relativePolyhedralCLT_delete_zero_variance_faces
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.relativePolyhedralDistance_zero_of_all_face_variances_zero
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.normalizedObservationsRectangleDistanceCLT
 set_option pp.all true in

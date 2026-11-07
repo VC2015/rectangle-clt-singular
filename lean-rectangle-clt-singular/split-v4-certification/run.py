@@ -125,6 +125,7 @@ def commands(mode: str, skip_cache: bool) -> list[tuple[str, list[str], str]]:
         for name in ("Audit", "MainAudit", "CompleteAudit", "SubexponentialAudit", "LowerResultsAudit"):
             result.append((name, ["lake", "env", "lean", f"RectangleCLTCompanion/{name}.lean"], "axiom_audit"))
     else:
+        result.append(("CompleteAudit", ["lake", "env", "lean", "RectangleCLTCompanion/CompleteAudit.lean"], "axiom_audit"))
         files = sorted((PACKAGE / "RectangleCLTCompanion/SplitV4").glob("*.lean"))
         targets = [str(p.relative_to(PACKAGE).with_suffix("")).replace("/", ".") for p in files]
         if targets:
