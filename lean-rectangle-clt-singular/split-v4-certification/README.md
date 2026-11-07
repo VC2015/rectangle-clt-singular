@@ -31,6 +31,10 @@ Each output directory contains complete command logs and `run.json`, including
 command arguments, working directory, UTC timestamps, durations, exit codes,
 log hashes, Git commit and dirty state, Lean source hashes, manifest hashes,
 actual dependency revisions, manuscript identity, and frozen-record hashes.
+The runner also records `ELAN_HOME`, `MATHLIB_CACHE_DIR`, `XDG_CACHE_HOME`, and
+the effective mathlib cache directory, so a read-only default cache or a
+deliberate override can be distinguished from a proof failure. Other process
+environment variables are omitted.
 The record is saved after each command. A toolchain or proof-build failure
 stops subsequent commands. A cache failure is recorded separately and allows
 the proof build to proceed. Audit failures are recorded while remaining

@@ -118,6 +118,7 @@ import RectangleCLTCompanion.TiltContractionMoments
 import RectangleCLTCompanion.TiltContractionPrekopaOne
 import RectangleCLTCompanion.TiltContractionSelector
 import RectangleCLTCompanion.TranslatedWeights
+import RectangleCLTCompanion.SplitV4.Main
 
 /-!
 # Unrestricted-covariance rectangle CLT

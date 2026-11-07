@@ -7,6 +7,7 @@ import argparse
 import datetime as dt
 import hashlib
 import json
+import os
 from pathlib import Path
 import shlex
 import subprocess
@@ -90,6 +91,29 @@ def proof_inputs(snapshot: dict, mode: str) -> dict:
             if not (exclude_new and "/RectangleCLTCompanion/SplitV4/" in path)}
 
 
+def environment_metadata() -> dict:
+    # These are directory selectors, not credentials. Never record the full
+    # process environment: proxy and service variables may contain secrets.
+    configured = {name: os.environ.get(name) for name in
+                  ("ELAN_HOME", "MATHLIB_CACHE_DIR", "XDG_CACHE_HOME")}
+    if configured["MATHLIB_CACHE_DIR"] is not None:
+        cache_dir = Path(configured["MATHLIB_CACHE_DIR"])
+        source = "MATHLIB_CACHE_DIR"
+    elif configured["XDG_CACHE_HOME"] is not None:
+        cache_dir = Path(configured["XDG_CACHE_HOME"]) / "mathlib"
+        source = "XDG_CACHE_HOME/mathlib"
+    elif os.environ.get("HOME") is not None:
+        cache_dir = Path(os.environ["HOME"]) / ".cache/mathlib"
+        source = "HOME/.cache/mathlib"
+    else:
+        cache_dir = Path(".cache")
+        source = "relative .cache fallback"
+    if not cache_dir.is_absolute():
+        cache_dir = PACKAGE / cache_dir
+    return {**configured, "mathlib_effective_cache_dir": str(cache_dir.resolve()),
+            "mathlib_cache_dir_source": source}
+
+
 def commands(mode: str, skip_cache: bool) -> list[tuple[str, list[str], str]]:
     result = [("version", ["lake", "env", "lean", "--version"], "toolchain")]
     if not skip_cache:
@@ -137,6 +161,7 @@ def main() -> int:
     record = {
         "schema_version": 1, "mode": args.mode, "started_at": now(),
         "runner_sha256": sha256(Path(__file__).resolve()),
+        "environment_metadata": environment_metadata(),
         "handoff_commit": HANDOFF_COMMIT, "cwd": str(PACKAGE),
         "paper_certified": False,
         "scope": "Fresh command evidence only; statement and revised-proof-route certification requires separate mapping and review.",
