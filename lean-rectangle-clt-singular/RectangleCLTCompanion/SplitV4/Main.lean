@@ -41,6 +41,12 @@ import RectangleCLTCompanion.SplitV4.CubeContraction
 import RectangleCLTCompanion.SplitV4.CubeCopySelection
 import RectangleCLTCompanion.SplitV4.SymmetricFamilyCertification
 import RectangleCLTCompanion.SplitV4.ZeroVarianceFaces
+import RectangleCLTCompanion.SplitV4.Concentration
+import RectangleCLTCompanion.SplitV4.ModerateTailGeneral
+import RectangleCLTCompanion.SplitV4.RelativeFourthRefinement
+import RectangleCLTCompanion.SplitV4.SeededInterpolation
+import RectangleCLTCompanion.SplitV4.VariableAmplitudeInterpolation
+import RectangleCLTCompanion.SplitV4.GaussianMaximumLimits
 import RectangleCLTCompanion.SubexponentialMain
 import RectangleCLTCompanion.LowerScaleMain
 import RectangleCLTCompanion.FactorExistence
@@ -88,6 +94,10 @@ The current statement correspondences are:
   expected positive maximum; its logarithmic specialization is proved too.
 * `lower:family-properties`: `symmetricFamilyProperties` proves the actual
   masked finite-product model, moments, rank, and correlation gap.
+* `lem:concentration`: `lemma_concentration` proves both intrinsic
+  concentration classes with a universal constant fixed before the models.
+* `opt:moderate-tail`: `uniformScalarModerateTail` proves the strict-tail
+  expansion for arbitrary independent bounded scalar variables.
 * The envelope specialization of `thm:unrestricted` is `unrestrictedCLT`.
   It does not have a relative fourth-moment parameter and therefore does
   not prove all of Theorem 1.
@@ -96,7 +106,6 @@ The unrestricted Gaussian comparison input of Appendix E and the bounded
 and Orlicz polyhedral branches are also connected. The paired calculus,
 conditional coefficients, fourth-coordinate maximum and common-point
 contraction assemble the Appendix G comparison. The polynomial theorem and
-its two proof routes are connected as well. The relative theorem, full
-intrinsic anti-concentration lemma, and lower-bound calibrations remain
+its two proof routes are connected as well. The relative theorem and lower-bound calibrations remain
 separate targets in the statement map.
 -/

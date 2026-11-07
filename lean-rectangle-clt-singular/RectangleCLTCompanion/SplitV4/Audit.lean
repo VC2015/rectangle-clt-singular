@@ -107,6 +107,17 @@ set_option pp.universes true
 
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.normalizedObservationsCLT
+#print RectangleCLT.Companion.SplitV4.BoundedConcentrationContract
+#print RectangleCLT.Companion.SplitV4.GaussianConcentrationContract
+#print RectangleCLT.Companion.SplitV4.moderateArrayCGF
+#print RectangleCLT.Companion.SplitV4.moderateArrayGamma
+#print RectangleCLT.Companion.SplitV4.moderateScalarSum
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.lemma_concentration
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.uniformScalarModerateTail
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.relativeMomentBounds_of_fourth_admissibility
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.normalizedObservationsRectangleDistanceCLT
 set_option pp.all true in
