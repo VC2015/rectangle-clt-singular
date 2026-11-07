@@ -1,0 +1,121 @@
+RectangleCLT.Companion.SplitV4.Printed.independent_sum_bernstein_mgf.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} [MeasureTheory.IsProbabilityMeasure μ] {n : ℕ} (X : Fin n → Ω → ℝ)
+  (hX : ∀ (i : Fin n), Measurable (X i)) (hind : ProbabilityTheory.iIndepFun X μ)
+  (hXi : ∀ (i : Fin n), MeasureTheory.Integrable (X i) μ)
+  (hX2 : ∀ (i : Fin n), MeasureTheory.Integrable (fun ω => X i ω ^ 2) μ)
+  (hmean : ∀ (i : Fin n), ∫ (ω : Ω), X i ω ∂μ = 0) {b t v : ℝ} (hb : 0 < b) (htb : |t| * b < 3)
+  (hbound : ∀ (i : Fin n), ∀ᵐ (ω : Ω) ∂μ, |X i ω| ≤ b) (hv : ∑ i, ∫ (ω : Ω), X i ω ^ 2 ∂μ ≤ v) :
+  MeasureTheory.Integrable (fun ω => Real.exp (t * ∑ i, X i ω)) μ ∧
+    ProbabilityTheory.mgf (fun ω => ∑ i, X i ω) μ t ≤ Real.exp (t ^ 2 * v / (2 * (1 - |t| * b / 3)))
+RectangleCLT.Companion.SplitV4.Printed.expected_le_exp_moment_by_tail_integration.{u_1} {Ω : Type u_1}
+  [MeasurableSpace Ω] {μ : MeasureTheory.Measure Ω} [MeasureTheory.IsProbabilityMeasure μ] (S : Ω → ℝ)
+  (hS : MeasureTheory.Integrable S μ) {t A : ℝ} (ht : 0 < t)
+  (he : MeasureTheory.Integrable (fun ω => Real.exp (t * S ω)) μ) (hmgf : ProbabilityTheory.mgf S μ t ≤ Real.exp A) :
+  ∫ (ω : Ω), S ω ∂μ ≤ (A + 1) / t
+RectangleCLT.Companion.SplitV4.Printed.bounded_vector_bernstein_maximum_by_tail_integration.{u_1} {Ω : Type u_1}
+  [MeasurableSpace Ω] {μ : MeasureTheory.Measure Ω} [MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ}
+  {T : Fin n → Ω → RectangleCLT.Vector p} {U v : ℝ} (h : RectangleCLT.BoundedIndependentHypotheses μ T U) (hp : 1 ≤ p)
+  (hU : 0 < U) (hv : 0 ≤ v) (hvariance : ∀ (j : Fin p), ∑ i, ∫ (ω : Ω), T i ω j ^ 2 ∂μ ≤ v) :
+  ∫ (ω : Ω), ‖RectangleCLT.sumVector T ω‖ ∂μ ≤
+    3 * (√(v * RectangleCLT.dimensionLog p) + U * RectangleCLT.dimensionLog p)
+RectangleCLT.Companion.SplitV4.Printed.gaussianComparisonWithLargeIncrementRemainders.{u_1} {Ω : Type u_1}
+  [MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω) [MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ} (hp : 1 ≤ p)
+  (_hn : 1 ≤ n) (X : Fin n → Ω → RectangleCLT.Vector p) (hX : ∀ (i : Fin n), Measurable (X i))
+  (hind : ProbabilityTheory.iIndepFun X μ) (hcenter : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), X i ω j ∂μ = 0)
+  (hfourth : ∀ (i : Fin n) (j : Fin p), MeasureTheory.Integrable (fun ω => X i ω j ^ 4) μ)
+  (haverage : ∀ (j : Fin p), 1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 2 ∂μ = 1) (A : Matrix (Fin p) (Fin p) ℝ)
+  (hA : A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X)) {φ : ℝ}
+  (hφ : 0 < φ) :
+  RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.Companion.normalizedObservationSum X) A ≤
+    RectangleCLT.Companion.SplitV4.largeIncrementMasterConstant *
+      RectangleCLT.Companion.SplitV4.largeIncrementMasterRate (RectangleCLT.dimensionLog p)
+        (RectangleCLT.Companion.SplitV4.deltaOne μ X)
+        (RectangleCLT.Companion.SplitV4.pairedTailVariance μ (RectangleCLT.Companion.SplitV4.normalizedSummands X)
+          (φ * RectangleCLT.dimensionLog p)⁻¹)
+        (RectangleCLT.Companion.SplitV4.pairedTailExpectedMaximum μ
+          (RectangleCLT.Companion.SplitV4.normalizedSummands X) (φ * RectangleCLT.dimensionLog p)⁻¹)
+        φ
+RectangleCLT.Companion.SplitV4.Printed.expected_maximum_under_envelope_moment.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} [MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ} (Y : Fin n → Ω → RectangleCLT.Vector p)
+  (hp : 1 ≤ p) (hY : ∀ (i : Fin n), Measurable (Y i)) (hind : ProbabilityTheory.iIndepFun Y μ)
+  (hcenter : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), Y i ω j ∂μ = 0) {q A v : ℝ} (hq : 2 < q) (hA : 0 ≤ A)
+  (hsecond : ∀ (i : Fin n) (j : Fin p), MeasureTheory.Integrable (fun ω => Y i ω j ^ 2) μ)
+  (hvariance : ∀ (j : Fin p), ∑ i, ∫ (ω : Ω), Y i ω j ^ 2 ∂μ ≤ v)
+  (hmoment : ∀ (i : Fin n), MeasureTheory.Integrable (fun ω => ‖Y i ω‖ ^ q) μ)
+  (hbudget : ∑ i, ∫ (ω : Ω), ‖Y i ω‖ ^ q ∂μ ≤ A ^ q) :
+  ∫ (ω : Ω), ‖RectangleCLT.sumVector Y ω‖ ∂μ ≤
+    RectangleCLT.Companion.SplitV4.envelopeMaximumConstant *
+      (√(v * RectangleCLT.dimensionLog p) + A * RectangleCLT.dimensionLog p ^ (1 - 1 / q))
+RectangleCLT.Companion.SplitV4.Printed.abs_good_covariance_le_envelope_sq {p : ℕ}
+  {μ : MeasureTheory.Measure (RectangleCLT.Vector p)} [MeasureTheory.IsProbabilityMeasure μ] {B T q : ℝ}
+  (h : RectangleCLT.Companion.SplitV4.ConditionalTruncationMomentHypotheses μ B T q) (j k : Fin p) :
+  |RectangleCLT.covariance (RectangleCLT.Companion.SplitV4.goodConditionalLaw μ T) id j k| ≤ 2 * B ^ 2
+RectangleCLT.Companion.SplitV4.Printed.conditionalRetained_marginal_half_lower_bound {p n : ℕ}
+  (μ : Fin n → MeasureTheory.Measure (RectangleCLT.Vector p)) [∀ (i : Fin n), MeasureTheory.IsProbabilityMeasure (μ i)]
+  {T : ℝ} (hT : 0 ≤ T) (mask : Fin n → Bool) (S : Matrix (Fin p) (Fin p) ℝ) (hS : ∀ (j : Fin p), S j j = 1)
+  (hgood :
+    RectangleCLT.Companion.SplitV4.matrixMaxEntryNorm
+        (RectangleCLT.Companion.SplitV4.conditionalCovarianceForMask μ T mask - S) ≤
+      1 / 2)
+  (j : Fin p) :
+  1 / 2 ≤
+    RectangleCLT.covariance (RectangleCLT.Companion.SplitV4.conditionalGoodProductLaw μ T)
+      (RectangleCLT.Companion.normalizedObservationSum
+        (RectangleCLT.Companion.SplitV4.conditionalRetainedSummand μ T mask))
+      j j
+RectangleCLT.Companion.SplitV4.Printed.conditionalGoodKernel_ownGaussian_rectangle_error_le {p n : ℕ}
+  (μ : Fin n → MeasureTheory.Measure (RectangleCLT.Vector p)) [∀ (i : Fin n), MeasureTheory.IsProbabilityMeasure (μ i)]
+  {T : ℝ} (hT : 0 ≤ T) (tag : RectangleCLT.Companion.SplitV4.TruncationTag p n) (hp : 1 ≤ p) (hn : 1 ≤ n)
+  (S : Matrix (Fin p) (Fin p) ℝ) (hS : ∀ (j : Fin p), S j j = 1)
+  (hgood :
+    RectangleCLT.Companion.SplitV4.matrixMaxEntryNorm
+        (RectangleCLT.Companion.SplitV4.conditionalCovarianceForMask μ T tag.1 - S) ≤
+      1 / 2)
+  (A : Matrix (Fin p) (Fin p) ℝ)
+  (hA : A * A.transpose = RectangleCLT.Companion.SplitV4.conditionalCovarianceForMask μ T tag.1)
+  (R : RectangleCLT.Rect p) :
+  RectangleCLT.rectangleError ((RectangleCLT.Companion.SplitV4.conditionalTruncationKernel μ T) tag)
+      (RectangleCLT.Companion.normalizedObservationSum fun i x => x i) A R ≤
+    2 * RectangleCLT.Companion.SplitV4.relativeUniversalConstant *
+        min 1 (RectangleCLT.Companion.unrestrictedRate (4 * T / √↑n) (RectangleCLT.dimensionLog p)) +
+      24 * Real.exp (3 / 2) * ‖RectangleCLT.Companion.SplitV4.conditionalNormalizedShift μ T tag‖ *
+        √(RectangleCLT.dimensionLog p)
+RectangleCLT.Companion.SplitV4.Printed.polynomialEnvelopeTransfer.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  (μ : MeasureTheory.Measure Ω) [MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ} (X : Fin n → Ω → RectangleCLT.Vector p)
+  (hX : ∀ (i : Fin n), Measurable (X i)) (hind : ProbabilityTheory.iIndepFun X μ) {B q : ℝ} (hp : 1 ≤ p) (hn : 1 ≤ n)
+  (hB : 1 ≤ B) (hq : 2 < q) (hmoment : ∀ (i : Fin n), MeasureTheory.Integrable (fun ω => ‖X i ω‖ ^ q) μ)
+  (hbudget : ∀ (i : Fin n), ∫ (ω : Ω), ‖X i ω‖ ^ q ∂μ ≤ B ^ q)
+  (hcenter : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), X i ω j ∂μ = 0)
+  (haverage : ∀ (j : Fin p), 1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 2 ∂μ = 1) (A : Matrix (Fin p) (Fin p) ℝ)
+  (hfactor : A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X)) :
+  RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.Companion.normalizedObservationSum X) A ≤
+    RectangleCLT.Companion.SplitV4.Printed.polynomialEnvelopeTransferConstant *
+      min 1 (RectangleCLT.Companion.SplitV4.polynomialEnvelopeTransferRate n p B q)
+RectangleCLT.Companion.SplitV4.Printed.bennettPolynomialCLT_observations.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} [MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ} {q : ℝ} (hp : 1 ≤ p) (hn : 1 ≤ n)
+  (X : Fin n → Ω → RectangleCLT.Vector p) (hX : ∀ (i : Fin n), Measurable (X i))
+  (hind : ProbabilityTheory.iIndepFun X μ) (hcenter : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), X i ω j ∂μ = 0)
+  (hi4 : ∀ (i : Fin n) (j : Fin p), MeasureTheory.Integrable (fun ω => X i ω j ^ 4) μ)
+  (haverage : ∀ (j : Fin p), 1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 2 ∂μ = 1) (G : Matrix (Fin p) (Fin p) ℝ)
+  (hG : G * G.transpose = RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X)) {B : ℝ}
+  (hB : 1 ≤ B) (hq : 2 < q) (hmoment : ∀ (i : Fin n), MeasureTheory.Integrable (fun ω => ‖X i ω‖ ^ q) μ)
+  (hbudget : ∀ (i : Fin n), ∫ (ω : Ω), ‖X i ω‖ ^ q ∂μ ≤ B ^ q)
+  (hfourth : ∀ (j : Fin p), 1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 4 ∂μ ≤ B ^ 2) :
+  RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.Companion.normalizedObservationSum X) G ≤
+    RectangleCLT.Companion.SplitV4.bennettPolynomialConstant q *
+      min 1
+        (B ^ (1 / 2) * RectangleCLT.dimensionLog p ^ (5 / 4) / ↑n ^ (1 / 4) +
+          B * RectangleCLT.dimensionLog p ^ (3 / 2 - 1 / q) /
+            (↑n ^ (1 / 2 - 1 / q) *
+              Real.log (Real.exp 1 + B * (↑n / RectangleCLT.dimensionLog p) ^ (2 / q - 1 / 2)) ^ (1 - 1 / q)))
+RectangleCLT.Companion.SplitV4.Printed.polynomialMomentCLTExists.{u} (q : ℝ) (hq : 2 < q) :
+  ∃ C,
+    1 ≤ C ∧
+      ∀ (p n : ℕ),
+        1 ≤ p →
+          1 ≤ n →
+            ∀ (B : ℝ),
+              1 ≤ B →
+                RectangleCLT.Companion.SplitV4.polynomialWorstDistance q B p n ≤
+                  C * min 1 (RectangleCLT.Companion.SplitV4.polynomialCombinedRate n p B q)
+Audited 73 added printed G.1/E.1/polynomial theorem declarations transitively; only propext, Classical.choice and Quot.sound. Checked 56563 constants in the new Proposition 2 closure: current relative theorem route, no historical unrestricted bounded endpoint.

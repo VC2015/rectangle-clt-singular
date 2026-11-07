@@ -1,0 +1,134 @@
+def RectangleCLT.Companion.SplitV4.Printed.clockLogVector : (p : ℕ) →
+  ℝ × (RectangleCLT.Face p → ℝ) → RectangleCLT.Face p → ℝ :=
+fun p e f => Real.log (e.2 f / e.1)
+def RectangleCLT.Companion.SplitV4.Printed.clockLogMaximum : (p : ℕ) → ℝ × (RectangleCLT.Face p → ℝ) → ℝ :=
+fun p e => ‖RectangleCLT.Companion.SplitV4.Printed.clockLogVector p e‖
+def RectangleCLT.Companion.SplitV4.Printed.randomThresholdRadius : (p : ℕ) → ℝ → ℝ × (RectangleCLT.Face p → ℝ) → ℝ :=
+fun p h e => h * RectangleCLT.Companion.SplitV4.Printed.clockLogMaximum p e
+def RectangleCLT.Companion.SplitV4.Printed.expectedClockCutoff : ℕ → ℝ → ℝ :=
+fun p h => 16 * h * RectangleCLT.dimensionLog p
+RectangleCLT.Companion.SplitV4.Printed.clock_abs_log_ratio_tail {p : Nat} (f : RectangleCLT.Face p) {s : Real}
+  (hs : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) s) :
+  @Eq.{1} Real
+    (@MeasureTheory.Measure.real.{0} (Prod.{0, 0} Real (RectangleCLT.Face p → Real))
+      (@Prod.instMeasurableSpace.{0, 0} Real (RectangleCLT.Face p → Real) Real.measurableSpace
+        (@MeasurableSpace.pi.{0, 0} (RectangleCLT.Face p) (fun (a : RectangleCLT.Face p) => Real)
+          fun (a : RectangleCLT.Face p) => Real.measurableSpace))
+      (RectangleCLT.exponentialRectangleLaw p)
+      (@setOf.{0} (Prod.{0, 0} Real (RectangleCLT.Face p → Real))
+        fun (e : Prod.{0, 0} Real (RectangleCLT.Face p → Real)) =>
+        @LT.lt.{0} Real Real.instLT s
+          (@abs.{0} Real Real.lattice Real.instAddGroup
+            (Real.log
+              (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                (@Prod.snd.{0, 0} Real (RectangleCLT.Face p → Real) e f)
+                (@Prod.fst.{0, 0} Real (RectangleCLT.Face p → Real) e))))))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) (Real.exp s)))
+RectangleCLT.Companion.SplitV4.Printed.integral_le_log_add_one_of_exponential_tail.{u_1} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] (μ : @MeasureTheory.Measure.{u_1} Ω inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ] (X : Ω → Real)
+  (hXm : @Measurable.{u_1, 0} Ω Real inst✝ Real.measurableSpace X)
+  (hX0 : ∀ (ω : Ω), @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) (X ω))
+  {N : Real} (hN : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) N)
+  (htail :
+    ∀ (s : Real),
+      @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) s →
+        @LE.le.{0} Real Real.instLE
+          (@MeasureTheory.Measure.real.{u_1} Ω inst✝ μ
+            (@setOf.{u_1} Ω fun (ω : Ω) => @LT.lt.{0} Real Real.instLT s (X ω)))
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) N
+            (Real.exp (@Neg.neg.{0} Real Real.instNeg s)))) :
+  And
+    (@MeasureTheory.Integrable.{0, u_1} Real
+      (@ContinuousENorm.toENorm.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real
+          (@PseudoMetricSpace.toUniformSpace.{0} Real
+            (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+              (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                  (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                    (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                      (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+        (@SeminormedAddGroup.toContinuousENorm.{0} Real
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+            (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+              (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                  (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace)) Ω
+      inst✝ X μ)
+    (@LE.le.{0} Real Real.instLE
+      (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+        inst✝ μ fun (ω : Ω) => X ω)
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) (Real.log N)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))
+RectangleCLT.Companion.SplitV4.Printed.integral_randomThresholdRadius_le {p : Nat}
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p) {h : Real}
+  (hh : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h) :
+  @LE.le.{0} Real Real.instLE
+    (@MeasureTheory.integral.{0, 0} (Prod.{0, 0} Real (RectangleCLT.Face p → Real)) Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      (@Prod.instMeasurableSpace.{0, 0} Real (RectangleCLT.Face p → Real) Real.measurableSpace
+        (@MeasurableSpace.pi.{0, 0} (RectangleCLT.Face p) (fun (a : RectangleCLT.Face p) => Real)
+          fun (a : RectangleCLT.Face p) => Real.measurableSpace))
+      (RectangleCLT.exponentialRectangleLaw p) fun (e : Prod.{0, 0} Real (RectangleCLT.Face p → Real)) =>
+      RectangleCLT.Companion.SplitV4.Printed.randomThresholdRadius p h e)
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) h
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+        (Real.log
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@OfNat.ofNat.{0} Real 4
+              (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+            (@Nat.cast.{0} Real Real.instNatCast p)))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))
+RectangleCLT.Companion.SplitV4.Printed.integral_randomThresholdRadius_le_log {p : Nat}
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p) {h : Real}
+  (hh : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h) :
+  @LE.le.{0} Real Real.instLE
+    (@MeasureTheory.integral.{0, 0} (Prod.{0, 0} Real (RectangleCLT.Face p → Real)) Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      (@Prod.instMeasurableSpace.{0, 0} Real (RectangleCLT.Face p → Real) Real.measurableSpace
+        (@MeasurableSpace.pi.{0, 0} (RectangleCLT.Face p) (fun (a : RectangleCLT.Face p) => Real)
+          fun (a : RectangleCLT.Face p) => Real.measurableSpace))
+      (RectangleCLT.exponentialRectangleLaw p) fun (e : Prod.{0, 0} Real (RectangleCLT.Face p → Real)) =>
+      RectangleCLT.Companion.SplitV4.Printed.randomThresholdRadius p h e)
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 4
+          (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+        h)
+      (RectangleCLT.dimensionLog p))
+RectangleCLT.Companion.SplitV4.Printed.expectedClockCutoff_bad_le {p : Nat}
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p) {h : Real}
+  (hh : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h) :
+  @LE.le.{0} Real Real.instLE
+    (@MeasureTheory.Measure.real.{0} (Prod.{0, 0} Real (RectangleCLT.Face p → Real))
+      (@Prod.instMeasurableSpace.{0, 0} Real (RectangleCLT.Face p → Real) Real.measurableSpace
+        (@MeasurableSpace.pi.{0, 0} (RectangleCLT.Face p) (fun (a : RectangleCLT.Face p) => Real)
+          fun (a : RectangleCLT.Face p) => Real.measurableSpace))
+      (RectangleCLT.exponentialRectangleLaw p)
+      (@setOf.{0} (Prod.{0, 0} Real (RectangleCLT.Face p → Real))
+        fun (e : Prod.{0, 0} Real (RectangleCLT.Face p → Real)) =>
+        @LT.lt.{0} Real Real.instLT (RectangleCLT.Companion.SplitV4.Printed.expectedClockCutoff p h)
+          (RectangleCLT.Companion.SplitV4.Printed.randomThresholdRadius p h e)))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+      (@OfNat.ofNat.{0} Real 4
+        (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))))
+Audited 35 printed exponential-clock tail, expected-width and Markov declarations; only permitted axioms.
