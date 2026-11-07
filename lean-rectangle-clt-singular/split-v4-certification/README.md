@@ -1,5 +1,7 @@
 # Split-V4 complete Lean certificate
 
+Reader-facing report: [REPORT.md](REPORT.md) · [PDF](REPORT.pdf).
+
 The frozen proof source is `69f89747f4b845491b75cb23134c056bfbcd40f7`.
 All 31 proved named statements and the required analytic chains are checked;
 Conjecture 1 is excluded. The final isolated run passed all 167 required
