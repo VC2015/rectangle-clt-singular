@@ -44,6 +44,8 @@ set_option pp.universes true
 #print RectangleCLT.Companion.SplitV4.relativeFourthMatrix
 #print RectangleCLT.Companion.SplitV4.relativeFreshFourthMatrix
 #print RectangleCLT.Companion.SplitV4.RelativeMomentBounds
+#print RectangleCLT.Companion.SplitV4.closedBoxSmoothingGap
+#print RectangleCLT.Companion.SplitV4.smoothingDiscrepancy
 #print RectangleCLT.Companion.weightMass
 #print RectangleCLT.Companion.weightMean
 #print RectangleCLT.faceDot
@@ -67,6 +69,8 @@ set_option pp.all true in
 #check RectangleCLT.Companion.unrestrictedCLT
 set_option pp.all true in
 #check RectangleCLT.Companion.gaussian_mean_relative_to_one_face
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.rectangleDistance_le_smoothingDiscrepancy_add_endpoint
 
 #check RectangleCLT.Companion.unrestrictedCLTExists
 #check RectangleCLT.Companion.gaussian_factor_exists_of_boundedIndependent

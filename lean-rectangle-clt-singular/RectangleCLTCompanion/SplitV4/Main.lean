@@ -1,5 +1,6 @@
 import RectangleCLTCompanion.SplitV4.ObservationNormalization
 import RectangleCLTCompanion.SplitV4.SeedCalibration
+import RectangleCLTCompanion.SplitV4.Smoothing
 import RectangleCLTCompanion.SplitV4.PolyhedralGeometry
 import RectangleCLTCompanion.SplitV4.PairedExchange
 import RectangleCLTCompanion.SplitV4.RelativeMoments
