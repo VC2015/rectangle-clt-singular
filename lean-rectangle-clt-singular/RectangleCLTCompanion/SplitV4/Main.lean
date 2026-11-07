@@ -4,6 +4,7 @@ import RectangleCLTCompanion.SplitV4.Smoothing
 import RectangleCLTCompanion.SplitV4.PolyhedralGeometry
 import RectangleCLTCompanion.SplitV4.PairedExchange
 import RectangleCLTCompanion.SplitV4.RelativeMoments
+import RectangleCLTCompanion.SplitV4.RelativeMomentTransfer
 import RectangleCLTCompanion.SplitV4.SubexponentialTransfer
 import RectangleCLTCompanion.SplitV4.TimeWeights
 import RectangleCLTCompanion.SubexponentialMain

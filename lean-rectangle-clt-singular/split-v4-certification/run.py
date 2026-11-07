@@ -10,9 +10,11 @@ import json
 import os
 from pathlib import Path
 import shlex
+import signal
 import subprocess
 import sys
 import time
+from typing import BinaryIO
 
 HERE = Path(__file__).resolve().parent
 PACKAGE = HERE.parent
@@ -133,12 +135,62 @@ def commands(mode: str, skip_cache: bool) -> list[tuple[str, list[str], str]]:
     return result
 
 
+def run_logged(command: list[str], log: BinaryIO, stream: bool) -> int:
+    if not stream:
+        return subprocess.run(command, cwd=PACKAGE, stdout=log,
+                              stderr=subprocess.STDOUT).returncode
+    process = subprocess.Popen(command, cwd=PACKAGE, stdout=subprocess.PIPE,
+                               stderr=subprocess.STDOUT, bufsize=0,
+                               start_new_session=(os.name == "posix"))
+    assert process.stdout is not None
+    try:
+        while chunk := process.stdout.read(65536):
+            log.write(chunk)
+            log.flush()
+            binary_stdout = getattr(sys.stdout, "buffer", None)
+            if binary_stdout is not None:
+                binary_stdout.write(chunk)
+                binary_stdout.flush()
+            else:
+                # Supports notebook/text-only stdout wrappers. The binary log
+                # always retains the exact bytes, including non-UTF-8 output.
+                sys.stdout.write(chunk.decode("utf-8", errors="replace"))
+                sys.stdout.flush()
+        return process.wait()
+    except BaseException:
+        # Stop Lake and its subprocesses before recording a user interrupt.
+        # A separate process group lets this cleanup include child Lean jobs.
+        if process.poll() is None or os.name == "posix":
+            try:
+                if os.name == "posix":
+                    os.killpg(process.pid, signal.SIGINT)
+                else:
+                    process.terminate()
+            except ProcessLookupError:
+                pass
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                try:
+                    if os.name == "posix":
+                        os.killpg(process.pid, signal.SIGKILL)
+                    else:
+                        process.kill()
+                except ProcessLookupError:
+                    pass
+                process.wait()
+        raise
+    finally:
+        process.stdout.close()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("mode", choices=("baseline", "checkpoint"))
     parser.add_argument("--output", type=Path, help="New or empty output directory; relative to current directory")
     parser.add_argument("--skip-cache", action="store_true", help="Omit optional cache download, never update dependencies")
     parser.add_argument("--plan", action="store_true", help="Print commands without running them or writing records")
+    parser.add_argument("--stream", action="store_true", help="Tee command output live to stdout while preserving exact log bytes")
     args = parser.parse_args()
     plan = commands(args.mode, args.skip_cache)
     if args.plan:
@@ -162,6 +214,7 @@ def main() -> int:
         "schema_version": 1, "mode": args.mode, "started_at": now(),
         "runner_sha256": sha256(Path(__file__).resolve()),
         "environment_metadata": environment_metadata(),
+        "stream_stdout": args.stream,
         "handoff_commit": HANDOFF_COMMIT, "cwd": str(PACKAGE),
         "paper_certified": False,
         "scope": "Fresh command evidence only; statement and revised-proof-route certification requires separate mapping and review.",
@@ -181,8 +234,7 @@ def main() -> int:
         start = time.monotonic()
         with (output / entry["log"]).open("wb") as log:
             try:
-                p = subprocess.run(command, cwd=PACKAGE, stdout=log, stderr=subprocess.STDOUT)
-                entry["exit_code"] = p.returncode
+                entry["exit_code"] = run_logged(command, log, args.stream)
             except OSError as exc:
                 log.write((str(exc) + "\n").encode())
                 entry["exit_code"] = 127

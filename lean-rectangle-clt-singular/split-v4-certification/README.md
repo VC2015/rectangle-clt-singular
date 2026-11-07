@@ -21,7 +21,9 @@ new `*Audit.lean` file. Direct execution regenerates theorem-type and axiom
 output even when Lake can reuse the compiled module.
 
 Use `--plan` to inspect commands without running them. `--skip-cache` omits
-the optional cache download. `--output PATH` selects a new or empty directory;
+the optional cache download. `--stream` displays command output as it arrives
+and retains the same exact bytes in the command log. CI enables streaming so
+long builds show their progress. `--output PATH` selects a new or empty directory;
 the runner refuses to overwrite previous evidence. No invocation runs
 `lake update` or changes the toolchain. The checked-in manifest must keep
 mathlib at `c44e0c8ee63ca166450922a373c7409c5d26b00b` and the toolchain at
@@ -59,3 +61,11 @@ names or a successful package build.
 CI uses `.github/workflows/rectangle-clt-split-v4.yml` and uploads the command
 evidence even on failure. Its success covers the checked sources and audits;
 it does not assert that every pending manuscript target has been proved.
+CI reproduces the historical baseline in a detached worktree at the exact
+handoff commit. It copies the current evidence runner into that worktree and
+shares the three package caches with the branch checkout. The checkpoint then
+builds the current branch sources separately. Cache restoration also accepts
+the historical `rectangle-subexp` prefix with the same toolchain and manifest
+hashes, retaining the pinned dependencies and prior compiled proofs.
+The branch and its pull request share a concurrency group, so a newer run
+cancels superseded runs for that branch.
