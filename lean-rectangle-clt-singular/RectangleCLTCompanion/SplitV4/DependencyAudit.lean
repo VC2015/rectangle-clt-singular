@@ -33,7 +33,9 @@ run_cmd do
       ``RectangleCLT.Companion.rectangleError_le_smoother_gap_add_sharp_endpoint,
       ``RectangleCLT.thinning_covariance,
       ``RectangleCLT.thinning_third_moment,
-      ``RectangleCLT.hasDerivAt_thinning_third_coefficient] do
+      ``RectangleCLT.hasDerivAt_thinning_third_coefficient,
+      ``RectangleCLT.Companion.SplitV4.C4Test.ofContDiff,
+      ``RectangleCLT.Companion.SplitV4.smootherC4Test] do
     selected := selected.insert n
   for (n, ci) in env.constants.toList do
     if isTheorem ci then
@@ -48,8 +50,9 @@ run_cmd do
   for n in names do
     let some ci := env.checked.get.find? n
       | throwError "Declaration {n} is absent from the checked kernel environment"
-    unless isTheorem ci do
-      throwError "Expected a theorem declaration at dependency endpoint {n}"
+    unless isTheorem ci || n == ``RectangleCLT.Companion.SplitV4.C4Test.ofContDiff ||
+        n == ``RectangleCLT.Companion.SplitV4.smootherC4Test do
+      throwError "Expected a theorem or explicitly audited C4 constructor at endpoint {n}"
     let some value := ci.value?
       | throwError "The checked theorem {n} has no proof value"
     let (_, axiomState) := ((CollectAxioms.collect n).run env).run {}
@@ -64,6 +67,7 @@ run_cmd do
         return (← Meta.ppExpr ci.type).pretty
     let record := Json.mkObj [
       ("declaration", Json.str n.toString),
+      ("declaration_kind", Json.str (if isTheorem ci then "theorem" else "definition")),
       ("module", Json.str moduleName),
       ("expanded_lean_type", Json.str expandedType),
       ("type_used_constants", encodeNames ci.type.getUsedConstants),

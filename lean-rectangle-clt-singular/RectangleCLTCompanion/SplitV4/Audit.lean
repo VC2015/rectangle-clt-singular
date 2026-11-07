@@ -50,6 +50,29 @@ set_option pp.universes true
 #print RectangleCLT.Companion.weightMean
 #print RectangleCLT.faceDot
 #print RectangleCLT.vectorNormSq
+#print RectangleCLT.Companion.SplitV4.gaussianSmoothingConstant
+#print RectangleCLT.Companion.SplitV4.bennettTruncate
+#print RectangleCLT.Companion.SplitV4.envelopeMaximumConstant
+#print RectangleCLT.Companion.SplitV4.unrestrictedGaussianComparisonConstant
+#print RectangleCLT.Companion.SplitV4.polyhedronError
+#print RectangleCLT.Companion.SplitV4.polyhedralDistance
+#print RectangleCLT.Companion.SplitV4.coordinateFourthBudget
+#print RectangleCLT.Companion.SplitV4.diagonalFourth
+#print RectangleCLT.Companion.SplitV4.C4Test
+#print RectangleCLT.Companion.SplitV4.C4Test.ofContDiff
+#print RectangleCLT.Companion.SplitV4.smootherC4Test
+#print RectangleCLT.Companion.SplitV4.originalSigma
+#print RectangleCLT.Companion.SplitV4.copyAverage
+#print RectangleCLT.Companion.SplitV4.productArrayLargeMean
+#print RectangleCLT.Companion.SplitV4.productArrayTruncatedCovariance
+#print RectangleCLT.Companion.SplitV4.copyArrayLargeMean
+#print RectangleCLT.Companion.SplitV4.copyArrayTruncatedCovariance
+#print RectangleCLT.Companion.SplitV4.pairedIncrement
+#print RectangleCLT.Companion.SplitV4.matrixMaxEntryNorm
+#print RectangleCLT.Companion.SplitV4.conditionalVectorLaw
+#print RectangleCLT.Companion.SplitV4.conditionalGoodProductLaw
+#print RectangleCLT.Companion.SplitV4.conditionalRetainedSummand
+#print RectangleCLT.Companion.SplitV4.conditionalTruncationKernel
 
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.normalizedObservationsCLT
@@ -71,6 +94,36 @@ set_option pp.all true in
 #check RectangleCLT.Companion.gaussian_mean_relative_to_one_face
 set_option pp.all true in
 #check RectangleCLT.Companion.SplitV4.rectangleDistance_le_smoothingDiscrepancy_add_endpoint
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.gaussianEndpointSmoothing
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.truncated_bennett_maximum
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.truncated_bennett_maximum_zero_variance
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.expected_maximum_under_envelope_moment
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.unrestrictedGaussianComparisonExists
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.boundedPolyhedralEnvelopeCLT
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.orliczPolyhedralCLT
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.C4Test.hasDerivAt_slepianExpectation
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.C4Test.hasDerivAt_arraySlepian
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.C4Test.hasDerivAt_arraySlepian_of_coordinate_fourths
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.smootherC4Test_fourthDiagonal_eq_diagonalFourth
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.gaussian_common_point_fourth_random_data
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.expected_coordinateFourthBudget_le
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.copyAverage_ae_eq_condExp
+set_option pp.all true in
+#check RectangleCLT.Companion.SplitV4.conditionalRetained_normalized_covariance
 
 #check RectangleCLT.Companion.unrestrictedCLTExists
 #check RectangleCLT.Companion.gaussian_factor_exists_of_boundedIndependent
