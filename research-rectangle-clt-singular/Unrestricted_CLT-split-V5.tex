@@ -7,7 +7,7 @@
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{longtable,booktabs,tabularx}
 \usepackage{xcolor}
-% Magenta marks the retained exposition revisions and preparatory lemmas in Appendices F and G.
+% Magenta marks the retained revisions.
 \newenvironment{recovered}{\color{magenta}}{}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
@@ -59,9 +59,10 @@
 {\Large Sharp High-Dimensional Gaussian Approximations\\[0.15em]
 over Rectangles without Covariance Restrictions}\\[0.85em]
 {\normalsize Victor Chernozhukov, Denis Chetverikov, Kengo Kato, Yuta
-Koike\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnote{The paper
-was developed through collaboration with the AI systems GPT-6 Astra
-and GPT-6 Sol. \textcolor{magenta}{The human authors take full
+Koike\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnote{\textcolor{magenta}{This paper
+was developed in collaboration with the AI system GPT-Astra.
+Lean formalization and verification were performed with GPT-6 Sol
+(see Section~\ref{sec:lean-introduction}). The human authors take full
 responsibility for the content of this research.}}}\\[0.65em]
 {\normalsize 7 November 2026 \(\,\cdot\,\) Unrestricted covariance, split-V5 (working draft)}
 \end{center}
@@ -161,20 +162,18 @@ smoothed expectations, we also retain information about the summands'
 third and fourth moments. We collect this information in matrices that
 will be compared with the covariance matrix \(\Sigma\). For
 \(1\le j\le p\), define
-\begin{align*}
- T_j&:=\sum_i\E[\xi_{ij}\,\xi_i\xi_i^\top],\\
- Q_j&:=\sum_i\E[\xi_{ij}^2\,\xi_i\xi_i^\top],\\
- \widetilde Q_j&:=\sum_i\E[\xi_{ij}^2]\,\E[\xi_i\xi_i^\top].
-\end{align*}
+\[
+ T_j:=\sum_i\E[\xi_{ij}\,\xi_i\xi_i^\top],\qquad
+ Q_j:=\sum_i\E[\xi_{ij}^2\,\xi_i\xi_i^\top],\qquad
+ \widetilde Q_j:=\sum_i\E[\xi_{ij}^2]\,\E[\xi_i\xi_i^\top].
+\]
 We measure these moments relative to the variance in each direction.
 Specifically, we call \(s_3,s_4\ge0\) \emph{relative moment bounds} if,
 for every \(1\le j\le p\) and \(u\in\R^p\),
 \begin{equation}\label{eq:relative-moments}
- \begin{aligned}
- |u^\top T_j u|&\le s_3\,u^\top\Sigma u,\\
- u^\top Q_j u&\le s_4\,u^\top\Sigma u,\\
- u^\top\widetilde Q_j u&\le s_4\,u^\top\Sigma u.
- \end{aligned}
+ |u^\top T_j u|\le s_3\,u^\top\Sigma u,\qquad
+ u^\top Q_j u\le s_4\,u^\top\Sigma u,\qquad
+ u^\top\widetilde Q_j u\le s_4\,u^\top\Sigma u.
 \end{equation}
 Here \(u^\top\Sigma u\) is the variance of the linear contrast
 \(u^\top W\). The first bound controls the aggregate third moment
@@ -267,12 +266,25 @@ original coordinates.
 \end{recovered}
 
 \subsection{Sub-exponential coordinates}\label{sec:subexponential}
-A coordinatewise tail bound allows some observations to exceed every
-deterministic envelope. We clip the coordinates before applying
-Theorem~\ref{thm:unrestricted}. The clipping level must be high enough
-to control the discarded sum, and this increases the effective envelope.
-We measure the tail size by the \emph{Orlicz norm}
-\(\|V\|_{\psi_1}:=\inf\{s>0:\E\exp(|V|/s)\le2\}\).
+\begin{recovered}
+We next extend the bounded-observation result to observations whose
+coordinates have sub-exponential tails. We measure tail size by the
+\emph{Orlicz norm}
+\[
+ \|V\|_{\psi_1}:=\inf\{s>0:\E\exp(|V|/s)\le2\}.
+\]
+A uniform bound \(\|X_{ij}\|_{\psi_1}\le K\) gives
+\(\Pp(|X_{ij}|>t)\le2e^{-t/K}\) for \(t\ge0\).
+We cap each coordinate's magnitude at a deterministic threshold \(T\),
+then recenter and rescale the coordinates so that their normalized
+sum has unit marginal variances. We can then apply
+Theorem~\ref{thm:unrestricted} to this bounded sum. To transfer the
+resulting bound to the original sum, we must also control the residual
+introduced by capping. The exponential tail bound allows us to do so
+with a threshold of order \(K\log(en)\). This choice yields an
+effective envelope of order \(K\log(en)/\sqrt n\), introducing an
+additional logarithmic factor in the bound.
+\end{recovered}
 
 \begin{corollary}[Sub-exponential transfer]\label{cor:subexponential}
 Let \(X_1,\ldots,X_n\in\R^p\) be independent and centered, with
@@ -292,19 +304,26 @@ Then
 
 \end{corollary}
 
+\begin{recovered}
 For fixed \(K\) and \(p\asymp n^a\), \(a>0\), the bound is of order
-\(n^{-1/2}(\log n)^3\). In Appendix~\ref{app:subexponential} we
-control the discarded sum and use a Gaussian coupling to restore
-the original covariance after clipping.
+\(n^{-1/2}(\log n)^3\). See Appendix~\ref{app:subexponential} for the proof.
+\end{recovered}
 
 \subsection{Polynomial moment envelopes}\label{sec:polynomial-main}
 
-A moment bound on the largest absolute coordinate permits occasional
-observations larger than any fixed envelope. We combine two estimates
-for such observations. The first follows by truncation and
-Theorem~\ref{thm:unrestricted}, and the second uses a separate
-coordinate fourth-moment bound to improve the contribution of large
-observations.
+\begin{recovered}
+We next consider observations whose largest absolute coordinate has a
+finite moment of order \(q>2\), allowing heavier tails than the
+sub-exponential condition. We combine two Gaussian approximation
+bounds. The first follows from truncation and
+Theorem~\ref{thm:unrestricted} under this moment condition alone. The
+second also uses a separate bound on the coordinate fourth moments.
+This additional condition can improve the treatment of large
+observations because an observation with a large maximum need not
+contribute much to any given coordinate.
+Theorem~\ref{thm:polynomial} states the two estimates separately,
+so that we can use whichever applies and gives the smaller bound.
+\end{recovered}
 
 Let \(X_1,\ldots,X_n\in\R^p\) be independent and centered, with
 \(n^{-1}\sum_i\E X_{ij}^2=1\) for each \(j\). For this setting, write
@@ -313,64 +332,116 @@ Let \(X_1,\ldots,X_n\in\R^p\) be independent and centered, with
  \Sigma:=\Cov(W),\qquad Z\sim N(0,\Sigma),\qquad L:=\log(ep).
  \label{poly:setup}
 \end{equation}
-For fixed \(q>2\) and \(B\ge1\), let \(\mathcal C_q(B,p)\)
-denote the class of these arrays satisfying
+\begin{recovered}
+For fixed \(q>2\) and \(B\ge1\), we consider the envelope and
+coordinate moment conditions
 \begin{align}
  \max_{i\le n}\E\norm{X_i}_\infty^q&\le B^q,
  \label{poly:envelope}\\
  \max_{j\le p}\frac1n\sum_{i=1}^n\E X_{ij}^4&\le B^2.
  \label{poly:fourth}
 \end{align}
-The dependence of this class on \(n\) is suppressed.
 The first condition controls the \emph{random envelope}
 \(\norm{X_i}_\infty\), including when the largest coordinate occurs
-at a different location in each observation. The second condition
-is imposed even when \(2<q<4\). At \(q=4\), the moment bounds for
+at a different location in each observation. The second condition is
+an additional assumption on the averaged coordinate fourth moments,
+including when \(2<q<4\). At \(q=4\), the moment bounds for
 the envelope and for each coordinate are \(B^4\) and \(B^2\),
-respectively.
+respectively. We write \(\mathcal C_q(B,p)\) for the class of arrays
+satisfying both conditions, suppressing its dependence on \(n\).
+\end{recovered}
 
+\begin{recovered}
 \begin{theorem}[Polynomial moment envelopes]\label{thm:polynomial}
-For every fixed \(q>2\), there is a constant \(C_q>0\), depending
-only on \(q\), such that, for all \(n,p\ge1\) and \(B\ge1\),
+Let \(X_1,\ldots,X_n\in\R^p\) be independent and centered, with
+\(n^{-1}\sum_i\E X_{ij}^2=1\) for every \(j\), and let \(W,Z,L\)
+be as in~\eqref{poly:setup}. For every fixed \(q>2\), there is a
+constant \(C_q>0\), depending only on \(q\), such that the following
+statements hold for all \(n,p\ge1\) and \(B\ge1\).
+\begin{subequations}\label{poly:combined}
+\par\noindent\textup{(i)} If the envelope condition~\eqref{poly:envelope}
+holds, then
 \begin{equation}
-\begin{aligned}
- \sup_{\mathcal C_q(B,p)}\rh(W,Z)
- \le C_q\min\Bigg\{1,\ &
+ \rh(W,Z)\le C_q\min\left\{1,
+ \frac{B L^{3/2-1/q}\{\log(en)\}^{1/2-1/q}}
+ {n^{1/2-1/q}}\right\}.
+ \label{poly:main-envelope}
+\end{equation}
+\noindent\textup{(ii)} If the coordinate fourth-moment
+condition~\eqref{poly:fourth} also holds, then
+\begin{equation}
+ \rh(W,Z)\le C_q\min\left\{1,
  \frac{B^{1/2}L^{5/4}}{n^{1/4}}
  +\frac{B L^{3/2-1/q}}
- {n^{1/2-1/q}\{\log(e+B(n/L)^{2/q-1/2})\}^{1-1/q}},\\
- &\frac{B L^{3/2-1/q}\{\log(en)\}^{1/2-1/q}}
- {n^{1/2-1/q}}\Bigg\}.
-\end{aligned}
- \label{poly:combined}
+ {n^{1/2-1/q}\{\log(e+B(n/L)^{2/q-1/2})\}^{1-1/q}}\right\}.
+ \label{poly:main-fourth}
 \end{equation}
-The observations need not be identically distributed or symmetric,
-and their covariance may be singular.
+\end{subequations}
+When both moment conditions hold, we may take the smaller of
+\eqref{poly:main-envelope} and~\eqref{poly:main-fourth}.
 \end{theorem}
+\end{recovered}
 
-The bound allows \(B\) to vary with \(n\). For fixed \(B\) and
-\(q>4\), its final term has sample-size power \(n^{-1/2+1/q}\).
-At \(q=4\), the sum inside the minimum has order
-\(Bn^{-1/4}L^{5/4}/\{\log(e+B)\}^{3/4}\).
-Section~\ref{sec:poly} explains the two estimates and proves
-Theorem~\ref{thm:polynomial}. The matching lower bounds and the
-remaining logarithmic gaps are given in Section~\ref{opt:section}.
+\begin{recovered}
+The bounds allow \(B\) to grow with \(n\).
+Bound~\eqref{poly:main-envelope} requires only~\eqref{poly:envelope},
+while~\eqref{poly:main-fourth} uses~\eqref{poly:fourth} to exploit
+smaller coordinate fourth moments. For example, at \(q=4\),
+\eqref{poly:envelope} alone bounds their averages by \(B^4\),
+whereas~\eqref{poly:fourth} reduces this bound to \(B^2\).
+Theorem~\ref{lower:dense}\textup{(i)} matches
+\eqref{poly:main-envelope} from below up to the logarithmic factor
+\(\{\log(en)\}^{1/2-1/q}\) under the envelope condition alone,
+for every fixed \(q>2\) and fixed or growing \(B\ge2\).
+
+When both moment conditions hold and \(B\ge2\) is fixed, the
+comparison has three regimes.
+When \(2<q<4\) and \(n/L\to\infty\),
+\eqref{poly:main-fourth} improves the logarithmic factors in
+\eqref{poly:main-envelope}. Theorem~\ref{lower:sparse} gives a
+matching lower bound when \(\log n=o(L)\) and the rate tends to zero.
+At \(q=4\), \eqref{poly:main-fourth} gives the rate
+\(n^{-1/4}L^{5/4}\), which Theorem~\ref{opt:q4-lower} matches from below.
+This confirms our conjecture that the quartic rate in
+\cite[Theorem~2.5]{CCKK2022} is optimal under fourth-moment envelopes.
+When \(q>4\), \eqref{poly:main-envelope} improves the sample-size
+power to \(n^{-1/2+1/q}\). Theorem~\ref{lower:dense}\textup{(ii)} matches the
+rate in~\eqref{poly:main-envelope} from below up to the logarithmic factor
+\(\{\log(en)\}^{1/2-1/q}\).
+
+For growing \(B\), \eqref{poly:main-fourth} can also improve on
+\eqref{poly:main-envelope} when \(q>4\). More generally, for every
+fixed \(q>2\), Theorem~\ref{lower:sparse} matches the rate in
+\eqref{poly:main-fourth} from below when \(B(n/L)^{2/q-1/2}\to\infty\),
+provided that the logarithm of this quantity is \(o(L)\) and the
+rate tends to zero. At \(q=4\), Theorem~\ref{opt:q4-growing}
+matches the dependence \(B/\{\log(e+B)\}^{3/4}\) on the growing
+envelope from below. These lower-bound comparisons use the dimension sequences
+specified in the cited theorems. See Section~\ref{sec:poly} for
+the proof of Theorem~\ref{thm:polynomial} and
+Section~\ref{opt:section} for the lower bounds and their summary
+in Table~\ref{opt:tab:rates}.
+\end{recovered}
 
 \subsection{Transfer to polyhedra}\label{sec:polyhedral-transfer}
 
-A polyhedron is specified by inequalities along its face normals.
-Collecting these projections into a vector turns membership into a
-lower-orthant event, as in~\cite[Section~3.1]{CCK2017}.
 \begin{recovered}
+A polyhedron is specified by inequalities
+\(\nu_\alpha^\top x\le a_\alpha\), for \(\alpha=1,\ldots,m\),
+where the \(\nu_\alpha\) are its normal vectors. Membership of
+\(W\) is therefore a lower-orthant event for the vector
+\((\nu_1^\top W,\ldots,\nu_m^\top W)\), as
+in~\cite[Section~3.1]{CCK2017}.
 The following corollary extends our Gaussian approximation bounds to
-polyhedra. Its condition on the normals limits the amplification caused
-by standardizing the projections and permits singular covariance matrices.
+polyhedra. Its condition on the normal vectors limits the amplification
+caused by standardizing these linear forms and permits singular
+covariance matrices.
 \end{recovered}
 
 \begin{recovered}
 \begin{corollary}[Polyhedral transfer]\label{cor:polyhedral-transfer}
 Let \(W\in\R^p\) be centered with covariance \(\Sigma\), and let
-\(Z\sim N(0,\Sigma)\). For normals \(\nu_1,\ldots,\nu_m\in\R^p\)
+\(Z\sim N(0,\Sigma)\). For normal vectors \(\nu_1,\ldots,\nu_m\in\R^p\)
 with \(\sigma_\alpha^2:=\nu_\alpha^\top\Sigma\nu_\alpha>0\), define
 \[
  P_a:=\bigcap_{\alpha=1}^m\{x:\nu_\alpha^\top x\le a_\alpha\},
@@ -389,9 +460,14 @@ hold for \(\Delta_m(W,Z)\) with the substitutions
 \[
  p\mapsto m,\qquad \delta\mapsto J\delta,\qquad s_4\mapsto J^2s_4.
 \]
-Under the polynomial-moment assumptions of Theorem~\ref{thm:polynomial},
-the bound \eqref{poly:combined} holds for \(\Delta_m(W,Z)\), uniformly
-over observations in \(\mathcal C_q(B,p)\), with
+Under the setup~\eqref{poly:setup} and the envelope
+condition~\eqref{poly:envelope}, the bound~\eqref{poly:main-envelope}
+holds for \(\Delta_m(W,Z)\) with
+\[
+ p\mapsto m,\qquad B\mapsto JB.
+\]
+If the coordinate fourth-moment condition~\eqref{poly:fourth} also holds,
+then~\eqref{poly:main-fourth} holds for \(\Delta_m(W,Z)\) with
 \[
  p\mapsto m,\qquad B\mapsto J^2B.
 \]
@@ -402,7 +478,7 @@ the bound \eqref{eq:subexponential} holds for \(\Delta_m(W_n,Z_n)\) with
 \]
 In each case, \(L\) becomes \(\log(em)\), and the auxiliary quantities
 in the cited bound are recomputed using the substituted parameters.
-The bounds are uniform over normals satisfying
+The bounds are uniform over normal vectors satisfying
 \eqref{eq:polyhedral-normal-condition} for the given \(J\).
 Zero-variance inequalities may be deleted unless they exclude both
 vectors almost surely, in which case the probability difference is zero.
@@ -425,7 +501,8 @@ For fixed tail scale and polynomially growing dimension, the bound
 in~\cite[Theorem~1]{GaoZhang} improves this to
 \(O(n^{-1/3}(\log n)^{7/3})\).
 In the same regime, our Corollaries~\ref{cor:observations}
-and~\ref{cor:subexponential} give rates of \(n^{-1/2}\) up to logarithmic
+and~\ref{cor:subexponential} \textcolor{magenta}{achieve the optimal rate of}
+\(n^{-1/2}\) up to logarithmic
 factors for bounded and sub-exponential coordinates, respectively.
 The covariance may be singular, and the constants do not depend on its
 smallest positive eigenvalue.
@@ -436,35 +513,42 @@ Chernozhukov, Chetverikov, and Koike~\cite{CCK} obtain the bounded-observation
 rate \(Bn^{-1/2}\{\log(ep)\}^{3/2}\log n\) by combining exchangeable
 pairs with Slepian--Stein interpolation and mixed smoothing.
 The bound in~\cite{AL} removes the final \(\log n\) under the same
-type of nondegeneracy condition. Results under local nondegeneracy
-also allow some singular covariance matrices~\cite{FKLZ,Local}.
+type of nondegeneracy condition. \textcolor{magenta}{Our companion
+paper~\cite{CorrelationGap} drastically improves upon~\cite{AL} by attaining the same
+rate under a pairwise correlation gap bounded away from zero, without
+requiring full nondegeneracy. This condition allows singular covariance
+matrices.}
 Theorem~\ref{thm:unrestricted} imposes no such condition and identifies
 the relative fourth moments that govern its remaining logarithmic factor.
 
-\textcolor{magenta}{The improvement in the power of \(n\) combines a Gaussian matrix
-estimate with concentration near rectangle boundaries. The Gaussian
-surface approach in~\cite{GaoZhang} provides matrix estimates without a
-factor depending on rank. Here we work directly with logistic weights.
-Covariance contraction for a Gaussian law tilted by a log-concave weight
-and a mean bound relative to a single face leave a signed trace term to
-control. A Gamma mixture links this term to derivatives of Gaussian
-expectations under a common shift of the thresholds. Conditioning on
-one or two Gaussian projections reduces these derivatives to
-conditional-density estimates, which we bound by probabilities of short
-outer layers. Thus the key matrix and threshold estimates
-avoid surface integrals over polyhedral faces and their intersections.
-The outer-layer construction retains the geometry underlying Nazarov's
-inequality~\cite{Nazarov2003,CCK17N}. Appendices~\ref{appx-an:sec:matrix}
+\textcolor{magenta}{To obtain the improved power of \(n\), we exploit the
+fact that a smooth rectangle indicator varies appreciably only near the
+boundary. We use a logistic approximation and estimate its derivatives
+in expectation, retaining the small probability of lying near that
+boundary. As in~\cite{GaoZhang}, Gaussian matrix estimates control the
+derivative directions without introducing a factor depending on rank.
+We derive these estimates directly from the logistic weights. The key
+step bounds the required derivatives of Gaussian rectangle probabilities with
+respect to their thresholds by probabilities of thin layers between a
+rectangle and a slightly enlarged rectangle. This construction retains
+the geometry underlying Nazarov's inequality~\cite{Nazarov2003,CCK17N},
+while avoiding surface integrals over faces and their intersections.
+Appendices~\ref{appx-an:sec:matrix}
 and~\ref{appx-an:sec:threshold} give these estimates.}
 
-\textcolor{magenta}{Averaging the layer probabilities over the remaining summands
-preserves the small boundary probability when two derivatives are moved
-onto the Gaussian density by integration by parts. We integrate the
-resulting centered quadratic Gaussian weights before taking absolute
-values and sum pairs of derivative directions using the aggregate
-covariance. These operations retain the cancellations needed when the
-covariance is singular and recover a power of the smoothing width in
-the fourth-order remainder.}
+\textcolor{magenta}{We must preserve this small boundary probability as
+we gradually replace the original summands by Gaussian noise. At each
+stage, we average the layer probabilities over the summands that
+remain. The Gaussian component allows us to integrate by parts twice,
+replacing two derivatives of
+the logistic approximation by a centered quadratic expression
+(second Hermite polynomial) in that Gaussian component. We estimate the resulting weighted Gaussian
+expectation before taking absolute values, preserving cancellations
+that a pointwise bound would lose. We then combine the summands'
+contributions through their aggregate covariance, so the bounds remain
+valid even when this covariance is singular. Together, these steps
+gain one power of the smoothing width in the fourth-order Taylor
+remainder, which is essential for the improved rate.}
 
 The logarithmic refinement uses the calibrated dropout path defined
 in~\cite[Section~4]{AL}, preceded by a short Slepian interpolation that
@@ -474,9 +558,12 @@ the main comparison, including at its starting point, which in our view
 simplifies the proof.} The retention probabilities
 and amplitudes are chosen so that the summands' contribution to covariance
 decreases linearly while their third moments have zero time derivative
-at the initial endpoint. The extra factor of interpolation time then cancels the
-singular weight in the cubic derivative estimate. \textcolor{magenta}{With the same derivative estimate, ordinary
-Slepian interpolation yields a logarithmic time integral because the
+at the initial endpoint. \textcolor{magenta}{The calibration makes the cubic
+coefficient vanish linearly at the start of the comparison. This offsets
+the inverse Gaussian-variance factor produced by two integrations by
+parts, so the cubic contribution remains integrable uniformly as the
+Gaussian seed tends to zero.} \textcolor{magenta}{With the same derivative estimate, ordinary
+Slepian interpolation alone would yield a logarithmic time integral because the
 third-moment derivative does not vanish at the initial endpoint.} The calibrated path therefore removes this
 logarithm from the cubic contribution. The short initial Slepian step
 is controlled directly, before using Gaussian integration by parts
@@ -489,34 +576,48 @@ In the refined bound~\eqref{eq:relative-unrestricted}, the size of this
 contribution is governed by the relative fourth-moment bound \(s_4\).
 Section~\ref{sec:smoothing} explains these estimates and their balance.}
 
-For polynomial moment envelopes, Theorem~\ref{thm:polynomial} combines
-two different consequences of the moment assumptions. Conditional
-truncation transfers the bounded-observation result to the rate
-\(n^{-1/2+1/q}\) up to logarithmic factors. For fixed \(B\) and
-\(q>4\), this improves the power of \(n\) over the \(n^{-1/4}\)
-term in~\cite[Theorem~2.5]{CCKK2022}.
-\textcolor{magenta}{The second bound uses a self-contained logistic--Slepian
-proof of a version of CCKK's matching-covariance comparison
-estimate~\cite[Lemma~A.1]{CCKK2022}. Interchanging each summand with an
-independent copy and applying a trapezoidal Taylor identity gives a
-fourth-order remainder. We retain the expected maximum of the large
-increments and bound it using a Bennett inequality that combines the
-envelope moment with the coordinate fourth moment. This sharper tail
-estimate reduces their contribution by a logarithmic factor.}
+\textcolor{magenta}{For polynomial moment envelopes,
+Theorem~\ref{thm:polynomial} separates two bounds according to their
+assumptions. Part~\textup{(i)} requires only the envelope
+condition~\eqref{poly:envelope}. Conditional truncation transfers the
+bounded-observation result to the rate \(n^{-1/2+1/q}\) up to
+logarithmic factors. For fixed \(B\) and \(q>4\), this improves the
+power of \(n\) over the \(n^{-1/4}\) term
+in~\cite[Theorem~2.5]{CCKK2022}. Part~\textup{(ii)} also assumes the
+coordinate fourth-moment condition~\eqref{poly:fourth} and sharpens
+ the treatment of large observations in the bound in~\cite{CCKK2022}.
+We give a self-contained logistic--Slepian proof of a version of the
+matching-covariance comparison estimate~\cite[Lemma~A.1]{CCKK2022}. Interchanging each
+summand with an independent copy and applying a trapezoidal Taylor
+identity gives a fourth-order remainder. A Bennett inequality using
+both moment conditions controls the expected maximum of the large
+increments and reduces the envelope contribution by the logarithmic
+factor in~\eqref{poly:main-fourth}. When both conditions hold, we may
+take the smaller of the two bounds.}
 
-At \(q=4\), the exponent \(n^{-1/4}\) remains. The centrally symmetric
-examples in Theorem~\ref{opt:q4-lower} show that it is sharp, confirming
-our conjecture in~\cite{CCKK2022} for fourth-moment envelopes.
-Theorems~\ref{opt:q4-growing} and~\ref{lower:sparse} also attain the
-Bennett refinement in the stated regimes with growing envelopes or
-other moment orders. These conclusions distinguish the improvement
-for bounded and sub-exponential coordinates from what is possible
-under the moment conditions of Theorem~\ref{thm:polynomial} with \(q=4\).
+\textcolor{magenta}{At \(q=4\), the sample-size dependence
+\(n^{-1/4}\) remains and is sharp. For fixed \(B\ge2\), the centrally
+symmetric examples in Theorem~\ref{opt:q4-lower} match the full rate
+\(n^{-1/4}L^{5/4}\) in~\eqref{poly:main-fourth} from below,
+confirming our conjecture that the quartic rate
+in~\cite[Theorem~2.5]{CCKK2022} is optimal under fourth-moment
+envelopes. More generally, Theorem~\ref{lower:dense}\textup{(i)}
+matches~\eqref{poly:main-envelope} from below up to logarithmic
+factors under the envelope condition alone, while
+Theorems~\ref{opt:q4-growing} and~\ref{lower:sparse}
+match~\eqref{poly:main-fourth} from below in their regimes with
+growing envelopes or other moment orders. These comparisons use the
+dimension and vanishing-rate conditions of the cited theorems.}
 
+\textcolor{magenta}{In summary, our new main upper bounds provide
+polynomial or logarithmic improvements over previous bounds in the
+regimes described above. Most of the lower bounds are also new,
+although their constructions build in part on earlier examples
+in~\cite{CCK,FKLZ}. Together, these results establish sharpness,
+up to logarithmic factors, across a broad variety of moment regimes.}
 
 \subsection{Lean verification}\label{sec:lean-introduction}
-\begin{recovered}
-Lean 4 verification covers all 31 proved statements and the substantive
+\textcolor{magenta}{Lean 4 verification covers all 31 proved statements and the substantive
 printed-proof arguments of an archived version of this paper, with the
 derivative-envelope estimates restricted to the positive orders
 \(q\ge1\) stated in Appendix~\ref{appx-sec:smoothing}.
@@ -525,18 +626,20 @@ Conjecture~\ref{conj:sharp-unrestricted} is excluded. The
 identifies the exact manuscript and proof versions, the correspondence
 between the printed and formal arguments, the treatment of external
 inputs, and the successful independent checks. The verification does not
-cover the more recent expository changes.
-\end{recovered}
+cover the more recent expository changes.}
 
 \section*{Plan of the Paper}
 Section~\ref{sec:smoothing} outlines the smoothing and interpolation
 argument for Theorem~\ref{thm:unrestricted} and concludes with its proof.
-Section~\ref{sec:poly} outlines and combines the two estimates proving
-Theorem~\ref{thm:polynomial}.
+\textcolor{magenta}{Section~\ref{sec:poly} outlines the proofs of the two
+parts of Theorem~\ref{thm:polynomial} and compares their rates.}
 Section~\ref{opt:section} compares the upper bounds with examples that
 give lower bounds. Section~\ref{sec:discussion} asks whether the remaining
 logarithmic factor for bounded observations can be removed. The appendices
 give the proofs of the auxiliary estimates and the lower bounds.
+\textcolor{magenta}{Appendix~\ref{app:polynomial-proof} proves
+Theorem~\ref{thm:polynomial}, followed by the lower-bound proofs in
+Appendix~\ref{app:sharpness-proofs}.}
 
 \section{Outline of the Proof of Theorem~\ref*{thm:unrestricted}}\label{sec:smoothing}
 Throughout this section we use the bounded-summand setup~\eqref{eq:setup},
@@ -1043,14 +1146,17 @@ open whether the additional logarithm is necessary.
 
 \section{Outline of the Proof of Theorem~\ref*{thm:polynomial}}\label{sec:poly}
 
-We prove Theorem~\ref{thm:polynomial} by combining a truncation bound
-with a refinement of the polynomial-moment estimate in~\cite{CCKK2022}.
-Conditional truncation transfers Theorem~\ref{thm:unrestricted} to
-every envelope moment of order \(q>2\). A Bennett inequality gives a
-different bound that also uses the coordinate fourth moments.
-We state these estimates below, explain their dependence on the moment
-order, and then give the proof of Theorem~\ref{thm:polynomial} in
-Subsection~\ref{sec:proof-theorem-two}.
+\begin{recovered}
+We prove part~\textup{(i)} of Theorem~\ref{thm:polynomial} by
+conditional truncation and part~\textup{(ii)} by a refinement of the
+polynomial-moment estimate in~\cite{CCKK2022}. The first argument
+uses only the envelope condition~\eqref{poly:envelope}. The second
+also uses the coordinate fourth-moment condition~\eqref{poly:fourth}
+in a Bennett inequality. We outline the two arguments below and
+compare their rates. Appendix~\ref{app:polynomial-proof} gives
+both proofs, in Subsections~\ref{app:conditional}
+and~\ref{app:bennett}, respectively.
+\end{recovered}
 
 Throughout this section, \(W,Z,\Sigma\), and \(L\) have the meanings
 in~\eqref{poly:setup}. Let \(\mathcal E_q(B,p)\) be the class of
@@ -1069,7 +1175,7 @@ The moment order \(q>2\) is fixed. Constants indexed by \(q\)
 may depend on it, and the bounds are not asserted uniformly as
 \(q\) approaches \(2\) or infinity.
 
-\subsection{Transfer from bounded observations}\label{poly:transfer-sec}
+\subsection{\texorpdfstring{\textcolor{magenta}{Part (i): transfer from bounded observations}}{Part (i): transfer from bounded observations}}\label{poly:transfer-sec}
 
 Truncating all \textcolor{magenta}{summands} and paying the probability that any \textcolor{magenta}{summand} changes
 loses information about the size of the exceptional observations.
@@ -1078,31 +1184,32 @@ information, the remaining \textcolor{magenta}{summands} are independent and bou
 exceptional part can be treated as a random shift. The bounded-summand
 theorem and Gaussian anti-concentration then control the two parts.
 
-\begin{proposition}[Polynomial envelope transfer]\label{poly:transfer}
-For every fixed \(q>2\), there is a constant \(C_q\) such that, for
-every array in \(\mathcal E_q(B,p)\),
+\begin{recovered}
+In the notation above, the conclusion~\eqref{poly:main-envelope} of
+Theorem~\ref{thm:polynomial}\textup{(i)} becomes
 \begin{equation}
- \rh(W,Z)\le C_q\min\{1,V_q\{\log(en)\}^{\alpha_q}\}.
+ \rh(W,Z)\le C_q\min\{1,V_q\{\log(en)\}^{\alpha_q}\},
+ \qquad (X_i)_{i=1}^n\in\mathcal E_q(B,p).
  \label{poly:transfer-bound}
 \end{equation}
-Only the unit marginal variances and the envelope condition
-\eqref{poly:envelope} are required.
-\end{proposition}
+Appendix~\ref{app:conditional} proves this bound by choosing the
+truncation threshold to balance the approximation error for bounded
+observations against the variance discarded in the tails. The extra
+logarithm in~\eqref{poly:transfer-bound} comes from the
+bounded-observation theorem. If Conjecture~\ref{conj:sharp-unrestricted}
+holds, the same argument gives \(C_q\min\{1,V_q\}\) under the
+envelope condition alone.
+\end{recovered}
 
-Appendix~\ref{app:conditional} chooses the truncation threshold by
-balancing the approximation error for bounded observations against the
-variance discarded in the tails. The extra logarithm in
-\eqref{poly:transfer-bound} comes from the bounded-observation theorem.
-If Conjecture~\ref{conj:sharp-unrestricted} holds, the same argument
-gives \(C_q\min\{1,V_q\}\) under the envelope condition alone.
+\subsection{\texorpdfstring{\textcolor{magenta}{Part (ii): refinement under coordinate fourth moments}}{Part (ii): refinement under coordinate fourth moments}}\label{poly:bennett-sec}
 
-\subsection{A refinement under coordinate fourth moments}\label{poly:bennett-sec}
-
+\begin{recovered}
 Coordinate fourth moments can be substantially smaller than the fourth
-moment of the random envelope. The separate coordinate condition
-\eqref{poly:fourth}, which defines \(\mathcal C_q(B,p)\), improves
-the bound when the largest observations occur sparsely across coordinates.
-To express this improvement, define
+moment of the random envelope. Adding the coordinate condition
+\eqref{poly:fourth} restricts the class from \(\mathcal E_q(B,p)\)
+to \(\mathcal C_q(B,p)\) and permits a sharper treatment of large
+observations. To express this improvement, define
+\end{recovered}
 \begin{equation}
  U:=\frac{B^{1/2}L^{5/4}}{n^{1/4}},\qquad
  \mathcal K_q:=\left(\frac{V_q}{U}\right)^2
@@ -1121,18 +1228,15 @@ The quantity \(\mathcal K_q\) compares the two contributions.
 When it is large, Bennett's inequality reduces the envelope
 contribution by a power of \(\mathcal L_q\).
 
-\begin{proposition}[Bennett refinement]\label{poly:bennett}
-For every fixed \(q>2\), there is a constant \(C_q\) such that, for
-every array in \(\mathcal C_q(B,p)\),
+\begin{recovered}
+In this notation, the conclusion~\eqref{poly:main-fourth} of
+Theorem~\ref{thm:polynomial}\textup{(ii)} becomes
 \begin{equation}
  \rh(W,Z)\le C_q\min\left\{1,
- U+\frac{V_q}{\mathcal{L}_q^{1-1/q}}\right\}.
+ U+\frac{V_q}{\mathcal L_q^{1-1/q}}\right\},
+ \qquad (X_i)_{i=1}^n\in\mathcal C_q(B,p).
  \label{poly:bennett-bound}
 \end{equation}
-The observations need not be identically distributed or symmetric.
-\end{proposition}
-
-\begin{recovered}
 The proof compares logistic approximations along a Slepian path.
 Interchanging each summand with an independent copy gives a
 fourth-order remainder, and a Bennett inequality controls the large
@@ -1143,102 +1247,117 @@ self-contained proof of the comparison estimate and the refinement.
 Basu and Kuchibhotla use a related truncation
 argument for maxima of independent sums~\cite[Proposition~4.2]{BK2025}.
 
-Table~\ref{poly:summary} summarizes the two estimates and their
-sharpness. Their combination gives Theorem~\ref{thm:polynomial},
-as shown in Subsection~\ref{sec:proof-theorem-two}.
+\begin{recovered}
+The two appendix proofs give the respective parts of
+Theorem~\ref{thm:polynomial}. Taking the larger of their constants
+as \(C_q\) makes both bounds valid on \(\mathcal C_q(B,p)\),
+where we may therefore take their minimum. Table~\ref{poly:summary}
+summarizes the assumptions, proof routes, and lower-bound comparisons.
+\end{recovered}
 
 \begin{table}[htbp]
 \centering
+\color{magenta}
 \small
 \renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.20\textwidth}
- >{\raggedright\arraybackslash}p{0.28\textwidth}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.23\textwidth}
+ >{\raggedright\arraybackslash}p{0.27\textwidth}
  >{\raggedright\arraybackslash}X@{}}
 \toprule
-Result and upper rate & Proof route & Sharpness established\\
+Result, assumptions, and upper rate & Proof route & Lower bounds and remaining gap\\
 \midrule
-Proposition~\ref{poly:transfer}\newline
-Appendix~\ref{app:conditional}\newline
+Theorem~\ref{thm:polynomial}\textup{(i)}\newline
+Condition~\eqref{poly:envelope} alone\newline
 \(V_q\{\log(en)\}^{\alpha_q}\)
 & Conditional truncation, followed by the bounded-summand theorem and
-Gaussian anti-concentration.
-& For fixed \(B\ge2\) and \(q>4\), the lower rate is \(V_q\) in
-Theorem~\ref{lower:dense}. The remaining gap is
-\(\{\log(en)\}^{\alpha_q}\), and its necessity is unresolved.\\[0.6em]
-Proposition~\ref{poly:bennett}\newline
-Appendix~\ref{app:bennett}\newline
-\(U+V_q/\mathcal{L}_q^{1-1/q}\)
-& \textcolor{magenta}{Logistic smoothing, Slepian interpolation with
-paired increments, and a Bennett inequality using both moment budgets.}
-& Matching rates in the large-\(\mathcal K_q\) regime of
-Theorem~\ref{lower:sparse}, and for fixed \(B\ge2\) at \(q=4\)
-by Theorem~\ref{opt:q4-lower}. The term \(U\) remains when \(q>4\)
-and \(B\) is fixed.\\
+Gaussian anti-concentration.\newline Appendix~\ref{app:conditional}.
+& Theorem~\ref{lower:dense}\textup{(i)} gives a lower bound of order
+\(V_q\) for every fixed \(q>2\), with fixed or growing \(B\ge2\).
+The remaining factor is \(\{\log(en)\}^{\alpha_q}\), whose
+necessity is unresolved.\\[0.6em]
+Theorem~\ref{thm:polynomial}\textup{(ii)}\newline
+Conditions~\eqref{poly:envelope} and~\eqref{poly:fourth}\newline
+\(U+V_q/\mathcal L_q^{1-1/q}\)
+& Logistic smoothing, Slepian interpolation with paired increments, and
+a Bennett inequality using both moment conditions.\newline
+Appendix~\ref{app:bennett}.
+& Matching lower bounds for fixed \(B\ge2\) at \(q=4\)
+(Theorem~\ref{opt:q4-lower}) and for large \(\mathcal K_q\)
+(Theorem~\ref{lower:sparse}). At \(q=4\),
+Theorem~\ref{opt:q4-growing} also matches the dependence on growing \(B\).\\
 \bottomrule
 \end{tabularx}
-\caption{Upper bounds, proof methods, and scope of sharpness.
-Constants are suppressed and both upper bounds are capped at 1.
-The comparisons use the dimension and vanishing-rate conditions of
-the cited results in Section~\ref{opt:section}.}
+\caption{The two parts of Theorem~\ref{thm:polynomial}, their proofs,
+and their sharpness. Constants are suppressed and both upper bounds
+are capped at 1. The lower-bound comparisons use the dimension and
+vanishing-rate conditions of the cited results in Section~\ref{opt:section}.}
 \label{poly:summary}
 \end{table}
 
-\subsection{The transition at four moments}\label{poly:transition}
+\subsection{\texorpdfstring{\textcolor{magenta}{Comparison of the bounds under the two moment assumptions}}{Comparison of the bounds under the two moment assumptions}}\label{poly:transition}
 
-For fixed \(B\) and \(n/L\to\infty\), the three ranges of \(q\)
-have different interpretations. If \(2<q<4\), then \(\mathcal K_q\to\infty\)
+\begin{recovered}
+Under the envelope condition~\eqref{poly:envelope} alone,
+\eqref{poly:transfer-bound} applies for every fixed \(q>2\).
+Theorem~\ref{lower:dense}\textup{(i)} gives a lower bound of order
+\(V_q\) for this class with \(B\ge2\), including growing \(B\),
+along its dimension sequences with \(V_q\to0\). Thus the powers of \(B\), \(n\),
+and \(L\) are sharp, and the remaining gap is
+\(\{\log(en)\}^{\alpha_q}\).
+
+When the coordinate condition~\eqref{poly:fourth} also holds, both
+bounds are available. First fix \(B\ge2\) and suppose that
+\(n/L\to\infty\). If \(2<q<4\), then \(\mathcal K_q\to\infty\)
 and
 \[
- \frac{V_q/\mathcal{L}_q^{1-1/q}}{U}
-   =\frac{\sqrt{\mathcal K_q}}{\mathcal{L}_q^{1-1/q}}\longrightarrow\infty.
+ \frac{V_q/\mathcal L_q^{1-1/q}}{U}
+   =\frac{\sqrt{\mathcal K_q}}{\mathcal L_q^{1-1/q}}\longrightarrow\infty.
 \]
-The Bennett bound therefore has order \(V_q/\mathcal{L}_q^{1-1/q}\).
-The sparse construction in Theorem~\ref{lower:sparse} matches this
-order when \(\log \mathcal K_q=o(L)\) and the rate tends to zero.
+The bound~\eqref{poly:bennett-bound} therefore has order
+\(V_q/\mathcal L_q^{1-1/q}\), improving the logarithmic factors
+in~\eqref{poly:transfer-bound}. Theorem~\ref{lower:sparse} matches
+this rate from below when \(\log\mathcal K_q=o(L)\) and the rate
+tends to zero.
 
-At \(q=4\), \(\mathcal K_4=B\), and the first term is absorbed uniformly in
-\(B\ge1\), because \(\{\log(e+B)\}^{3/4}/\sqrt B\) is bounded.
-Thus Proposition~\ref{poly:bennett} gives
+At \(q=4\), \(\mathcal K_4=B\), and the first term in
+\eqref{poly:bennett-bound} is absorbed by the second uniformly in \(B\ge1\),
+because \(\{\log(e+B)\}^{3/4}/\sqrt B\) is bounded.
+Thus Theorem~\ref{thm:polynomial}\textup{(ii)} gives
 \begin{equation}
  \rh(W,Z)\le C\min\left\{1,
  \frac{Bn^{-1/4}L^{5/4}}{\{\log(e+B)\}^{3/4}}\right\}.
  \label{poly:q4}
 \end{equation}
-The fixed-envelope lower bound and the sparse growing-envelope lower
-bound in Section~\ref{opt:section} identify the order in their respective
-dimension regimes.
+For fixed \(B\ge2\), Theorem~\ref{opt:q4-lower} matches the rate
+\(n^{-1/4}L^{5/4}\) from below.
 
-If \(q>4\) and \(B\) is fixed, then \(\mathcal K_q\to0\). The CCKK and
-Bennett bounds retain the term \(U\), whereas Proposition
-\ref{poly:transfer} gives \(V_q\{\log(en)\}^{\alpha_q}\). In particular, for
-\(p\asymp n^a\), where \(a>0\) is fixed, the latter rate is
+If \(q>4\) and \(B\) is fixed, then \(\mathcal K_q\to0\).
+The bound~\eqref{poly:bennett-bound} retains the term \(U\), whereas
+\eqref{poly:transfer-bound} gives \(V_q\{\log(en)\}^{\alpha_q}\).
+In particular, for \(p\asymp n^a\), where \(a>0\) is fixed,
+the latter rate is
 \[
  O_{q,B,a}\!\left(n^{-\alpha_q}(\log n)^{1+2\alpha_q}\right).
 \]
-Since \(\alpha_q>1/4\), this improves the power of \(n\) in the CCKK
-bound. Theorem~\ref{lower:dense} supplies the lower rate \(V_q\), so
-the remaining gap is at most \(\{\log(en)\}^{\alpha_q}\). For example, at
-\(q=6\) the lower rate is \(Bn^{-1/3}L^{4/3}\), and the upper rate
-is this quantity times \(\{\log(en)\}^{1/3}\). We do not assert that this
-remaining logarithm is necessary.
+Since \(\alpha_q>1/4\), this improves the power of \(n\).
+Theorem~\ref{lower:dense}\textup{(ii)} supplies a lower bound of order
+\(V_q\) within \(\mathcal C_q(B,p)\), so the remaining gap is again
+\(\{\log(en)\}^{\alpha_q}\). For example, at \(q=6\) the lower
+rate is \(Bn^{-1/3}L^{4/3}\), and the upper rate is this quantity
+times \(\{\log(en)\}^{1/3}\).
 
-\subsection{Proof of Theorem~\ref*{thm:polynomial}}\label{sec:proof-theorem-two}
-
-\begin{proof}[Proof of Theorem~\ref{thm:polynomial}]
-Every array in \(\mathcal C_q(B,p)\) also belongs to
-\(\mathcal E_q(B,p)\), so both Propositions~\ref{poly:transfer}
-and~\ref{poly:bennett} apply.
-Choose \(C_q\) to be the larger of the two constants. Taking the
-smaller bound and then the supremum over \(\mathcal C_q(B,p)\) gives
-\[
- \sup_{\mathcal C_q(B,p)}\rh(W,Z)
- \le C_q\min\left\{1,\,
- U+\frac{V_q}{\mathcal L_q^{1-1/q}},\,
- V_q\{\log(en)\}^{\alpha_q}\right\}.
-\]
-Substituting~\eqref{poly:rates}
-and~\eqref{poly:bennett-parameters} gives~\eqref{poly:combined}.
-\end{proof}
+When \(B\) grows, \(\mathcal K_q\) can diverge even for \(q>4\).
+For every fixed \(q>2\), the same ratio calculation shows that
+\eqref{poly:bennett-bound} has order \(V_q/\mathcal L_q^{1-1/q}\)
+whenever \(\mathcal K_q\to\infty\). Theorem~\ref{lower:sparse}
+matches this rate from below if also \(\log\mathcal K_q=o(L)\)
+and the rate tends to zero. At \(q=4\), these conditions become
+\(B\to\infty\), \(\log B=o(L)\), and
+\(Bn^{-1/4}L^{5/4}/\{\log(e+B)\}^{3/4}\to0\).
+Theorem~\ref{opt:q4-growing} gives the corresponding lower bound,
+including the dependence on \(B\). All these lower-bound comparisons
+use the dimension sequences specified in the cited theorems.
+\end{recovered}
 
 \section{Sharpness of the bounds}\label{opt:section}
 
@@ -1264,10 +1383,16 @@ For bounded observations, the lower bound has order
 \(n^{-1/2}(\log p_n)^{3/2}\) even when each observation has a
 \emph{centrally symmetric} law, meaning that
 \(X_{n,i}\) and \(-X_{n,i}\) have the same distribution.
-All mixed third moments then vanish. Under fourth-moment envelopes,
-the lower bounds match the upper bounds in the dimension regimes
-specified below, including their dependence on a growing envelope.
-For fixed envelopes of order \(q>4\), a logarithmic gap remains.
+All mixed third moments then vanish.
+\textcolor{magenta}{Under the envelope condition~\eqref{poly:envelope}
+alone, the lower bounds match the powers of the envelope size, sample
+size, and logarithm of the dimension for every fixed \(q>2\) and
+\(B_n\ge2\), leaving a factor \(\{\log(en)\}^{1/2-1/q}\).
+With the additional coordinate condition~\eqref{poly:fourth}, the
+lower bounds match the upper bounds at \(q=4\) and in the
+large-\(\mathcal K_q\) regimes specified below. For fixed \(B\)
+and \(q>4\), the same logarithmic gap remains.
+Table~\ref{opt:tab:rates} separates these two moment classes.}
 
 Independent skewed coordinates give the first bounded example:
 small errors in their scalar tails accumulate in the distribution of
@@ -1280,6 +1405,7 @@ the moment conditions for each construction.
 
 \begin{table}[!htb]
 \centering
+\color{magenta}
 \caption{Lower-bound rates and upper-bound multipliers for the Kolmogorov
 distance over rectangles with unrestricted covariance. Multiplying the rate
 in the second column by the factor in the third gives an upper bound.}
@@ -1301,7 +1427,18 @@ Observation class and regime & Lower-bound rate & Upper-bound multiplier\\
 & \(\displaystyle\times C
    \sqrt{\log\!\left(e+\sqrt{n/\log p}\right)}\)\\
 \midrule
-\multicolumn{3}{@{}l@{}}{Polynomial moment envelopes satisfying~\eqref{poly:envelope} and~\eqref{poly:fourth}}\\[3pt]
+\multicolumn{3}{@{}l@{}}{Envelope condition~\eqref{poly:envelope} alone: upper bound from Theorem~\ref{thm:polynomial}\textup{(i)}}\\[3pt]
+\shortstack[l]{\(q>2\), \(B_n\ge2\) may vary\\Theorem~\ref{lower:dense}\textup{(i)}}
+& \(\displaystyle\frac{B_n(\log p)^{3/2-1/q}}{n^{1/2-1/q}}\)
+& \(\times C_q\{\log(en)\}^{1/2-1/q}\)\\
+\midrule
+\multicolumn{3}{@{}l@{}}{Conditions~\eqref{poly:envelope} and~\eqref{poly:fourth}: the smaller of the two bounds in Theorem~\ref{thm:polynomial}}\\[3pt]
+\shortstack[l]{\(2<q<4\), fixed \(B\ge2\)\\\(\log n=o(\log p)\)\\Theorem~\ref{lower:sparse}}
+& \(\displaystyle
+  \frac{(\log p)^{3/2-1/q}}
+       {n^{1/2-1/q}\{\log(e+n/\log p)\}^{1-1/q}}\)
+& \(\times C_{q,B}\)\\
+\addlinespace[5pt]
 \shortstack[l]{\(q=4\), fixed \(B\ge2\)\\Theorem~\ref{opt:q4-lower}}
 & \(\displaystyle\frac{(\log p)^{5/4}}{n^{1/4}}\)
 & \(\times C_B\)\\
@@ -1311,15 +1448,9 @@ Observation class and regime & Lower-bound rate & Upper-bound multiplier\\
   \frac{B_n(\log p)^{5/4}}{n^{1/4}\{\log(e+B_n)\}^{3/4}}\)
 & \(\times C\)\\
 \addlinespace[5pt]
-\shortstack[l]{\(q>4\), fixed \(B\ge2\)\\Theorem~\ref{lower:dense}}
-& \(\displaystyle\frac{(\log p)^{3/2-1/q}}{n^{1/2-1/q}}\)
-& \(\times C_{q,B}\{\log(en)\}^{1/2-1/q}\)\\
-\addlinespace[5pt]
-\shortstack[l]{\(2<q<4\), fixed \(B\ge2\)\\\(\log n=o(\log p)\)\\Theorem~\ref{lower:sparse}}
-& \(\displaystyle
-  \frac{(\log p)^{3/2-1/q}}
-       {n^{1/2-1/q}\{\log(e+n/\log p)\}^{1-1/q}}\)
-& \(\times C_{q,B}\)\\
+\shortstack[l]{\(q>4\), fixed \(B\ge2\)\\Theorem~\ref{lower:dense}\textup{(ii)}}
+& \(\displaystyle\frac{B(\log p)^{3/2-1/q}}{n^{1/2-1/q}}\)
+& \(\times C_q\{\log(en)\}^{1/2-1/q}\)\\
 \addlinespace[5pt]
 \shortstack[l]{\(q>2\), \(B_n\ge2\) may vary\\Growth conditions below\\Theorem~\ref{lower:sparse}}
 & \(\displaystyle
@@ -1335,13 +1466,13 @@ to zero. A positive constant times the second-column rate is attained
 by the cited construction. The upper bound holds uniformly over the
 corresponding observation class and can always be capped at \(1\).
 The observations are independent and centered, with unit average
-marginal variances. The coordinate bounds in the first column hold almost surely.
-In the polynomial rows, \(q\) is fixed, and the moment conditions use
-the displayed \(B\) or \(B_n\). For all rows after the first, the constructions use
-\(p_n=m_n^2\) with integers \(m_n\to\infty\) and are centrally symmetric.
-The upper-bound constants depend only on their subscripts, and the
-lower-bound constants may depend on \(q\) and on a fixed \(B\), but
-not on a growing \(B_n\). The growth conditions in the last row are
+marginal variances. The coordinate bounds in the first two entries hold
+almost surely. In the polynomial entries, \(q\) is fixed, and the moment
+conditions use the displayed \(B\) or \(B_n\). Except in the first entry,
+the constructions use \(p_n=m_n^2\) with integers \(m_n\to\infty\)
+and are centrally symmetric. The constants may depend on \(q\) or
+a fixed \(B\) as indicated, but not on a growing \(B_n\).
+The growth conditions in the last entry are
 \[
  B_n(n/\log p)^{2/q-1/2}\longrightarrow\infty,
  \qquad
@@ -1482,40 +1613,54 @@ agrees up to constants with the upper rate in~\eqref{poly:q4}.
 
 \subsection{Other polynomial-moment regimes}
 
-For fixed \(B\) and \(q>4\), the lower bound matches the powers of
-\(n\) and \(\log p\) in Proposition~\ref{poly:transfer}.
-Recall that \(\alpha_q=1/2-1/q\).
+\begin{recovered}
+We first consider the envelope condition~\eqref{poly:envelope} alone.
+The following construction matches the powers of \(B\), \(n\),
+and \(L\) in Theorem~\ref{thm:polynomial}\textup{(i)} for every
+fixed \(q>2\). When \(q>4\) and \(B\) is fixed, the same
+construction also satisfies the coordinate condition~\eqref{poly:fourth}.
+Recall the classes \(\mathcal E_q\) and \(\mathcal C_q\) from
+Section~\ref{sec:poly} and the exponent \(\alpha_q=1/2-1/q\).
 
-\begin{theorem}[Lower bound for fixed \(B\) and \(q>4\)]\label{lower:dense}
-Fix \(q>4\) and \(B\ge2\). Let \(m_n\to\infty\) be integers,
+\begin{theorem}[Polynomial-envelope lower bounds]\label{lower:dense}
+Fix \(q>2\). Let \(B_n\ge2\), let \(m_n\to\infty\) be integers,
 put \(p_n:=m_n^2\), and define
 \[
- V_{n,q}:=\frac{B L_n^{3/2-1/q}}{n^{1/2-1/q}}
-         =Bn^{-\alpha_q}L_n^{1+\alpha_q}.
+ V_{n,q}:=\frac{B_nL_n^{3/2-1/q}}{n^{1/2-1/q}}
+         =B_n n^{-\alpha_q}L_n^{1+\alpha_q}.
 \]
-Suppose that \(V_{n,q}\to0\).
-For all sufficiently large \(n\), there are i.i.d. centrally symmetric
-observations in \(\mathcal C_q(B,p_n)\) such that
+Suppose that \(V_{n,q}\to0\). There are constants \(c_q,C_q>0\),
+depending only on \(q\), for which the following statements hold.
+
+\noindent\textup{(i)} For all sufficiently large \(n\), there are
+i.i.d. centrally symmetric observations in
+\(\mathcal E_q(B_n,p_n)\) such that
 \begin{equation}
- \liminf_{n\to\infty}\frac{\rh(W_n,Z_n)}{V_{n,q}}>0.
+ \rh(W_n,Z_n)\ge c_q V_{n,q}.
  \label{lower:dense-rate}
 \end{equation}
-Consequently, along these dimension sequences,
+Consequently, along these dimension sequences and for all
+sufficiently large \(n\),
 \[
- c_{q,B}V_{n,q}
- \le\sup_{\mathcal C_q(B,p_n)}\rh(W_n,Z_n)
- \le C_qV_{n,q}\{\log(en)\}^{\alpha_q},
+ c_q V_{n,q}
+ \le\sup_{\mathcal E_q(B_n,p_n)}\rh(W_n,Z_n)
+ \le C_q V_{n,q}\{\log(en)\}^{\alpha_q}.
 \]
-where \(c_{q,B}>0\) depends only on \(q,B\), and \(C_q>0\)
-depends only on \(q\).
+\noindent\textup{(ii)} If \(q>4\) and \(B_n=B\ge2\) is fixed,
+the observations in part~\textup{(i)} can also be chosen to belong
+to \(\mathcal C_q(B,p_n)\). The same two-sided bound then holds
+with \(\mathcal E_q(B_n,p_n)\) replaced by \(\mathcal C_q(B,p_n)\).
 \end{theorem}
 
 The logarithmic factor \(\{\log(en)\}^{\alpha_q}\) is the remaining
-gap in this comparison.
-For other combinations of the envelope size and moment order, the
-sparse construction used in Theorem~\ref{opt:q4-growing} matches
-the Bennett refinement of Proposition~\ref{poly:bennett}. The assumptions
-below specify the dimension range in which this construction applies.
+gap under the envelope condition alone, and also under both conditions
+when \(q>4\) and \(B\) is fixed. For other combinations of the
+envelope size and moment order, the sparse construction used in
+Theorem~\ref{opt:q4-growing} matches the rate in
+Theorem~\ref{thm:polynomial}\textup{(ii)} from below.
+The assumptions below specify the dimension range in which this
+construction applies.
+\end{recovered}
 
 \begin{theorem}[Sparse polynomial-moment lower bound]\label{lower:sparse}
 Fix \(q>2\). Let \(B_n\ge2\), let \(m_n\to\infty\) be integers,
@@ -1538,7 +1683,7 @@ observations in \(\mathcal C_q(B_n,p_n)\) such that
  \label{lower:sparse-rate}
 \end{equation}
 where \(c_q>0\) depends only on \(q\).
-Together with Proposition~\ref{poly:bennett}, this gives
+Together with \textcolor{magenta}{Theorem~\ref{thm:polynomial}\textup{(ii)}}, this gives
 \(\sup_{\mathcal C_q(B_n,p_n)}\rh(W_n,Z_n)\asymp_q R_{n,q}\)
 under~\eqref{lower:sparse-regime}, including when the supremum is
 restricted to centrally symmetric observations.
@@ -1611,11 +1756,14 @@ Annual Review of Statistics and Its Application \textbf{10}, 427--449.
 Working version: arXiv:2205.09691.
 \url{https://arxiv.org/abs/2205.09691}.
 
-\bibitem{Local}
+\bibitem{CorrelationGap}
+\begin{recovered}
 V. Chernozhukov, D. Chetverikov, K. Kato, and Y. Koike,
 with AI collaborators (2026).
 \emph{High-dimensional Gaussian approximation over rectangles under
-local nondegeneracy}. Companion working manuscript, 21 October 2026.
+a pairwise correlation gap}. Companion working manuscript, V3,
+4 November 2026.
+\end{recovered}
 
 \bibitem{CCK}
 V. Chernozhukov, D. Chetverikov, and Y. Koike (2023).
@@ -3688,21 +3836,22 @@ independent copies. \begin{recovered}Applying
 Theorem~\ref{thm:unrestricted} to the transformed summands proves the
 bounded-summand conclusion.\end{recovered}
 
-For Theorem~\ref{thm:polynomial}, suppose that the observations belong
-to \(\mathcal C_q(B,p)\). The projected observations satisfy
-\[
- \max_{i\le n}\E\norm{MX_i}_\infty^q\le (JB)^q,
- \qquad
- \max_{\alpha\le m}\frac1n\sum_i\E(MX_i)_\alpha^4
- \le J^4B^2.
-\]
-The first inequality uses the envelope bound above, and the second
-follows by convexity from the coordinate fourth-moment condition.
-Since \(J\ge1\), these observations belong to
-\(\mathcal C_q(J^2B,m)\).
 \begin{recovered}
-Theorem~\ref{thm:polynomial} therefore proves the polynomial-moment
-conclusion.
+Under the envelope condition~\eqref{poly:envelope}, the projected
+observations satisfy
+\[
+ \max_{i\le n}\E\norm{MX_i}_\infty^q\le(JB)^q.
+\]
+Applying part~\textup{(i)} of Theorem~\ref{thm:polynomial} therefore
+gives~\eqref{poly:main-envelope} with \(p\) replaced by \(m\) and
+\(B\) by \(JB\). If~\eqref{poly:fourth} also holds, convexity gives
+\[
+ \max_{\alpha\le m}\frac1n\sum_i\E(MX_i)_\alpha^4\le J^4B^2.
+\]
+Since \(J\ge1\), both moment conditions hold with envelope parameter
+\(J^2B\). Part~\textup{(ii)} of Theorem~\ref{thm:polynomial}
+therefore gives~\eqref{poly:main-fourth} with \(p\) replaced by
+\(m\) and \(B\) by \(J^2B\).
 \end{recovered}
 
 For sub-exponential observations, the triangle inequality gives
@@ -3713,8 +3862,20 @@ the remaining conclusion.
 \end{recovered}
 \end{proof}
 
-\section{Proof of Proposition~\ref*{poly:transfer} (polynomial envelope transfer)}\label{app:conditional}
+\section{\texorpdfstring{\textcolor{magenta}{Proof of Theorem~\ref*{thm:polynomial} (polynomial moment envelopes)}}{Proof of Theorem 2 (polynomial moment envelopes)}}\label{app:polynomial-proof}
 
+\textcolor{magenta}{We prove part~\textup{(i)} under the envelope
+condition alone, then part~\textup{(ii)} under the additional
+coordinate fourth-moment condition. Throughout this appendix, we use
+the notation of Section~\ref{sec:poly}.}
+
+\subsection{\texorpdfstring{\textcolor{magenta}{Part (i): polynomial envelope transfer}}{Part (i): polynomial envelope transfer}}\label{app:conditional}
+
+\textcolor{magenta}{We work under the envelope
+condition~\eqref{poly:envelope}, with
+\((X_i)_{i=1}^n\in\mathcal E_q(B,p)\). The goal is to
+prove~\eqref{poly:transfer-bound}, which is~\eqref{poly:main-envelope}
+in this notation.}
 We first record the bounded theorem used in the transfer. By Theorem~\ref{thm:unrestricted}, independent
 centered vectors \(Y_i\) satisfying \(\norm{Y_i}_\infty\le M\)
 and \(n^{-1}\sum_i\E Y_{ij}^2\ge1/2\) obey
@@ -3872,11 +4033,424 @@ When \(n\ge L\log(en)\), take \(T:=2B\{n/(L\log(en))\}^{1/q}\).
 Then \(T\ge2B\), and the first two terms in~\eqref{poly:threshold}
 have order \(V_q\{\log(en)\}^{\alpha_q}\). If \(n<L\log(en)\), then
 \(V_q\{\log(en)\}^{\alpha_q}=BL(L\log(en)/n)^{\alpha_q}\ge1\), so \(\rh\le1\)
-suffices. This proves Proposition~\ref{poly:transfer}. If
+suffices. This proves Theorem~\ref{thm:polynomial}\textup{(i)}. If
 Conjecture~\ref{conj:sharp-unrestricted} holds, the first term of
 \eqref{poly:threshold} loses its factor \(\sqrt{\log(en)}\).
 Choosing \(T:=2B(n/L)^{1/q}\) when \(n\ge L\) then gives
 \(C_q\min\{1,V_q\}\). When \(n<L\), we have \(V_q\ge1\).
+
+\subsection{\texorpdfstring{\textcolor{magenta}{Part (ii): Bennett refinement}}{Part (ii): Bennett refinement}}\label{app:bennett}
+
+\begin{recovered}
+We prove~\eqref{poly:bennett-bound} under both moment
+conditions~\eqref{poly:envelope} and~\eqref{poly:fourth}.
+We first isolate the Gaussian comparison estimate that retains the
+variance and expected maximum of the large increments. A Bennett
+inequality will then control that maximum using both moment budgets.
+
+\begin{lemma}[Gaussian comparison with large-increment remainders]
+\label{ben:comparison}
+There is an absolute constant \(C>0\) with the following property.
+Let \(n,p\ge1\), and let \(X_1,\ldots,X_n\in\R^p\) be independent
+centered random vectors with finite coordinate fourth moments and
+\(n^{-1}\sum_i\E X_{ij}^2=1\) for every \(j\le p\). Put
+\[
+ W:=n^{-1/2}\sum_iX_i,\qquad \Sigma:=\Cov(W),\qquad
+ Z\sim N(0,\Sigma),\qquad L:=\log(ep).
+\]
+Let \(\widetilde X_i\) be mutually independent copies of \(X_i\),
+independent of the original array, and define
+\[
+ Y_i:=(\widetilde X_i-X_i)/\sqrt n,\qquad
+ \Delta_1:=\frac1{n^2}\max_j\sum_i\E X_{ij}^4.
+\]
+For \(t>0\), define
+\[
+ v_t:=\max_j\sum_i\E[Y_{ij}^2\ind\{\norm{Y_i}_\infty>t\}],
+ \qquad M_t:=\E\norm{\sum_iY_i\ind\{\norm{Y_i}_\infty>t\}}_\infty.
+\]
+Then, for every \(\phi>0\),
+\begin{equation}
+ \rh(W,Z)\le C\left\{
+ \frac{\sqrt L}{\phi}+\phi L^2\sqrt{\Delta_1}
+ +\phi^3L^{7/2}\Delta_1+\phi L^{3/2}v_t+\sqrt L M_t\right\},
+ \qquad t:=(\phi L)^{-1}.
+ \label{ben:master}
+\end{equation}
+The covariance may be singular, and the observations need not be
+identically distributed or symmetric.
+\end{lemma}
+\end{recovered}
+
+\begin{recovered}
+Lemma~\ref{ben:comparison} is a version of the matching-covariance
+case of Lemma~A.1 in the supplement to~\cite{CCKK2022}, with a
+self-contained proof using logistic smoothing and Slepian interpolation
+that retains the expected maximum \(M_t\) of the large increments
+for the Bennett refinement below. The proof uses the same symmetry
+under interchanging a summand and its independent copy as Appendix~H
+of that supplement. A trapezoidal Taylor identity expresses its
+consequence directly as a fourth-order remainder.
+
+Throughout this subsection, we use the logistic approximation in the
+original space \(\R^p\), with coordinate face normals
+\(u_j:=e_j\) and \(u_{p+j}:=-e_j\), for \(j\le p\).
+Thus \(m=2p\), \(\norm x_U=\norm x_\infty\), and
+\[
+ A_a:=\{x:u_\alpha\cdot x\le a_\alpha,\ \alpha\le2p\},\qquad
+ F_{a,h}(x):=\left(1+\sum_{\alpha=1}^{2p}
+          e^{(u_\alpha\cdot x-a_\alpha)/h}\right)^{-1}.
+\]
+These sets represent bounded closed rectangles and the empty set.
+Limits of thresholds cover unbounded rectangles. The mixture and
+derivative formulas in Appendix~\ref{appx-sec:smoothing} apply to
+these normals as well.
+
+The observations may be unbounded, so we first relate the rectangle
+distance to the smooth comparison using concentration only at the
+Gaussian endpoint.
+
+\begin{lemma}[Smoothing from the Gaussian endpoint]\label{ben:smoothing}
+Let \(V\in\R^p\) be any random vector, and let \(Z\in\R^p\)
+be centered Gaussian with \(\Var(Z_j)=1\) for every \(j\le p\).
+Then, for every \(h>0\),
+\begin{equation}\label{ben:gaussian-smoothing}
+ \rh(V,Z)\le C\left\{
+ \sup_{a\in\R^{2p}}|\E F_{a,h}(V)-\E F_{a,h}(Z)|
+       +hL^{3/2}\right\},\qquad L:=\log(ep),
+\end{equation}
+where \(C\) is absolute.
+\end{lemma}
+\begin{proof}
+Put \(H(a):=\Pp(V\in A_a)-\Pp(Z\in A_a)\),
+\(\rho:=\sup_a|H(a)|\), and let \(D\) denote the supremum of
+the smooth discrepancies. In the mixture representation
+\eqref{eq:mixture}, write
+\(\eta_\alpha:=h\log(\omega_\alpha/\omega_0)\) and
+\(R_h:=\norm\eta_\infty\). The estimate at the start of
+Appendix~\ref{appx-sec:smoothing} gives \(\E R_h\le ChL\).
+Choose \(d:=KhL\) with a universal \(K\) large enough that
+\(\Pp(R_h>d)\le1/4\).
+
+On \(\{R_h\le d\}\), every coordinate of
+\(d\mathbf1+\eta\) is nonnegative. Monotonicity in the thresholds
+and the Gaussian bound in Lemma~\ref{lem:concentration} give
+\[
+ H(a+d\mathbf1+\eta)
+ \ge H(a)-C(d+R_h)\sqrt L.
+\]
+On the complementary event, the left side is at least \(-\rho\).
+If \(\sup_aH(a)=\rho\), take \(a\) arbitrarily close to this
+supremum and average. The mixture representation gives
+\[
+ D\ge\tfrac12\rho-C(d+\E R_h)\sqrt L.
+\]
+If \(\sup_a(-H(a))=\rho\), use \(-H\) and
+\(a-d\mathbf1+\eta\) instead. Since \(\rho=\rh(V,Z)\),
+the result follows.
+\end{proof}
+
+We next compare the smooth expectations. Pairing a summand with its
+copy lets us average the Hessian at the two ends of a short segment.
+The trapezoidal identity then leaves a fourth derivative, without a
+zero-skewness assumption.
+
+\begin{lemma}[Slepian interpolation with paired increments]
+\label{ben:paired-interpolation}
+Under the assumptions and notation of Lemma~\ref{ben:comparison},
+take \(Z\) independent of the original array and its copies. For
+\(h>0\), put \(\mathcal X:=\sigma(X_1,\ldots,X_n)\), and define
+\[
+ \bar Y_i:=Y_i\ind\{\norm{Y_i}_\infty\le h\},\qquad
+ b_h:=\E\left[\sum_iY_i\ind\{\norm{Y_i}_\infty>h\}
+                    \mid\mathcal X\right],\qquad
+ T_h:=\frac12\sum_i\E[\bar Y_i\bar Y_i^\top\mid\mathcal X].
+\]
+Along the Slepian path
+\(W_s:=\sqrt s\,W+\sqrt{1-s}\,Z\), \(0\le s\le1\),
+every \(C^4\) function \(f:\R^p\to\R\) with bounded derivatives
+of orders \(1\) through \(4\) satisfies, for \(0<s<1\),
+\begin{align}
+ \frac d{ds}\E f(W_s)
+ ={}&\frac12\E[(T_h-\Sigma):D^2f(W_s)]
+       -\frac1{2\sqrt s}\E[b_h\cdot\nabla f(W_s)]\notag\\
+ &-\frac{s}{8}\sum_i\E\int_0^1 r(1-r)
+ D^4f(W_s+r\sqrt s\,\bar Y_i)
+          [\bar Y_i,\bar Y_i,\bar Y_i,\bar Y_i]\,dr.
+ \label{ben:slepian-identity}
+\end{align}
+Here \(A:B:=\sum_{j,k}A_{jk}B_{jk}\) for matrices \(A,B\).
+\end{lemma}
+\begin{proof}
+Differentiating along the path and applying Gaussian integration by
+parts gives
+\begin{equation}\label{ben:slepian-initial}
+ \frac d{ds}\E f(W_s)
+ =\frac1{2\sqrt s}\E[W\cdot\nabla f(W_s)]
+       -\frac12\E[\Sigma:D^2f(W_s)].
+\end{equation}
+This remains valid for singular \(\Sigma\): write \(Z=AG\) with
+\(G\) standard Gaussian and apply integration by parts to its
+independent coordinates.
+
+Interchanging \(X_i\) and \(\widetilde X_i\) preserves their joint
+law, changes \(Y_i\) to \(-Y_i\), and changes \(W_s\) to
+\(W_s+\sqrt s\,Y_i\). The truncation event is unchanged, so
+\[
+ \E[\bar Y_i\cdot\nabla f(W_s)]
+ =-\E[\bar Y_i\cdot\nabla f(W_s+\sqrt s\,\bar Y_i)].
+\]
+Off the truncation event, both sides have zero multiplier. Since
+\(\E[\sum_iY_i\mid\mathcal X]=-W\), we obtain
+\begin{align*}
+ \E[W\cdot\nabla f(W_s)]
+ ={}&\frac12\sum_i\E\big[\bar Y_i\cdot
+       \{\nabla f(W_s+\sqrt s\,\bar Y_i)-\nabla f(W_s)\}\big]\\
+ &-\E[b_h\cdot\nabla f(W_s)].
+\end{align*}
+For a twice continuously differentiable scalar function \(g\),
+two integrations by parts give
+\[
+ \int_0^1g(r)\,dr
+ =\frac{g(0)+g(1)}2-\frac12\int_0^1r(1-r)g''(r)\,dr.
+\]
+Apply this identity to
+\(g(r):=D^2f(W_s+r\sqrt s\,\bar Y_i)[\bar Y_i,\bar Y_i]\).
+The copy interchange also gives \(\E g(1)=\E g(0)\).
+The fundamental theorem of calculus therefore yields
+\begin{align*}
+ &\E\big[\bar Y_i\cdot
+   \{\nabla f(W_s+\sqrt s\,\bar Y_i)-\nabla f(W_s)\}\big]\\
+ &\quad=\sqrt s\,\E D^2f(W_s)[\bar Y_i,\bar Y_i]
+ -\frac{s^{3/2}}2\E\int_0^1r(1-r)
+       D^4f(W_s+r\sqrt s\,\bar Y_i)[\bar Y_i^{\otimes4}]\,dr.
+\end{align*}
+Substitute into \eqref{ben:slepian-initial} and condition the
+second-order coefficient on \(\mathcal X\). This proves
+\eqref{ben:slepian-identity}.
+\end{proof}
+
+\begin{proof}[Proof of Lemma~\ref{ben:comparison}]
+Fix \(\phi>0\), set \(h:=t=(\phi L)^{-1}\), and use the
+notation of Lemma~\ref{ben:paired-interpolation}. The vectors
+\(Y_i\) are independent and centrally symmetric, although they
+need not be independent of \(W\).
+
+We first bound the random coefficients in
+\eqref{ben:slepian-identity}. Conditional Jensen gives
+\(\E\norm{b_h}_\infty\le M_h\). Also,
+\(\frac12\sum_i\E Y_iY_i^\top=\Sigma\), so Cauchy--Schwarz
+gives \(\norm{\E T_h-\Sigma}_{\max}\le v_h/2\).
+The fourth moments satisfy
+\[
+ \max_j\sum_i\E Y_{ij}^4\le16\Delta_1,\qquad
+ |\bar Y_{ij}\bar Y_{ik}|\le h^2,\qquad
+ \max_{j,k}\sum_i\E\bar Y_{ij}^2\bar Y_{ik}^2\le16\Delta_1.
+\]
+To bound the fluctuation of \(T_h\), conditional Jensen reduces it
+to the maximum of the centered sums
+\(\sum_i\{\bar Y_{ij}\bar Y_{ik}-\E\bar Y_{ij}\bar Y_{ik}\}\).
+For independent centered scalars \(U_i\) with \(|U_i|\le b\)
+and \(\sum_i\E U_i^2\le v\), expansion of the exponential gives
+\[
+ \E e^{\lambda\sum_iU_i}
+ \le\exp\!\left\{\frac{\lambda^2v}{2(1-|\lambda|b/3)}\right\},
+ \qquad |\lambda|b<3.
+\]
+Sum this bound over both signs and the \(p^2\) entries, then
+optimize \(\lambda\). The expected maximum is at most
+\(C(\sqrt{vL}+bL)\). Taking \(b=2h^2\) and
+\(v\le16\Delta_1\) proves
+\begin{equation}\label{ben:conditional-matrix}
+ \E\norm{T_h-\Sigma}_{\max}
+ \le C\{\sqrt{L\Delta_1}+h^2L+v_h\}.
+\end{equation}
+
+The fourth-order coefficient is controlled by
+\(Q_h:=\max_j\sum_i\bar Y_{ij}^4\). For \(0\le U\le b\),
+convexity gives \(\E e^{U/b}\le1+(e-1)\E U/b\).
+Apply this to \(U=\bar Y_{ij}^4\) and \(b=h^4\), use
+independence over \(i\), and sum the bounds over \(j\).
+Jensen's inequality then gives
+\begin{equation}\label{ben:fourth-maximum}
+ \E Q_h\le h^4\log p+(e-1)\max_j\sum_i\E\bar Y_{ij}^4
+       \le C(\Delta_1+h^4L).
+\end{equation}
+
+We next control the derivatives at the random points in
+\eqref{ben:slepian-identity}. Fix a threshold vector \(a\), and
+write \(F:=F_{a,h}\) and \(\Psi:=F(1-F)\).
+The positive weight formula \eqref{appx-eq:partition-derivative},
+with face normals \(\pm e_j\), gives
+\[
+ \sum_j|\partial_jF(x)|\le h^{-1}\Psi(x),\qquad
+ \sum_{j,k}|\partial_{jk}F(x)|\le Ch^{-2}\Psi(x).
+\]
+For vectors \(y_i\) and shifts \(z_i\) with
+\(\norm{z_i}_\infty\le h\), it also gives
+\begin{equation}\label{ben:fourth-contraction}
+ \sum_i|D^4F(x+z_i)[y_i,y_i,y_i,y_i]|
+ \le Ch^{-4}\Psi(x)\max_j\sum_i|y_{ij}|^4.
+\end{equation}
+Indeed, each positive weight product at \(x+z_i\) is bounded by
+a universal multiple of its value at \(x\), as in
+\eqref{appx-eq:local-envelope}. For every four coordinate indices,
+H\"older's inequality bounds the sum over \(i\) of their absolute
+coordinate products by \(\max_j\sum_i|y_{ij}|^4\). Summing the
+positive weights proves \eqref{ben:fourth-contraction}.
+
+Gaussian anti-concentration supplies the small expectation of
+\(\Psi\). For deterministic \(x\) and \(0<s<1\),
+\begin{equation}\label{ben:gaussian-envelope}
+ \E_Z\Psi(x+\sqrt{1-s}\,Z)
+ \le C\frac{h\sqrt L}{\sqrt{1-s}}.
+\end{equation}
+To verify this, write \(F_r:=F_{a+r\mathbf1,h}\).
+As in the proof of Lemma~\ref{appx-lem:envelope},
+\(\partial_rF_r=F_r(1-F_r)/h\) and
+\(\Psi\le(e/2)(F_h-F_{-h})\).
+The mixture representation \eqref{eq:mixture} writes the difference
+as an average of layer indicators. Apply the Gaussian part of
+Lemma~\ref{lem:concentration} with face variance \(1-s\).
+
+Apply Lemma~\ref{ben:paired-interpolation} to \(F\), condition on
+the original observations in the first two terms, and condition on
+both arrays in the remainder. The preceding derivative bounds imply
+\begin{align*}
+ \left|\frac d{ds}\E F(W_s)\right|
+ \le{}&C\frac{\sqrt L}{h\sqrt{1-s}}
+                \E\norm{T_h-\Sigma}_{\max}
+       +C\frac{\sqrt L}{\sqrt{s(1-s)}}M_h\\
+ &+C\frac{s\sqrt L}{h^3\sqrt{1-s}}\E Q_h.
+\end{align*}
+In the last term, \eqref{ben:fourth-contraction} brings every
+derivative to the common point \(W_s\) before averaging over \(Z\).
+This retains the maximum of the coordinate fourth-moment sums.
+The time factors are integrable:
+\[
+ \int_0^1\frac{ds}{\sqrt{1-s}}=2,\qquad
+ \int_0^1\frac{ds}{\sqrt{s(1-s)}}=\pi,\qquad
+ \int_0^1\frac{s\,ds}{\sqrt{1-s}}=\frac43.
+\]
+Integrate first over \([\varepsilon,1-\varepsilon]\), then pass
+to the endpoints by dominated convergence. Uniformly in \(a\),
+\[
+ |\E F_{a,h}(W)-\E F_{a,h}(Z)|
+ \le C\sqrt L\left\{
+ h^{-1}\E\norm{T_h-\Sigma}_{\max}+M_h+h^{-3}\E Q_h\right\}.
+\]
+Use \eqref{ben:conditional-matrix} and \eqref{ben:fourth-maximum},
+then apply Lemma~\ref{ben:smoothing}. The result is
+\[
+ \rh(W,Z)\le C\left\{
+ hL^{3/2}+\frac{L\sqrt{\Delta_1}}h
+ +\frac{\sqrt L\,\Delta_1}{h^3}
+ +\frac{\sqrt L\,v_h}h+\sqrt L\,M_h\right\}.
+\]
+Substituting \(h=t=(\phi L)^{-1}\) gives \eqref{ben:master}.
+\end{proof}
+\end{recovered}
+
+
+The following elementary Bennett calculation controls the remaining
+large-increment term.
+
+\begin{lemma}[A truncated Bennett maximum]\label{ben:maximum}
+Suppose independent centrally symmetric vectors \(T_i\in\R^p\)
+satisfy \(\max_j\sum_i\E T_{ij}^2\le v\) and
+\(\sum_i\E\norm{T_i}_\infty^q\le A^q\), with \(q>1\).
+For every \(u>0\) and \(v>0\),
+\begin{equation}
+ \E\norm{\sum_iT_i}_\infty
+ \le C\frac{uL}{\log(1+u^2L/v)}+\frac{A^q}{u^{q-1}}.
+ \label{ben:maximum-bound}
+\end{equation}
+If \(v=0\), the sum is zero almost surely.
+\end{lemma}
+\begin{proof}
+The truncated vectors \(T_i^{(u)}:=T_i\ind\{\norm{T_i}_\infty\le u\}\)
+are centered by symmetry. Bennett's exponential bound yields
+\[
+ \log\E\exp\left(\pm\lambda\sum_iT_{ij}^{(u)}\right)
+ \le\frac v{u^2}(e^{\lambda u}-1-\lambda u),\qquad\lambda>0.
+\]
+Applying log-sum-exp to the \(2p\) signed coordinates and choosing
+\(\lambda:=u^{-1}\log(1+u^2\log(2p)/v)\) gives the first term in
+\eqref{ben:maximum-bound}, since \(\log(2p)\asymp L\).
+The expected norm of the omitted sum is at most
+\(\sum_i\E[\norm{T_i}_\infty\ind\{\norm{T_i}_\infty>u\}]
+\le A^qu^{1-q}\).
+\end{proof}
+
+\begin{recovered}
+We now apply Lemma~\ref{ben:comparison} under the assumptions of
+Theorem~\ref{thm:polynomial}\textup{(ii)}, using the lemma's notation for the symmetrized
+increments and their tail quantities. Put
+\(A:=Bn^{-1/2+1/q}\) and \(d:=B/\sqrt n\). The moment conditions give
+\end{recovered}
+\[
+ \Delta_1\lesssim d^2,\qquad
+ \max_j\sum_i\E Y_{ij}^4\lesssim d^2,\qquad
+ \sum_i\E\norm{Y_i}_\infty^q\lesssim_q A^q.
+\]
+Cauchy--Schwarz within each expectation and then \textcolor{magenta}{in the sum over \(i\)} gives
+\begin{equation}
+ v_t\le
+ \max_j\left(\sum_i\E Y_{ij}^4\right)^{1/2}
+       \left(\sum_i\Pp(\norm{Y_i}_\infty>t)\right)^{1/2}
+ \lesssim_q d(A/t)^{q/2}.
+ \label{ben:mixed}
+\end{equation}
+This is where the coordinate fourth-moment budget is used. Lemma
+\ref{ben:maximum} and the direct triangle inequality imply, respectively,
+\begin{equation}
+ M_t\lesssim_q\frac{uL}{\log(1+u^2L/v_t)}+\frac{A^q}{u^{q-1}},
+ \qquad M_t\lesssim_q A^qt^{1-q}.
+ \label{ben:tail}
+\end{equation}
+
+We finish the proof of Theorem~\ref{thm:polynomial}\textup{(ii)} by choosing the
+smoothing bandwidth \(\phi^{-1}\). The identities
+\[
+ U^2=dL^{5/2},\qquad V_q=AL^{3/2-1/q},\qquad
+ \mathcal K_q=(V_q/U)^2
+\]
+make the two cases transparent. If \(\mathcal K_q\le1\), take
+\(\phi^{-1}:=U/\sqrt L\), so that \(t=U/L^{3/2}\).
+The first three terms of \eqref{ben:master} are bounded by \(CU\).
+The remaining terms, by \eqref{ben:mixed} and the direct bound in
+\eqref{ben:tail}, are at most
+\[
+ C_qU \mathcal K_q^{q/4},\qquad C_qU \mathcal K_q^{q/2},
+\]
+and hence are also bounded by \(C_qU\).
+
+If \(\mathcal K_q>1\), put \(b:=1-1/q\) and set
+\[
+ r:=V_q \mathcal{L}_q^{-b},\qquad \phi^{-1}:=r/\sqrt L,\qquad
+ t:=AL^{-1/q}\mathcal{L}_q^{-b},\qquad u:=A(\mathcal{L}_q/L)^{1/q}=\mathcal{L}_q t.
+\]
+Equation~\eqref{ben:mixed} gives
+\(v_t\lesssim_q dL^{1/2}\mathcal{L}_q^{(q-1)/2}\), and therefore
+\[
+ \frac{u^2L}{v_t}\gtrsim_q
+ \mathcal K_q \mathcal{L}_q^{2/q-(q-1)/2}.
+\]
+For every fixed real \(c\) and fixed \(c_0>0\),
+\(\log(1+c_0K\{\log(e+K)\}^c)\gtrsim_{c,c_0}\log(e+K)\)
+on \(K\ge1\). This follows by continuity on compact intervals and
+by dividing both sides by \(\log K\) at infinity. Thus
+\eqref{ben:tail} gives \(\sqrt L M_t\lesssim_q r\).
+The other four terms of \eqref{ben:master} are bounded, in order, by
+\[
+ r,\qquad C r\frac{\mathcal{L}_q^{2b}}{\mathcal K_q},\qquad
+ C r\frac{\mathcal{L}_q^{4b}}{\mathcal K_q^2},\qquad
+ C_q r\frac{\mathcal{L}_q^{2b+(q-1)/2}}{\mathcal K_q}.
+\]
+Each ratio is bounded on \(\mathcal K_q\ge1\), with a constant depending only
+on \(q\). \begin{recovered}Combining the cases and using \(\rh\le1\)
+proves Theorem~\ref{thm:polynomial}\textup{(ii)}.\end{recovered}
+
 
 \section{Proofs of the lower bounds in Section~\ref*{opt:section}}\label{app:sharpness-proofs}
 
@@ -4422,8 +4996,9 @@ coordinate moment bounds. The dimension changes from \(m^2\) to
 Take the dimension sequence \(m=m_n\) from the theorem being
 proved, and set \(p=m^2\) and \(\ell=\log m\) as in
 Appendix~\ref{app:lower-family}. We take \(J_{iu}=1\) almost surely
-and vary the amplitude \(a\) of the activated component. In the case
-of Theorem~\ref{lower:dense}, \(B\ge2\) and \(q>4\) are fixed.
+and vary the amplitude \(a\) of the activated component.
+For Theorem~\ref{lower:dense}, fix \(q>2\) and write
+\(B:=B_n\), allowing the envelope to vary with \(n\).
 Choose
 \[
  \pi:=1,\qquad \theta:=\frac{\ell}{2n},\qquad
@@ -4438,12 +5013,20 @@ the scale in~\eqref{lower:eq:proof-scale} is
 \[
  d_n=\frac{a\ell^{3/2}}{2\sqrt n}.
 \]
-For the three choices of \(a\), this is asymptotic to a constant multiple of the
+For each choice of \(a\), the scale \(d_n\) is asymptotic to a constant multiple of the
 rate in the corresponding theorem, and hence \(d_n\to0\).
-Those assumptions also give \(\ell/n\to0\), so \(a\ge1\)
-eventually. Consequently, \(\ell^3/n\to0\) and
-\(v=\theta a^2=2d_n^2/\ell^2\to0\).
-Thus the probabilities and variances in the construction are valid
+\begin{recovered}
+For Theorem~\ref{lower:dense}, the condition \(V_{n,q}\to0\),
+with \(B_n\ge2\) and \(\alpha_q>0\), implies \(\ell/n\to0\),
+because \(V_{n,q}\asymp_q B_n\ell(\ell/n)^{\alpha_q}\).
+The other two rate conditions also give \(\ell/n\to0\).
+Thus \(a\ge1\) eventually in all three cases, and
+\[
+ \frac{\ell^3}{n}\le4d_n^2\to0,\qquad
+ v=\theta a^2=\frac{2d_n^2}{\ell^2}\to0.
+\]
+\end{recovered}
+The probabilities and variances in the construction are therefore valid
 for large \(n\), and~\eqref{sym:eq:rademacher-max} applies.
 
 \begin{recovered}
@@ -4460,13 +5043,23 @@ For \(a=\theta^{-1/4}\), we have \(v=\sqrt\theta\), and
  \label{sym:eq:q4-moments}
 \end{align}
 Thus these observations belong to \(\mathcal C_4(2,m^2)\).
-For \(a=(B/2)\theta^{-1/q}\), the envelope has \(q\)th-moment
-norm at most \(1+B/2\le B\), and the coordinate fourth moment is
+\begin{recovered}
+For \(a=(B/2)\theta^{-1/q}\), the envelope bound gives
+\[
+ (\E\norm{X_i}_\infty^q)^{1/q}\le s+a\theta^{1/q}
+ \le1+B/2\le B.
+\]
+Thus the observations belong to \(\mathcal E_q(B,m^2)\) for every
+fixed \(q>2\), including when \(B=B_n\) grows.
+Their coordinate fourth moment is
 \[
  1+4v-5v^2+(B^4/16)\theta^{1-4/q}.
 \]
-It tends to \(1\) for fixed \(B\) and \(q>4\), so the observations
-belong to \(\mathcal C_q(B,m^2)\) eventually.
+If \(q>4\) and \(B\) is fixed, this tends to \(1\), so the
+observations also belong to \(\mathcal C_q(B,m^2)\) eventually.
+This verifies the additional moment condition in
+Theorem~\ref{lower:dense}\textup{(ii)}.
+\end{recovered}
 
 \textcolor{magenta}{The count \(N=\sum_iI_i\) of summands with \(I_i=1\) has mean \(\ell/2\) and variance at most \(\ell/2\).}
 \begin{recovered}
@@ -4525,16 +5118,21 @@ Equation~\eqref{sym:eq:common-discrepancy} gives
 Together with~\eqref{poly:q4}, this proves
 \eqref{lower:q4-fixed}.
 
-For fixed \(B\) and \(q>4\), recall
-\(\alpha_q=1/2-1/q\) and
-\(V_{n,q}=Bn^{-\alpha_q}L_n^{1+\alpha_q}\).
-The choice \(a=(B/2)\theta^{-1/q}\) gives
+\begin{recovered}
+For every fixed \(q>2\), with \(B=B_n\), the choice
+\(a=(B/2)\theta^{-1/q}\) gives
 \[
- d_n=2^{1/q-2}Bn^{-\alpha_q}\ell^{1+\alpha_q}
-       \asymp_q V_{n,q}.
+ d_n=2^{1/q-2}B_n n^{-\alpha_q}\ell^{1+\alpha_q}
+     =\{2^{2/q-7/2}+o(1)\}V_{n,q},
 \]
-Equation~\eqref{sym:eq:common-discrepancy} and the upper bound in
-Proposition~\ref{poly:transfer} prove Theorem~\ref{lower:dense}.
+since \(L_n=1+2\ell\). The asymptotic coefficient does not depend on
+the envelope sequence. Equation~\eqref{sym:eq:common-discrepancy}
+therefore gives~\eqref{lower:dense-rate} with a positive constant
+depending only on \(q\). The upper bound in
+Theorem~\ref{thm:polynomial}\textup{(i)} gives the two-sided comparison
+in Theorem~\ref{lower:dense}\textup{(i)}. The additional moment
+verification above proves part~\textup{(ii)}.
+\end{recovered}
 
 All three covariance matrices have rank \(2m-1\), as shown in
 Appendix~\ref{app:lower-family}. Their correlation gaps are,
@@ -4719,414 +5317,5 @@ At \(q=4\), this is
 \(\frac14\sqrt{\ell/(4n\Lambda)}\), as in the growing-envelope
 fourth-moment construction.
 
-\section{Proof of Proposition~\ref*{poly:bennett} (Bennett refinement)}\label{app:bennett}
-
-\begin{recovered}
-We first isolate the Gaussian comparison estimate that retains the
-variance and expected maximum of the large increments. A Bennett
-inequality will then control that maximum using both moment budgets.
-
-\begin{lemma}[Gaussian comparison with large-increment remainders]
-\label{ben:comparison}
-There is an absolute constant \(C>0\) with the following property.
-Let \(n,p\ge1\), and let \(X_1,\ldots,X_n\in\R^p\) be independent
-centered random vectors with finite coordinate fourth moments and
-\(n^{-1}\sum_i\E X_{ij}^2=1\) for every \(j\le p\). Put
-\[
- W:=n^{-1/2}\sum_iX_i,\qquad \Sigma:=\Cov(W),\qquad
- Z\sim N(0,\Sigma),\qquad L:=\log(ep).
-\]
-Let \(\widetilde X_i\) be mutually independent copies of \(X_i\),
-independent of the original array, and define
-\[
- Y_i:=(\widetilde X_i-X_i)/\sqrt n,\qquad
- \Delta_1:=\frac1{n^2}\max_j\sum_i\E X_{ij}^4.
-\]
-For \(t>0\), define
-\[
- v_t:=\max_j\sum_i\E[Y_{ij}^2\ind\{\norm{Y_i}_\infty>t\}],
- \qquad M_t:=\E\norm{\sum_iY_i\ind\{\norm{Y_i}_\infty>t\}}_\infty.
-\]
-Then, for every \(\phi>0\),
-\begin{equation}
- \rh(W,Z)\le C\left\{
- \frac{\sqrt L}{\phi}+\phi L^2\sqrt{\Delta_1}
- +\phi^3L^{7/2}\Delta_1+\phi L^{3/2}v_t+\sqrt L M_t\right\},
- \qquad t:=(\phi L)^{-1}.
- \label{ben:master}
-\end{equation}
-The covariance may be singular, and the observations need not be
-identically distributed or symmetric.
-\end{lemma}
-\end{recovered}
-
-\begin{recovered}
-Lemma~\ref{ben:comparison} is a version of the matching-covariance
-case of Lemma~A.1 in the supplement to~\cite{CCKK2022}, with a
-self-contained proof using logistic smoothing and Slepian interpolation
-that retains the expected maximum \(M_t\) of the large increments
-for the Bennett refinement below. The proof uses the same symmetry
-under interchanging a summand and its independent copy as Appendix~H
-of that supplement. A trapezoidal Taylor identity expresses its
-consequence directly as a fourth-order remainder.
-
-Throughout this appendix, we use the logistic approximation in the
-original space \(\R^p\), with coordinate face normals
-\(u_j:=e_j\) and \(u_{p+j}:=-e_j\), for \(j\le p\).
-Thus \(m=2p\), \(\norm x_U=\norm x_\infty\), and
-\[
- A_a:=\{x:u_\alpha\cdot x\le a_\alpha,\ \alpha\le2p\},\qquad
- F_{a,h}(x):=\left(1+\sum_{\alpha=1}^{2p}
-          e^{(u_\alpha\cdot x-a_\alpha)/h}\right)^{-1}.
-\]
-These sets represent bounded closed rectangles and the empty set.
-Limits of thresholds cover unbounded rectangles. The mixture and
-derivative formulas in Appendix~\ref{appx-sec:smoothing} apply to
-these normals as well.
-
-The observations may be unbounded, so we first relate the rectangle
-distance to the smooth comparison using concentration only at the
-Gaussian endpoint.
-
-\begin{lemma}[Smoothing from the Gaussian endpoint]\label{ben:smoothing}
-Let \(V\in\R^p\) be any random vector, and let \(Z\in\R^p\)
-be centered Gaussian with \(\Var(Z_j)=1\) for every \(j\le p\).
-Then, for every \(h>0\),
-\begin{equation}\label{ben:gaussian-smoothing}
- \rh(V,Z)\le C\left\{
- \sup_{a\in\R^{2p}}|\E F_{a,h}(V)-\E F_{a,h}(Z)|
-       +hL^{3/2}\right\},\qquad L:=\log(ep),
-\end{equation}
-where \(C\) is absolute.
-\end{lemma}
-\begin{proof}
-Put \(H(a):=\Pp(V\in A_a)-\Pp(Z\in A_a)\),
-\(\rho:=\sup_a|H(a)|\), and let \(D\) denote the supremum of
-the smooth discrepancies. In the mixture representation
-\eqref{eq:mixture}, write
-\(\eta_\alpha:=h\log(\omega_\alpha/\omega_0)\) and
-\(R_h:=\norm\eta_\infty\). The estimate at the start of
-Appendix~\ref{appx-sec:smoothing} gives \(\E R_h\le ChL\).
-Choose \(d:=KhL\) with a universal \(K\) large enough that
-\(\Pp(R_h>d)\le1/4\).
-
-On \(\{R_h\le d\}\), every coordinate of
-\(d\mathbf1+\eta\) is nonnegative. Monotonicity in the thresholds
-and the Gaussian bound in Lemma~\ref{lem:concentration} give
-\[
- H(a+d\mathbf1+\eta)
- \ge H(a)-C(d+R_h)\sqrt L.
-\]
-On the complementary event, the left side is at least \(-\rho\).
-If \(\sup_aH(a)=\rho\), take \(a\) arbitrarily close to this
-supremum and average. The mixture representation gives
-\[
- D\ge\tfrac12\rho-C(d+\E R_h)\sqrt L.
-\]
-If \(\sup_a(-H(a))=\rho\), use \(-H\) and
-\(a-d\mathbf1+\eta\) instead. Since \(\rho=\rh(V,Z)\),
-the result follows.
-\end{proof}
-
-We next compare the smooth expectations. Pairing a summand with its
-copy lets us average the Hessian at the two ends of a short segment.
-The trapezoidal identity then leaves a fourth derivative, without a
-zero-skewness assumption.
-
-\begin{lemma}[Slepian interpolation with paired increments]
-\label{ben:paired-interpolation}
-Under the assumptions and notation of Lemma~\ref{ben:comparison},
-take \(Z\) independent of the original array and its copies. For
-\(h>0\), put \(\mathcal X:=\sigma(X_1,\ldots,X_n)\), and define
-\[
- \bar Y_i:=Y_i\ind\{\norm{Y_i}_\infty\le h\},\qquad
- b_h:=\E\left[\sum_iY_i\ind\{\norm{Y_i}_\infty>h\}
-                    \mid\mathcal X\right],\qquad
- T_h:=\frac12\sum_i\E[\bar Y_i\bar Y_i^\top\mid\mathcal X].
-\]
-Along the Slepian path
-\(W_s:=\sqrt s\,W+\sqrt{1-s}\,Z\), \(0\le s\le1\),
-every \(C^4\) function \(f:\R^p\to\R\) with bounded derivatives
-of orders \(1\) through \(4\) satisfies, for \(0<s<1\),
-\begin{align}
- \frac d{ds}\E f(W_s)
- ={}&\frac12\E[(T_h-\Sigma):D^2f(W_s)]
-       -\frac1{2\sqrt s}\E[b_h\cdot\nabla f(W_s)]\notag\\
- &-\frac{s}{8}\sum_i\E\int_0^1 r(1-r)
- D^4f(W_s+r\sqrt s\,\bar Y_i)
-          [\bar Y_i,\bar Y_i,\bar Y_i,\bar Y_i]\,dr.
- \label{ben:slepian-identity}
-\end{align}
-Here \(A:B:=\sum_{j,k}A_{jk}B_{jk}\) for matrices \(A,B\).
-\end{lemma}
-\begin{proof}
-Differentiating along the path and applying Gaussian integration by
-parts gives
-\begin{equation}\label{ben:slepian-initial}
- \frac d{ds}\E f(W_s)
- =\frac1{2\sqrt s}\E[W\cdot\nabla f(W_s)]
-       -\frac12\E[\Sigma:D^2f(W_s)].
-\end{equation}
-This remains valid for singular \(\Sigma\): write \(Z=AG\) with
-\(G\) standard Gaussian and apply integration by parts to its
-independent coordinates.
-
-Interchanging \(X_i\) and \(\widetilde X_i\) preserves their joint
-law, changes \(Y_i\) to \(-Y_i\), and changes \(W_s\) to
-\(W_s+\sqrt s\,Y_i\). The truncation event is unchanged, so
-\[
- \E[\bar Y_i\cdot\nabla f(W_s)]
- =-\E[\bar Y_i\cdot\nabla f(W_s+\sqrt s\,\bar Y_i)].
-\]
-Off the truncation event, both sides have zero multiplier. Since
-\(\E[\sum_iY_i\mid\mathcal X]=-W\), we obtain
-\begin{align*}
- \E[W\cdot\nabla f(W_s)]
- ={}&\frac12\sum_i\E\big[\bar Y_i\cdot
-       \{\nabla f(W_s+\sqrt s\,\bar Y_i)-\nabla f(W_s)\}\big]\\
- &-\E[b_h\cdot\nabla f(W_s)].
-\end{align*}
-For a twice continuously differentiable scalar function \(g\),
-two integrations by parts give
-\[
- \int_0^1g(r)\,dr
- =\frac{g(0)+g(1)}2-\frac12\int_0^1r(1-r)g''(r)\,dr.
-\]
-Apply this identity to
-\(g(r):=D^2f(W_s+r\sqrt s\,\bar Y_i)[\bar Y_i,\bar Y_i]\).
-The copy interchange also gives \(\E g(1)=\E g(0)\).
-The fundamental theorem of calculus therefore yields
-\begin{align*}
- &\E\big[\bar Y_i\cdot
-   \{\nabla f(W_s+\sqrt s\,\bar Y_i)-\nabla f(W_s)\}\big]\\
- &\quad=\sqrt s\,\E D^2f(W_s)[\bar Y_i,\bar Y_i]
- -\frac{s^{3/2}}2\E\int_0^1r(1-r)
-       D^4f(W_s+r\sqrt s\,\bar Y_i)[\bar Y_i^{\otimes4}]\,dr.
-\end{align*}
-Substitute into \eqref{ben:slepian-initial} and condition the
-second-order coefficient on \(\mathcal X\). This proves
-\eqref{ben:slepian-identity}.
-\end{proof}
-
-\begin{proof}[Proof of Lemma~\ref{ben:comparison}]
-Fix \(\phi>0\), set \(h:=t=(\phi L)^{-1}\), and use the
-notation of Lemma~\ref{ben:paired-interpolation}. The vectors
-\(Y_i\) are independent and centrally symmetric, although they
-need not be independent of \(W\).
-
-We first bound the random coefficients in
-\eqref{ben:slepian-identity}. Conditional Jensen gives
-\(\E\norm{b_h}_\infty\le M_h\). Also,
-\(\frac12\sum_i\E Y_iY_i^\top=\Sigma\), so Cauchy--Schwarz
-gives \(\norm{\E T_h-\Sigma}_{\max}\le v_h/2\).
-The fourth moments satisfy
-\[
- \max_j\sum_i\E Y_{ij}^4\le16\Delta_1,\qquad
- |\bar Y_{ij}\bar Y_{ik}|\le h^2,\qquad
- \max_{j,k}\sum_i\E\bar Y_{ij}^2\bar Y_{ik}^2\le16\Delta_1.
-\]
-To bound the fluctuation of \(T_h\), conditional Jensen reduces it
-to the maximum of the centered sums
-\(\sum_i\{\bar Y_{ij}\bar Y_{ik}-\E\bar Y_{ij}\bar Y_{ik}\}\).
-For independent centered scalars \(U_i\) with \(|U_i|\le b\)
-and \(\sum_i\E U_i^2\le v\), expansion of the exponential gives
-\[
- \E e^{\lambda\sum_iU_i}
- \le\exp\!\left\{\frac{\lambda^2v}{2(1-|\lambda|b/3)}\right\},
- \qquad |\lambda|b<3.
-\]
-Sum this bound over both signs and the \(p^2\) entries, then
-optimize \(\lambda\). The expected maximum is at most
-\(C(\sqrt{vL}+bL)\). Taking \(b=2h^2\) and
-\(v\le16\Delta_1\) proves
-\begin{equation}\label{ben:conditional-matrix}
- \E\norm{T_h-\Sigma}_{\max}
- \le C\{\sqrt{L\Delta_1}+h^2L+v_h\}.
-\end{equation}
-
-The fourth-order coefficient is controlled by
-\(Q_h:=\max_j\sum_i\bar Y_{ij}^4\). For \(0\le U\le b\),
-convexity gives \(\E e^{U/b}\le1+(e-1)\E U/b\).
-Apply this to \(U=\bar Y_{ij}^4\) and \(b=h^4\), use
-independence over \(i\), and sum the bounds over \(j\).
-Jensen's inequality then gives
-\begin{equation}\label{ben:fourth-maximum}
- \E Q_h\le h^4\log p+(e-1)\max_j\sum_i\E\bar Y_{ij}^4
-       \le C(\Delta_1+h^4L).
-\end{equation}
-
-We next control the derivatives at the random points in
-\eqref{ben:slepian-identity}. Fix a threshold vector \(a\), and
-write \(F:=F_{a,h}\) and \(\Psi:=F(1-F)\).
-The positive weight formula \eqref{appx-eq:partition-derivative},
-with face normals \(\pm e_j\), gives
-\[
- \sum_j|\partial_jF(x)|\le h^{-1}\Psi(x),\qquad
- \sum_{j,k}|\partial_{jk}F(x)|\le Ch^{-2}\Psi(x).
-\]
-For vectors \(y_i\) and shifts \(z_i\) with
-\(\norm{z_i}_\infty\le h\), it also gives
-\begin{equation}\label{ben:fourth-contraction}
- \sum_i|D^4F(x+z_i)[y_i,y_i,y_i,y_i]|
- \le Ch^{-4}\Psi(x)\max_j\sum_i|y_{ij}|^4.
-\end{equation}
-Indeed, each positive weight product at \(x+z_i\) is bounded by
-a universal multiple of its value at \(x\), as in
-\eqref{appx-eq:local-envelope}. For every four coordinate indices,
-H\"older's inequality bounds the sum over \(i\) of their absolute
-coordinate products by \(\max_j\sum_i|y_{ij}|^4\). Summing the
-positive weights proves \eqref{ben:fourth-contraction}.
-
-Gaussian anti-concentration supplies the small expectation of
-\(\Psi\). For deterministic \(x\) and \(0<s<1\),
-\begin{equation}\label{ben:gaussian-envelope}
- \E_Z\Psi(x+\sqrt{1-s}\,Z)
- \le C\frac{h\sqrt L}{\sqrt{1-s}}.
-\end{equation}
-To verify this, write \(F_r:=F_{a+r\mathbf1,h}\).
-As in the proof of Lemma~\ref{appx-lem:envelope},
-\(\partial_rF_r=F_r(1-F_r)/h\) and
-\(\Psi\le(e/2)(F_h-F_{-h})\).
-The mixture representation \eqref{eq:mixture} writes the difference
-as an average of layer indicators. Apply the Gaussian part of
-Lemma~\ref{lem:concentration} with face variance \(1-s\).
-
-Apply Lemma~\ref{ben:paired-interpolation} to \(F\), condition on
-the original observations in the first two terms, and condition on
-both arrays in the remainder. The preceding derivative bounds imply
-\begin{align*}
- \left|\frac d{ds}\E F(W_s)\right|
- \le{}&C\frac{\sqrt L}{h\sqrt{1-s}}
-                \E\norm{T_h-\Sigma}_{\max}
-       +C\frac{\sqrt L}{\sqrt{s(1-s)}}M_h\\
- &+C\frac{s\sqrt L}{h^3\sqrt{1-s}}\E Q_h.
-\end{align*}
-In the last term, \eqref{ben:fourth-contraction} brings every
-derivative to the common point \(W_s\) before averaging over \(Z\).
-This retains the maximum of the coordinate fourth-moment sums.
-The time factors are integrable:
-\[
- \int_0^1\frac{ds}{\sqrt{1-s}}=2,\qquad
- \int_0^1\frac{ds}{\sqrt{s(1-s)}}=\pi,\qquad
- \int_0^1\frac{s\,ds}{\sqrt{1-s}}=\frac43.
-\]
-Integrate first over \([\varepsilon,1-\varepsilon]\), then pass
-to the endpoints by dominated convergence. Uniformly in \(a\),
-\[
- |\E F_{a,h}(W)-\E F_{a,h}(Z)|
- \le C\sqrt L\left\{
- h^{-1}\E\norm{T_h-\Sigma}_{\max}+M_h+h^{-3}\E Q_h\right\}.
-\]
-Use \eqref{ben:conditional-matrix} and \eqref{ben:fourth-maximum},
-then apply Lemma~\ref{ben:smoothing}. The result is
-\[
- \rh(W,Z)\le C\left\{
- hL^{3/2}+\frac{L\sqrt{\Delta_1}}h
- +\frac{\sqrt L\,\Delta_1}{h^3}
- +\frac{\sqrt L\,v_h}h+\sqrt L\,M_h\right\}.
-\]
-Substituting \(h=t=(\phi L)^{-1}\) gives \eqref{ben:master}.
-\end{proof}
-\end{recovered}
-
-
-The following elementary Bennett calculation controls the remaining
-large-increment term.
-
-\begin{lemma}[A truncated Bennett maximum]\label{ben:maximum}
-Suppose independent centrally symmetric vectors \(T_i\in\R^p\)
-satisfy \(\max_j\sum_i\E T_{ij}^2\le v\) and
-\(\sum_i\E\norm{T_i}_\infty^q\le A^q\), with \(q>1\).
-For every \(u>0\) and \(v>0\),
-\begin{equation}
- \E\norm{\sum_iT_i}_\infty
- \le C\frac{uL}{\log(1+u^2L/v)}+\frac{A^q}{u^{q-1}}.
- \label{ben:maximum-bound}
-\end{equation}
-If \(v=0\), the sum is zero almost surely.
-\end{lemma}
-\begin{proof}
-The truncated vectors \(T_i^{(u)}:=T_i\ind\{\norm{T_i}_\infty\le u\}\)
-are centered by symmetry. Bennett's exponential bound yields
-\[
- \log\E\exp\left(\pm\lambda\sum_iT_{ij}^{(u)}\right)
- \le\frac v{u^2}(e^{\lambda u}-1-\lambda u),\qquad\lambda>0.
-\]
-Applying log-sum-exp to the \(2p\) signed coordinates and choosing
-\(\lambda:=u^{-1}\log(1+u^2\log(2p)/v)\) gives the first term in
-\eqref{ben:maximum-bound}, since \(\log(2p)\asymp L\).
-The expected norm of the omitted sum is at most
-\(\sum_i\E[\norm{T_i}_\infty\ind\{\norm{T_i}_\infty>u\}]
-\le A^qu^{1-q}\).
-\end{proof}
-
-\begin{recovered}
-We now apply Lemma~\ref{ben:comparison} under the assumptions of
-Proposition~\ref{poly:bennett}, using its notation for the symmetrized
-increments and their tail quantities. Put
-\(A:=Bn^{-1/2+1/q}\) and \(d:=B/\sqrt n\). The moment conditions give
-\end{recovered}
-\[
- \Delta_1\lesssim d^2,\qquad
- \max_j\sum_i\E Y_{ij}^4\lesssim d^2,\qquad
- \sum_i\E\norm{Y_i}_\infty^q\lesssim_q A^q.
-\]
-Cauchy--Schwarz within each expectation and then \textcolor{magenta}{in the sum over \(i\)} gives
-\begin{equation}
- v_t\le
- \max_j\left(\sum_i\E Y_{ij}^4\right)^{1/2}
-       \left(\sum_i\Pp(\norm{Y_i}_\infty>t)\right)^{1/2}
- \lesssim_q d(A/t)^{q/2}.
- \label{ben:mixed}
-\end{equation}
-This is where the coordinate fourth-moment budget is used. Lemma
-\ref{ben:maximum} and the direct triangle inequality imply, respectively,
-\begin{equation}
- M_t\lesssim_q\frac{uL}{\log(1+u^2L/v_t)}+\frac{A^q}{u^{q-1}},
- \qquad M_t\lesssim_q A^qt^{1-q}.
- \label{ben:tail}
-\end{equation}
-
-We finish the proof of Proposition~\ref{poly:bennett} by choosing the
-smoothing bandwidth \(\phi^{-1}\). The identities
-\[
- U^2=dL^{5/2},\qquad V_q=AL^{3/2-1/q},\qquad
- \mathcal K_q=(V_q/U)^2
-\]
-make the two cases transparent. If \(\mathcal K_q\le1\), take
-\(\phi^{-1}:=U/\sqrt L\), so that \(t=U/L^{3/2}\).
-The first three terms of \eqref{ben:master} are bounded by \(CU\).
-The remaining terms, by \eqref{ben:mixed} and the direct bound in
-\eqref{ben:tail}, are at most
-\[
- C_qU \mathcal K_q^{q/4},\qquad C_qU \mathcal K_q^{q/2},
-\]
-and hence are also bounded by \(C_qU\).
-
-If \(\mathcal K_q>1\), put \(b:=1-1/q\) and set
-\[
- r:=V_q \mathcal{L}_q^{-b},\qquad \phi^{-1}:=r/\sqrt L,\qquad
- t:=AL^{-1/q}\mathcal{L}_q^{-b},\qquad u:=A(\mathcal{L}_q/L)^{1/q}=\mathcal{L}_q t.
-\]
-Equation~\eqref{ben:mixed} gives
-\(v_t\lesssim_q dL^{1/2}\mathcal{L}_q^{(q-1)/2}\), and therefore
-\[
- \frac{u^2L}{v_t}\gtrsim_q
- \mathcal K_q \mathcal{L}_q^{2/q-(q-1)/2}.
-\]
-For every fixed real \(c\) and fixed \(c_0>0\),
-\(\log(1+c_0K\{\log(e+K)\}^c)\gtrsim_{c,c_0}\log(e+K)\)
-on \(K\ge1\). This follows by continuity on compact intervals and
-by dividing both sides by \(\log K\) at infinity. Thus
-\eqref{ben:tail} gives \(\sqrt L M_t\lesssim_q r\).
-The other four terms of \eqref{ben:master} are bounded, in order, by
-\[
- r,\qquad C r\frac{\mathcal{L}_q^{2b}}{\mathcal K_q},\qquad
- C r\frac{\mathcal{L}_q^{4b}}{\mathcal K_q^2},\qquad
- C_q r\frac{\mathcal{L}_q^{2b+(q-1)/2}}{\mathcal K_q}.
-\]
-Each ratio is bounded on \(\mathcal K_q\ge1\), with a constant depending only
-on \(q\). \begin{recovered}Combining the cases and using \(\rh\le1\)
-proves Proposition~\ref{poly:bennett}.\end{recovered}
-
 \end{document}
+
