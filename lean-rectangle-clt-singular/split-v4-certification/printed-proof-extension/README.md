@@ -5,6 +5,10 @@ the printed arguments of the frozen Split-V4 manuscript. It is separate from
 the existing certificate of the 31 named results. That certificate and its
 execution evidence are preserved unchanged.
 
+The reader-facing report is available as [REPORT.md](REPORT.md) and
+[PDF](REPORT.pdf). It summarizes the certified scope, all 31 named statements,
+printed-route coverage, execution evidence and the proposed manuscript repair.
+
 The correspondence review accounts for all substantive in-paper arguments:
 253 valid same-argument passage records and one formally refuted order-zero
 reading requiring the positive-order qualification below. The local and independent-CI
