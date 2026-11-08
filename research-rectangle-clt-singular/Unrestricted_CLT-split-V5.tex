@@ -2181,7 +2181,9 @@ The same second-moment bound will also control coefficient matrices
 in operator norm.
 
 The second ingredient controls the probability of lying near any
-boundary formed by the face inequalities. Fix a positive absolute
+boundary formed by the face inequalities. \textcolor{magenta}{Recall that
+\(A_a^s=A_{a+s\mathbf1}\) denotes a common shift of all face thresholds.}
+Fix a positive absolute
 constant \(C_0\), large enough for the applications below. We call
 a random vector \(V_0\) a \emph{concentrated base}\textcolor{magenta}{, or simply \emph{base}}, if
 \begin{equation}
@@ -2963,7 +2965,7 @@ Substituting these bounds into \eqref{appx-an:entropy-sum} yields
 yielding the required bound for the first term on the right-hand side of \eqref{appx-an:matrix-main-split}.
 
 We next bound the second term on the right-hand side of \eqref{appx-an:matrix-main-split}, i.e. the signed trace term.
-First, suppose that the normals $u_1,\dots, u_m$ are linearly independent. For
+First, suppose that the normal vectors $u_1,\dots, u_m$ are linearly independent. For
 \(s\in\R\), put \(F_s:=F_{a+s\mathbf1,h}\) and
 \(\theta_s:=1-F_s\).
 Since
@@ -3003,27 +3005,29 @@ where $T(x) = \sum_{j=1}^m e^{(u_j\cdot x-a_j)/h}$. Thus, by the law of iterated
 \end{equation}
 where the second equality follows from the Gamma Laplace transform formula.
 
-Further, put
-\[
- b_j:=\{a_j+h\log(\omega_j/T_\ell)-u_j\cdot V_0\}/\sigma,\quad j=1,\dots,m.
-\]
-The event \(U\in Q_s\) is then equivalent to
-\(u_j\cdot G\le b_j+s/\sigma\) for every \(j\) since $U = V_0 + \sigma G$. Also, define the
+\begingroup\color{magenta}
+Further, define the
 Gaussian trace function and its common-threshold derivative by
 \begin{equation}
  J(b):=\E_G[H_2(G)\ind\{u_j\cdot G\le b_j,\ j\le m\}],
  \quad \mathcal D(b):=\sum_j\partial_jJ(b),\quad b=(b_1,\dots,b_m)\in\R^m.
  \label{appx-an:threshold-functions}
 \end{equation}
+Also, define $b^0 = (b_1^0,\dots,b_m^0)\in\R^m$ by setting
+\[
+ b_j^0:=\{a_j+h\log(\omega_j/T_\ell)-u_j\cdot V_0\}/\sigma,\quad j=1,\dots, m.
+\]
+The event \(U\in Q_s\) is then equivalent to
+\(u_j\cdot G\le b_j^0+s/\sigma\) for every \(j\) since $U = V_0 + \sigma G$. 
 Then, by the law of iterated expectations,
 \[
  \E[H_2(G)F_s(U)^\ell] = \E[H_2(G)\ind\{U\in Q_s\}]
- =\E[J(b+s\mathbf1/\sigma)],
+ =\E[J(b^0+s\mathbf1/\sigma)],
 \]
 and hence
 \[
  \frac{d}{ds}\E[H_2(G)F_s(U)^\ell]
- =\frac1\sigma\E[\mathcal D(b+s\mathbf1/\sigma)].
+ =\frac1\sigma\E[\mathcal D(b^0+s\mathbf1/\sigma)].
 \]
 To justify differentiation under the expectation, conditioning on
 $u_j\cdot G=b_j$ gives
@@ -3032,7 +3036,7 @@ standard Gaussian density. This bound has a finite supremum over $b$,
 so dominated convergence applies for fixed $r$ and $m$. Moreover,
 \begin{equation}\label{eq: key bound for surface integrals}
  \left|\frac{d}{ds}\E[H_2(G)F_s(U)^\ell]\right|
- \le\frac1\sigma\E[|\mathcal D(b+s\mathbf1/\sigma)|]
+ \le\frac1\sigma\E[|\mathcal D(b^0+s\mathbf1/\sigma)|]
  \le C\left(L^{3/2}+\frac\delta\sigma L^2\right),
 \end{equation}
 where the last inequality follows by conditioning on $T_\ell$ and
@@ -3042,17 +3046,22 @@ bound is uniform in the thresholds. Combining \eqref{eq: F theta k trick}, \eqre
 \[
  \left|\E[H_2(G)F(U)\theta(U)^k]\right|
  \le\frac{C2^kh}{k}
-       \left(L^{3/2}+\frac\delta\sigma L^2\right)
- \le\frac{C2^k}{k}hL^{3/2},
+       \left(L^{3/2}+\frac\delta\sigma L^2\right).
 \]
-where the second inequality follows from \(\sigma\ge\delta\sqrt L\).
-This gives the required bound for the second term on the right-hand side of \eqref{appx-an:matrix-main-split} when the normals $u_1,\dots, u_m$ are linearly independent. Combining it with \eqref{appx-an:matrix-main-split} and
-\eqref{appx-an:tilted-mean-bound} proves
-\eqref{appx-an:matrix-bound} for linearly independent normals.
+This gives the required bound for the second term on the right-hand side of \eqref{appx-an:matrix-main-split} when the normal vectors $u_1,\dots, u_m$ are linearly independent. Combining it with \eqref{appx-an:matrix-main-split} and
+\eqref{appx-an:tilted-mean-bound} gives
+\begin{equation}
+ \E_{V_0}\sum_{\alpha_1,\ldots,\alpha_k=1}^m
+ \left\|\E_G\left[(GG^\top-I_r)F_{a,h}(U)
+              \prod_{b=1}^k\pi_{\alpha_b}(U)\right]\right\|_*
+ \le C_1^{k+1}h\left(L^{3/2}+\frac\delta\sigma L^2\right)
+ \label{appx-an:matrix-bound-unsimplified}
+\end{equation}
+for linearly independent normal vectors.
 
 
 
-For arbitrary normals, take \(\lambda\in(0,1)\) and define the following vectors in $\R^{r+m}$:
+For arbitrary normal vectors, take \(\lambda\in(0,1)\) and define the following vectors in $\R^{r+m}$:
 \[
  u_j^\lambda:=(\sqrt{1-\lambda^2}\,u_j,\lambda e_j),\qquad
  V_0^\lambda:=(V_0/\sqrt{1-\lambda^2},0),\qquad
@@ -3071,7 +3080,7 @@ since \(u_j^\lambda\cdot V_0^\lambda=u_j\cdot V_0\) for every \(j\), it follows 
 &=\mathbb P\{V_0\in A_a^s\setminus A_a^{-s}\} \le C_0(s+\delta)\sqrt L.
 \end{aligned}
 \]
-We therefore obtain \eqref{appx-an:matrix-bound} with $V_0$, $G$, $I_r$, and $U=V_0+\sigma G$ replaced by $V_0^{\lambda}$, $\widehat G$, $I_{r+m}$, and $U^{\lambda} = V_0^{\lambda} + \sigma \widehat G$, respectively, and appropriately adjusted $F_{a, h}$ and $\pi_{\alpha}$. Also, as \(\lambda\downarrow0\),
+Proceeding as before, we therefore obtain \eqref{appx-an:matrix-bound-unsimplified} with $V_0$, $G$, $I_r$, and $U=V_0+\sigma G$ replaced by $V_0^{\lambda}$, $\widehat G$, $I_{r+m}$, and $U^{\lambda} = V_0^{\lambda} + \sigma \widehat G$, respectively, and appropriately adjusted $F_{a, h}$ and $\pi_{\alpha}$. Also, as \(\lambda\downarrow0\),
 \[
  u_j^\lambda\cdot(V_0^\lambda+\sigma\widehat G)
  =u_j\cdot V_0+\sigma\sqrt{1-\lambda^2}\,u_j\cdot G
@@ -3086,9 +3095,10 @@ Fatou's lemma for the expectation over $V_0$ then give
  \E_{V_0}\sum_{\alpha_1,\ldots,\alpha_k=1}^m
  \left\|\E_{\widehat G}\left[(\widehat G\widehat G^\top-I_{r+m})F_{a, h}(U)
               \prod_{b=1}^k\pi_{\alpha_b}(U)\right]\right\|_*
- \le C_1^{k+1}hL^{3/2}.
+ \le C_1^{k+1}h\left(L^{3/2}+\frac\delta\sigma L^2\right).
 \]
-In turn, this gives \eqref{appx-an:matrix-bound} since replacing any $(r+m)\times(r+m)$ matrix by its $r\times r$ upper-left block cannot make the nuclear norm larger.
+Using \(\sigma\ge\delta\sqrt L\), we thus obtain \eqref{appx-an:matrix-bound} since replacing any $(r+m)\times(r+m)$ matrix by its $r\times r$ upper-left block cannot make the nuclear norm larger.
+\par\endgroup
 \end{proof}
 
 \begin{remark}[Gaussian covariance contraction]\label{appx-rem:covariance-contraction}
@@ -3106,236 +3116,461 @@ so \(\operatorname{Var}_{Q_w}(a\cdot G)\le\norm a^2\) for every
 
 \subsection{An averaged Gaussian threshold estimate}
 \label{appx-an:sec:threshold}
-
-We now bound the common-threshold derivative in
-\eqref{appx-an:threshold-functions} by probabilities of short outer
-layers and then average over the concentrated base. Introduce the
-Gaussian distribution function
-\[
- C(b):=\Pp\{u_j\cdot G\le b_j,\ j\le m\},\qquad b\in\R^m,
-\]
-and, when the normals are linearly independent, write
-\[
- C_j:=\partial_jC,\qquad C_{jl}:=\partial_j\partial_lC,
- \qquad \rho_{jl}:=u_j\cdot u_l.
-\]
+\begingroup\color{magenta}
+We now derive a bound for the common-threshold derivative in
+\eqref{appx-an:threshold-functions} in the case when the normal vectors $u_1,\dots, u_m$ are linearly independent.
 
 \begin{lemma}[Averaged Gaussian threshold derivative]
 \label{appx-an:lem:threshold}
-Suppose the unit normals are linearly independent, let \(V_0\) be a
-concentrated base, and let \(\sigma>0\). For every \(a\in\R^m\), put
-\(b_j(V_0):=(a_j-u_j\cdot V_0)/\sigma\). Then
+Suppose the unit normal vectors $u_1,\dots, u_m$ are linearly independent and let \(V_0\) be a
+concentrated base. Take \(G\sim N(0,I_r)\) independent of \(V_0\). Fix \(\sigma>0\) and let $J(b)$ and $\mathcal D(b)$ be defined as in \eqref{appx-an:threshold-functions}.
+Also, for every \(a\in\R^m\), put
+\(b_j(V_0):=(a_j-u_j\cdot V_0)/\sigma\), $j=1,\dots, m$. Then
 \begin{equation}
- \E_{V_0}|\mathcal D(b(V_0))|
+ \E[|\mathcal D(b(V_0))|]
  \le C\bigl(\sigma L^{3/2}+\delta L^2\bigr).
  \label{appx-an:threshold-bound}
 \end{equation}
 \end{lemma}
 
 \begin{proof}
+Introduce the centered Gaussian random vector $X=(X_1,\dots,X_m)\in\R^m$ by setting $X_j := u_j\cdot G$, $j=1,\dots,m$ and let
+\[
+ C(b):=\Pp(X\leq b) = \Pp\{u_j\cdot G\le b_j,\ j\le m\},\qquad b\in\R^m,
+\]
+be its distribution function. Also, denote
+\[
+ C_j:=\partial_jC,\qquad C_{jl}:=\partial_j\partial_lC,
+ \qquad \rho_{jl}:=u_j\cdot u_l,\qquad j, l=1,\dots, m.
+\]
 We first express \(\mathcal D\) through the first and mixed second
-derivatives of \(C\). Gaussian conditioning gives the identities
-\begin{align}
- J(b)&=-\sum_j b_jC_j(b),\label{appx-an:radial-trace}\\
- \mathcal D(b)
- &=\sum_j(b_j^2-1)C_j(b)
+derivatives of \(C\). For $v>0$, let \(G_v\sim N(0,vI_r)\). Its density is
+\[
+\phi_{r, v}(g)
+=(2\pi v)^{-r/2}\exp\left(-\frac{\|g\|^2}{2v}\right),\quad g\in\R^r,
+\]
+and so
+\[
+\frac{\partial}{\partial v}\phi_{r, v}(g)
+=\frac12\left(\frac{\|g\|^2}{v^2}-\frac rv\right)
+\phi_{r, v}(g).
+\]
+Since
+\[
+\Pp\{\sqrt v\,X\le b\}=\Pp\{u_j\cdot G_v\le b_j,\ j\le m\}
+=\int_{\{g:u_j\cdot g\le b_j,\ j\le m\}}
+\phi_{r,v}(g)\,dg,
+\]
+differentiating under the integral sign at \(v=1\) gives
+\[
+\left.\frac{d}{dv}\Pp\{\sqrt v\,X\le b\}\right|_{v=1}
+=\frac12\E\left[
+(\|G\|^2-r)\mathbf 1\{X\le b\}
+\right]
+=\frac12J(b).
+\]
+On the other hand, since the normal vectors $u_1,\dots, u_m$ are linearly independent, the covariance matrix of $X$ is positive definite, and so its distribution function $C$ is continuously differentiable. Thus, 
+\[
+\left.\frac{d}{dv}\Pp\{\sqrt v\,X\le b\}\right|_{v=1} = \left.\frac{d}{dv}C(b/\sqrt v)\right|_{v=1}
+=-\frac12\sum_{j=1}^m b_jC_j(b).
+\]
+Combining the two identities gives
+\begin{equation}\label{appx-an:radial-trace}
+J(b)=-\sum_{j} b_jC_j(b).
+\end{equation}
+
+Further, we claim that
+\begin{equation}
+ \mathcal D(b)=\sum_j(b_j^2-1)C_j(b)
    -\sum_{j<l}(1-\rho_{jl})(b_j+b_l)C_{jl}(b).
  \label{appx-an:threshold-identity}
-\end{align}
-%Here \(C_j\ge0\) and \(C_{jl}\ge0\) for \(j\ne l\).
-To verify these formulas, put \(X_j:=u_j\cdot G\).
-The vector \(X\) has a positive definite covariance matrix, so its
-distribution function is smooth. Differentiating the Gaussian
-density with respect to its variance, and then differentiating
-\(C(b/\sqrt v)\) at \(v=1\), gives
+\end{equation}
+To prove this claim,
+fix \(j\) and recall that \(\rho_{jl}=\E[X_jX_l]=u_j\cdot u_l\).
+Since \(X\) is Gaussian and \(\E[X_j^2]=1\), the residual
+vector \((X_l-\rho_{jl}X_j)_{l\ne j}\) is independent of \(X_j\).
+Thus,
+\begin{equation}\label{appx-an:conditional-first-derivative}
+C_j(b)
+=\varphi(b_j)\Pp\{X_l-\rho_{jl}X_j \le b_l-\rho_{jl}b_j,\ l\ne j\},
+\end{equation}
+where \(\varphi\) is the standard normal density. To differentiate this expression further, let
 \[
- \tfrac12J(b)
- =\left.\frac{d}{dv}\Pp\{\sqrt v\,X\le b\}\right|_{v=1}
- =-\tfrac12\sum_j b_jC_j(b).
+\Psi_j(c):=\Pp\{X_l-\rho_{jl}X_j\le c_l,\ l\ne j\},
+\qquad c=(c_l)_{l\ne j}.
 \]
-This proves \eqref{appx-an:radial-trace}. For the second derivative, condition
-on \(X_j=b_j\). The residual vector
-\((X_l-\rho_{jl}X_j)_{l\ne j}\) is independent of \(X_j\).
-Thus, with \(\varphi\) the standard normal density,
+The linear independence of \(u_1,\ldots,u_m\) implies that
+the residual vector has a nondegenerate Gaussian distribution,
+so \(\Psi_j\) is continuously differentiable. Substituting $\Psi_j$ into the expression for $C_j$, taking the derivative with respect to $b_j$, and using \(\varphi'(b_j)=-b_j\varphi(b_j)\) then gives
+\begin{align*}
+C_{jj}(b)
+&=-b_jC_j(b)
+ -\varphi(b_j)\sum_{l\ne j}\rho_{jl}
+ \partial_l\Psi_j\big((b_q-\rho_{jq}b_j)_{q\ne j}\big)=-b_jC_j(b)-\sum_{l\ne j}\rho_{jl}C_{jl}(b),
+\end{align*}
+where the second equality follows by noting that differentiating the
+expression for \(C_j(b)\) with respect to \(b_l\) yields
 \[
- C_j(b)=\varphi(b_j)
- \Pp\{X_l-\rho_{jl}X_j\le b_l-\rho_{jl}b_j,\ l\ne j\}.
+C_{jl}(b)
+=\varphi(b_j)
+\partial_l\Psi_j\big((b_q-\rho_{jq}b_j)_{q\ne j}\big),
+\qquad l\ne j.
 \]
-Differentiating in \(b_j\), and using
-\(\varphi'(b_j)=-b_j\varphi(b_j)\), yields
+Thus,
 \[
- C_{jj}(b)=-b_jC_j(b)-\sum_{l\ne j}\rho_{jl}C_{jl}(b).
+\begin{aligned}
+\mathcal D(b)
+&=\sum_{l=1}^m\partial_lJ(b)=-\sum_j C_j(b)
+  -\sum_j b_j\sum_l C_{jl}(b)\\
+&=-\sum_j C_j(b)
+  -\sum_j b_j\left[
+      -b_jC_j(b)
+      +\sum_{l\ne j}(1-\rho_{jl})C_{jl}(b)
+    \right]\\
+&=\sum_j(b_j^2-1)C_j(b)
+  -\sum_j\sum_{l\ne j}
+       b_j(1-\rho_{jl})C_{jl}(b).
+\end{aligned}
 \]
-Apply the common-threshold derivative \(\sum_l\partial_l\) to
-\eqref{appx-an:radial-trace}, substitute this identity, and pair the terms with
-indices \((j,l)\) and \((l,j)\). This gives
-\eqref{appx-an:threshold-identity}. %Positivity of the stated derivatives follows
-%from their conditional-density representations.
+This gives \eqref{appx-an:threshold-identity} by noting that \(\rho_{jl}=\rho_{lj}\) and \(C_{jl}(b)=C_{lj}(b)\).
 
-We next bound these derivatives by Gaussian probabilities in short
-outer layers. The geometry follows the outward-interval construction
-in~\cite{Nazarov2003,CCK17N}. For pairs of equalities we use outward
-sectors in the plane spanned by their normals. The widths depend on
-the corresponding Gaussian projections.
 
-For linearly independent \(u_j,u_l\), let \(\Pi_{jl}\) be orthogonal projection
-onto their span. Define
+Next, we bound the derivatives in \eqref{appx-an:threshold-identity} using the arguments related to those in~\cite{Nazarov2003,CCK17N}. For $j, l=1,\dots, m$, let \(\Pi_{j l}\) be the orthogonal projection onto \(\operatorname{span}(u_j, u_l)\). Define
 \begin{equation}
  R(g):=1+\max\left\{\max_j|u_j\cdot g|,
-                          \max_{j<l}\norm{\Pi_{jl}g}\right\},
+                          \max_{j<l}\norm{\Pi_{jl}g}\right\},\qquad g\in\R^r,
  \label{appx-an:projection-radius}
 \end{equation}
 omitting the second maximum when \(m=1\).
-This function is \(1\)-Lipschitz. A union bound over at most \(m+m^2\)
-Gaussian projections of dimensions at most \(2\) gives
+For the record, note that this function is \(1\)-Lipschitz and since we are dealing with at most \(m+m^2\)
+Gaussian projections of dimensions at most \(2\), it is standard to establish that
 \begin{equation}
  \E R(G)^2\le CL,\qquad \E R(G)^3\le CL^{3/2}.
  \label{appx-an:projection-moments}
 \end{equation}
-Indeed, the tail of the maximum in \eqref{appx-an:projection-radius} is bounded by
-\(\min\{1,Cm^2e^{-s^2/2}\}\), and integration, split at \(C\sqrt L\),
-gives these moment bounds.
-
-
-%For \(P_b:=\{x:u_j\cdot x\le b_j,\ j\le m\}\), we will prove
-We will prove
+We will prove that
 \begin{equation}
  |\mathcal D(b)|
  \le C\E\left[
- R(G)^3\ind\left\{0<\max_j(u_j\cdot G-b_j)\le\frac1{R(G)}\right\}
+ R(G)^3\ind\left\{0<\max_j(u_j\cdot G-b_j)
+ \le\frac1{R(G)}\right\}
  \right].
  \label{appx-an:adaptive-layer}
 \end{equation}
-We construct events associated with a single equality or a pair
-of equalities. Let \(H_j\) be a standard Gaussian vector in
-\(u_j^\perp\), and put \(x:=b_ju_j+H_j\).
-Gaussian conditioning gives
+To do so, fix \(j\) and note that
+\(
+H_j:=G-(u_j\cdot G)u_j
+\)
+is a standard Gaussian vector in \(u_j^\perp\), independent
+of \(X_j=u_j\cdot G\). Moreover, for every \(l\ne j\),
+\[
+u_l\cdot H_j
+=X_l-(u_l\cdot u_j)X_j
+=X_l-\rho_{jl}X_j.
+\]
+Thus, substituting this identity into \eqref{appx-an:conditional-first-derivative} and denoting \(Y_j:=b_ju_j+H_j\), we obtain
 \begin{equation}
- C_j(b)=\varphi(b_j)
-       \E\ind\{u_l\cdot x<b_l\text{ for }l\ne j\}.
- \label{appx-an:one-density}
+\begin{aligned}
+C_j(b)
+&=\varphi(b_j)
+\E\ind\{u_l\cdot Y_j\le b_l,\ l\ne j\}=\varphi(b_j)
+\E\ind\{u_l\cdot Y_j<b_l,\ l\ne j\},
+\end{aligned}
+\label{appx-an:one-density}
 \end{equation}
-The strict inequalities do not change this probability, since the
-conditional residual Gaussian vector is nondegenerate.
-For each such \(x\), include the points
+where the second equality follows because
+\(\Pp(u_l\cdot Y_j=b_l)=0\) for every \(l\ne j\),
+by the linear independence of the normal vectors. Further, define
 \[
- g=x+v u_j,\qquad 0<v<\eta(x),\qquad
- \eta(x):=\frac1{4R(x)}
+E_j:=\left\{
+x+vu_j:
+u_j\cdot x=b_j,\
+u_l\cdot x<b_l\ \text{for all }l\ne j,\ 
+0<v<\eta(x)
+\right\},
+\qquad
+\eta(x):=\frac1{4R(x)},
 \]
-in an event \(E_j\).
-The coordinates along \(u_j\) and in \(u_j^\perp\) are independent
-standard Gaussian coordinates. Consequently, integration in the
-coordinate along \(u_j\) gives exactly
+where $x$ varies over $\R^r$, and $v$ varies over $\R$.
+In words, \(E_j\) consists of short outward normal segments
+starting from the relative interior of the \(j\)-th facet. Also, for any $y\in E_j$, the decomposition $y = x+ vu_j$ is unique, and so, letting $Z$ be a $N(-b_j,1)$ random variable that is independent of $H_j$, we have that $G$ is equal in distribution to $Y_j + Zu_j$ and that
 \[
- \E[R(G)^3\ind_{E_j}(G)]
- =\E_{H_j}\left[\ind\{u_l\cdot x<b_l,\ l\ne j\}
-   \int_0^{\eta(x)}R(x+vu_j)^3\varphi(b_j+v)\,dv\right].
+Y_j + Zu_j \in E_j\quad\Longleftrightarrow\quad u_l\cdot Y_j < b_l\text{ for }{l\neq j}\text{ and }0<Z<\eta(Y_j)
 \]
-For \(0<v<\eta(x)\), the Lipschitz property of \(R\) implies
-\(3R(x)/4\le R(x+vu_j)\le5R(x)/4\), and
+since $u_j\cdot Y_j = b_j$. Thus,
+\[
+\E[R(G)^3\ind_{E_j}(G)]
+=\E\left[
+\ind\{u_l\cdot Y_j<b_l,\ l\ne j\}
+\int_0^{\eta(Y_j)}
+R(Y_j+vu_j)^3\varphi(b_j+v)\,dv
+\right].
+\]
+In addition, for $x+vu_j \in E_j$, we have $R(x) \geq 1+ |u_j\cdot x| = 1+ |b_j|$ and $0<v<\eta(x)\leq 1/4$, and so
 \[
  \frac{\varphi(b_j+v)}{\varphi(b_j)}
  =e^{-b_jv-v^2/2}\ge e^{-1/4-1/32}.
 \]
-It follows that
+Also, the Lipschitz property of \(R\) implies
+\(R(x+vu_j)\geq 3R(x)/4\). Therefore,
 \begin{equation}
  \E[R(G)^3\ind_{E_j}(G)]
- \ge c(1+b_j^2)C_j(b).
+ \ge c(1+b_j^2)C_j(b),
  \label{appx-an:one-region}
 \end{equation}
+which is the bound on $C_j(b)$ we will use below.
 
-For a pair \(j<l\), put \(\alpha:=\arccos(\rho_{jl})\in(0,\pi)\),
-and let \(z\) be the unique vector in \(\operatorname{span}(u_j,u_l)\)
-with \(u_j\cdot z=b_j\), \(u_l\cdot z=b_l\).
-Let \(H_{jl}\) be standard Gaussian in the orthogonal complement of
-this span, put \(x:=z+H_{jl}\), and let \(\varphi_2\) denote the
-standard Gaussian density on the two-dimensional span.
-The linear map from this span to its two normal coordinates has
-absolute determinant \(\sin\alpha\). Thus Gaussian conditioning gives
+
+
+
+Now fix \(j<l\) and denote
+\(\alpha:=\arccos(\rho_{jl})\in(0,\pi)\) and
+\(S_{jl}:=\operatorname{span}(u_j, u_l)\).
+Since \(u_j\) and \(u_l\) are linearly independent,
+there is a unique \(z\in S_{jl}\) satisfying
+$u_j\cdot z=b_j$ and $u_l\cdot z=b_l$.
+Let \(H_{jl}:=(I_r-\Pi_{jl})G\) and observe that \(G=\Pi_{jl}G+H_{jl}\), where the two components on the right-hand side are independent standard Gaussian vectors in \(S_{jl}\) and \(S_{jl}^\perp\), respectively. Also, denote \(Y_{jl}:=z+H_{jl}\) and let \(\varphi_2\) be the standard Gaussian density on \(S_{jl}\). In addition, let $f_{j l}$ be the joint density of the pair $(X_j,X_l)$.
+
+Simple algebra shows that $f_{j l}(b_j, b_l) = \varphi_2(z)/\sin\alpha$. Thus, differentiating
+\begin{align*}
+C(b) & = \Pp(X_a\leq b_a, \ a=1,\dots,m) \\
+&= \int_{-\infty}^{b_j}\int_{-\infty}^{b_l}f_{jl}(s,t)\Pp(X_a\leq b_a, \ a\neq j,l\mid X_j = s,X_l = t)dt ds,
+\end{align*}
+we have
+\begin{align}
+C_{jl}(b) & = \frac{\varphi_2(z)}{\sin\alpha}\E[\ind\{X_a \leq b_a, \ a\neq j,l\} \mid X_j = b_j, X_l = b_l] \nonumber\\
+& = \frac{\varphi_2(z)}{\sin\alpha}
+\E[\ind\{u_a\cdot Y_{jl}\leq b_a,\ a\ne j,l\}\mid X_j=b_j,X_l=b_l] \nonumber \\
+& = \frac{\varphi_2(z)}{\sin\alpha}
+\E[\ind\{u_a\cdot Y_{jl} <  b_a,\ a\ne j,l\}],\label{appx-an:two-density}
+\end{align}
+where the second line follows from noting that conditional on $X_j=b_j$ and $X_l = b_l$, we have 
+\begin{align*}
+\ind\{X_a\leq b_a, \ a\neq j,l\} 
+&= \ind\{u_a\cdot G\leq b_a, \ a\neq j,l\} = \ind\{ u_a\cdot(\Pi_{jl} G + H_{jl}) \leq b_a,\ a\neq j,l \} \\
+& = \ind\{u_a\cdot (z + H_{jl})\leq b_a, \ a\neq j,l\} = \ind\{u_a\cdot Y_{jl}\leq b_a, a\neq j,l\}
+\end{align*}
+and the third from noting that $Y_{jl}$ is independent of $(X_j,X_l)$ and using the fact that
+\(\Pp(u_a\cdot Y_{jl}=b_a)=0\) for every \(a\ne j,l\).
+
+Further, let
+\[
+K_{jl}:=\{s u_j+t u_l: s,t\ge0\},
+\]
+and
+\[
+E_{jl}:=\left\{
+x+y:
+\begin{array}{l}
+u_j\cdot x=b_j,\quad u_l\cdot x=b_l,\\
+u_a\cdot x<b_a\ \text{for all }a\ne j,l,\\
+y\in\operatorname{int}_{S_{jl}}K_{jl},\
+0<\|y\|<\eta(x)
+\end{array}
+\right\},
+\qquad
+\eta(x)=\frac1{4R(x)}.
+\]
+In words, \(E_{jl}\) consists of short outward sectors
+starting from points where exactly the \(j\)-th and
+\(l\)-th constraints are active. Also, for any $w\in E_{jl}$, the decomposition $w = x+y$ is unique, and so, letting \(Z_{jl}\) be a Gaussian vector in \(S_{jl}\)
+with mean \(-z\) and identity covariance that is independent
+of \(H_{jl}\), we have that $G$ is equal in distribution to \(Y_{jl}+Z_{jl}\) and that
+\[
+Y_{jl}+Z_{jl}\in E_{jl}
+\quad\Longleftrightarrow\quad
+u_a\cdot Y_{jl}<b_a\ (a\ne j,l),\
+Z_{jl}\in \operatorname{int}_{S_{jl}}K_{jl},\
+0<\|Z_{jl}\|<\eta(Y_{jl}),
+\]
+since $u_j\cdot Y_{jl} = b_j$ and $u_l\cdot Y_{jl} = b_l$. Thus,
+\[
+\begin{aligned}
+\E[R(G)^3\ind_{E_{jl}}(G)]
+=\E\bigg[
+&\ind\{u_a\cdot Y_{jl}<b_a,\ a\ne j,l\}\int_{\substack{y\in K_{jl}\\
+                 0<\|y\|<\eta(Y_{jl})}}
+R(Y_{jl}+y)^3\varphi_2(z+y)\,dy
+\bigg].
+\end{aligned}
+\]
+In addition, for any
+\(x+y\in E_{jl}\), the Lipschitz property of \(R\)
+and \(\|y\|<1/(4R(x))\) imply
+\[
+R(x+y)\ge R(x)-\|y\|\ge\frac34R(x).
+\]
+Also, since \(z=\Pi_{jl}x\), the definition of \(R\)
+gives \(\|z\|\le R(x)\), and so
+\[
+\begin{aligned}
+\frac{\varphi_2(z+y)}{\varphi_2(z)}
+&=\exp\left(-z\cdot y-\frac{\|y\|^2}{2}\right)\ge\exp\left(-\|z\|\|y\|-\frac{\|y\|^2}{2}\right)
+\ge e^{-1/4-1/32}.
+\end{aligned}
+\]
+Moreover, the sector \(K_{jl}\cap\{0<\|y\|<\eta(x)\}\)
+has area \(\alpha\eta(x)^2/2\). Consequently,
+\[
+\begin{aligned}
+&\int_{\substack{y\in K_{jl}\\
+                 0<\|y\|<\eta(x)}}
+R(x+y)^3\varphi_2(z+y)\,dy\\
+&\qquad\ge
+cR(x)^3\varphi_2(z)\frac{\alpha\eta(x)^2}{2}
+=c\alpha R(x)\varphi_2(z)
+\ge c\alpha\|z\|\varphi_2(z).
+\end{aligned}
+\]
+Therefore,
+\[
+\E[R(G)^3\ind_{E_{jl}}(G)]
+\ge c\alpha\|z\|\varphi_2(z)
+\Pp(u_a\cdot Y_{jl}<b_a,\ a\ne j,l).
+\]
+Finally, since \(b_j+b_l=(u_j+u_l)\cdot z\), we have
+\[
+\begin{aligned}
+\frac{(1-\rho_{jl})|b_j+b_l|}{\sin\alpha}
+&\le
+\frac{(1-\cos\alpha)\|u_j+u_l\|}{\sin\alpha}
+\|z\| =2\sin(\alpha/2)\|z\|
+\le\alpha\|z\|.
+\end{aligned}
+\]
+Combining this inequality with
+\eqref{appx-an:two-density} gives
 \begin{equation}
- C_{jl}(b)=\frac{\varphi_2(z)}{\sin\alpha}
-       \E\ind\{u_a\cdot x<b_a,\ a\ne j,l\}.
- \label{appx-an:two-density}
+\E[R(G)^3\ind_{E_{jl}}(G)]
+\ge c(1-\rho_{jl})|b_j+b_l|C_{jl}(b),
+\label{appx-an:two-region}
 \end{equation}
-Let \(K_{jl}:=\{s u_j+t u_l:s,t\ge0\}\), a sector of angle \(\alpha\).
-For each valid \(x\), include \(g=x+y\) with
-\(y\) in the interior of \(K_{jl}\) and
-\(0<\norm y<\eta(x)\) in an event \(E_{jl}\).
-Orthogonal Gaussian coordinates now give
-\[
- \E[R(G)^3\ind_{E_{jl}}(G)]
- =\E_{H_{jl}}\left[
-  \ind\{u_a\cdot x<b_a,\ a\ne j,l\}
-  \int_{\substack{y\in K_{jl}\\0<\norm y<\eta(x)}}
-           R(x+y)^3\varphi_2(z+y)\,dy\right].
-\]
-As above, \(R(x+y)\ge3R(x)/4\), and
-\(\varphi_2(z+y)/\varphi_2(z)\ge e^{-1/4-1/32}\), since
-\(\norm z\le R(x)\).
-The area of the sector is \(\alpha\eta(x)^2/2\).
-Therefore
-\[
- \E[R(G)^3\ind_{E_{jl}}(G)]
- \ge c\alpha\norm z\,\varphi_2(z)
-        \Pp\{u_a\cdot x<b_a,\ a\ne j,l\}.
-\]
-To compare this with the coefficient in \eqref{appx-an:threshold-identity}, note
-that \(b_j+b_l=(u_j+u_l)\cdot z\), so
-\[
- \frac{(1-\rho_{jl})|b_j+b_l|}{\sin\alpha}
- \le 2\sin(\alpha/2)\norm z\le\alpha\norm z.
-\]
-Together with \eqref{appx-an:two-density}, this proves
-\begin{equation}
- \E[R(G)^3\ind_{E_{jl}}(G)]
- \ge c(1-\rho_{jl})|b_j+b_l|C_{jl}(b).
- \label{appx-an:two-region}
-\end{equation}
-In particular, no inverse correlation-gap factor remains.
+which is the bound on $C_{jl}(b)$ we will use below.
 
-It remains to justify summing these event probabilities.
-Set \(P_b:=\{x:u_j\cdot x\le b_j,\ j\le m\}\).
-For any constructed point \(g=x+y\), \(x\in P_b\) and \(y\)
-is a nonnegative combination of the normals whose inequalities
-are equalities at \(x\). Hence
-\(y\cdot(w-x)\le0\) for every \(w\in P_b\), and
-\[
- \norm{g-w}^2
- =\norm y^2+\norm{x-w}^2+2y\cdot(x-w)
- \ge\norm y^2+\norm{x-w}^2.
-\]
-Thus \(x\) is the unique closest point to \(g\) in \(P_b\).
-Distinct events cannot share \(g\), since their closest points
-would coincide but would have different sets of equality constraints.
-The use of strict inequalities for all other constraints ensures this
-last assertion. Sector edges are immaterial null sets.
 
-Each constructed point lies outside \(P_b\), and, for every \(a\),
-\[
- u_a\cdot g-b_a\le\norm y<\frac1{4R(x)}\le\frac1{R(g)},
-\]
-where the last inequality follows from the Lipschitz property of $R$. 
-Consequently all the disjoint events lie in the outer-layer event
-in \eqref{appx-an:adaptive-layer}. Sum \eqref{appx-an:one-region} and
-\eqref{appx-an:two-region}, and use \eqref{appx-an:threshold-identity} and
-\(|b_j^2-1|\le1+b_j^2\), to obtain \eqref{appx-an:adaptive-layer}.
 
-The averaging step now uses only the assumed concentration of \(V_0\).
-Conditioning on \(G\) in \eqref{appx-an:adaptive-layer}, the outer layer becomes
+
+We now show that the events \(E_j\) and
+\(E_{jl}\) are pairwise disjoint and that their union is
+contained in the event under the expectation sign on the right-hand side of
+\eqref{appx-an:adaptive-layer}.
+To do so, let
 \[
- V_0+\sigma G\in A_a^{\sigma/R(G)}\setminus A_a.
+P_b:=\{w\in\R^r:u_a\cdot w\le b_a,\ a=1,\dots,m\}.
 \]
-Its conditional probability is at most
-\(C\{\sigma/R(G)+\delta\}\sqrt L\), by \eqref{appx-an:concentration}
-with translated thresholds. Therefore \eqref{appx-an:projection-moments}
-gives
+Consider any point \(g\) belonging to one of the events
+\(E_j\) or \(E_{jl}\). By their definitions, we can write
+\(g=x+y\), where \(x\in P_b\) and \(y\) is a nonzero
+nonnegative linear combination of the normal vectors corresponding
+to the constraints that are equalities at \(x\).
+Thus, for every \(w\in P_b\), we have
 \[
- \E_{V_0}|\mathcal D(b(V_0))|
- \le C\sqrt L\{\sigma\E R(G)^2+\delta\E R(G)^3\}
- \le C\{\sigma L^{3/2}+\delta L^2\}.
+y\cdot(w-x)
+=\sum_{a:u_a\cdot x=b_a}t_a(u_a\cdot w-b_a)
+\le0,
 \]
-This proves~\eqref{appx-an:threshold-bound}.
+where the coefficients \(t_a\) are nonnegative. Consequently,
+\[
+\begin{aligned}
+\|g-w\|^2
+&=\|x+y-w\|^2=\|y\|^2+\|x-w\|^2+2y\cdot(x-w)\ge\|y\|^2+\|x-w\|^2
+\ge\|g-x\|^2.
+\end{aligned}
+\]
+Moreover, the last inequality is strict whenever \(w\ne x\).
+Therefore, \(x\) is the unique closest point to \(g\) in \(P_b\).
+
+This observation implies that all the events \(E_j\) and
+\(E_{jl}\) are pairwise disjoint. Indeed, if \(g\) belonged
+to two such events, the corresponding points \(x\) would
+both be closest points to \(g\) in \(P_b\), and therefore
+would coincide. However, the definition of \(E_j\) requires
+that exactly the \(j\)-th constraint is an equality at \(x\),
+whereas the definition of \(E_{jl}\) requires that exactly
+the \(j\)-th and \(l\)-th constraints are equalities. Thus, the $E_j$ and the $E_{jl}$ are pairwise disjoint.
+
+Next, we show that all these events are contained in the event under the expectation sign on the right-hand side of \eqref{appx-an:adaptive-layer}. Take any $g$ in either $E_j$ or $E_{jl}$.
+Then \(g=x+y\) with \(x\in P_b\),
+\(y\ne0\), and \(y\) being a nonnegative combination of active
+normal vectors. Hence at least one constraint that is active at $x$ is violated
+at \(g\). Indeed,
+\[
+y\cdot y
+=\sum_{a:u_a\cdot x=b_a}t_a(u_a\cdot g-b_a)>0,
+\]
+and so \(u_a\cdot g>b_a\) for at least one \(a\).
+On the other hand, since \(\|u_a\|=1\) and
+\(u_a\cdot x\le b_a\), we have, for every \(a\),
+\[
+u_a\cdot g-b_a
+=u_a\cdot x-b_a+u_a\cdot y
+\le\|y\|.
+\]
+By construction, \(\|y\|<\eta(x)=1/(4R(x))\).
+Since \(R\) is \(1\)-Lipschitz and \(R(x)\ge1\),
+\[
+R(g)\le R(x)+\|y\|
+<R(x)+\frac1{4R(x)}
+\le\frac54R(x)<4R(x).
+\]
+Therefore,
+\[
+0<\max_a(u_a\cdot g-b_a)
+\le\|y\|<\frac1{4R(x)}
+<\frac1{R(g)}.
+\]
+Thus every event \(E_j\) and \(E_{jl}\) is contained in
+the outer-layer event in \eqref{appx-an:adaptive-layer}.
+
+Finally, the disjointness of these events implies
+\[
+\begin{aligned}
+&\sum_j\E[R(G)^3\ind_{E_j}(G)]
++\sum_{j<l}\E[R(G)^3\ind_{E_{jl}}(G)]\\
+&\qquad\le
+\E\left[
+R(G)^3\ind\left\{
+0<\max_a(u_a\cdot G-b_a)\le\frac1{R(G)}
+\right\}\right].
+\end{aligned}
+\]
+Combining this inequality with \eqref{appx-an:one-region}
+and \eqref{appx-an:two-region}, we obtain
+\[
+\begin{aligned}
+&\sum_j(1+b_j^2)C_j(b)
++\sum_{j<l}(1-\rho_{jl})|b_j+b_l|C_{jl}(b)\\
+&\qquad\le C\E\left[
+R(G)^3\ind\left\{
+0<\max_a(u_a\cdot G-b_a)\le\frac1{R(G)}
+\right\}\right].
+\end{aligned}
+\]
+Since \(C_j(b)\ge0\) and \(C_{jl}(b)\ge0\) for \(j<l\), and
+\(|b_j^2-1|\le1+b_j^2\), the representation
+\eqref{appx-an:threshold-identity} now yields
+\eqref{appx-an:adaptive-layer}, as required.
+
+
+We are now ready to complete the proof of the lemma. We have
+$$
+0<\max_j(u_j\cdot G-b_j(V_0))
+ \le\frac1{R(G)} \quad \Longleftrightarrow \quad V_0+\sigma G\in A_a^{\sigma/R(G)}\setminus A_a.
+$$
+Also,
+$$
+\Pp\left(V_0+\sigma G\in A_a^{\sigma/R(G)}\setminus A_a \mid G\right) \leq C\{\sigma/R(G)+\delta\}\sqrt L
+$$
+by \eqref{appx-an:concentration} with thresholds \(a_j-\sigma u_j\cdot G\). Therefore, \eqref{appx-an:projection-moments} and \eqref{appx-an:adaptive-layer}
+give
+\[
+ \E[|\mathcal D(b(V_0))|]
+ \le C\sqrt L\{\sigma\E[R(G)^2]+\delta\E[R(G)^3]\}
+ \le C(\sigma L^{3/2}+\delta L^2),
+\]
+which gives~\eqref{appx-an:threshold-bound} and completes the proof of the lemma.
 \end{proof}
+\par\endgroup
 
 \section{\texorpdfstring{Proof of the anti-concentration inequality of Lemma~\ref{lem:concentration}}{Proof of the rectangle anti-concentration inequality}}\label{appx-app:concentration}
 \label{appx-conc:conditioning}
