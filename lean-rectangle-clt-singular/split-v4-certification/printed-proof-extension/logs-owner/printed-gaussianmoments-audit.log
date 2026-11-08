@@ -1,0 +1,46 @@
+RectangleCLT.Companion.SplitV4.Printed.gaussian_norm_tail_union (m : ℕ) {y : ℝ} (hy : 0 ≤ y) :
+  (RectangleCLT.standardGaussian m).real {z | y < ‖z‖} ≤ min 1 (2 * ↑m * Real.exp (-y ^ 2 / 2))
+RectangleCLT.Companion.SplitV4.Printed.integral_gaussian_norm_sq_by_union_tail {m : ℕ} (hm : 1 ≤ m) :
+  ∫ (z : RectangleCLT.Vector m), ‖z‖ ^ 2 ∂RectangleCLT.standardGaussian m ≤ 2 * Real.log (2 * ↑m) + 2
+RectangleCLT.Companion.SplitV4.Printed.normalizedGaussianMaximum_tendsto_in_probability {ε : ℝ} (hε : 0 < ε) :
+  Filter.Tendsto
+    (fun n =>
+      (RectangleCLT.standardGaussian (n + 2)).real
+        {z | ε < |RectangleCLT.Companion.SplitV4.Printed.normalizedGaussianMaximum n z - 1|})
+    Filter.atTop (nhds 0)
+RectangleCLT.Companion.SplitV4.Printed.normalizedGaussianMaximum_uniform_integrability (ε : ℝ) :
+  0 < ε →
+    ∃ K,
+      0 < K ∧
+        ∀ (n : ℕ),
+          ∫ (z : RectangleCLT.Vector (n + 2)),
+              {z | K < |RectangleCLT.Companion.SplitV4.Printed.normalizedGaussianMaximum n z|}.indicator
+                (fun z => |RectangleCLT.Companion.SplitV4.Printed.normalizedGaussianMaximum n z|)
+                z ∂RectangleCLT.standardGaussian (n + 2) ≤
+            ε
+RectangleCLT.Companion.SplitV4.Printed.normalizedGaussianMaximum_tendsto_L1 :
+  Filter.Tendsto
+    (fun n =>
+      ∫ (z : RectangleCLT.Vector (n + 2)),
+        |RectangleCLT.Companion.SplitV4.Printed.normalizedGaussianMaximum n z -
+            1| ∂RectangleCLT.standardGaussian (n + 2))
+    Filter.atTop (nhds 0)
+RectangleCLT.Companion.SplitV4.Printed.tendsto_gaussianMaximumMean_div_sqrt_log_via_uniform_integrability :
+  Filter.Tendsto (fun m => RectangleCLT.Companion.SplitV4.gaussianMaximumMean m / √(2 * Real.log ↑m)) Filter.atTop
+    (nhds 1)
+RectangleCLT.Companion.SplitV4.Printed.printedNormalMaxThreshold_tail_identity {m : ℕ} (hm : 2 ≤ m) :
+  ↑m *
+      RectangleCLT.Companion.standardNormalUpperTail
+        (RectangleCLT.Companion.SplitV4.Printed.printedNormalMaxThreshold m) =
+    1
+RectangleCLT.Companion.SplitV4.Printed.tendsto_printedNormalMaxThreshold_div_sqrt_two_log :
+  Filter.Tendsto (fun p => RectangleCLT.Companion.SplitV4.Printed.printedNormalMaxThreshold p / √(2 * Real.log ↑p))
+    Filter.atTop (nhds 1)
+RectangleCLT.Companion.SplitV4.Printed.tendsto_normalMaximumDensity_at_printed_threshold_div_sqrt_log :
+  Filter.Tendsto
+    (fun m =>
+      RectangleCLT.Companion.SplitV4.normalMaximumDensity m
+          (RectangleCLT.Companion.SplitV4.Printed.printedNormalMaxThreshold m) /
+        √(2 * Real.log ↑m))
+    Filter.atTop (nhds (Real.exp (-1)))
+Audited 69 printed Gaussian maximum moment/quantile theorems transitively; only the three permitted axioms. Checked 44409 constants in the new UI/mean closure; no old mean limit or old quantitative maximum second-moment bound.

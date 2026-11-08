@@ -1,0 +1,125 @@
+RectangleCLT.Companion.SplitV4.bounded_face_intrinsic_concentration.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {p m n : Nat} [@NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) m]
+  (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (U : Matrix.{0, 0, 0} (Fin m) (Fin p) Real) (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  (hξ :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (ξ i))
+  (hind :
+    @ProbabilityTheory.iIndepFun.{u_1, 0, 0} Ω (Fin n) inst✝ (fun (x : Fin n) => RectangleCLT.Vector p)
+      (fun (x : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      ξ μ)
+  (hξi :
+    ∀ (i : Fin n),
+      @MeasureTheory.Integrable.{0, u_1} (RectangleCLT.Vector p)
+        (@ContinuousENorm.toENorm.{0} (RectangleCLT.Vector p)
+          (@UniformSpace.toTopologicalSpace.{0} (RectangleCLT.Vector p)
+            (@PseudoMetricSpace.toUniformSpace.{0} (RectangleCLT.Vector p)
+              (@SeminormedAddGroup.toPseudoMetricSpace.{0} (RectangleCLT.Vector p)
+                (@Pi.seminormedAddGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                  @SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                    (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                      (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                        (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                          (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+          (@SeminormedAddGroup.toContinuousENorm.{0} (RectangleCLT.Vector p)
+            (@Pi.seminormedAddGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+              @SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                  (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                    (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                      (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+        (@Pi.topologicalSpace.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) =>
+          @UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        Ω inst✝ (ξ i) μ)
+  (hcenter :
+    ∀ (i : Fin n),
+      @Eq.{1} (RectangleCLT.Vector p)
+        (@MeasureTheory.integral.{u_1, 0} Ω (RectangleCLT.Vector p)
+          (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+            Real.normedAddCommGroup)
+          (@Pi.normedSpace.{0, 0, 0} Real Real.normedField (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+            (fun (i : Fin p) =>
+              @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+            fun (i : Fin p) =>
+            @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst✝ μ fun (ω : Ω) => ξ i ω)
+        (@OfNat.ofNat.{0} (RectangleCLT.Vector p) 0
+          (@Zero.toOfNat0.{0} (RectangleCLT.Vector p)
+            (@Pi.instZero.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instZero))))
+  {η v : Real} (hη : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) η)
+  (hv : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) v)
+  (hbound :
+    ∀ (i : Fin n),
+      @Filter.Eventually.{u_1} Ω
+        (fun (ω : Ω) =>
+          @LE.le.{0} Real Real.instLE (@RectangleCLT.Companion.SplitV4.faceProjectionNorm p m U (ξ i ω)) η)
+        (@MeasureTheory.ae.{u_1, u_1} Ω (@MeasureTheory.Measure.{u_1} Ω inst✝)
+          (@MeasureTheory.Measure.instFunLike.{u_1} Ω inst✝)
+          (@MeasureTheory.Measure.instOuterMeasureClass.{u_1} Ω inst✝) μ))
+  (hvariance :
+    ∀ (α : Fin m),
+      @Eq.{1} Real
+        (@ProbabilityTheory.variance.{u_1} Ω inst✝
+          (fun (ω : Ω) =>
+            @dotProduct.{0, 0} (Fin p) Real (Fin.fintype p) Real.instMul Real.instAddCommMonoid (U α)
+              (@RectangleCLT.sumVector.{u_1} Ω p n ξ ω))
+          μ)
+        v)
+  (R : Ω → RectangleCLT.Vector p)
+  (hR :
+    @Measurable.{u_1, 0} Ω (RectangleCLT.Vector p) inst✝
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) R)
+  (hRind :
+    @ProbabilityTheory.IndepFun.{u_1, 0, 0} Ω (RectangleCLT.Vector p) (RectangleCLT.Vector p) inst✝
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      (@RectangleCLT.sumVector.{u_1} Ω p n ξ) R μ)
+  (a : RectangleCLT.Vector m) {s : Real}
+  (hs : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) s) :
+  @LE.le.{0} Real Real.instLE
+    (@MeasureTheory.Measure.real.{u_1} Ω inst✝ μ
+      (@setOf.{u_1} Ω fun (ω : Ω) =>
+        @Membership.mem.{0, 0} (RectangleCLT.Vector p) (Set.{0} (RectangleCLT.Vector p))
+          (@Set.instMembership.{0} (RectangleCLT.Vector p))
+          (@RectangleCLT.Companion.SplitV4.gaussianPolyhedronLayer p m U a s)
+          (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@instHAdd.{0} (RectangleCLT.Vector p)
+              (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+            (@RectangleCLT.sumVector.{u_1} Ω p n ξ ω) (R ω))))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@OfNat.ofNat.{0} Real 256
+        (@instOfNatAtLeastTwo.{0} Real 256 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 254 (instOfNatNat 254)))))
+      (@Min.min.{0} Real Real.instMin (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+        (@Min.min.{0} Real Real.instMin
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) s η) v)
+            (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+              (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+              inst✝ μ fun (ω : Ω) =>
+              @RectangleCLT.Companion.SplitV4.faceProjectionNorm p m U (@RectangleCLT.sumVector.{u_1} Ω p n ξ ω)))
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) s η)
+            (Real.sqrt
+              (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) (RectangleCLT.dimensionLog m)
+                v))))))
+'RectangleCLT.Companion.SplitV4.bounded_face_intrinsic_concentration' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited all 10 arbitrary-face bounded concentration theorem declarations.

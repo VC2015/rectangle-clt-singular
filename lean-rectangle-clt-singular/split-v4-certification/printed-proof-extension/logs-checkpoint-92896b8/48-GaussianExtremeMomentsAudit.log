@@ -1,0 +1,38 @@
+RectangleCLT.Companion.SplitV4.tendsto_gaussianMaximumMean_div_sqrt_log :
+  @Filter.Tendsto.{0, 0} Nat Real
+    (fun (m : Nat) =>
+      @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (RectangleCLT.Companion.SplitV4.gaussianMaximumMean m)
+        (Real.sqrt
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@OfNat.ofNat.{0} Real 2
+              (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+            (Real.log (@Nat.cast.{0} Real Real.instNatCast m)))))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+    (@nhds.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+RectangleCLT.Companion.SplitV4.integral_finiteGaussianMaximum_sq_le (m : Nat)
+  [@NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) m] :
+  @LE.le.{0} Real Real.instLE
+    (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector m) Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      (@MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Real) fun (a : Fin m) => Real.measurableSpace)
+      (RectangleCLT.standardGaussian m) fun (z : RectangleCLT.Vector m) =>
+      @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+        (@RectangleCLT.Companion.SplitV4.finiteMaximum.{0} (Fin m) (Fin.fintype m)
+          (@instNonemptyOfInhabited.{1} (Fin m) (@Fin.instInhabited m inst✝)) z)
+        (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (RectangleCLT.dimensionLog m)
+      (Real.exp
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@OfNat.ofNat.{0} Real 11
+            (@instOfNatAtLeastTwo.{0} Real 11 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 9 (instOfNatNat 9)))))
+          (@OfNat.ofNat.{0} Real 2
+            (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))))
+Audited 27 Gaussian extreme moments declarations; only the three permitted axioms.

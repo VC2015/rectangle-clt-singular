@@ -1,0 +1,115 @@
+structure RectangleCLT.Companion.SubexponentialIndependentHypotheses.{u} {Ω : Type u} [MeasurableSpace Ω] {p n : ℕ}
+  (μ : MeasureTheory.Measure Ω) (X : Fin n → Ω → RectangleCLT.Vector p) (K : ℝ) : Prop
+number of parameters: 7
+fields:
+  RectangleCLT.Companion.SubexponentialIndependentHypotheses.measurable : ∀ (i : Fin n), Measurable (X i)
+  RectangleCLT.Companion.SubexponentialIndependentHypotheses.independent : ProbabilityTheory.iIndepFun X μ
+  RectangleCLT.Companion.SubexponentialIndependentHypotheses.centered : ∀ (i : Fin n) (j : Fin p),
+      ∫ (ω : Ω), X i ω j ∂μ = 0
+  RectangleCLT.Companion.SubexponentialIndependentHypotheses.integrable_exp : ∀ (i : Fin n) (j : Fin p),
+      MeasureTheory.Integrable (fun ω => Real.exp (|X i ω j| / K)) μ
+  RectangleCLT.Companion.SubexponentialIndependentHypotheses.exponential_moment : ∀ (i : Fin n) (j : Fin p),
+      ∫ (ω : Ω), Real.exp (|X i ω j| / K) ∂μ ≤ 2
+  RectangleCLT.Companion.SubexponentialIndependentHypotheses.one_le_scale : 1 ≤ K
+constructor:
+  RectangleCLT.Companion.SubexponentialIndependentHypotheses.mk.{u} {Ω : Type u} [MeasurableSpace Ω] {p n : ℕ}
+    {μ : MeasureTheory.Measure Ω} {X : Fin n → Ω → RectangleCLT.Vector p} {K : ℝ}
+    (measurable : ∀ (i : Fin n), Measurable (X i)) (independent : ProbabilityTheory.iIndepFun X μ)
+    (centered : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), X i ω j ∂μ = 0)
+    (integrable_exp : ∀ (i : Fin n) (j : Fin p), MeasureTheory.Integrable (fun ω => Real.exp (|X i ω j| / K)) μ)
+    (exponential_moment : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), Real.exp (|X i ω j| / K) ∂μ ≤ 2)
+    (one_le_scale : 1 ≤ K) : RectangleCLT.Companion.SubexponentialIndependentHypotheses μ X K
+structure RectangleCLT.Companion.Psi1IndependentHypotheses.{u} {Ω : Type u} [MeasurableSpace Ω] {p n : ℕ}
+  (μ : MeasureTheory.Measure Ω) (X : Fin n → Ω → RectangleCLT.Vector p) (K : ℝ) : Prop
+number of parameters: 7
+fields:
+  RectangleCLT.Companion.Psi1IndependentHypotheses.measurable : ∀ (i : Fin n), Measurable (X i)
+  RectangleCLT.Companion.Psi1IndependentHypotheses.independent : ProbabilityTheory.iIndepFun X μ
+  RectangleCLT.Companion.Psi1IndependentHypotheses.centered : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), X i ω j ∂μ = 0
+  RectangleCLT.Companion.Psi1IndependentHypotheses.psi1_le : ∀ (i : Fin n) (j : Fin p),
+      (RectangleCLT.Companion.psi1Norm μ fun ω => X i ω j) ≤ ENNReal.ofReal K
+  RectangleCLT.Companion.Psi1IndependentHypotheses.one_le_scale : 1 ≤ K
+constructor:
+  RectangleCLT.Companion.Psi1IndependentHypotheses.mk.{u} {Ω : Type u} [MeasurableSpace Ω] {p n : ℕ}
+    {μ : MeasureTheory.Measure Ω} {X : Fin n → Ω → RectangleCLT.Vector p} {K : ℝ}
+    (measurable : ∀ (i : Fin n), Measurable (X i)) (independent : ProbabilityTheory.iIndepFun X μ)
+    (centered : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), X i ω j ∂μ = 0)
+    (psi1_le : ∀ (i : Fin n) (j : Fin p), (RectangleCLT.Companion.psi1Norm μ fun ω => X i ω j) ≤ ENNReal.ofReal K)
+    (one_le_scale : 1 ≤ K) : RectangleCLT.Companion.Psi1IndependentHypotheses μ X K
+def RectangleCLT.Companion.SubexponentialCLT.{u} : ℝ → Prop :=
+fun C =>
+  ∀ {Ω : Type u} [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+    [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (p n : ℕ),
+    1 ≤ p →
+      1 ≤ n →
+        ∀ (X : Fin n → Ω → RectangleCLT.Vector p) (K : ℝ) (A : Matrix (Fin p) (Fin p) ℝ),
+          RectangleCLT.Companion.SubexponentialIndependentHypotheses μ X K →
+            (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X) j j = 1) →
+              A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X) →
+                ∀ (R : RectangleCLT.Rect p),
+                  RectangleCLT.rectangleError μ (RectangleCLT.Companion.normalizedObservationSum X) A R ≤
+                    C *
+                      min 1
+                        (RectangleCLT.Companion.unrestrictedRate (RectangleCLT.Companion.subexponentialScale n K)
+                          (RectangleCLT.dimensionLog p))
+def RectangleCLT.Companion.FixedGapSubexponentialCLT.{u} : ℝ → ℝ → Prop :=
+fun c₀ C =>
+  ∀ {Ω : Type u} [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+    [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (p n : ℕ),
+    1 ≤ p →
+      1 ≤ n →
+        ∀ (X : Fin n → Ω → RectangleCLT.Vector p) (K : ℝ) (A : Matrix (Fin p) (Fin p) ℝ),
+          RectangleCLT.Companion.SubexponentialIndependentHypotheses μ X K →
+            (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X) j j = 1) →
+              A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X) →
+                c₀ ≤
+                    RectangleCLT.pairGap
+                      (RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X)) →
+                  ∀ (R : RectangleCLT.Rect p),
+                    RectangleCLT.rectangleError μ (RectangleCLT.Companion.normalizedObservationSum X) A R ≤
+                      C *
+                        min 1
+                          (RectangleCLT.Companion.fixedGapSubexponentialRate
+                            (RectangleCLT.Companion.subexponentialScale n K) (RectangleCLT.dimensionLog p))
+RectangleCLT.Companion.subexponentialCLT.{u} :
+  RectangleCLT.Companion.SubexponentialCLT RectangleCLT.Companion.subexponentialUniversalConstant
+RectangleCLT.Companion.fixedGapSubexponentialCLT.{u} {c₀ : ℝ} (hc₀ : 0 < c₀) :
+  RectangleCLT.Companion.FixedGapSubexponentialCLT c₀ (RectangleCLT.Companion.subexponentialGapConstant c₀)
+RectangleCLT.Companion.subexponentialCLT_psi1.{u} {Ω : Type u} [MeasurableSpace Ω] {μ : MeasureTheory.Measure Ω}
+  [MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ} {X : Fin n → Ω → RectangleCLT.Vector p} {K : ℝ}
+  (h : RectangleCLT.Companion.Psi1IndependentHypotheses μ X K) (hp : 1 ≤ p) (hn : 1 ≤ n)
+  (haverage : ∀ (j : Fin p), 1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 2 ∂μ = 1) (A : Matrix (Fin p) (Fin p) ℝ)
+  (hA : A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X))
+  (R : RectangleCLT.Rect p) :
+  RectangleCLT.rectangleError μ (RectangleCLT.Companion.normalizedObservationSum X) A R ≤
+    2 * RectangleCLT.Companion.subexponentialUniversalConstant *
+      min 1
+        (RectangleCLT.Companion.unrestrictedRate (RectangleCLT.Companion.subexponentialScale n K)
+          (RectangleCLT.dimensionLog p))
+RectangleCLT.Companion.fixedGapSubexponentialCLT_psi1.{u} {Ω : Type u} [MeasurableSpace Ω] {μ : MeasureTheory.Measure Ω}
+  [MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ} {X : Fin n → Ω → RectangleCLT.Vector p} {K c₀ : ℝ} (hc₀ : 0 < c₀)
+  (h : RectangleCLT.Companion.Psi1IndependentHypotheses μ X K) (hp : 1 ≤ p) (hn : 1 ≤ n)
+  (haverage : ∀ (j : Fin p), 1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 2 ∂μ = 1) (A : Matrix (Fin p) (Fin p) ℝ)
+  (hA : A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X))
+  (hgap : c₀ ≤ RectangleCLT.pairGap (RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X)))
+  (R : RectangleCLT.Rect p) :
+  RectangleCLT.rectangleError μ (RectangleCLT.Companion.normalizedObservationSum X) A R ≤
+    2 * RectangleCLT.Companion.subexponentialGapConstant c₀ *
+      min 1
+        (RectangleCLT.Companion.fixedGapSubexponentialRate (RectangleCLT.Companion.subexponentialScale n K)
+          (RectangleCLT.dimensionLog p))
+RectangleCLT.Companion.gaussian_factor_exists_of_subexponential.{u_1} {Ω : Type u_1} [MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} [MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ} {X : Fin n → Ω → RectangleCLT.Vector p}
+  {K : ℝ} (h : RectangleCLT.Companion.SubexponentialIndependentHypotheses μ X K) :
+  ∃ A, A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X)
+RectangleCLT.Companion.subexponentialCLTExists.{u} : ∃ C, 1 ≤ C ∧ RectangleCLT.Companion.SubexponentialCLT C
+RectangleCLT.Companion.fixedGapSubexponentialCLTExists.{u} {c₀ : ℝ} (hc₀ : 0 < c₀) :
+  ∃ C, 1 ≤ C ∧ RectangleCLT.Companion.FixedGapSubexponentialCLT c₀ C
+'RectangleCLT.Companion.subexponentialCLT' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.fixedGapSubexponentialCLT' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.subexponentialCLT_psi1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.fixedGapSubexponentialCLT_psi1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.gaussian_factor_exists_of_subexponential' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited 258 sub-exponential theorem declarations; only propext, Classical.choice and Quot.sound.

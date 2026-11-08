@@ -1,0 +1,199 @@
+def RectangleCLT.Companion.SplitV4.Printed.rademacherGlobalError : ℕ → ℕ → ℝ :=
+fun n m => √(RectangleCLT.dimensionLog m) / √↑n + RectangleCLT.dimensionLog m ^ 2 / ↑n
+def RectangleCLT.Companion.SplitV4.Printed.rademacherGlobalSmallConstant : ℝ :=
+RectangleCLT.Companion.SplitV4.Printed.rademacherCutoffAmplitude ^ 2 / 4
+def RectangleCLT.Companion.SplitV4.Printed.rademacherGlobalConstant : ℝ :=
+2 * RectangleCLT.scalarBerryEsseenConstant / (1 - RectangleCLT.Companion.SplitV4.Printed.rademacherCDFCap) +
+      32 * Real.exp 1 * RectangleCLT.Companion.SplitV4.moderateTailRemainderConstant / Real.exp (-1) +
+    67 * Real.exp 1 * RectangleCLT.Companion.SplitV4.moderateTailRemainderConstant +
+  8 / RectangleCLT.Companion.SplitV4.Printed.rademacherCutoffAmplitude ^ 2
+RectangleCLT.Companion.SplitV4.Printed.familyRademacher_scalar_berryEsseen {n : Nat}
+  (hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n) (x : Real) :
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+        (RectangleCLT.Companion.SplitV4.familyRademacherCDF n x) (RectangleCLT.Companion.standardNormalCDF x)))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      RectangleCLT.scalarBerryEsseenConstant (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n)))
+RectangleCLT.Companion.SplitV4.Printed.familyRademacherMaximum_damped_error {n m : Nat}
+  [@NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) m]
+  (hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n)
+  (hm : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) m) {x : Real}
+  (hx : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) x)
+  (hsmall :
+    @LE.le.{0} Real Real.instLE
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        RectangleCLT.Companion.SplitV4.moderateTailSmallConstant
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+            (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n)))
+          (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) x)))
+      (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (herror :
+    @LE.le.{0} Real Real.instLE (RectangleCLT.Companion.SplitV4.rademacherRelativeTailError n x)
+      (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) :
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+        (@MeasureTheory.Measure.real.{0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySigns m)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Companion.SplitV4.FamilySigns m)
+            fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) => Bool.instMeasurableSpace)
+          (RectangleCLT.Companion.SplitV4.familySignArrayLaw n m)
+          (@setOf.{0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySigns m)
+            fun (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySigns m) =>
+            @LE.le.{0} Real Real.instLE (@RectangleCLT.Companion.SplitV4.familyRademacherMaximum n m inst✝ z) x))
+        (RectangleCLT.Companion.SplitV4.normalMaximumCDF m x)))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (Real.exp (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+          (RectangleCLT.Companion.SplitV4.rademacherRelativeTailError n x))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@Nat.cast.{0} Real Real.instNatCast m)
+          (RectangleCLT.Companion.standardNormalUpperTail x)))
+      (Real.exp
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@Neg.neg.{0} Real Real.instNeg
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (Real.exp
+                (@Neg.neg.{0} Real Real.instNeg (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@Nat.cast.{0} Real Real.instNatCast m) (RectangleCLT.Companion.standardNormalUpperTail x))))
+          (@OfNat.ofNat.{0} Real 2
+            (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))))
+RectangleCLT.Companion.SplitV4.Printed.familyRademacherMaximum_low_error {n m : Nat}
+  [@NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) m]
+  (hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n)
+  (hm : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) m)
+  (hsmall :
+    @LE.le.{0} Real Real.instLE
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        RectangleCLT.scalarBerryEsseenConstant (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n)))
+      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+        RectangleCLT.Companion.SplitV4.Printed.rademacherCDFCap))
+  {x : Real} (hx : @LE.le.{0} Real Real.instLE x (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) :
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+        (@MeasureTheory.Measure.real.{0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySigns m)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Companion.SplitV4.FamilySigns m)
+            fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) => Bool.instMeasurableSpace)
+          (RectangleCLT.Companion.SplitV4.familySignArrayLaw n m)
+          (@setOf.{0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySigns m)
+            fun (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySigns m) =>
+            @LE.le.{0} Real Real.instLE (@RectangleCLT.Companion.SplitV4.familyRademacherMaximum n m inst✝ z) x))
+        (RectangleCLT.Companion.SplitV4.normalMaximumCDF m x)))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@OfNat.ofNat.{0} Real 2
+            (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+          RectangleCLT.scalarBerryEsseenConstant)
+        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+          (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+          RectangleCLT.Companion.SplitV4.Printed.rademacherCDFCap))
+      (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n)))
+RectangleCLT.Companion.SplitV4.Printed.familyRademacher_mgf {n : Nat} (t : Real) :
+  @Eq.{1} Real
+    (@ProbabilityTheory.mgf.{0} (Fin n → Bool)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+      (@RectangleCLT.Companion.SplitV4.familyRademacherScalarSum n) (RectangleCLT.Companion.SplitV4.familySignLaw n) t)
+    (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+      (Real.cosh
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) t
+          (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n))))
+      n)
+RectangleCLT.Companion.SplitV4.Printed.familyRademacherUpperTail_subgaussian {n : Nat}
+  (hn : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n) {x : Real}
+  (hx : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) x) :
+  @LE.le.{0} Real Real.instLE (RectangleCLT.Companion.SplitV4.familyRademacherUpperTail n x)
+    (Real.exp
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@Neg.neg.{0} Real Real.instNeg
+          (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) x
+            (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))))
+RectangleCLT.Companion.SplitV4.Printed.eventually_rademacher_cutoff_conditions :
+  @Filter.Eventually.{0} Nat
+    (fun (n : Nat) =>
+      And (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n)
+        (And
+          (@LE.le.{0} Real Real.instLE
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              RectangleCLT.scalarBerryEsseenConstant (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n)))
+            (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+              RectangleCLT.Companion.SplitV4.Printed.rademacherCDFCap))
+          (And
+            (@LE.le.{0} Real Real.instLE
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                RectangleCLT.Companion.SplitV4.moderateTailSmallConstant
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                    (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+                    (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n)))
+                  (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+                    (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                      RectangleCLT.Companion.SplitV4.Printed.rademacherCutoffAmplitude
+                      (Real.sqrt (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n)))))))
+              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+            (@LE.le.{0} Real Real.instLE
+              (RectangleCLT.Companion.SplitV4.rademacherRelativeTailError n
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  RectangleCLT.Companion.SplitV4.Printed.rademacherCutoffAmplitude
+                  (Real.sqrt (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n)))))
+              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+RectangleCLT.Companion.SplitV4.Printed.eventually_familyRademacherMaximum_global_error :
+  @Filter.Eventually.{0} Nat
+    (fun (n : Nat) =>
+      ∀ (m : Nat) (hm : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) m),
+        @LE.le.{0} Real Real.instLE (RectangleCLT.dimensionLog m)
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              RectangleCLT.Companion.SplitV4.Printed.rademacherGlobalSmallConstant
+              (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n))) →
+          ∀ (x : Real),
+            @LE.le.{0} Real Real.instLE
+              (@abs.{0} Real Real.lattice Real.instAddGroup
+                (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                  (@MeasureTheory.Measure.real.{0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySigns m)
+                    (@MeasurableSpace.pi.{0, 0} (Fin n)
+                      (fun (a : Fin n) => RectangleCLT.Companion.SplitV4.FamilySigns m) fun (a : Fin n) =>
+                      @MeasurableSpace.pi.{0, 0} (Fin m) (fun (a : Fin m) => Bool) fun (a : Fin m) =>
+                        Bool.instMeasurableSpace)
+                    (RectangleCLT.Companion.SplitV4.familySignArrayLaw n m)
+                    (@setOf.{0} (Fin n → RectangleCLT.Companion.SplitV4.FamilySigns m)
+                      fun (z : Fin n → RectangleCLT.Companion.SplitV4.FamilySigns m) =>
+                      @LE.le.{0} Real Real.instLE
+                        (@RectangleCLT.Companion.SplitV4.familyRademacherMaximum n m
+                          (@NeZero.mk.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) m
+                            fun
+                              (a :
+                                @Eq.{1} Nat m
+                                  (@OfNat.ofNat.{0} Nat 0
+                                    (@Zero.toOfNat0.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass)))) =>
+                            RectangleCLT.Companion.SplitV4.Printed.eventually_familyRademacherMaximum_global_error._proof_6
+                              m hm a)
+                          z)
+                        x))
+                  (RectangleCLT.Companion.SplitV4.normalMaximumCDF m x)))
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                RectangleCLT.Companion.SplitV4.Printed.rademacherGlobalConstant
+                (RectangleCLT.Companion.SplitV4.Printed.rademacherGlobalError n m)))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+'RectangleCLT.Companion.SplitV4.Printed.eventually_familyRademacherMaximum_global_error' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited all 47 printed global Rademacher maximum theorem declarations; only the three permitted axioms.
+Global Rademacher endpoint closure checked across 54475 constants: literal all-x F.1, Laplace IBP and copy variance reached; old F.1/small-x/log-tail endpoints absent.

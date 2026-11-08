@@ -1,0 +1,85 @@
+RectangleCLT.Companion.SplitV4.Printed.polynomialSparseParameter_tendsto_atTop_below_four {B q : ℝ} (hB : 0 < B)
+  (hq : 2 < q) (hq4 : q < 4) {p : ℕ → ℕ}
+  (hr : Filter.Tendsto (fun n => ↑n / RectangleCLT.dimensionLog (p n)) Filter.atTop Filter.atTop) :
+  Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.polynomialSparseParameter n (p n) B q) Filter.atTop
+    Filter.atTop
+RectangleCLT.Companion.SplitV4.Printed.polynomialSparseRate_dominates_coordinate_below_four {B q : ℝ} (hB : 0 < B)
+  (hq : 2 < q) (hq4 : q < 4) {p : ℕ → ℕ} (hp : ∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ p n)
+  (hr : Filter.Tendsto (fun n => ↑n / RectangleCLT.dimensionLog (p n)) Filter.atTop Filter.atTop) :
+  Filter.Tendsto
+    (fun n =>
+      RectangleCLT.Companion.SplitV4.polynomialSparseRate n (p n) B q /
+        RectangleCLT.Companion.SplitV4.polynomialCoordinateRate n (p n) B)
+    Filter.atTop Filter.atTop
+RectangleCLT.Companion.SplitV4.Printed.polynomialMoment_four_uniform_bound.{u} :
+  ∃ C,
+    1 ≤ C ∧
+      ∀ {Ω : Type u} [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+        [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {n p : ℕ},
+        1 ≤ n →
+          1 ≤ p →
+            ∀ (B : ℝ),
+              1 ≤ B →
+                ∀ (X : Fin n → Ω → RectangleCLT.Vector p),
+                  RectangleCLT.Companion.SplitV4.PolynomialIndependentHypotheses μ X 4 B →
+                    ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+                      A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X) →
+                        RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.Companion.normalizedObservationSum X)
+                            A ≤
+                          C *
+                            min 1
+                              (B * RectangleCLT.dimensionLog p ^ (5 / 4) /
+                                (↑n ^ (1 / 4) * Real.log (Real.exp 1 + B) ^ (3 / 4)))
+RectangleCLT.Companion.SplitV4.Printed.polynomialSparseParameter_tendsto_zero_above_four {B q : ℝ} (hq : 4 < q)
+  {p : ℕ → ℕ} (hr : Filter.Tendsto (fun n => ↑n / RectangleCLT.dimensionLog (p n)) Filter.atTop Filter.atTop) :
+  Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.polynomialSparseParameter n (p n) B q) Filter.atTop (nhds 0)
+RectangleCLT.Companion.SplitV4.Printed.polynomialSparseRate_negligible_to_coordinate_above_four {B q : ℝ} (hB : 0 < B)
+  (hq : 4 < q) {p : ℕ → ℕ} (hp : ∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ p n)
+  (hr : Filter.Tendsto (fun n => ↑n / RectangleCLT.dimensionLog (p n)) Filter.atTop Filter.atTop) :
+  Filter.Tendsto
+    (fun n =>
+      RectangleCLT.Companion.SplitV4.polynomialSparseRate n (p n) B q /
+        RectangleCLT.Companion.SplitV4.polynomialCoordinateRate n (p n) B)
+    Filter.atTop (nhds 0)
+RectangleCLT.Companion.SplitV4.Printed.polynomialEnvelopeTransferRate_isBigO_polylog {p : ℕ → ℕ} {a B q : ℝ}
+  (ha : 0 < a) (hB : 0 ≤ B) (hq : 2 < q) (hp : ∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ p n)
+  (hpoly : (fun n => ↑(p n)) =O[Filter.atTop] fun n => ↑n ^ a) :
+  (fun n => RectangleCLT.Companion.SplitV4.polynomialEnvelopeTransferRate n (p n) B q) =O[Filter.atTop] fun n =>
+    ↑n ^ (-(1 / 2 - 1 / q)) * Real.log ↑n ^ (1 + 2 * (1 / 2 - 1 / q))
+RectangleCLT.Companion.SplitV4.Printed.polynomialEnvelope_rates_six (n p : ℕ) (B : ℝ) :
+  RectangleCLT.Companion.SplitV4.polynomialEnvelopeV n p B 6 =
+      B * RectangleCLT.dimensionLog p ^ (4 / 3) / ↑n ^ (1 / 3) ∧
+    RectangleCLT.Companion.SplitV4.polynomialEnvelopeTransferRate n p B 6 =
+      B * RectangleCLT.dimensionLog p ^ (4 / 3) / ↑n ^ (1 / 3) * RectangleCLT.dimensionLog n ^ (1 / 3)
+RectangleCLT.Companion.SplitV4.Printed.sparse_log_dimension_condition_of_log_n {B q : ℝ} (hB : 0 < B) {p : ℕ → ℕ}
+  (hp : ∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ p n)
+  (hL : Filter.Tendsto (fun n => RectangleCLT.dimensionLog (p n)) Filter.atTop Filter.atTop)
+  (hlog : Filter.Tendsto (fun n => Real.log ↑n / RectangleCLT.dimensionLog (p n)) Filter.atTop (nhds 0)) :
+  Filter.Tendsto
+    (fun n =>
+      Real.log (RectangleCLT.Companion.SplitV4.polynomialSparseParameter n (p n) B q) / RectangleCLT.dimensionLog (p n))
+    Filter.atTop (nhds 0)
+RectangleCLT.Companion.SplitV4.Printed.sparse_regime_four_iff (B : ℕ → ℝ) (p : ℕ → ℕ) :
+  Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.polynomialSparseParameter n (p n) (B n) 4) Filter.atTop
+        Filter.atTop ∧
+      Filter.Tendsto
+          (fun n =>
+            Real.log (RectangleCLT.Companion.SplitV4.polynomialSparseParameter n (p n) (B n) 4) /
+              RectangleCLT.dimensionLog (p n))
+          Filter.atTop (nhds 0) ∧
+        Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.polynomialSparseRate n (p n) (B n) 4) Filter.atTop
+          (nhds 0) ↔
+    Filter.Tendsto B Filter.atTop Filter.atTop ∧
+      Filter.Tendsto (fun n => Real.log (B n) / RectangleCLT.dimensionLog (p n)) Filter.atTop (nhds 0) ∧
+        Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.polynomialSparseRate n (p n) (B n) 4) Filter.atTop
+          (nhds 0)
+RectangleCLT.Companion.SplitV4.Printed.envelope_tendsto_atTop_under_sparse_conditions_above_four {B : ℕ → ℝ} {p : ℕ → ℕ}
+  {q : ℝ} (hq : 4 < q) (hB : ∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ B n) (hp : ∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ p n)
+  (hK :
+    Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.polynomialSparseParameter n (p n) (B n) q) Filter.atTop
+      Filter.atTop)
+  (hR :
+    Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.polynomialSparseRate n (p n) (B n) q) Filter.atTop
+      (nhds 0)) :
+  Filter.Tendsto B Filter.atTop Filter.atTop
+Audited 42 printed polynomial regime theorem declarations transitively; only propext, Classical.choice and Quot.sound.

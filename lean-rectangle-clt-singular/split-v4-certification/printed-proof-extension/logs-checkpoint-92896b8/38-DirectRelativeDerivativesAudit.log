@@ -1,0 +1,1570 @@
+def RectangleCLT.Companion.SplitV4.relativeCubicContraction.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p n : ℕ} →
+      RectangleCLT.FaceSmoother p →
+        MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → RectangleCLT.Vector p → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} s μ ξ x =>
+  ∑ j, ∑ k, ∑ l, RectangleCLT.Companion.SplitV4.relativeThirdMatrix μ ξ j k l * s.mixedThirdDerivativeF x j k l
+def RectangleCLT.Companion.SplitV4.directCopyCoordinate.{u_1} : {Ω : Type u_1} →
+  {p n : ℕ} → (Fin n → Ω → RectangleCLT.Vector p) → Fin n → Fin p → Bool → Ω × Ω → ℝ :=
+fun {Ω} {p n} ξ i j b z => if b = true then ξ i z.2 j else ξ i z.1 j
+def RectangleCLT.Companion.SplitV4.directCopyVector.{u_1} : {Ω : Type u_1} →
+  {p n : ℕ} → (Fin n → Ω → RectangleCLT.Vector p) → Fin n → Bool → Ω × Ω → RectangleCLT.Vector p :=
+fun {Ω} {p n} ξ i b z j => RectangleCLT.Companion.SplitV4.directCopyCoordinate ξ i j b z
+def RectangleCLT.Companion.SplitV4.signedCoordinateFaceEquiv : (p : ℕ) → Fin (2 * p) ≃ RectangleCLT.Face p :=
+fun p => Fintype.equivOfCardEq ⋯
+def RectangleCLT.Companion.SplitV4.signedCoordinateRows : (p : ℕ) → Matrix (Fin (2 * p)) (Fin p) ℝ :=
+fun p α =>
+  if ((RectangleCLT.Companion.SplitV4.signedCoordinateFaceEquiv p) α).2 = true then
+    RectangleCLT.FaceSmoother.coordinateDirection ((RectangleCLT.Companion.SplitV4.signedCoordinateFaceEquiv p) α).1
+  else -RectangleCLT.FaceSmoother.coordinateDirection ((RectangleCLT.Companion.SplitV4.signedCoordinateFaceEquiv p) α).1
+def RectangleCLT.Companion.SplitV4.directSlepianFourthRemainder.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p n : ℕ} →
+      RectangleCLT.FaceSmoother p →
+        MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → Matrix (Fin p) (Fin p) ℝ → ℝ → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} s μ ξ A v =>
+  ∫ (r : ℝ) in 0 ..1,
+    RectangleCLT.Companion.SplitV4.genericManuscriptFourthPathIntegrand μ (RectangleCLT.gaussianLaw A) s.F ξ 0 1
+      (√(1 - v)) (√v) (-(1 / 2)) v r
+def RectangleCLT.Companion.SplitV4.directInitializationGap.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p n : ℕ} →
+      MeasureTheory.Measure Ω →
+        (Fin n → Ω → RectangleCLT.Vector p) →
+          Matrix (Fin p) (Fin p) ℝ → (h : ℝ) → 0 < h → RectangleCLT.Vector p × RectangleCLT.Vector p → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} μ ξ A h hh bounds =>
+  let s := RectangleCLT.FaceSmoother.closedBox bounds.1 bounds.2 h hh;
+  |∫ (ω : Ω), s.F (RectangleCLT.sumVector ξ ω) ∂μ -
+      RectangleCLT.Companion.SplitV4.directSlepianExpectation s μ ξ A
+        (RectangleCLT.Companion.SplitV4.seededInitializationTime (RectangleCLT.dimensionLog p * h ^ 2))|
+def RectangleCLT.Companion.SplitV4.initializationDiscrepancy.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p n : ℕ} →
+      MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → Matrix (Fin p) (Fin p) ℝ → (h : ℝ) → 0 < h → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} μ ξ A h hh =>
+  sSup (Set.range (RectangleCLT.Companion.SplitV4.directInitializationGap μ ξ A h hh))
+RectangleCLT.Companion.SplitV4.RelativeMomentBounds.abs_third_entry_le.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {p n : Nat} {μ : @MeasureTheory.Measure.{u_1} Ω inst✝} {ξ : Fin n → Ω → RectangleCLT.Vector p} {s₃ s₄ : Real}
+  (h : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ s₃ s₄)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (j k l : Fin p) :
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@RectangleCLT.Companion.SplitV4.relativeThirdMatrix.{u_1} Ω inst✝ p n μ ξ j k l))
+    s₃
+RectangleCLT.Companion.SplitV4.relativeCubicContraction_eq_sum_integral_canonical_third.{u_1} {Ω : Type u_1}
+  [MeasurableSpace.{u_1} Ω] {p n : Nat} {μ : @MeasureTheory.Measure.{u_1} Ω inst✝}
+  {ξ : Fin n → Ω → RectangleCLT.Vector p} {s₃ s₄ : Real} (s : RectangleCLT.FaceSmoother p)
+  (h : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ s₃ s₄) (x : RectangleCLT.Vector p) :
+  @Eq.{1} Real (@RectangleCLT.Companion.SplitV4.relativeCubicContraction.{u_1} Ω inst✝ p n s μ ξ x)
+    (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+      fun (i : Fin n) =>
+      @MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+        inst✝ μ fun (ω : Ω) =>
+        @DFunLike.coe.{1, 1, 1}
+          (@ContinuousMultilinearMap.{0, 0, 0, 0} Real (Fin (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)))
+            (fun (i : Fin (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) => Fin p → Real) Real
+            (@DivisionSemiring.toSemiring.{0} Real
+              (@Semifield.toDivisionSemiring.{0} Real
+                (@Field.toSemifield.{0} Real
+                  (@NormedField.toField.{0} Real
+                    (@NontriviallyNormedField.toNormedField.{0} Real
+                      (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))
+            (fun (i : Fin (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) =>
+              @ENormedAddCommMonoid.toAddCommMonoid.{0} (Fin p → Real)
+                (@UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                  (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                        (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                          fun (i : Fin p) => Real.normedAddCommGroup)))))
+                (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (Fin p → Real)
+                  (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                    Real.normedAddCommGroup)))
+            (@ENormedAddCommMonoid.toAddCommMonoid.{0} Real
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real
+                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup))))
+              (@NormedAddCommGroup.toENormedAddCommMonoid.{0} Real Real.normedAddCommGroup))
+            (fun (i : Fin (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) =>
+              @NormedSpace.toModule.{0, 0} Real (Fin p → Real)
+                (@NontriviallyNormedField.toNormedField.{0} Real
+                  (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                  (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                    Real.normedAddCommGroup))
+                (@Pi.normedSpace.{0, 0, 0} Real
+                  (@NontriviallyNormedField.toNormedField.{0} Real
+                    (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                  (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                  (fun (i : Fin p) =>
+                    @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                      (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                        (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                          (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                  fun (i : Fin p) =>
+                  @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                    (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                      (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                        (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                          (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+            (@NormedSpace.toModule.{0, 0} Real Real
+              (@NontriviallyNormedField.toNormedField.{0} Real
+                (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+            (fun (i : Fin (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) =>
+              @UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                      (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                        fun (i : Fin p) => Real.normedAddCommGroup)))))
+            (@UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real
+                (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)))))
+          (Fin (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)) → Fin p → Real)
+          (fun (x : Fin (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)) → Fin p → Real) => Real)
+          (@ContinuousMultilinearMap.funLike.{0, 0, 0, 0} Real (Fin (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)))
+            (fun (i : Fin (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) => Fin p → Real) Real
+            (@DivisionSemiring.toSemiring.{0} Real
+              (@Semifield.toDivisionSemiring.{0} Real
+                (@Field.toSemifield.{0} Real
+                  (@NormedField.toField.{0} Real
+                    (@NontriviallyNormedField.toNormedField.{0} Real
+                      (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))
+            (fun (i : Fin (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) =>
+              @ENormedAddCommMonoid.toAddCommMonoid.{0} (Fin p → Real)
+                (@UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                  (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                        (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                          fun (i : Fin p) => Real.normedAddCommGroup)))))
+                (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (Fin p → Real)
+                  (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                    Real.normedAddCommGroup)))
+            (@ENormedAddCommMonoid.toAddCommMonoid.{0} Real
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real
+                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup))))
+              (@NormedAddCommGroup.toENormedAddCommMonoid.{0} Real Real.normedAddCommGroup))
+            (fun (i : Fin (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) =>
+              @NormedSpace.toModule.{0, 0} Real (Fin p → Real)
+                (@NontriviallyNormedField.toNormedField.{0} Real
+                  (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                  (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                    Real.normedAddCommGroup))
+                (@Pi.normedSpace.{0, 0, 0} Real
+                  (@NontriviallyNormedField.toNormedField.{0} Real
+                    (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                  (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                  (fun (i : Fin p) =>
+                    @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                      (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                        (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                          (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                  fun (i : Fin p) =>
+                  @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                    (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                      (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                        (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                          (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+            (@NormedSpace.toModule.{0, 0} Real Real
+              (@NontriviallyNormedField.toNormedField.{0} Real
+                (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+            (fun (i : Fin (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) =>
+              @UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                      (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                        fun (i : Fin p) => Real.normedAddCommGroup)))))
+            (@UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real
+                (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)))))
+          (@iteratedFDeriv.{0, 0, 0} Real
+            (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField) (Fin p → Real)
+            (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+              Real.normedAddCommGroup)
+            (@Pi.normedSpace.{0, 0, 0} Real
+              (@NontriviallyNormedField.toNormedField.{0} Real
+                (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+              (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+              (fun (i : Fin p) =>
+                @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                  (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                    (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                      (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+              fun (i : Fin p) =>
+              @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                  (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                    (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                      (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+            Real Real.normedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+            (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)) (@RectangleCLT.FaceSmoother.F p s) x)
+          fun (x : Fin (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) => ξ i ω)
+RectangleCLT.Companion.SplitV4.integrable_relativeCubicContraction_and_integral_bound.{u_1, u_2} {Ω : Type u_1}
+  {Γ : Type u_2} [MeasurableSpace.{u_1} Ω] [MeasurableSpace.{u_2} Γ] {p n : Nat}
+  (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) (ν : @MeasureTheory.Measure.{u_2} Γ inst✝¹)
+  [@MeasureTheory.IsProbabilityMeasure.{u_2} Γ inst✝¹ ν] (ξ : Fin n → Ω → RectangleCLT.Vector p) {s₃ s₄ : Real}
+  (s : RectangleCLT.FaceSmoother p)
+  (h : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ s₃ s₄)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (X : Γ → RectangleCLT.Vector p)
+  (hX :
+    @Measurable.{u_2, 0} Γ (RectangleCLT.Vector p) inst✝¹
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) X) :
+  And
+    (@MeasureTheory.Integrable.{0, u_2} Real
+      (@ContinuousENorm.toENorm.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real
+          (@PseudoMetricSpace.toUniformSpace.{0} Real
+            (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+              (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                  (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                    (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                      (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+        (@SeminormedAddGroup.toContinuousENorm.{0} Real
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+            (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+              (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                  (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace)) Γ
+      inst✝¹ (fun (ω : Γ) => @RectangleCLT.Companion.SplitV4.relativeCubicContraction.{u_1} Ω inst✝ p n s μ ξ (X ω)) ν)
+    (@LE.le.{0} Real Real.instLE
+      (@abs.{0} Real Real.lattice Real.instAddGroup
+        (@MeasureTheory.integral.{u_2, 0} Γ Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst✝¹ ν fun (ω : Γ) =>
+          @RectangleCLT.Companion.SplitV4.relativeCubicContraction.{u_1} Ω inst✝ p n s μ ξ (X ω)))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@OfNat.ofNat.{0} Real 13
+              (@instOfNatAtLeastTwo.{0} Real 13 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 11 (instOfNatNat 11)))))
+            s₃)
+          (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (@RectangleCLT.FaceSmoother.bandwidth p s) (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))))
+        (@MeasureTheory.integral.{u_2, 0} Γ Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst✝¹ ν fun (ω : Γ) =>
+          @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@RectangleCLT.FaceSmoother.F p s (X ω))
+            (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+              (@RectangleCLT.FaceSmoother.F p s (X ω))))))
+RectangleCLT.Companion.SplitV4.RelativeMomentBounds.sum_integral_abs_copy_coordinate_four_product_le.{u_1}
+  {Ω : Type u_1} [MeasurableSpace.{u_1} Ω] {p n : Nat} {μ : @MeasureTheory.Measure.{u_1} Ω inst✝}
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ] {ξ : Fin n → Ω → RectangleCLT.Vector p} {s₃ s₄ : Real}
+  (h : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ s₃ s₄)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (a : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) → Fin p)
+  (b : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) → Bool) :
+  @LE.le.{0} Real Real.instLE
+    (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+      fun (i : Fin n) =>
+      @MeasureTheory.integral.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) Real Real.normedAddCommGroup
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+        (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+        (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ) fun (z : Prod.{u_1, u_1} Ω Ω) =>
+        @abs.{0} Real Real.lattice Real.instAddGroup
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@RectangleCLT.Companion.SplitV4.directCopyCoordinate.{u_1} Ω p n ξ i
+                  (a
+                    (@OfNat.ofNat.{0} (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) 0
+                      (@Fin.instOfNat (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))
+                        (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) 0)))
+                  (b
+                    (@OfNat.ofNat.{0} (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) 0
+                      (@Fin.instOfNat (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))
+                        (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) 0)))
+                  z)
+                (@RectangleCLT.Companion.SplitV4.directCopyCoordinate.{u_1} Ω p n ξ i
+                  (a
+                    (@OfNat.ofNat.{0} (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) 1
+                      (@Fin.instOfNat (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))
+                        (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) 1)))
+                  (b
+                    (@OfNat.ofNat.{0} (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) 1
+                      (@Fin.instOfNat (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))
+                        (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) 1)))
+                  z))
+              (@RectangleCLT.Companion.SplitV4.directCopyCoordinate.{u_1} Ω p n ξ i
+                (a
+                  (@OfNat.ofNat.{0} (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) 2
+                    (@Fin.instOfNat (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))
+                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) 2)))
+                (b
+                  (@OfNat.ofNat.{0} (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) 2
+                    (@Fin.instOfNat (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))
+                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) 2)))
+                z))
+            (@RectangleCLT.Companion.SplitV4.directCopyCoordinate.{u_1} Ω p n ξ i
+              (a
+                (@OfNat.ofNat.{0} (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) 3
+                  (@Fin.instOfNat (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))
+                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) 3)))
+              (b
+                (@OfNat.ofNat.{0} (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) 3
+                  (@Fin.instOfNat (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))
+                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))) 3)))
+              z)))
+    s₄
+RectangleCLT.Companion.SplitV4.sum_integral_norm_fourth_shift_copies_le.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {p n : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) {s₃ s₄ : Real}
+  (h : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ s₃ s₄)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (s : RectangleCLT.FaceSmoother p) (x : RectangleCLT.Vector p)
+  (v : Fin n → Prod.{u_1, u_1} Ω Ω → RectangleCLT.Vector p)
+  (hv :
+    ∀ (i : Fin n),
+      @Measurable.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) (RectangleCLT.Vector p)
+        (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (v i))
+  (hvb :
+    ∀ (i : Fin n),
+      @Filter.Eventually.{u_1} (Prod.{u_1, u_1} Ω Ω)
+        (fun (z : Prod.{u_1, u_1} Ω Ω) =>
+          @LE.le.{0} Real Real.instLE
+            (@Norm.norm.{0} (RectangleCLT.Vector p)
+              (@NormedRing.toNorm.{0} (RectangleCLT.Vector p)
+                (@Pi.normedRing.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                  @NormedCommRing.toNormedRing.{0} Real Real.normedCommRing))
+              (v i z))
+            (@RectangleCLT.FaceSmoother.bandwidth p s))
+        (@MeasureTheory.ae.{u_1, u_1} (Prod.{u_1, u_1} Ω Ω)
+          (@MeasureTheory.Measure.{u_1} (Prod.{u_1, u_1} Ω Ω) (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝))
+          (@MeasureTheory.Measure.instFunLike.{u_1} (Prod.{u_1, u_1} Ω Ω)
+            (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝))
+          (@MeasureTheory.Measure.instOuterMeasureClass.{u_1} (Prod.{u_1, u_1} Ω Ω)
+            (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝))
+          (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ)))
+  (b : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) → Bool) :
+  And
+    (∀ (i : Fin n),
+      @MeasureTheory.Integrable.{0, u_1} Real
+        (@ContinuousENorm.toENorm.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real
+              (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+                (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+          (@SeminormedAddGroup.toContinuousENorm.{0} Real
+            (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (Prod.{u_1, u_1} Ω Ω) (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+        (fun (z : Prod.{u_1, u_1} Ω Ω) =>
+          @DFunLike.coe.{1, 1, 1}
+            (@ContinuousMultilinearMap.{0, 0, 0, 0} Real (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) => Fin p → Real) Real
+              (@DivisionSemiring.toSemiring.{0} Real
+                (@Semifield.toDivisionSemiring.{0} Real
+                  (@Field.toSemifield.{0} Real
+                    (@NormedField.toField.{0} Real
+                      (@NontriviallyNormedField.toNormedField.{0} Real
+                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                @ENormedAddCommMonoid.toAddCommMonoid.{0} (Fin p → Real)
+                  (@UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                    (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                      (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                          (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                            fun (i : Fin p) => Real.normedAddCommGroup)))))
+                  (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (Fin p → Real)
+                    (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                      Real.normedAddCommGroup)))
+              (@ENormedAddCommMonoid.toAddCommMonoid.{0} Real
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup))))
+                (@NormedAddCommGroup.toENormedAddCommMonoid.{0} Real Real.normedAddCommGroup))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                @NormedSpace.toModule.{0, 0} Real (Fin p → Real)
+                  (@NontriviallyNormedField.toNormedField.{0} Real
+                    (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                    (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                      Real.normedAddCommGroup))
+                  (@Pi.normedSpace.{0, 0, 0} Real
+                    (@NontriviallyNormedField.toNormedField.{0} Real
+                      (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                    (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                    (fun (i : Fin p) =>
+                      @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                            (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                    fun (i : Fin p) =>
+                    @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                      (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                            (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+              (@NormedSpace.toModule.{0, 0} Real Real
+                (@NontriviallyNormedField.toNormedField.{0} Real
+                  (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                  (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                @UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                  (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                        (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                          fun (i : Fin p) => Real.normedAddCommGroup)))))
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real
+                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)))))
+            (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) → Fin p → Real)
+            (fun (x : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) → Fin p → Real) => Real)
+            (@ContinuousMultilinearMap.funLike.{0, 0, 0, 0} Real (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) => Fin p → Real) Real
+              (@DivisionSemiring.toSemiring.{0} Real
+                (@Semifield.toDivisionSemiring.{0} Real
+                  (@Field.toSemifield.{0} Real
+                    (@NormedField.toField.{0} Real
+                      (@NontriviallyNormedField.toNormedField.{0} Real
+                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                @ENormedAddCommMonoid.toAddCommMonoid.{0} (Fin p → Real)
+                  (@UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                    (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                      (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                          (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                            fun (i : Fin p) => Real.normedAddCommGroup)))))
+                  (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (Fin p → Real)
+                    (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                      Real.normedAddCommGroup)))
+              (@ENormedAddCommMonoid.toAddCommMonoid.{0} Real
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup))))
+                (@NormedAddCommGroup.toENormedAddCommMonoid.{0} Real Real.normedAddCommGroup))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                @NormedSpace.toModule.{0, 0} Real (Fin p → Real)
+                  (@NontriviallyNormedField.toNormedField.{0} Real
+                    (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                    (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                      Real.normedAddCommGroup))
+                  (@Pi.normedSpace.{0, 0, 0} Real
+                    (@NontriviallyNormedField.toNormedField.{0} Real
+                      (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                    (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                    (fun (i : Fin p) =>
+                      @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                            (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                    fun (i : Fin p) =>
+                    @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                      (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                            (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+              (@NormedSpace.toModule.{0, 0} Real Real
+                (@NontriviallyNormedField.toNormedField.{0} Real
+                  (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                  (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                @UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                  (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                        (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                          fun (i : Fin p) => Real.normedAddCommGroup)))))
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real
+                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)))))
+            (@iteratedFDeriv.{0, 0, 0} Real
+              (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField) (Fin p → Real)
+              (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                Real.normedAddCommGroup)
+              (@Pi.normedSpace.{0, 0, 0} Real
+                (@NontriviallyNormedField.toNormedField.{0} Real
+                  (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                (fun (i : Fin p) =>
+                  @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                fun (i : Fin p) =>
+                @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                  (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+              Real Real.normedAddCommGroup
+              (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+              (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) (@RectangleCLT.FaceSmoother.F p s)
+              (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+                (@instHAdd.{0} (RectangleCLT.Vector p)
+                  (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+                x (v i z)))
+            fun (a : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+            @RectangleCLT.Companion.SplitV4.directCopyVector.{u_1} Ω p n ξ i (b a) z)
+        (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ))
+    (@LE.le.{0} Real Real.instLE
+      (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+        fun (i : Fin n) =>
+        @MeasureTheory.integral.{u_1, 0} (Prod.{u_1, u_1} Ω Ω) Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+          (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ) fun (z : Prod.{u_1, u_1} Ω Ω) =>
+          @Norm.norm.{0} Real Real.norm
+            (@DFunLike.coe.{1, 1, 1}
+              (@ContinuousMultilinearMap.{0, 0, 0, 0} Real (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) => Fin p → Real) Real
+                (@DivisionSemiring.toSemiring.{0} Real
+                  (@Semifield.toDivisionSemiring.{0} Real
+                    (@Field.toSemifield.{0} Real
+                      (@NormedField.toField.{0} Real
+                        (@NontriviallyNormedField.toNormedField.{0} Real
+                          (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                  @ENormedAddCommMonoid.toAddCommMonoid.{0} (Fin p → Real)
+                    (@UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                      (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                        (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                            (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                              fun (i : Fin p) => Real.normedAddCommGroup)))))
+                    (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (Fin p → Real)
+                      (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                        fun (i : Fin p) => Real.normedAddCommGroup)))
+                (@ENormedAddCommMonoid.toAddCommMonoid.{0} Real
+                  (@UniformSpace.toTopologicalSpace.{0} Real
+                    (@PseudoMetricSpace.toUniformSpace.{0} Real
+                      (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup))))
+                  (@NormedAddCommGroup.toENormedAddCommMonoid.{0} Real Real.normedAddCommGroup))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                  @NormedSpace.toModule.{0, 0} Real (Fin p → Real)
+                    (@NontriviallyNormedField.toNormedField.{0} Real
+                      (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                      (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                        fun (i : Fin p) => Real.normedAddCommGroup))
+                    (@Pi.normedSpace.{0, 0, 0} Real
+                      (@NontriviallyNormedField.toNormedField.{0} Real
+                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                      (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                      (fun (i : Fin p) =>
+                        @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                              (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                      fun (i : Fin p) =>
+                      @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                        (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                              (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+                (@NormedSpace.toModule.{0, 0} Real Real
+                  (@NontriviallyNormedField.toNormedField.{0} Real
+                    (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                  (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                  @UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                    (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                      (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                          (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                            fun (i : Fin p) => Real.normedAddCommGroup)))))
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)))))
+              (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) → Fin p → Real)
+              (fun (x : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) → Fin p → Real) => Real)
+              (@ContinuousMultilinearMap.funLike.{0, 0, 0, 0} Real (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) => Fin p → Real) Real
+                (@DivisionSemiring.toSemiring.{0} Real
+                  (@Semifield.toDivisionSemiring.{0} Real
+                    (@Field.toSemifield.{0} Real
+                      (@NormedField.toField.{0} Real
+                        (@NontriviallyNormedField.toNormedField.{0} Real
+                          (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                  @ENormedAddCommMonoid.toAddCommMonoid.{0} (Fin p → Real)
+                    (@UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                      (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                        (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                            (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                              fun (i : Fin p) => Real.normedAddCommGroup)))))
+                    (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (Fin p → Real)
+                      (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                        fun (i : Fin p) => Real.normedAddCommGroup)))
+                (@ENormedAddCommMonoid.toAddCommMonoid.{0} Real
+                  (@UniformSpace.toTopologicalSpace.{0} Real
+                    (@PseudoMetricSpace.toUniformSpace.{0} Real
+                      (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup))))
+                  (@NormedAddCommGroup.toENormedAddCommMonoid.{0} Real Real.normedAddCommGroup))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                  @NormedSpace.toModule.{0, 0} Real (Fin p → Real)
+                    (@NontriviallyNormedField.toNormedField.{0} Real
+                      (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                      (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                        fun (i : Fin p) => Real.normedAddCommGroup))
+                    (@Pi.normedSpace.{0, 0, 0} Real
+                      (@NontriviallyNormedField.toNormedField.{0} Real
+                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                      (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                      (fun (i : Fin p) =>
+                        @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                              (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                      fun (i : Fin p) =>
+                      @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                        (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                              (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+                (@NormedSpace.toModule.{0, 0} Real Real
+                  (@NontriviallyNormedField.toNormedField.{0} Real
+                    (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                  (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                  @UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                    (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                      (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                          (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                            fun (i : Fin p) => Real.normedAddCommGroup)))))
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)))))
+              (@iteratedFDeriv.{0, 0, 0} Real
+                (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField) (Fin p → Real)
+                (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                  Real.normedAddCommGroup)
+                (@Pi.normedSpace.{0, 0, 0} Real
+                  (@NontriviallyNormedField.toNormedField.{0} Real
+                    (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                  (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                  (fun (i : Fin p) =>
+                    @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                      (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                        (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                          (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                  fun (i : Fin p) =>
+                  @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                    (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                      (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                        (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                          (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                Real Real.normedAddCommGroup
+                (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                  (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) (@RectangleCLT.FaceSmoother.F p s)
+                (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+                  (@instHAdd.{0} (RectangleCLT.Vector p)
+                    (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+                  x (v i z)))
+              fun (a : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+              @RectangleCLT.Companion.SplitV4.directCopyVector.{u_1} Ω p n ξ i (b a) z))
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              RectangleCLT.Companion.SplitV4.fourthDerivativeEnvelopeConstant s₄)
+            (@RectangleCLT.FaceSmoother.F p s x))
+          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) (@RectangleCLT.FaceSmoother.F p s x)))
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+          (@RectangleCLT.FaceSmoother.bandwidth p s) (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))))
+RectangleCLT.Companion.SplitV4.sum_integral_norm_fourth_shift_copies_common_base_le.{u_1, u_2} {Β : Type u_1}
+  {Ω : Type u_2} [MeasurableSpace.{u_1} Β] [MeasurableSpace.{u_2} Ω] {p n : Nat}
+  (ν : @MeasureTheory.Measure.{u_1} Β inst✝) [@MeasureTheory.IsFiniteMeasure.{u_1} Β inst✝ ν]
+  (μ : @MeasureTheory.Measure.{u_2} Ω inst✝¹) [@MeasureTheory.IsProbabilityMeasure.{u_2} Ω inst✝¹ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) {s₃ s₄ : Real}
+  (h : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_2} Ω inst✝¹ p n μ ξ s₃ s₄)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_2} Ω inst✝¹ p μ (@RectangleCLT.sumVector.{u_2} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (s : RectangleCLT.FaceSmoother p) (X : Β → RectangleCLT.Vector p)
+  (hX :
+    @Measurable.{u_1, 0} Β (RectangleCLT.Vector p) inst✝
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) X)
+  (v : Fin n → Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) → RectangleCLT.Vector p)
+  (hv :
+    ∀ (i : Fin n),
+      @Measurable.{max u_1 u_2, 0} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω)) (RectangleCLT.Vector p)
+        (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+          (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹))
+        (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (v i))
+  (hvb :
+    ∀ (i : Fin n),
+      @Filter.Eventually.{max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+        (fun (z : Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω)) =>
+          @LE.le.{0} Real Real.instLE
+            (@Norm.norm.{0} (RectangleCLT.Vector p)
+              (@NormedRing.toNorm.{0} (RectangleCLT.Vector p)
+                (@Pi.normedRing.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                  @NormedCommRing.toNormedRing.{0} Real Real.normedCommRing))
+              (v i z))
+            (@RectangleCLT.FaceSmoother.bandwidth p s))
+        (@MeasureTheory.ae.{max u_1 u_2, max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+          (@MeasureTheory.Measure.{max u_2 u_1} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+            (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+              (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹)))
+          (@MeasureTheory.Measure.instFunLike.{max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+            (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+              (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹)))
+          (@MeasureTheory.Measure.instOuterMeasureClass.{max u_1 u_2} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+            (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+              (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹)))
+          (@MeasureTheory.Measure.prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+            (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹) ν
+            (@MeasureTheory.Measure.prod.{u_2, u_2} Ω Ω inst✝¹ inst✝¹ μ μ))))
+  (b : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) → Bool) :
+  And
+    (∀ (i : Fin n),
+      @MeasureTheory.Integrable.{0, max u_1 u_2} Real
+        (@ContinuousENorm.toENorm.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real
+              (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+                (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+          (@SeminormedAddGroup.toContinuousENorm.{0} Real
+            (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω))
+        (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+          (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹))
+        (fun (z : Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω)) =>
+          @DFunLike.coe.{1, 1, 1}
+            (@ContinuousMultilinearMap.{0, 0, 0, 0} Real (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) => Fin p → Real) Real
+              (@DivisionSemiring.toSemiring.{0} Real
+                (@Semifield.toDivisionSemiring.{0} Real
+                  (@Field.toSemifield.{0} Real
+                    (@NormedField.toField.{0} Real
+                      (@NontriviallyNormedField.toNormedField.{0} Real
+                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                @ENormedAddCommMonoid.toAddCommMonoid.{0} (Fin p → Real)
+                  (@UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                    (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                      (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                          (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                            fun (i : Fin p) => Real.normedAddCommGroup)))))
+                  (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (Fin p → Real)
+                    (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                      Real.normedAddCommGroup)))
+              (@ENormedAddCommMonoid.toAddCommMonoid.{0} Real
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup))))
+                (@NormedAddCommGroup.toENormedAddCommMonoid.{0} Real Real.normedAddCommGroup))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                @NormedSpace.toModule.{0, 0} Real (Fin p → Real)
+                  (@NontriviallyNormedField.toNormedField.{0} Real
+                    (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                    (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                      Real.normedAddCommGroup))
+                  (@Pi.normedSpace.{0, 0, 0} Real
+                    (@NontriviallyNormedField.toNormedField.{0} Real
+                      (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                    (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                    (fun (i : Fin p) =>
+                      @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                            (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                    fun (i : Fin p) =>
+                    @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                      (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                            (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+              (@NormedSpace.toModule.{0, 0} Real Real
+                (@NontriviallyNormedField.toNormedField.{0} Real
+                  (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                  (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                @UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                  (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                        (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                          fun (i : Fin p) => Real.normedAddCommGroup)))))
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real
+                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)))))
+            (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) → Fin p → Real)
+            (fun (x : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) → Fin p → Real) => Real)
+            (@ContinuousMultilinearMap.funLike.{0, 0, 0, 0} Real (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) => Fin p → Real) Real
+              (@DivisionSemiring.toSemiring.{0} Real
+                (@Semifield.toDivisionSemiring.{0} Real
+                  (@Field.toSemifield.{0} Real
+                    (@NormedField.toField.{0} Real
+                      (@NontriviallyNormedField.toNormedField.{0} Real
+                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                @ENormedAddCommMonoid.toAddCommMonoid.{0} (Fin p → Real)
+                  (@UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                    (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                      (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                          (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                            fun (i : Fin p) => Real.normedAddCommGroup)))))
+                  (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (Fin p → Real)
+                    (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                      Real.normedAddCommGroup)))
+              (@ENormedAddCommMonoid.toAddCommMonoid.{0} Real
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup))))
+                (@NormedAddCommGroup.toENormedAddCommMonoid.{0} Real Real.normedAddCommGroup))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                @NormedSpace.toModule.{0, 0} Real (Fin p → Real)
+                  (@NontriviallyNormedField.toNormedField.{0} Real
+                    (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                    (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                      Real.normedAddCommGroup))
+                  (@Pi.normedSpace.{0, 0, 0} Real
+                    (@NontriviallyNormedField.toNormedField.{0} Real
+                      (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                    (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                    (fun (i : Fin p) =>
+                      @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                            (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                    fun (i : Fin p) =>
+                    @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                      (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                            (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+              (@NormedSpace.toModule.{0, 0} Real Real
+                (@NontriviallyNormedField.toNormedField.{0} Real
+                  (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                  (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+              (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                @UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                  (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                        (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                          fun (i : Fin p) => Real.normedAddCommGroup)))))
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real
+                  (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)))))
+            (@iteratedFDeriv.{0, 0, 0} Real
+              (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField) (Fin p → Real)
+              (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                Real.normedAddCommGroup)
+              (@Pi.normedSpace.{0, 0, 0} Real
+                (@NontriviallyNormedField.toNormedField.{0} Real
+                  (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                (fun (i : Fin p) =>
+                  @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                fun (i : Fin p) =>
+                @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                  (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+              Real Real.normedAddCommGroup
+              (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+              (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) (@RectangleCLT.FaceSmoother.F p s)
+              (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+                (@instHAdd.{0} (RectangleCLT.Vector p)
+                  (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+                (X (@Prod.fst.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) z)) (v i z)))
+            fun (a : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+            @RectangleCLT.Companion.SplitV4.directCopyVector.{u_2} Ω p n ξ i (b a)
+              (@Prod.snd.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) z))
+        (@MeasureTheory.Measure.prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+          (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹) ν
+          (@MeasureTheory.Measure.prod.{u_2, u_2} Ω Ω inst✝¹ inst✝¹ μ μ)))
+    (@LE.le.{0} Real Real.instLE
+      (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+        fun (i : Fin n) =>
+        @MeasureTheory.integral.{max u_1 u_2, 0} (Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω)) Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          (@Prod.instMeasurableSpace.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+            (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹))
+          (@MeasureTheory.Measure.prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) inst✝
+            (@Prod.instMeasurableSpace.{u_2, u_2} Ω Ω inst✝¹ inst✝¹) ν
+            (@MeasureTheory.Measure.prod.{u_2, u_2} Ω Ω inst✝¹ inst✝¹ μ μ))
+          fun (z : Prod.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω)) =>
+          @Norm.norm.{0} Real Real.norm
+            (@DFunLike.coe.{1, 1, 1}
+              (@ContinuousMultilinearMap.{0, 0, 0, 0} Real (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) => Fin p → Real) Real
+                (@DivisionSemiring.toSemiring.{0} Real
+                  (@Semifield.toDivisionSemiring.{0} Real
+                    (@Field.toSemifield.{0} Real
+                      (@NormedField.toField.{0} Real
+                        (@NontriviallyNormedField.toNormedField.{0} Real
+                          (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                  @ENormedAddCommMonoid.toAddCommMonoid.{0} (Fin p → Real)
+                    (@UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                      (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                        (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                            (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                              fun (i : Fin p) => Real.normedAddCommGroup)))))
+                    (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (Fin p → Real)
+                      (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                        fun (i : Fin p) => Real.normedAddCommGroup)))
+                (@ENormedAddCommMonoid.toAddCommMonoid.{0} Real
+                  (@UniformSpace.toTopologicalSpace.{0} Real
+                    (@PseudoMetricSpace.toUniformSpace.{0} Real
+                      (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup))))
+                  (@NormedAddCommGroup.toENormedAddCommMonoid.{0} Real Real.normedAddCommGroup))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                  @NormedSpace.toModule.{0, 0} Real (Fin p → Real)
+                    (@NontriviallyNormedField.toNormedField.{0} Real
+                      (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                      (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                        fun (i : Fin p) => Real.normedAddCommGroup))
+                    (@Pi.normedSpace.{0, 0, 0} Real
+                      (@NontriviallyNormedField.toNormedField.{0} Real
+                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                      (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                      (fun (i : Fin p) =>
+                        @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                              (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                      fun (i : Fin p) =>
+                      @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                        (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                              (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+                (@NormedSpace.toModule.{0, 0} Real Real
+                  (@NontriviallyNormedField.toNormedField.{0} Real
+                    (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                  (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                  @UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                    (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                      (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                          (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                            fun (i : Fin p) => Real.normedAddCommGroup)))))
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)))))
+              (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) → Fin p → Real)
+              (fun (x : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) → Fin p → Real) => Real)
+              (@ContinuousMultilinearMap.funLike.{0, 0, 0, 0} Real (Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) => Fin p → Real) Real
+                (@DivisionSemiring.toSemiring.{0} Real
+                  (@Semifield.toDivisionSemiring.{0} Real
+                    (@Field.toSemifield.{0} Real
+                      (@NormedField.toField.{0} Real
+                        (@NontriviallyNormedField.toNormedField.{0} Real
+                          (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                  @ENormedAddCommMonoid.toAddCommMonoid.{0} (Fin p → Real)
+                    (@UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                      (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                        (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                            (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                              fun (i : Fin p) => Real.normedAddCommGroup)))))
+                    (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (Fin p → Real)
+                      (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                        fun (i : Fin p) => Real.normedAddCommGroup)))
+                (@ENormedAddCommMonoid.toAddCommMonoid.{0} Real
+                  (@UniformSpace.toTopologicalSpace.{0} Real
+                    (@PseudoMetricSpace.toUniformSpace.{0} Real
+                      (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup))))
+                  (@NormedAddCommGroup.toENormedAddCommMonoid.{0} Real Real.normedAddCommGroup))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                  @NormedSpace.toModule.{0, 0} Real (Fin p → Real)
+                    (@NontriviallyNormedField.toNormedField.{0} Real
+                      (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                      (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                        fun (i : Fin p) => Real.normedAddCommGroup))
+                    (@Pi.normedSpace.{0, 0, 0} Real
+                      (@NontriviallyNormedField.toNormedField.{0} Real
+                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                      (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                      (fun (i : Fin p) =>
+                        @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                              (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                      fun (i : Fin p) =>
+                      @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                        (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                          (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                            (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                              (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+                (@NormedSpace.toModule.{0, 0} Real Real
+                  (@NontriviallyNormedField.toNormedField.{0} Real
+                    (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                  (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+                (fun (i : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+                  @UniformSpace.toTopologicalSpace.{0} (Fin p → Real)
+                    (@PseudoMetricSpace.toUniformSpace.{0} (Fin p → Real)
+                      (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} (Fin p → Real)
+                        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} (Fin p → Real)
+                          (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                            fun (i : Fin p) => Real.normedAddCommGroup)))))
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real
+                    (@SeminormedAddCommGroup.toPseudoMetricSpace.{0} Real
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)))))
+              (@iteratedFDeriv.{0, 0, 0} Real
+                (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField) (Fin p → Real)
+                (@Pi.normedAddCommGroup.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                  Real.normedAddCommGroup)
+                (@Pi.normedSpace.{0, 0, 0} Real
+                  (@NontriviallyNormedField.toNormedField.{0} Real
+                    (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))
+                  (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p)
+                  (fun (i : Fin p) =>
+                    @NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                      (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                        (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                          (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                  fun (i : Fin p) =>
+                  @InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                    (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                      (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                        (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                          (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                Real Real.normedAddCommGroup
+                (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                  (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) (@RectangleCLT.FaceSmoother.F p s)
+                (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+                  (@instHAdd.{0} (RectangleCLT.Vector p)
+                    (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+                  (X (@Prod.fst.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) z)) (v i z)))
+              fun (a : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))) =>
+              @RectangleCLT.Companion.SplitV4.directCopyVector.{u_2} Ω p n ξ i (b a)
+                (@Prod.snd.{u_1, u_2} Β (Prod.{u_2, u_2} Ω Ω) z)))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            RectangleCLT.Companion.SplitV4.fourthDerivativeEnvelopeConstant s₄)
+          (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (@RectangleCLT.FaceSmoother.bandwidth p s) (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4))))
+        (@MeasureTheory.integral.{u_1, 0} Β Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst✝ ν fun (β : Β) =>
+          @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@RectangleCLT.FaceSmoother.F p s (X β))
+            (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+              (@RectangleCLT.FaceSmoother.F p s (X β))))))
+RectangleCLT.Companion.SplitV4.integral_relativeCubicContraction_full_smoother_component.{u_1, u_2} {Ω : Type u_1}
+  {Γ : Type u_2} [MeasurableSpace.{u_1} Ω] [MeasurableSpace.{u_2} Γ] {p n : Nat}
+  [@NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) p] (μ : @MeasureTheory.Measure.{u_1} Ω inst✝)
+  (ν : @MeasureTheory.Measure.{u_2} Γ inst✝¹) [@MeasureTheory.IsProbabilityMeasure.{u_2} Γ inst✝¹ ν]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) {s₃ s₄ δ v : Real}
+  (h : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ s₃ s₄)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (s : RectangleCLT.FaceSmoother p)
+  (hfaces :
+    @Eq.{1} (Finset.{0} (RectangleCLT.Face p)) (@RectangleCLT.FaceSmoother.faces p s)
+      (@Finset.univ.{0} (RectangleCLT.Face p) (@instFintypeProd.{0, 0} (Fin p) Bool (Fin.fintype p) Bool.fintype)))
+  (X : Γ → RectangleCLT.Vector p)
+  (hmodel :
+    @RectangleCLT.Companion.SplitV4.DerivativeEnvelopeComponent.{u_2} Γ inst✝¹
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) p) p ν
+      (RectangleCLT.Companion.SplitV4.signedCoordinateRows p) X δ v)
+  (hδ : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) δ)
+  (hv :
+    @LE.le.{0} Real Real.instLE
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))
+      v)
+  (hband :
+    @LE.le.{0} Real Real.instLE
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 4
+          (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+        δ)
+      (@RectangleCLT.FaceSmoother.bandwidth p s)) :
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@MeasureTheory.integral.{u_2, 0} Γ Real Real.normedAddCommGroup
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+        inst✝¹ ν fun (ω : Γ) => @RectangleCLT.Companion.SplitV4.relativeCubicContraction.{u_1} Ω inst✝ p n s μ ξ (X ω)))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@OfNat.ofNat.{0} Real 13
+              (@instOfNatAtLeastTwo.{0} Real 13 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 11 (instOfNatNat 11)))))
+            RectangleCLT.Companion.SplitV4.derivativeEnvelopeSignedAverageConstant)
+          s₃)
+        (Real.sqrt (RectangleCLT.dimensionLog p)))
+      (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+        (@RectangleCLT.FaceSmoother.bandwidth p s) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))
+RectangleCLT.Companion.SplitV4.abs_directSlepianCubicTerm_le.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω] {p n : Nat}
+  [@NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) p] (μ : @MeasureTheory.Measure.{u_1} Ω inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ] (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ s₃ s₄ : Real}
+  (h : @RectangleCLT.BoundedIndependentHypotheses.{u_1} Ω inst✝ p n μ ξ δ)
+  (hmom : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ s₃ s₄)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ)))
+  (s : RectangleCLT.FaceSmoother p)
+  (hfaces :
+    @Eq.{1} (Finset.{0} (RectangleCLT.Face p)) (@RectangleCLT.FaceSmoother.faces p s)
+      (@Finset.univ.{0} (RectangleCLT.Face p) (@instFintypeProd.{0, 0} (Fin p) Bool (Fin.fintype p) Bool.fintype)))
+  (hband :
+    @LE.le.{0} Real Real.instLE
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 4
+          (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+        δ)
+      (@RectangleCLT.FaceSmoother.bandwidth p s))
+  {v : Real} (hv0 : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) v)
+  (hv1 : @LE.le.{0} Real Real.instLE v (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) :
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@RectangleCLT.Companion.SplitV4.directSlepianCubicTerm.{u_1} Ω inst✝ p n s μ ξ A v))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          RectangleCLT.Companion.SplitV4.directInitializationCubicConstant s₃)
+        (Real.sqrt (RectangleCLT.dimensionLog p)))
+      (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+        (@RectangleCLT.FaceSmoother.bandwidth p s) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))
+RectangleCLT.Companion.SplitV4.directSlepian_fourth_copy_data.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω] {p n : Nat}
+  [@NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) p] (μ : @MeasureTheory.Measure.{u_1} Ω inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ] (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ s₃ s₄ : Real}
+  (h : @RectangleCLT.BoundedIndependentHypotheses.{u_1} Ω inst✝ p n μ ξ δ)
+  (hmom : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ s₃ s₄)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ)))
+  (s : RectangleCLT.FaceSmoother p)
+  (hfaces :
+    @Eq.{1} (Finset.{0} (RectangleCLT.Face p)) (@RectangleCLT.FaceSmoother.faces p s)
+      (@Finset.univ.{0} (RectangleCLT.Face p) (@instFintypeProd.{0, 0} (Fin p) Bool (Fin.fintype p) Bool.fintype)))
+  (hband :
+    @LE.le.{0} Real Real.instLE
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 4
+          (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+        δ)
+      (@RectangleCLT.FaceSmoother.bandwidth p s))
+  {v r : Real} (hv0 : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) v)
+  (hv1 : @LE.le.{0} Real Real.instLE v (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (hr0 : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) r)
+  (hr1 : @LE.le.{0} Real Real.instLE r (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (b : Fin (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)) → Bool) :
+  And
+    (∀ (i : Fin n),
+      @MeasureTheory.Integrable.{0, u_1} Real
+        (@ContinuousENorm.toENorm.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real
+              (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+                (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+          (@SeminormedAddGroup.toContinuousENorm.{0} Real
+            (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (Prod.{u_1, u_1} (Prod.{0, u_1} (RectangleCLT.Vector p) Ω) (Prod.{u_1, u_1} Ω Ω))
+        (@Prod.instMeasurableSpace.{u_1, u_1} (Prod.{0, u_1} (RectangleCLT.Vector p) Ω) (Prod.{u_1, u_1} Ω Ω)
+          (@Prod.instMeasurableSpace.{0, u_1} (RectangleCLT.Vector p) Ω
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            inst✝)
+          (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝))
+        (@RectangleCLT.Companion.SplitV4.directSlepianFourthCopyTensor.{u_1} Ω p n s ξ v r b i)
+        (@MeasureTheory.Measure.prod.{u_1, u_1} (Prod.{0, u_1} (RectangleCLT.Vector p) Ω) (Prod.{u_1, u_1} Ω Ω)
+          (@Prod.instMeasurableSpace.{0, u_1} (RectangleCLT.Vector p) Ω
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            inst✝)
+          (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+          (@MeasureTheory.Measure.prod.{0, u_1} (RectangleCLT.Vector p) Ω
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) inst✝
+            (@RectangleCLT.gaussianLaw p A) μ)
+          (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ)))
+    (@LE.le.{0} Real Real.instLE
+      (@Finset.sum.{0, 0} (Fin n) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin n) (Fin.fintype n))
+        fun (i : Fin n) =>
+        @MeasureTheory.integral.{u_1, 0}
+          (Prod.{u_1, u_1} (Prod.{0, u_1} (RectangleCLT.Vector p) Ω) (Prod.{u_1, u_1} Ω Ω)) Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          (@Prod.instMeasurableSpace.{u_1, u_1} (Prod.{0, u_1} (RectangleCLT.Vector p) Ω) (Prod.{u_1, u_1} Ω Ω)
+            (@Prod.instMeasurableSpace.{0, u_1} (RectangleCLT.Vector p) Ω
+              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              inst✝)
+            (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝))
+          (@MeasureTheory.Measure.prod.{u_1, u_1} (Prod.{0, u_1} (RectangleCLT.Vector p) Ω) (Prod.{u_1, u_1} Ω Ω)
+            (@Prod.instMeasurableSpace.{0, u_1} (RectangleCLT.Vector p) Ω
+              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              inst✝)
+            (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+            (@MeasureTheory.Measure.prod.{0, u_1} (RectangleCLT.Vector p) Ω
+              (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+              inst✝ (@RectangleCLT.gaussianLaw p A) μ)
+            (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ))
+          fun (z : Prod.{u_1, u_1} (Prod.{0, u_1} (RectangleCLT.Vector p) Ω) (Prod.{u_1, u_1} Ω Ω)) =>
+          @Norm.norm.{0} Real Real.norm
+            (@RectangleCLT.Companion.SplitV4.directSlepianFourthCopyTensor.{u_1} Ω p n s ξ v r b i z))
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            RectangleCLT.Companion.SplitV4.directInitializationFourthConstant s₄)
+          (Real.sqrt (RectangleCLT.dimensionLog p)))
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+          (@RectangleCLT.FaceSmoother.bandwidth p s) (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)))))
+RectangleCLT.Companion.SplitV4.abs_directSlepianFourthRemainder_le.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {p n : Nat} [@NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) p]
+  (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ s₃ s₄ : Real}
+  (h : @RectangleCLT.BoundedIndependentHypotheses.{u_1} Ω inst✝ p n μ ξ δ)
+  (hmom : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ s₃ s₄)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ)))
+  (s : RectangleCLT.FaceSmoother p)
+  (hfaces :
+    @Eq.{1} (Finset.{0} (RectangleCLT.Face p)) (@RectangleCLT.FaceSmoother.faces p s)
+      (@Finset.univ.{0} (RectangleCLT.Face p) (@instFintypeProd.{0, 0} (Fin p) Bool (Fin.fintype p) Bool.fintype)))
+  (hband :
+    @LE.le.{0} Real Real.instLE
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 4
+          (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+        δ)
+      (@RectangleCLT.FaceSmoother.bandwidth p s))
+  {v : Real} (hv0 : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) v)
+  (hv1 : @LE.le.{0} Real Real.instLE v (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) :
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@RectangleCLT.Companion.SplitV4.directSlepianFourthRemainder.{u_1} Ω inst✝ p n s μ ξ A v))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          RectangleCLT.Companion.SplitV4.directInitializationRemainderConstant s₄)
+        (Real.sqrt (RectangleCLT.dimensionLog p)))
+      (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+        (@RectangleCLT.FaceSmoother.bandwidth p s) (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3))))
+RectangleCLT.Companion.SplitV4.direct_initialization_bound.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω] {p n : Nat}
+  [@NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) p] (μ : @MeasureTheory.Measure.{u_1} Ω inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ] (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ s₃ s₄ : Real}
+  (h : @RectangleCLT.BoundedIndependentHypotheses.{u_1} Ω inst✝ p n μ ξ δ)
+  (hmom : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ s₃ s₄)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ)))
+  (s : RectangleCLT.FaceSmoother p)
+  (hfaces :
+    @Eq.{1} (Finset.{0} (RectangleCLT.Face p)) (@RectangleCLT.FaceSmoother.faces p s)
+      (@Finset.univ.{0} (RectangleCLT.Face p) (@instFintypeProd.{0, 0} (Fin p) Bool (Fin.fintype p) Bool.fintype)))
+  (hband :
+    @LE.le.{0} Real Real.instLE
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 4
+          (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+        δ)
+      (@RectangleCLT.FaceSmoother.bandwidth p s)) :
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+        (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+          inst✝ μ fun (ω : Ω) => @RectangleCLT.FaceSmoother.F p s (@RectangleCLT.sumVector.{u_1} Ω p n ξ ω))
+        (@RectangleCLT.Companion.SplitV4.directSlepianExpectation.{u_1} Ω inst✝ p n s μ ξ A
+          (RectangleCLT.Companion.SplitV4.seededInitializationTime
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (RectangleCLT.dimensionLog p)
+              (@HPow.hPow.{0, 0, 0} Real Nat Real
+                (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+                (@RectangleCLT.FaceSmoother.bandwidth p s) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))))))
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          RectangleCLT.Companion.SplitV4.directInitializationConstant s₃)
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) (RectangleCLT.dimensionLog p)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 3
+              (@instOfNatAtLeastTwo.{0} Real 3 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))))
+            (@OfNat.ofNat.{0} Real 2
+              (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))))
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            RectangleCLT.Companion.SplitV4.directInitializationConstant s₄)
+          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) (RectangleCLT.dimensionLog p)
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@OfNat.ofNat.{0} Real 3
+                (@instOfNatAtLeastTwo.{0} Real 3 Real.instNatCast
+                  (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))))
+              (@OfNat.ofNat.{0} Real 2
+                (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                  (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))))
+        (@RectangleCLT.FaceSmoother.bandwidth p s)))
+RectangleCLT.Companion.SplitV4.initializationDiscrepancy_le.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω] {p n : Nat}
+  [@NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) p] (μ : @MeasureTheory.Measure.{u_1} Ω inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ] (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ s₃ s₄ : Real}
+  (h : @RectangleCLT.BoundedIndependentHypotheses.{u_1} Ω inst✝ p n μ ξ δ)
+  (hmom : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ s₃ s₄)
+  (hunit :
+    ∀ (j : Fin p),
+      @Eq.{1} Real (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) j j)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ)))
+  (h₀ : Real) (hh₀ : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h₀)
+  (hband :
+    @LE.le.{0} Real Real.instLE
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 4
+          (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+        δ)
+      h₀) :
+  @LE.le.{0} Real Real.instLE (@RectangleCLT.Companion.SplitV4.initializationDiscrepancy.{u_1} Ω inst✝ p n μ ξ A h₀ hh₀)
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          RectangleCLT.Companion.SplitV4.directInitializationConstant s₃)
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) (RectangleCLT.dimensionLog p)
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@OfNat.ofNat.{0} Real 3
+              (@instOfNatAtLeastTwo.{0} Real 3 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))))
+            (@OfNat.ofNat.{0} Real 2
+              (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))))
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            RectangleCLT.Companion.SplitV4.directInitializationConstant s₄)
+          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) (RectangleCLT.dimensionLog p)
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@OfNat.ofNat.{0} Real 3
+                (@instOfNatAtLeastTwo.{0} Real 3 Real.instNatCast
+                  (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))))
+              (@OfNat.ofNat.{0} Real 2
+                (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                  (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))))
+        h₀))
+'RectangleCLT.Companion.SplitV4.relativeCubicContraction_eq_sum_integral_canonical_third' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.sum_integral_norm_fourth_shift_copies_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited 71 direct signed-cubic and restored-fourth derivative theorems.
