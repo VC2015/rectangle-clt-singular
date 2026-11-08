@@ -1,0 +1,76 @@
+RectangleCLT.Companion.SplitV4.relativeCLT_of_uniform_smooth_comparison.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {p n : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω inst✝) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  (hp : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) p) (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  {δ s₄ : Real} (h : @RectangleCLT.Companion.SplitV4.RelativeIndependentHypotheses.{u_1} Ω inst✝ p n μ ξ δ s₄)
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ)))
+  (K C : Real) (hK : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) K)
+  (hC : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) C)
+  (hgap :
+    ∀ (b : Real) (hb : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) b),
+      @LE.le.{0} Real Real.instLE (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) K δ) b →
+        @LT.lt.{0} Real Real.instLT
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (RectangleCLT.dimensionLog p)
+              (@HPow.hPow.{0, 0, 0} Real Nat Real
+                (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) b
+                (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+              (@OfNat.ofNat.{0} Real 4
+                (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+                  (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))) →
+          ∀ (lo hi : RectangleCLT.Vector p),
+            let s : RectangleCLT.FaceSmoother p := @RectangleCLT.FaceSmoother.closedBox p lo hi b hb;
+            @LE.le.{0} Real Real.instLE
+              (@abs.{0} Real Real.lattice Real.instAddGroup
+                (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                  (@MeasureTheory.integral.{u_1, 0} Ω Real Real.normedAddCommGroup
+                    (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                    inst✝ μ fun (ω : Ω) => @RectangleCLT.FaceSmoother.F p s (@RectangleCLT.sumVector.{u_1} Ω p n ξ ω))
+                  (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector p) Real Real.normedAddCommGroup
+                    (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                    (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                    (@RectangleCLT.gaussianLaw p A) fun (g : RectangleCLT.Vector p) =>
+                    @RectangleCLT.FaceSmoother.F p s g)))
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) C
+                  (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+                    (RectangleCLT.dimensionLog p)
+                    (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                      (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                      (@OfNat.ofNat.{0} Real 3
+                        (@instOfNatAtLeastTwo.{0} Real 3 Real.instNatCast
+                          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))))
+                      (@OfNat.ofNat.{0} Real 2
+                        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))))
+                (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) δ
+                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                    (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                      (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) s₄ b)
+                    (RectangleCLT.Companion.SplitV4.relativeComparisonLog (RectangleCLT.dimensionLog p) b))))) :
+  @LE.le.{0} Real Real.instLE
+    (@RectangleCLT.Companion.rectangleDistance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ) A)
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (RectangleCLT.Companion.SplitV4.relativeOptimizationConstant K
+        (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) C
+          RectangleCLT.Companion.sharpEndpointConstant))
+      (@Min.min.{0} Real Real.instMin (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+        (RectangleCLT.Companion.SplitV4.relativeRate δ s₄ (RectangleCLT.dimensionLog p))))
+'RectangleCLT.Companion.SplitV4.relativeCLT_of_uniform_smooth_comparison' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited 2 RelativeSmoothingReduction declarations; only the three standard axioms are permitted.

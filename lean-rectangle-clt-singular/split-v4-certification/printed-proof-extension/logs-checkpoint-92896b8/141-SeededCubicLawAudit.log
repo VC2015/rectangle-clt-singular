@@ -1,0 +1,74 @@
+RectangleCLT.Companion.SplitV4.seeded_relative_cubic_law_eq_product.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {p n : Nat} (s : RectangleCLT.FaceSmoother p) (μ : @MeasureTheory.Measure.{u_1} Ω inst✝)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ] (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ M₃ M₄ : Real}
+  (h : @RectangleCLT.BoundedIndependentHypotheses.{u_1} Ω inst✝ p n μ ξ δ)
+  (hrel : @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ M₃ M₄)
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (hA :
+    @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+      (@HMul.hMul.{0, 0, 0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+        (@Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.{0, 0, 0, 0} (Fin p) (Fin p) (Fin p) Real (Fin.fintype p)
+          Real.instMul Real.instAddCommMonoid)
+        A (@Matrix.transpose.{0, 0, 0} (Fin p) (Fin p) Real A))
+      (@RectangleCLT.covariance.{u_1} Ω inst✝ p μ (@RectangleCLT.sumVector.{u_1} Ω p n ξ)))
+  (x : RectangleCLT.Vector p) {ε t : Real}
+  (hε : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) ε)
+  (ht : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) t)
+  (ht1 : @LE.le.{0} Real Real.instLE t (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) :
+  @Eq.{1} Real
+    (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector p) Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      (@RectangleCLT.Companion.SplitV4.seededInterpolationLaw.{u_1} Ω inst✝ p n μ ξ A ε t)
+      fun (y : RectangleCLT.Vector p) =>
+      @RectangleCLT.Companion.SplitV4.relativeCubicContraction.{u_1} Ω inst✝ p n s μ ξ
+        (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector p) (RectangleCLT.Vector p) (RectangleCLT.Vector p)
+          (@instHAdd.{0} (RectangleCLT.Vector p)
+            (@Pi.instAdd.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instAdd))
+          x y))
+    (@RectangleCLT.Companion.SplitV4.restorationThirdExpectation.{u_1}
+      (Prod.{0, u_1} (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (RectangleCLT.Vector p)) (Prod.{u_1, u_1} Ω Ω))
+      (@Prod.instMeasurableSpace.{0, u_1} (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (RectangleCLT.Vector p))
+        (Prod.{u_1, u_1} Ω Ω)
+        (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝))
+      p p n s
+      (@MeasureTheory.Measure.prod.{0, u_1} (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (RectangleCLT.Vector p))
+        (Prod.{u_1, u_1} Ω Ω)
+        (@Prod.instMeasurableSpace.{0, 0} (Fin n → RectangleCLT.Vector p) (RectangleCLT.Vector p)
+          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+            @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+          (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+        (@Prod.instMeasurableSpace.{u_1, u_1} Ω Ω inst✝ inst✝)
+        (@RectangleCLT.Companion.splitBaseLaw.{u_1} Ω inst✝ p n μ ξ t)
+        (@MeasureTheory.Measure.prod.{u_1, u_1} Ω Ω inst✝ inst✝ μ μ))
+      A
+      (fun
+          (z :
+            Prod.{0, u_1} (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (RectangleCLT.Vector p))
+              (Prod.{u_1, u_1} Ω Ω)) =>
+        @RectangleCLT.Companion.SplitV4.seededSplitBaseValue p n A x ε t
+          (@Prod.fst.{0, u_1} (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (RectangleCLT.Vector p))
+            (Prod.{u_1, u_1} Ω Ω) z))
+      (@RectangleCLT.Companion.SplitV4.seededCopyWhitened.{0, u_1}
+        (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (RectangleCLT.Vector p)) Ω p p n A ξ)
+      (@RectangleCLT.Companion.SplitV4.seededCopyOriginal.{0, u_1}
+        (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (RectangleCLT.Vector p)) Ω p n ξ)
+      (fun (x : Fin n)
+          (x :
+            Prod.{0, u_1} (Prod.{0, 0} (Fin n → RectangleCLT.Vector p) (RectangleCLT.Vector p))
+              (Prod.{u_1, u_1} Ω Ω)) =>
+        @OfNat.ofNat.{0} (RectangleCLT.Vector p) 0
+          (@Zero.toOfNat0.{0} (RectangleCLT.Vector p)
+            (@Pi.instZero.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (i : Fin p) => Real.instZero)))
+      (RectangleCLT.Companion.SplitV4.seededSplitGaussianScale ε t))
+'RectangleCLT.Companion.SplitV4.seeded_relative_cubic_law_eq_product' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited all 5 seeded cubic law theorem declarations.

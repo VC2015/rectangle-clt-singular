@@ -1,0 +1,87 @@
+def RectangleCLT.Companion.SplitV4.absoluteLinearMaximum : {m n : ℕ} →
+  [inst : NeZero m] → (Fin m → Fin n → ℝ) → Kane.Cube n → ℝ :=
+fun {m n} [NeZero m] Z x =>
+  RectangleCLT.Companion.SplitV4.finiteFamilyMaximum fun α => |RectangleCLT.Companion.SplitV4.cubeLinear (Z α) x|
+RectangleCLT.Companion.SplitV4.finiteMaximum_pair_contraction.{u_1} {J : Type u_1} [Fintype.{u_1} J]
+  [Nonempty.{u_1 + 1} J] (A Φ Z : J → Real) (L : Real)
+  (hLip :
+    ∀ (j k : J),
+      @LE.le.{0} Real Real.instLE
+        (@abs.{0} Real Real.lattice Real.instAddGroup
+          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (Φ j) (Φ k)))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) L
+          (@abs.{0} Real Real.lattice Real.instAddGroup
+            (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (Z j) (Z k))))) :
+  @LE.le.{0} Real Real.instLE
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+      (@RectangleCLT.Companion.SplitV4.finiteFamilyMaximum.{u_1} J inst✝ inst✝¹ fun (j : J) =>
+        @HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) (A j) (Φ j))
+      (@RectangleCLT.Companion.SplitV4.finiteFamilyMaximum.{u_1} J inst✝ inst✝¹ fun (j : J) =>
+        @HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (A j) (Φ j)))
+    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+      (@RectangleCLT.Companion.SplitV4.finiteFamilyMaximum.{u_1} J inst✝ inst✝¹ fun (j : J) =>
+        @HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd) (A j)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) L (Z j)))
+      (@RectangleCLT.Companion.SplitV4.finiteFamilyMaximum.{u_1} J inst✝ inst✝¹ fun (j : J) =>
+        @HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (A j)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) L (Z j))))
+RectangleCLT.Companion.SplitV4.cube_average_contraction.{u_1} {J : Type u_1} [Fintype.{u_1} J] [Nonempty.{u_1 + 1} J]
+  {n : Nat} (P Q : J → Fin n → Real)
+  (hLip :
+    ∀ (i : Fin n) (j k : J),
+      @LE.le.{0} Real Real.instLE
+        (@abs.{0} Real Real.lattice Real.instAddGroup
+          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (P j i) (P k i)))
+        (@abs.{0} Real Real.lattice Real.instAddGroup
+          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (Q j i) (Q k i)))) :
+  @LE.le.{0} Real Real.instLE
+    (@Kane.avg.{0} (Kane.Cube n)
+      (@Pi.instFintype.{0, 0} (Fin n) (fun (a : Fin n) => Bool) (instDecidableEqFin n) (Fin.fintype n)
+        fun (a : Fin n) => Bool.fintype)
+      fun (x : Kane.Cube n) =>
+      @RectangleCLT.Companion.SplitV4.finiteFamilyMaximum.{u_1} J inst✝ inst✝¹ fun (j : J) =>
+        @RectangleCLT.Companion.SplitV4.cubeLinear n (P j) x)
+    (@Kane.avg.{0} (Kane.Cube n)
+      (@Pi.instFintype.{0, 0} (Fin n) (fun (a : Fin n) => Bool) (instDecidableEqFin n) (Fin.fintype n)
+        fun (a : Fin n) => Bool.fintype)
+      fun (x : Kane.Cube n) =>
+      @RectangleCLT.Companion.SplitV4.finiteFamilyMaximum.{u_1} J inst✝ inst✝¹ fun (j : J) =>
+        @RectangleCLT.Companion.SplitV4.cubeLinear n (Q j) x)
+RectangleCLT.Companion.SplitV4.integral_cube_square_contraction {m n : Nat}
+  [@NeZero.{0} Nat (@MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) m] (Z : Fin m → Fin n → Real) (η : Real)
+  (hη : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) η)
+  (hZ :
+    ∀ (α : Fin m) (i : Fin n), @LE.le.{0} Real Real.instLE (@abs.{0} Real Real.lattice Real.instAddGroup (Z α i)) η) :
+  @LE.le.{0} Real Real.instLE
+    (@MeasureTheory.integral.{0, 0} (Kane.Cube n) Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+      (RectangleCLT.Companion.SplitV4.cubeUniformLaw n) fun (x : Kane.Cube n) =>
+      @RectangleCLT.Companion.SplitV4.absoluteLinearMaximum m n inst✝
+        (fun (α : Fin m) (i : Fin n) =>
+          @HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (Z α i) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+        x)
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 4
+          (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+        η)
+      (@MeasureTheory.integral.{0, 0} (Kane.Cube n) Real Real.normedAddCommGroup
+        (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+          (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => Bool) fun (a : Fin n) => Bool.instMeasurableSpace)
+        (RectangleCLT.Companion.SplitV4.cubeUniformLaw n) fun (x : Kane.Cube n) =>
+        @RectangleCLT.Companion.SplitV4.absoluteLinearMaximum m n inst✝ Z x))
+'RectangleCLT.Companion.SplitV4.cube_average_contraction' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLT.Companion.SplitV4.cube_square_contraction_intrinsic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.integral_cube_square_contraction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited all 34 cube-contraction theorem declarations; only the three permitted axioms.

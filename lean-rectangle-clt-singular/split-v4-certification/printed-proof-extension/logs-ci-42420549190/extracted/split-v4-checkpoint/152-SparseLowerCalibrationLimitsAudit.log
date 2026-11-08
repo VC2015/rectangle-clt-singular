@@ -1,0 +1,741 @@
+RectangleCLT.Companion.SplitV4.sparseLowerCoordinateRate_div_scale {n : Nat}
+  (hn : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) n) {ell q B : Real}
+  (he : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) ell)
+  (hB : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) B)
+  (hK :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      (RectangleCLT.Companion.SplitV4.sparseLowerKhat n ell q B)) :
+  @Eq.{1} Real
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (RectangleCLT.Companion.SplitV4.sparseLowerCoordinateRate n ell B)
+      (RectangleCLT.Companion.SplitV4.sparseLowerScale n ell q B))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@OfNat.ofNat.{0} Real 4
+              (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+            (RectangleCLT.Companion.SplitV4.sparseLowerLog n ell q B))
+          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) q))))
+      (Real.sqrt (RectangleCLT.Companion.SplitV4.sparseLowerKhat n ell q B)))
+RectangleCLT.Companion.SplitV4.tendsto_sparseLowerCoordinateRate_div_scale (ell B : Nat → Real) (q : Real)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hB :
+    ∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder)) :
+  @Filter.Tendsto.{0, 0} Nat Real
+    (fun (n : Nat) =>
+      @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (RectangleCLT.Companion.SplitV4.sparseLowerCoordinateRate n (ell n) (B n))
+        (RectangleCLT.Companion.SplitV4.sparseLowerScale n (ell n) q (B n)))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+    (@nhds.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+RectangleCLT.Companion.SplitV4.tendsto_sparseLowerCoordinateRate (ell B : Nat → Real) (q : Real)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hB :
+    ∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder))
+  (hd :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerScale n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @Filter.Tendsto.{0, 0} Nat Real
+    (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerCoordinateRate n (ell n) (B n))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+    (@nhds.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+RectangleCLT.Companion.SplitV4.sparseLowerCoordinateRate_fourth {n : Nat} {ell B : Real}
+  (he : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) ell)
+  (hB : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) B) :
+  @Eq.{1} Real
+    (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+      (RectangleCLT.Companion.SplitV4.sparseLowerCoordinateRate n ell B) (@OfNat.ofNat.{0} Nat 4 (instOfNatNat 4)))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) B
+          (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) ell
+          (@OfNat.ofNat.{0} Nat 5 (instOfNatNat 5))))
+      (@Nat.cast.{0} Real Real.instNatCast n))
+RectangleCLT.Companion.SplitV4.tendsto_sparseLower_fifth_div (ell B : Nat → Real) (q : Real)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hB :
+    ∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder))
+  (hd :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerScale n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @Filter.Tendsto.{0, 0} Nat Real
+    (fun (n : Nat) =>
+      @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+          (ell n) (@OfNat.ofNat.{0} Nat 5 (instOfNatNat 5)))
+        (@Nat.cast.{0} Real Real.instNatCast n))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+    (@nhds.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+RectangleCLT.Companion.SplitV4.tendsto_sparseLower_cube_div (ell B : Nat → Real) (q : Real)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hB :
+    ∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder))
+  (hd :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerScale n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @Filter.Tendsto.{0, 0} Nat Real
+    (fun (n : Nat) =>
+      @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+          (ell n) (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)))
+        (@Nat.cast.{0} Real Real.instNatCast n))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+    (@nhds.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+RectangleCLT.Companion.SplitV4.tendsto_sparseLowerTheta (ell B : Nat → Real) (q : Real)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hB :
+    ∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder))
+  (hd :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerScale n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerTheta n (ell n) q (B n))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+    (@nhds.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+RectangleCLT.Companion.SplitV4.tendsto_sparseLowerPi_log (ell B : Nat → Real) (q : Real)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hB :
+    ∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder)) :
+  @Filter.Tendsto.{0, 0} Nat Real
+    (fun (n : Nat) =>
+      @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (RectangleCLT.Companion.SplitV4.sparseLowerPi n (ell n) q (B n))
+        (RectangleCLT.Companion.SplitV4.sparseLowerLog n (ell n) q (B n)))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+    (@nhds.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+RectangleCLT.Companion.SplitV4.tendsto_sparseLowerPi (ell B : Nat → Real) (q : Real)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hB :
+    ∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder)) :
+  @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerPi n (ell n) q (B n))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+    (@nhds.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+RectangleCLT.Companion.SplitV4.tendsto_sparseLowerVariance (ell B : Nat → Real) {q : Real}
+  (hq :
+    @LT.lt.{0} Real Real.instLT
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      q)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hB :
+    ∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder))
+  (hd :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerScale n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @Filter.Tendsto.{0, 0} Nat Real
+    (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerVariance n (ell n) q (B n))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+    (@nhds.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+RectangleCLT.Companion.SplitV4.tendsto_sparseLowerCount (ell B : Nat → Real) (q : Real)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder))
+  (hΛ :
+    @Filter.Tendsto.{0, 0} Nat Real
+      (fun (n : Nat) =>
+        @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (RectangleCLT.Companion.SplitV4.sparseLowerLog n (ell n) q (B n)) (ell n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerCount n (ell n) q (B n))
+    (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder)
+RectangleCLT.Companion.SplitV4.sparseLowerScale_square {n : Nat} {ell q B : Real}
+  (he : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) ell) :
+  @Eq.{1} Real
+    (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+      (RectangleCLT.Companion.SplitV4.sparseLowerScale n ell q B) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) ell
+          (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+            (RectangleCLT.Companion.SplitV4.sparseLowerAmplitude n ell q B) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+          (RectangleCLT.Companion.SplitV4.sparseLowerCount n ell q B) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))
+      (@Nat.cast.{0} Real Real.instNatCast n))
+RectangleCLT.Companion.SplitV4.sparseLower_variance_scale_identity {n : Nat} {ell q B : Real}
+  (he : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) ell)
+  (hK :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      (RectangleCLT.Companion.SplitV4.sparseLowerKhat n ell q B)) :
+  @Eq.{1} Real
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) ell
+        (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+      (RectangleCLT.Companion.SplitV4.sparseLowerVariance n ell q B))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@OfNat.ofNat.{0} Real 4
+            (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+          (RectangleCLT.Companion.SplitV4.sparseLowerPi n ell q B))
+        (RectangleCLT.Companion.SplitV4.sparseLowerLog n ell q B))
+      (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+        (RectangleCLT.Companion.SplitV4.sparseLowerScale n ell q B) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))
+RectangleCLT.Companion.SplitV4.sparseLower_count_cost_identity {n : Nat}
+  (hn : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) n) {ell q B : Real}
+  (he : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) ell)
+  (hB : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) B)
+  (hK :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      (RectangleCLT.Companion.SplitV4.sparseLowerKhat n ell q B)) :
+  @Eq.{1} Real
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) ell
+            (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+              (RectangleCLT.Companion.SplitV4.sparseLowerAmplitude n ell q B)
+              (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))
+          (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+            (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+              (RectangleCLT.Companion.SplitV4.sparseLowerCount n ell q B) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+            (RectangleCLT.Companion.SplitV4.sparseLowerCount n ell q B)))
+        (@Nat.cast.{0} Real Real.instNatCast n))
+      (RectangleCLT.Companion.SplitV4.sparseLowerScale n ell q B))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (RectangleCLT.Companion.SplitV4.sparseLowerScale n ell q B)
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+          (RectangleCLT.Companion.SplitV4.sparseLowerCount n ell q B))))
+RectangleCLT.Companion.SplitV4.sparseLower_gaussian_cost_identity {n : Nat}
+  (hn : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) n) {ell q B : Real}
+  (he : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) ell)
+  (hB : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) B)
+  (hK :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      (RectangleCLT.Companion.SplitV4.sparseLowerKhat n ell q B)) :
+  @Eq.{1} Real
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) ell
+          (RectangleCLT.Companion.SplitV4.sparseLowerVariance n ell q B))
+        (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+          (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) ell))
+      (RectangleCLT.Companion.SplitV4.sparseLowerScale n ell q B))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@OfNat.ofNat.{0} Real 4
+            (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (RectangleCLT.Companion.SplitV4.sparseLowerPi n ell q B)
+            (RectangleCLT.Companion.SplitV4.sparseLowerLog n ell q B)))
+        (RectangleCLT.Companion.SplitV4.sparseLowerScale n ell q B))
+      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) ell)))
+RectangleCLT.Companion.SplitV4.tendsto_sparseLower_count_cost (ell B : Nat → Real) (q : Real)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hB :
+    ∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder))
+  (hΛ :
+    @Filter.Tendsto.{0, 0} Nat Real
+      (fun (n : Nat) =>
+        @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (RectangleCLT.Companion.SplitV4.sparseLowerLog n (ell n) q (B n)) (ell n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))))
+  (hd :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerScale n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @Filter.Tendsto.{0, 0} Nat Real
+    (fun (n : Nat) =>
+      @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (ell n)
+              (@HPow.hPow.{0, 0, 0} Real Nat Real
+                (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+                (RectangleCLT.Companion.SplitV4.sparseLowerAmplitude n (ell n) q (B n))
+                (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))
+            (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+              (@HPow.hPow.{0, 0, 0} Real Nat Real
+                (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+                (RectangleCLT.Companion.SplitV4.sparseLowerCount n (ell n) q (B n))
+                (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+              (RectangleCLT.Companion.SplitV4.sparseLowerCount n (ell n) q (B n))))
+          (@Nat.cast.{0} Real Real.instNatCast n))
+        (RectangleCLT.Companion.SplitV4.sparseLowerScale n (ell n) q (B n)))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+    (@nhds.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+RectangleCLT.Companion.SplitV4.tendsto_sparseLower_gaussian_cost (ell B : Nat → Real) (q : Real)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hB :
+    ∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder))
+  (hd :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerScale n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @Filter.Tendsto.{0, 0} Nat Real
+    (fun (n : Nat) =>
+      @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (ell n)
+            (RectangleCLT.Companion.SplitV4.sparseLowerVariance n (ell n) q (B n)))
+          (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) (ell n)))
+        (RectangleCLT.Companion.SplitV4.sparseLowerScale n (ell n) q (B n)))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+    (@nhds.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+RectangleCLT.Companion.SplitV4.sparseLower_gaussian_coefficient_identity {n : Nat}
+  (hn : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) n) {ell q B : Real}
+  (he : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) ell)
+  (hB : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) B)
+  (hK :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      (RectangleCLT.Companion.SplitV4.sparseLowerKhat n ell q B)) :
+  @Eq.{1} Real
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (Real.sqrt (RectangleCLT.Companion.SplitV4.sparseLowerVariance n ell q B))
+        (Real.sqrt
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@OfNat.ofNat.{0} Real 2
+              (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+            ell)))
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (RectangleCLT.Companion.SplitV4.sparseLowerAmplitude n ell q B)
+          (RectangleCLT.Companion.SplitV4.sparseLowerCount n ell q B))
+        (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n))))
+    (Real.sqrt
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real 8
+          (@instOfNatAtLeastTwo.{0} Real 8 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 6 (instOfNatNat 6)))))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (RectangleCLT.Companion.SplitV4.sparseLowerPi n ell q B)
+          (RectangleCLT.Companion.SplitV4.sparseLowerLog n ell q B))))
+RectangleCLT.Companion.SplitV4.tendsto_sparseLower_gaussian_coefficient (ell B : Nat → Real) (q : Real)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hB :
+    ∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder)) :
+  @Filter.Tendsto.{0, 0} Nat Real
+    (fun (n : Nat) =>
+      @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (Real.sqrt (RectangleCLT.Companion.SplitV4.sparseLowerVariance n (ell n) q (B n)))
+          (Real.sqrt
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@OfNat.ofNat.{0} Real 2
+                (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                  (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+              (ell n))))
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (RectangleCLT.Companion.SplitV4.sparseLowerAmplitude n (ell n) q (B n))
+            (RectangleCLT.Companion.SplitV4.sparseLowerCount n (ell n) q (B n)))
+          (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n))))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+    (@nhds.{0} Real
+      (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+RectangleCLT.Companion.SplitV4.sparseLower_coverage_lower {n : Nat}
+  (hn : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) n) {ell q B : Real}
+  (he : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) ell)
+  (hB : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) B)
+  (hK :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      (RectangleCLT.Companion.SplitV4.sparseLowerKhat n ell q B))
+  (hΛ :
+    @LE.le.{0} Real Real.instLE (RectangleCLT.Companion.SplitV4.sparseLowerLog n ell q B)
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) ell
+        (@OfNat.ofNat.{0} Real 10
+          (@instOfNatAtLeastTwo.{0} Real 10 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 8 (instOfNatNat 8)))))))
+  (hlog :
+    @LE.le.{0} Real Real.instLE
+      (Real.log
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@OfNat.ofNat.{0} Real 2
+            (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+          (RectangleCLT.Companion.SplitV4.sparseLowerPi n ell q B)))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@OfNat.ofNat.{0} Real 5
+            (@instOfNatAtLeastTwo.{0} Real 5 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 3 (instOfNatNat 3)))))
+          (@OfNat.ofNat.{0} Real 4
+            (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))))
+        (RectangleCLT.Companion.SplitV4.sparseLowerLog n ell q B))) :
+  @LE.le.{0} Real Real.instLE
+    (Real.exp
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) ell
+        (@OfNat.ofNat.{0} Real 4
+          (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (Real.exp ell)
+      (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (RectangleCLT.Companion.SplitV4.sparseLowerPi n ell q B)
+          (@OfNat.ofNat.{0} Real 2
+            (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))
+        (RectangleCLT.Companion.SplitV4.sparseLowerCutoff n ell q B)))
+RectangleCLT.Companion.SplitV4.tendsto_sparseLower_coverage (ell B : Nat → Real) (q : Real)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hB :
+    ∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder))
+  (hΛ :
+    @Filter.Tendsto.{0, 0} Nat Real
+      (fun (n : Nat) =>
+        @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (RectangleCLT.Companion.SplitV4.sparseLowerLog n (ell n) q (B n)) (ell n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @Filter.Tendsto.{0, 0} Nat Real
+    (fun (n : Nat) =>
+      @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (Real.exp (ell n))
+        (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (RectangleCLT.Companion.SplitV4.sparseLowerPi n (ell n) q (B n))
+            (@OfNat.ofNat.{0} Real 2
+              (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))
+          (RectangleCLT.Companion.SplitV4.sparseLowerCutoff n (ell n) q (B n))))
+    (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder)
+RectangleCLT.Companion.SplitV4.sparseLowerCoordinateRate_ge_bounded {n : Nat}
+  (hn : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) n) {ell B : Real}
+  (he : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) ell)
+  (hB :
+    @LE.le.{0} Real Real.instLE
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      B)
+  (hen : @LE.le.{0} Real Real.instLE ell (@Nat.cast.{0} Real Real.instNatCast n)) :
+  @LE.le.{0} Real Real.instLE (RectangleCLT.Companion.SplitV4.maskedFourthBoundedScale n ell)
+    (RectangleCLT.Companion.SplitV4.sparseLowerCoordinateRate n ell B)
+RectangleCLT.Companion.SplitV4.tendsto_sparseLower_scale_bounded_ratio (ell B : Nat → Real) (q : Real)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hB :
+    ∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder))
+  (hd :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerScale n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @Filter.Tendsto.{0, 0} Nat Real
+    (fun (n : Nat) =>
+      @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (RectangleCLT.Companion.SplitV4.sparseLowerScale n (ell n) q (B n))
+        (RectangleCLT.Companion.SplitV4.maskedFourthBoundedScale n (ell n)))
+    (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder)
+RectangleCLT.Companion.SplitV4.eventually_sparseLower_probabilities (ell B : Nat → Real) {q : Real}
+  (hq :
+    @LT.lt.{0} Real Real.instLT
+      (@OfNat.ofNat.{0} Real 2
+        (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+      q)
+  (he :
+    @Filter.Tendsto.{0, 0} Nat Real ell (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@Filter.atTop.{0} Real Real.instPreorder))
+  (hB :
+    ∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n))
+  (hK :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Real Real.instPreorder))
+  (hd :
+    @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.SplitV4.sparseLowerScale n (ell n) q (B n))
+      (@Filter.atTop.{0} Nat Nat.instPreorder)
+      (@nhds.{0} Real
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) :
+  @Filter.Eventually.{0} Nat
+    (fun (n : Nat) =>
+      And
+        (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+          (RectangleCLT.Companion.SplitV4.sparseLowerTheta n (ell n) q (B n)))
+        (And
+          (@LT.lt.{0} Real Real.instLT (RectangleCLT.Companion.SplitV4.sparseLowerTheta n (ell n) q (B n))
+            (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+          (And
+            (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+              (RectangleCLT.Companion.SplitV4.sparseLowerPi n (ell n) q (B n)))
+            (And
+              (@LT.lt.{0} Real Real.instLT (RectangleCLT.Companion.SplitV4.sparseLowerPi n (ell n) q (B n))
+                (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+              (And
+                (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+                  (RectangleCLT.Companion.SplitV4.sparseLowerVariance n (ell n) q (B n)))
+                (@LT.lt.{0} Real Real.instLT (RectangleCLT.Companion.SplitV4.sparseLowerVariance n (ell n) q (B n))
+                  (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                    (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+                    (@OfNat.ofNat.{0} Real 2
+                      (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                        (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))))))))))))
+    (@Filter.atTop.{0} Nat Nat.instPreorder)
+RectangleCLT.Companion.SplitV4.sparseLowerCoordinateRate_div_scale: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.tendsto_sparseLowerCoordinateRate_div_scale: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.tendsto_sparseLowerCoordinateRate: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.sparseLowerCoordinateRate_fourth: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.tendsto_sparseLower_fifth_div: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.tendsto_sparseLower_cube_div: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.tendsto_sparseLowerTheta: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.tendsto_sparseLowerPi_log: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.tendsto_sparseLowerPi: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.tendsto_sparseLowerVariance: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.tendsto_sparseLowerCount: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.sparseLowerScale_square: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.sparseLower_variance_scale_identity: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.sparseLower_count_cost_identity: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.sparseLower_gaussian_cost_identity: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.tendsto_sparseLower_count_cost: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.tendsto_sparseLower_gaussian_cost: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.sparseLower_gaussian_coefficient_identity: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.tendsto_sparseLower_gaussian_coefficient: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.sparseLower_coverage_lower: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.tendsto_sparseLower_coverage: transitive axioms [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.sparseLowerCoordinateRate_ge_bounded: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.tendsto_sparseLower_scale_bounded_ratio: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.eventually_sparseLower_probabilities: transitive axioms [propext,
+ Quot.sound,
+ Classical.choice]
+Audited genuine scalar sparse-mask calibration: exact powers, logarithmic probability asymptotics, original rounded-count coverage, valid probabilities and negligible genuine comparison costs.

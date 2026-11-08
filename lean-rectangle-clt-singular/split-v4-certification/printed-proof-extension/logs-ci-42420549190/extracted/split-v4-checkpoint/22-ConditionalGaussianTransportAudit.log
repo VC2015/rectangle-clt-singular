@@ -1,0 +1,104 @@
+RectangleCLT.Companion.SplitV4.indep_sup_of_conditionalEventIndependence.{u_1} {Ω : Type u_1}
+  [mΩ : MeasurableSpace.{u_1} Ω] (μ : @MeasureTheory.Measure.{u_1} Ω mΩ)
+  [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω mΩ μ] (H K L : MeasurableSpace.{u_1} Ω)
+  (hH : @LE.le.{u_1} (MeasurableSpace.{u_1} Ω) (@MeasurableSpace.instLE.{u_1} Ω) H mΩ)
+  (hK : @LE.le.{u_1} (MeasurableSpace.{u_1} Ω) (@MeasurableSpace.instLE.{u_1} Ω) K mΩ)
+  (hL : @LE.le.{u_1} (MeasurableSpace.{u_1} Ω) (@MeasurableSpace.instLE.{u_1} Ω) L mΩ)
+  (hCI : @RectangleCLT.Companion.SplitV4.ConditionalEventIndependence.{u_1} Ω mΩ μ H K L)
+  (hHL : @ProbabilityTheory.Indep.{u_1} Ω H L mΩ μ) : @ProbabilityTheory.Indep.{u_1} Ω (H ⊔ K) L mΩ μ
+RectangleCLT.Companion.SplitV4.independent_data_gaussian_test_transport.{u_1, u_2, u_3} {Ω : Type u_1} {E : Type u_2}
+  {B : Type u_3} [mΩ : MeasurableSpace.{u_1} Ω] [MeasurableSpace.{u_2} E] [NormedAddCommGroup.{u_3} B]
+  [@NormedSpace.{0, u_3} Real B Real.normedField (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} B inst✝)]
+  [@CompleteSpace.{u_3} B
+      (@PseudoMetricSpace.toUniformSpace.{u_3} B
+        (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} B
+          (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} B inst✝)))]
+  [MeasurableSpace.{u_3} B]
+  [@BorelSpace.{u_3} B
+      (@UniformSpace.toTopologicalSpace.{u_3} B
+        (@PseudoMetricSpace.toUniformSpace.{u_3} B
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} B
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} B inst✝))))
+      inst✝¹]
+  {r : Nat} (μ : @MeasureTheory.Measure.{u_1} Ω mΩ) [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω mΩ μ] (D : Ω → E)
+  (G : Ω → RectangleCLT.Vector r) (hD : @Measurable.{u_1, u_2} Ω E mΩ inst✝² D)
+  (hG :
+    @Measurable.{u_1, 0} Ω (RectangleCLT.Vector r) mΩ
+      (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace) G)
+  (hDG :
+    @ProbabilityTheory.IndepFun.{u_1, u_2, 0} Ω E (RectangleCLT.Vector r) mΩ inst✝²
+      (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace) D G μ)
+  (hGlaw :
+    @Eq.{1}
+      (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+        (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+      (@MeasureTheory.Measure.map.{u_1, 0} Ω (RectangleCLT.Vector r) mΩ
+        (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace) G μ)
+      (RectangleCLT.standardGaussian r))
+  (F : Prod.{u_2, 0} E (RectangleCLT.Vector r) → B)
+  (hF :
+    @Measurable.{u_2, u_3} (Prod.{u_2, 0} E (RectangleCLT.Vector r)) B
+      (@Prod.instMeasurableSpace.{u_2, 0} E (RectangleCLT.Vector r) inst✝²
+        (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+      inst✝¹ F)
+  (hFi :
+    @MeasureTheory.Integrable.{u_3, u_1} B
+      (@ContinuousENorm.toENorm.{u_3} B
+        (@UniformSpace.toTopologicalSpace.{u_3} B
+          (@PseudoMetricSpace.toUniformSpace.{u_3} B
+            (@SeminormedAddGroup.toPseudoMetricSpace.{u_3} B
+              (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} B
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} B inst✝)))))
+        (@SeminormedAddGroup.toContinuousENorm.{u_3} B
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} B
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} B inst✝))))
+      (@UniformSpace.toTopologicalSpace.{u_3} B
+        (@PseudoMetricSpace.toUniformSpace.{u_3} B
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} B
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} B inst✝))))
+      (Prod.{u_1, 0} Ω (RectangleCLT.Vector r))
+      (@Prod.instMeasurableSpace.{u_1, 0} Ω (RectangleCLT.Vector r) mΩ
+        (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+      (fun (z : Prod.{u_1, 0} Ω (RectangleCLT.Vector r)) =>
+        F
+          (@Prod.mk.{u_2, 0} E (RectangleCLT.Vector r) (D (@Prod.fst.{u_1, 0} Ω (RectangleCLT.Vector r) z))
+            (@Prod.snd.{u_1, 0} Ω (RectangleCLT.Vector r) z)))
+      (@MeasureTheory.Measure.prod.{u_1, 0} Ω (RectangleCLT.Vector r) mΩ
+        (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace) μ
+        (RectangleCLT.standardGaussian r))) :
+  And
+    (@MeasureTheory.Integrable.{u_3, u_1} B
+      (@ContinuousENorm.toENorm.{u_3} B
+        (@UniformSpace.toTopologicalSpace.{u_3} B
+          (@PseudoMetricSpace.toUniformSpace.{u_3} B
+            (@SeminormedAddGroup.toPseudoMetricSpace.{u_3} B
+              (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} B
+                (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} B inst✝)))))
+        (@SeminormedAddGroup.toContinuousENorm.{u_3} B
+          (@SeminormedAddCommGroup.toSeminormedAddGroup.{u_3} B
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} B inst✝))))
+      (@UniformSpace.toTopologicalSpace.{u_3} B
+        (@PseudoMetricSpace.toUniformSpace.{u_3} B
+          (@SeminormedAddCommGroup.toPseudoMetricSpace.{u_3} B
+            (@NormedAddCommGroup.toSeminormedAddCommGroup.{u_3} B inst✝))))
+      Ω mΩ (fun (ω : Ω) => F (@Prod.mk.{u_2, 0} E (RectangleCLT.Vector r) (D ω) (G ω))) μ)
+    (@Eq.{u_3 + 1} B
+      (@MeasureTheory.integral.{u_1, u_3} Ω B inst✝ inst✝³ mΩ μ fun (ω : Ω) =>
+        F (@Prod.mk.{u_2, 0} E (RectangleCLT.Vector r) (D ω) (G ω)))
+      (@MeasureTheory.integral.{u_1, u_3} (Prod.{u_1, 0} Ω (RectangleCLT.Vector r)) B inst✝ inst✝³
+        (@Prod.instMeasurableSpace.{u_1, 0} Ω (RectangleCLT.Vector r) mΩ
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (@MeasureTheory.Measure.prod.{u_1, 0} Ω (RectangleCLT.Vector r) mΩ
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace) μ
+          (RectangleCLT.standardGaussian r))
+        fun (z : Prod.{u_1, 0} Ω (RectangleCLT.Vector r)) =>
+        F
+          (@Prod.mk.{u_2, 0} E (RectangleCLT.Vector r) (D (@Prod.fst.{u_1, 0} Ω (RectangleCLT.Vector r) z))
+            (@Prod.snd.{u_1, 0} Ω (RectangleCLT.Vector r) z))))
+'RectangleCLT.Companion.SplitV4.indep_sup_of_conditionalEventIndependence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.independent_data_gaussian_test_transport' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited all 10 conditional Gaussian transport theorem declarations.

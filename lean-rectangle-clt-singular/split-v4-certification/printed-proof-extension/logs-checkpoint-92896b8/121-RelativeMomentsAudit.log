@@ -1,0 +1,83 @@
+def RectangleCLT.Companion.SplitV4.QuadraticLE : {p : ℕ} → Matrix (Fin p) (Fin p) ℝ → Matrix (Fin p) (Fin p) ℝ → Prop :=
+fun {p} A B => ∀ (u : RectangleCLT.Vector p), RectangleCLT.matrixQuadratic A u ≤ RectangleCLT.matrixQuadratic B u
+def RectangleCLT.Companion.SplitV4.relativeThirdMatrix.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p n : ℕ} → MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → Fin p → Matrix (Fin p) (Fin p) ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} μ ξ j => RectangleCLT.Companion.restorationCoefficient μ ξ fun i ω => ξ i ω j
+def RectangleCLT.Companion.SplitV4.relativeFourthMatrix.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p n : ℕ} → MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → Fin p → Matrix (Fin p) (Fin p) ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} μ ξ j => RectangleCLT.Companion.restorationCoefficient μ ξ fun i ω => ξ i ω j ^ 2
+def RectangleCLT.Companion.SplitV4.relativeFreshFourthMatrix.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p n : ℕ} → MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → Fin p → Matrix (Fin p) (Fin p) ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} μ ξ j k l => ∑ i, (∫ (ω : Ω), ξ i ω j ^ 2 ∂μ) * ∫ (ω : Ω), ξ i ω k * ξ i ω l ∂μ
+structure RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} {Ω : Type u_1} [MeasurableSpace Ω] {p n : ℕ}
+  (μ : MeasureTheory.Measure Ω) (ξ : Fin n → Ω → RectangleCLT.Vector p) (s₃ s₄ : ℝ) : Prop
+number of parameters: 8
+fields:
+  RectangleCLT.Companion.SplitV4.RelativeMomentBounds.measurable : ∀ (i : Fin n), Measurable (ξ i)
+  RectangleCLT.Companion.SplitV4.RelativeMomentBounds.second_integrable : ∀ (i : Fin n) (j k : Fin p),
+      MeasureTheory.Integrable (fun ω => ξ i ω j * ξ i ω k) μ
+  RectangleCLT.Companion.SplitV4.RelativeMomentBounds.third_integrable : ∀ (i : Fin n) (j k l : Fin p),
+      MeasureTheory.Integrable (fun ω => ξ i ω j * (ξ i ω k * ξ i ω l)) μ
+  RectangleCLT.Companion.SplitV4.RelativeMomentBounds.fourth_integrable : ∀ (i : Fin n) (j k l : Fin p),
+      MeasureTheory.Integrable (fun ω => ξ i ω j ^ 2 * (ξ i ω k * ξ i ω l)) μ
+  RectangleCLT.Companion.SplitV4.RelativeMomentBounds.s₃_nonneg : 0 ≤ s₃
+  RectangleCLT.Companion.SplitV4.RelativeMomentBounds.s₄_nonneg : 0 ≤ s₄
+  RectangleCLT.Companion.SplitV4.RelativeMomentBounds.third_lower : ∀ (j : Fin p),
+      RectangleCLT.Companion.SplitV4.QuadraticLE (-s₃ • RectangleCLT.covariance μ (RectangleCLT.sumVector ξ))
+        (RectangleCLT.Companion.SplitV4.relativeThirdMatrix μ ξ j)
+  RectangleCLT.Companion.SplitV4.RelativeMomentBounds.third_upper : ∀ (j : Fin p),
+      RectangleCLT.Companion.SplitV4.QuadraticLE (RectangleCLT.Companion.SplitV4.relativeThirdMatrix μ ξ j)
+        (s₃ • RectangleCLT.covariance μ (RectangleCLT.sumVector ξ))
+  RectangleCLT.Companion.SplitV4.RelativeMomentBounds.fourth_upper : ∀ (j : Fin p),
+      RectangleCLT.Companion.SplitV4.QuadraticLE (RectangleCLT.Companion.SplitV4.relativeFourthMatrix μ ξ j)
+        (s₄ • RectangleCLT.covariance μ (RectangleCLT.sumVector ξ))
+  RectangleCLT.Companion.SplitV4.RelativeMomentBounds.fresh_fourth_upper : ∀ (j : Fin p),
+      RectangleCLT.Companion.SplitV4.QuadraticLE (RectangleCLT.Companion.SplitV4.relativeFreshFourthMatrix μ ξ j)
+        (s₄ • RectangleCLT.covariance μ (RectangleCLT.sumVector ξ))
+constructor:
+  RectangleCLT.Companion.SplitV4.RelativeMomentBounds.mk.{u_1} {Ω : Type u_1} [MeasurableSpace Ω] {p n : ℕ}
+    {μ : MeasureTheory.Measure Ω} {ξ : Fin n → Ω → RectangleCLT.Vector p} {s₃ s₄ : ℝ}
+    (measurable : ∀ (i : Fin n), Measurable (ξ i))
+    (second_integrable : ∀ (i : Fin n) (j k : Fin p), MeasureTheory.Integrable (fun ω => ξ i ω j * ξ i ω k) μ)
+    (third_integrable :
+      ∀ (i : Fin n) (j k l : Fin p), MeasureTheory.Integrable (fun ω => ξ i ω j * (ξ i ω k * ξ i ω l)) μ)
+    (fourth_integrable :
+      ∀ (i : Fin n) (j k l : Fin p), MeasureTheory.Integrable (fun ω => ξ i ω j ^ 2 * (ξ i ω k * ξ i ω l)) μ)
+    (s₃_nonneg : 0 ≤ s₃) (s₄_nonneg : 0 ≤ s₄)
+    (third_lower :
+      ∀ (j : Fin p),
+        RectangleCLT.Companion.SplitV4.QuadraticLE (-s₃ • RectangleCLT.covariance μ (RectangleCLT.sumVector ξ))
+          (RectangleCLT.Companion.SplitV4.relativeThirdMatrix μ ξ j))
+    (third_upper :
+      ∀ (j : Fin p),
+        RectangleCLT.Companion.SplitV4.QuadraticLE (RectangleCLT.Companion.SplitV4.relativeThirdMatrix μ ξ j)
+          (s₃ • RectangleCLT.covariance μ (RectangleCLT.sumVector ξ)))
+    (fourth_upper :
+      ∀ (j : Fin p),
+        RectangleCLT.Companion.SplitV4.QuadraticLE (RectangleCLT.Companion.SplitV4.relativeFourthMatrix μ ξ j)
+          (s₄ • RectangleCLT.covariance μ (RectangleCLT.sumVector ξ)))
+    (fresh_fourth_upper :
+      ∀ (j : Fin p),
+        RectangleCLT.Companion.SplitV4.QuadraticLE (RectangleCLT.Companion.SplitV4.relativeFreshFourthMatrix μ ξ j)
+          (s₄ • RectangleCLT.covariance μ (RectangleCLT.sumVector ξ))) :
+    RectangleCLT.Companion.SplitV4.RelativeMomentBounds μ ξ s₃ s₄
+RectangleCLT.Companion.SplitV4.relativeMomentBounds_of_envelope.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {p n : Nat} {μ : @MeasureTheory.Measure.{u_1} Ω inst✝} [@MeasureTheory.IsProbabilityMeasure.{u_1} Ω inst✝ μ]
+  {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : Real}
+  (h : @RectangleCLT.BoundedIndependentHypotheses.{u_1} Ω inst✝ p n μ ξ δ) :
+  @RectangleCLT.Companion.SplitV4.RelativeMomentBounds.{u_1} Ω inst✝ p n μ ξ δ
+    (@HPow.hPow.{0, 0, 0} Real Nat Real (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) δ
+      (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+'RectangleCLT.Companion.SplitV4.relativeMomentBounds_of_envelope' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.relativeFreshFourthMatrix_eq_independent_copy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLT.Companion.SplitV4.integrable_relativeFreshFourth_entry' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Audited 28 relative-moment helper declarations; main relative CLT remains open.
