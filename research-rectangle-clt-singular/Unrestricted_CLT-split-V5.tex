@@ -154,19 +154,38 @@ example, taking \(A\coloneqq (-\infty,s]^p\) shows that this distance controls t
 error in approximating the distribution of \(\max_{j\le p}W_j\), the maximum
 coordinate of \(W\).
 
-The envelope is needed to smooth the boundary of a rectangle. We can measure the fourth-order comparison error more closely by keeping the moments in each direction where the proof integrates by parts. For $1\le j\le p$, define
+\begin{recovered}
+In our proof, the envelope \(\delta\) sets a lower bound on the width
+used to smooth rectangle indicators. To sharpen the comparison of the
+smoothed expectations, we also retain information about the summands'
+third and fourth moments. We collect this information in matrices that
+will be compared with the covariance matrix \(\Sigma\). For
+\(1\le j\le p\), define
 \begin{align*}
- T_j&:=\sum_i\E[\xi_{ij}\,\xi_i\xi_i^\top],&
- Q_j&:=\sum_i\E[\xi_{ij}^2\,\xi_i\xi_i^\top],&
+ T_j&:=\sum_i\E[\xi_{ij}\,\xi_i\xi_i^\top],\\
+ Q_j&:=\sum_i\E[\xi_{ij}^2\,\xi_i\xi_i^\top],\\
  \widetilde Q_j&:=\sum_i\E[\xi_{ij}^2]\,\E[\xi_i\xi_i^\top].
 \end{align*}
-We call $s_3,s_4\ge0$ \emph{relative moment bounds} if
+We measure these moments relative to the variance in each direction.
+Specifically, we call \(s_3,s_4\ge0\) \emph{relative moment bounds} if,
+for every \(1\le j\le p\) and \(u\in\R^p\),
 \begin{equation}\label{eq:relative-moments}
- -s_3\Sigma\preceq T_j\preceq s_3\Sigma,\qquad
- Q_j\preceq s_4\Sigma,\qquad \widetilde Q_j\preceq s_4\Sigma
- \qquad (1\le j\le p).
+ \begin{aligned}
+ |u^\top T_j u|&\le s_3\,u^\top\Sigma u,\\
+ u^\top Q_j u&\le s_4\,u^\top\Sigma u,\\
+ u^\top\widetilde Q_j u&\le s_4\,u^\top\Sigma u.
+ \end{aligned}
 \end{equation}
-For a contrast $u$ of variance $u^\top\Sigma u=1$, the first inequality bounds the absolute signed sum $\sum_i\E[\xi_{ij}(u^\top\xi_i)^2]$. The next two inequalities bound the fourth moments when the coordinate and the contrast come from the same \textcolor{magenta}{summand} or from independent copies of it. These comparisons require no inverse of $\Sigma$. The envelope always permits $s_3=\delta$ and $s_4=\delta^2$, by testing on any $u$ and using $|\xi_{ij}|\le\delta$.
+Here \(u^\top\Sigma u\) is the variance of the linear contrast
+\(u^\top W\). The first bound controls the aggregate third moment
+\(\sum_i\E[\xi_{ij}(u^\top\xi_i)^2]\), allowing cancellation across
+summands. The remaining bounds control mixed fourth moments: the
+coordinate and the contrast come from the same summand in \(Q_j\),
+and from independent copies in \(\widetilde Q_j\). These comparisons
+remain meaningful when \(\Sigma\) is singular. The envelope bound
+\(|\xi_{ij}|\le\delta\) always permits \(s_3=\delta\) and
+\(s_4=\delta^2\).
+\end{recovered}
 
 \begin{theorem}[Unrestricted covariance]\label{thm:unrestricted}
 Under~\eqref{eq:setup}, for every admissible $s_4$ in \eqref{eq:relative-moments},
@@ -179,9 +198,24 @@ In particular, the envelope alone gives
  \label{eq:unrestricted}
 \end{equation}
 \end{theorem}
-The rate in \eqref{eq:relative-unrestricted} is $O(\delta L^{3/2})$ whenever $s_4D_L\lesssim\delta^2$. Aggregate third moments enter the proof through $s_3L^{3/2}$. Even at exact cancellation, smoothing still costs order $\delta L^{3/2}$ in this argument. A smaller $s_3$ alone therefore yields no gain in the order of the unrestricted bound.
+\begin{recovered}
+The rate in \eqref{eq:relative-unrestricted} is \(O(\delta L^{3/2})\)
+whenever \(s_4D_L\lesssim\delta^2\). In the derivation of
+\eqref{eq:relative-unrestricted}, aggregate third moments contribute a
+term of order \(s_3L^{3/2}\), which is absorbed into
+\(C\delta L^{3/2}\) because we may always take \(s_3\le\delta\).
+Even under exact cancellation, \(s_3=0\), smoothing still costs order
+\(\delta L^{3/2}\) in our argument. This order cannot be improved in
+general under unrestricted covariance; see
+Theorem~\ref{opt:symmetric-lower} in Section~\ref{opt:section}.
+\end{recovered}
 
-For example, let $\xi_i=a_i R_i$ for independent copies of a centered sign vector with covariance $\Sigma$, where $\sum_i a_i^2=1$. Since $R_{ij}^2=1$, both fourth-moment matrices equal $(\sum_i a_i^4)\Sigma$. \textcolor{magenta}{Give one summand a weight proportional to $\sqrt{\log n}$ and each of the other $n-1$ summands a weight proportional to $1$.} After normalization, $\delta\asymp\sqrt{(\log n)/n}$ and $s_4\asymp1/n$. For $p\asymp n^a$ with fixed $a>0$, \eqref{eq:relative-unrestricted} gains a factor of order $\sqrt{\log n}$ over \eqref{eq:unrestricted}, for every covariance of the sign vector.
+\textcolor{magenta}{To illustrate the gain from the fourth-moment
+refinement, let \(R_1,\ldots,R_n\) be independent copies of a centered
+random vector \(R\in\{-1,1\}^p\) with covariance \(\Sigma\). The
+coordinates of \(R\) may be dependent. For deterministic weights
+\(a_1,\ldots,a_n\) satisfying \(\sum_i a_i^2=1\), set
+\(\xi_i:=a_iR_i\).} Since $R_{ij}^2=1$, both fourth-moment matrices equal $(\sum_i a_i^4)\Sigma$. \textcolor{magenta}{Give one summand a weight proportional to $\sqrt{\log n}$ and each of the other $n-1$ summands a weight proportional to $1$.} After normalization, $\delta\asymp\sqrt{(\log n)/n}$ and $s_4\asymp1/n$. For $p\asymp n^a$ with fixed $a>0$, \eqref{eq:relative-unrestricted} gains a factor of order $\sqrt{\log n}$ over \eqref{eq:unrestricted}, for every covariance of the sign vector.
 
 For normalized observations, Theorem~\ref{thm:unrestricted} gives
 the following dependence on the sample size.
@@ -215,7 +249,9 @@ factor \(\sqrt{1+\log_+(\sqrt n/(B\sqrt L))}\). When \(p\) grows polynomially
 in~\(n\) and \(B\) is fixed, this factor is of order \((\log n)^{1/2}\).
 Conjecture~\ref{conj:sharp-unrestricted} states that this factor can be removed.
 
-For unequal marginal variances, let
+\begin{recovered}
+Corollary~\ref{cor:observations} is stated for a normalized sum \(W_n\)
+whose coordinates have unit variance. For unequal positive variances, let
 \[
  \sigma_j^2\coloneqq n^{-1}\sum_i\E X_{ij}^2,
  \qquad
@@ -225,9 +261,10 @@ We then apply Theorem~\ref{thm:unrestricted} to the summands
 \(\xi_{ij}\coloneqq X_{ij}/(\sigma_j\sqrt n)\). If
 \(\max_i\norm{X_i}_\infty\le K_n\), these summands have
 envelope \(\delta=K_n/(\underline\sigma\sqrt n)\).
-Positive diagonal scaling maps rectangles to rectangles and so preserves
-the distance \(\rh\), and the resulting bound also holds in the
+Positive diagonal scaling preserves the class of rectangles and hence
+the distance \(\rh\), so the resulting bound also holds in the
 original coordinates.
+\end{recovered}
 
 \subsection{Sub-exponential coordinates}\label{sec:subexponential}
 A coordinatewise tail bound allows some observations to exceed every
