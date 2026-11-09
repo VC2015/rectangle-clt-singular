@@ -840,9 +840,16 @@ Rearranging these utility comparisons gives the inequalities defining
 For the smoothing bound, we use~\eqref{eq:mixture} as a representation
 by random threshold shifts with the face normals fixed.
 The largest absolute threshold shift has expectation at most \(ChL\).
-To convert this width into an error in probability, put
-\(A_a^s:=\{x:u_\alpha\cdot x\le a_\alpha+s,\ \alpha\le m\}\) for
-real \(s\). The following inequality applies to the original sum and
+{\color{blue}
+To convert this width into an error in probability, for each real \(s\) define
+\[
+ A_a^s:=\{x\in\R^r:u_\alpha\cdot x\le a_\alpha+s,\ \alpha\le m\}.
+\]
+Thus every face threshold is increased by the same amount \(s\).
+Since the face normals are unit vectors, this moves each defining
+hyperplane outward by distance \(s\) when \(s>0\), and inward by
+distance \(|s|\) when \(s<0\). The notation denotes this common
+threshold shift, not a dilation of the set \(A_a\).} The following inequality applies to the original sum and
 also after independent noise has been added along the comparison path.
 The lemma is of independent interest. Both parts retain the expected
 largest absolute projection, which can be more informative than the
@@ -878,7 +885,9 @@ The constant \(C\) is absolute.
 The bounds involving \(\E\norm{V}_U\) are \emph{intrinsic}:
 their dependence on the face directions enters through this expected
 maximum, with no explicit dependence on the number of faces.
-If all the original coordinates coincide, then
+\textcolor{blue}{The intrinsic bounds can be substantially smaller when the
+coordinates are strongly dependent. For example, if all face normals
+coincide up to sign}, then
 \(\E\norm{V}_U\le\sqrt v\), regardless of \(p\), and in the
 Gaussian case it equals \(\sqrt{2v/\pi}\).
 The first inequality in~\eqref{eq:gaussian-intrinsic-concentration}
@@ -898,113 +907,65 @@ using a bootstrap argument and Kane's~\cite{Kane} noise-sensitivity
 inequality. The logarithmic Gaussian bound is the rectangle form of
 Nazarov's inequality~\cite[Lemma~A.1]{CCK2017}. A direct
 integration-by-parts argument proves the stronger geometric form
-in~\eqref{eq:gaussian-intrinsic-concentration}.
+in~\eqref{eq:gaussian-intrinsic-concentration}\textcolor{blue}{, which is analogous
+to the anti-concentration bound for centered cubes in Chernozhukov,
+Chetverikov, and Kato~\cite[Theorem~3 and Comment~5]{CCK2015AC}}.
 
-To measure the discrepancy after smoothing, write
+\textcolor{blue}{Let \(M_h\) denote the largest absolute difference between the
+smoothed rectangle probabilities of \(S\) and \(G\), over all threshold vectors:}
 \[
  M_h:=\sup_a|\E F_{a,h}(S)-\E F_{a,h}(G)|.
 \]
-The expected width of the random shift and the preceding lemma give
-the following reduction.
+\textcolor{blue}{The expected size of the random threshold shifts and
+Lemma~\ref{lem:concentration} give the following reduction.}
 \begin{lemma}[Smoothing error]\label{lem:endpoint}
-Under~\eqref{eq:setup}, for \(h\ge\delta\), the rectangular distance is bounded as
+Under~\eqref{eq:setup}, for \(h\ge\delta\), the \textcolor{blue}{Kolmogorov distance over rectangles satisfies}
 \begin{equation}
  \rho\le M_h+ChL^{3/2}.
  \label{eq:endpoint-min}
 \end{equation}
 \end{lemma}
 Appendix~\ref{appx-sec:smoothing} proves this bound and records the
-derivative formulas used below. Here the \emph{displacement} is the
-largest absolute change in the face thresholds in~\eqref{eq:mixture}.
-Each threshold \(a_\alpha\) is shifted by
-\(h\log(\omega_\alpha/\omega_0)\), and
+derivative formulas used below. {\color{blue}To see why the smoothing error has
+order \(hL^{3/2}\), recall that the representation~\eqref{eq:mixture}
+shifts each face threshold \(a_\alpha\) by
+\(h\log(\omega_\alpha/\omega_0)\). Put
 \[
- \E_\omega\max_{\alpha\le m}
- \bigl|h\log(\omega_\alpha/\omega_0)\bigr|\le ChL.
+ R_h:=\max_{\alpha\le m}
+ \bigl|h\log(\omega_\alpha/\omega_0)\bigr|.
 \]
-The logarithmic factor arises from taking the maximum over the
-\(m=2p\) faces. Lemma~\ref{lem:concentration} converts a threshold
-shift of size \(d\) into a probability error at most
-\(C(d+\delta)\sqrt L\). Averaging over the shifts gives an error
-at most \(C(hL+\delta)\sqrt L\le ChL^{3/2}\), since
-\(h\ge\delta\) and \(L\ge1\).
+For each realization of the shifts,
+\[
+ A_a^{-R_h}\subseteq A_{a,\omega}\subseteq A_a^{R_h},
+\]
+so membership can change only within the shell
+\(A_a^{R_h}\setminus A_a^{-R_h}\). Conditional on the shifts,
+Lemma~\ref{lem:concentration} bounds the probability of this shell
+by \(C(R_h+\delta)\sqrt L\) at either endpoint \(S\) or \(G\).
+
+The expected largest absolute shift satisfies \(\E_\omega R_h\le ChL\),
+where the logarithmic factor \(L\) arises from taking the maximum over the
+\(m=2p\) faces. Averaging the conditional probability bound over the shifts
+therefore gives a smoothing error at each endpoint of at most
+\[
+ C(\E_\omega R_h+\delta)\sqrt L
+ \le C(hL+\delta)\sqrt L
+ \le ChL^{3/2},
+\]
+since \(h\ge\delta\) and \(L\ge1\).}
 
 
 \subsection{Calibrated dropout with Slepian regularization}
 \label{sec:outline-path}
 
-We first add a small independent Gaussian component and normalize
-the result to preserve covariance. We then gradually delete summands
-and rescale those retained while increasing the Gaussian variance.
-The initial Gaussian component permits Gaussian integration by parts
-throughout the main comparison, and our choice of rescaling controls
-the third-moment contribution near the starting point.
+\textcolor{blue}{Our goal is to bound \(M_h\), the smoothed discrepancy between
+\(S=\sum_i\zeta_i^0\) and the independent Gaussian vector \(G\sim N(0,I_r)\).
+Figure~\ref{fig:two-stage-path} shows the two stages of the comparison.
+We first move from \(S\) to a regularized sum \(U_0\) by Slepian interpolation,
+and then from \(U_0\) to \(U_1=G\) by calibrated dropout.
+Both stages preserve the common covariance \(I_r\).}
 
-For a fixed \(\varepsilon>0\) and time \(t\in[0,1]\), consider the path
-\begin{equation}
- U_t\coloneqq
- \frac{(1+t)\sum_{i=1}^n\mathbb B_{i,t}\zeta_i^0
-             +\sqrt{t+\varepsilon}\,G}{\sqrt{1+\varepsilon}},
- \qquad 0\le t\le1.
- \label{eq:path}
-\end{equation}
-At each fixed time, the \(\mathbb B_{i,t}\) are independent Bernoulli
-\emph{masks}, independent of the summands and \(G\). A mask equal to \(1\) retains
-its summand, and a mask equal to zero deletes it. Before the common
-normalization, each retained summand is multiplied by its \emph{amplitude}
-\(\gamma(t)\coloneqq1+t\). The \emph{retention probability} is
-\[
- \varpi(t)\coloneqq\Pp(\mathbb B_{i,t}=1)
-             =\frac{1-t}{(1+t)^2}.
-\]
-These choices give \(\varpi(t)\gamma(t)^2=1-t\). In the normalized
-path~\eqref{eq:path}, the two independent components therefore contribute
-\[
- \underbrace{\frac{1-t}{1+\varepsilon}I_r}_{\text{retained summands}}
- +\underbrace{\frac{t+\varepsilon}{1+\varepsilon}I_r}_{\text{Gaussian component}}
- =I_r.
-\]
-As \(t\) increases, covariance is transferred from the retained summands
-to the Gaussian component, while \(\Cov(U_t)=I_r\) throughout.
-At \(t=0\), every summand is retained. At \(t=1\), all summands have
-been deleted, leaving only the Gaussian vector.
-
-This random deletion is known as \emph{Bernoulli thinning}
-\cite{Renyi1956,SteutelHarn1979,LastPenrose2017}. We call the
-chosen amplitude and retention probability \emph{calibrated dropout},
-in reference to the independent masks used in dropout regularization~\cite{Dropout2014}.
-With \(\varepsilon=0\), this coincides with the calibrated path
-defined in~\cite[Section~4]{AL}. Before normalization, each summand's third-moment tensor is multiplied
-by \(\varpi(t)\gamma(t)^3=1-t^2\). The derivative of this multiplier
-conveniently vanishes at \(t=0\), which will help control the impact of
-the third moments when the Gaussian variance is smallest.
-
-The extra Gaussian variance \(\varepsilon\), called the
-\emph{Gaussian seed}, keeps that variance positive from the start.
-The endpoints of the interpolation are
-\[
- U_0=\frac{S+\sqrt\varepsilon\,G}{\sqrt{1+\varepsilon}},
- \qquad U_1=G.
-\]
-To reach \(U_0\) from \(S\), we first follow the short
-\emph{Slepian interpolation}
-\[
- T_v\coloneqq\sqrt{1-v}\,S+\sqrt v\,G,\qquad 0\le v\le1,
-\]
-from \(v=0\) to \(v_\varepsilon\coloneqq
-\varepsilon/(1+\varepsilon)\), so that \(T_{v_\varepsilon}=U_0\).
-We call this initial operation \emph{Slepian regularization}.
-After a change of time it is also
-\emph{Ornstein--Uhlenbeck regularization}~\cite[Theorem~4.12]{Nourdin2012}.
-
-Figure~\ref{fig:two-stage-path} summarizes the two stages. Slepian
-regularization rescales every summand and adds a small Gaussian component.
-The calibrated dropout path then deletes summands at random, amplifies
-those retained, and increases the Gaussian variance. Both stages preserve
-covariance \(I_r\). The paths describe distributions at each time, and
-we do not need to couple the Bernoulli masks across different times.
-
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
 \centering
 \resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[>=Stealth,font=\fontsize{9}{11}\selectfont]
@@ -1012,7 +973,7 @@ we do not need to couple the Bernoulli masks across different times.
 \definecolor{drop}{RGB}{136,73,32}
 \node[font=\Large] (S) at (0,0) {$S$};
 \node[font=\Large] (U) at (6.2,0) {$U_0$};
-\node[font=\Large] (G) at (12.4,0) {$G$};
+\node[font=\Large] (G) at (12.4,0) {$\textcolor{blue}{U_1=G}$};
 \draw[->,thick,seed] (S) -- node[above=9pt,align=center] {Slepian regularization} node[below=8pt] {$0\le v\le v_\varepsilon$} (U);
 \draw[->,thick,drop] (U) -- node[above=9pt,align=center] {Calibrated dropout with a Gaussian seed} node[below=8pt] {$0\le t\le1$} (G);
 \node[anchor=north,align=center] at (6.2,-0.85) {$\displaystyle U_0=\frac{S+\sqrt\varepsilon\,G}{\sqrt{1+\varepsilon}}$
@@ -1026,76 +987,303 @@ we do not need to couple the Bernoulli masks across different times.
 }
 \caption{The comparison from \(S\) to \(G\) passes through the regularized
 sum \(U_0\). The first stage follows \(T_v\) up to \(v_\varepsilon\),
-and the second follows \(U_t\) from \(t=0\) to \(t=1\).}
+and the second follows \(U_t\) from \(t=0\) to \(t=1\),
+\textcolor{blue}{ending at \(U_1=G\)}.}
 \label{fig:two-stage-path}
 \end{figure}
 
-We first compare \(S\) with \(U_0\), and then \(U_0\) with \(G\).
-For fixed thresholds, write
+\textcolor{blue}{Fix \(\varepsilon>0\). In the first stage, we rescale \(S\)
+and add a small independent Gaussian component along the
+\emph{Slepian interpolation}}
 \[
- P_a(t)\coloneqq\E F_{a,h}(U_t),\qquad
- I_h\coloneqq\sup_a|\E F_{a,h}(S)-\E F_{a,h}(U_0)|.
+ T_v\coloneqq\sqrt{1-v}\,S+\sqrt v\,G,
+ \qquad 0\le v\le1.
 \]
-The quantity \(I_h\) measures the error from introducing the seed.
+\textcolor{blue}{We stop at time \(v_\varepsilon\coloneqq\varepsilon/(1+\varepsilon)\),
+so the first stage starts at \(T_0=S\) and ends at}
+\[
+ U_0\coloneqq T_{v_\varepsilon}
+ =\frac{S+\sqrt\varepsilon\,G}{\sqrt{1+\varepsilon}}.
+\]
+\textcolor{blue}{Since \(S\) and \(G\) are independent and both have covariance
+\(I_r\), we have \(\Cov(T_v)=(1-v)I_r+vI_r=I_r\) throughout this stage.}
 
-\begin{recovered}
-The triangle inequality followed by integration along \(U_t\) gives
-\end{recovered}
+\begin{samepage}
+\textcolor{blue}{The initial independent Gaussian component, which we call the
+\emph{Gaussian seed}, contributes \(\varepsilon I_r/(1+\varepsilon)\)
+to the covariance of \(U_0\). This seed gives the second stage a positive
+Gaussian variance from its starting point, permitting two Gaussian
+integrations by parts throughout that stage, including at \(t=0\).
+We call the initial operation \emph{Slepian regularization}.}
+After a change of time it is also
+\emph{Ornstein--Uhlenbeck regularization}~\cite[Theorem~4.12]{Nourdin2012}.
+\par
+\end{samepage}
+
+\textcolor{blue}{Starting from \(U_0\), we now delete summands at random,
+rescale those retained, and increase the Gaussian variance.
+For each time \(t\in[0,1]\), let \(\mathbb B_{i,t}\) be independent Bernoulli
+\emph{masks}, independent of the summands and \(G\), and define}
 \begin{equation}
- M_h\le I_h+\sup_a\int_0^1|P_a'(t)|\,dt .
- \label{eq:roadmap}
+ U_t\coloneqq
+ \frac{(1+t)\sum_{i=1}^n\mathbb B_{i,t}\zeta_i^0
+             +\sqrt{t+\varepsilon}\,G}{\sqrt{1+\varepsilon}},
+ \qquad 0\le t\le1.
+ \label{eq:path}
 \end{equation}
-Here \(P_a'(t)\) is the rate at which the smoothed probability changes
-at time \(t\).
-\begin{recovered}
-The smoothing error in Lemma~\ref{lem:endpoint} is evaluated at the
-original endpoints \(S\) and \(G\). The intermediate vector \(U_0\)
-enters only in comparing the smoothed expectations: \(I_h\) controls
-the passage from \(S\) to \(U_0\), and the integral controls the passage
-from \(U_0\) to \(G\).
-\end{recovered}
-The small initial Gaussian component allows us to
-integrate by parts twice on the second stage, including near \(t=0\).
+A mask equal to \(1\) retains its summand, and a mask equal to zero deletes it.
+Before the common normalization, each retained summand is multiplied by its
+\emph{amplitude} \(\gamma(t)\coloneqq1+t\).
+
+The \emph{retention probability} is
+\[
+ \varpi(t)\coloneqq\Pp(\mathbb B_{i,t}=1)
+             =\frac{1-t}{(1+t)^2}.
+\]
+These choices give \(\varpi(t)\gamma(t)^2=1-t\). In the normalized
+path~\eqref{eq:path}, the two independent components therefore contribute
+\textcolor{blue}{covariances adding up to \(I_r\):}
+\[
+ \underbrace{\frac{1-t}{1+\varepsilon}I_r}_{\text{retained summands}}
+ +\underbrace{\frac{t+\varepsilon}{1+\varepsilon}I_r}_{\text{Gaussian component}}
+ =I_r.
+\]
+As \(t\) increases, covariance is transferred from the retained summands
+to the Gaussian component, while \(\Cov(U_t)=I_r\) throughout.
+\textcolor{blue}{At \(t=0\), every summand is retained, giving the regularized
+sum \(U_0\) constructed in the first stage. At \(t=1\), all summands have
+been deleted and \(U_1=G\).}
+
+\textcolor{blue}{The joint choice of amplitude and retention probability also
+controls the third-moment contribution. Before normalization, each summand's
+third-moment tensor is multiplied by}
+\[
+ \textcolor{blue}{\varpi(t)\gamma(t)^3=1-t^2.}
+\]
+\textcolor{blue}{The derivative of this multiplier vanishes at \(t=0\),
+which helps control the third moments when the Gaussian variance is smallest.}
+This random deletion is known as \emph{Bernoulli thinning}
+\cite{Renyi1956,SteutelHarn1979,LastPenrose2017}. We call the
+chosen amplitude and retention probability \emph{calibrated dropout},
+in reference to the independent masks used in dropout regularization~\cite{Dropout2014}.
+With \(\varepsilon=0\), this coincides with the calibrated path
+defined in~\cite[Section~4]{AL}.
+The paths describe distributions at each time, and
+we do not need to couple the Bernoulli masks across different times.
+
+{\color{blue}
+To measure changes in the smoothed probabilities along the first stage, put
+\[
+ P_a^0(v)\coloneqq\E F_{a,h}(T_v),\qquad 0\le v\le1.
+\]
+The superscript \(0\) labels this initial stage. Since
+\(T_0=S\) and \(T_{v_\varepsilon}=U_0\), the cost of introducing the seed
+can be bounded by integrating the rate of change:
+\[
+ I_h\coloneqq\sup_a|P_a^0(v_\varepsilon)-P_a^0(0)|
+ =\sup_a\left|\int_0^{v_\varepsilon}(P_a^0)'(v)\,dv\right|
+ \le\sup_a\int_0^{v_\varepsilon}|(P_a^0)'(v)|\,dv.
+\]
+}
+
+\textcolor{blue}{To measure the change in the smoothed probabilities along the
+second stage, put}
+\[
+ P_a(t)\coloneqq\E F_{a,h}(U_t).
+\]
+{\color{blue}
+Its derivative \(P_a'(t)\) is the rate of change at time \(t\).
+The two stages meet at \(P_a^0(v_\varepsilon)=P_a(0)\).
+The triangle inequality and integration along the paths therefore give
+\begin{equation}
+\begin{aligned}
+ M_h&\le I_h+\sup_a\int_0^1|P_a'(t)|\,dt\\
+ &\le
+ \underbrace{\sup_a\int_0^{v_\varepsilon}|(P_a^0)'(v)|\,dv}
+             _{\text{Slepian regularization}}
+ +\underbrace{\sup_a\int_0^1|P_a'(t)|\,dt}
+             _{\text{calibrated dropout}}.
+\end{aligned}
+\label{eq:roadmap}
+\end{equation}
+It remains to bound the two derivatives over their respective time intervals.
+}
 
 \subsection{Controlling the comparison error}
 \label{sec:outline-seeded}
 
-To bound the integral in~\eqref{eq:roadmap}, let
-\(K_3:=\sum_i\E(\zeta_i^0)^{\otimes3}\) denote the aggregate
-third-moment tensor. Lemma~\ref{appx-an:lem:identity} separates its contribution
-to the rate of change of \(P_a(t)\) from the fourth-order remainder,
+{\color{blue}
+We bound the two integrals in~\eqref{eq:roadmap} in the order of the
+comparison. The initial Slepian stage is short enough to be controlled
+by direct averaged derivative estimates. Its purpose is to introduce
+the Gaussian seed needed for the main comparison. The principal
+difficulty lies in using that seed to obtain sharper derivative bounds
+throughout the second stage.
+
+Let
+\[
+ K_3\coloneqq\sum_i\E(\zeta_i^0)^{\otimes3}
+\]
+denote the aggregate third-moment tensor. Along the initial Slepian path,
+Lemma~\ref{appx-an:lem:identity} separates its contribution from the
+fourth-order remainder:
+\[
+ (P_a^0)'(v)
+ =-\frac{\sqrt{1-v}}4\E D^3F_{a,h}(T_v):K_3+R^0_{a,h}(v),
+ \qquad 0<v<1.
+\]
+Here \(R^0_{a,h}\) is the integral remainder supplied by that lemma.
+
+To bound these terms, we retain the concentration of the logistic
+derivatives near the boundary. Each spatial derivative contributes a
+factor \(h^{-1}\), so the third and fourth derivatives initially
+contribute \(h^{-3}\) and \(h^{-4}\). Their expansions also contain
+positive logistic weight products whose sums are bounded by a constant
+times
+\[
+ F_{a,h}(x)\bigl(1-F_{a,h}(x)\bigr).
+\]
+This factor is small where the smoother is close to either \(0\) or
+\(1\). Averaging it therefore gives a sharper bound than taking its
+maximum.
+
+The required averaging bound holds uniformly along the Slepian path
+\[
+ T_v=\sqrt{1-v}\,S+\sqrt v\,G.
+\]
+Its independent bounded and Gaussian components have variance
+\(1-v\) and \(v\), respectively, in every face direction. At least
+one of these variances is at least \(1/2\). Conditioning on the other
+component only translates the face thresholds, so the corresponding
+anti-concentration bound gives
+\[
+ \E\!\left[F_{a,h}(T_v)\bigl(1-F_{a,h}(T_v)\bigr)\right]
+ \le Ch\sqrt L,\qquad h\ge\mathsf A\delta.
+\]
+This argument remains available as \(v\) approaches zero, because the
+bounded component then supplies the required variance.
+
+The relative moment bounds in~\eqref{eq:relative-moments} control the
+coefficients multiplying these logistic weights. In the cubic term,
+we sum the signed third-moment coefficients before taking absolute
+values, obtaining the factor \(s_3\). In the fourth-order remainder,
+the derivative evaluation points have face projections within
+\(C\delta\) of those of \(T_v\). Since \(h\ge\mathsf A\delta\), their
+logistic weights can be compared with the weights at \(T_v\) at the
+cost of an absolute constant. Summing the fourth-moment coefficients
+then gives the factor \(s_4\). Appendix~\ref{appx-an:sec:initialization}
+provides these coefficient and shift estimates.
+
+Combining the derivative factors with the averaged boundary weight
+gives
+\[
+\begin{aligned}
+ \left|\E D^3F_{a,h}(T_v):K_3\right|
+ &\le Cs_3h^{-3}\,h\sqrt L
+ =\frac{Cs_3\sqrt L}{h^2},\\
+ |R^0_{a,h}(v)|
+ &\le Cs_4h^{-4}\,h\sqrt L
+ =\frac{Cs_4\sqrt L}{h^3}.
+\end{aligned}
+\]
+Thus averaging supplies one factor of \(h\) before we integrate over
+time. Substituting these estimates into the Slepian identity yields
+\[
+ |(P_a^0)'(v)|
+ \le C\sqrt L\left(\frac{s_3}{h^2}+\frac{s_4}{h^3}\right),
+ \qquad 0<v<1.
+\]
+
+The first stage lasts only until \(v_\varepsilon\le\varepsilon\).
+With the choice \(\varepsilon=Lh^2<1/4\), integrating this bound gives
+\[
+ I_h\le\sup_a\int_0^{v_\varepsilon}|(P_a^0)'(v)|\,dv
+ \le C v_\varepsilon\sqrt L
+       \left(\frac{s_3}{h^2}+\frac{s_4}{h^3}\right)
+ \le CL^{3/2}\left(s_3+\frac{s_4}{h}\right).
+\]
+A larger seed lengthens this first stage and increases its cost.
+We next examine how the seed improves the derivative estimates along
+the calibrated dropout stage.
+
+For the calibrated dropout path, the same lemma gives}
+
 \begin{equation}
  P_a'(t)=
  -\frac{t}{3(1+\varepsilon)^{3/2}}\,
        \E D^3F_{a,h}(U_t):K_3+R_{4,a,h}(t).
  \label{eq:path-summary}
 \end{equation}
-Here \(D^3F\) is the third derivative tensor, and the colon sums
-products of corresponding tensor entries. The remainder \(R_{4,a,h}\) consists of fourth derivatives evaluated
-at nearby points. As in~\cite[Lemmas~22--23]{GaoZhang}, we use the aggregate
-covariance to sum pairs of directions before estimating the remaining
-ones. Indeed, the identity covariance gives
-\(\sum_i\E|(u\cdot\zeta_i^0)(w\cdot\zeta_i^0)|\le1\) for unit face
-normals \(u,w\). Moving two derivatives from the logistic approximation
-onto the Gaussian density by integration by parts contributes a
-factor of order \((t+\varepsilon)^{-1}\). The matrix and threshold estimates
-in Appendix~\ref{appx-sec:support} preserve concentration near the
-rectangle boundary in this calculation. This gains one power of the
-smoothing width in the fourth-order remainder.
+{\color{blue}
+The remainder \(R_{4,a,h}(t)\) consists of fourth derivatives evaluated
+at points whose face projections differ from those of \(U_t\) by at most
+\(C\delta\). To see how the Gaussian component helps, write \(F=F_{a,h}\),
+let \(g\sim N(0,I_r)\), and fix a base point \(x\in\R^r\), directions
+\(z,w_1,w_2\in\R^r\), and a scale \(\sigma>0\). Two Gaussian integrations
+by parts give
+\[
+\begin{aligned}
+ &\E_g D^4F(x+\sigma g)[z,z,w_1,w_2]\\
+ &\qquad=\frac1{\sigma^2}\,
+ \E_g\!\left[
+ \bigl\{(g\cdot z)^2-\norm z^2\bigr\}
+ D^2F(x+\sigma g)[w_1,w_2]
+ \right].
+\end{aligned}
+\]
+We apply this identity after conditioning on the base and derivative
+directions. It replaces two derivatives of the logistic approximation
+by the \emph{Hermite term} \((g\cdot z)^2-\norm z^2\).
+In our application, \(\sigma^2\) is comparable to \(t+\varepsilon\),
+so these integrations contribute \((t+\varepsilon)^{-1}\), while the
+two remaining derivatives contribute \(h^{-2}\).
+
+The repeated direction \(z\) enters the Hermite term through the matrix
+\(zz^\top\), since
+\[
+ (g\cdot z)^2-\norm z^2
+ =\tr\!\left[(gg^\top-I_r)zz^\top\right].
+\]
+The two remaining derivative directions supply face projections.
+For example, when all four directions come from the same summand
+and the two face projections use \(u_j\), summing over the summands gives
+\[
+ A_j:=\sum_i\E\!\left[
+ (u_j\cdot\zeta_i^0)^2\,
+ \zeta_i^0(\zeta_i^0)^\top
+ \right]\preceq s_4I_r.
+\]
+This is the fourth-moment bound in~\eqref{eq:relative-moments}, expressed
+in support coordinates. It controls the contribution in every direction:
+\(v^\top A_jv\le s_4\norm v^2\). Terms involving different face normals
+or independent copies satisfy analogous operator-norm bounds.
+
+We retain these matrix bounds when estimating the weighted Gaussian
+average, as in~\cite[Lemmas~22--23]{GaoZhang}. Their operator norms are
+bounded by \(Cs_4\), independently of \(r\). Taking traces instead would
+sum contributions over \(r\) orthogonal directions and give only
+\(\tr(A_j)\le rs_4\). Keeping the matrices intact avoids this loss.
+
+It remains to preserve the concentration of the logistic derivatives
+near the rectangle boundary. The matrix and threshold estimates in
+Appendix~\ref{appx-sec:support} control the Hermite term together with
+the logistic weights, retaining cancellations that would be lost by
+bounding the factors separately. Under the scale conditions of
+Proposition~\ref{an:prop:derivative} below, the resulting weighted boundary
+estimate supplies a factor \(hL^{3/2}\). Consequently,
+\[
+ |R_{4,a,h}(t)|
+ \le Cs_4\,\frac1{t+\varepsilon}\,\frac1{h^2}\,hL^{3/2}
+ =\frac{Cs_4L^{3/2}}{h(t+\varepsilon)}.
+\]
+The factor \(h\) supplied by the boundary estimate reduces the remaining
+dependence on the smoothing width from \(h^{-2}\) to \(h^{-1}\).
+}
 
 A larger seed improves this Gaussian estimate but increases the
 initialization error. Choosing \(\varepsilon=Lh^2\) balances these
-effects. The next proposition gives the estimates for both stages.
-To state the initialization bound, write the corresponding Slepian
-identity as
-\[
- \frac{d}{dv}\E F_{a,h}(T_v)
- =-\frac{\sqrt{1-v}}4\E D^3F_{a,h}(T_v):K_3+R^0_{a,h}(v),
- \qquad 0<v<1.
-\]
-This defines its fourth-order remainder \(R^0_{a,h}\), whose integral
-formula, like that of \(R_{4,a,h}\), is given by
-Lemma~\ref{appx-an:lem:identity}.
+effects. \textcolor{blue}{The next proposition collects the derivative
+bounds and the integrated first-stage estimate used above.}
 
 \begin{proposition}[Initialization and seeded derivative estimates]
 \label{an:prop:derivative}
@@ -1127,17 +1315,86 @@ and, uniformly over \(a\in\R^m\) and \(0<t<1\),
 \end{proposition}
 \subsection{Proof of Theorem~\ref*{thm:unrestricted}}\label{sec:proof-theorem-one}
 
-We combine the smoothing error with the initialization and derivative
-bounds in Proposition~\ref{an:prop:derivative}.
-
+{\color{blue}
 \begin{proof}[Proof of Theorem~\ref{thm:unrestricted}]
-Use admissible $s_3\le\delta$ (replace any supplied bound by its minimum with $\delta$). Take $h=\mathsf A\max\{\delta,\sqrt{s_4D_L}\}$ with $\mathsf A\ge1$ as in Proposition~\ref{an:prop:derivative}. If $Lh^2\ge1/4$, the right side of \eqref{eq:relative-unrestricted} is bounded below by a positive absolute constant before the factor $C$, and $\rho\le1$ suffices. Otherwise set $\varepsilon=Lh^2$. Integrating the cubic estimate costs $Cs_3L^{3/2}$, since $t/(t+\varepsilon)\le1$. Integrating the fourth-order estimate gives $\log(1+1/\varepsilon)$. Together with initialization and the smoothing estimate \eqref{eq:endpoint-min}, this yields
+We combine the errors from smoothing and the two comparison stages,
+then choose the smoothing width to balance their contributions.
+The envelope condition allows us to take \(s_3\le\delta\).
+
+First fix \(h\ge\mathsf A\delta\), where \(\mathsf A\ge1\) is the
+constant in Proposition~\ref{an:prop:derivative}, and suppose that
+\(Lh^2<1/4\). Set \(\varepsilon\coloneqq Lh^2\). By the smoothing
+bound~\eqref{eq:endpoint-min} and the decomposition~\eqref{eq:roadmap},
 \[
- \rho\le C L^{3/2}\left[h+s_3+
- \frac{s_4}{h}\left\{1+\log\!\left(1+\frac1{Lh^2}\right)\right\}\right].
+ \rh(W,Z)
+ \le ChL^{3/2}+I_h+\sup_a\int_0^1|P_a'(t)|\,dt.
 \]
-Since $h\ge\delta$, the expression in braces is at most $C D_L$. The fourth-order term in brackets is therefore at most $C\sqrt{s_4D_L}$, and the boundary and cubic terms are at most $C(\delta+\sqrt{s_4D_L})$. This proves \eqref{eq:relative-unrestricted}. Taking $s_4=\delta^2$ and using $D_L\ge1$ gives \eqref{eq:unrestricted}.
+The first term is the smoothing error. For the initial Slepian stage,
+\eqref{eq:initialization-bound} gives
+\[
+ I_h\le CL^{3/2}\left(s_3+\frac{s_4}{h}\right).
+\]
+For the calibrated dropout stage, we integrate the cubic and
+fourth-order bounds in~\eqref{eq:seeded-derivatives}. Their time
+integrals behave differently:
+\[
+ \int_0^1\frac{t}{t+\varepsilon}\,dt\le1,
+ \qquad
+ \int_0^1\frac{dt}{t+\varepsilon}
+ =\log\!\left(1+\frac1\varepsilon\right).
+\]
+Thus the cubic contribution has a bounded time integral, whereas the
+fourth-order remainder contributes a logarithm. Combining the two
+stages with the smoothing error yields
+\[
+ \rh(W,Z)\le CL^{3/2}\left[
+ h+s_3+\frac{s_4}{h}
+ \left\{1+\log\!\left(1+\frac1{Lh^2}\right)\right\}
+ \right].
+\]
+
+We now choose \(h\). Since \(h\ge\delta\),
+\[
+ 1+\log\!\left(1+\frac1{Lh^2}\right)
+ \le1+\log\!\left(1+\frac1{L\delta^2}\right)
+ \le CD_L.
+\]
+Using also \(s_3\le\delta\), we obtain
+\[
+ \rh(W,Z)\le CL^{3/2}
+ \left(h+\delta+\frac{s_4D_L}{h}\right).
+\]
+Increasing \(h\) enlarges the smoothing error but reduces the
+fourth-order contribution. Balancing these terms, subject to
+\(h\ge\mathsf A\delta\), leads to
+\[
+ h\coloneqq\mathsf A\max\{\delta,\sqrt{s_4D_L}\}.
+\]
+For this choice,
+\[
+ h+\delta+\frac{s_4D_L}{h}
+ \le C\left(\delta+\sqrt{s_4D_L}\right).
+\]
+If \(Lh^2<1/4\), the preceding estimates, together with
+\(\rh(W,Z)\le1\), prove~\eqref{eq:relative-unrestricted}.
+
+It remains to cover the case in which the chosen width satisfies
+\(Lh^2\ge1/4\). Then
+\[
+ L^{3/2}\left(\delta+\sqrt{s_4D_L}\right)
+ \ge\frac{L^{3/2}h}{\mathsf A}
+ \ge\frac{L}{2\mathsf A}
+ \ge\frac1{2\mathsf A}.
+\]
+The right side of~\eqref{eq:relative-unrestricted} therefore exceeds
+\(1\) after increasing its absolute constant, so \(\rh(W,Z)\le1\)
+proves the bound in this case as well.
+
+Finally, the envelope condition permits \(s_4=\delta^2\).
+Substituting this value into~\eqref{eq:relative-unrestricted} and
+using \(D_L\ge1\) gives~\eqref{eq:unrestricted}.
 \end{proof}
+}
 
 The surviving logarithm comes from integrating the fourth-order
 remainder near the beginning of the second stage. The lower bounds in
@@ -1933,6 +2190,14 @@ S. Basu and A. K. Kuchibhotla (2025).
 Maximal inequalities for independent random vectors.
 \href{https://arxiv.org/abs/2504.17885}{arXiv:2504.17885}, version~1.
 
+\bibitem{CCK2015AC}
+{\color{blue}
+V. Chernozhukov, D. Chetverikov, and K. Kato (2015).
+\emph{Comparison and anti-concentration bounds for maxima of Gaussian
+random vectors}.
+Probability Theory and Related Fields \textbf{162}(1--2), 47--70.
+\href{https://doi.org/10.1007/s00440-014-0565-9}{doi:10.1007/s00440-014-0565-9}.}
+
 \end{thebibliography}
 
 \clearpage
@@ -2386,8 +2651,14 @@ calibrated path in~\eqref{eq:path}, set
  \label{eq:seed-initialization}
 \end{equation}
 For the calibrated amplitude, \(Y_t=c_\varepsilon U_t\), and
-\(T_{v_\varepsilon}=U_0\). Thus
-\(I_h=\sup_a|\E F_{a,h}(S)-\E F_{a,h}(T_{v_\varepsilon})|\).
+\(T_{v_\varepsilon}=U_0\). \textcolor{blue}{Thus
+\(P_a^0(v_\varepsilon)=P_a(0)\), and}
+{\color{blue}
+\[
+ I_h=\sup_a|P_a^0(v_\varepsilon)-P_a^0(0)|
+ \le\sup_a\int_0^{v_\varepsilon}|(P_a^0)'(v)|\,dv.
+\]
+}
 The Slepian remainder \(R^0_{a,h}\) defined in
 Subsection~\ref{sec:outline-seeded} is the integral remainder of
 Lemma~\ref{appx-an:lem:identity} with seed zero and
@@ -2431,11 +2702,23 @@ Apply Lemma~\ref{appx-an:lem:identity} with seed zero and the Slepian amplitude.
 \[
  \max_j\sum_i\E\xi_{ij}^4=\max_j e_j^\top Q_j e_j\le s_4.
 \]
-This argument also covers products from two independent copies. An order-$k$ derivative contributes $h^{-k}$, and its positive logistic weights, summed over their free labels, are at most a constant times $F(1-F)$. Equation~\eqref{eq:slepian-weight} and the bounded integrals of the Slepian kernels now give \eqref{eq:direct-initialization}. Since $v_\varepsilon\le Lh^2$, the integrated initialization cost is at most
+This argument also covers products from two independent copies. An order-$k$ derivative contributes $h^{-k}$, and its positive logistic weights, summed over their free labels, are at most a constant times $F(1-F)$. Equation~\eqref{eq:slepian-weight} and the bounded integrals of the Slepian kernels now give \eqref{eq:direct-initialization}.
+{\color{blue}
+Combining the cubic and fourth-order terms gives
 \[
- C Lh^2\left(\frac{s_3\sqrt L}{h^2}+\frac{s_4\sqrt L}{h^3}\right)
- = C L^{3/2}(s_3+s_4/h).
+ |(P_a^0)'(v)|
+ \le C\sqrt L\left(\frac{s_3}{h^2}+\frac{s_4}{h^3}\right).
 \]
+Integrating over the first stage and using \(v_\varepsilon\le Lh^2\) yields
+\[
+\begin{aligned}
+ I_h&\le\sup_a\int_0^{v_\varepsilon}|(P_a^0)'(v)|\,dv\\
+ &\le C v_\varepsilon\sqrt L
+       \left(\frac{s_3}{h^2}+\frac{s_4}{h^3}\right)
+ \le CL^{3/2}(s_3+s_4/h).
+\end{aligned}
+\]
+}
 
 Boundedness and continuity of the test function justify the limit
 at \(v=0\). This proves~\eqref{eq:initialization-bound}.
