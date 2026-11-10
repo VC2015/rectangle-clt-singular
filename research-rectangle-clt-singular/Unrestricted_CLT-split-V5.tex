@@ -4906,14 +4906,27 @@ If \(v=0\), the sum is zero almost surely.
 \end{lemma}
 \begin{proof}
 The truncated vectors \(T_i^{(u)}:=T_i\ind\{\norm{T_i}_\infty\le u\}\)
-are centered by symmetry. Bennett's exponential bound yields
+are centered by symmetry. Bennett's exponential bound \cite[Theorem 2.9]{BLM2013} yields
 \[
  \log\E\exp\left(\pm\lambda\sum_iT_{ij}^{(u)}\right)
  \le\frac v{u^2}(e^{\lambda u}-1-\lambda u),\qquad\lambda>0.
 \]
-Applying log-sum-exp to the \(2p\) signed coordinates and choosing
-\(\lambda:=u^{-1}\log(1+u^2\log(2p)/v)\) gives the first term in
-\eqref{ben:maximum-bound}, since \(\log(2p)\asymp L\).
+%Applying log-sum-exp to the \(2p\) signed coordinates and choosing
+%\(\lambda:=u^{-1}\log(1+u^2\log(2p)/v)\) gives the first term in
+%\eqref{ben:maximum-bound}, since \(\log(2p)\asymp L\).
+Applying log-sum-exp to the \(2p\) signed coordinates and Jensen's inequality for log give
+\begin{align*}
+\E\norm{\lambda\sum_iT_i^{(u)}}_\infty
+%&\leq\E\log\sum_{\epsilon\in\{-1,1\}}\sum_{j=1}^p\exp\left(\epsilon\lambda\sum_iT_{ij}^{(u)}\right)+\log(2p)\\
+%&\leq\log\sum_{\epsilon\in\{-1,1\}}\sum_{j=1}^p\E\exp\left(\epsilon\lambda\sum_iT_{ij}^{(u)}\right)+\log(2p)\\
+&\leq\log\left\{2p\exp\left(\frac v{u^2}(e^{\lambda u}-1-\lambda u)\right)\right\}+\log(2p).
+\end{align*}
+Choosing \(\lambda:=u^{-1}\log(1+u^2L/v)\) yields 
+\begin{align*}
+\E\norm{\sum_iT_i^{(u)}}_\infty
+&\leq\frac v{\lambda u^2}(u^2L/v-\lambda u)+\frac{2}{\lambda}\log(2p)
+\leq\frac{3L}{\lambda}=\frac{3uL}{\log(1+u^2L/v)}.
+\end{align*}
 The expected norm of the omitted sum is at most
 \(\sum_i\E[\norm{T_i}_\infty\ind\{\norm{T_i}_\infty>u\}]
 \le A^qu^{1-q}\).
