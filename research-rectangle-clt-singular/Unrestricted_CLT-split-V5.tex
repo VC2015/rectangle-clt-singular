@@ -216,6 +216,12 @@ coordinates of \(R\) may be dependent. For deterministic weights
 \(a_1,\ldots,a_n\) satisfying \(\sum_i a_i^2=1\), set
 \(\xi_i:=a_iR_i\).} Since $R_{ij}^2=1$, both fourth-moment matrices equal $(\sum_i a_i^4)\Sigma$. \textcolor{magenta}{Give one summand a weight proportional to $\sqrt{\log n}$ and each of the other $n-1$ summands a weight proportional to $1$.} After normalization, $\delta\asymp\sqrt{(\log n)/n}$ and $s_4\asymp1/n$. For $p\asymp n^a$ with fixed $a>0$, \eqref{eq:relative-unrestricted} gains a factor of order $\sqrt{\log n}$ over \eqref{eq:unrestricted}, for every covariance of the sign vector.
 
+The envelope bound admits a further refinement when the dimension grows
+slowly relative to the inverse summand bound. Proposition~\ref{prop:dimension-cap}
+in Appendix~\ref{app:dimension-cap} replaces \(\sqrt{D_L}\) in
+\eqref{eq:unrestricted} by \(\sqrt{\min\{D_L,L\}}\), using the same
+interpolation and an additional integrated remainder estimate.
+
 For normalized observations, Theorem~\ref{thm:unrestricted} gives
 the following dependence on the sample size.
 
@@ -626,7 +632,8 @@ Conjecture~\ref{conj:sharp-unrestricted} is excluded. The
 identifies the exact manuscript and proof versions, the correspondence
 between the printed and formal arguments, the treatment of external
 inputs, and the successful independent checks. The verification does not
-cover the more recent expository changes.}
+cover the more recent expository changes or the dimension-logarithm
+refinement in Appendix~\ref{app:dimension-cap}.}
 
 \section*{Plan of the Paper}
 Section~\ref{sec:smoothing} outlines the smoothing and interpolation
@@ -640,6 +647,8 @@ give the proofs of the auxiliary estimates and the lower bounds.
 \textcolor{magenta}{Appendix~\ref{app:polynomial-proof} proves
 Theorem~\ref{thm:polynomial}, followed by the lower-bound proofs in
 Appendix~\ref{app:sharpness-proofs}.}
+Appendix~\ref{app:dimension-cap} caps the additional logarithm in the
+bounded-envelope bound by \(L=\log(ep)\).
 
 \section{Outline of the Proof of Theorem~\ref*{thm:unrestricted}}\label{sec:smoothing}
 Throughout this section we use the bounded-summand setup~\eqref{eq:setup},
@@ -5933,5 +5942,390 @@ At \(q=4\), this is
 \(\frac14\sqrt{\ell/(4n\Lambda)}\), as in the growing-envelope
 fourth-moment construction.
 
+
+% Dimension cap: adapted from Yuta Koike's 10 November 2026 note, Section 6.
+% The coarse single-face bound below avoids importing Source input 3.2.
+\section{A dimension-logarithm cap for the bounded-envelope bound}
+\label{app:dimension-cap}
+
+The additional logarithm in Theorem~\ref{thm:unrestricted} comes from
+integrating a bound proportional to \((t+\varepsilon)^{-1}\).
+We can cap this logarithm by \(L=\log(ep)\) by combining that bound
+with estimates that depend polynomially on the number of faces and
+the support rank. These polynomial factors enter only through their
+logarithms after integration. The interpolation and its cubic
+estimate remain those of Section~\ref{sec:smoothing}.
+
+\begin{proposition}[Dimension-logarithm cap]
+\label{prop:dimension-cap}
+Under~\eqref{eq:setup}, define \(J_L:=\min\{D_L,L\}\). There is an
+absolute constant \(C\) such that
+\begin{equation}
+ \rh(W,Z)\le C\min\{1,\delta L^{3/2}\sqrt{J_L}\}.
+ \label{cap:result}
+\end{equation}
+More precisely, for \(h\ge\mathsf A\delta\) and
+\(\varepsilon=Lh^2<1/4\), the remainder in
+\eqref{eq:path-summary} satisfies
+\begin{equation}
+ \sup_a\int_0^1|R_{4,a,h}(t)|\,dt
+ \le\frac{C\delta^2L^{3/2}}h
+       \min\{1+\log(1/\varepsilon),L\}.
+ \label{cap:integrated}
+\end{equation}
+\end{proposition}
+
+The proposition concerns the bounded-envelope bound. Combining it
+with the relative fourth-moment bound in
+\eqref{eq:relative-unrestricted} gives
+\[
+ \rh(W,Z)\le C\min\left\{1,
+ L^{3/2}\bigl(\delta+\sqrt{s_4D_L}\bigr),
+ \delta L^{3/2}\sqrt{J_L}\right\}.
+\]
+In particular, we do not need to replace \(D_L\) in the
+\(s_4\)-dependent expression to obtain the envelope improvement.
+When \(p\) is fixed, \eqref{cap:result} is of order \(\delta\).
+
+We use the support coordinates of
+Subsection~\ref{appx-an:sec:coords}. Thus \(r\le p\), the unit face
+normals are \(u_1,\ldots,u_m\), where \(m=2p\), and
+\(\sum_i\E\zeta_i^0(\zeta_i^0)^\top=I_r\), with
+\(\|\zeta_i^0\|_U\le\delta\). We first record concentration
+estimates for one or two face projections. Their constants do not
+depend on the angle between the two normals; the angle appears
+explicitly in the two-dimensional bound.
+
+\begin{lemma}[Concentration for one or two face projections]
+\label{lem:cap-concentration}
+Let \(V=\sum_i X_i+G_A\), where the \(X_i\) are independent centered
+vectors, \(\|X_i\|_U\le b\delta\), and \(G_A\) is an independent
+centered Gaussian vector. Suppose
+\(\Cov(V)=\tau^2I_r\), with \(c_0\le\tau^2\le C_0\).
+For \(h\ge A\delta\),
+\begin{align}
+ \sup_x\Pp\{|u_j\cdot V-x|\le h\}&\le Ch,
+ \label{cap:one-concentration}\\
+ \sup_{x,y}\Pp\{|u_j\cdot V-x|\le h,
+                 |u_k\cdot V-y|\le h\}
+ &\le Ch^2/\nu_{jk},
+ \quad \nu_{jk}:=\sqrt{1-(u_j\cdot u_k)^2}>0.
+ \label{cap:two-concentration}
+\end{align}
+The constants depend only on \(b,c_0,C_0\).
+For the logistic weights \(W_j=F\pi_j\) and
+\(W_{jk}=F\pi_j\pi_k\), at width \(h\) and arbitrary thresholds,
+these estimates imply
+\begin{equation}
+ \sup_z\E W_j(V+z)\le Ch,\qquad
+ \sup_z\E W_{jk}(V+z)\le Ch^2/\nu_{jk}.
+ \label{cap:weight-concentration}
+\end{equation}
+The bounds also hold after an independent random shift.
+\end{lemma}
+
+\begin{proof}
+For the second estimate, write \(\rho=u_j\cdot u_k\),
+\(\nu=\sqrt{1-\rho^2}\), and \(q:=(u_k-\rho u_j)/\nu\).
+In the orthonormal coordinates \((u_j,q)\), a bounded summand has
+components of absolute value at most \(b\delta\) and
+\(2b\delta/\nu\), respectively. Its phase is therefore uniformly
+small on the frequency rectangle
+\[
+ |t_1|\le c/h,\qquad |t_2|\le c\nu/h,
+\]
+if \(A\) is sufficiently large. For an independent copy \(X_i'\),
+the identity
+\(\left|\E e^{it\cdot X_i}\right|^2
+ =\E\cos\{t\cdot(X_i-X_i')\}\), together with
+\(1-\cos x\ge c x^2\) for small \(|x|\), bounds the product of
+the summand characteristic functions by the exponential of a
+negative constant times their total variance. Including the exact
+Gaussian factor gives
+\[
+ |\varphi_V(t_1,t_2)|\le
+       \exp\{-c\tau^2(t_1^2+t_2^2)\}
+\]
+on this frequency rectangle.
+
+The event in \eqref{cap:two-concentration} is contained in a
+rectangle with half-widths \(Ch\) and \(Ch/\nu\) in these
+orthonormal coordinates. To bound its probability, majorize its
+indicator by a constant times a product of two rescaled kernels
+\(k(x):=(\sin(ax)/(ax))^2\), with \(k(0):=1\) and a fixed
+sufficiently small \(a>0\). The kernel is bounded below on the
+required interval, and its Fourier transform is bounded and has
+compact support. Fourier inversion gives
+\[
+ \frac{Ch^2}{\nu}
+ \int_{|t_1|\le c/h,\ |t_2|\le c\nu/h}
+        |\varphi_V(t_1,t_2)|\,dt_1dt_2
+ \le \frac{Ch^2}{\nu}.
+\]
+The same one-dimensional argument proves
+\eqref{cap:one-concentration}.
+
+For the weight bounds, use
+\[
+ W_j(x)\le \frac{e^{s}}{(1+e^s)^2},\qquad
+ W_{jk}(x)\le \frac{e^{s+t}}{(1+e^s+e^t)^3},
+ \quad s=\frac{u_j\cdot x-a_j}{h},\quad
+ t=\frac{u_k\cdot x-a_k}{h}.
+\]
+The two majorants have integrals \(1\) and \(1/2\), respectively,
+and bounded logarithmic derivatives. Consequently the sums of
+their suprema over unit intervals or unit squares are finite.
+Apply \eqref{cap:one-concentration} or
+\eqref{cap:two-concentration} to each such interval or square and
+sum. The estimates are uniform in translations and thresholds.
+Conditioning proves the assertion about independent random shifts.
+\end{proof}
+
+We next separate the Hessian into terms involving one face and
+terms involving two faces. This decomposition makes the small-angle
+cancellation explicit. For the moment let \(F\) have width
+\(\ell\), and define \(\mu:=\sum_j\pi_j u_j\). For directions
+\(z,w\), write \(z_j:=u_j\cdot z\), \(w_j:=u_j\cdot w\), and
+\(\rho_{jk}:=u_j\cdot u_k\). Direct differentiation gives
+\begin{align}
+ D^2F(x)[z,w]
+ &=-\ell^{-1}\sum_jz_jw_j D_{u_j}W_j(x)
+     +2\ell^{-2}\sum_{j<k}W_{jk}(x)B_{jk}(z,w),
+ \label{cap:hessian}\\
+ B_{jk}(z,w)
+ &:=z_jw_k+z_kw_j-\rho_{jk}(z_jw_j+z_kw_k).
+ \label{cap:pair-coefficient}
+\end{align}
+Indeed, \(D_{u_j}W_j=\ell^{-1}W_j(1-2u_j\cdot\mu)\).
+The terms containing \(\rho_{jk}\) cancel between the two parts
+of \eqref{cap:hessian}, leaving the Hessian formula used in
+Lemma~\ref{appx-an:lem:restoration}.
+
+Apply two further derivatives in the repeated direction of each
+tensor in \eqref{appx-an:fourth-identity}. The triples of directions
+\((Z_i,z_i,w_i)\) are
+\[
+ (\zeta_i,\zeta_i,\zeta_i),\qquad
+ (\widetilde\zeta_i,\zeta_i,\zeta_i),\qquad
+ (\widetilde\zeta_i,\widetilde\zeta_i,\zeta_i),
+\]
+respectively. Denote the resulting single-face remainder by
+\(R_{4,\mathrm{single},a,h}\), and the contribution of an unordered
+pair by \(R_{4,jk,a,h}\). This fixes the slot order in the
+decomposition, even though the full fourth derivative is symmetric.
+
+\begin{lemma}[Complementary remainder bounds]
+\label{lem:cap-remainder}
+Let \(h\ge A\delta\), \(\varepsilon=Lh^2<1/4\), and
+\(v:=t+\varepsilon\). Along the calibrated interpolation,
+\begin{align}
+ |R_{4,\mathrm{single},a,h}(t)|
+ &\le Cmr\delta^2v^{-3/2},
+ \label{cap:single}\\
+ |R_{4,jk,a,h}(t)|
+ &\le C\min\left\{\frac{\delta^2\nu_{jk}}{h^2},
+                    \frac{r\delta^2}{\nu_{jk}v}\right\},
+ \quad \nu_{jk}>0.
+ \label{cap:pair}
+\end{align}
+Parallel or antiparallel pairs contribute zero. Consequently,
+\begin{equation}
+ |R_{4,a,h}(t)|
+ \le \frac{Cmr\delta^2}{v^{3/2}}
+       +\frac{Cm^2\sqrt r\,\delta^2}{h\sqrt v}.
+ \label{cap:complementary}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Use the unnormalized path and rescaled test function in
+\eqref{eq:seeded-test}, so the logistic width is
+\(\ell=\widetilde h=\sqrt{1+\varepsilon}\,h\), which is comparable
+to \(h\). The Gaussian split in
+\eqref{eq:seeded-gaussian-split} gives
+\[
+ Y_t=V_{0,t}+\sigma_tG_1,\qquad
+ \sigma_t^2=v/2,\qquad
+ \Cov(V_{0,t})=(1-t/2+\varepsilon/2)I_r.
+\]
+The bounded summands in \(V_{0,t}\) have face norm at most
+\(2\delta\), and its covariance scalar lies between \(1/2\) and
+\(9/8\). Lemma~\ref{lem:cap-concentration} therefore applies
+uniformly in time, including after conditioning on \(G_1\), which
+is independent of \(V_{0,t}\). It also applies to the full base
+\(Y_t\), whose covariance is \((1+\varepsilon)I_r\).
+
+For a nonparallel pair, define
+\(c:=1-|\rho_{jk}|\), let \(s\) be the sign of \(\rho_{jk}\)
+with \(s:=1\) at zero, and define
+\(q:=(u_j-su_k)/\sqrt{2c}\). Then \(q\) is unit, and
+\begin{equation}
+ B_{jk}(z,w)=sc\{z_jw_j+z_kw_k-2(q\cdot z)(q\cdot w)\}.
+ \label{cap:angle-cancellation}
+\end{equation}
+For each of the three copy patterns, the aggregate covariance
+identity and Cauchy--Schwarz give
+\[
+ \sum_i\E|B_{jk}(z_i,w_i)|\le4c,
+ \qquad |B_{jk}(z_i,w_i)|\le4\delta^2.
+\]
+For example,
+\(\sum_i\E|(q\cdot z_i)(q\cdot w_i)|\le1\), whether the
+two slots use the same copy or independent copies.
+
+The direct derivative bound
+\( |D_{Z_i}^2W_{jk}|\le C\delta^2\ell^{-2}W_{jk}\)
+follows by differentiating the logarithm of the weight twice.
+Each remainder point differs from \(Y_t\) by face norm at most
+\(4\delta\), by \eqref{appx-an:translates}. Comparing its positive
+weight with the weight at \(Y_t\) costs at most
+\(e^{C\delta/\ell}\). The restored weight is independent of the
+copies, so \eqref{cap:weight-concentration} yields
+\[
+ |R_{4,jk,a,h}(t)|
+ \le C\delta^2\ell^{-4}c\,\frac{\ell^2}{\nu_{jk}}
+ \le \frac{C\delta^2\nu_{jk}}{h^2},
+\]
+where we used \(c\le\nu_{jk}^2\) and the bounded absolute
+integrals of the calibrated scalar kernels.
+
+For the second pair estimate and the single-face estimate, transfer
+derivatives to \(G_1\) before averaging the copies. Let
+\(\mathcal H\) be generated by the original summands, masks, and
+\(G_0\), as in the proof of
+Lemma~\ref{appx-an:lem:restoration}. The repeated directions
+have conditional aggregate covariance \(I_r\), and all shifts
+and directions are independent of \(G_1\) conditional on
+\(\mathcal H\). Write \(H_2(G):=GG^\top-I_r\). For a unit
+vector \(u\), define the symmetric matrix
+\[
+ H_{3,u}(G):=(u\cdot G)(GG^\top-I_r)-uG^\top-Gu^\top.
+\]
+Gaussian integration by parts gives, conditional on the directions
+and the base,
+\begin{align*}
+ \E_G D_Z^2W(V_0+\sigma G+d)
+ &=\sigma^{-2}\E_G[\tr\{H_2(G)ZZ^\top\}W(V_0+\sigma G+d)],\\
+ \E_G D_Z^2D_uW(V_0+\sigma G+d)
+ &=\sigma^{-3}\E_G[\tr\{H_{3,u}(G)ZZ^\top\}
+                         W(V_0+\sigma G+d)].
+\end{align*}
+These identities follow by applying Stein's identity to the two
+repeated derivatives, and also to \(D_u\) in the second identity.
+
+To separate a shift from its coefficient, use the exact weight
+translation series \eqref{eq:weight-translation}. For a weight
+with \(k=1\) or \(2\) face factors, its level \(q\) has a
+coefficient bounded by \(e^{4k\delta/\ell}\eta^q\), where
+\(\eta:=e^{4\delta/\ell}-1\), and \(q\) additional face
+probabilities. After conditional averaging, the coefficient
+matrices have operator norm at most
+\(C\delta^2e^{4k\delta/\ell}\eta^q\). For single-face terms this
+uses \(|z_{i,j}w_{i,j}|\le\delta^2\), and for pair terms it uses
+\(|B_{jk}(z_i,w_i)|\le4\delta^2\), together with the conditional
+covariance budget for \(Z_i\).
+
+Taking absolute values of the matrix contractions and summing the
+additional face probabilities costs at most \(1\). Thus each
+level is bounded using the original weight \(W_j\) or \(W_{jk}\).
+The scalar series
+\(\sum_{q\ge0}\binom{k+q}{q}\eta^q\) is bounded if \(A\) is
+large enough that \(\eta\le1/2\). Absolute convergence and
+Gaussian integrability justify these interchanges, as in
+Lemma~\ref{appx-an:lem:restoration}.
+
+We may now take the expectation over \(V_{0,t}\) conditional on
+\(G_1\) and use \eqref{cap:weight-concentration}. The elementary
+nuclear-norm estimates
+\[
+ \E\|H_2(G_1)\|_*\le2r,\qquad
+ \E\|H_{3,u}(G_1)\|_*
+ \le\E\{|u\cdot G_1|(\|G_1\|^2+1)+2\|G_1\|\}\le Cr
+\]
+then give
+\[
+ |R_{4,jk,a,h}(t)|
+ \le C\ell^{-2}\sigma_t^{-2}\delta^2r
+                    \frac{\ell^2}{\nu_{jk}}
+ \le\frac{Cr\delta^2}{\nu_{jk}v}.
+\]
+For each single-face term in \eqref{cap:hessian}, the corresponding
+bound is
+\(C\ell^{-1}\sigma_t^{-3}\delta^2r\ell
+ \le Cr\delta^2v^{-3/2}\).
+Summing over the \(m\) faces proves \eqref{cap:single}.
+The scalar remainder kernels have bounded absolute integrals, so
+the estimates hold for their full contributions.
+
+If \(|\rho_{jk}|=1\), the normals are equal or opposite and
+\(B_{jk}\) vanishes identically. For the other pairs, taking the
+geometric mean of the two estimates in \eqref{cap:pair} cancels
+\(\nu_{jk}\). Summing over at most \(m^2/2\) pairs proves
+\eqref{cap:complementary}.
+\end{proof}
+
+We finish by integrating the better bound at each time. This step
+explains why polynomial dependence on dimension in
+\eqref{cap:complementary} is harmless for the logarithmic cap.
+
+\begin{proof}[Proof of Proposition~\ref{prop:dimension-cap}]
+Define
+\[
+ A_h:=\frac{\delta^2L^{3/2}}h,\qquad
+ S_h:=mr\delta^2,\qquad
+ B_h:=\frac{m^2\sqrt r\,\delta^2}h.
+\]
+The original remainder estimate \eqref{eq:seeded-derivatives}, with
+\(s_4=\delta^2\), and \eqref{cap:complementary} bound the same
+full remainder. Since \(\min\{x,y+z\}\le
+\min\{x,y\}+\min\{x,z\}\) for nonnegative \(x,y,z\), they imply
+\[
+ |R_{4,a,h}(t)|\le C\left[
+ \min\left\{\frac{A_h}v,\frac{S_h}{v^{3/2}}\right\}
+ +\min\left\{\frac{A_h}v,\frac{B_h}{\sqrt v}\right\}\right].
+\]
+Splitting the first integral at \((S_h/A_h)^2\), and the second
+at \((A_h/B_h)^2\), gives
+\begin{align*}
+ \int_\varepsilon^{1+\varepsilon}
+       \min\{A_h/v,S_h/v^{3/2}\}\,dv
+ &\le CA_h\left\{1+\log_+
+                    \frac{S_h}{A_h\sqrt\varepsilon}\right\},\\
+ \int_\varepsilon^{1+\varepsilon}
+       \min\{A_h/v,B_h/\sqrt v\}\,dv
+ &\le CA_h\{1+\log_+(B_h/A_h)\}.
+\end{align*}
+These bounds also hold when the splitting point lies outside the
+interval, by integrating the smaller expression throughout.
+The ratios in the logarithms are
+\[
+ \frac{S_h}{A_h\sqrt\varepsilon}=\frac{mr}{L^2},
+ \qquad \frac{B_h}{A_h}=\frac{m^2\sqrt r}{L^{3/2}}.
+\]
+Because \(m=2p\), \(r\le p\), and \(L=\log(ep)\ge1\), both
+logarithms are at most \(CL\). We obtain
+\(\sup_a\int_0^1|R_{4,a,h}(t)|\,dt\le CA_hL\).
+Direct integration of the original estimate gives the alternative
+\(CA_h\{1+\log(1/\varepsilon)\}\), proving
+\eqref{cap:integrated}.
+
+The smoothing, initialization, and cubic estimates used in the
+proof of Theorem~\ref{thm:unrestricted} now yield
+\[
+ \rh(W,Z)\le CL^{3/2}\left[
+ h+\delta+\frac{\delta^2}h
+       \min\{1+\log(1/(Lh^2)),L\}\right]
+\]
+when \(h\ge\mathsf A\delta\) and \(Lh^2<1/4\). Choose
+\(h:=\mathsf A\delta\sqrt{J_L}\). In this range,
+\(1+\log(1/(Lh^2))\le2D_L\), so each term is bounded by
+\(C\delta L^{3/2}\sqrt{J_L}\).
+If instead \(Lh^2\ge1/4\), then
+\(\delta L^{3/2}\sqrt{J_L}=L^{3/2}h/\mathsf A
+ \ge1/(2\mathsf A)\), and the trivial probability bound suffices.
+This proves \eqref{cap:result}.
+\end{proof}
+
 \end{document}
+
 
