@@ -1455,7 +1455,7 @@ observations against the variance discarded in the tails. The extra
 logarithm in~\eqref{poly:transfer-bound} comes from the
 bounded-observation theorem. If Conjecture~\ref{conj:sharp-unrestricted}
 holds, the same argument gives \(C_q\min\{1,V_q\}\) under the
-envelope condition alone.
+envelope condition alone (see Remark \ref{rmk:E1}).
 \end{recovered}
 
 \subsection{\texorpdfstring{\textcolor{magenta}{Part (ii): refinement under coordinate fourth moments}}{Part (ii): refinement under coordinate fourth moments}}\label{poly:bennett-sec}
@@ -4463,7 +4463,12 @@ the exceptional \textcolor{magenta}{summands}. Define
  I_i:=\ind\{\norm{X_i}_\infty>T\},\qquad
  p_i:=\Pp(I_i=1),\qquad \mu_i:=\E[X_i\mid I_i=0].
 \]
-Markov's inequality gives \(p_i\le(B/T)^q<1/4\), so the conditional
+Markov's inequality gives 
+\begin{equation}
+p_i\le(B/T)^q<1/4, 
+\label{app:p_i-bound}
+\end{equation}
+so the conditional
 mean is well defined. Decompose each observation as
 \begin{equation}
  Y_i:=(1-I_i)(X_i-\mu_i),\qquad
@@ -4485,7 +4490,7 @@ Set \(v_T:=B^qT^{2-q}\). Since \(\E X_i=0\),
  \E[\norm{X_i}_\infty^2 I_i]\le v_T.
  \label{app:tail-moments}
 \end{equation}
-As \(B/T\le1/2\), these inequalities imply
+As \(B/T\le1/2\), these inequalities and \eqref{poly:envelope} imply
 \[
  \max_j\frac1n\sum_i\E R_{ij}^2\le C v_T,\qquad
  \max_i\E\norm{R_i}_\infty^q\le C_qB^q.
@@ -4511,7 +4516,7 @@ If \(C_i:=\E X_iX_i^\top\), then
           -\mu_i\mu_i^\top.
 \]
 Here \(\maxnorm{C_i}\le\E\norm{X_i}_\infty^2\le B^2\).
-Using \eqref{app:tail-moments} therefore gives
+Using \eqref{app:p_i-bound}, \eqref{app:tail-moments} and $B/T\leq1/2$ therefore gives
 \[
  \maxnorm{C_i^0-C_i}\le C v_T,
  \qquad \maxnorm{C_i^0}\le2B^2.
@@ -4525,12 +4530,12 @@ Consequently, with \(\Delta:=\maxnorm{Q-\Sigma}\),
  \le C v_T.
  \label{app:conditional-covariance}
 \end{equation}
-In particular, on the event \(\mathcal G:=\{\Delta\le1/2\}\), all
+In particular, on the event \(\mathcal E:=\{\Delta\le1/2\}\), all
 diagonal entries of \(Q\) are at least \(1/2\), and
-\(\Pp(\mathcal G^c)\le C v_T\).
+\(\Pp(\mathcal E^c)\le C v_T\).
 
 Conditional on \(\mathcal F\), let \(G_Q\sim N(0,Q)\). On
-\(\mathcal G\), the bounded input \eqref{app:bounded-input}, applied
+\(\mathcal E\), the bounded input \eqref{app:bounded-input}, applied
 to the shifted rectangle, and Gaussian rectangle anti-concentration
 give, for each rectangle \(A\),
 \begin{align*}
@@ -4546,7 +4551,7 @@ is unchanged up to an absolute constant. The Gaussian comparison in
 \(\rh(G_Q,Z)\le C\min\{1,L\sqrt\Delta\}\).
 Take expectations, use Jensen's inequality and
 \eqref{app:shift}--\eqref{app:conditional-covariance}, and bound the
-contribution of \(\mathcal G^c\) by its probability. We obtain
+contribution of \(\mathcal E^c\) by its probability. We obtain
 \[
  \rh(W,Z)\le C_q\left\{
  \frac{T}{\sqrt n}L^{3/2}\sqrt{\log(en)}
@@ -4560,11 +4565,15 @@ When \(n\ge L\log(en)\), take \(T:=2B\{n/(L\log(en))\}^{1/q}\).
 Then \(T\ge2B\), and the first two terms in~\eqref{poly:threshold}
 have order \(V_q\{\log(en)\}^{\alpha_q}\). If \(n<L\log(en)\), then
 \(V_q\{\log(en)\}^{\alpha_q}=BL(L\log(en)/n)^{\alpha_q}\ge1\), so \(\rh\le1\)
-suffices. This proves Theorem~\ref{thm:polynomial}\textup{(i)}. If
+suffices. This proves Theorem~\ref{thm:polynomial}\textup{(i)}. 
+
+\begin{remark}\label{rmk:E1}
+If
 Conjecture~\ref{conj:sharp-unrestricted} holds, the first term of
 \eqref{poly:threshold} loses its factor \(\sqrt{\log(en)}\).
 Choosing \(T:=2B(n/L)^{1/q}\) when \(n\ge L\) then gives
 \(C_q\min\{1,V_q\}\). When \(n<L\), we have \(V_q\ge1\).
+\end{remark}
 
 \subsection{\texorpdfstring{\textcolor{magenta}{Part (ii): Bennett refinement}}{Part (ii): Bennett refinement}}\label{app:bennett}
 
