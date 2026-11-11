@@ -7,6 +7,7 @@
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{longtable,booktabs,tabularx}
 \usepackage{xcolor}
+\definecolor{revisionpurple}{HTML}{7030A0}
 % Magenta marks the retained revisions.
 \newenvironment{recovered}{\color{magenta}}{}
 \usepackage{tikz}
@@ -789,44 +790,35 @@ full list of inequalities. A redundant inequality can change the
 smoothing formula even when it does not change the set \(A_a\).
 \end{recovered}
 
-{\color{green!60!black}
+{\color{revisionpurple}
 To interpret~\eqref{eq:selector}, assign each face \(\alpha\) the
 \emph{violation score} \(u_\alpha\cdot x-a_\alpha\), and introduce a
 \emph{baseline option} with score \(0\). The baseline score is at least
 as large as every face score exactly when \(x\in A_a\). Logistic
-normalization gives the baseline probability \(F_{a,h}(x)\), providing
-a smooth approximation to membership in \(A_a\). The remaining
-probabilities, which we call \emph{face probabilities}, are proportional
-to \(e^{(u_\alpha\cdot x-a_\alpha)/h}\) and sum to \(1-F_{a,h}(x)\).
-In the random-threshold representation introduced below, the baseline
-records that no randomly shifted constraint is violated, while the face
-probabilities identify the face with the largest positive shifted
-violation. The threshold shifts are scaled differences of the Gumbel
-shocks introduced below. We use these probabilities to express and bound
-the derivatives of the logistic approximation.
+normalization gives the baseline probability \(F_{a,h}(x)\) and the
+\emph{face probabilities}
+\[
+ \pi_\alpha(x):=
+ \frac{e^{(u_\alpha\cdot x-a_\alpha)/h}}
+ {1+\sum_{\beta=1}^m e^{(u_\beta\cdot x-a_\beta)/h}},
+ \qquad \sum_{\alpha=1}^m\pi_\alpha(x)=1-F_{a,h}(x).
+\]
+We use these probabilities to express and bound the derivatives of
+the logistic approximation.
 }
 
-Membership in \(A_a\) requires
-\(\max_{\alpha\le m}(u_\alpha\cdot x-a_\alpha)\le0\).
-The logistic approximation smooths both this maximum and the indicator
-that tests whether it is nonpositive. We can write
-\[
- F_{a,h}(x)=g_h\!\left(h\log\sum_{\alpha=1}^m
- e^{(u_\alpha\cdot x-a_\alpha)/h}\right),
- \qquad g_h(s):=\frac1{1+e^{s/h}}.
-\]
-The inner function smoothly approximates the maximum violation, while
-\(g_h\) approximates the indicator of \(({-\infty},0]\). We use the
-same scale \(h\) for both steps. The construction of Chernozhukov,
-Chetverikov, and Kato~\cite{CCK2013} allows the cutoff function and
-its scale to be chosen separately from the smooth maximum. The
-multinomial logistic form, with a baseline score of zero, was used by
-McFadden~\cite[p.~1001]{McFadden1989} to smooth indicators of simultaneous
-inequalities and also appears in~\cite[eq.~(5)]{GaoZhang}.
-For every \(h>0\), the approximation is smooth, allowing us to
-differentiate along the interpolation path. As \(h\) decreases to
-zero, it approaches the indicator away from the boundary, but the
-uniform bounds on its derivatives increase.
+{\color{revisionpurple}
+The smoother \(F_{a,h}\) in~\eqref{eq:selector} combines a smooth
+maximum of the violation scores with a logistic cutoff, using the
+same width \(h\) for both. By comparison,
+the construction in~\cite{CCK2013} allows the cutoff and its scale to
+be chosen separately from the smooth maximum. The multinomial
+logistic form was used by McFadden~\cite[p.~1001]{McFadden1989} to
+smooth indicators of simultaneous inequalities and also appears
+in~\cite[eq.~(5)]{GaoZhang}. As \(h\) decreases to zero,
+\(F_{a,h}(x)\) approaches \(\ind_{A_a}(x)\) away from the boundary
+of \(A_a\), but its derivative bounds increase.
+}
 
 \textcolor{green!60!black}{The \emph{random-threshold representation} of the multinomial logit
 probabilities makes the underlying random shocks explicit, with their
@@ -854,6 +846,11 @@ that the baseline utility \(-h\log\omega_0\) exceeds all face utilities
 \(u_\alpha\cdot x-a_\alpha-h\log\omega_\alpha\).
 Rearranging these utility comparisons gives the inequalities defining
 \(A_{a,\omega}\).
+{\color{revisionpurple}
+Thus the baseline records that no randomly shifted constraint is
+violated, while \(\pi_\alpha(x)\) is the probability that face
+\(\alpha\) has the largest positive shifted violation.
+}
 
 For the smoothing bound, we use~\eqref{eq:mixture} as a representation
 by random threshold shifts with the face normals fixed.
@@ -911,22 +908,14 @@ Gaussian case it equals \(\sqrt{2v/\pi}\).
 The first inequality in~\eqref{eq:gaussian-intrinsic-concentration}
 is a \emph{dimension-free alternative to Nazarov bounds} \textcolor{green!60!black}{developed in~\cite{ChernozhukovAC2026}.}
 
+{\color{revisionpurple}
 Appendix~\ref{appx-app:concentration} gives a self-contained proof.
-Convexity along edges of the discrete cube supplies the Rademacher
-boundary estimate. Pairing each summand with an independent copy gives
-a conditional Rademacher representation. Symmetrization and a contraction
-inequality control the fluctuations of its conditional variances,
-completing the bounded-sum argument. For the dimension-dependent Rademacher
-anti-concentration inequality, see O'Donnell, Servedio, and
-Tan~\cite{OST} and~\cite[Lemma~J.4]{CCKK2022}. The logarithmic bounded-sum
-estimate also appears in~\cite[Lemma~2.1]{AL}, where it is obtained
-using a bootstrap argument and Kane's~\cite{Kane} noise-sensitivity
-inequality. The logarithmic Gaussian bound is the rectangle form of
-Nazarov's inequality~\cite[Lemma~A.1]{CCK2017}. A direct
-integration-by-parts argument proves the stronger geometric form
-in~\eqref{eq:gaussian-intrinsic-concentration}\textcolor{blue}{, which is analogous
-to the anti-concentration bound for centered cubes in Chernozhukov,
-Chetverikov, and Kato~\cite[Theorem~3 and Comment~5]{CCK2015AC}}.
+The logarithmic Gaussian bound is the rectangle form of Nazarov's
+inequality~\cite[Lemma~A.1]{CCK2017}. A direct integration-by-parts
+argument proves the stronger geometric
+bound~\eqref{eq:gaussian-intrinsic-concentration}, analogous to the
+bound for centered cubes in~\cite[Theorem~3 and Comment~5]{CCK2015AC}.
+}
 
 \textcolor{blue}{Let \(M_h\) denote the largest absolute difference between the
 smoothed rectangle probabilities of \(S\) and \(G\), over all threshold vectors:}
@@ -1138,7 +1127,15 @@ Let
 \[
  K_3\coloneqq\sum_i\E(\zeta_i^0)^{\otimes3}
 \]
-denote the aggregate third-moment tensor. Along the initial Slepian path,
+denote the aggregate third-moment tensor.
+{\color{revisionpurple}
+Here \(z^{\otimes3}\) has entries \(z_jz_kz_\ell\), and
+\(D^3F(x):K_3\) denotes the sum of the third partial derivatives of
+\(F\) at \(x\), each multiplied by the corresponding entry of \(K_3\).
+We similarly write \(D^qF(x)[z_1,\ldots,z_q]\) for the \(q\)th
+derivative evaluated in the listed directions.
+}
+Along the initial Slepian path,
 Lemma~\ref{appx-an:lem:identity} separates its contribution from the
 fourth-order remainder:
 \[
@@ -1164,23 +1161,43 @@ path is at most \(Ch\sqrt L\). Multiplying by this bound improves the
  derivative factors from \(h^{-3}\) and \(h^{-4}\) to
 \(h^{-2}\sqrt L\) and \(h^{-3}\sqrt L\), respectively.
 
-To bound this expected weight, we use anti-concentration along
+{\color{revisionpurple}
+To bound this expected weight, fix \(x\) and increase all thresholds
+by the same amount \(s\). Define
+\(F_s(x):=F_{a+s\mathbf1,h}(x)\), where \(\mathbf1\in\R^m\)
+has all entries equal to \(1\). Direct differentiation gives
 \[
- T_v=\sqrt{1-v}\,S+\sqrt v\,G.
+ \frac{\partial}{\partial s}F_s(x)
+ =h^{-1}F_s(x)\{1-F_s(x)\}.
 \]
-The two independent components have variances \(1-v\) and \(v\) in every
-face direction, so at least one has variance at least \(1/2\). Condition
-on the other component, which merely translates the face thresholds.
-Lemma~\ref{lem:concentration} then controls the probability that the
-remaining component lies in the transition region of the smoother.
-Integrating this bound over the levels of the logistic weight gives
+For \(|s|\le h\), the product \(F_s(x)\{1-F_s(x)\}\) is at least
+\(e^{-1}F_0(x)\{1-F_0(x)\}\). Integrating over \([-h,h]\) yields
 \[
- \E\!\left[F_{a,h}(T_v)\bigl(1-F_{a,h}(T_v)\bigr)\right]
- \le Ch\sqrt L,\qquad h\ge\mathsf A\delta.
+ F_0(x)\{1-F_0(x)\}
+ \le \frac e2\{F_h(x)-F_{-h}(x)\}.
 \]
-The bound is uniform in \(v\): near \(v=0\), the bounded component
-supplies the variance needed for anti-concentration, while near
-\(v=1\), the Gaussian component does so.
+By~\eqref{eq:mixture}, \(F_h(x)-F_{-h}(x)\) is the probability,
+over the random shifts \(\omega\), that \(x\) belongs to the shell
+\(A_{a,\omega}^{h}\setminus A_{a,\omega}^{-h}\).
+
+We apply this inequality at \(T_v=\sqrt{1-v}\,S+\sqrt v\,G\).
+The two independent components have variances \(1-v\) and \(v\)
+along every face normal. Condition on the component with the smaller
+variance and on the random thresholds. The remaining component has
+variance at least \(1/2\) along every face normal, so
+Lemma~\ref{lem:concentration} bounds the conditional shell probability
+by \(C(h+\delta)\sqrt L\). Hence, uniformly in \(v\),
+\[
+ \E[F_{a,h}(T_v)\{1-F_{a,h}(T_v)\}]
+ \le C(h+\delta)\sqrt L\le Ch\sqrt L,
+ \qquad h\ge\mathsf A\delta.
+\]
+The smoothing error compares \(A_{a,\omega}\) with \(A_a\), and
+therefore depends on the largest absolute random threshold shift.
+Here we compare \(A_{a,\omega}^{h}\) with \(A_{a,\omega}^{-h}\):
+each corresponding pair of thresholds differs by exactly \(2h\),
+regardless of the random shifts.
+}
 
 We now combine this averaging bound with the relative moment bounds
 in~\eqref{eq:relative-moments}. The cubic contribution is controlled by
@@ -1214,21 +1231,18 @@ time. Substituting these estimates into the Slepian identity yields
  \qquad 0<v<1.
 \]
 
-The first stage lasts only until \(v_\varepsilon\le\varepsilon\).
-With the choice \(\varepsilon=Lh^2<1/4\), integrating this bound gives
+{\color{revisionpurple}
+The first stage lasts only until \(v_\varepsilon\le\varepsilon\),
+so integration gives
 \[
- I_h\le\sup_a\int_0^{v_\varepsilon}|(P_a^0)'(v)|\,dv
- \le C v_\varepsilon\sqrt L
-       \left(\frac{s_3}{h^2}+\frac{s_4}{h^3}\right)
- \le CL^{3/2}\left(s_3+\frac{s_4}{h}\right).
+ I_h\le C\varepsilon\sqrt L
+       \left(\frac{s_3}{h^2}+\frac{s_4}{h^3}\right).
 \]
-{\color{green!60!black}
-For fixed \(h\), increasing \(\varepsilon\) increases the stopping time
-\(v_\varepsilon=\varepsilon/(1+\varepsilon)\), and hence the upper bound
-obtained by integrating the first-stage derivative estimate.
+For fixed \(h\), increasing \(\varepsilon\) increases the stopping
+time \(v_\varepsilon\) and the displayed bound on \(I_h\). We choose
+\(\varepsilon\) after examining how the factor \(t+\varepsilon\)
+enters the derivative bounds obtained by Gaussian integration by parts.
 }
-We next examine how the seed improves the derivative estimates along
-the calibrated dropout stage.
 
 For the calibrated dropout path, the same lemma gives}
 
@@ -1293,36 +1307,95 @@ The sum of the expected coefficient matrices is
 \]
 by the fourth-moment bound in~\eqref{eq:relative-moments}, expressed in
 support coordinates. Terms involving different face normals or
-independent copies satisfy analogous operator-norm bounds. We use these
-aggregate matrix bounds to estimate the Hermite terms together with
-their logistic weights, as in~\cite[Lemmas~22--23]{GaoZhang}.
-The resulting estimates depend on \(s_4\), with no additional factor
-depending on \(r\).
+independent copies satisfy analogous operator-norm bounds.
+{\color{revisionpurple}
+A related use of aggregate matrix bounds after two Gaussian
+integrations by parts appears in~\cite[Lemma~16]{GaoZhang}.
+Here we also need to retain the boundary-concentration gain,
+which requires the weighted Gaussian estimates developed in
+Appendix~\ref{appx-sec:support}.
+}
 }
 
-It remains to preserve the concentration of the logistic derivatives
-near the rectangle boundary. The matrix and threshold estimates in
-Appendix~\ref{appx-sec:support} control the Hermite term together with
-the logistic weights, retaining cancellations that would be lost by
-bounding the factors separately. Under the scale conditions of
-Proposition~\ref{an:prop:derivative} below, the resulting weighted boundary
-estimate supplies a factor \(hL^{3/2}\). Consequently,
+{\color{revisionpurple}
+The inequality \(A_j\preceq s_4I_r\) controls the moment
+coefficients. The remaining task is to bound the Gaussian
+expectation of the Hermite term multiplied by the logistic weights.
+Both factors depend on the same Gaussian vector, so we cannot
+multiply their separate expectation bounds.
+Estimating their absolute sizes separately would also lose the
+cancellations needed to avoid a factor depending on rank.
+The matrix and threshold estimates in
+Appendix~\ref{appx-sec:support} control the Gaussian matrix
+\(gg^\top-I_r\) averaged against the products of logistic
+probabilities arising from the derivatives. Under the scale
+conditions of Proposition~\ref{an:prop:derivative}, these estimates
+supply a factor \(ChL^{3/2}\) in the remainder bound, with no factor
+depending on \(r\). The corresponding factor without the Hermite
+term was \(Ch\sqrt L\).
+Consequently,
 \[
  |R_{4,a,h}(t)|
  \le Cs_4\,\frac1{t+\varepsilon}\,\frac1{h^2}\,hL^{3/2}
  =\frac{Cs_4L^{3/2}}{h(t+\varepsilon)}.
 \]
-The factor \(h\) supplied by the boundary estimate reduces the remaining
-dependence on the smoothing width from \(h^{-2}\) to \(h^{-1}\).
+Thus the boundary gain of one power of \(h\) survives the two
+integrations by parts, at the cost of an additional factor \(L\)
+in this weighted estimate.
+
+For the cubic contribution, two Gaussian integrations by parts
+leave one derivative of \(F_{a,h}\), which contributes \(h^{-1}\).
+The signed aggregate third-moment matrices supply the factor
+\(s_3\). Multiplying by the weighted boundary factor \(hL^{3/2}\)
+removes this remaining power of \(h^{-1}\).
+Including the coefficient in~\eqref{eq:path-summary} gives a bound
+\(Cs_3L^{3/2}t/(t+\varepsilon)\).
+The derivative of the calibrated third-moment multiplier
+\(1-t^2\) supplies the factor \(t\). Since \(t/(t+\varepsilon)\le1\),
+integration over \(0\le t\le1\) contributes at most \(Cs_3L^{3/2}\),
+uniformly in the seed \(\varepsilon\). The fourth-order bound
+has no compensating factor \(t\), and its integral contains
+\(\log(1+1/\varepsilon)\).
+
+We choose the seed scale by comparing the errors accumulated over
+both stages. The direct derivative bounds are useful during the short
+initialization stage: although its fourth-order bound contains
+\(h^{-3}\), it is integrated over an interval of length at most
+\(\varepsilon\). Its fourth-order contribution is therefore bounded by
+\(C\varepsilon s_4\sqrt L/h^3\). Choosing \(\varepsilon=Lh^2\)
+makes this contribution at most \(Cs_4L^{3/2}/h\), and the full
+first-stage bound becomes
+\[
+ I_h\le CL^{3/2}\left(s_3+\frac{s_4}{h}\right).
+\]
+Thus the short duration compensates for the unfavorable powers of
+\(h\) in the direct derivative bounds.
+
+With this seed choice, the fourth-order bound in the second stage
+can be written as
+\[
+ |R_{4,a,h}(t)|
+ \le \frac{Cs_4\sqrt L}{h^3}\,
+       \frac{\varepsilon}{t+\varepsilon}.
+\]
+It has the same order as the direct derivative bound at \(t=0\),
+but decreases as the Gaussian variance grows. Consequently,
+\[
+ \sup_a\int_0^1|R_{4,a,h}(t)|\,dt
+ \le \frac{Cs_4L^{3/2}}h
+       \log\!\left(1+\frac1\varepsilon\right).
+\]
+A larger seed would increase the initialization bound linearly while
+reducing the second-stage logarithm. The choice \(\varepsilon=Lh^2\)
+keeps the fourth-order initialization cost at the scale
+\(s_4L^{3/2}/h\), and the second stage costs this scale times a
+logarithm. The gain comes from accumulating the direct bound only
+over a short interval and using the decreasing Gaussian bound for
+the rest of the comparison.
+The next proposition states these bounds under their precise
+scale conditions.
 }
 
-{\color{green!60!black}
-Increasing \(\varepsilon\) reduces the second-stage derivative bound
-through the factor \((t+\varepsilon)^{-1}\), but lengthens the first-stage
-integration interval and increases its error bound. We choose
-\(\varepsilon=Lh^2\) to control both contributions. The next proposition
-collects the derivative bounds and the integrated first-stage estimate
-used above.
 }
 
 \begin{proposition}[Initialization and seeded derivative estimates]
@@ -1682,7 +1755,7 @@ For bounded observations, the lower bound has order
 \(X_{n,i}\) and \(-X_{n,i}\) have the same distribution.
 All mixed third moments then vanish.
 \textcolor{magenta}{Under the envelope condition~\eqref{poly:envelope}
-alone, the lower bounds match the upper bounds in terms of the powers of the envelope size, sample
+alone, the lower bounds match \textcolor{revisionpurple}{the upper bounds in} the powers of the envelope size, sample
 size, and logarithm of the dimension for every fixed \(q>2\) and
 \(B_n\ge2\), leaving a factor \(\{\log(en)\}^{1/2-1/q}\).
 With the additional coordinate condition~\eqref{poly:fourth}, the
@@ -1695,7 +1768,7 @@ Independent skewed coordinates give the first bounded example:
 small errors in their scalar tails accumulate in the distribution of
 the maximum. In the symmetric examples, dependence among coordinates
 allows the maximum to be written as a leading component plus an
-independent random shift arising from what we call the rare component. A difference between the mean shifts for
+independent random shift \textcolor{revisionpurple}{arising from the rare component of the construction}. A difference between the mean shifts for
 the sum and its Gaussian counterpart gives the lower bound.
 Appendix~\ref{app:sharpness-proofs} proves these assertions and checks
 the moment conditions for each construction.
@@ -1912,9 +1985,10 @@ agrees up to constants with the upper rate in~\eqref{poly:q4}.
 
 \begin{recovered}
 We first consider the envelope condition~\eqref{poly:envelope} alone.
-The following construction matches the powers of \(B\), \(n\),
-and \(L\) in Theorem~\ref{thm:polynomial}\textup{(i)} up to a factor of \(\{\log(en)\}^{1/2-1/q}\) for every
-fixed \(q>2\). When \(q>4\) and \(B\) is fixed, the same
+\textcolor{revisionpurple}{For every fixed \(q>2\), the following construction
+matches the upper bound in Theorem~\ref{thm:polynomial}\textup{(i)}
+from below up to a factor \(\{\log(en)\}^{1/2-1/q}\), with the same
+powers of \(B\), \(n\), and \(L\).} When \(q>4\) and \(B\) is fixed, the same
 construction also satisfies the coordinate condition~\eqref{poly:fourth}.
 Recall the classes \(\mathcal E_q\) and \(\mathcal C_q\) from
 Section~\ref{sec:poly} and the exponent \(\alpha_q=1/2-1/q\).
@@ -3911,14 +3985,22 @@ which gives~\eqref{appx-an:threshold-bound} and completes the proof of the lemma
 \section{\texorpdfstring{Proof of the anti-concentration inequality of Lemma~\ref{lem:concentration}}{Proof of the rectangle anti-concentration inequality}}\label{appx-app:concentration}
 \label{appx-conc:conditioning}
 
+{\color{revisionpurple}
 We first prove a boundary estimate for a maximum of affine functions
 of independent signs. Convexity along each edge of the discrete cube
 relates the probability of a short interval to the expected maximum
-of the underlying linear functions. Conditioning on pairs of independent
-copies then gives the bounded-sum assertion of Lemma~\ref{lem:concentration}.
-This supplies a self-contained argument for the Rademacher estimate
-used here, whose corresponding logarithmic bound is established
-in~\cite{OST} and recorded in~\cite[Lemma~J.4]{CCKK2022}.
+of the underlying linear functions. Pairing each summand with an
+independent copy gives a conditional Rademacher representation.
+Symmetrization and a contraction inequality then control the
+fluctuations of its conditional variances, completing the bounded-sum
+assertion of Lemma~\ref{lem:concentration}. This supplies a
+self-contained argument for the Rademacher estimate used here,
+whose corresponding logarithmic bound is established in~\cite{OST}
+and recorded in~\cite[Lemma~J.4]{CCKK2022}. The logarithmic bounded-sum
+estimate also appears in~\cite[Lemma~2.1]{AL}, where it is obtained
+using a bootstrap argument and Kane's~\cite{Kane} noise-sensitivity
+inequality.
+}
 
 \begin{lemma}[Rademacher boundary estimate]\label{appx-lem:cube-boundary}
 Let \(\varepsilon\) be uniform on \(\{-1,1\}^n\), and let
@@ -5110,8 +5192,8 @@ Let \(S\coloneqq\sum_{i=1}^n\eta_i\), where the real variables \(\eta_i\) are
 independent and centered, \(\delta>0\), \(|\eta_i|\le\delta\)
 almost surely, and
 \(\sum_i\E\eta_i^2=1\). Write
-\(\gamma\coloneqq\sum_i\E\eta_i^3\). There are absolute constants \(a,C>0\)
-such that, whenever \(x\ge0\) and \(\delta(1+x)\le a\),
+\(\gamma\coloneqq\sum_i\E\eta_i^3\). There are absolute constants \(\textcolor{revisionpurple}{c_0},C>0\)
+such that, whenever \(x\ge0\) and \(\delta(1+x)\le \textcolor{revisionpurple}{c_0}\),
 \begin{equation}
  \left|\log\frac{\Pp(S>x)}{1-\Phi(x)}
        -\frac{\gamma x^3}{6}\right|
@@ -5136,14 +5218,14 @@ under this tilt. The independent-copy formula for variance gives
  e^{-4\delta t}\Var(\eta_i)
  \le\Var_t(\eta_i)\le e^{4\delta t}\Var(\eta_i).
 \]
-Consequently, for a fixed small absolute \(a_0>0\),
-\(e^{-4a_0}\le K''(t)\le e^{4a_0}\) on
-\(0\le t\le a_0/\delta\). The centered tilted variable is bounded by
+Consequently, for a fixed small absolute \(\textcolor{revisionpurple}{c_1}>0\),
+\(e^{-4\textcolor{revisionpurple}{c_1}}\le K''(t)\le e^{4\textcolor{revisionpurple}{c_1}}\) on
+\(0\le t\le \textcolor{revisionpurple}{c_1}/\delta\). The centered tilted variable is bounded by
 \(2\delta\), and \(\Var_t(\eta_i)\le\delta^2\). Its fourth cumulant
 therefore has absolute value at most
 \(7\delta^2\Var_t(\eta_i)\). Since \(K^{(4)}(t)\) is the sum of
 these tilted fourth cumulants, we obtain
-\(\sup_{0\le t\le a_0/\delta}|K^{(4)}(t)|\le C\delta^2\).
+\(\sup_{0\le t\le \textcolor{revisionpurple}{c_1}/\delta}|K^{(4)}(t)|\le C\delta^2\).
 Also \(|\gamma|\le\delta\). Taylor's theorem now yields, uniformly in
 this local range,
 \begin{align}
@@ -5154,17 +5236,17 @@ this local range,
 \end{align}
 
 We choose the tilt so that its mean equals \(x\). To see that this
-choice lies in the range just controlled, \textcolor{green!60!black}{define} \(t_0\coloneqq a_0/\delta\).
+choice lies in the range just controlled, \textcolor{green!60!black}{define} \(t_0\coloneqq \textcolor{revisionpurple}{c_1}/\delta\).
 Then
 \[
  K'(t_0)=\int_0^{t_0}K''(u)\,du
- \ge e^{-4a_0}a_0/\delta.
+ \ge e^{-4\textcolor{revisionpurple}{c_1}}\textcolor{revisionpurple}{c_1}/\delta.
 \]
-Choose \(a<e^{-4a_0}a_0/2\). The condition in the lemma implies
+Choose \(\textcolor{revisionpurple}{c_0}<e^{-4\textcolor{revisionpurple}{c_1}}\textcolor{revisionpurple}{c_1}/2\). The condition in the lemma implies
 \(x<K'(t_0)\). Since \(K'(0)=0\) and \(K''>0\), there is a unique
 \(t\in[0,t_0)\) with \(K'(t)=x\), including \(t=0\) when \(x=0\).
 The bounds on \(K''\) show \(t\asymp x\) for \(x>0\).
-Inverting \eqref{opt:cumulant-expansions}, and decreasing \(a\) if
+Inverting \eqref{opt:cumulant-expansions}, and decreasing \(\textcolor{revisionpurple}{c_0}\) if
 necessary, gives
 \begin{equation}
  t=x-\gamma x^2/2+O(\delta^2x^3),\qquad
@@ -5205,7 +5287,7 @@ The same \(O(\delta)\) estimate therefore covers an atom at \(T=0\).
 The integral gives \(J(u)\asymp(1+u)^{-1}\) and
 \(|(\log J)'(u)|\le C/(1+u)\) for \(u\ge0\).
 The relative error in \eqref{opt:strict-tail} is therefore
-\(O(\delta(1+s))\), and choosing \(a\) small makes it less than \(1/2\).
+\(O(\delta(1+s))\), and choosing \(\textcolor{revisionpurple}{c_0}\) small makes it less than \(1/2\).
 Also \eqref{opt:tilted-scale} gives
 \(\log J(s)-\log J(x)=O(\delta^2x^2)\).
 Finally,
@@ -5323,19 +5405,19 @@ comparison does not require either shift to be nonnegative.
 
 We will use the lemma with \(G\) a maximum of independent standard
 normal variables and \(A\) a maximum of independent Rademacher sums.
-For an integer \(n\ge1\), let
+\textcolor{revisionpurple}{For an integer \(n\ge1\), let}
 \[
  A_n:=n^{-1/2}\sum_{i=1}^n\eta_i,
 \]
 where the \(\eta_i\) are independent signs taking the values
-\(-1\) and \(1\) with equal probability. For an integer \(m\ge2\), let
+\(-1\) and \(1\) with equal probability. \textcolor{revisionpurple}{For an integer \(m\ge2\), let}
 \(A_{n,1},\ldots,A_{n,m}\) be independent copies of \(A_n\), and \textcolor{green!60!black}{define}
 \(\Lambda_m:=\log(em)\).
 \begin{recovered}
 We denote the Kolmogorov distance between this maximum and its
 Gaussian counterpart by \(\epsilon_{n,m}\). For absolute constants
-\(a_1,C>0\), this error satisfies, for large \(n\) and
-\(\Lambda_m\le a_1\sqrt n\),
+\(\textcolor{revisionpurple}{c_3},C>0\), this error satisfies, for large \(n\) and
+\(\Lambda_m\le \textcolor{revisionpurple}{c_3}\sqrt n\),
 \end{recovered}
 \begin{equation}
  \epsilon_{n,m}:=\sup_x\left|\Pp\{\max_{j\le m}A_{n,j}\le x\}-\Phi(x)^m\right|
@@ -5351,11 +5433,11 @@ tail estimate from Lemma~\ref{opt:moderate-tail}. Here
  \left|\log\frac{\Pp(A_n>x)}{\bar\Phi(x)}\right|
  \le C\epsilon_n(x),\qquad
  \epsilon_n(x)\coloneqq\frac{1+x}{\sqrt n}+\frac{x^4}{n},
- \qquad 0\le x\le an^{1/4},
+ \qquad 0\le x\le \textcolor{revisionpurple}{c_2}n^{1/4},
 \]
-for a sufficiently small absolute \(a>0\) and all large \(n\).
+for a sufficiently small absolute \(\textcolor{revisionpurple}{c_2}>0\) and all large \(n\).
 Indeed \(n^{-1/2}(1+x)\) satisfies the lemma's condition uniformly
-on this range. Choosing \(a\) small makes the two tails uniformly
+on this range. Choosing \(\textcolor{revisionpurple}{c_2}\) small makes the two tails uniformly
 comparable and yields
 \(\left|\Pp(A_n>x)/\bar\Phi(x)-1\right|\le C\epsilon_n(x)\).
 
@@ -5364,7 +5446,7 @@ scalar distribution function. For \(x\le1\),
 Berry--Esseen and a fixed upper bound \(r_0<1\) on the two scalar
 distribution functions give an error at most
 \(Cm r_0^{m-1}/\sqrt n\le C/\sqrt n\). For
-\(1<x\le an^{1/4}\), \textcolor{green!60!black}{define} \(u_x:=\Pp(A_n>x)\),
+\(1<x\le \textcolor{revisionpurple}{c_2}n^{1/4}\), \textcolor{green!60!black}{define} \(u_x:=\Pp(A_n>x)\),
 \(v_x:=\bar\Phi(x)\), and \(w:=mv_x\).
 Tail comparability and the mean value theorem give
 \[
@@ -5373,9 +5455,9 @@ Tail comparability and the mean value theorem give
 If \(x\le2\sqrt{\Lambda_m}\), this is bounded by the asserted
 maximum error. Otherwise \(w\le e^{-x^2/4}\), so the error is
 at most \(C\epsilon_n(x)e^{-x^2/4}\le C/\sqrt n\).
-Finally, choose \(a_1<a^2/4\). For \(x>an^{1/4}\), the
+Finally, choose \(\textcolor{revisionpurple}{c_3}<\textcolor{revisionpurple}{c_2}^2/4\). For \(x>\textcolor{revisionpurple}{c_2}n^{1/4}\), the
 sub-Gaussian tails bound the error by
-\(2m e^{-x^2/2}\le2e^{-a^2\sqrt n/4}=O(n^{-1/2})\).
+\(2m e^{-x^2/2}\le2e^{-\textcolor{revisionpurple}{c_2}^2\sqrt n/4}=O(n^{-1/2})\).
 This proves~\eqref{sym:eq:rademacher-max}.
 
 To apply Lemma~\ref{lower:shift-comparison}, we also need a threshold
@@ -5582,7 +5664,7 @@ to these scaled maxima at the threshold \(u_m\), defined by
 at \(t_n:=su_m\). The approximation bound
 \eqref{sym:eq:rademacher-max} and the derivative bound
 \eqref{sym:eq:gaussian-smoothness} then give, whenever
-\(\log(em)\le a_1\sqrt n\),
+\(\log(em)\le\textcolor{revisionpurple}{c_3}\sqrt n\),
 \end{recovered}
 \begin{equation}
 \begin{split}
@@ -5592,7 +5674,7 @@ at \(t_n:=su_m\). The approximation bound
 \end{split}
  \label{lower:eq:master-comparison}
 \end{equation}
-The density \(F_m'(u_m)\) is asymptotic to \(\sqrt{2\ell}/e\) by \eqref{sym:eq:gaussian-max}.
+The density \(F_m'(u_m)\) is asymptotic to \(\sqrt{2\ell}/e\) \textcolor{revisionpurple}{by \eqref{sym:eq:gaussian-max}}.
 In the parameter choices below, \(s\to1\) and \(\E Q_*\sim k\),
 so \(\E V_W\) has order \(ak/\sqrt n\).
 We therefore use the auxiliary scale
