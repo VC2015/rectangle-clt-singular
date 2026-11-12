@@ -8,6 +8,7 @@
 \usepackage{longtable,booktabs,tabularx}
 \usepackage{xcolor}
 \definecolor{revisionpurple}{HTML}{7030A0}
+\definecolor{revisionbrown}{HTML}{8B4513}
 % Magenta marks the retained revisions.
 \newenvironment{recovered}{\color{magenta}}{}
 \usepackage{tikz}
@@ -543,19 +544,21 @@ while avoiding surface integrals over faces and their intersections.
 Appendices~\ref{appx-an:sec:matrix}
 and~\ref{appx-an:sec:threshold} give these estimates.}
 
-\textcolor{magenta}{We must preserve this small boundary probability as
-we gradually replace the original summands by Gaussian noise. At each
-stage, we average the layer probabilities over the summands that
-remain. The Gaussian component allows us to integrate by parts twice,
-replacing two derivatives of
-the logistic approximation by a centered quadratic expression
-(second Hermite polynomial) in that Gaussian component. We estimate the resulting weighted Gaussian
-expectation before taking absolute values, preserving cancellations
-that a pointwise bound would lose. We then combine the summands'
-contributions through their aggregate covariance, so the bounds remain
-valid even when this covariance is singular. Together, these steps
-gain one power of the smoothing width in the fourth-order Taylor
-remainder, which is essential for the improved rate.}
+\textcolor{revisionbrown}{Boundary concentration improves the averaged
+derivative estimates by one power of the smoothing width. The main
+difficulty is preserving this gain as we replace the original summands
+by Gaussian noise. Two Gaussian integrations by parts replace two
+derivatives of the logistic approximation by a centered quadratic
+Gaussian expression (a second Hermite polynomial). This expression and
+the remaining logistic weights depend on the same Gaussian vector, so
+we must estimate their weighted expectation jointly. We also sum the
+moment matrices before taking operator norms, allowing the relative
+moment assumptions to control their aggregate contribution without
+introducing a factor depending on the covariance rank. The resulting
+estimate preserves the gain of one power of the smoothing width, at
+the cost of an additional factor \(L\). The key step combines boundary
+concentration with these weighted Gaussian and aggregate moment
+estimates.}
 
 The logarithmic refinement uses the calibrated dropout path defined
 in~\cite[Section~4]{AL}, preceded by a short Slepian interpolation that
@@ -622,6 +625,67 @@ regimes described above. Most of the lower bounds are also new,
 although their constructions build in part on earlier examples
 in~\cite{CCK,FKLZ}. Together, these results establish sharpness,
 up to logarithmic factors, across a broad variety of moment regimes.}
+
+\textcolor{revisionbrown}{Table~\ref{tab:proof-comparison} summarizes
+the principal proof methods, separating bounded and sub-exponential
+coordinates from polynomial moment envelopes.}
+
+\begin{table}[!htb]
+\color{revisionbrown}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.1}
+\caption{Principal proof methods for Gaussian approximation over rectangles.}
+\label{tab:proof-comparison}
+\smallskip
+\textit{(a) Bounded or sub-exponential coordinates}\par\smallskip
+{\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{.12\textwidth}
+ >{\raggedright\arraybackslash}p{.15\textwidth}
+ >{\raggedright\arraybackslash}p{.15\textwidth}
+ >{\raggedright\arraybackslash}X
+ >{\raggedright\arraybackslash}p{.15\textwidth}
+ >{\raggedright\arraybackslash}p{.16\textwidth}@{}}
+\toprule
+Work & Covariance assumption & Gaussian seeding & Subsequent comparison & Non-Gaussian boundary estimates & Key derivative bounds \\
+\midrule
+This paper & Unrestricted & Slepian regularization & Calibrated dropout & Direct & Lemma~\ref{appx-an:lem:restoration} \\[2pt]
+Companion \cite{CorrelationGap} & Pairwise correlation gap & Slepian regularization & Calibrated dropout & Direct & Section~5; Appendix~A \\[2pt]
+AL~\cite{AL} & Positive definite & Gaussian smoothing & Calibrated dropout & Direct & Corollary~3.2 \\[2pt]
+CCK~\cite{CCK} & Positive definite & Gaussian smoothing & Slepian--Stein & Recursive & Lemmas~6.1--6.3 \\[2pt]
+FKLZ~\cite{FKLZ} & Three-coordinate nondegeneracy & Gaussian smoothing & Slepian--Stein & Recursive & Lemmas~2.2--2.3 \\[2pt]
+GZ~\cite{GaoZhang} & Unrestricted & Bernoulli interpolation & Slepian interpolation & Not used & Lemmas~16, 32 \\[2pt]
+CCKK~\cite{CCKK2022}, Thm.~2.1 & Unrestricted & No separate stage & Iterated randomized Lindeberg; Stein kernels & Recursive & Lemma~3.1; Appendix~C \\
+\bottomrule
+\end{tabularx}}
+\smallskip
+{\footnotesize\raggedright
+Boundary estimates bound the probability that a non-Gaussian sum lies in a
+thin layer near a rectangle's boundary and are used to control
+derivatives in expectation. A direct bound does not use the Gaussian
+approximation error being proved. A recursive bound compares the sum
+with a Gaussian vector, introducing an approximation error that must
+itself be controlled.\par}
+
+\medskip
+\textit{(b) Polynomial moment envelopes}\par\smallskip
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{.25\textwidth}
+ >{\raggedright\arraybackslash}p{.30\textwidth}
+ >{\raggedright\arraybackslash}X@{}}
+\toprule
+Result & Moment assumptions & Proof route \\
+\midrule
+CCKK~\cite{CCKK2022}, Thm.~2.5 & Envelope and coordinate fourth moments & Slepian--Stein and truncation \\[2pt]
+This paper, Thm.~\ref{thm:polynomial}(i) & Envelope alone & Conditional truncation and the bounded-summand theorem \\[2pt]
+This paper, Thm.~\ref{thm:polynomial}(ii) & Envelope and coordinate fourth moments & Logistic--Slepian comparison and Bennett's inequality \\
+\bottomrule
+\end{tabularx}
+\smallskip
+{\footnotesize\raggedright
+The envelope and coordinate fourth-moment conditions are
+\eqref{poly:envelope} and~\eqref{poly:fourth}, respectively.\par}
+\end{table}
 
 \subsection{Lean verification}\label{sec:lean-introduction}
 \textcolor{magenta}{Lean 4 verification covers all 31 proved statements and the substantive
@@ -845,7 +909,8 @@ Yellott~\cite[Section~2.6]{Yellott1977}. Indeed, the variables
 that the baseline utility \(-h\log\omega_0\) exceeds all face utilities
 \(u_\alpha\cdot x-a_\alpha-h\log\omega_\alpha\).
 Rearranging these utility comparisons gives the inequalities defining
-\(A_{a,\omega}\).
+\(A_{a,\omega}\). \textcolor{revisionbrown}{An equivalent Gumbel-max
+representation is used in~\cite[Lemma~14]{GaoZhang}.}
 {\color{revisionpurple}
 Thus the baseline records that no randomly shifted constraint is
 violated, while \(\pi_\alpha(x)\) is the probability that face
@@ -1128,12 +1193,8 @@ Let
  K_3\coloneqq\sum_i\E(\zeta_i^0)^{\otimes3}
 \]
 denote the aggregate third-moment tensor.
-{\color{revisionpurple}
-Here \(z^{\otimes3}\) has entries \(z_jz_kz_\ell\), and
-\(D^3F(x):K_3\) denotes the sum of the third partial derivatives of
-\(F\) at \(x\), each multiplied by the corresponding entry of \(K_3\).
-We similarly write \(D^qF(x)[z_1,\ldots,z_q]\) for the \(q\)th
-derivative evaluated in the listed directions.
+{\color{revisionbrown}
+Here \(z^{\otimes3}\) has entries \(z_jz_kz_\ell\).
 }
 Along the initial Slepian path,
 Lemma~\ref{appx-an:lem:identity} separates its contribution from the
@@ -1143,7 +1204,14 @@ fourth-order remainder:
  =-\frac{\sqrt{1-v}}4\E D^3F_{a,h}(T_v):K_3+R^0_{a,h}(v),
  \qquad 0<v<1.
 \]
-Here \(R^0_{a,h}\) is the integral remainder supplied by that lemma.
+{\color{revisionbrown}
+The contraction \(D^3F(x):K_3\) is the sum of the third partial
+derivatives of \(F\) at \(x\), each multiplied by the corresponding
+entry of \(K_3\). We similarly write
+\(D^qF(x)[z_1,\ldots,z_q]\) for the \(q\)th derivative evaluated in
+the listed directions. The term \(R^0_{a,h}\) is the integral
+remainder supplied by the lemma.
+}
 
 {\color{green!60!black}
 The derivative bounds improve after averaging because the logistic
@@ -1190,7 +1258,7 @@ by \(C(h+\delta)\sqrt L\). Hence, uniformly in \(v\),
 \[
  \E[F_{a,h}(T_v)\{1-F_{a,h}(T_v)\}]
  \le C(h+\delta)\sqrt L\le Ch\sqrt L,
- \qquad h\ge\mathsf A\delta.
+ \qquad \textcolor{revisionbrown}{h\ge\delta}.
 \]
 The smoothing error compares \(A_{a,\omega}\) with \(A_a\), and
 therefore depends on the largest absolute random threshold shift.
@@ -1206,7 +1274,7 @@ cancellation across summands. The fourth-order remainder is controlled
 by \(s_4\). To apply the same averaging bound to this remainder, we must
 also account for the shifts in its derivative evaluation points.
 These shifts change each scalar product \(u_\alpha\cdot x\) by at most
-\(C\delta\). Since \(h\ge\mathsf A\delta\), the shifted logistic weights
+\(C\delta\). \textcolor{revisionbrown}{Since \(h\ge\delta\)}, the shifted logistic weights
 can therefore be compared with those at \(T_v\), losing only an
 absolute constant. Appendix~\ref{appx-an:sec:initialization} supplies the details.
 }
@@ -1254,13 +1322,20 @@ For the calibrated dropout path, the same lemma gives}
 \end{equation}
 {\color{blue}
 {\color{green!60!black}
+{\color{revisionbrown}
 The remainder \(R_{4,a,h}(t)\) consists of fourth derivatives evaluated
-at shifted points \(U_t+\Delta\). Their face projections, meaning the
-scalar products with the face normals, differ from those of \(U_t\) by
-at most \(C\delta\): each shift satisfies
+at shifted points \(U_t+\Delta\). Here \(\Delta\) denotes the random
+displacement obtained by deleting one scaled summand and inserting a
+scaled independent copy along the segment in Taylor's formula. It
+depends on the summand index and the position along that segment, and
+may depend on the same summands as \(U_t\) and the derivative
+directions. Formula~\eqref{appx-an:translates} gives these displacements
+before the normalization by \(\sqrt{1+\varepsilon}\). Every such shift
+changes each face projection by at most \(C\delta\):
 \[
  \max_{\alpha\le m}|u_\alpha\cdot\Delta|\le C\delta.
 \]
+}
 } To see how the Gaussian component helps, write \(F=F_{a,h}\),
 let \(g\sim N(0,I_r)\), and fix a base point \(x\in\R^r\), directions
 \(z,w_1,w_2\in\R^r\), and a scale \(\sigma>0\). Two Gaussian integrations
@@ -1329,7 +1404,7 @@ The matrix and threshold estimates in
 Appendix~\ref{appx-sec:support} control the Gaussian matrix
 \(gg^\top-I_r\) averaged against the products of logistic
 probabilities arising from the derivatives. Under the scale
-conditions of Proposition~\ref{an:prop:derivative}, these estimates
+conditions of Proposition~\ref{an:prop:derivative} \textcolor{revisionbrown}{below}, these estimates
 supply a factor \(ChL^{3/2}\) in the remainder bound, with no factor
 depending on \(r\). The corresponding factor without the Hermite
 term was \(Ch\sqrt L\).
@@ -2088,7 +2163,44 @@ The lower bounds show that the dimension dependence in this conjecture
 cannot generally be improved, even for centrally symmetric observations.
 
 
-Theorem~\ref{thm:unrestricted} proves the conjectured rate for arrays with $\textcolor{green!60!black}{s_4D_L\le C\delta^2}$. A bound on the cumulative comparison error without the extra logarithm for all bounded arrays would give the full conjecture
+Theorem~\ref{thm:unrestricted} proves the conjectured rate for arrays with $\textcolor{green!60!black}{s_4D_L\le C\delta^2}$.
+
+{\color{revisionbrown}
+The companion paper~\cite{CorrelationGap} establishes the conjectured rate
+when distinct coordinates are uniformly separated from perfect positive
+or negative correlation. This condition permits singular covariance
+matrices. The following consequence makes the dependence on the
+correlation gap explicit.
+
+\begin{samepage}
+\begin{corollary}[Approximation under a positive correlation gap]
+\label{cor:positive-correlation-gap}
+Under~\eqref{eq:setup}, define
+\[
+ c\coloneqq 1-\max_{j\ne k}|\Sigma_{jk}|,
+\]
+with \(c\coloneqq 1\) when \(p=1\). If \(c>0\), then
+\[
+ \rh(W,Z)\le C\min\left\{1,\,
+ \delta L^{3/2}\sqrt{1+\log(1/c)}\right\},
+ \qquad L=\log(ep),
+\]
+where \(C\) is an absolute constant.
+\end{corollary}
+\end{samepage}
+
+This follows from~\cite[Theorem~1]{CorrelationGap} by taking
+\(s_3=\delta\) and \(s_4=\delta^2\), and using
+\(\min\{1/c,L\}\le L\).
+
+Consequently, for every fixed \(c_0>0\), the conjectured rate holds
+uniformly over covariance matrices satisfying \(c\ge c_0\), including
+singular matrices. The remaining question is whether the additional
+factor can be removed uniformly as \(c\) approaches zero, including at
+\(c=0\).
+}
+
+A bound on the cumulative comparison error without the extra logarithm for all bounded arrays would give the full conjecture
 and sharpen the polynomial transfer in Subsection~\ref{poly:transfer-sec}.
 
 \begin{thebibliography}{99}
@@ -2101,6 +2213,48 @@ P.~M. Aronow and P. Lopatto (2026).
 Manuscript, arXiv:2609.07067v1.
 \url{https://arxiv.org/abs/2609.07067v1}.
 
+\bibitem{BK2025}
+S. Basu and A. K. Kuchibhotla (2025).
+Maximal inequalities for independent random vectors.
+\href{https://arxiv.org/abs/2504.17885}{arXiv:2504.17885}, version~1.
+
+\bibitem{Berry1941}
+A. C. Berry (1941).
+\emph{The accuracy of the Gaussian approximation to the sum of independent variates}.
+Transactions of the American Mathematical Society \textbf{49}(1), 122--136.
+\href{https://doi.org/10.1090/S0002-9947-1941-0003498-3}{doi:10.1090/S0002-9947-1941-0003498-3}.
+
+\bibitem{Bhatia1997}
+R. Bhatia (1997).
+\emph{Matrix Analysis}.
+Graduate Texts in Mathematics \textbf{169}. Springer, New York.
+\href{https://doi.org/10.1007/978-1-4612-0653-8}{doi:10.1007/978-1-4612-0653-8}.
+
+\bibitem{BLM2013}
+S. Boucheron, G. Lugosi, and P. Massart (2013).
+\emph{Concentration Inequalities: A Nonasymptotic Theory of Independence}.
+Oxford University Press, Oxford.
+\href{https://doi.org/10.1093/acprof:oso/9780199535255.001.0001}{\nolinkurl{doi:10.1093/acprof:oso/9780199535255.001.0001}}.
+
+\bibitem{BoydVandenberghe2004}
+S. Boyd and L. Vandenberghe (2004).
+\emph{Convex Optimization}.
+Cambridge University Press, Cambridge.
+\url{https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf}.
+
+\bibitem{BrascampLieb1976}
+H. J. Brascamp and E. H. Lieb (1976).
+\emph{On extensions of the Brunn--Minkowski and Pr\'ekopa--Leindler
+theorems, including inequalities for log concave functions, and with
+an application to the diffusion equation}.
+Journal of Functional Analysis \textbf{22}(4), 366--389.
+\href{https://doi.org/10.1016/0022-1236(76)90004-5}{doi:10.1016/0022-1236(76)90004-5}.
+
+\bibitem{ChernozhukovAC2026}
+V. Chernozhukov (2026).
+\emph{Dimension-Free Gaussian Anti-Concentration via Convex Geometry}.
+Research note, 2 November 2026.
+
 \bibitem{CCK2013}
 V. Chernozhukov, D. Chetverikov, and K. Kato (2013).
 \emph{Gaussian approximations and multiplier bootstrap for maxima of
@@ -2108,11 +2262,25 @@ sums of high-dimensional random vectors}.
 The Annals of Statistics \textbf{41}(6), 2786--2819.
 \href{https://doi.org/10.1214/13-AOS1161}{doi:10.1214/13-AOS1161}.
 
+\bibitem{CCK2015AC}
+{\color{blue}
+V. Chernozhukov, D. Chetverikov, and K. Kato (2015).
+\emph{Comparison and anti-concentration bounds for maxima of Gaussian
+random vectors}.
+Probability Theory and Related Fields \textbf{162}(1--2), 47--70.
+\href{https://doi.org/10.1007/s00440-014-0565-9}{doi:10.1007/s00440-014-0565-9}.}
+
 \bibitem{CCK2017}
 V. Chernozhukov, D. Chetverikov, and K. Kato (2017).
 \emph{Central limit theorems and bootstrap in high dimensions}.
 The Annals of Probability \textbf{45}(4), 2309--2352.
 \href{https://doi.org/10.1214/16-AOP1113}{doi:10.1214/16-AOP1113}.
+
+\bibitem{CCK17N}
+V. Chernozhukov, D. Chetverikov, and K. Kato (2017).
+\emph{Detailed proof of Nazarov's inequality}.
+arXiv:1711.10696.
+\url{https://arxiv.org/abs/1711.10696}.
 
 \bibitem{CCKK2022}
 V. Chernozhukov, D. Chetverikov, K. Kato, and Y. Koike (2022).
@@ -2145,12 +2313,28 @@ The Annals of Applied Probability \textbf{33}(3), 2374--2425.
 Working version: arXiv:2012.09513v2, May 12, 2021.
 \url{https://arxiv.org/abs/2012.09513v2}.
 
+\bibitem{Comtet1974}
+L. Comtet (1974).
+\emph{Advanced Combinatorics: The Art of Finite and Infinite Expansions}.
+Reidel, Dordrecht.
+\href{https://doi.org/10.1007/978-94-010-2196-8}{doi:10.1007/978-94-010-2196-8}.
+
+\bibitem{CoverThomas2006}
+T. M. Cover and J. A. Thomas (2006).
+\emph{Elements of Information Theory}, 2nd edition.
+Wiley, Hoboken, NJ.
+
 \bibitem{FKLZ}
 X. Fang, Y. Koike, S.-H. Liu, and Y.-K. Zhao (2026).
 \emph{High-dimensional central limit theorems by Stein's method in
 the degenerate case}. The Annals of Applied Probability, to appear.
 arXiv:2305.17365.
 \href{https://research.cuhk.edu.hk/en/publications/high-dimensional-central-limit-theorems-by-steins-method-in-the-d/}{Accepted manuscript (2026)}.
+
+\bibitem{Folland1999}
+G. B. Folland (1999).
+\emph{Real Analysis: Modern Techniques and Their Applications}, 2nd edition.
+Wiley, New York.
 
 \bibitem{GaoZhang}
 Z. Gao and W. Zhang (2026).
@@ -2166,12 +2350,33 @@ Research in the Mathematical Sciences \textbf{1}, Article~13.
 Working version: arXiv:1309.2987v3.
 \url{https://arxiv.org/abs/1309.2987v3}.
 
+\bibitem{LastPenrose2017}
+G. Last and M. Penrose (2017).
+\emph{Lectures on the Poisson Process}.
+Cambridge University Press, Cambridge.
+\href{https://doi.org/10.1017/9781316104477}{doi:10.1017/9781316104477}.
+
 \bibitem{McFadden1989}
 D. McFadden (1989).
 \emph{A method of simulated moments for estimation of discrete
 response models without numerical integration}.
 Econometrica \textbf{57}(5), 995--1026.
 \href{https://doi.org/10.2307/1913621}{doi:10.2307/1913621}.
+
+\bibitem{Nazarov2003}
+F. Nazarov (2003).
+\emph{On the maximal perimeter of a convex set in \(\R^n\)
+with respect to a Gaussian measure}.
+In V. D. Milman and G. Schechtman (eds.),
+\emph{Geometric Aspects of Functional Analysis (2001--2002)},
+Lecture Notes in Mathematics \textbf{1807}, 169--187.
+Springer, Berlin.
+
+\bibitem{Nourdin2012}
+I. Nourdin (2012).
+\emph{Lectures on Gaussian approximations with Malliavin calculus}.
+Lecture notes, arXiv:1203.4147v3.
+\url{https://arxiv.org/abs/1203.4147v3}.
 
 \bibitem{OST}
 R. O'Donnell, R.~A. Servedio, and L.-Y. Tan (2019).
@@ -2186,93 +2391,6 @@ A.~Pr\'ekopa (1973).
 Acta Scientiarum Mathematicarum (Szeged) \textbf{34}, 335--343.
 \url{https://rutcor.rutgers.edu/Prekopa/pdf/SCIENT2.pdf}.
 
-\bibitem{Dropout2014}
-N. Srivastava, G. Hinton, A. Krizhevsky, I. Sutskever, and
-R. Salakhutdinov (2014).
-\emph{Dropout: A simple way to prevent neural networks from overfitting}.
-Journal of Machine Learning Research \textbf{15}(56), 1929--1958.
-\url{https://www.jmlr.org/papers/v15/srivastava14a.html}.
-
-\bibitem{Bhatia1997}
-R. Bhatia (1997).
-\emph{Matrix Analysis}.
-Graduate Texts in Mathematics \textbf{169}. Springer, New York.
-\href{https://doi.org/10.1007/978-1-4612-0653-8}{doi:10.1007/978-1-4612-0653-8}.
-
-\bibitem{Comtet1974}
-L. Comtet (1974).
-\emph{Advanced Combinatorics: The Art of Finite and Infinite Expansions}.
-Reidel, Dordrecht.
-\href{https://doi.org/10.1007/978-94-010-2196-8}{doi:10.1007/978-94-010-2196-8}.
-
-\bibitem{CoverThomas2006}
-T. M. Cover and J. A. Thomas (2006).
-\emph{Elements of Information Theory}, 2nd edition.
-Wiley, Hoboken, NJ.
-
-\bibitem{Folland1999}
-G. B. Folland (1999).
-\emph{Real Analysis: Modern Techniques and Their Applications}, 2nd edition.
-Wiley, New York.
-
-\bibitem{Stein1981}
-C. M. Stein (1981).
-\emph{Estimation of the mean of a multivariate normal distribution}.
-The Annals of Statistics \textbf{9}(6), 1135--1151.
-\href{https://doi.org/10.1214/aos/1176345632}{doi:10.1214/aos/1176345632}.
-
-\bibitem{BLM2013}
-S. Boucheron, G. Lugosi, and P. Massart (2013).
-\emph{Concentration Inequalities: A Nonasymptotic Theory of Independence}.
-Oxford University Press, Oxford.
-\href{https://doi.org/10.1093/acprof:oso/9780199535255.001.0001}{\nolinkurl{doi:10.1093/acprof:oso/9780199535255.001.0001}}.
-
-\bibitem{Berry1941}
-A. C. Berry (1941).
-\emph{The accuracy of the Gaussian approximation to the sum of independent variates}.
-Transactions of the American Mathematical Society \textbf{49}(1), 122--136.
-\href{https://doi.org/10.1090/S0002-9947-1941-0003498-3}{doi:10.1090/S0002-9947-1941-0003498-3}.
-
-\bibitem{BrascampLieb1976}
-H. J. Brascamp and E. H. Lieb (1976).
-\emph{On extensions of the Brunn--Minkowski and Pr\'ekopa--Leindler
-theorems, including inequalities for log concave functions, and with
-an application to the diffusion equation}.
-Journal of Functional Analysis \textbf{22}(4), 366--389.
-\href{https://doi.org/10.1016/0022-1236(76)90004-5}{doi:10.1016/0022-1236(76)90004-5}.
-
-\bibitem{Nazarov2003}
-F. Nazarov (2003).
-\emph{On the maximal perimeter of a convex set in \(\R^n\)
-with respect to a Gaussian measure}.
-In V. D. Milman and G. Schechtman (eds.),
-\emph{Geometric Aspects of Functional Analysis (2001--2002)},
-Lecture Notes in Mathematics \textbf{1807}, 169--187.
-Springer, Berlin.
-
-\bibitem{CCK17N}
-V. Chernozhukov, D. Chetverikov, and K. Kato (2017).
-\emph{Detailed proof of Nazarov's inequality}.
-arXiv:1711.10696.
-\url{https://arxiv.org/abs/1711.10696}.
-
-\bibitem{ChernozhukovAC2026}
-V. Chernozhukov (2026).
-\emph{Dimension-Free Gaussian Anti-Concentration via Convex Geometry}.
-Research note, 2 November 2026.
-
-\bibitem{BoydVandenberghe2004}
-S. Boyd and L. Vandenberghe (2004).
-\emph{Convex Optimization}.
-Cambridge University Press, Cambridge.
-\url{https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf}.
-
-\bibitem{Nourdin2012}
-I. Nourdin (2012).
-\emph{Lectures on Gaussian approximations with Malliavin calculus}.
-Lecture notes, arXiv:1203.4147v3.
-\url{https://arxiv.org/abs/1203.4147v3}.
-
 \bibitem{Renyi1956}
 A. R\'enyi (1956).
 \emph{A characterization of Poisson processes}.
@@ -2280,17 +2398,24 @@ Magyar Tud. Akad. Mat. Kutat\'o Int. K\"ozl. \textbf{1}(4), 519--527.
 In Hungarian, with an English summary.
 \url{https://real.mtak.hu/200653/}.
 
+\bibitem{Dropout2014}
+N. Srivastava, G. Hinton, A. Krizhevsky, I. Sutskever, and
+R. Salakhutdinov (2014).
+\emph{Dropout: A simple way to prevent neural networks from overfitting}.
+Journal of Machine Learning Research \textbf{15}(56), 1929--1958.
+\url{https://www.jmlr.org/papers/v15/srivastava14a.html}.
+
+\bibitem{Stein1981}
+C. M. Stein (1981).
+\emph{Estimation of the mean of a multivariate normal distribution}.
+The Annals of Statistics \textbf{9}(6), 1135--1151.
+\href{https://doi.org/10.1214/aos/1176345632}{doi:10.1214/aos/1176345632}.
+
 \bibitem{SteutelHarn1979}
 F. W. Steutel and K. van Harn (1979).
 \emph{Discrete analogues of self-decomposability and stability}.
 The Annals of Probability \textbf{7}(5), 893--899.
 \href{https://doi.org/10.1214/aop/1176994950}{doi:10.1214/aop/1176994950}.
-
-\bibitem{LastPenrose2017}
-G. Last and M. Penrose (2017).
-\emph{Lectures on the Poisson Process}.
-Cambridge University Press, Cambridge.
-\href{https://doi.org/10.1017/9781316104477}{doi:10.1017/9781316104477}.
 
 \bibitem{Yellott1977}
 J. I. Yellott, Jr. (1977).
@@ -2298,19 +2423,6 @@ J. I. Yellott, Jr. (1977).
 of Comparative Judgment, and the double exponential distribution}.
 Journal of Mathematical Psychology \textbf{15}(2), 109--144.
 \href{https://doi.org/10.1016/0022-2496(77)90026-8}{doi:10.1016/0022-2496(77)90026-8}.
-
-\bibitem{BK2025}
-S. Basu and A. K. Kuchibhotla (2025).
-Maximal inequalities for independent random vectors.
-\href{https://arxiv.org/abs/2504.17885}{arXiv:2504.17885}, version~1.
-
-\bibitem{CCK2015AC}
-{\color{blue}
-V. Chernozhukov, D. Chetverikov, and K. Kato (2015).
-\emph{Comparison and anti-concentration bounds for maxima of Gaussian
-random vectors}.
-Probability Theory and Related Fields \textbf{162}(1--2), 47--70.
-\href{https://doi.org/10.1007/s00440-014-0565-9}{doi:10.1007/s00440-014-0565-9}.}
 
 \end{thebibliography}
 
@@ -3043,7 +3155,7 @@ For the first remainder tensor retain the pair $(\zeta_i,\zeta_i)$, and for the 
 \subsection{A matrix estimate for the logistic weights}
 \label{appx-an:sec:matrix}
 
-To prove~\eqref{appx-an:matrix-bound}, we use the covariance bound for
+\textcolor{revisionbrown}{To prove~\eqref{appx-an:matrix-bound} below, we use the covariance bound for}
 a standard Gaussian law tilted by a log-concave weight. Pr\'ekopa's
 theorem~\cite[Theorem~6]{Prekopa1973} implies that this covariance is
 at most \(I_r\) in the positive-semidefinite order. The nuclear norm
