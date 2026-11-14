@@ -1,6 +1,6 @@
 % High-dimensional Gaussian approximation over rectangles.
 % Manuscript revised 14 November 2026; split-V7 working draft.
-% Appendix H: self-contained correlation-gap proof retaining Gaussian width.
+% Appendices G and H retain Gaussian width in the capped and correlation-gap bounds.
 \documentclass[11pt,letterpaper]{article}
 \usepackage[margin=1.05in]{geometry}
 \usepackage[T1]{fontenc}
@@ -250,14 +250,13 @@ coordinates of \(R\) may be dependent. For deterministic weights
 \(a_1,\ldots,a_n\) satisfying \(\sum_i a_i^2=1\), set
 \(\xi_i:=a_iR_i\).} Since $R_{ij}^2=1$, both fourth-moment matrices equal $(\sum_i a_i^4)\Sigma$. {Give one summand a weight proportional to $\sqrt{\log n}$ and each of the other $n-1$ summands a weight proportional to $1$.} After normalization, $\delta\asymp\sqrt{(\log n)/n}$ and $s_4\asymp1/n$. For $p\asymp n^a$ with fixed $a>0$, \eqref{eq:intrinsic-unrestricted} gains a factor of order $\sqrt{\log n}$ over \eqref{eq:intrinsic-envelope}, for every covariance of the sign vector.
 
-\begin{vSixBlock}
-After using \(g_\Sigma\le C\sqrt L\) in the envelope bound,
 Proposition~\ref{prop:dimension-cap} in Appendix~\ref{app:dimension-cap}
-replaces the remaining factor \(\sqrt{D_L}\) by
-\(\sqrt{\min\{D_L,L\}}\). This refinement is useful when dimension
-grows slowly relative to the inverse summand bound. It uses the same
-interpolation and an additional integrated remainder estimate.
-\end{vSixBlock}
+replaces the factor \(\sqrt{D_L}\) in the envelope bound
+\eqref{eq:intrinsic-envelope} by \(\sqrt{\min\{D_L,L\}}\),
+while retaining the Gaussian-width factor \(g_\Sigma\).
+This refinement is useful when dimension grows slowly relative to the
+inverse summand bound. It uses the same interpolation and an additional
+integrated remainder estimate.
 
 For normalized observations, Theorem~\ref{thm:unrestricted} gives
 the following dependence on the sample size.
@@ -812,7 +811,7 @@ give the proofs of the auxiliary estimates and the lower bounds.
 Theorem~\ref{thm:polynomial}, followed by the lower-bound proofs in
 Appendix~\ref{app:sharpness-proofs}.}
 Appendix~\ref{app:dimension-cap} caps the additional logarithm in the
-bounded-envelope bound by \(L=\log(ep)\).
+bounded-envelope bound by \(L=\log(ep)\), retaining Gaussian width.
 Appendix~\ref{app:correlation-gap-proof} proves the positive-correlation-gap
 corollary, retaining Gaussian width through its surface and matrix estimates.
 
@@ -8159,24 +8158,28 @@ associated with a pair of faces. These bounds have polynomial
 factors in the number of faces and the support rank, but those
 factors enter only through logarithms after we integrate the
 smaller bound at each time. We use the same interpolation and
-cubic estimate as in Section~\ref{sec:smoothing}, with
-$\kappa\le\sqrt L$, and state the resulting cap in terms of
-dimension.
+cubic estimate as in Section~\ref{sec:smoothing}, retaining the
+boundary coefficient from~\eqref{eq:intrinsic-boundary-coefficient}:
+\[
+ \kappa=\min\{\sqrt L,\,1+\max\{\E\|W\|_\infty,g_\Sigma\}\},
+ \qquad 1\le\kappa\le\sqrt L.
+\]
+This preserves the Gaussian-width improvement when we cap the logarithm.
 
 \begin{proposition}[Dimension-logarithm cap]
 \label{prop:dimension-cap}
 Under~\eqref{eq:setup}, define $J_L:=\min\{D_L,L\}$. There is an
 absolute constant $C$ such that
 \begin{equation}
- \rh(W,Z)\le C\min\{1,\delta L^{3/2}\sqrt{J_L}\}.
+ \rh(W,Z)\le C\min\{1,\delta g_\Sigma L\sqrt{J_L}\}.
  \label{cap:result}
 \end{equation}
-More precisely, for $h\ge\mathsf A\delta$ and
-$\varepsilon=Lh^2<1/4$, the remainder in
+Here $g_\Sigma=\E\|Z\|_\infty$. More precisely, for
+$h\ge\mathsf A\delta$ and $\varepsilon=Lh^2<1/4$, the remainder in
 \eqref{eq:path-summary} satisfies
 \begin{equation}
  \sup_a\int_0^1|R_{4,a,h}(t)|\,dt
- \le\frac{C\delta^2L^{3/2}}h
+ \le\frac{C\delta^2\kappa L}h
        \min\{1+\log(1/\varepsilon),L\}.
  \label{cap:integrated}
 \end{equation}
@@ -8187,12 +8190,14 @@ alone. Combining it with~\eqref{eq:intrinsic-unrestricted} gives
 \[
  \rh(W,Z)\le C\min\left\{1,
  g_\Sigma L\bigl(\delta+\sqrt{s_4D_L}\bigr),
- \delta L^{3/2}\sqrt{J_L}\right\}.
+ \delta g_\Sigma L\sqrt{J_L}\right\}.
 \]
 Thus the relative fourth-moment bound and the capped envelope
-bound can be used together. The argument below does not replace
-$D_L$ by $J_L$ in the expression involving $s_4$.
-When $p$ is fixed, $J_L\le L$ is bounded, so
+bound can be used together, with the same Gaussian-width factor.
+The argument below does not replace $D_L$ by $J_L$ in the expression
+involving $s_4$. Using $g_\Sigma\le C\sqrt L$ in~\eqref{cap:result}
+gives the dimension-based bound $C\delta L^{3/2}\sqrt{J_L}$.
+When $p$ is fixed, both $g_\Sigma$ and $J_L\le L$ are bounded, so
 \eqref{cap:result} is of order $\delta$.
 
 We work in the support coordinates of
@@ -8715,14 +8720,13 @@ the times at which the bounds cross.
 \begin{proof}[Proof of Proposition~\ref{prop:dimension-cap}]
 Define
 \[
- A_h:=\frac{\delta^2L^{3/2}}h,\qquad
+ A_h:=\frac{\delta^2\kappa L}h,\qquad
  S_h:=mr\delta^2,\qquad
  B_h:=\frac{m^2\sqrt r\,\delta^2}h.
 \]
 The envelope allows us to take $s_4=\delta^2$ in
-\eqref{eq:seeded-derivatives}. Together with
-$\kappa\le\sqrt L$, that estimate bounds the full remainder
-by $CA_h/v$. Lemma~\ref{lem:cap-remainder} bounds the same
+\eqref{eq:seeded-derivatives}. Retaining $\kappa$, that estimate
+bounds the full remainder by $CA_h/v$. Lemma~\ref{lem:cap-remainder} bounds the same
 remainder by $C(S_h/v^{3/2}+B_h/\sqrt v)$.
 Using $\min\{x,y+z\}\le\min\{x,y\}+\min\{x,z\}$ for
 nonnegative $x,y,z$, we obtain
@@ -8762,11 +8766,12 @@ This bound also covers crossing times outside the interval.
 
 The choice $\varepsilon=Lh^2$ removes $h$ from both ratios:
 \[
- \frac{S_h}{A_h\sqrt\varepsilon}=\frac{mr}{L^2},
- \qquad \frac{B_h}{A_h}=\frac{m^2\sqrt r}{L^{3/2}}.
+ \frac{S_h}{A_h\sqrt\varepsilon}=\frac{mr}{\kappa L^{3/2}},
+ \qquad \frac{B_h}{A_h}=\frac{m^2\sqrt r}{\kappa L}.
 \]
-Because $m=2p$, $r\le p$, and $L=\log(ep)\ge1$, both
-positive logarithms are at most $CL$.
+Because $\kappa\ge1$, $m=2p$, $r\le p$, and $L=\log(ep)\ge1$,
+both positive logarithms are at most $CL$. Thus retaining $\kappa$
+does not change the logarithmic cap.
 We have proved
 $\sup_a\int_0^1|R_{4,a,h}(t)|\,dt\le CA_hL$.
 Direct integration of $CA_h/(t+\varepsilon)$ gives the
@@ -8778,7 +8783,7 @@ initialization, and cubic estimates in the proof of
 Theorem~\ref{thm:unrestricted}, together with the remainder
 bound just proved, yield
 \[
- \rh(W,Z)\le CL^{3/2}\left[
+ \rh(W,Z)\le C\kappa L\left[
  h+\delta+\frac{\delta^2}h
        \min\{1+\log(1/(Lh^2)),L\}\right]
 \]
@@ -8798,17 +8803,30 @@ If $Lh^2<1/4$, then $\delta\sqrt L<1$ and
 It follows that the minimum in the discrepancy bound is at
 most $2\min\{D_L,L\}=2J_L$.
 The three terms in brackets are therefore bounded by
-$C\delta\sqrt{J_L}$, giving the rate in~\eqref{cap:result}.
+$C\delta\sqrt{J_L}$, giving
+$\rh(W,Z)\le C\delta\kappa L\sqrt{J_L}$.
 
 If instead $Lh^2\ge1/4$, then
 \[
- \delta L^{3/2}\sqrt{J_L}
- =L^{3/2}h/\mathsf A
- \ge L/(2\mathsf A)\ge1/(2\mathsf A),
+ \delta\kappa L\sqrt{J_L}
+ =\kappa Lh/\mathsf A
+ \ge\kappa\sqrt L/(2\mathsf A)\ge1/(2\mathsf A),
 \]
-so the trivial probability bound proves the same rate after
-increasing the absolute constant. Combining that rate with
-$\rh(W,Z)\le1$ proves~\eqref{cap:result} in all cases.
+so the trivial probability bound gives the same estimate after
+increasing the absolute constant. Hence
+$\rh(W,Z)\le C\min\{1,\delta\kappa L\sqrt{J_L}\}$ in both cases.
+
+It remains to express the boundary coefficient in terms of Gaussian
+width. Lemma~\ref{intrinsic:lem:maximum} gives
+$\E\|W\|_\infty\le C(g_\Sigma+\delta L)$ without invoking
+the Gaussian approximation being proved. If $\delta L\le g_\Sigma$,
+this bound and $g_\Sigma\ge\sqrt{2/\pi}$ imply
+$\kappa\le Cg_\Sigma$. If instead $\delta L>g_\Sigma$, then
+\[
+ \delta g_\Sigma L\sqrt{J_L}\ge g_\Sigma^2\ge2/\pi,
+\]
+so the trivial probability bound suffices.
+This proves~\eqref{cap:result} in all cases.
 \end{proof}
 
 \clearpage
