@@ -10044,104 +10044,171 @@ nondegeneracy condition.
 \section{Proof of Corollary~\ref*{cor:correlation-budget} (exceptional correlation gaps)}
 \label{app:correlation-budget}
 
-We separate the pairs with gaps below the cutoff $c$ from the remaining
-pairs. Lemma~\ref{lem:cap-remainder} bounds the first group directly,
-with a cost that vanishes as a pair becomes perfectly correlated.
-For the second group, the matrix estimates in
-Appendix~\ref{app:correlation-gap-proof} retain the boundary coefficient
-$\kappa$. Balancing the two contributions against smoothing gives the
-two terms in the corollary.
+The correlation budget allows pairs to have arbitrarily small
+positive gaps by charging their aggregate contribution. We therefore use two estimates for the fourth-order
+remainder. Lemma~\ref{lem:cap-remainder} bounds each exceptional pair
+at a cost that vanishes with its gap. The matrix estimates in
+Appendix~\ref{app:correlation-gap-proof} control the remaining pairs
+together and retain the boundary coefficient $\kappa$. We separate
+the two contributions and explain why the matrix estimates apply to
+the separated pairs, before choosing a smoothing width that
+accommodates both contributions.
 
 \begin{proof}[Proof of Corollary~\ref{cor:correlation-budget}]
-Fix $c\in(0,1]$, and recall $B_c$ and $J_c$ from the corollary. Work
-in the support coordinates of Section~\ref{sec:smoothing}, with
-unit signed face normals $u_1,\ldots,u_m$, where $m=2p$.
-Throughout the proof,
+Fix $c\in(0,1]$, and recall
 \[
- \kappa=\min\{\sqrt L,\,1+\max\{\E\|W\|_\infty,g_\Sigma\}\},
- \qquad 1\le\kappa\le\sqrt L.
+ \eta_{jk}:=1-|\Sigma_{jk}|,\qquad
+ B_c:=\sum_{\substack{j<k\\0<\eta_{jk}<c}}\sqrt{\eta_{jk}},
+ \qquad J_c:=1+\log(1/c).
 \]
-First take $h\ge\mathsf A\delta$ and $\varepsilon:=Lh^2<1/4$,
+Here $j,k$ index the original $p$ coordinates. For the derivative
+estimates we work in the Gaussian support, with the $m=2p$ signed
+unit face normals from Section~\ref{sec:smoothing}. Each coordinate
+provides a normal and its negative. We retain the coefficient
+\[
+ \kappa:=\min\{\sqrt L,\,1+\max\{\E\|W\|_\infty,g_\Sigma\}\},
+ \qquad 1\le\kappa\le\sqrt L,
+\]
+until the last step, where we replace it by the Gaussian width.
+Initially take $h\ge\mathsf A\delta$ and $\varepsilon:=Lh^2<1/4$,
 where $\mathsf A$ is an absolute constant large enough for the
 estimates in Appendices~\ref{app:dimension-cap}
 and~\ref{app:correlation-gap-proof}. Write $v:=t+\varepsilon$.
-We use the same calibrated interpolation, Gaussian split, and
-copy construction as in those appendices.
 
-For a face pair $\{j,k\}$, write
+We use the calibrated interpolation from those appendices. To check
+the hypotheses needed below, recall its Gaussian split
+\eqref{hgap:eq:split}:
+\[
+ Y_t=V_{0,t}+\sigma_tG_1,\qquad
+ V_{0,t}=(1+t)\sum_i\mathbb B_{i,t}\zeta_i^0+\sigma_tG_0,
+ \qquad \sigma_t^2=v/2.
+\]
+The standard Gaussians $G_0,G_1$ are independent of one another and
+of the original summands and masks. The two independent components
+of $V_{0,t}$ have common face variances $1-t$ and $v/2$; at least one
+is at least $1/3$. The retained summands have face norm at most
+$2\delta$, and the expected face norms of the two components are
+bounded by $2\E\|W\|_\infty$ and $g_\Sigma$, respectively.
+Applying Lemma~\ref{lem:concentration} to the component with variance
+at least $1/3$, with the other as an independent shift, gives
+\eqref{hgap:eq:ac} with coefficient $\kappa$, uniformly in $t$.
+This argument requires no lower bound on the pairwise gaps.
+Also, $\delta\sqrt L\le\sigma_t<1$ once $\mathsf A\ge\sqrt2$.
+The normalization $Y_t=\sqrt{1+\varepsilon}\,U_t$ changes the
+smoothing width to $\widetilde h=\sqrt{1+\varepsilon}\,h$;
+since $\widetilde h\asymp h$, we express the estimates below in
+terms of $h$.
+
+For signed face indices $j,k$, define
 $\rho_{jk}:=u_j\cdot u_k$ and
 $\nu_{jk}:=\sqrt{1-\rho_{jk}^2}$.
-Decompose the fourth-order remainder as
+The Hessian decomposition~\eqref{cap:hessian} separates the
+fourth-order remainder into single-face and unordered-pair
+contributions. Group them as
 \[
- R_{4,a,h}(t)=R_{\mathrm{sep},a,h}(t)+R_{\mathrm{exc},a,h}(t).
+ R_{4,a,h}(t)=R_{\mathrm{sep},a,h}(t)+R_{\mathrm{exc},a,h}(t),
 \]
-Here $R_{\mathrm{exc},a,h}$ consists of the unordered pair
-contributions in~\eqref{cap:hessian} with
-$0<1-|\rho_{jk}|<c$. The term $R_{\mathrm{sep},a,h}$ contains
-all single-face contributions and all pairs with
-$1-|\rho_{jk}|\ge c$. Parallel and antiparallel pairs contribute
-zero by~\eqref{cap:pair-coefficient}, so the decomposition is exact.
-For normals associated with distinct original coordinates, the face
-gap equals the gap of that coordinate pair, regardless of the signs.
+where $R_{\mathrm{exc},a,h}$ contains the pair terms with
+$0<1-|\rho_{jk}|<c$, and $R_{\mathrm{sep},a,h}$ contains all
+single-face terms and the pair terms with $1-|\rho_{jk}|\ge c$.
+There is no missing contribution at zero gap: if $u_k=\pm u_j$,
+then the directional coordinates satisfy $z_k=\pm z_j$ and
+$w_k=\pm w_j$, so the coefficient
+$B_{jk}(z,w)$ in~\eqref{cap:pair-coefficient} is zero.
 
-We first control the exceptional pairs. The direct bound in
-\eqref{cap:pair} gives
+We first bound the exceptional contribution. For each such face
+pair, the direct estimate~\eqref{cap:pair} gives
 \[
  |R_{4,jk,a,h}(t)|\le\frac{C\delta^2\nu_{jk}}{h^2}.
 \]
-If the corresponding original coordinate gap is $\eta$, then
+For two distinct original coordinates, all four choices of signs
+give the same absolute correlation. If their coordinate gap is
+$\eta$, then
 $\nu_{jk}=\sqrt{\eta(2-\eta)}\le\sqrt{2\eta}$.
-Each original coordinate pair produces at most $4$ unordered
-signed-face pairs. Summing their bounds therefore gives, uniformly
-in $a$ and $t$,
+The two faces of a single coordinate have zero gap and contribute
+zero. Thus each term of $B_c$ accounts for at most four unordered
+signed-face pairs, and summation gives
 \begin{equation}
  |R_{\mathrm{exc},a,h}(t)|
- \le\frac{C\delta^2B_c}{h^2}.
+ \le\frac{C\delta^2B_c}{h^2},
  \label{budget:eq:exceptional}
 \end{equation}
-This estimate uses no lower bound on the positive exceptional gaps.
-In particular, it remains uniform as any such gap tends to zero.
+uniformly in $a$ and $t$. In particular, this bound stays uniform
+as any positive exceptional gap tends to zero.
 
-For the separated part, define $d_c:=c(2-c)$.
-Proposition~\ref{hgap:prop:cubic} needs no gap assumption, and the
-angle-weighted estimate in Proposition~\ref{hgap:prop:pair} is also
-valid before a minimum gap is imposed. Its left side is a sum of
-nonnegative nuclear norms. We may consequently restrict that sum to
-the separated pairs. For these pairs,
+We next bound the separated contribution without imposing a gap
+condition on the exceptional pairs. Set $d_c:=c(2-c)$, so that
+$c\le d_c\le1$. Proposition~\ref{hgap:prop:cubic} has no gap
+assumption. The angle-weighted bound in
+Proposition~\ref{hgap:prop:pair} also holds before a minimum gap
+is imposed, and its left side is a sum of nonnegative nuclear
+norms. We may therefore discard the exceptional terms from that
+sum. On each remaining pair,
 \[
  \lambda_{jk}=\vartheta_{jk}\sin\vartheta_{jk}
  \ge\sin^2\vartheta_{jk}
  =1-\rho_{jk}^2\ge d_c,
  \qquad \vartheta_{jk}:=\arccos\rho_{jk}.
 \]
-Removing the angle weights from this restricted sum costs at most
-$d_c^{-1}$. Repeat the translated-weight expansion in
-Lemma~\ref{hgap:thm:fourth}, restricting the two-face terms to these
-pairs and retaining all single-face terms. The conditional covariance
-bound and the summability of the translation series are unchanged.
-The single-face and two-face matrix bounds still contribute
-$h\kappa L^{3/2}$ and $h^2\kappa L^{3/2}/\sigma_t$, respectively,
-where $\sigma_t^2=v/2$. Restoring their factors
-$h^{-1}\sigma_t^{-3}$ and $h^{-2}\sigma_t^{-2}$ yields
-\begin{equation}
- |R_{\mathrm{sep},a,h}(t)|
- \le\frac{C\delta^2\kappa L^{3/2}}{d_cv^{3/2}}.
- \label{budget:eq:separated}
-\end{equation}
-The concentrated-base verification in
-Subsection~\ref{hgap:sec:completion} uses only the component variances,
-the envelope, and the expected maxima. It does not require a positive
-gap for every pair, so it applies here with the same $\kappa$.
+Removing the angle weights from the restricted sum costs at most
+$d_c^{-1}$. Only the indices in the pair sum have been restricted:
+the smoothing function and its logistic weights still involve
+all $m$ faces. Consequently the matrix estimates apply to the
+same concentrated base verified above. Combining the two orders
+of each pair in~\eqref{hgap:eq:hessian} gives the unordered
+coefficient in~\eqref{cap:pair-coefficient}, so this restriction
+selects exactly the pair terms in $R_{\mathrm{sep},a,h}$.
 
-Independently, Proposition~\ref{an:prop:derivative} bounds the full
-remainder by
+To pass from these matrices to the remainder, we use the
+translated-weight expansion in the proof of
+Lemma~\ref{hgap:thm:fourth}. Here are the hypotheses that make this
+step valid. Let $\mathcal H$ be generated by the original summands,
+masks, and $G_0$. In each term of
+\eqref{hgap:eq:explicit-remainder}, the repeated direction $Z_i$
+is a copy of $\zeta_i^0$. The array of these copies is independent
+of $\mathcal H$ and satisfies
 \[
- |R_{4,a,h}(t)|\le\frac{C\delta^2\kappa L}{hv}.
+ \sum_i\E[Z_iZ_i^\top\mid\mathcal H]=I_r.
 \]
-We use this bound on the full remainder, rather than assuming it for
-each part separately. Combining it with
+The other two directions have face norm at most $\delta$, and
+the shift has face norm at most $4\delta$. The copies and shifts
+are jointly independent of $G_1$ conditional on $\mathcal H$,
+although a shift may depend on the copies. Expanding the translated
+weights before taking absolute values separates the unshifted
+Gaussian matrices from these copy-dependent coefficients. The
+displayed covariance identity bounds the coefficient matrices,
+and $h\ge\mathsf A\delta$ makes the translation series summable,
+exactly as in Lemma~\ref{hgap:thm:fourth}. The concentration estimate
+is used for the unconditional law of $V_{0,t}$; no concentration
+conditional on $\mathcal H$ is asserted or needed.
+
+The single-face matrix sum contributes $h\kappa L^{3/2}$, and
+the restricted pair matrix sum contributes
+$h^2\kappa L^{3/2}/(d_c\sigma_t)$. Their derivative factors are
+$h^{-1}\sigma_t^{-3}$ and $h^{-2}\sigma_t^{-2}$, respectively.
+The bounded integrals of the scalar kernels in
+\eqref{hgap:eq:explicit-remainder} change only the absolute
+constant. Hence
+\begin{align}
+ |R_{\mathrm{sep},a,h}(t)|
+ &\le C\delta^2\left\{
+    \frac{h\kappa L^{3/2}}{h\sigma_t^3}
+   +\frac{h^2\kappa L^{3/2}}{h^2\sigma_t^2d_c\sigma_t}
+                    \right\}\notag\\
+ &\le\frac{C\delta^2\kappa L^{3/2}}{d_cv^{3/2}},
+ \label{budget:eq:separated}
+\end{align}
+where the last inequality uses $d_c\le1$ and $\sigma_t^2=v/2$.
+
+Near the start of the interpolation, a different estimate is
+more useful. Proposition~\ref{an:prop:derivative} gives
+\[
+ |R_{4,a,h}(t)|\le\frac{C\delta^2\kappa L}{hv}
+\]
+for the full remainder. We do not need this estimate separately
+for either part of the decomposition. Indeed, combining it with
 \eqref{budget:eq:exceptional}--\eqref{budget:eq:separated} and using
-$\min\{x,y+z\}\le\min\{x,y\}+z$ for nonnegative $x,y,z$ gives
+$\min\{x,y+z\}\le\min\{x,y\}+z$ for nonnegative $x,y,z$ yields
 \[
  |R_{4,a,h}(t)|\le
  C\min\left\{\frac{\delta^2\kappa L}{hv},
@@ -10149,8 +10216,8 @@ $\min\{x,y+z\}\le\min\{x,y\}+z$ for nonnegative $x,y,z$ gives
  +\frac{C\delta^2B_c}{h^2}.
 \]
 Set $y:=v/\varepsilon$ and use $\sqrt\varepsilon=h\sqrt L$.
-Extending the upper integration limit for the minimum to infinity
-and evaluating the integral as in~\eqref{hgap:eq:time-integral}, we obtain
+Extending the upper integration limit for the nonnegative minimum
+to infinity gives
 \begin{align}
  \sup_a\int_0^1|R_{4,a,h}(t)|\,dt
  &\le\frac{C\delta^2\kappa L}{h}
@@ -10160,56 +10227,69 @@ and evaluating the integral as in~\eqref{hgap:eq:time-integral}, we obtain
                   +\frac{\delta^2B_c}{h^2}\right\}.
  \label{budget:eq:integrated}
 \end{align}
-Indeed, the integral equals $2\log(1/d_c)+2\le2J_c$.
-Adding smoothing, initialization, and the cubic term, whose total
-bound is $C\kappa L(h+\delta+\delta^2/h)$, now gives
+For the last step, the two integrands agree at $y=d_c^{-2}$.
+The integral before that point is $2\log(1/d_c)$, and the integral
+after it is $2$. Their sum is at most $2J_c$ because $d_c\ge c$.
+Thus the pointwise factor $d_c^{-1}$ costs only a logarithm after
+time integration, while the exceptional-pair cost remains additive.
+
+The smoothing, initialization, and cubic estimates used in
+Appendix~\ref{app:correlation-gap-proof} contribute at most
+$C\kappa L(h+\delta+\delta^2/h)$. Since $h\ge\mathsf A\delta$
+and $J_c\ge1$, adding them to~\eqref{budget:eq:integrated} gives
 \begin{equation}
  \rh(W,Z)\le C\left\{
        \kappa Lh+\frac{\delta^2\kappa LJ_c}{h}
                     +\frac{\delta^2B_c}{h^2}\right\}.
  \label{budget:eq:balance}
 \end{equation}
-Here $h\ge\mathsf A\delta$ and $J_c\ge1$ absorb the additional
-terms into those displayed.
-
-The first remainder term in~\eqref{budget:eq:balance} is balanced
-against smoothing at width $\delta\sqrt{J_c}$. The exceptional-pair
-term is balanced at width $(\delta^2B_c/(\kappa L))^{1/3}$.
-We therefore choose
+There are two balances with the smoothing cost $\kappa Lh$.
+The separated-pair term suggests width $\delta\sqrt{J_c}$;
+the exceptional-pair term suggests width
+$(\delta^2B_c/(\kappa L))^{1/3}$. Choose the larger width:
 \[
  h:=\mathsf A\max\left\{\delta\sqrt{J_c},
                     \left(\frac{\delta^2B_c}{\kappa L}\right)^{1/3}
               \right\}.
 \]
-This choice has $h\ge\mathsf A\delta$. If $Lh^2<1/4$, each of
-the two remainder terms is at most a constant times $\kappa Lh$.
-Moreover,
+This gives $h\ge\mathsf A\delta$ and
+\[
+ \frac{\delta^2\kappa LJ_c}{h}
+       \le\frac{\kappa Lh}{\mathsf A^2},\qquad
+ \frac{\delta^2B_c}{h^2}
+       \le\frac{\kappa Lh}{\mathsf A^3}.
+\]
+If $Lh^2<1/4$, substitution in~\eqref{budget:eq:balance}, followed by
 \[
  \kappa Lh\le\mathsf A\left\{
        \delta\kappa L\sqrt{J_c}
-       +\delta^{2/3}(\kappa L)^{2/3}B_c^{1/3}\right\}.
+       +\delta^{2/3}(\kappa L)^{2/3}B_c^{1/3}\right\},
 \]
-Thus~\eqref{budget:eq:balance} gives the asserted bound with
-$\kappa$ in place of $g_\Sigma$.
+proves the desired bound with $\kappa$ in place of $g_\Sigma$.
 If instead $Lh^2\ge1/4$, the expression in braces is at least
 \[
  \frac{\kappa Lh}{\mathsf A}
  \ge\frac{\kappa\sqrt L}{2\mathsf A}
- \ge\frac1{2\mathsf A},
+ \ge\frac1{2\mathsf A}.
 \]
-so the same capped bound follows from $\rh(W,Z)\le1$.
+The trivial bound $\rh(W,Z)\le1$ therefore gives the same conclusion,
+with the cap at $1$, even when this choice of width is outside the
+range used to derive~\eqref{budget:eq:balance}.
 
-Finally, Lemma~\ref{intrinsic:lem:maximum} gives
-$\E\|W\|_\infty\le C(g_\Sigma+\delta L)$ independently of this
-rectangle comparison. If $\delta L\le g_\Sigma$, it follows that
-$\kappa\le Cg_\Sigma$, and substitution in both terms gives
-\eqref{budget:eq:result}. If $\delta L>g_\Sigma$, its first term
-satisfies
+It remains to replace $\kappa$ by $g_\Sigma$. Lemma~\ref{intrinsic:lem:maximum}
+gives $\E\|W\|_\infty\le C(g_\Sigma+\delta L)$ independently of
+the rectangle comparison being proved. If $\delta L\le g_\Sigma$,
+this estimate and $g_\Sigma\ge\sqrt{2/\pi}$ imply
+$\kappa\le Cg_\Sigma$. Substitution in both terms proves
+\eqref{budget:eq:result}. If $\delta L>g_\Sigma$, the first term
+in that bound already satisfies
 \[
  \delta g_\Sigma L\sqrt{J_c}\ge g_\Sigma^2\ge2/\pi,
 \]
-so the trivial probability bound again suffices. This completes
-the proof, including empty exceptional sets and singular covariances.
+so the trivial probability bound suffices. The argument includes
+$B_c=0$ and singular covariance matrices, since zero-gap pairs
+contribute zero and all derivative estimates were taken on the
+Gaussian support.
 \end{proof}
 
 \end{document}
