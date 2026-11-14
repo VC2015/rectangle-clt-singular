@@ -92,7 +92,8 @@ fourth-moment bound, the rate becomes \(n^{-1/2+1/q}\) up to
 logarithmic factors. At \(q=4\), the slower \(n^{-1/4}\) rate is
 unavoidable, confirming our earlier conjecture. We also allow the
 bounds on observation size to grow with \(n\). Lower-bound examples
-show that the dependence on sample size and observation size is sharp
+show that the dependence on \vSix{sample size, observation size, and
+Gaussian width} is sharp
 up to logarithmic factors in the regimes studied, and in several
 regimes the upper and lower bounds match including the logarithmic
 terms.
@@ -220,10 +221,10 @@ The factor \(g_\Sigma\) measures boundary concentration. Using
 \(g_\Sigma\le C\sqrt L\) gives the worst-case dimension dependence,
 whereas a smaller width improves the bound for strongly dependent
 coordinates. The remaining factor \(L\) cannot be removed in general,
-even when \(g_\Sigma\) is bounded: Proposition~\ref{prop:width-lower}
-in Appendix~\ref{app:bounded-width-lower} constructs centrally symmetric
-observations for which the error has order at least \(\delta L\)
-while \(g_\Sigma\to\sqrt{2/\pi}\). This example does not establish
+even when \(g_\Sigma\) is bounded. Theorem~\ref{opt:symmetric-lower}
+constructs centrally symmetric observations with error of order at
+least \(\delta g_\Sigma L\), allowing the width to range from a
+constant to order \(\sqrt L\). These examples do not establish
 the necessity of the additional factor \(\sqrt{D_L}\).
 Section~\ref{sec:proof-theorem-one} proves the theorem.
 \end{vSixBlock}
@@ -235,9 +236,9 @@ whenever \({s_4D_L\le C\delta^2}\). In the derivation of
 term of order \(s_3g_\Sigma L\), which is absorbed into
 \(C\delta g_\Sigma L\) because we may always take \(s_3\le\delta\).
 Even under exact cancellation, \(s_3=0\), smoothing still costs order
-\(\delta g_\Sigma L\) in our argument. In the worst case over
-covariance matrices, the resulting order \(\delta L^{3/2}\) cannot
-be improved in general; see
+\(\delta g_\Sigma L\) in our argument. \vSix{The lower bounds show
+that this order is necessary in general, including when the width
+stays bounded;} see
 Theorem~\ref{opt:symmetric-lower} in Section~\ref{opt:section}.
 \end{recovered}
 
@@ -283,27 +284,21 @@ fixed \(a>0\), the bound \(g_n\le C\sqrt L\) gives the rate
 \(n^{-1/2}(\log n)^2\). If \(g_n\) remains bounded, the rate improves
 to \(n^{-1/2}(\log n)^{3/2}\).
 
-The factor \(BL^{3/2}/\sqrt n\) is sharp in the worst case over
-covariance matrices. For \(B\ge2\), \(p\to\infty\), and
-\(BL^{3/2}/\sqrt n\to0\), Theorem~\ref{opt:skew-lower} gives i.i.d.\
-observations with independent coordinates whose error is at least
-of this order. Their Gaussian width is of order \(\sqrt L\).
-The example is inspired by that of Chernozhukov, Chetverikov, and
-Koike~\cite[Proposition~2.1]{CCK}, and it drops some of their side
-conditions on \(B\) and \(p\). Thus, in this regime,
-\eqref{eq:observations-intrinsic} is optimal up to the factor
-\(\sqrt{1+\log_+(\sqrt n/(B\sqrt L))}\). When \(p\) grows
-polynomially in \(n\) and \(B\) is fixed, this factor has order
-\((\log n)^{1/2}\). Conjecture~\ref{conj:sharp-unrestricted} asks
-whether it can be removed from the worst-case bound.
+Theorem~\ref{opt:symmetric-lower} gives centrally symmetric examples
+whose error is at least of order \(B g_nL/\sqrt n\), whenever
+this rate tends to zero, with widths ranging from a constant to
+order \(\sqrt L\). Thus the corollary is sharp in these regimes
+up to its additional square-root logarithm. Theorem~\ref{opt:skew-lower}
+attains the same rate with independent skewed coordinates, for which
+\(g_n\asymp\sqrt L\). This example extends that of
+Chernozhukov, Chetverikov, and Koike~\cite[Proposition~2.1]{CCK}.
+Conjecture~\ref{conj:sharp-unrestricted} asks whether the additional
+factor can be removed from the worst-case bound.
 
-The sub-exponential and polynomial-moment bounds below also retain
-Gaussian width. In each case, the factor arising from
-anti-concentration is \(g_\Sigma\), or its counterpart for the
-Gaussian vector under consideration. To compare these bounds with
-the lower-bound examples, we use \(g_\Sigma\le C\sqrt L\) and focus
-on worst-case dimension dependence. Those comparisons do not assert
-sharpness for each prescribed Gaussian width.
+The sub-exponential and polynomial-moment upper bounds below also
+retain Gaussian width. Section~\ref{opt:section} states the lower
+bounds in the same notation and specifies the dimension and width
+sequences for which the constructions apply.
 \end{vSixBlock}
 
 \begin{recovered}
@@ -461,10 +456,8 @@ while~\eqref{poly:main-fourth} uses~\eqref{poly:fourth} to exploit
 smaller coordinate fourth moments. For example, at \(q=4\),
 \eqref{poly:envelope} alone bounds their averages by \(B^4\),
 whereas~\eqref{poly:fourth} reduces this bound to \(B^2\).
-\vSix{For the following lower-bound comparisons, use
-\(g_\Sigma\le C\sqrt L\) in the upper bounds.}
+\vSix{The lower bounds below retain the same Gaussian-width factor.}
 Theorem~\ref{lower:dense}\textup{(i)} matches
-\vSix{the resulting dimension-based bound in}
 \eqref{poly:main-envelope} from below up to the logarithmic factor
 \(\{\log(en)\}^{1/2-1/q}\) under the envelope condition alone,
 for every fixed \(q>2\) and fixed or growing \(B\ge2\).
@@ -476,7 +469,9 @@ When \(2<q<4\) and \(n/L\to\infty\),
 \eqref{poly:main-envelope}. Theorem~\ref{lower:sparse} gives a
 matching lower bound when \(\log n=o(L)\) and the rate tends to zero.
 At \(q=4\), \eqref{poly:main-fourth} gives the rate
-\(n^{-1/4}L^{5/4}\), which Theorem~\ref{opt:q4-lower} matches from below.
+\vSix{\(g_\Sigma n^{-1/4}L^{3/4}\), which
+Theorem~\ref{opt:q4-lower} matches from below for widths ranging
+from a constant to order \(\sqrt L\).}
 This confirms our conjecture that the quartic rate in
 \cite[Theorem~2.5]{CCKK2022} is optimal under fourth-moment envelopes.
 When \(q>4\), \eqref{poly:main-envelope} improves the sample-size
@@ -679,13 +674,12 @@ increments and reduces the envelope contribution by the logarithmic
 factor in~\eqref{poly:main-fourth}. When both conditions hold, we may
 take the smaller of the two bounds.}
 
-\vSix{The following comparisons concern the dimension-based consequences
-of Theorem~\ref{thm:polynomial}, obtained using
-\(g_\Sigma\le C\sqrt L\).}
+\vSix{The lower-bound constructions retain Gaussian width in
+these polynomial-moment comparisons as well.}
 {At \(q=4\), the sample-size dependence
 \(n^{-1/4}\) remains and is sharp. For fixed \(B\ge2\), the centrally
 symmetric examples in Theorem~\ref{opt:q4-lower} match the full rate
-\(n^{-1/4}L^{5/4}\) in~\eqref{poly:main-fourth} from below,
+\vSix{\(g_\Sigma n^{-1/4}L^{3/4}\)} in~\eqref{poly:main-fourth} from below,
 confirming our conjecture that the quartic rate
 in~\cite[Theorem~2.5]{CCKK2022} is optimal under fourth-moment
 envelopes. More generally, Theorem~\ref{lower:dense}\textup{(i)}
@@ -778,7 +772,8 @@ inputs, and the successful independent checks. The verification does not
 refinement in Appendix~\ref{app:dimension-cap}, the Gaussian-width
 refinements and their proofs in Sections~\ref{sec:smoothing}--\ref{sec:poly}
 and Appendices~\ref{appx-sec:smoothing}--\ref{app:polynomial-proof}, or
-the bounded-width lower bound in Appendix~\ref{app:bounded-width-lower}.}}
+the Gaussian-width lower bounds and their proofs in
+Section~\ref{opt:section} and Appendix~\ref{app:sharpness-proofs}.}}
 
 \section*{Plan of the Paper}
 Section~\ref{sec:smoothing} outlines the smoothing and interpolation
@@ -1698,7 +1693,7 @@ in both cases. Finally, the envelope condition permits
 \begin{vSixBlock}
 The factor \(L\) outside the final square root comes from the
 random threshold shifts and the Gaussian weighted derivative estimates.
-Proposition~\ref{prop:width-lower} shows that a factor of this order
+Theorem~\ref{opt:symmetric-lower} shows that a factor of this order
 is necessary even when Gaussian width is bounded. The additional
 logarithm inside \(D_L\) comes from integrating the fourth-order
 remainder near the beginning of the second stage. Its necessity
@@ -1846,7 +1841,8 @@ Condition~\eqref{poly:envelope} alone\newline
 & Conditional truncation, followed by the bounded-summand theorem and
 Gaussian anti-concentration.\newline Appendix~\ref{app:conditional}.
 & Theorem~\ref{lower:dense}\textup{(i)} gives a lower bound of order
-\(V_q\) for every fixed \(q>2\), with fixed or growing \(B\ge2\).
+\vSix{\((g_\Sigma/\sqrt L)V_q\)} for every fixed \(q>2\),
+with fixed or growing \(B\ge2\).
 The remaining factor is \(\{\log(en)\}^{\alpha_q}\), whose
 necessity is unresolved.\\[0.6em]
 Theorem~\ref{thm:polynomial}\textup{(ii)}\newline
@@ -1863,152 +1859,144 @@ Theorem~\ref{opt:q4-growing} also matches the dependence on growing \(B\).\\
 \end{tabularx}
 \caption{The two parts of Theorem~\ref{thm:polynomial}, their proofs,
 and their sharpness. Constants are suppressed and both upper bounds
-are capped at 1. \vSix{The lower-bound comparisons concern the
-worst case over covariance matrices, using \(g_\Sigma\le C\sqrt L\),}
-and use the dimension and vanishing-rate conditions of the cited results
-in Section~\ref{opt:section}.}
+are capped at 1. \vSix{The lower-bound examples have widths
+ranging from a constant to order \(\sqrt L\), subject to the
+dimension and vanishing-rate conditions in Section~\ref{opt:section}.}}
 \label{poly:summary}
 \end{table}
 
 \subsection{\texorpdfstring{{Comparison of the bounds under the two moment assumptions}}{Comparison of the bounds under the two moment assumptions}}\label{poly:transition}
 
 \begin{vSixBlock}
-We compare the dimension-based consequences of
-\eqref{poly:transfer-bound} and~\eqref{poly:bennett-bound}, obtained
-using \(g_\Sigma\le C\sqrt L\). For a given covariance matrix,
-both upper bounds retain the common factor \(g_\Sigma/\sqrt L\),
-so their relative sizes are unchanged. The lower bounds below concern
-the worst case over covariance matrices.
-\end{vSixBlock}
-\begin{recovered}
-Under the envelope condition~\eqref{poly:envelope} alone,
-\eqref{poly:transfer-bound} applies for every fixed \(q>2\).
-Theorem~\ref{lower:dense}\textup{(i)} gives a lower bound of order
-\(V_q\) for this class with \(B\ge2\), including growing \(B\),
-along its dimension sequences with \(V_q\to0\). Thus the powers of \(B\), \(n\),
-and \(L\) are sharp, and the remaining gap is
-\(\{\log(en)\}^{\alpha_q}\).
+Both upper bounds retain the factor \(g_\Sigma/\sqrt L\), so
+their relative sizes are determined by \(U,V_q,\mathcal K_q\),
+and \(\mathcal L_q\). The lower bounds use the same width factor.
+The comparisons below apply along the dimension and width sequences
+specified in Section~\ref{opt:section}.
 
-When the coordinate condition~\eqref{poly:fourth} also holds, both
-bounds are available. First fix \(B\ge2\) and suppose that
-\(n/L\to\infty\). If \(2<q<4\), then \(\mathcal K_q\to\infty\)
-and
+Under the envelope condition alone, Theorem~\ref{lower:dense}\textup{(i)}
+gives a lower bound of order \((g_\Sigma/\sqrt L)V_q\) for
+every fixed \(q>2\) and fixed or growing \(B\ge2\), when this
+scale tends to zero. The bound~\eqref{poly:transfer-bound} differs
+by the factor \(\{\log(en)\}^{\alpha_q}\).
+
+When the coordinate fourth-moment condition also holds, both bounds
+are available. First fix \(B\ge2\) and suppose \(n/L\to\infty\).
+For \(2<q<4\), we have \(\mathcal K_q\to\infty\), and
 \[
- \frac{V_q/\mathcal L_q^{1-1/q}}{U}
-   =\frac{\sqrt{\mathcal K_q}}{\mathcal L_q^{1-1/q}}\longrightarrow\infty.
+ \frac{V_q/\mathcal L_q^{1-1/q}}U
+ =\frac{\sqrt{\mathcal K_q}}{\mathcal L_q^{1-1/q}}\to\infty.
 \]
-The bound~\eqref{poly:bennett-bound} therefore has order
-\(V_q/\mathcal L_q^{1-1/q}\), improving the logarithmic factors
-in~\eqref{poly:transfer-bound}. Theorem~\ref{lower:sparse} matches
-this rate from below when \(\log\mathcal K_q=o(L)\) and the rate
-tends to zero.
+Thus~\eqref{poly:bennett-bound} has order
+\((g_\Sigma/\sqrt L)V_q/\mathcal L_q^{1-1/q}\), improving
+the logarithmic factors in~\eqref{poly:transfer-bound}.
+Theorem~\ref{lower:sparse} matches this rate from below when
+\(\log\mathcal K_q=o(L)\) and the intrinsic rate tends to zero.
 
-At \(q=4\), \(\mathcal K_4=B\), and the first term in
-\eqref{poly:bennett-bound} is absorbed by the second uniformly in \(B\ge1\),
-because \(\{\log(e+B)\}^{3/4}/\sqrt B\) is bounded.
-Thus Theorem~\ref{thm:polynomial}\textup{(ii)} gives
+At \(q=4\), \(\mathcal K_4=B\), and the second term absorbs
+the first uniformly in \(B\ge1\), because
+\(\{\log(e+B)\}^{3/4}/\sqrt B\) is bounded. Hence
 \begin{equation}
  \rh(W,Z)\le C\min\left\{1,
- \vSix{\frac{g_\Sigma Bn^{-1/4}L^{3/4}}
- {\{\log(e+B)\}^{3/4}}}\right\}.
+ \frac{g_\Sigma Bn^{-1/4}L^{3/4}}
+ {\{\log(e+B)\}^{3/4}}\right\}.
  \label{poly:q4}
 \end{equation}
-\vSix{For fixed \(B\ge2\), Theorem~\ref{opt:q4-lower} matches the
-worst-case rate \(n^{-1/4}L^{5/4}\) from below. With bounded
-Gaussian width, \eqref{poly:q4} instead gives
-\(O(n^{-1/4}L^{3/4})\).}
+For fixed \(B\ge2\), Theorem~\ref{opt:q4-lower} matches
+\(g_\Sigma n^{-1/4}L^{3/4}\) from below. In particular,
+\(n^{-1/4}L^{3/4}\) is sharp even when width stays bounded.
+For growing \(B\), Theorem~\ref{opt:q4-growing} also matches
+the factor \(B/\{\log(e+B)\}^{3/4}\).
 
-If \(q>4\) and \(B\) is fixed, then \(\mathcal K_q\to0\).
-The bound~\eqref{poly:bennett-bound} retains the term \(U\), whereas
-\eqref{poly:transfer-bound} gives \(V_q\{\log(en)\}^{\alpha_q}\).
-In particular, for \(p\asymp n^a\), where \(a>0\) is fixed,
-the latter rate is
+For \(q>4\) and fixed \(B\), \(\mathcal K_q\to0\).
+The bound~\eqref{poly:bennett-bound} retains
+\((g_\Sigma/\sqrt L)U\), whereas~\eqref{poly:transfer-bound}
+gives \((g_\Sigma/\sqrt L)V_q\{\log(en)\}^{\alpha_q}\).
+For example, if \(p\asymp n^a\), with fixed \(a>0\), the
+latter rate is
 \[
- O_{q,B,a}\!\left(n^{-\alpha_q}(\log n)^{1+2\alpha_q}\right).
+ O_{q,B,a}\!\left(g_\Sigma n^{-\alpha_q}
+                    (\log n)^{1/2+2\alpha_q}\right).
 \]
 Since \(\alpha_q>1/4\), this improves the power of \(n\).
-Theorem~\ref{lower:dense}\textup{(ii)} supplies a lower bound of order
-\(V_q\) within \(\mathcal C_q(B,p)\), so the remaining gap is again
-\(\{\log(en)\}^{\alpha_q}\). For example, at \(q=6\) the lower
-rate is \(Bn^{-1/3}L^{4/3}\), and the upper rate is this quantity
-times \(\{\log(en)\}^{1/3}\).
+Theorem~\ref{lower:dense}\textup{(ii)} supplies a lower bound
+of order \((g_\Sigma/\sqrt L)V_q\) within \(\mathcal C_q(B,p)\),
+leaving the factor \(\{\log(en)\}^{\alpha_q}\). At \(q=6\),
+for instance, the lower rate is \(Bg_\Sigma n^{-1/3}L^{5/6}\).
 
-When \(B\) grows, \(\mathcal K_q\) can diverge even for \(q>4\).
+When \(B\) grows, \(\mathcal K_q\) can diverge also for \(q>4\).
 For every fixed \(q>2\), the same ratio calculation shows that
-\eqref{poly:bennett-bound} has order \(V_q/\mathcal L_q^{1-1/q}\)
-whenever \(\mathcal K_q\to\infty\). Theorem~\ref{lower:sparse}
-matches this rate from below if also \(\log\mathcal K_q=o(L)\)
-and the rate tends to zero. At \(q=4\), these conditions become
-\(B\to\infty\), \(\log B=o(L)\), and
-\(Bn^{-1/4}L^{5/4}/\{\log(e+B)\}^{3/4}\to0\).
-Theorem~\ref{opt:q4-growing} gives the corresponding lower bound,
-including the dependence on \(B\). All these lower-bound comparisons
-use the dimension sequences specified in the cited theorems.
-\end{recovered}
+\eqref{poly:bennett-bound} has order
+\((g_\Sigma/\sqrt L)V_q/\mathcal L_q^{1-1/q}\) whenever
+\(\mathcal K_q\to\infty\). Theorem~\ref{lower:sparse} matches
+this rate from below if also \(\log\mathcal K_q=o(L)\) and
+the intrinsic rate tends to zero.
+\end{vSixBlock}
 
 \section{Sharpness of the bounds}\label{opt:section}
-
-We construct observations for which the Gaussian approximation error
-attains the rates summarized in Table~\ref{opt:tab:rates}. The examples
-allow the distribution and dimension to depend on the sample size.
-For an array of independent centered observations
-\(X_{n,1},\ldots,X_{n,n}\in\R^{p_n}\), we use the notation
+\begin{vSixBlock}
+We construct observations whose Gaussian approximation error attains
+the rates summarized in Table~\ref{opt:tab:rates}, including their
+dependence on Gaussian width. The examples allow the distribution
+and dimension to depend on the sample size. For independent centered
+observations \(X_{n,1},\ldots,X_{n,n}\in\R^{p_n}\), define
 \begin{equation}
 \begin{gathered}
  W_n:=\frac1{\sqrt n}\sum_{i=1}^nX_{n,i},\qquad
  \Sigma_n:=\frac1n\sum_{i=1}^n\E X_{n,i}X_{n,i}^{\top},\\
- Z_n\sim N(0,\Sigma_n),\qquad L_n:=\log(ep_n).
+ Z_n\sim N(0,\Sigma_n),\qquad
+ L_n:=\log(ep_n),\qquad g_{\Sigma_n}:=\E\|Z_n\|_\infty.
 \end{gathered}
 \label{lower:eq:setup}
 \end{equation}
-Thus \(Z_n\) has the same covariance as \(W_n\), and
-\(\rh(W_n,Z_n)\) is their Kolmogorov distance over rectangles.
-Each lower bound below is attained by identically distributed
-observations with unit marginal variances.
+Each example below has identically distributed observations with unit
+marginal variances.
 
-These statements concern the worst case over covariance matrices,
-without imposing a bound on \(g_{\Sigma_n}\). They are compared with
-the dimension-based upper bounds. Sharpness over a class with a prescribed
-Gaussian width is a separate question. For example, the independent-coordinate
-construction below has \(g_{\Sigma_n}\asymp\sqrt{L_n}\), so it does
-not give a lower bound for classes with bounded Gaussian width.
-\vSix{Appendix~\ref{app:bounded-width-lower} gives a complementary
-example with bounded Gaussian width and error of order at least
-\(n^{-1/2}L_n\), showing that a logarithmic dimension factor is
-still necessary in that class.}
+The independent-coordinate example has \(\Sigma_n=I_{p_n}\), so
+\(g_{\Sigma_n}\asymp\sqrt{L_n}\). The symmetric examples allow us
+to vary the width by choosing the numbers of leading coordinates
+and rare-component coordinates separately. For these examples, let
+\begin{equation}
+ 1\le r_n\le m_n,\qquad m_n\to\infty,\qquad p_n:=r_nm_n,
+ \qquad w_n:=\E\max_{j\le r_n}|G_j|,
+ \label{lower:eq:dimensions}
+\end{equation}
+where \(r_n,m_n\) are integers and the \(G_j\) are independent
+standard normal variables. The prescribed width \(w_n\) lets us
+state the growth conditions before constructing the observations.
+Each symmetric construction will satisfy
+\begin{equation}
+ g_{\Sigma_n}=(1+o(1))w_n,\qquad
+ w_n\asymp\sqrt{\log(er_n)}.
+ \label{lower:eq:width-profile}
+\end{equation}
+Thus \(r_n=1\) gives \(g_{\Sigma_n}\to\sqrt{2/\pi}\), whereas
+\(r_n=m_n\) gives \(g_{\Sigma_n}\asymp\sqrt{L_n}\).
+These examples show that the remaining logarithmic dimension
+factors are necessary in general, even when the Gaussian width
+stays bounded. They do not settle the necessity of the additional
+logarithmic multipliers in Table~\ref{opt:tab:rates}.
+These are existence results for the stated width regimes: we do
+not assert a matching lower bound for every covariance matrix
+with the same Gaussian width.
 
-For bounded observations, the lower bound has order
-\(n^{-1/2}(\log p_n)^{3/2}\) even when each observation has a
-\emph{centrally symmetric} law, meaning that
-\(X_{n,i}\) and \(-X_{n,i}\) have the same distribution.
-All mixed third moments then vanish.
-{Under the envelope condition~\eqref{poly:envelope}
-alone, the lower bounds match {the upper bounds in} the powers of the envelope size, sample
-size, and logarithm of the dimension for every fixed \(q>2\) and
-\(B_n\ge2\), leaving a factor \(\{\log(en)\}^{1/2-1/q}\).
-With the additional coordinate condition~\eqref{poly:fourth}, the
-lower bounds match the upper bounds at \(q=4\) and in the
-large-\(\mathcal K_q\) regimes specified below. For fixed \(B\)
-and \(q>4\), the same logarithmic gap remains.
-Table~\ref{opt:tab:rates} separates these two moment classes.}
-
-Independent skewed coordinates give the first bounded example:
-small errors in their scalar tails accumulate in the distribution of
-the maximum. In the symmetric examples, dependence among coordinates
-allows the maximum to be written as a leading component plus an
-independent random shift {arising from the rare component of the construction}. A difference between the mean shifts for
-the sum and its Gaussian counterpart gives the lower bound.
-Appendix~\ref{app:sharpness-proofs} proves these assertions and checks
-the moment conditions for each construction.
+The two constructions reveal different sources of error. With
+independent skewed coordinates, small scalar tail errors accumulate
+in the distribution of the maximum. In the symmetric construction,
+each maximum is a leading component plus an independent random shift.
+The difference between the mean shifts for the sum and its Gaussian
+counterpart produces the lower bound. The number \(r_n\) controls
+the boundary density of the leading maximum, and \(m_n\) controls
+the rare-component shift. Appendix~\ref{app:sharpness-proofs}
+proves these assertions and checks the moment conditions.
 
 \begin{table}[!htb]
+\color{magenta}
 \centering
-
-\caption{Lower-bound rates and upper-bound multipliers for the Kolmogorov
-distance over rectangles with unrestricted covariance. Multiplying the rate
-in the second column by the factor in the third gives an upper bound.
-\vSix{These comparisons use \(g_{\Sigma_n}\le C\sqrt{L_n}\)
-and concern the worst case over covariance matrices.}}
+\caption{Lower-bound rates and upper-bound multipliers for Gaussian
+approximation over rectangles. Multiplying the rate in the second
+column by the factor in the third gives an upper bound. The lower
+bounds retain the Gaussian width of the constructed covariance.}
 \label{opt:tab:rates}
 \vspace{3pt}
 \small
@@ -2017,287 +2005,262 @@ and concern the worst case over covariance matrices.}}
 \toprule
 Observation class and regime & Lower-bound rate & Upper-bound multiplier\\
 \midrule
-\shortstack[l]{\(\norm{X_{n,i}}_\infty\le B_n\)\\\(B_n\ge2\) may grow\\Theorem~\ref{opt:skew-lower}}
-& \(\displaystyle\frac{B_n(\log p)^{3/2}}{\sqrt n}\)
-& \(\displaystyle\times C
-   \sqrt{\log\!\left(e+\frac{\sqrt n}{B_n\sqrt{\log p}}\right)}\)\\
-\addlinespace[5pt]
-\shortstack[l]{\(\norm{X_{n,i}}_\infty\le2\)\\Centrally symmetric\\Theorem~\ref{opt:symmetric-lower}}
-& \(\displaystyle\frac{(\log p)^{3/2}}{\sqrt n}\)
-& \(\displaystyle\times C
-   \sqrt{\log\!\left(e+\sqrt{n/\log p}\right)}\)\\
+\shortstack[l]{\(\norm{X_{n,i}}_\infty\le B_n\)\\\(B_n\ge2\) may grow\\Theorem~\ref{opt:symmetric-lower}}
+& \(\displaystyle B_n g_{\Sigma_n}L_n/\sqrt n\)
+& \(\displaystyle C\sqrt{1+\log_+\frac{\sqrt n}{B_n\sqrt{L_n}}}\)\\
 \midrule
-\multicolumn{3}{@{}l@{}}{Envelope condition~\eqref{poly:envelope} alone: upper bound from Theorem~\ref{thm:polynomial}\textup{(i)}}\\[3pt]
+\multicolumn{3}{@{}l@{}}{Envelope condition~\eqref{poly:envelope} alone: Theorem~\ref{thm:polynomial}\textup{(i)}}\\[3pt]
 \shortstack[l]{\(q>2\), \(B_n\ge2\) may vary\\Theorem~\ref{lower:dense}\textup{(i)}}
-& \(\displaystyle\frac{B_n(\log p)^{3/2-1/q}}{n^{1/2-1/q}}\)
-& \(\times C_q\{\log(en)\}^{1/2-1/q}\)\\
+& \(\displaystyle B_n g_{\Sigma_n}n^{-\alpha_q}L_n^{1-1/q}\)
+& \(C_q\{\log(en)\}^{\alpha_q}\)\\
 \midrule
-\multicolumn{3}{@{}l@{}}{Conditions~\eqref{poly:envelope} and~\eqref{poly:fourth}: the smaller of the two bounds in Theorem~\ref{thm:polynomial}}\\[3pt]
-\shortstack[l]{\(2<q<4\), fixed \(B\ge2\)\\\(\log n=o(\log p)\)\\Theorem~\ref{lower:sparse}}
+\multicolumn{3}{@{}l@{}}{Envelope and coordinate conditions~\eqref{poly:envelope}--\eqref{poly:fourth}: Theorem~\ref{thm:polynomial}}\\[3pt]
+\shortstack[l]{\(2<q<4\), fixed \(B\ge2\)\\\(\log n=o(L_n)\)\\Theorem~\ref{lower:sparse}}
 & \(\displaystyle
-  \frac{(\log p)^{3/2-1/q}}
-       {n^{1/2-1/q}\{\log(e+n/\log p)\}^{1-1/q}}\)
-& \(\times C_{q,B}\)\\
+ \frac{g_{\Sigma_n}n^{-\alpha_q}L_n^{1-1/q}}
+ {\{\log(e+n/L_n)\}^{1-1/q}}\)
+& \(C_{q,B}\)\\
 \addlinespace[5pt]
 \shortstack[l]{\(q=4\), fixed \(B\ge2\)\\Theorem~\ref{opt:q4-lower}}
-& \(\displaystyle\frac{(\log p)^{5/4}}{n^{1/4}}\)
-& \(\times C_B\)\\
+& \(\displaystyle g_{\Sigma_n}n^{-1/4}L_n^{3/4}\)
+& \(C_B\)\\
 \addlinespace[5pt]
-\shortstack[l]{\(q=4\), \(B_n\to\infty\)\\\(\log B_n=o(\log p)\)\\Theorem~\ref{opt:q4-growing}}
+\shortstack[l]{\(q=4\), \(B_n\to\infty\)\\\(\log B_n=o(L_n)\)\\Theorem~\ref{opt:q4-growing}}
 & \(\displaystyle
-  \frac{B_n(\log p)^{5/4}}{n^{1/4}\{\log(e+B_n)\}^{3/4}}\)
-& \(\times C\)\\
+ \frac{B_n g_{\Sigma_n}n^{-1/4}L_n^{3/4}}
+ {\{\log(e+B_n)\}^{3/4}}\)
+& \(C\)\\
 \addlinespace[5pt]
 \shortstack[l]{\(q>4\), fixed \(B\ge2\)\\Theorem~\ref{lower:dense}\textup{(ii)}}
-& \(\displaystyle\frac{B(\log p)^{3/2-1/q}}{n^{1/2-1/q}}\)
-& \(\times C_q\{\log(en)\}^{1/2-1/q}\)\\
+& \(\displaystyle B g_{\Sigma_n}n^{-\alpha_q}L_n^{1-1/q}\)
+& \(C_q\{\log(en)\}^{\alpha_q}\)\\
 \addlinespace[5pt]
-\shortstack[l]{\(q>2\), \(B_n\ge2\) may vary\\Growth conditions below\\Theorem~\ref{lower:sparse}}
+\shortstack[l]{\(q>2\), \(B_n\ge2\) may vary\\Large \(\mathcal K_{n,q}\)\\Theorem~\ref{lower:sparse}}
 & \(\displaystyle
-  \frac{B_n(\log p)^{3/2-1/q}}
-       {n^{1/2-1/q}\{\log(e+B_n(n/\log p)^{2/q-1/2})\}^{1-1/q}}\)
-& \(\times C_q\)\\
+ \frac{B_n g_{\Sigma_n}n^{-\alpha_q}L_n^{1-1/q}}
+ {\{\log(e+\mathcal K_{n,q})\}^{1-1/q}}\)
+& \(C_q\)\\
 \bottomrule
 \end{tabular*}
 \par\medskip
 \begin{minipage}{\linewidth}\small
-Here \(p=p_n\to\infty\), and each displayed rate is assumed to tend
-to zero. A positive constant times the second-column rate is attained
-by the cited construction. The upper bound holds uniformly over the
-corresponding observation class and can always be capped at \(1\).
-The observations are independent and centered, with unit average
-marginal variances. The coordinate bounds in the first two entries hold
-almost surely. In the polynomial entries, \(q\) is fixed, and the moment
-conditions use the displayed \(B\) or \(B_n\). Except in the first entry,
-the constructions use \(p_n=m_n^2\) with integers \(m_n\to\infty\)
-and are centrally symmetric. The constants may depend on \(q\) or
-a fixed \(B\) as indicated, but not on a growing \(B_n\).
-The growth conditions in the last entry are
-\[
- B_n(n/\log p)^{2/q-1/2}\longrightarrow\infty,
- \qquad
- \log\!\bigl(B_n(n/\log p)^{2/q-1/2}\bigr)=o(\log p).
-\]
+Here \(\alpha_q=1/2-1/q\), and each displayed lower rate tends
+to zero. The symmetric constructions use~\eqref{lower:eq:dimensions}
+and satisfy~\eqref{lower:eq:width-profile}. The bounded rate also
+holds with independent coordinates in Theorem~\ref{opt:skew-lower},
+where \(g_{\Sigma_n}\asymp\sqrt{L_n}\). In the polynomial entries,
+\(q\) is fixed, and constants may depend on \(q\) or a fixed
+\(B\) as indicated. All upper bounds can be capped at \(1\).
+The last entry assumes
+\(\mathcal K_{n,q}:=B_n(n/L_n)^{2/q-1/2}\to\infty\) and
+\(\log\mathcal K_{n,q}=o(L_n)\).
 \end{minipage}
 \end{table}
 
 \subsection{Bounded observations}
 
-We first allow the almost-sure bound on an observation to vary with
-\(n\). A skewed two-point distribution gives a lower bound with the
-same linear dependence on that bound as the upper estimate in
-Corollary~\ref{cor:observations}. The construction extends the example
-in~\cite[Proposition~2.1]{CCK}.
+The bounded rate is necessary even with independent coordinates
+and covariance \(I_{p_n}\). The following skewed two-point example
+extends the construction in~\cite[Proposition~2.1]{CCK} and identifies
+the contribution of the third moment.
 
 \begin{theorem}[Bounded observations with independent coordinates]\label{opt:skew-lower}
-Let \(p_n\) be positive integers tending to infinity, and let
-\(B_n\ge2\). Define the rate
+Let \(p_n\to\infty\) be integers and \(B_n\ge2\). Set
+\(\Sigma_n:=I_{p_n}\), and suppose that
 \[
- r_n:=\frac{B_n(\log p_n)^{3/2}}{\sqrt n},
+ e_n:=\frac{B_n g_{\Sigma_n}L_n}{\sqrt n}\longrightarrow0.
 \]
-and suppose that \(r_n\to0\).
-There are i.i.d. centered observations
-\(X_{n,1},\ldots,X_{n,n}\in\R^{p_n}\) with independent coordinates,
-covariance \(I_{p_n}\), and
-\(\norm{X_{n,i}}_\infty\le B_n\) almost surely, such that
+There are i.i.d. centered observations with independent coordinates,
+covariance \(\Sigma_n\), and \(\norm{X_{n,i}}_\infty\le B_n\)
+almost surely, such that
 \begin{equation}
- \liminf_{n\to\infty}\frac{\rh(W_n,Z_n)}{r_n}
- \ge\frac{\sqrt2}{4e}.
+ \liminf_{n\to\infty}\frac{\rh(W_n,Z_n)}{e_n}
+ \ge\frac1{4e}.
  \label{opt:lower-constant}
 \end{equation}
-Here \(W_n\) and \(Z_n\) are defined in~\eqref{lower:eq:setup},
-and the bound \(B_n\) is attained with positive probability.
+The envelope \(B_n\) is attained with positive probability.
 \end{theorem}
 
-The same powers of \(n\) and \(\log p_n\) occur for centrally
-symmetric observations bounded by \(2\). Thus cancellation of all
-third moments does not by itself improve these powers when the
-covariance is unrestricted.
+The same rate can occur when each observation is centrally symmetric,
+so that all mixed third moments vanish. The next result also allows
+the Gaussian width to remain bounded.
 
 \begin{theorem}[Centrally symmetric lower bound]\label{opt:symmetric-lower}
-Let \(m_n\ge2\) be integers such that \(m_n\to\infty\) and
-\((\log m_n)^3/n\to0\). {Define}
+Let \(r_n,m_n,p_n,w_n\) be as in~\eqref{lower:eq:dimensions},
+let \(B_n\ge2\), and suppose that
 \[
- p_n:=m_n^2,\qquad \delta_n:=\frac2{\sqrt n}.
+ \frac{B_n w_nL_n}{\sqrt n}\longrightarrow0.
 \]
-For all sufficiently large \(n\), there are i.i.d. centered vectors
-\(X_{n,i}\in\R^{p_n}\), \(1\le i\le n\), with centrally symmetric
-law, unit marginal variances, and \(\norm{X_{n,i}}_\infty\le2\).
-For these observations, the notation in~\eqref{lower:eq:setup} gives
-\[
- \liminf_{n\to\infty}
- \frac{\rh(W_n,Z_n)}{\delta_nL_n^{3/2}}\ge\frac1{8e}.
-\]
+For all sufficiently large \(n\), there are i.i.d. centered,
+centrally symmetric observations with unit marginal variances,
+\(\norm{X_{n,i}}_\infty\le B_n\), and width satisfying
+\eqref{lower:eq:width-profile}, such that
+\begin{equation}
+ \rh(W_n,Z_n)\ge c\frac{B_n g_{\Sigma_n}L_n}{\sqrt n},
+ \label{lower:symmetric-rate}
+\end{equation}
+where \(c>0\) is an absolute constant.
 \end{theorem}
 
-The covariance matrices in this and the remaining examples are
-singular. Appendix~\ref{app:lower-family} gives their rank and
-correlations. It also shows that duplicating a coordinate leaves
-the Kolmogorov distance over rectangles unchanged.
+For \(r_n=1\), the width converges to \(\sqrt{2/\pi}\), and
+\eqref{lower:symmetric-rate} still contains the factor \(L_n\).
+For comparison, if all coordinates of each observation coincide,
+the width is exactly \(\sqrt{2/\pi}\), and scalar Berry--Esseen
+gives an error at most \(CB_n/\sqrt n\). Thus bounded width
+permits both scalar behavior and the larger errors constructed here.
+The symmetric covariance matrices have rank \(r_n+m_n-1\).
+They are singular when \(r_n\ge2\); duplicating a coordinate
+makes them singular also when \(r_n=1\), without changing the
+width, rectangle distance, or moment bounds.
 
 \subsection{Fourth-moment envelopes}\label{opt:q4-comparison}
 
-We next impose moment bounds in place of an almost-sure bound.
-Recall the class \(\mathcal C_q(B,p)\) from Section~\ref{sec:polynomial-main},
-where \(q>2\). For the i.i.d. observations constructed here,
-membership requires unit marginal variances and
+We next replace an almost-sure bound by moment bounds. For the i.i.d.
+observations constructed here, membership in \(\mathcal C_q(B,p)\)
+requires unit marginal variances and
 \[
  \E\norm{X_{n,1}}_\infty^q\le B^q,\qquad
- \max_{j\le p_n}\E X_{n,1,j}^4\le B^2.
+ \max_{j\le p}\E X_{n,1,j}^4\le B^2.
 \]
-These are the envelope and coordinate conditions
-\eqref{poly:envelope} and~\eqref{poly:fourth}.
-At \(q=4\), the following theorem matches the upper rate
-in~\eqref{poly:q4} for every fixed \(B\ge2\).
+At \(q=4\), increasing the amplitude of the rare component gives
+a lower bound matching~\eqref{poly:q4}, including its Gaussian width.
 
 \begin{theorem}[Fourth-moment lower bound]\label{opt:q4-lower}
-Let \(m_n\to\infty\) be integers, {define} \(p_n:=m_n^2\), and
-retain \(L_n=\log(ep_n)\) from~\eqref{lower:eq:setup}. Define
+Let \(r_n,m_n,p_n,w_n\) be as in~\eqref{lower:eq:dimensions},
+and suppose that
 \[
- r_{n,4}:=\frac{L_n^{5/4}}{n^{1/4}},
+ w_n n^{-1/4}L_n^{3/4}\longrightarrow0.
 \]
-and suppose that \(r_{n,4}\to0\).
 For all sufficiently large \(n\), there are i.i.d. centrally
-symmetric observations in \(\mathcal C_4(2,p_n)\) such that
+symmetric observations in \(\mathcal C_4(2,p_n)\), with width
+satisfying~\eqref{lower:eq:width-profile}, such that
 \begin{equation}
- \liminf_{n\to\infty}
- \frac{\rh(W_n,Z_n)}{r_{n,4}}\ge\frac1{2\sqrt2\,e}.
+ \rh(W_n,Z_n)\ge c g_{\Sigma_n}n^{-1/4}L_n^{3/4},
  \label{opt:eq:q4-lower}
 \end{equation}
-Consequently, for every fixed \(B\ge2\), along these dimension sequences,
+where \(c>0\) is absolute. For these observations, the lower bound
+and~\eqref{poly:q4} give
 \begin{equation}
- \sup_{\mathcal C_4(B,p_n)}\rh(W_n,Z_n)
- \asymp_B n^{-1/4}L_n^{5/4}.
+ \rh(W_n,Z_n)\asymp g_{\Sigma_n}n^{-1/4}L_n^{3/4}.
  \label{lower:q4-fixed}
 \end{equation}
-The comparison constants may depend on \(B\). The same conclusion holds
-if the supremum is restricted to centrally symmetric observations.
 \end{theorem}
 
-This confirms our conjecture that the \(n^{-1/4}\) rate in the Gaussian
-approximation bound of Chernozhukov, Chetverikov, Kato, and
-Koike~\cite[Theorem~2.5]{CCKK2022} is sharp when \(q=4\).
-For fixed \(B\ge2\), the lower bound also matches the dimension factor
-\(L_n^{5/4}\). The construction follows from the bounded symmetric
-example by increasing the size of its rare component.
-
-For a growing envelope, the upper rate in~\eqref{poly:q4} is
-proportional to \(B/\{\log(e+B)\}^{3/4}\).
-The next theorem attains this dependence as well. Its construction
-makes the rare component nonzero in only a small fraction of the
-coordinates, so that both moment conditions remain satisfied.
+The examples belong to \(\mathcal C_4(B,p_n)\) for every fixed
+\(B\ge2\). They confirm the optimality of the quartic sample-size
+rate conjectured for~\cite[Theorem~2.5]{CCKK2022} and show that
+the logarithmic factor \(L_n^{3/4}\) remains necessary when width
+is bounded. Taking \(r_n=m_n\) recovers the worst-case dimension
+rate. For growing \(B_n\), coordinate masks permit the larger
+envelope while preserving the separate coordinate fourth-moment bound.
 
 \begin{theorem}[Growing fourth-moment envelope]\label{opt:q4-growing}
-Let \(B_n\ge2\) tend to infinity and let \(m_n\to\infty\) be integers.
-{Define}
+Let \(r_n,m_n,p_n,w_n\) be as in~\eqref{lower:eq:dimensions},
+and let \(B_n\ge2\) tend to infinity. Suppose that
 \[
- p_n:=m_n^2,\qquad \ell_n:=\log m_n,\qquad
- \Lambda_n:=\log(2B_n^2).
+ \log B_n=o(L_n),\qquad
+ \frac{B_n w_n n^{-1/4}L_n^{3/4}}
+ {\{\log(e+B_n)\}^{3/4}}\longrightarrow0.
 \]
-Define the rate
-\[
- r_{n,B}:=\frac{B_n\ell_n^{5/4}}{n^{1/4}\Lambda_n^{3/4}},
-\]
-and suppose that \(\Lambda_n=o(\ell_n)\) and \(r_{n,B}\to0\).
 For all sufficiently large \(n\), there are i.i.d. centrally
-symmetric observations in \(\mathcal C_4(B_n,p_n)\) such that
+symmetric observations in \(\mathcal C_4(B_n,p_n)\), with width
+satisfying~\eqref{lower:eq:width-profile}, such that
 \begin{equation}
- \liminf_{n\to\infty}
- \frac{\rh(W_n,Z_n)}{r_{n,B}}\ge\frac1{4e}.
+ \rh(W_n,Z_n)\ge
+ c\frac{B_n g_{\Sigma_n}n^{-1/4}L_n^{3/4}}
+ {\{\log(e+B_n)\}^{3/4}},
  \label{opt:eq:q4-growing}
 \end{equation}
+where \(c>0\) is absolute.
 \end{theorem}
 
-Since \(L_n=1+2\ell_n\) and \(\Lambda_n\sim2\log B_n\), this rate
-agrees up to constants with the upper rate in~\eqref{poly:q4}.
+This matches the upper bound~\eqref{poly:q4}, including the
+dependence on the growing envelope and on Gaussian width.
 
 \subsection{Other polynomial-moment regimes}
 
-\begin{recovered}
-We first consider the envelope condition~\eqref{poly:envelope} alone.
-{For every fixed \(q>2\), the following construction
-matches the upper bound in Theorem~\ref{thm:polynomial}\textup{(i)}
-from below up to a factor \(\{\log(en)\}^{1/2-1/q}\), with the same
-powers of \(B\), \(n\), and \(L\).} When \(q>4\) and \(B\) is fixed, the same
-construction also satisfies the coordinate condition~\eqref{poly:fourth}.
-Recall the classes \(\mathcal E_q\) and \(\mathcal C_q\) from
-Section~\ref{sec:poly} and the exponent \(\alpha_q=1/2-1/q\).
+Under the envelope condition alone, the following examples match
+Theorem~\ref{thm:polynomial}\textup{(i)} up to the factor
+\(\{\log(en)\}^{1/2-1/q}\). For fixed \(B\) and \(q>4\),
+they also satisfy the coordinate fourth-moment condition. Recall
+\(\mathcal E_q,\mathcal C_q\) and \(\alpha_q=1/2-1/q\)
+from Section~\ref{sec:poly}.
 
 \begin{theorem}[Polynomial-envelope lower bounds]\label{lower:dense}
-Fix \(q>2\). Let \(B_n\ge2\), let \(m_n\to\infty\) be integers,
-{define} \(p_n:=m_n^2\), and define
+Fix \(q>2\), let \(B_n\ge2\), and let
+\(r_n,m_n,p_n,w_n\) be as in~\eqref{lower:eq:dimensions}.
+Suppose that
 \[
- V_{n,q}:=\frac{B_nL_n^{3/2-1/q}}{n^{1/2-1/q}}
-         =B_n n^{-\alpha_q}L_n^{1+\alpha_q}.
+ V_{n,q}:=B_n w_n n^{-\alpha_q}L_n^{1-1/q}\longrightarrow0.
 \]
-Suppose that \(V_{n,q}\to0\). There are constants \(c_q,C_q>0\),
-depending only on \(q\), for which the following statements hold.
+There is a constant \(c_q>0\), depending only on \(q\), such that:
 
 \noindent\textup{(i)} For all sufficiently large \(n\), there are
-i.i.d. centrally symmetric observations in
-\(\mathcal E_q(B_n,p_n)\) such that
+i.i.d. centrally symmetric observations in \(\mathcal E_q(B_n,p_n)\),
+with width satisfying~\eqref{lower:eq:width-profile}, for which
 \begin{equation}
- \rh(W_n,Z_n)\ge c_q V_{n,q}.
+ \rh(W_n,Z_n)\ge c_q B_n g_{\Sigma_n}n^{-\alpha_q}L_n^{1-1/q}.
  \label{lower:dense-rate}
 \end{equation}
-Consequently, along these dimension sequences and for all
-sufficiently large \(n\),
-\[
- c_q V_{n,q}
- \le\sup_{\mathcal E_q(B_n,p_n)}\rh(W_n,Z_n)
- \le C_q V_{n,q}\{\log(en)\}^{\alpha_q}.
-\]
 \noindent\textup{(ii)} If \(q>4\) and \(B_n=B\ge2\) is fixed,
-the observations in part~\textup{(i)} can also be chosen to belong
-to \(\mathcal C_q(B,p_n)\). The same two-sided bound then holds
-with \(\mathcal E_q(B_n,p_n)\) replaced by \(\mathcal C_q(B,p_n)\).
+the observations in part~\textup{(i)} also belong to
+\(\mathcal C_q(B,p_n)\) for all sufficiently large \(n\).
 \end{theorem}
 
-The logarithmic factor \(\{\log(en)\}^{\alpha_q}\) is the remaining
-gap under the envelope condition alone, and also under both conditions
-when \(q>4\) and \(B\) is fixed. For other combinations of the
-envelope size and moment order, the sparse construction used in
-Theorem~\ref{opt:q4-growing} matches the rate in
-Theorem~\ref{thm:polynomial}\textup{(ii)} from below.
-The assumptions below specify the dimension range in which this
-construction applies.
-\end{recovered}
+The upper bound in Theorem~\ref{thm:polynomial}\textup{(i)} is
+at most \(C_q\{\log(en)\}^{\alpha_q}\) times the rate in
+\eqref{lower:dense-rate}. This is the remaining gap for the envelope
+class, and also for the class with both moment conditions when
+\(q>4\) and \(B\) is fixed. For other moment and envelope regimes,
+coordinate masks give the following matching bound.
 
 \begin{theorem}[Sparse polynomial-moment lower bound]\label{lower:sparse}
-Fix \(q>2\). Let \(B_n\ge2\), let \(m_n\to\infty\) be integers,
-and {define} \(p_n:=m_n^2\). With \(L_n=\log(ep_n)\), define
+Fix \(q>2\), let \(B_n\ge2\), and let
+\(r_n,m_n,p_n,w_n\) be as in~\eqref{lower:eq:dimensions}.
+Define
 \[
  \mathcal K_{n,q}:=B_n(n/L_n)^{2/q-1/2},\qquad
- R_{n,q}:=\frac{B_n n^{-\alpha_q}L_n^{1+\alpha_q}}
-                    {\{\log(e+\mathcal K_{n,q})\}^{1-1/q}}.
+ R_{n,q}:=\frac{B_n w_n n^{-\alpha_q}L_n^{1-1/q}}
+ {\{\log(e+\mathcal K_{n,q})\}^{1-1/q}},
 \]
-Suppose that
+and suppose that
 \begin{equation}
- \mathcal K_{n,q}\longrightarrow\infty,\qquad
- \log\mathcal K_{n,q}=o(L_n),\qquad R_{n,q}\longrightarrow0.
+ \mathcal K_{n,q}\to\infty,\qquad
+ \log\mathcal K_{n,q}=o(L_n),\qquad R_{n,q}\to0.
  \label{lower:sparse-regime}
 \end{equation}
 For all sufficiently large \(n\), there are i.i.d. centrally symmetric
-observations in \(\mathcal C_q(B_n,p_n)\) such that
+observations in \(\mathcal C_q(B_n,p_n)\), with width
+satisfying~\eqref{lower:eq:width-profile}, for which
 \begin{equation}
- \rh(W_n,Z_n)\ge c_qR_{n,q},
+ \rh(W_n,Z_n)\ge c_q
+ \frac{B_n g_{\Sigma_n}n^{-\alpha_q}L_n^{1-1/q}}
+ {\{\log(e+\mathcal K_{n,q})\}^{1-1/q}},
  \label{lower:sparse-rate}
 \end{equation}
-where \(c_q>0\) depends only on \(q\).
-Together with {Theorem~\ref{thm:polynomial}\textup{(ii)}}, this gives
-\(\sup_{\mathcal C_q(B_n,p_n)}\rh(W_n,Z_n)\asymp_q R_{n,q}\)
-under~\eqref{lower:sparse-regime}, including when the supremum is
-restricted to centrally symmetric observations.
+where \(c_q>0\) depends only on \(q\). The upper bound in
+Theorem~\ref{thm:polynomial}\textup{(ii)} is at most a constant
+depending only on \(q\) times this rate.
 \end{theorem}
 
-For fixed \(B\) and \(2<q<4\), the dimension condition
-\(\log\mathcal K_{n,q}=o(L_n)\) holds whenever
-\(\log n=o(L_n)\). At \(q=4\), the assumptions are equivalent to
-\(B_n\to\infty\), \(\log B_n=o(L_n)\), and \(R_{n,4}\to0\).
-For \(q>4\), the theorem requires \(B_n\) to grow sufficiently quickly
-that \(\mathcal K_{n,q}\to\infty\).
-The sharp rate for intermediate values of \(\mathcal K_{n,q}\), or
-for dimensions outside these conditions, remains unresolved here.
+For fixed \(B\) and \(2<q<4\), the dimension condition holds
+whenever \(\log n=o(L_n)\). At \(q=4\), the assumptions reduce
+to those of Theorem~\ref{opt:q4-growing}. For \(q>4\), the theorem
+requires \(B_n\) to grow sufficiently quickly that
+\(\mathcal K_{n,q}\to\infty\). The sharp rate for intermediate
+values of \(\mathcal K_{n,q}\), or dimensions outside these
+conditions, remains unresolved here.
+
+In the symmetric results, \(w_n\) can be chosen anywhere between
+constant order and order \(\sqrt{L_n}\) through~\eqref{lower:eq:dimensions}.
+The upper bounds hold for all arrays in the stated moment class
+with Gaussian width at most a fixed multiple of \(w_n\), while
+the examples attain the displayed lower scales. In particular,
+\(r_n=m_n\) gives the corresponding worst-case comparisons over
+the full moment classes, and \(r_n=1\) gives their bounded-width
+counterparts.
+\end{vSixBlock}
+
 
 \section{Remaining questions}\label{sec:discussion}
 
@@ -5779,18 +5742,19 @@ absorbed by \(O(\delta(1+x))\) for \(0\le x\le1\), and by
 \end{proof}
 
 
+\begin{vSixBlock}
 \subsection{Proof of Theorem~\ref*{opt:skew-lower} (skewed bounded observations)}
 
 \label{app:skew-proof}
 Let \(p_n\) and \(B_n\) satisfy Theorem~\ref{opt:skew-lower}.
 Recall that the rate to be attained is
 \[
- r_n=\frac{B_n(\log p_n)^{3/2}}{\sqrt n}\longrightarrow0.
+ e_n=\frac{B_n g_{I_{p_n}}L_n}{\sqrt n}\longrightarrow0.
 \]
-We apply Lemma~\ref{opt:moderate-tail} at a threshold for which the
+Since \(g_{I_{p_n}}\sim\sqrt{2\log p_n}\), this is equivalent to \(B_n(\log p_n)^{3/2}/\sqrt n\to0\). We apply Lemma~\ref{opt:moderate-tail} at a threshold for which the
 Gaussian maximum has distribution function exactly \(e^{-1}\).
 This choice avoids an additional error of order \(p_n^{-1}\),
-which need not be smaller than \(r_n\).
+which need not be smaller than \(e_n\).
 
 \begin{proof}[Proof of Theorem~\ref{opt:skew-lower}]
 Let the scalar entries \(X_{n,i,j}\), \(1\le i\le n\) and
@@ -5813,21 +5777,21 @@ Then \(x_n\sim\sqrt{2\log p_n}\), \(p_nt_n\to1\), and
 third moment \(\gamma=\mu_{3,n}/\sqrt n\), so
 Lemma~\ref{opt:moderate-tail} gives
 \begin{equation}
- q_n=t_n\{1+s_n+o(r_n)\},\qquad
+ q_n=t_n\{1+s_n+o(e_n)\},\qquad
  s_n\coloneqq\frac{\mu_{3,n}x_n^3}{6\sqrt n}.
  \label{opt:tail-linearization}
 \end{equation}
-Indeed, its remainder divided by \(r_n\) is
+Indeed, its remainder divided by \(e_n\) is
 \(O(x_n^{-2}+\delta_nx_n)=o(1)\), and exponentiating introduces only
-\(O(r_n^2)=o(r_n)\). Moreover,
-\(\liminf s_n/r_n\ge\sqrt2/4\).
+\(O(e_n^2)=o(e_n)\). Moreover,
+\(\liminf s_n/e_n\ge1/4\).
 By exact independence, the discrepancy on the common-threshold orthant is
 \[
  \Pp(\max_jW_{n,j}\le x_n)-\Pp(\max_jZ_{n,j}\le x_n)
  =(1-q_n)^{p_n}-(1-t_n)^{p_n}.
 \]
 The mean value theorem expresses this discrepancy as
-\(-p_nt_n(1-u_n)^{p_n-1}\{s_n+o(r_n)\}\), for \(u_n\) between
+\(-p_nt_n(1-u_n)^{p_n-1}\{s_n+o(e_n)\}\), for \(u_n\) between
 \(q_n\) and \(t_n\). Since \(q_n/t_n\to1\), the leading prefactor
 converges to \(e^{-1}\). It follows that
 \begin{equation}
@@ -5835,11 +5799,13 @@ converges to \(e^{-1}\). It follows that
  =-\frac{\mu_{3,n}x_n^3}{6e\sqrt n}(1+o(1)).
  \label{opt:exact-product-asymptotic}
 \end{equation}
-Dividing by \(r_n\) and using
-\(\liminf s_n/r_n\ge\sqrt2/4\) proves~\eqref{opt:lower-constant}.
+Dividing by \(e_n\) and using
+\(\liminf s_n/e_n\ge1/4\) proves~\eqref{opt:lower-constant}.
 The construction also gives
 \(\Pp(\norm{X_{n,i}}_\infty=B_n)>0\), so the envelope is attained.
 \end{proof}
+
+\end{vSixBlock}
 
 \subsection{A common comparison for shifted maxima}
 \label{app:lower-comparison}
@@ -5887,7 +5853,7 @@ normal variables and \(A\) a maximum of independent Rademacher sums.
  A_n:=n^{-1/2}\sum_{i=1}^n\eta_i,
 \]
 where the \(\eta_i\) are independent signs taking the values
-\(-1\) and \(1\) with equal probability. {For an integer \(m\ge2\), let}
+\(-1\) and \(1\) with equal probability. \vSix{For an integer \(m\ge1\), let}
 \(A_{n,1},\ldots,A_{n,m}\) be independent copies of \(A_n\), and {define}
 \(\Lambda_m:=\log(em)\).
 \begin{recovered}
@@ -5902,7 +5868,8 @@ Gaussian counterpart by \(\epsilon_{n,m}\). For absolute constants
                  +\frac{\Lambda_m^2}{n}\right).
  \label{sym:eq:rademacher-max}
 \end{equation}
-An absolute scalar approximation error would be multiplied by \(m\).
+\vSix{For \(m=1\), this follows from scalar Berry--Esseen.
+For \(m\ge2\),} an absolute scalar approximation error would be multiplied by \(m\).
 To obtain this smaller error for the maximum, we use the relative
 tail estimate from Lemma~\ref{opt:moderate-tail}. Here
 \(\delta=n^{-1/2}\) and \(\gamma=0\), and the lemma gives
@@ -5939,7 +5906,7 @@ This proves~\eqref{sym:eq:rademacher-max}.
 
 To apply Lemma~\ref{lower:shift-comparison}, we also need a threshold
 where the Gaussian maximum has a large density and a bound on the
-derivative of that density. Let \(H_1,\ldots,H_m\) be independent
+derivative of that density. \vSix{For \(m\ge2\), let} \(H_1,\ldots,H_m\) be independent
 standard normal variables, and define
 \[
  H_*:=\max_{u\le m}H_u,\qquad F_m(x):=\Pp(H_*\le x)=\Phi(x)^m.
@@ -5977,650 +5944,443 @@ by an absolute constant, treating \(m=2,3\) separately. For
 \(m=2,3\) separately. For larger \(x\), the bound
 \(C(m^2e^{-x^2}+mx e^{-x^2/2})\le C\log(em)\) suffices.
 
+
+\begin{vSixBlock}
+For the leading maximum, we also allow a bounded number of coordinates.
+Set \(u_1:=0\), and for \(r\ge2\) define \(u_r\) by
+\(r\bar\Phi(u_r)=1\). With \(F_r=\Phi^r\), the estimates above give
+\begin{equation}
+ F_r'(u_r)\asymp g_r\asymp\sqrt{\log(er)},\qquad
+ \|F_r''\|_\infty\le C\log(er),\qquad
+ g_r:=\E\max_{j\le r}|G_j|,
+ \label{lower:eq:leading-density}
+\end{equation}
+uniformly for \(r\ge1\). Indeed, for \(r\to\infty\),
+\eqref{sym:eq:gaussian-max} gives the density asymptotic, and the
+same Gaussian tail argument gives \(g_r\sim\sqrt{2\log r}\).
+The remaining finitely many values have positive densities, and
+\(r=1\) follows directly from \(F_1=\Phi\). The case \(r=1\)
+of the second-derivative bound is also immediate.
+\end{vSixBlock}
+
+\begin{vSixBlock}
 \subsection{The common symmetric construction}
 \label{app:lower-family}
 
-\begin{recovered}
 Each symmetric summand consists of a Rademacher component and an
 independent component that is present only for selected summand and
-coordinate indices. The activation of this second component follows
-the construction in~\cite[Proposition~E.1]{FKLZ}.
-\end{recovered}
-Fix integers \(n\ge1\), \(m\ge2\), activation probabilities
-\(0<\theta,\pi\le1\), and an amplitude \(a>0\). Write
+coordinate indices. The activation of the second component follows
+the construction in~\cite[Proposition~E.1]{FKLZ}. We use \(r\)
+indices for the leading component and \(m\) for the activated
+component, so that their effects on width and on the random shift
+can be varied separately.
+
+Fix integers \(n\ge1\), \(1\le r\le m\), and \(m\ge2\),
+probabilities \(0<\theta,\pi\le1\), and an amplitude \(a>0\).
+Define
 \[
- p:=m^2,\qquad \ell:=\log m,\qquad
- v:=\theta\pi a^2,\qquad s:=\sqrt{1-v}.
+ p:=rm,\quad R:=\log(er),\quad \ell:=\log m,\quad
+ v:=\theta\pi a^2,\quad s:=\sqrt{1-v},
 \]
-We require \(0<v<1/2\). Here \(v\) will be the variance of the
-activated component, and \(s\) normalizes each coordinate to variance
-\(1\). The parameters may depend on \(n\). Within this construction,
-we omit the subscript \(n\) from \(m,p,X_i,W,\Sigma\), and \(Z\).
-\begin{recovered}
-For \(1\le i\le n\) and \(1\le j,u\le m\), let \(\eta_{ij}\) and
-\(\varepsilon_{iu}\) be Rademacher signs, \(I_i\) Bernoulli\((\theta)\)
-variables, and \(J_{iu}\) Bernoulli\((\pi)\) variables. All these
-variables are mutually independent.
-\end{recovered} Define \(m^2\) coordinates by
+and require \(0<v<1/2\). The quantities \(v\) and \(s^2\)
+are the variance contributions of the activated and leading
+components. Their sum is \(1\). We suppress the dependence of
+these parameters on \(n\).
+
+For \(i\le n\), \(j\le r\), and \(u\le m\), let
+\(\eta_{ij}\) and \(\varepsilon_{iu}\) be Rademacher signs,
+\(I_i\) Bernoulli\((\theta)\) variables, and \(J_{iu}\)
+Bernoulli\((\pi)\) variables, all mutually independent. Define
 \begin{equation}
  X_{i,ju}:=s\eta_{ij}+aI_iJ_{iu}\varepsilon_{iu},
- \qquad 1\le j,u\le m,\quad 1\le i\le n.
+ \qquad j\le r,\quad u\le m,\quad i\le n.
  \label{sym:eq:common-construction}
 \end{equation}
-\begin{recovered}
-The index \(i\) labels summands, and the pair \((j,u)\) labels a
-coordinate within each summand. The first component depends on \(j\),
-whereas the second depends on \(u\) and is shared by all coordinates
-with that value of \(u\). The indicator \(I_i\) switches on the second
-component of summand \(X_i\), and \(J_{iu}\) selects which indices
-\(u\) contribute. We call \(J_{iu}\) a \emph{coordinate mask}.
-Taking \(\pi=1\) removes the masks.
-\end{recovered}
-\begin{recovered}
-The next lemma collects the properties used to choose the amplitude
-and activation probabilities in each lower-bound example.
-\end{recovered}
+The index \(i\) labels summands, and \((j,u)\) labels coordinates.
+The first component depends on \(j\), while the second depends on
+\(u\) and is shared by coordinates with that value of \(u\).
+The indicator \(I_i\) activates the second component of summand
+\(X_i\), and the \emph{coordinate mask} \(J_{iu}\) selects
+which indices contribute. Taking \(\pi=1\) removes the masks.
 
-\begin{recovered}
+The following properties let us choose the amplitude and activation
+probabilities without changing the argument for the leading maximum.
 \begin{lemma}[Properties of the common symmetric construction]
 \label{lower:family-properties}
-For the parameters and independent variables specified above, suppose
-\(0<v=\theta\pi a^2<1/2\) and let \(s=\sqrt{1-v}\).
-The observations \(X_1,\ldots,X_n\in\R^{m^2}\) defined
+For the parameters and independent variables above, the observations
 in~\eqref{sym:eq:common-construction} are i.i.d., centered, and
-centrally symmetric, with unit marginal variances. Their covariance
-matrix, which is also the covariance of \(W=n^{-1/2}\sum_iX_i\), is
+centrally symmetric, with unit marginal variances. Their covariance is
 \begin{equation}
  \Sigma_{(j,u),(j',u')}=(1-v)\ind\{j=j'\}+v\ind\{u=u'\}.
  \label{sym:eq:common-covariance}
 \end{equation}
-It has rank \(2m-1\), and its largest absolute off-diagonal
-correlation is \(1-v\). Thus its \emph{correlation gap}, defined as
-\(1\) minus that largest correlation, is \(v\).
-For every \(i\le n\), every coordinate \((j,u)\), and every \(q\ge1\),
+It has rank \(r+m-1\) and correlation gap \(v\). For every
+coordinate and every \(q\ge1\),
 \begin{align}
  \E X_{i,ju}^4
- &=s^4+6s^2v+\theta\pi a^4
-   =1+4v-5v^2+\theta\pi a^4,\label{lower:eq:family-fourth}\\
+ &=1+4v-5v^2+\theta\pi a^4,
+ \label{lower:eq:family-fourth}\\
  \norm{X_i}_\infty&\le s+aI_i\quad\text{almost surely},\qquad
  (\E\norm{X_i}_\infty^q)^{1/q}\le s+a\theta^{1/q}.
  \label{lower:eq:family-envelope}
 \end{align}
+For independent standard normal variables \(G_j,H_u\), the vector
+\(Z_{ju}:=sG_j+\sqrt v\,H_u\) has covariance \(\Sigma\).
+Writing \(g_t:=\E\max_{j\le t}|G_j|\), its width satisfies
+\begin{equation}
+ s g_r\le g_\Sigma\le s g_r+\sqrt v\,g_m.
+ \label{lower:eq:family-width}
+\end{equation}
 \end{lemma}
-\end{recovered}
 
 \begin{proof}
-\begin{recovered}
-Independence over \(i\) and the common laws of the component variables
-make the summands i.i.d. Averaging over the signs gives centering.
-Reversing every sign in a summand preserves its distribution and
-negates it, so its law is centrally symmetric.
-Independence of the signs gives~\eqref{sym:eq:common-covariance},
-whose diagonal entries are \(s^2+v=1\).
-\end{recovered}
-The covariance range consists of
-arrays \((b_j+d_u)_{j,u}\), with \(b,d\in\R^m\).
-Adding a constant to all \(b_j\) and subtracting it from all \(d_u\)
-is the only redundancy, so this space has dimension \(2m-1\).
-Both components have positive variance, so the rank is \(2m-1\).
-\begin{recovered}
-For distinct coordinates, the covariance is \(1-v\), \(v\), or
-\(0\), according to which indices coincide. Since \(m\ge2\) and
-\(0<v<1/2\), the largest of these values is \(1-v\).
-Expanding the fourth power and averaging over the signs proves
-\eqref{lower:eq:family-fourth}. Finally, \(|\eta_{ij}|=1\) and
-\(|J_{iu}\varepsilon_{iu}|\le1\) give the almost-sure envelope,
-and Minkowski's inequality gives its moment bound
-in~\eqref{lower:eq:family-envelope}.
-\end{recovered}
+Independence over \(i\) gives i.i.d. observations, and averaging
+over the signs gives centering. Reversing every sign in a summand
+preserves its law and negates it, proving central symmetry.
+Independence of the signs gives~\eqref{sym:eq:common-covariance}.
+The covariance range consists of arrays \((b_j+d_u)_{j,u}\),
+with \(b\in\R^r\) and \(d\in\R^m\). Adding a constant to
+all \(b_j\) and subtracting it from all \(d_u\) is the only
+redundancy. Since both variance contributions are positive, the rank
+is \(r+m-1\). Distinct coordinates have covariance \(1-v\),
+\(v\), or \(0\); the value \(1-v\) occurs because \(m\ge2\).
+It is the largest, since \(v<1/2\), and hence the gap is \(v\).
+
+Expanding the fourth power and averaging over the signs gives
+\(s^4+6s^2v+\theta\pi a^4=1+4v-5v^2+\theta\pi a^4\).
+The almost-sure envelope follows from
+\(|\eta_{ij}|=1\) and \(|J_{iu}\varepsilon_{iu}|\le1\),
+and Minkowski's inequality gives its moment bound. Finally,
+conditional Jensen gives
+\(\E_H\max_{j,u}|sG_j+\sqrt v H_u|\ge s\max_j|G_j|\),
+while the triangle inequality gives the upper bound in
+\eqref{lower:eq:family-width}.
 \end{proof}
 
-\begin{recovered}
-Let \(A_j\) denote the normalized sum of the Rademacher components,
-\(N\) the number of summands with \(I_i=1\), and \(Q_u\) the sum
-over \(i\) of the selected signs at index \(u\). Explicitly,
-\end{recovered}
+To compare maxima, define
 \[
- A_j:=n^{-1/2}\sum_i\eta_{ij},\qquad
- N:=\sum_iI_i,\qquad Q_u:=\sum_iI_iJ_{iu}\varepsilon_{iu},
- \qquad Q_*:=\max_{u\le m}Q_u.
+ A_j:=n^{-1/2}\sum_i\eta_{ij},\quad
+ N:=\sum_i I_i,\quad k:=n\theta,\quad
+ Q_u:=\sum_i I_iJ_{iu}\varepsilon_{iu},\quad Q_*:=\max_{u\le m}Q_u.
 \]
-Let \(G_j,H_u\) be mutually independent standard normal variables,
-independent of the observations, and write
-\(A_*:=\max_jA_j\), \(G_*:=\max_jG_j\), and \(H_*:=\max_uH_u\).
-The centered Gaussian vector defined by
-\(Z_{ju}:=sG_j+\sqrt v\,H_u\) has covariance
-\eqref{sym:eq:common-covariance}. Since the first term depends only
-on \(j\) and the second only on \(u\), the maxima separate:
-for \(W=n^{-1/2}\sum_iX_i\),
+Let \(A_*:=\max_{j\le r}A_j\), \(G_*:=\max_{j\le r}G_j\),
+and \(H_*:=\max_{u\le m}H_u\), with the Gaussian variables
+independent of the observations. The maxima separate:
 \begin{equation}
- \max_{j,u}W_{ju}=sA_*+\frac a{\sqrt n}Q_*,
- \qquad \max_{j,u}Z_{ju}=sG_*+\sqrt v\,H_*.
+ \max_{j,u}W_{ju}=sA_*+\frac a{\sqrt n}Q_*,\qquad
+ \max_{j,u}Z_{ju}=sG_*+\sqrt v\,H_*.
  \label{sym:eq:common-maxima}
 \end{equation}
 Each sum on the right has independent components.
 
-\begin{recovered}
-The maximum \(Q_*\) equals \(N\) whenever some index \(u\) satisfies
-\(J_{iu}\varepsilon_{iu}=1\) for every summand with \(I_i=1\).
-Conditional on \((I_1,\ldots,I_n)\), this event has probability
-\((\pi/2)^N\) for each fixed \(u\), and these events are independent
-over \(u\). To bound the probability that no \(Q_u\) attains \(N\),
-first restrict to \(N\le b\). For any \(b\ge0\), this gives
-\end{recovered}
+The maximum \(Q_*\) equals \(N\) whenever some index \(u\)
+has \(J_{iu}\varepsilon_{iu}=1\) for every active summand.
+Conditional on the \(I_i\), this event has probability
+\((\pi/2)^N\) for each \(u\), independently over \(u\).
+Restricting first to \(N\le b\) gives, for any real \(b\ge0\),
 \begin{equation}
- \Pp(Q_*\ne N)\le \Pp(N>b)+\exp\{-m(\pi/2)^b\}.
+ \Pp(Q_*\ne N)\le\Pp(N>b)+\exp\{-m(\pi/2)^b\}.
  \label{lower:eq:all-active}
 \end{equation}
-{The expected number of summands with \(I_i=1\) is \(k:=\E N=n\theta\).}
-Along any parameter sequence for which \(k\to\infty\) and the
-right-hand side of~\eqref{lower:eq:all-active} tends to zero for
-some choice \(b=b_n\),
+Whenever \(k\to\infty\) and this bound tends to zero,
 \begin{equation}
  \E Q_*=(1+o(1))k,\qquad \E Q_*^2\le k^2+k.
  \label{lower:eq:activation-moments}
 \end{equation}
-\begin{recovered}
 Indeed, \(|Q_*|\le N\), \(\E N=k\), \(\E N^2\le k^2+k\), and
-\end{recovered}
 \(\E|N-Q_*|\le2(\E N^2)^{1/2}\Pp(Q_*\ne N)^{1/2}=o(k)\).
 
-To apply the shifted-variable comparison, divide both maxima
-in~\eqref{sym:eq:common-maxima} by \(s\) and define
-\[
- V_W:=\frac{aQ_*}{s\sqrt n},\qquad
- V_G:=\frac{\sqrt v}{s}H_*.
-\]
-Thus \(s^{-1}\max_{j,u}W_{ju}=A_*+V_W\), while
-\(s^{-1}\max_{j,u}Z_{ju}=G_*+V_G\).
-\begin{recovered}
-The shifts \(V_W\) and \(V_G\) are independent of \(A_*\) and
-\(G_*\), respectively. We apply Lemma~\ref{lower:shift-comparison}
-to these scaled maxima at the threshold \(u_m\), defined by
-\(m\bar\Phi(u_m)=1\). This amounts to evaluating the original maxima
-at \(t_n:=su_m\). The approximation bound
-\eqref{sym:eq:rademacher-max} and the derivative bound
-\eqref{sym:eq:gaussian-smoothness} then give, whenever
-\(\log(em)\le{c_3}\sqrt n\),
-\end{recovered}
+Divide the maxima in~\eqref{sym:eq:common-maxima} by \(s\), and
+define \(V_W:=aQ_* /(s\sqrt n)\) and
+\(V_G:=\sqrt v H_*/s\). Apply Lemma~\ref{lower:shift-comparison}
+at \(u_r\), where \(u_1=0\) and \(r\bar\Phi(u_r)=1\)
+for \(r\ge2\). With \(t_n:=su_r\),
+\eqref{sym:eq:rademacher-max} and~\eqref{lower:eq:leading-density}
+give, whenever \(R\le c_3\sqrt n\),
 \begin{equation}
 \begin{split}
  &\Pp(\max_{j,u}W_{ju}\le t_n)-\Pp(\max_{j,u}Z_{ju}\le t_n)\\
- &\qquad=F_m'(u_m)(\E V_G-\E V_W)
-       +O\{\epsilon_{n,m}+\ell\,\E(V_W^2+V_G^2)\}.
+ &\qquad=F_r'(u_r)(\E V_G-\E V_W)
+       +O\{\epsilon_{n,r}+R\,\E(V_W^2+V_G^2)\}.
 \end{split}
  \label{lower:eq:master-comparison}
 \end{equation}
-The density \(F_m'(u_m)\) is asymptotic to \(\sqrt{2\ell}/e\) {by \eqref{sym:eq:gaussian-max}}.
-In the parameter choices below, \(s\to1\) and \(\E Q_*\sim k\),
-so \(\E V_W\) has order \(ak/\sqrt n\).
-We therefore use the auxiliary scale
+Here \(F_r'(u_r)\asymp\sqrt R\). The probability difference
+therefore has scale
 \begin{equation}
- d_n:=\frac{ak\sqrt\ell}{\sqrt n},\qquad k=n\theta.
+ d_n:=\frac{ak\sqrt R}{\sqrt n},\qquad k=n\theta.
  \label{lower:eq:proof-scale}
 \end{equation}
-We will show that the difference between the mean shifts gives a
-probability difference of order \(d_n\), while the remainder
-in~\eqref{lower:eq:master-comparison} is \(o(d_n)\).
+For each parameter choice below, we prove that the mean-shift
+difference has order \(ak/\sqrt n\), that \(d_n\to0\), and
+that the remainder is \(o(d_n)\). We also verify \(v\to0\) and
+\(\sqrt v\,g_m\to0\). Since \(g_r\ge\sqrt{2/\pi}\),
+\eqref{lower:eq:family-width} then gives
+\(g_\Sigma/g_r\to1\), proving~\eqref{lower:eq:width-profile}.
 
-
-The construction also permits correlation gap
-exactly zero. Append a copy of the first coordinate to every
-observation and to its Gaussian counterpart. The inverse image of
-a rectangle under this duplication map is a rectangle or the empty
-set, and every original rectangle is recovered by leaving the added
-coordinate unrestricted. Thus duplication preserves the rectangle
-distance exactly, along with symmetry, the envelope, and all
-coordinate moment bounds. The dimension changes from \(m^2\) to
-\(m^2+1\), which leaves every asymptotic logarithmic factor unchanged.
+Duplicating the first coordinate gives correlation gap exactly zero.
+The inverse image of a rectangle under duplication is a rectangle
+or the empty set, and every original rectangle is recovered by
+leaving the added coordinate unrestricted. Thus duplication preserves
+the rectangle distance, Gaussian width, symmetry, envelope, and
+coordinate moments. The dimension changes from \(rm\) to \(rm+1\),
+which leaves the asymptotic logarithmic factors unchanged.
 
 \subsection{Proofs of Theorems~\ref*{opt:symmetric-lower}, \ref*{opt:q4-lower}, and~\ref*{lower:dense} (unmasked observations)}
 \label{app:symmetric-lower}
 
-Take the dimension sequence \(m=m_n\) from the theorem being
-proved, and set \(p=m^2\) and \(\ell=\log m\) as in
-Appendix~\ref{app:lower-family}. We take \(J_{iu}=1\) almost surely
-and vary the amplitude \(a\) of the activated component.
-For Theorem~\ref{lower:dense}, fix \(q>2\) and write
-\(B:=B_n\), allowing the envelope to vary with \(n\).
-Choose
+Take \(r=r_n\) and \(m=m_n\) from the theorem being proved,
+and use the notation of Appendix~\ref{app:lower-family}. We have
+\(\ell\asymp L_n\), \(R\le1+\ell\), and
+\(w_n=g_r\asymp\sqrt R\). Choose
 \[
  \pi:=1,\qquad \theta:=\frac{\ell}{2n},\qquad
  a:=\begin{cases}
- 1,&\text{for Theorem~\ref{opt:symmetric-lower}},\\
+ B_n-1,&\text{for Theorem~\ref{opt:symmetric-lower}},\\
  \theta^{-1/4},&\text{for Theorem~\ref{opt:q4-lower}},\\
- (B/2)\theta^{-1/q},&\text{for Theorem~\ref{lower:dense}}.
+ (B_n/2)\theta^{-1/q},&\text{for Theorem~\ref{lower:dense}}.
  \end{cases}
 \]
-Here \(k=n\theta=\ell/2\), so
-the scale in~\eqref{lower:eq:proof-scale} is
+Since \(k=\ell/2\), the scale in~\eqref{lower:eq:proof-scale} is
 \[
- d_n=\frac{a\ell^{3/2}}{2\sqrt n}.
+ d_n=\frac{a\ell\sqrt R}{2\sqrt n}.
 \]
-For each choice of \(a\), the scale \(d_n\) is asymptotic to a constant multiple of the
-rate in the corresponding theorem, and hence \(d_n\to0\).
-\begin{recovered}
-For Theorem~\ref{lower:dense}, the condition \(V_{n,q}\to0\),
-with \(B_n\ge2\) and \(\alpha_q>0\), implies \(\ell/n\to0\),
-because \(V_{n,q}\asymp_q B_n\ell(\ell/n)^{\alpha_q}\).
-The other two rate conditions also give \(\ell/n\to0\).
-Thus \(a\ge1\) eventually in all three cases, and
+It is comparable to the scale assumed to vanish in the corresponding
+theorem. In each case that assumption implies \(\ell/n\to0\).
+For the polynomial choice this follows by writing its scale as
+\(B_n\sqrt{R\ell}(\ell/n)^{\alpha_q}\), up to constants.
+The other two choices give the same conclusion directly.
+Thus \(a\ge1\) eventually, and
 \[
- \frac{\ell^3}{n}\le4d_n^2\to0,\qquad
- v=\theta a^2=\frac{2d_n^2}{\ell^2}\to0.
+ \frac{\ell^2R}{n}\le4d_n^2\to0,\qquad
+ v=\frac{2d_n^2}{\ell R}\to0.
 \]
-\end{recovered}
-The probabilities and variances in the construction are therefore valid
-for large \(n\), and~\eqref{sym:eq:rademacher-max} applies.
+The probabilities and variances are valid for large \(n\), and
+\(R\le c_3\sqrt n\) eventually.
 
-\begin{recovered}
-Lemma~\ref{lower:family-properties} lets us check the moment
-conditions by substituting the chosen amplitude.
-\end{recovered}
-For \(a=1\), the observations are bounded by \(s+1\le2\).
+Lemma~\ref{lower:family-properties} verifies the moment conditions.
+For \(a=B_n-1\), the observations are bounded by \(s+a\le B_n\).
 For \(a=\theta^{-1/4}\), we have \(v=\sqrt\theta\), and
-\eqref{lower:eq:family-fourth}--\eqref{lower:eq:family-envelope} give
 \begin{align}
  \E X_{i,ju}^4&=2+4v-5v^2\le14/5<4,\notag\\
- \E\norm{X_i}_\infty^4
- &\le8(s^4+\theta a^4)\le16.
+ \E\norm{X_i}_\infty^4&\le8(s^4+\theta a^4)\le16.
  \label{sym:eq:q4-moments}
 \end{align}
-Thus these observations belong to \(\mathcal C_4(2,m^2)\).
-\begin{recovered}
-For \(a=(B/2)\theta^{-1/q}\), the envelope bound gives
+These observations belong to \(\mathcal C_4(2,p_n)\). For
+\(a=(B_n/2)\theta^{-1/q}\), Minkowski's inequality gives
 \[
- (\E\norm{X_i}_\infty^q)^{1/q}\le s+a\theta^{1/q}
- \le1+B/2\le B.
+ (\E\norm{X_i}_\infty^q)^{1/q}\le s+B_n/2\le B_n.
 \]
-Thus the observations belong to \(\mathcal E_q(B,m^2)\) for every
-fixed \(q>2\), including when \(B=B_n\) grows.
-Their coordinate fourth moment is
-\[
- 1+4v-5v^2+(B^4/16)\theta^{1-4/q}.
-\]
-If \(q>4\) and \(B\) is fixed, this tends to \(1\), so the
-observations also belong to \(\mathcal C_q(B,m^2)\) eventually.
-This verifies the additional moment condition in
-Theorem~\ref{lower:dense}\textup{(ii)}.
-\end{recovered}
+The coordinate fourth moment is
+\(1+4v-5v^2+(B_n^4/16)\theta^{1-4/q}\).
+When \(q>4\) and \(B_n=B\) is fixed, it tends to \(1\), so
+the additional coordinate condition holds eventually.
 
-{The count \(N=\sum_iI_i\) of summands with \(I_i=1\) has mean \(\ell/2\) and variance at most \(\ell/2\).}
-\begin{recovered}
-Chebyshev's inequality bounds \(\Pp(N>\ell)\) by \(2/\ell\).
-Taking \(b=\ell\) in~\eqref{lower:eq:all-active} therefore gives
-\end{recovered}
+The count \(N\) has mean \(\ell/2\) and variance at most
+\(\ell/2\). Chebyshev's inequality and~\eqref{lower:eq:all-active}
+with \(b=\ell\) give
 \[
  \Pp(Q_*\ne N)\le 2/\ell+
-       \exp\{-e^{(1-\log2)\ell}\}\longrightarrow0.
+ \exp\{-e^{(1-\log2)\ell}\}\to0.
 \]
-Consequently, \(\E Q_*=(1/2+o(1))\ell\) and
-\(\E Q_*^2=O(\ell^2)\).
-\begin{recovered}
-Using \(s\to1\), \(v=\theta a^2\), and the Gaussian maximum
-estimates in~\eqref{sym:eq:gaussian-max}, we obtain
-\end{recovered}
+Hence \(\E Q_*=(1/2+o(1))\ell\) and
+\(\E Q_*^2=O(\ell^2)\). The Gaussian estimates in
+\eqref{sym:eq:gaussian-max}, applied to the \(m\) rare-component
+coordinates, yield
 \[
- \E V_G-\E V_W=(1/2+o(1))\frac{a\ell}{\sqrt n},
- \qquad
+ \E V_G-\E V_W=(1/2+o(1))\frac{a\ell}{\sqrt n},\qquad
  \E(V_W^2+V_G^2)=O(a^2\ell^2/n).
 \]
-In particular, the Gaussian shift has the larger mean.
-The error from replacing the Rademacher maximum satisfies
+The Gaussian shift has the larger mean. For the approximation of the
+leading maximum,~\eqref{sym:eq:rademacher-max} gives
 \[
- \frac{\epsilon_{n,m}}{d_n}
- \le C\left(\frac1{a\ell}+\frac{\sqrt\ell}{a\sqrt n}\right)\to0.
+ \frac{\epsilon_{n,r}}{d_n}
+ \le C\left(\frac1{a\ell}
+       +\frac{R^{3/2}}{a\ell\sqrt n}\right)\to0,
 \]
-\begin{recovered}
-The second-moment remainder in~\eqref{lower:eq:master-comparison}
-is \(O(d_n^2)=o(d_n)\), since \(d_n\to0\).
-At the threshold \(t_n=su_m\) defined there, we therefore obtain
-\end{recovered}
+using \(R\le1+\ell\) and \(\ell/n\to0\).
+The second-moment remainder is \(O(d_n^2)=o(d_n)\). Therefore
 \begin{equation}
- \Pp(\max_{j,u}W_{ju}\le t_n)-\Pp(\max_{j,u}Z_{ju}\le t_n)
- =\left\{\frac{\sqrt2}{e}+o(1)\right\}d_n.
+\begin{split}
+ &\Pp(\max_{j,u}W_{ju}\le t_n)-\Pp(\max_{j,u}Z_{ju}\le t_n)\\
+ &\qquad=(1/2+o(1))F_r'(u_r)\frac{a\ell}{\sqrt n}
+          +o(d_n)\ge c d_n
+\end{split}
  \label{sym:eq:common-discrepancy}
 \end{equation}
-This is an asymptotic for the specified orthant and hence a lower
-bound for the rectangle distance.
+for all sufficiently large \(n\). The uniform comparison
+\(F_r'(u_r)\asymp\sqrt R\) covers bounded and growing \(r\).
 
-We finish by expressing \(d_n\) in the notation of each theorem.
-For the bounded choice \(a=1\), recall that
-\(\delta_n=2/\sqrt n\) and \(L_n=\log(ep_n)=1+2\ell\).
-Then \(\delta_nL_n^{3/2}\sim2^{7/2}d_n\), which gives
-\(\sqrt2/(2^{7/2}e)=1/(8e)\) in
-Theorem~\ref{opt:symmetric-lower}.
-
-For the fourth-moment choice \(a=\theta^{-1/4}\), the rate in
-Theorem~\ref{opt:q4-lower} is \(r_{n,4}=n^{-1/4}L_n^{5/4}\), and
+We also have
 \[
- d_n=2^{-3/4}n^{-1/4}\ell^{5/4}
-       =(1/4+o(1))r_{n,4}.
+ \sqrt v\,g_m=O(a\ell/\sqrt n)=O(d_n/\sqrt R)\to0.
 \]
-Equation~\eqref{sym:eq:common-discrepancy} gives
-\(\sqrt2/(4e)=1/(2\sqrt2\,e)\).
-Together with~\eqref{poly:q4}, this proves
-\eqref{lower:q4-fixed}.
-
-\begin{recovered}
-For every fixed \(q>2\), with \(B=B_n\), the choice
-\(a=(B/2)\theta^{-1/q}\) gives
+Together with \(v\to0\), this proves the asserted width relation.
+Substituting the amplitudes into \(d_n\), and using
+\(g_{\Sigma_n}\asymp\sqrt R\) and \(\ell\asymp L_n\), gives
 \[
- d_n=2^{1/q-2}B_n n^{-\alpha_q}\ell^{1+\alpha_q}
-     =\{2^{2/q-7/2}+o(1)\}V_{n,q},
+ d_n\asymp
+ \begin{cases}
+ B_n g_{\Sigma_n}L_n/\sqrt n,
+   &\text{for Theorem~\ref{opt:symmetric-lower}},\\
+ g_{\Sigma_n}n^{-1/4}L_n^{3/4},
+   &\text{for Theorem~\ref{opt:q4-lower}},\\
+ B_n g_{\Sigma_n}n^{-\alpha_q}L_n^{1-1/q},
+   &\text{for Theorem~\ref{lower:dense}},
+ \end{cases}
 \]
-since \(L_n=1+2\ell\). The asymptotic coefficient does not depend on
-the envelope sequence. Equation~\eqref{sym:eq:common-discrepancy}
-therefore gives~\eqref{lower:dense-rate} with a positive constant
-depending only on \(q\). The upper bound in
-Theorem~\ref{thm:polynomial}\textup{(i)} gives the two-sided comparison
-in Theorem~\ref{lower:dense}\textup{(i)}. The additional moment
-verification above proves part~\textup{(ii)}.
-\end{recovered}
+with constants depending only on \(q\) in the last case.
+This proves all three lower bounds. The upper bound~\eqref{poly:q4}
+gives~\eqref{lower:q4-fixed}, and
+Theorem~\ref{thm:polynomial}\textup{(i)} gives the stated logarithmic
+comparison for the polynomial envelope.
 
-All three covariance matrices have rank \(2m-1\), as shown in
-Appendix~\ref{app:lower-family}. Their correlation gaps are,
-respectively,
+The special case \(r=1\), \(B_n=2\), has \(u_r=0\) and
+\(F_r'(u_r)=\varphi(0)\). With \(\delta_n:=2/\sqrt n\),
+\eqref{sym:eq:common-discrepancy} gives more precisely
 \[
- \frac{\ell}{2n},\qquad
- \sqrt{\frac{\ell}{2n}},\qquad
- \frac{B^2}{4}\left(\frac{\ell}{2n}\right)^{1-2/q},
+ g_{\Sigma_n}\to\sqrt{2/\pi},\qquad
+ \liminf_{n\to\infty}
+ \frac{\rh(W_n,Z_n)}{\delta_n g_{\Sigma_n}L_n}\ge\frac18.
 \]
-and all tend to zero.
+Thus the bounded-width conclusion follows from the same comparison,
+without a separate construction.
 
 \subsection{Proofs of Theorems~\ref*{opt:q4-growing} and~\ref*{lower:sparse} (masked observations)}
 \label{app:q4-growing}
 
-For Theorem~\ref{lower:sparse}, fix \(q>2\) and take \(B_n,m_n\)
-satisfying~\eqref{lower:sparse-regime}. In this proof write
-\[
- B:=B_n,\qquad m:=m_n,\qquad p:=m^2,\qquad
- \ell:=\log m,\qquad L:=\log(ep)=L_n.
-\]
-Recall \(\alpha_q=1/2-1/q\) and the two quantities in that theorem:
-\[
- \mathcal K_{n,q}=B(n/L)^{2/q-1/2},\qquad
- R_{n,q}=\frac{B n^{-\alpha_q}L^{1+\alpha_q}}
-                   {\{\log(e+\mathcal K_{n,q})\}^{1-1/q}}.
-\]
-We choose the mask probability to satisfy the coordinate
-fourth-moment bound, and then choose the amplitude to satisfy the
-envelope bound. For this purpose, define
+Fix \(q>2\), and take the sequences from
+Theorem~\ref{lower:sparse}. Write \(B:=B_n\), \(r:=r_n\),
+\(m:=m_n\), \(R:=\log(er)\), \(\ell:=\log m\), and
+\(L:=L_n\). We choose the mask probability to satisfy the
+coordinate fourth-moment bound and the amplitude to satisfy the
+envelope bound. Define
 \[
  \widehat K:=B(n/\ell)^{2/q-1/2},\qquad
  \Lambda:=\log(2\widehat K^2),\qquad
- k:=\frac{\ell}{4\Lambda},\qquad \theta:=\frac{k}{n}.
+ k:=\frac{\ell}{4\Lambda},\qquad \theta:=k/n.
 \]
-Because \(L=1+2\ell\), we have
-\(\widehat K\asymp_q\mathcal K_{n,q}\).
-Assumption~\eqref{lower:sparse-regime}
-therefore gives \(\widehat K\to\infty\), \(\Lambda=o(\ell)\),
-and \(k\to\infty\). Choose the remaining parameters as
+Since \(\ell\asymp L\), assumption~\eqref{lower:sparse-regime}
+gives \(\widehat K\asymp_q\mathcal K_{n,q}\to\infty\),
+\(\Lambda=o(\ell)\), and \(k\to\infty\). Choose
 \begin{equation}
- \pi:=B^{-2}\theta^{4/q-1},\qquad a:=\frac B2\theta^{-1/q},
- \qquad v:=\theta\pi a^2=\frac14\theta^{2/q},\qquad s:=\sqrt{1-v}.
+ \pi:=B^{-2}\theta^{4/q-1},\qquad
+ a:=\frac B2\theta^{-1/q},\qquad
+ v:=\theta\pi a^2=\frac14\theta^{2/q},\qquad s:=\sqrt{1-v}.
  \label{q4:eq:sparse-parameters}
 \end{equation}
-We must check that \(\theta,\pi\) are probabilities and that
-\(0<v<1/2\). Recall the scale
-\(d_n=ak\sqrt\ell/\sqrt n\) from~\eqref{lower:eq:proof-scale}.
-For comparison, define
-\[
- U_\ell:=B^{1/2}n^{-1/4}\ell^{5/4}.
-\]
-This is the coordinate fourth-moment term in
-\eqref{poly:bennett-parameters}, with \(L\) replaced by \(\ell\).
-Substitution gives
-\[
- d_n=\frac{B n^{-\alpha_q}\ell^{1+\alpha_q}}
-          {2(4\Lambda)^{1-1/q}}\asymp_q R_{n,q},\qquad
- \frac{d_n}{U_\ell}
- =\frac{\sqrt{\widehat K}}{2(4\Lambda)^{1-1/q}}\longrightarrow\infty.
-\]
-Hence \(d_n\to0\) and \(U_\ell\to0\), so \(\ell^5/n\to0\),
-\(\theta\to0\), and \(v\to0\). Also
-\(\pi=\widehat K^{-2}(4\Lambda)^{1-4/q}\) gives
-\(\pi\Lambda\to0\). In particular, \(0<\pi<1\) and
-\(0<v<1/2\) eventually, and the leading-maximum estimate
-\eqref{sym:eq:rademacher-max} applies.
 
-\begin{recovered}
-The coordinate fourth-moment formula of
-Lemma~\ref{lower:family-properties}, together with
-\end{recovered}
-\(\theta\pi a^4=B^2/16\), gives
-\begin{equation}
+To check the parameter ranges and the approximation of the leading
+maximum under the intrinsic growth condition, define
+\[
+ U_{\ell,R}:=B^{1/2}n^{-1/4}\ell^{3/4}\sqrt R.
+\]
+Substitution into~\eqref{lower:eq:proof-scale} gives
+\[
+ d_n=\frac{B n^{-\alpha_q}\ell^{1-1/q}\sqrt R}
+ {2(4\Lambda)^{1-1/q}}\asymp_q R_{n,q},\qquad
+ \frac{d_n}{U_{\ell,R}}
+ =\frac{\sqrt{\widehat K}}{2(4\Lambda)^{1-1/q}}\to\infty.
+\]
+Thus \(d_n\to0\) and \(U_{\ell,R}\to0\), which imply
+\(\ell^3R^2/n\to0\), \(\ell/n\to0\), and
+\(R\le c_3\sqrt n\) eventually. Moreover,
+\[
+ d_n=(B/2)\sqrt{kR}\,(k/n)^{\alpha_q},\qquad
+ \pi=\widehat K^{-2}(4\Lambda)^{1-4/q}.
+\]
+Since \(k\to\infty\) and \(\alpha_q>0\), the first identity
+implies \(\theta=k/n\to0\). The second gives
+\(\pi\Lambda\to0\). Hence \(\theta,\pi\in(0,1)\) and
+\(v\in(0,1/2)\) eventually, with \(v\to0\).
+
+The moment formulas in Lemma~\ref{lower:family-properties} give
+\begin{align}
  \E X_{i,ju}^4
- =1+4v-5v^2+B^2/16\le9/5+B^2/16\le B^2.
- \label{q4:eq:sparse-coordinate-moments}
-\end{equation}
-The last inequality holds for \(B\ge2\). The envelope satisfies
-\begin{equation}
+ &=1+4v-5v^2+B^2/16\le9/5+B^2/16\le B^2,
+ \label{q4:eq:sparse-coordinate-moments}\\
  (\E\norm{X_i}_\infty^q)^{1/q}
- \le s+a\theta^{1/q}\le1+B/2\le B.
+ &\le s+a\theta^{1/q}\le1+B/2\le B.
  \label{q4:eq:sparse-envelope-moment}
-\end{equation}
-Thus the observations belong to \(\mathcal C_q(B,m^2)\).
+\end{align}
+Here \(\theta\pi a^4=B^2/16\) and \(B\ge2\).
+Thus the observations belong to \(\mathcal C_q(B,p_n)\).
 
-To evaluate the mean shifts in~\eqref{lower:eq:master-comparison},
-note that
-\(\log(2/\pi)=\Lambda-(1-4/q)\log(4\Lambda)\sim\Lambda\).
-Since \(k=\ell/(4\Lambda)\), this gives
-\(m(\pi/2)^{2k}\ge e^{\ell/4}\) eventually.
-\begin{recovered}
-Since \(\Var(N)\le k\), Chebyshev's inequality gives
-\(\Pp(N>2k)\le k^{-1}\). Equation~\eqref{lower:eq:all-active},
-with \(b=2k\), therefore yields
-\end{recovered}
+The relation
+\(\log(2/\pi)=\Lambda-(1-4/q)\log(4\Lambda)\sim\Lambda\)
+and \(k=\ell/(4\Lambda)\) imply
+\(m(\pi/2)^{2k}\ge e^{\ell/4}\) eventually. Chebyshev's
+inequality and~\eqref{lower:eq:all-active} with \(b=2k\) yield
 \[
- \Pp(Q_*\ne N)\le k^{-1}+\exp\{-e^{\ell/4}\}\longrightarrow0.
+ \Pp(Q_*\ne N)\le k^{-1}+\exp\{-e^{\ell/4}\}\to0.
 \]
-By~\eqref{lower:eq:activation-moments},
+Therefore
 \begin{equation}
  \E Q_*=(1+o(1))k,\qquad \E Q_*^2=O(k^2).
  \label{q4:eq:sparse-max-moments}
 \end{equation}
-\begin{recovered}
-For this parameter choice, the Gaussian shift has a smaller mean
-than the shift in the normalized sum, and their ratio tends to zero.
-Indeed,
-\end{recovered}
+In this case the Gaussian shift has the smaller mean, since
 \[
  \frac{\sqrt v\,\E H_*}{ak/\sqrt n}
- =\sqrt{\frac\pi k}\,\E H_*
- \sim\sqrt{8\pi\Lambda}\longrightarrow0,
+ =\sqrt{\pi/k}\,\E H_*\sim\sqrt{8\pi\Lambda}\to0.
 \]
-so
+Consequently,
 \begin{equation}
  \E V_W-\E V_G=(1+o(1))\frac{ak}{s\sqrt n}.
  \label{q4:eq:sparse-mean-gap}
 \end{equation}
 
-It remains to bound the remainder
-in~\eqref{lower:eq:master-comparison}. The relation \(\ell^5/n\to0\) and
-\eqref{sym:eq:rademacher-max} imply
+For the approximation of the leading maximum,
+\eqref{sym:eq:rademacher-max} gives
 \[
- \frac{\epsilon_{n,m}}{U_\ell}
+ \frac{\epsilon_{n,r}}{U_{\ell,R}}
  \le C\left(n^{-1/4}\ell^{-3/4}
-             +n^{-3/4}\ell^{3/4}\right)\longrightarrow0.
+       +n^{-3/4}R^{3/2}\ell^{-3/4}\right)\to0,
 \]
-Since \(d_n/U_\ell\to\infty\), we have \(\epsilon_{n,m}=o(d_n)\).
-For the second-moment remainder,
+because \(R\le1+\ell\) and \(\ell/n\to0\). Since
+\(d_n/U_{\ell,R}\to\infty\), this proves
+\(\epsilon_{n,r}=o(d_n)\). For the second moments,
 \[
- \frac{\ell a^2k^2}{n}=d_n^2,\qquad
- \ell^2v=4\pi\Lambda d_n^2.
+ \frac{Ra^2k^2}{n}=d_n^2,\qquad
+ Rv\ell=4\pi\Lambda d_n^2.
 \]
-\begin{recovered}
-The second-moment estimates for \(Q_*\) and \(H_*\) therefore give
-\(\ell\,\E(V_W^2+V_G^2)=O(d_n^2)=o(d_n)\).
-At the threshold \(t_n=su_m\) from~\eqref{lower:eq:master-comparison},
-the larger mean of \(V_W\) reverses the sign of the leading
-probability difference. We obtain
-\end{recovered}
+Thus \(R\E(V_W^2+V_G^2)=O(d_n^2)=o(d_n)\), and
+\eqref{lower:eq:master-comparison} gives
 \begin{equation}
- \Pp(\max_{j,u}Z_{ju}\le t_n)-\Pp(\max_{j,u}W_{ju}\le t_n)
- =\left\{\frac{\sqrt2}{e}+o(1)\right\}d_n.
+\begin{split}
+ &\Pp(\max_{j,u}Z_{ju}\le t_n)-\Pp(\max_{j,u}W_{ju}\le t_n)\\
+ &\qquad=(1+o(1))F_r'(u_r)\frac{ak}{s\sqrt n}
+           +o(d_n)\ge c d_n
+\end{split}
  \label{q4:eq:sparse-orthant}
 \end{equation}
-Because \(d_n\asymp_q R_{n,q}\), this proves
-\eqref{lower:sparse-rate}. For the matching upper bound, write
-\(U=(B^2L^5/n)^{1/4}\), as in~\eqref{poly:bennett-parameters}.
-Then
-\[
- \frac{R_{n,q}}{U}
- =\frac{\sqrt{\mathcal K_{n,q}}}
-        {\{\log(e+\mathcal K_{n,q})\}^{1-1/q}}\longrightarrow\infty.
-\]
-The bound in~\eqref{poly:bennett-bound} is therefore of order
-\(R_{n,q}\). Our observations are centrally symmetric, so the
-matching lower bound also holds under that restriction.
+for all sufficiently large \(n\).
 
-For Theorem~\ref{opt:q4-growing}, take \(q=4\).
-Then \(\widehat K=B\), \(\Lambda=\log(2B^2)=\Lambda_n\), and
-the rate in that theorem is
+The same estimates give
+\(\sqrt v\,g_m=O(\sqrt{\pi\Lambda}\,ak/\sqrt n)\to0\).
+Together with \(v\to0\) and~\eqref{lower:eq:family-width},
+this proves~\eqref{lower:eq:width-profile}. Expressing \(d_n\)
+in terms of \(g_{\Sigma_n}\) and \(L_n\) now gives
+\eqref{lower:sparse-rate}. For the upper bound, the ratio of the
+envelope term to the coordinate fourth-moment term in
+\eqref{poly:main-fourth} is
 \[
- r_{n,B}=\frac{B\ell^{5/4}}{n^{1/4}\Lambda^{3/4}}
-         =4\sqrt2\,d_n.
+ \frac{\sqrt{\mathcal K_{n,q}}}
+ {\{\log(e+\mathcal K_{n,q})\}^{1-1/q}}\to\infty.
 \]
-Its assumptions imply~\eqref{lower:sparse-regime}.
-Equation~\eqref{q4:eq:sparse-orthant} therefore gives
-\((\sqrt2/e)/(4\sqrt2)=1/(4e)\), as required. Equivalently, the discrepancy on the
-specified orthant is
-\[
- \left\{\frac1{16e}+o(1)\right\}
- \frac{B n^{-1/4}(\log p)^{5/4}}{(\log B)^{3/4}},
-\]
-which agrees in order with~\eqref{poly:q4}, including its dependence on \(B\).
+Both terms have the same Gaussian-width factor, so the upper bound
+matches the displayed lower rate.
 
-Equation~\eqref{sym:eq:common-covariance} gives rank \(2m-1\)
-and correlation gap
+Taking \(q=4\) gives \(\widehat K=B\),
+\(\Lambda=\log(2B^2)\asymp\log(e+B)\), and
+\(\mathcal K_{n,4}=B_n\). The assumptions and rate become those
+of Theorem~\ref{opt:q4-growing}, proving that result as well.
+The covariance rank is \(r+m-1\), and its correlation gap is
 \[
  v=\frac14\left(\frac{\ell}{4n\Lambda}\right)^{2/q}\to0.
 \]
-At \(q=4\), this is
-\(\frac14\sqrt{\ell/(4n\Lambda)}\), as in the growing-envelope
-fourth-moment construction.
-
-
-\begin{vSixBlock}
-\subsection{A lower bound with bounded Gaussian width}
-\label{app:bounded-width-lower}
-
-Small width controls the common boundary probability, but it need
-not control the number of small contrasts that can affect a
-rectangle. The next construction makes that distinction explicit.
-It uses the common-component construction from
-Subsection~\ref{app:lower-family} with a single leading coordinate.
-
-\begin{proposition}[A lower bound with bounded Gaussian width]
-\label{prop:width-lower}
-Let \(p=p_n\) satisfy \(\ell_n:=\log p_n\to\infty\) and
-\(\ell_n/\sqrt n\to0\). There are i.i.d., centered, centrally
-symmetric vectors \(X_1,\ldots,X_n\in\R^{p_n}\) with unit
-coordinate variances and \(\|X_i\|_\infty\le2\) such that, for
-\(W:=n^{-1/2}\sum_iX_i\), \(\Sigma_n:=\Cov(W)\),
-\(Z\sim N(0,\Sigma_n)\), and
-\(\delta_n:=2/\sqrt n\),
-\begin{equation}
- g_{\Sigma_n}\longrightarrow\sqrt{2/\pi},\qquad
- \liminf_{n\to\infty}
- \frac{\rh(W,Z)}{\delta_n\log(ep_n)}
-       \ge\frac1{4\sqrt{2\pi}}.
- \label{eq:bounded-width-lower}
-\end{equation}
-In particular, all mixed third moments vanish.
-\end{proposition}
-
-\begin{proof}
-Suppress the subscript on \(\ell_n\), and define
-\(\theta:=\ell/(2n)\) and \(s:=\sqrt{1-\theta}\). For all
-sufficiently large \(n\), these parameters are well defined.
-Let \(I_i\) be independent Bernoulli variables with mean
-\(\theta\), and let \(\epsilon_i,\epsilon_{ij}\) be independent
-Rademacher variables, independent also of the \(I_i\). Define
-\[
- X_{ij}:=s\epsilon_i+I_i\epsilon_{ij}.
-\]
-The vectors are independent and identically distributed across
-\(i\). They are centered and centrally symmetric, and
-\(\E X_{ij}^2=s^2+\theta=1\) and
-\(\|X_i\|_\infty\le s+1\le2\). Central symmetry makes all
-mixed third moments vanish.
-The covariance matrix is
-\(\Sigma_n=(1-\theta)\boldsymbol1\boldsymbol1^\top+\theta I_p\),
-so we may write
-\(Z_j=sG_0+\sqrt\theta G_j\) with independent standard Gaussians.
-It follows that
-\[
- \sqrt{2/\pi}\le g_{\Sigma_n}
- \le s\sqrt{2/\pi}+\sqrt\theta\,\E\max_j|G_j|
- =\sqrt{2/\pi}+O(\ell/\sqrt n).
-\]
-
-The maxima separate into a common component and a small random
-shift. Define
-\[
- A_n:=n^{-1/2}\sum_i\epsilon_i,\quad N:=\sum_iI_i,\quad
- Q_j:=\sum_iI_i\epsilon_{ij},\quad
- Q_*:=\max_jQ_j,\quad H_*:=\max_jG_j.
-\]
-Then \(\max_jW_j=sA_n+Q_*/\sqrt n\) and
-\(\max_jZ_j=sG_0+\sqrt\theta H_*\). In each expression, the
-common component is independent of the shift.
-
-Conditional on \(N\), the probability that no coordinate has all
-its retained signs positive is \((1-2^{-N})^p\).
-Since \(\E N=\ell/2\), a Chernoff bound gives
-\(\Pp(N>\ell)\le e^{-c\ell}\). On \(N\le\ell\),
-\[
- (1-2^{-N})^p\le
- \exp\{-p2^{-\ell}\}
- =\exp\{-\exp((1-\log2)\ell)\}.
-\]
-Consequently \(\Pp(Q_*\ne N)\to0\).
-The bounds \(|Q_*|\le N\) and \(\E N^2=O(\ell^2)\), together
-with Cauchy--Schwarz, imply
-\[
- \E Q_*=(1+o(1))\ell/2,\qquad \E Q_*^2=O(\ell^2).
-\]
-For completeness, the Gaussian tail bounds give
-\(H_*/\sqrt{2\ell}\to1\) in probability: a union bound controls
-the upper tail, while, for each fixed \(a\in(0,1)\),
-\[
- \Pp\{H_*\le a\sqrt{2\ell}\}
- \le\exp\{-p\overline\Phi(a\sqrt{2\ell})\}\to0.
-\]
-Here \(\overline\Phi=1-\Phi\) is the standard Gaussian upper tail.
-Integrating the union bound for \(\max_j|G_j|\) gives
-\(\E H_*^2=O(\ell)\), so uniform integrability yields
-\(\E H_*=(1+o(1))\sqrt{2\ell}\).
-
-Apply the scalar Berry--Esseen inequality~\cite{Berry1941}
-to \(A_n\), condition
-on the independent shift, and expand the Gaussian distribution
-function at zero. Its bounded second derivative makes the
-remainder at most a constant times the second moment of the shift.
-Writing \(\varphi\) for the standard Gaussian density, we obtain
-\begin{align*}
- &\Pp(\max_jW_j\le0)-\Pp(\max_jZ_j\le0)\\
- &\quad=\frac{\varphi(0)}s
-       \left(\sqrt\theta\,\E H_*
-                          -\frac{\E Q_*}{\sqrt n}\right)
-       +O(n^{-1/2}+\ell^2/n)\\
- &\quad=\left(\frac{\varphi(0)}2+o(1)\right)
-                       \frac{\ell}{\sqrt n}.
-\end{align*}
-The remainder is smaller than the leading term by the assumptions
-on \(\ell\). The lower orthant with all upper thresholds zero
-is a rectangle, which proves \eqref{eq:bounded-width-lower}.
-\end{proof}
-
-Thus bounded Gaussian width alone does not imply an error of order
-\(\delta\). At least a factor of order \(L\) is necessary in
-general, even for centrally symmetric observations. This example
-does not establish the necessity of the additional
-\(\sqrt{D_L}\) in \eqref{eq:intrinsic-envelope}.
 \end{vSixBlock}
+
 
 % Dimension cap: adapted from Yuta Koike's 10 November 2026 note, Section 6.
 % The coarse single-face bound below avoids importing Source input 3.2.
