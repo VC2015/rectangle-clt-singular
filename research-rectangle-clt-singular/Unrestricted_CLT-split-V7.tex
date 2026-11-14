@@ -1,6 +1,6 @@
 % High-dimensional Gaussian approximation over rectangles.
 % Manuscript revised 14 November 2026; split-V7 working draft.
-% Appendix H: self-contained correlation-gap proof, revised for exposition.
+% Appendix H: self-contained correlation-gap proof retaining Gaussian width.
 \documentclass[11pt,letterpaper]{article}
 \usepackage[margin=1.05in]{geometry}
 \usepackage[T1]{fontenc}
@@ -594,8 +594,10 @@ and mixed smoothing. The bound in~\cite{AL} removes the final
 Corollary~\ref{cor:positive-correlation-gap}, proved in
 Appendix~\ref{app:correlation-gap-proof}, attains the same rate under a
 pairwise correlation gap bounded away from zero, a condition that allows
-singular covariance matrices. The companion paper~\cite{CorrelationGap}
-develops broader moment-sensitive bounds under this pairwise condition.
+singular covariance matrices. Its bound also retains $g_\Sigma$, giving
+an improvement when the Gaussian width is smaller than its worst-case
+order. The companion paper~\cite{CorrelationGap} develops broader
+moment-sensitive bounds under this pairwise condition.
 Theorem~\ref{thm:unrestricted} imposes no such condition and identifies
 the relative fourth moments that govern its remaining logarithmic factor.
 
@@ -812,7 +814,7 @@ Appendix~\ref{app:sharpness-proofs}.}
 Appendix~\ref{app:dimension-cap} caps the additional logarithm in the
 bounded-envelope bound by \(L=\log(ep)\).
 Appendix~\ref{app:correlation-gap-proof} proves the positive-correlation-gap
-corollary using the interpolation estimates of this paper.
+corollary, retaining Gaussian width through its surface and matrix estimates.
 
 \section{\vSix{Proof of Theorem~\ref*{thm:unrestricted}}}\label{sec:smoothing}
 Throughout this section we use the bounded-summand setup~\eqref{eq:setup},
@@ -2447,8 +2449,8 @@ Theorem~\ref{thm:unrestricted} proves the conjectured rate for arrays with ${s_4
 The conjectured rate holds when distinct coordinates are uniformly
 separated from perfect positive or negative correlation. This condition
 permits singular covariance matrices. The following corollary makes the
-dependence on the correlation gap explicit, and
-Appendix~\ref{app:correlation-gap-proof} gives a proof using the smoothing
+dependence on the correlation gap explicit while retaining the Gaussian
+width $g_\Sigma$. Appendix~\ref{app:correlation-gap-proof} gives a proof using the smoothing
 and interpolation estimates of Section~\ref{sec:smoothing}.
 
 \begin{samepage}
@@ -2461,18 +2463,21 @@ Under~\eqref{eq:setup}, define
 with \(c\coloneqq 1\) when \(p=1\). If \(c>0\), then
 \[
  \rh(W,Z)\le C\min\left\{1,\,
- \delta L^{3/2}\sqrt{1+\log(1/c)}\right\},
+ \delta g_\Sigma L\sqrt{1+\log(1/c)}\right\},
  \qquad L=\log(ep),
 \]
-where \(C\) is an absolute constant.
+where \(C\) is an absolute constant and $g_\Sigma=\E\|Z\|_\infty$.
 \end{corollary}
 \end{samepage}
 
 The proof combines the fourth-order bound in
 Proposition~\ref{an:prop:derivative} with an additional estimate that
 retains the angles between pairs of faces. Taking the smaller bound
-before integration gives the factor \(1+\log(1/c)\).
-The companion paper~\cite{CorrelationGap} develops further
+before integration gives the factor \(1+\log(1/c)\). The intrinsic
+boundary coefficient is retained in both estimates, yielding the factor
+$g_\Sigma L$ in the final bound. Since $g_\Sigma\le C\sqrt L$, the
+dimension-based rate $C\delta L^{3/2}\sqrt{1+\log(1/c)}$ follows as a
+consequence. The companion paper~\cite{CorrelationGap} develops further
 moment-sensitive refinements under the same pairwise condition.
 
 Consequently, for every fixed \(c_0>0\), the conjectured rate holds
@@ -8813,7 +8818,9 @@ $\rh(W,Z)\le1$ proves~\eqref{cap:result} in all cases.
 We prove the positive-correlation-gap bound using the smoothing and
 interpolation estimates established in Section~\ref{sec:smoothing}.
 The additional estimate controls the fourth-order remainder after the
-Gaussian variance has grown. Its proof uses a cubic Gaussian Hermite
+Gaussian variance has grown. We retain the intrinsic boundary coefficient
+throughout these estimates and express it in terms of $g_\Sigma$ at the end.
+The proof uses a cubic Gaussian Hermite
 matrix for the single-face terms and retains the angle between the
 normals in the two-face terms. Pairing the corresponding surface
 contributions gives a bound that remains valid when a three-coordinate
@@ -8837,7 +8844,14 @@ $P(a):=\{x\in\R^r:u_j\cdot x\le a_j,\ j\le m\}$, the polyhedron
 previously denoted by $A_a$. For real $s$, let $P(a)^s=P(a+s\mathbf1)$.
 We allow arbitrary threshold lists, including those defining empty sets.
 The logistic function $F_{a,h}$ is the same as in
-Section~\ref{sec:smoothing}.
+Section~\ref{sec:smoothing}. We retain the boundary coefficient
+from~\eqref{eq:intrinsic-boundary-coefficient},
+\[
+ \kappa=\min\{\sqrt L,\,1+\max\{\E\|W\|_\infty,g_\Sigma\}\}.
+\]
+Thus $1\le\kappa\le\sqrt L$. Boundary probabilities contribute the
+factor $\kappa$, while Gaussian projection moments supply the remaining
+powers of $L$.
 
 Fix $h\ge\mathsf A\delta$ and $\varepsilon:=Lh^2<1/4$, where the
 absolute constant $\mathsf A$ will be chosen large enough for the
@@ -8858,14 +8872,14 @@ initialization error, and let $C_{3,a,h}(t)$ and $R_{4,a,h}(t)$ be the
 cubic term and fourth-order remainder in the derivative of
 $\E F_{a,h}(U_t)$. Lemma~\ref{lem:endpoint} and
 Proposition~\ref{an:prop:derivative}, using
-$s_3\le\delta$, $s_4\le\delta^2$, and $\kappa\le\sqrt L$, give
+$s_3\le\delta$ and $s_4\le\delta^2$, give
 \begin{align}
- \rh(W,Z)&\le ChL^{3/2}+I_h+
+ \rh(W,Z)&\le Ch\kappa L+I_h+
        \sup_a\int_0^1\{|C_{3,a,h}(t)|+|R_{4,a,h}(t)|\}\dd t,
                                              \label{hgap:eq:reduction}\\
  I_h+\sup_a\int_0^1|C_{3,a,h}(t)|\dd t
-     &\le CL^{3/2}(\delta+\delta^2/h),        \label{hgap:eq:old-cubic}\\
- |R_{4,a,h}(t)|&\le\frac{C\delta^2L^{3/2}}{h(t+\varepsilon)}.
+     &\le C\kappa L(\delta+\delta^2/h),        \label{hgap:eq:old-cubic}\\
+ |R_{4,a,h}(t)|&\le\frac{C\delta^2\kappa L}{h(t+\varepsilon)}.
                                              \label{hgap:eq:early}
 \end{align}
 All three estimates are uniform over the thresholds. The substitutions
@@ -8875,7 +8889,7 @@ by $\delta$ after the repeated pair has been summed using its covariance.
 The only additional interpolation estimate needed is
 \begin{equation}\label{hgap:eq:late}
  |R_{4,a,h}(t)|\le
- \frac{C\delta^2L^2}{d_c(t+\varepsilon)^{3/2}},
+ \frac{C\delta^2\kappa L^{3/2}}{d_c(t+\varepsilon)^{3/2}},
  \qquad d_c:=c(2-c).
 \end{equation}
 We prove it in Subsection~\ref{hgap:sec:completion}, using the Gaussian
@@ -8895,10 +8909,12 @@ As in~\eqref{appx-an:concentration}, we call $V$ a
 \emph{concentrated base} if, for a fixed absolute $C_0$,
 \begin{equation}\label{hgap:eq:ac}
  \Pp\{V\in P(a)^s\setminus P(a)^{-s}\}
-       \le C_0(s+\delta)\sqrt L,
+       \le C_0\kappa(s+\delta),
        \qquad a\in\R^m,\ s>0.
 \end{equation}
-The same inequality holds for a subsystem of the faces by sending
+The coefficient $\kappa$ is fixed throughout, and all constants in
+the following estimates are independent of it. The same inequality holds
+for a subsystem of the faces by sending
 unused thresholds to infinity. It also survives an independent random
 translation, by conditioning on that translation. Throughout the
 additional estimates, $G\sim N(0,I_r)$ is independent of $V$ and
@@ -8977,7 +8993,7 @@ $(Q-V)/\sigma:=\{g:V+\sigma g\in Q\}$. Then
 \begin{equation}
  \E\bigl|J_{\mathrm f}((Q-V)/\sigma)\bigr|
  +\E\bigl|J_{\mathrm e}((Q-V)/\sigma)\bigr|
- \le C\bigl(\sigma L^2+\delta L^{5/2}\bigr).
+ \le C\kappa\bigl(\sigma L^{3/2}+\delta L^2\bigr).
  \label{hgap:eq:surface-bounds}
 \end{equation}
 The constant depends only on $C_0$, and no angle separation is needed.
@@ -9181,10 +9197,11 @@ $V+\sigma G\in Q^{\sigma/R(G)}\setminus Q$.
 Conditioning on $G$ and applying~\eqref{hgap:eq:ac} bounds
 the average in~\eqref{hgap:eq:localized} by
 \[
- C\sqrt L\{\sigma\E R(G)^3+\delta\E R(G)^4\}
- \le C(\sigma L^2+\delta L^{5/2}).
+ C\kappa\{\sigma\E R(G)^3+\delta\E R(G)^4\}
+ \le C\kappa(\sigma L^{3/2}+\delta L^2).
 \]
-This proves both assertions.
+The projection-moment estimates retain their powers of $L$; only the
+boundary probability supplies $\kappa$. This proves both assertions.
 \end{proof}
 
 We will also use the positive versions of the same tube estimates.
@@ -9192,12 +9209,12 @@ They follow by applying the tube construction directly to the indicated
 nonnegative integrands, without integration by parts. With $P=(Q-V)/\sigma$
 and $\sigma\ge\delta\sqrt L$, they give
 \begin{align}
- \E\sum_E\vartheta_E\rho_E&\le C\sigma L,
- &\E\sum_E\vartheta_E\norm{z_E}^2\rho_E&\le C\sigma L^2.
+ \E\sum_E\vartheta_E\rho_E&\le C\sigma\kappa\sqrt L,
+ &\E\sum_E\vartheta_E\norm{z_E}^2\rho_E&\le C\sigma\kappa L^{3/2}.
  \label{hgap:eq:positive-edge}
 \end{align}
 The first uses $R^2$ on the tubes, giving
-$C\sqrt L(\sigma\E R(G)+\delta\E R(G)^2)\le C\sigma L$.
+$C\kappa(\sigma\E R(G)+\delta\E R(G)^2)\le C\sigma\kappa\sqrt L$.
 The second uses $R^4$ and $\|z_E\|^2\le R^2$, giving the second
 bound in exactly the same way.
 
@@ -9270,7 +9287,7 @@ $F\theta\le (e/2)(F_h-F_{-h})$. Apply~\eqref{hgap:eq:mixture} with
 $q=1$ to the difference and then use~\eqref{hgap:eq:ac} at the randomly
 shifted thresholds. Since $h\ge\delta$, this gives
 \begin{equation}\label{hgap:eq:logistic-mass}
- \sup_z\E_V F(V+z)\theta(V+z)\le Ch\sqrt L.
+ \sup_z\E_V F(V+z)\theta(V+z)\le Ch\kappa.
 \end{equation}
 Using just face $j$ gives the same bound for
 $e^{q_j(V+z)}/(1+e^{q_j(V+z)})^2$. The shifts $z$ here are arbitrary
@@ -9372,7 +9389,7 @@ For every integer $k\ge1$,
  \E_V\sum_{\alpha\in[m]^k}
  \left\|\E_G\bigl[\mathcal H_{3,u_{\alpha_1}}(G)
                     W_\alpha(U)\bigr]\right\|_*
- \le C^{k+1}hL^2.
+ \le C^{k+1}h\kappa L^{3/2}.
  \label{hgap:eq:cubic-matrix}
 \end{equation}
 No correlation gap is needed for this estimate.
@@ -9417,18 +9434,18 @@ After summing the tuples and the two signs, the projection term in
 \[
  \E\sum_\alpha |u_{\alpha_1}\cdot G|^3W_\alpha(U)
  \le\E[M_G^3 F(U)\theta(U)]
- \le Ch\sqrt L\,\E M_G^3\le ChL^2.
+ \le Ch\kappa\,\E M_G^3\le Ch\kappa L^{3/2}.
 \]
 In the penultimate step we condition on $G$ and apply
 \eqref{hgap:eq:logistic-mass} to the deterministic shift $\sigma G$.
 The same argument with $M_G$ instead of $M_G^3$ bounds the total
-averaged mass of $w_{\alpha,\pm}$ by $ChL$.
+averaged mass of $w_{\alpha,\pm}$ by $Ch\kappa\sqrt L$.
 For each first index $j$, the sum of the two reference weights is
 $|u_j\cdot G|b_j(G)$. The single-face version of
 \eqref{hgap:eq:logistic-mass} gives
-$\E[|u_j\cdot G|b_j(G)]\le Ch\sqrt L\,\E|u_j\cdot G|
-\le Ch\sqrt L$. There are $m^{k-1}$ tuples with first index $j$,
-so their total reference mass is at most $Cm^kh\sqrt L$.
+$\E[|u_j\cdot G|b_j(G)]\le Ch\kappa\,\E|u_j\cdot G|
+\le Ch\kappa$. There are $m^{k-1}$ tuples with first index $j$,
+so their total reference mass is at most $Cm^kh\kappa$.
 To see the entropy bound without introducing $\log(1/h)$, let $M$
 and $B$ be these total averaged masses. If $M>0$, the weights
 $p_{\alpha,\pm}/M$, together with the law of $V$, define a probability
@@ -9442,14 +9459,16 @@ for the concave logarithm gives
  =\log(B/M).
 \]
 This is the log-sum inequality with the outer average included.
-If $M=0$, all terms vanish. Write $M=hLx$, where $0\le x\le C$.
-Since $B\le Cm^kh\sqrt L$ and $\log m\le CL$, the inequalities
-$x\log(1/x)\le1/e$ and $L\ge1$ give
-$M\log(B/M)\le C(k+1)hL^2$. The zero-mass case is interpreted
+If $M=0$, all terms vanish. Write $M=h\kappa\sqrt L\,x$, where
+$0\le x\le C$. Since $B\le Cm^kh\kappa$ and $\log m\le CL$, the
+inequalities $x\log(1/x)\le1/e$ and $L\ge1$ give
+$M\log(B/M)\le C(k+1)h\kappa L^{3/2}$. The common factor
+$h\kappa$ cancels inside the logarithm, so this step introduces no
+additional dependence on the concentration coefficient. The zero-mass case is interpreted
 by continuity. This proves
 \begin{equation}
  \E_V\sum_{\alpha,\pm}p_{\alpha,\pm}
-                   \norm{\mu_{\alpha,\pm}}^2\le C(k+1)hL^2.
+                   \norm{\mu_{\alpha,\pm}}^2\le C(k+1)h\kappa L^{3/2}.
  \label{hgap:eq:cubic-means}
 \end{equation}
 
@@ -9467,24 +9486,24 @@ variables for $F^q$. The $q=0$ term has zero derivative, and the sum
 of the remaining absolute coefficients is at most $2^kh/(k\sigma)$.
 By Lemma~\ref{hgap:lem:surfaces} and
 $\delta\sqrt L\le\sigma$, the averaged absolute surface integral is
-at most $C\sigma L^2$. We conclude that
+at most $C\sigma\kappa L^{3/2}$. We conclude that
 \begin{equation}
  \left|\E H_2(G)\sum_j|u_j\cdot G|F(U)\pi_j(U)\theta(U)^{k-1}\right|
- \le C2^khL^2.
+ \le C2^kh\kappa L^{3/2}.
  \label{hgap:eq:cubic-trace}
 \end{equation}
 Finally, the two remaining terms of~\eqref{hgap:eq:H3} have nuclear norm
 at most $2\norm{\E_G[G W_\alpha(U)]}$.
 For these terms apply~\eqref{hgap:eq:relative-mean} to $W_\alpha$
-with the reference $b_j$. The total mass is at most $Ch\sqrt L$.
+with the reference $b_j$. The total mass is at most $Ch\kappa$.
 The summed projection term is bounded by
-$Ch\sqrt L\,\E M_G^2\le ChL^{3/2}$, and the reference mass is at
-most $Cm^kh\sqrt L$. The same log-sum argument, now writing the
-total mass as $h\sqrt L$ times a bounded scalar, gives
+$Ch\kappa\,\E M_G^2\le Ch\kappa L$, and the reference mass is at
+most $Cm^kh\kappa$. The same log-sum argument, now writing the
+total mass as $h\kappa$ times a bounded scalar, gives
 \[
- \E_V\sum_\alpha p_\alpha\le Ch\sqrt L,\qquad
+ \E_V\sum_\alpha p_\alpha\le Ch\kappa,\qquad
  \E_V\sum_\alpha p_\alpha\norm{\mu_\alpha}^2
- \le C(k+1)hL^{3/2}.
+ \le C(k+1)h\kappa L.
 \]
 Since $\E_G[GW_\alpha]=p_\alpha\mu_\alpha$, Cauchy--Schwarz on the
 joint space of $V$ and tuples gives
@@ -9492,7 +9511,7 @@ joint space of $V$ and tuples gives
  \E_V\sum_\alpha p_\alpha\|\mu_\alpha\|
  \le\left(\E_V\sum_\alpha p_\alpha\right)^{1/2}
       \left(\E_V\sum_\alpha p_\alpha\|\mu_\alpha\|^2\right)^{1/2}
- \le C\sqrt{k+1}\,hL.
+ \le C\sqrt{k+1}\,h\kappa\sqrt L.
 \]
 Together with~\eqref{hgap:eq:cubic-means}--\eqref{hgap:eq:cubic-trace}, this
 proves~\eqref{hgap:eq:cubic-matrix}.
@@ -9512,11 +9531,11 @@ For every integer $K\ge2$,
  \E_V\sum_{\substack{\alpha\in[m]^K\\(\alpha_1,\alpha_2)\in\cD}}
  \lambda_{\alpha_1\alpha_2}
  \left\|\E_G[(GG^\top-I_r)W_\alpha(U)]\right\|_*
- \le C^{K+1}\frac{h^2L^2}{\sigma}.
+ \le C^{K+1}\frac{h^2\kappa L^{3/2}}{\sigma}.
  \label{hgap:eq:weighted-pair-matrix}
 \end{equation}
 In particular, under the correlation gap the same sum without the
-weights $\lambda$ is at most $C^{K+1}h^2L^2/(d_c\sigma)$.
+weights $\lambda$ is at most $C^{K+1}h^2\kappa L^{3/2}/(d_c\sigma)$.
 \end{proposition}
 
 \begin{proof}
@@ -9549,28 +9568,28 @@ standard Gaussians, independent of $V$, and
 \]
 Conditional on $V,G_j$, the second coordinate has density at most
 $C/(\sigma\sin\vartheta_{jk})$. The density of the first coordinate
-is at most $C\sqrt L$. To verify this last assertion, partition the
+is at most $C\kappa$. To verify this last assertion, partition the
 possible values of $u_j\cdot V$ into intervals of length $\sigma$
 around a proposed density argument. The marginal form of
 \eqref{hgap:eq:ac} bounds each interval probability by
-$C(\sigma+\delta)\sqrt L$. On the interval at distance comparable
+$C\kappa(\sigma+\delta)$. On the interval at distance comparable
 to $|\ell|\sigma$, the Gaussian kernel is at most
 $C\sigma^{-1}e^{-c_1\ell^2}$. Summing gives
-$C(1+\delta/\sigma)\sqrt L\le C\sqrt L$.
+$C\kappa(1+\delta/\sigma)\le C\kappa$.
 
 More explicitly, the joint density at $(x,y)$ is the expectation over
 $V$ of the product of the first Gaussian density at $x$ and the
 conditional second Gaussian density at $y$. Bounding the latter and
 averaging the former therefore gives
 \[
- f_{j,k}(x,y)\le\frac{C\sqrt L}{\sigma\sin\vartheta_{jk}}.
+ f_{j,k}(x,y)\le\frac{C\kappa}{\sigma\sin\vartheta_{jk}}.
 \]
 Changing from the two coordinates to their scores contributes $h^2$.
 The score integral above and
 $\lambda_{jk}=\vartheta_{jk}\sin\vartheta_{jk}$ thus give
-$\lambda_{jk}\E b_{jk}(G)\le Ch^2\sqrt L/\sigma$.
+$\lambda_{jk}\E b_{jk}(G)\le Ch^2\kappa/\sigma$.
 Counting the at most $m^K$ tuples yields total weighted reference
-mass at most $Cm^Kh^2\sqrt L/\sigma$.
+mass at most $Cm^Kh^2\kappa/\sigma$.
 
 For the actual logistic mass we can sum the faces before estimating.
 The identity $\partial_{a_j}\partial_{a_k}F=2h^{-2}W_{jk}$,
@@ -9588,9 +9607,9 @@ $\|z_E\|^2$. The two positive surface estimates
 \eqref{hgap:eq:positive-edge} therefore give
 \begin{align}
  \E\sum_{(j,k)\in\cD}\lambda_{jk}W_{jk}(U)
-   &\le C h^2L/\sigma,\label{hgap:eq:pair-mass}\\
+   &\le C h^2\kappa\sqrt L/\sigma,\label{hgap:eq:pair-mass}\\
  \E\sum_{(j,k)\in\cD}\lambda_{jk}W_{jk}(U)\norm{\Pi_{jk}G}^2
-   &\le C h^2L^2/\sigma.\label{hgap:eq:pair-projection}
+   &\le C h^2\kappa L^{3/2}/\sigma.\label{hgap:eq:pair-projection}
 \end{align}
 Counting the two orders of each pair changes only the absolute constant.
 The factor $1/\sin\vartheta_{jk}$ in coarea leaves exactly
@@ -9606,15 +9625,18 @@ where the sums are over tuples with independent first two normals, then
        \log\frac{p_{b_{\alpha_1\alpha_2}}}{p_\alpha}
  \le M\log(B/M).
 \]
-Here $M\le Ch^2L/\sigma$ and $B\le Cm^Kh^2\sqrt L/\sigma$.
-Writing $M=(h^2L/\sigma)x$ shows that the right side is at most
-$C(K+1)h^2L^2/\sigma$, including the zero-mass case by continuity.
-Thus no logarithm of an angle or of $h$ enters this step.
+Here $M\le Ch^2\kappa\sqrt L/\sigma$ and
+$B\le Cm^Kh^2\kappa/\sigma$. Writing
+$M=(h^2\kappa\sqrt L/\sigma)x$ shows that the right side is at most
+$C(K+1)h^2\kappa L^{3/2}/\sigma$, including the zero-mass case by
+continuity. The common factor $h^2\kappa/\sigma$ cancels inside the
+logarithm. Thus no logarithm of an angle, of $h$, or of $\kappa$ enters
+this step.
 Together with~\eqref{hgap:eq:pair-projection}, this gives
 \begin{equation}
  \E_V\sum_{\alpha:\,(\alpha_1,\alpha_2)\in\cD}
  \lambda_{\alpha_1\alpha_2}p_\alpha\norm{\mu_\alpha}^2
- \le C(K+1)h^2L^2/\sigma.
+ \le C(K+1)h^2\kappa L^{3/2}/\sigma.
  \label{hgap:eq:pair-means}
 \end{equation}
 
@@ -9638,7 +9660,7 @@ After summing the two orders of every ridge, the trace is a signed
 sum of mixtures of $J_{\mathrm e}((Q-V)/\sigma)$.
 The absolute coefficients sum to at most $C2^Kh^2/\sigma^2$.
 By Lemma~\ref{hgap:lem:surfaces}, its magnitude is at most
-$C2^K h^2L^2/\sigma$. Combining this with~\eqref{hgap:eq:pair-means}
+$C2^K h^2\kappa L^{3/2}/\sigma$. Combining this with~\eqref{hgap:eq:pair-means}
 and~\eqref{hgap:eq:matrix-reduction} proves~\eqref{hgap:eq:weighted-pair-matrix}.
 The unweighted conclusion follows from~\eqref{hgap:eq:gap}.
 \end{proof}
@@ -9692,7 +9714,7 @@ If $\delta\sqrt L\le\sigma\le1$, there are constants $A_b\ge1,C_b$
 such that $h\ge A_b\delta$ implies
 \begin{equation}
  \left|\sum_i\E D^4F(V+\sigma G+v_i)[Z_i,Z_i,z_i,w_i]\right|
- \le \frac{C_b}{d_c}\frac{\delta^2L^2}{\sigma^3}.
+ \le \frac{C_b}{d_c}\frac{\delta^2\kappa L^{3/2}}{\sigma^3}.
  \label{hgap:eq:fourth-bound}
 \end{equation}
 The constants depend only on $b,C_0$, and not on the rank. No mutual independence of the
@@ -9782,14 +9804,14 @@ For $K=1,2$, the resulting series is bounded because
 \]
 The single-face contribution has the factor $h^{-1}\sigma^{-3}$
 from the Hessian decomposition and the three integrations by parts.
-Proposition~\ref{hgap:prop:cubic} supplies $hL^2$ for its matrix sum.
+Proposition~\ref{hgap:prop:cubic} supplies $h\kappa L^{3/2}$ for its matrix sum.
 The two-face contribution has factor $h^{-2}\sigma^{-2}$, and
-Proposition~\ref{hgap:prop:pair} supplies $h^2L^2/(d_c\sigma)$.
+Proposition~\ref{hgap:prop:pair} supplies $h^2\kappa L^{3/2}/(d_c\sigma)$.
 Consequently their sum is bounded by
 \[
- C_b\delta^2\left\{\frac{hL^2}{h\sigma^3}
-             +\frac{h^2L^2}{h^2\sigma^2d_c\sigma}\right\}
- \le\frac{C_b\delta^2L^2}{d_c\sigma^3},
+ C_b\delta^2\left\{\frac{h\kappa L^{3/2}}{h\sigma^3}
+             +\frac{h^2\kappa L^{3/2}}{h^2\sigma^2d_c\sigma}\right\}
+ \le\frac{C_b\delta^2\kappa L^{3/2}}{d_c\sigma^3},
 \]
 where we used $d_c\le1$. This is~\eqref{hgap:eq:fourth-bound}.
 For $\eta_b<1$ the weight expansion converges absolutely since
@@ -9823,11 +9845,14 @@ the summands and masks, and write
 The retained sum and $\sigma_tG_0$ are independent and have common
 face variances $1-t$ and $(t+\varepsilon)/2$, respectively. At least one
 variance is at least $1/3$. The retained summands are centered and
-have face norm at most $2\delta$. Apply the dimension-based part of
+have face norm at most $2\delta$. By~\eqref{appx-an:retained-maximum},
+the retained sum has expected face norm at most $2\E\|W\|_\infty$.
+The Gaussian component has expected face norm $\sigma_tg_\Sigma\le g_\Sigma$.
+Apply both the intrinsic and dimension-based parts of
 Lemma~\ref{lem:concentration} to the component with variance at least
-$1/3$, treating the other component as an independent shift. This
-proves~\eqref{hgap:eq:ac} for $V_{0,t}$, with an absolute $C_0$ uniformly
-in $t$. Also, if $h\ge\sqrt2\delta$, then
+$1/3$, treating the other component as an independent shift. The two
+bounds give~\eqref{hgap:eq:ac} with the coefficient $\kappa$ recalled
+above, with an absolute $C_0$ uniformly in $t$. Also, if $h\ge\sqrt2\delta$, then
 \[
  \sigma_t^2\ge Lh^2/2\ge\delta^2L,
  \qquad \sigma_t^2<(1+1/4)/2<1.
@@ -9871,12 +9896,12 @@ $\sum_i\E[Z_iZ_i^\top\mid\mathcal H]=I_r$.
 Each remaining slot has face norm at most $\delta$. The copies and
 shifts are jointly independent of $G_1$ conditional on $\mathcal H$.
 Lemma~\ref{hgap:thm:fourth}, with $b=4$, therefore bounds each summed
-expectation by $C\delta^2L^2/(d_c\sigma_t^3)$ whenever
+expectation by $C\delta^2\kappa L^{3/2}/(d_c\sigma_t^3)$ whenever
 $h\ge A_4\delta$. Since $\widetilde h\ge h$, the test function $f$
 has sufficient width. Integration against the scalar kernels gives
 \[
- |R_{4,a,h}(t)|\le\frac{C\delta^2L^2}{d_c\sigma_t^3}
-     \le\frac{C\delta^2L^2}{d_c(t+\varepsilon)^{3/2}},
+ |R_{4,a,h}(t)|\le\frac{C\delta^2\kappa L^{3/2}}{d_c\sigma_t^3}
+     \le\frac{C\delta^2\kappa L^{3/2}}{d_c(t+\varepsilon)^{3/2}},
 \]
 which is~\eqref{hgap:eq:late}.
 \end{proof}
@@ -9893,31 +9918,51 @@ $y:=(t+\varepsilon)/\varepsilon$ and using
 $\sqrt\varepsilon=h\sqrt L$, gives
 \begin{align}
  \int_0^1|R_{4,a,h}(t)|\dd t
- &\le\frac{C\delta^2L^{3/2}}h
+ &\le\frac{C\delta^2\kappa L}h
     \int_1^\infty\min\{y^{-1},d_c^{-1}y^{-3/2}\}\dd y\notag\\
- &=\frac{C\delta^2L^{3/2}}h
+ &=\frac{C\delta^2\kappa L}h
                       \{2\log(1/d_c)+2\}
- \le\frac{C\delta^2L^{3/2}J_c}{h}.              \label{hgap:eq:time-integral}
+ \le\frac{C\delta^2\kappa LJ_c}{h}.              \label{hgap:eq:time-integral}
 \end{align}
 Indeed, the two integrands agree at $y=d_c^{-2}$, the first integrates
 to $2\log(1/d_c)$ before that point, and the second integrates to $2$
 after it. The extension of the upper integration limit to infinity
 is an upper bound, so no assumption is needed about whether the
 crossover occurs before the end of the actual interpolation.
-Finally, $c\le d_c\le1$ gives the last inequality.
+Both remainder bounds have the same factor $\kappa$, so it does not
+affect the crossover. Finally, $c\le d_c\le1$ gives the last inequality.
 
 Substituting~\eqref{hgap:eq:old-cubic} and~\eqref{hgap:eq:time-integral} into
 \eqref{hgap:eq:reduction}, and using $J_c\ge1$, yields
 \begin{equation}\label{hgap:eq:balance}
- \rh(W,Z)\le CL^{3/2}\left(h+\delta+\frac{\delta^2J_c}{h}\right).
+ \rh(W,Z)\le C\kappa L\left(h+\delta+\frac{\delta^2J_c}{h}\right).
 \end{equation}
-Choose $h:=\mathsf A\delta\sqrt{J_c}$. To check the seed restriction without
-introducing another case into the interpolation, write
-$e_0:=\delta L^{3/2}\sqrt{J_c}$. If $e_0<1/(2\mathsf A)$, then
-$Lh^2=\mathsf A^2e_0^2/L^2<1/4$, and~\eqref{hgap:eq:balance} is at most $Ce_0$.
-If $e_0\ge1/(2\mathsf A)$, the trivial bound $\rh(W,Z)\le1$ already gives
-$\rh(W,Z)\le C\min\{1,e_0\}$ after enlarging the absolute constant.
-This proves the asserted bound for all admissible parameters.
+Choose $h:=\mathsf A\delta\sqrt{J_c}$. If $Lh^2<1/4$, the right
+side of~\eqref{hgap:eq:balance} is at most $C\delta\kappa L\sqrt{J_c}$.
+If $Lh^2\ge1/4$, then
+\[
+ \delta\kappa L\sqrt{J_c}
+ =\frac{\kappa Lh}{\mathsf A}
+ \ge\frac{\kappa\sqrt L}{2\mathsf A}\ge\frac1{2\mathsf A},
+\]
+because $\kappa,L\ge1$. The bound $\rh(W,Z)\le1$ therefore gives
+\[
+ \rh(W,Z)\le C\min\{1,\delta\kappa L\sqrt{J_c}\}
+\]
+in both cases.
+
+It remains to express the boundary coefficient in terms of Gaussian
+width. Lemma~\ref{intrinsic:lem:maximum} gives
+$\E\|W\|_\infty\le C(g_\Sigma+\delta L)$ without using the rectangle
+approximation being proved. If $\delta L\le g_\Sigma$, this estimate
+and $g_\Sigma\ge\sqrt{2/\pi}$ imply $\kappa\le Cg_\Sigma$.
+If instead $\delta L>g_\Sigma$, then
+\[
+ \delta g_\Sigma L\sqrt{J_c}\ge g_\Sigma^2\ge2/\pi,
+\]
+so the trivial bound suffices. Hence
+$\rh(W,Z)\le C\min\{1,\delta g_\Sigma L\sqrt{J_c}\}$ for all
+admissible parameters, as asserted.
 \end{proof}
 
 The proof also covers $p=1$: there are no independent face pairs, the
