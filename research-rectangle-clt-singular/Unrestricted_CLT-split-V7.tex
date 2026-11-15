@@ -293,7 +293,7 @@ attains the same rate with independent skewed coordinates, for which
 \(g_n\asymp\sqrt L\). This example extends that of
 Chernozhukov, Chetverikov, and Koike~\cite[Proposition~2.1]{CCK}.
 Conjecture~\ref{conj:sharp-unrestricted} asks whether the additional
-factor can be removed from the worst-case bound.
+factor can be removed while retaining the Gaussian width.
 
 The sub-exponential and polynomial-moment upper bounds below also
 retain Gaussian width. Section~\ref{opt:section} states the lower
@@ -1822,8 +1822,9 @@ absolute constant, so the bound by $1$ suffices. We obtain
 which is~\eqref{poly:main-envelope} in the present notation.
 The extra logarithm comes from the bounded-observation theorem.
 If Conjecture~\ref{conj:sharp-unrestricted} holds, the same transfer
-gives $C_q\min\{1,V_q\}$ in the worst case over covariance
-matrices under the envelope condition alone; see
+gives $C_q\min\{1,(g_\Sigma/\sqrt L)V_q\}$ under the envelope
+condition alone. Using $g_\Sigma\le C\sqrt L$ recovers
+$C_q\min\{1,V_q\}$ in the worst case over covariance matrices; see
 Remark~\ref{rmk:E1}.
 
 \subsection{\texorpdfstring{{Part (ii): refinement under coordinate fourth moments}}{Part (ii): refinement under coordinate fourth moments}}\label{poly:bennett-sec}
@@ -2430,19 +2431,24 @@ moment classes, while $r_n=1$ gives their bounded-width counterparts.
 
 For bounded observations with unrestricted covariance, our upper and
 lower bounds differ by an additional logarithmic factor. We conjecture
-that this factor can be removed, giving an upper bound that matches
-the examples above uniformly over covariance matrices.
+that this factor can be removed while retaining the Gaussian width
+in the upper bound.
 \begin{conjecture}[Sharp rectangle approximation under unrestricted covariance]
 \label{conj:sharp-unrestricted}
 Under~\eqref{eq:setup}, there is an absolute constant \(C\) such that
 \[
- \rh(W,Z)\le C\min\{1,\delta L^{3/2}\},\qquad L=\log(ep),
+ \rh(W,Z)\le C\min\{1,\delta g_\Sigma L\},\qquad L=\log(ep),
 \]
-uniformly in \(n,p,\delta\) and \(\Sigma\), including singular \(\Sigma\).
+where $g_\Sigma=\E\|Z\|_\infty$. The bound holds uniformly in
+$n,p,\delta$ and $\Sigma$, including singular $\Sigma$.
 \end{conjecture}
 
-The lower bounds show that the dimension dependence in this conjecture
-cannot generally be improved, even for centrally symmetric observations.
+Theorem~\ref{opt:symmetric-lower} constructs centrally symmetric
+observations attaining the scale $\delta g_\Sigma L$ in its stated
+Gaussian-width regimes. These examples establish sharpness across
+those regimes, with widths ranging from a constant to order $\sqrt L$.
+Using $g_\Sigma\le C\sqrt L$, the conjecture also implies the
+dimension-based bound $C\min\{1,\delta L^{3/2}\}$.
 
 
 Theorem~\ref{thm:unrestricted} proves the conjectured rate for arrays with ${s_4D_L\le C\delta^2}$.
@@ -4012,24 +4018,33 @@ uniform, and boundedness and continuity of \(F\) give
 
 We now prove the seeded derivative bounds in
 \eqref{eq:seeded-derivatives}. The Gaussian component allows us to
-integrate twice by parts in a repeated summand direction. This
-contributes a factor \(\sigma^{-2}\) and leaves only first or
-second derivatives of the logistic approximation. To use the
-aggregate moment assumptions, we must then sum the coefficient
-matrices before estimating their Gaussian averages.
+replace two derivatives in a repeated direction by a centered
+quadratic function of the Gaussian vector. This produces a factor
+$\sigma^{-2}$ and leaves only first or second derivatives of the
+logistic approximation. The remaining derivatives supply face
+components, which we combine with the repeated direction into
+coefficient matrices. Summing these matrices over the observations
+before estimating their Gaussian averages will preserve the
+aggregate moment bounds.
 
 The analytic input is Lemma~\ref{appx-an:lem:matrix}, stated and
-proved in Subsection~\ref{appx-an:sec:matrix}. It bounds the sum of
-the nuclear norms of the averages of \(GG^\top-I_r\) against
+proved in Subsection~\ref{appx-an:sec:matrix}. It controls the sum of
+the nuclear norms of averages of $GG^\top-I_r$ against
 logistic product weights, without a factor depending on rank.
-Here \(\|\cdot\|_*\) denotes the \emph{nuclear norm}, the sum of
-singular values, and \(\|\cdot\|_{\op}\) denotes the
+Here $\|\cdot\|_*$ denotes the \emph{nuclear norm}, the sum of
+singular values, and $\|\cdot\|_{\op}$ denotes the
 \emph{operator norm}, the largest singular value. The next lemma
-places all the weights at a common evaluation point so that this
-matrix estimate applies. Its parameter \(s\) counts the derivatives
-left after integration by parts: \(s=1\) treats the cubic term,
-and \(s=2\) treats the fourth-order remainder. The auxiliary vectors
-\(Z_i,Z_{i,a}\) are unrelated to the Gaussian target \(Z\).
+reduces the derivative estimates to these matrix averages. Its
+parameter $s$ counts the derivatives remaining after integration
+by parts: $s=1$ treats the cubic term, and $s=2$ treats the
+fourth-order remainder. The auxiliary vectors $Z_i,Z_{i,a}$ are
+unrelated to the Gaussian target $Z$.
+
+The conditioning in the lemma separates the Gaussian integration
+from the other randomness. It freezes the base, shifts, and
+directions, leaving a standard Gaussian vector for integration by
+parts. The concentration assumption on the base refers throughout
+to its unconditional law, as in~\eqref{appx-an:concentration}.
 
 \begin{lemma}[Paired derivatives at translated bases]
 \label{appx-an:lem:restoration}
@@ -4079,44 +4094,88 @@ and each face normal \(u_j\),
 \end{lemma}
 
 \begin{proof}
-Condition first on \(\mathcal H\) and on the arrays. The vector
-\(G\) remains standard Gaussian, whereas the base, shifts, and
-derivative directions are fixed. Applying Stein's
-identity~\cite{Stein1981} twice in the direction \(Z_i\) gives
+Condition on $\mathcal H$ and on the entire collection of arrays.
+Since $G$ is independent of $\mathcal H$, and the arrays are
+conditionally independent of $G$ given $\mathcal H$, the
+conditional law of $G$ remains $N(0,I_r)$. The base $V_0$, shifts
+$v_i$, and derivative directions are now fixed. We write $\E_G$
+for expectation over the remaining Gaussian vector.
+
+To see the two integrations by parts explicitly, define
+\[
+ \psi_i(g):=D^sF(V_0+v_i+\sigma g)
+                  [Z_{i,1},\ldots,Z_{i,s}],\qquad g\in\R^r,
+\]
+and let $\partial_z$ denote differentiation in the Gaussian
+argument $g$ along a fixed direction $z$. The chain rule gives
+\[
+ \partial_{Z_i}^2\psi_i(g)
+ =\sigma^2D^{s+2}F(V_0+v_i+\sigma g)
+                  [Z_i,Z_i,Z_{i,1},\ldots,Z_{i,s}],
+\]
+because each derivative in $g$ contributes a factor $\sigma$.
+Apply Stein's identity~\cite{Stein1981} first to
+$\partial_{Z_i}\psi_i$ and then to $(g\cdot Z_i)\psi_i(g)$:
+\begin{align*}
+ \E_G\partial_{Z_i}^2\psi_i(G)
+ &=\E_G[(G\cdot Z_i)\partial_{Z_i}\psi_i(G)]\\
+ &=\E_G[\{(G\cdot Z_i)^2-\|Z_i\|^2\}\psi_i(G)].
+\end{align*}
+The subtracted term comes from
+$\partial_{Z_i}(g\cdot Z_i)=\|Z_i\|^2$. For fixed directions,
+$\psi_i$ and its derivatives are bounded, so Gaussian
+integrability justifies both integrations by parts.
+
+The centered quadratic factor has the matrix representation
+\[
+ (G\cdot Z_i)^2-\|Z_i\|^2
+ =\tr\{(GG^\top-I_r)Z_iZ_i^\top\}.
+\]
+Combining this identity with the chain rule yields
 \begin{align*}
  &\E_G D^{s+2}F(U+v_i)[Z_i,Z_i,Z_{i,1},\ldots,Z_{i,s}]\\
  &\qquad=\sigma^{-2}\E_G\left[
        \tr\{(GG^\top-I_r)Z_iZ_i^\top\}
        D^sF(U+v_i)[Z_{i,1},\ldots,Z_{i,s}]\right].
 \end{align*}
-The trace is \((G\cdot Z_i)^2-\|Z_i\|^2\).
-Each derivative in \(G\) contributes a factor \(\sigma\),
-which accounts for \(\sigma^{-2}\) on the right.
-For fixed directions the logistic derivatives are bounded, so
-Gaussian integrability justifies these integrations.
-We will average over the arrays and \(\mathcal H\) again before
-using concentration of \(V_0\).
+This accounts for the factor $\sigma^{-2}$ and introduces the
+matrix $GG^\top-I_r$. Concentration has not been used at this
+conditional stage. We will use it only after averaging over the
+arrays and $\mathcal H$ again.
 
 Only first and second derivatives remain. Define
-\(W_j:=F\pi_j\) and \(W_{jk}:=F\pi_j\pi_k\). Their formulas are
+$W_j(x):=F(x)\pi_j(x)$ and
+$W_{jk}(x):=F(x)\pi_j(x)\pi_k(x)$. The first two cases of
+\eqref{appx-eq:partition-derivative} give
 \begin{align*}
  DF(x)[z]&=-h^{-1}\sum_jW_j(x)(u_j\cdot z),\\
  D^2F(x)[z,w]&=h^{-2}\left\{
        2\sum_{j,k}W_{jk}(x)(u_j\cdot z)(u_k\cdot w)
        -\sum_jW_j(x)(u_j\cdot z)(u_j\cdot w)\right\}.
 \end{align*}
-For each of these three sums, let \(\alpha=(\alpha_1,\ldots,\alpha_k)\)
-be its ordered tuple of face labels, with \(k=1\) or \(2\), and write
+To organize these three sums, let
+$\alpha=(\alpha_1,\ldots,\alpha_k)$ be an ordered tuple of face
+labels, with $k=1$ or $2$, and define
 \[
  W_\alpha(x):=F(x)\prod_{a=1}^k\pi_{\alpha_a}(x).
 \]
-Let \(c_{i,\alpha}\) be the corresponding product of the \(s\)
-remaining face projections. For the first derivative it is
-\(u_j\cdot Z_{i,1}\); for the two second-derivative sums it is
-\((u_j\cdot Z_{i,1})(u_l\cdot Z_{i,2})\), with \(l=j\) in the
-single-face sum. In particular, \(|c_{i,\alpha}|\le\delta^s\).
-Apart from \(\sigma^{-2}h^{-s}\) and a numerical coefficient of
-absolute value at most \(2\), each contribution has the form
+For the first derivative, $\alpha=(j)$ and
+$c_{i,(j)}:=u_j\cdot Z_{i,1}$. For the two second-derivative
+sums, the respective coefficients are
+\[
+ c_{i,(j,k)}:=(u_j\cdot Z_{i,1})(u_k\cdot Z_{i,2}),
+ \qquad
+ c_{i,(j)}:=(u_j\cdot Z_{i,1})(u_j\cdot Z_{i,2}).
+\]
+Each coefficient contains $s$ face components, so
+\eqref{appx-an:conditional-budget} gives
+$|c_{i,\alpha}|\le\delta^s$.
+
+We now average over the variables conditioned on and sum over
+$i$. The first-derivative sum and the two second-derivative sums
+have numerical coefficients $-1$, $2$, and $-1$, respectively.
+After extracting that coefficient and the common factor
+$\sigma^{-2}h^{-s}$, each contribution has the form
 \begin{equation}
  \sum_\alpha\sum_i\E\left[
   \tr\{(GG^\top-I_r)Z_iZ_i^\top\}\,
@@ -4124,58 +4183,128 @@ absolute value at most \(2\), each contribution has the form
  \label{appx-an:weighted-pair-form}
 \end{equation}
 
-The shifts \(v_i\) can depend on the derivative directions. We
-therefore express each translated weight exactly in terms of
-weights at \(U\), keeping the shifts in the coefficients.
-For a deterministic shift \(v\), define
+The shifts $v_i$ can depend on the derivative directions, so the
+translated weights in~\eqref{appx-an:weighted-pair-form} cannot
+be separated from the coefficients by independence. We instead
+express each translated weight as a convergent series of weights
+at the common point $U$. In this representation, all dependence
+on the shift remains in the coefficients.
+
+We first derive the identity at deterministic points
+$x,v\in\R^r$. Define
 \[
  d_j(v):=e^{u_j\cdot v/h}-1,\qquad
  z_v(x):=\sum_j\pi_j(x)d_j(v),\qquad
  \eta_b:=e^{b\delta/h}-1.
 \]
-The denominator in~\eqref{appx-an:basic-notation} satisfies
-\(N(x+v)=N(x)(1+z_v(x))\), and hence
+Here $d_j(v)$ is the relative change in the exponential weight
+of face $j$. Recalling the notation
+in~\eqref{appx-an:basic-notation}, we have
+\[
+ \begin{aligned}
+ N(x+v)
+ &=1+\sum_j e^{q_j(x)}\{1+d_j(v)\}\\
+ &=N(x)+\sum_j e^{q_j(x)}d_j(v)
+ =N(x)\{1+z_v(x)\}.
+ \end{aligned}
+\]
+Thus $z_v(x)$ is the relative change in the common denominator.
+In particular,
+\[
+ F(x+v)=\frac{F(x)}{1+z_v(x)},\qquad
+ \pi_j(x+v)=\frac{\pi_j(x)e^{u_j\cdot v/h}}{1+z_v(x)}.
+\]
+The product $W_\alpha=F\prod_{a=1}^k\pi_{\alpha_a}$ contains
+$k+1$ such denominator factors, which gives
 \begin{equation}
  W_\alpha(x+v)=W_\alpha(x)
  e^{\sum_{a=1}^k u_{\alpha_a}\cdot v/h}
  (1+z_v(x))^{-k-1}.
  \label{eq:weight-translation}
 \end{equation}
-If \(\|v\|_U\le b\delta\), then
-\(|d_j(v)|\le\eta_b\) and \(|z_v(x)|\le\eta_b\), since
-\(\sum_j\pi_j(x)\le1\).
-Choose \(\mathsf A_b\ge1\) large enough that \(\eta_b<1\).
-The binomial series then gives
+To expand the last factor, suppose that $\|v\|_U\le b\delta$.
+The inequality $|e^t-1|\le e^{|t|}-1$ gives
+$|d_j(v)|\le\eta_b$, and hence
 \[
+ |z_v(x)|\le\sum_j\pi_j(x)|d_j(v)|
+             \le\eta_b\sum_j\pi_j(x)\le\eta_b.
+\]
+Choose $\mathsf A_b\ge1$ large enough that
+$e^{b/\mathsf A_b}-1<1$. Since $h\ge\mathsf A_b\delta$,
+we then have $\eta_b<1$, uniformly over $x$ and the allowed
+shifts. The binomial series is therefore absolutely convergent:
+\[
+ \begin{aligned}
  (1+z_v(x))^{-k-1}
- =\sum_{\ell\ge0}(-1)^\ell\binom{k+\ell}{\ell}
+ &=\sum_{\ell\ge0}(-1)^\ell\binom{k+\ell}{\ell}z_v(x)^\ell\\
+ &=\sum_{\ell\ge0}(-1)^\ell\binom{k+\ell}{\ell}
        \sum_{\beta_1,\ldots,\beta_\ell}
        \prod_{q=1}^\ell\pi_{\beta_q}(x)d_{\beta_q}(v).
+ \end{aligned}
 \]
-At \(\ell=0\), the inner sum consists of the empty product \(1\).
+The second equality expands the power of the finite sum defining
+$z_v(x)$. Each $\beta_q$ ranges from $1$ to $m$, so the inner
+sum runs over ordered face tuples. At $\ell=0$, it consists of
+the empty product $1$. After substituting $x=U$ and $v=v_i$,
+every logistic factor is evaluated at $U$, while the shift enters
+only through $e^{\sum_a u_{\alpha_a}\cdot v_i/h}$ and the
+factors $d_{\beta_q}(v_i)$.
 
-These expansions may be interchanged with the expectations in
-\eqref{appx-an:weighted-pair-form}. To verify this, take absolute
-values and sum the weights over all face tuples. Their sum is
-\(F(x)(1-F(x))^{k+\ell}\le1\). The absolute series is therefore
-bounded by
+We next justify interchanging this series with the expectations
+in~\eqref{appx-an:weighted-pair-form}. First, Cauchy--Schwarz gives
+\[
+ \left|\tr\{(GG^\top-I_r)Z_iZ_i^\top\}\right|
+ =\left|(G\cdot Z_i)^2-\|Z_i\|^2\right|
+ \le(\|G\|^2+1)\|Z_i\|^2.
+\]
+For fixed $k$ and $\ell$, summing the nonnegative logistic
+weights over both face tuples gives
+\[
+ \sum_{\alpha,\beta}F(U)
+    \prod_{a=1}^k\pi_{\alpha_a}(U)
+    \prod_{q=1}^\ell\pi_{\beta_q}(U)
+ =F(U)\left\{\sum_j\pi_j(U)\right\}^{k+\ell}
+ =F(U)(1-F(U))^{k+\ell}\le1.
+\]
+Together with $|c_{i,\alpha}|\le\delta^s$,
+$e^{\sum_a u_{\alpha_a}\cdot v_i/h}\le e^{kb\delta/h}$,
+and $|d_{\beta_q}(v_i)|\le\eta_b$, this bounds the sum of the
+absolute values of all terms by
 \[
  \delta^s e^{kb\delta/h}(1-\eta_b)^{-k-1}
        (\|G\|^2+1)\sum_i\|Z_i\|^2.
 \]
-The conditional second-moment assumption gives
-\(\sum_i\E\|Z_i\|^2\le r\), and \(G\) is independent of the
-joint collection of \(\mathcal H\) and the arrays. The displayed
-bound is integrable, so Fubini's theorem
-\cite[Section~2.5]{Folland1999} applies. This preliminary
-integrability argument may depend on \(r\); the estimate below
-will not.
+Here we used
+$\sum_{\ell\ge0}\binom{k+\ell}{\ell}\eta_b^\ell
+=(1-\eta_b)^{-k-1}$.
+Taking traces and expectations in the conditional covariance
+bound~\eqref{appx-an:conditional-budget} yields
+\[
+ \sum_i\E\|Z_i\|^2
+ =\E\tr\left\{\sum_i\E[Z_iZ_i^\top\mid\mathcal H]\right\}
+ \le\tr(I_r)=r.
+\]
+Moreover, $G$ is independent of the joint collection of
+$\mathcal H$ and the arrays, as established at the start of the
+proof. Consequently,
+\[
+ \E\left[(\|G\|^2+1)\sum_i\|Z_i\|^2\right]
+ =(r+1)\sum_i\E\|Z_i\|^2\le r(r+1)<\infty.
+\]
+The absolute series thus has an integrable bound, and Fubini's
+theorem~\cite[Section~2.5]{Folland1999} permits the interchange.
+The rank enters only this justification of integrability. The
+bound on the resulting expectation below will not depend on it.
 
-Every weight involving \(G\) is now evaluated at \(U\).
-For fixed tuples \(\alpha\) and
-\(\beta=(\beta_1,\ldots,\beta_\ell)\), average the remaining
-coefficients conditionally on \(\mathcal H\) into the symmetric
-matrix
+Every weight involving $G$ is now evaluated at $U$. Conditional
+on $\mathcal H$ and $G$, these weights are fixed, because $V_0$
+is $\mathcal H$-measurable. The arrays have the same conditional
+law as they do given $\mathcal H$ alone, by their conditional
+independence from $G$. We can therefore average the coefficient
+matrices over the arrays while keeping the Gaussian weights
+fixed. For each pair of ordered face tuples
+$\alpha=(\alpha_1,\ldots,\alpha_k)$ and
+$\beta=(\beta_1,\ldots,\beta_\ell)$, define
 \[
  \Xi_{\alpha,\beta}:=\sum_i\E\left[
  Z_iZ_i^\top c_{i,\alpha}
@@ -4183,112 +4312,229 @@ matrix
  \prod_{q=1}^\ell d_{\beta_q}(v_i)
  \,\middle|\,\mathcal H\right].
 \]
-The conditional independence from \(G\) permits this averaging.
-For any vector \(z\in\R^r\), the coefficient bounds and
-\eqref{appx-an:conditional-budget} give
+This matrix is $\mathcal H$-measurable and symmetric, since each
+$Z_iZ_i^\top$ is symmetric and its multiplier is real. The
+multiplier may have either sign, so we estimate the operator norm
+through quadratic forms. We keep the sum over $i$ inside the
+matrix being estimated, where the aggregate moment assumptions
+can be applied.
+
+For $z\in\R^r$, the identity
+$z^\top Z_iZ_i^\top z=(z\cdot Z_i)^2$ and the coefficient bounds
+from the preceding calculation give
 \[
  \begin{aligned}
  |z^\top\Xi_{\alpha,\beta}z|
  &\le\delta^s e^{kb\delta/h}\eta_b^\ell
        \sum_i\E[(z\cdot Z_i)^2\mid\mathcal H]\\
+ &=\delta^s e^{kb\delta/h}\eta_b^\ell
+       z^\top\left\{\sum_i\E[Z_iZ_i^\top\mid\mathcal H]\right\}z\\
  &\le\delta^s e^{kb\delta/h}\eta_b^\ell\|z\|^2.
  \end{aligned}
 \]
-Since \(\Xi_{\alpha,\beta}\) is symmetric, taking the supremum
-over unit \(z\) proves
+The last inequality is the conditional covariance
+bound~\eqref{appx-an:conditional-budget}. For a real symmetric
+matrix, the operator norm is the largest absolute eigenvalue,
+which equals the supremum of the absolute quadratic form over
+unit vectors. Hence, almost surely,
 \[
  \|\Xi_{\alpha,\beta}\|_{\op}
+ =\sup_{\|z\|=1}|z^\top\Xi_{\alpha,\beta}z|
  \le\delta^s e^{kb\delta/h}\eta_b^\ell.
 \]
-This is the operator-norm use of the second-moment assumption
-recorded in Subsection~\ref{appx-an:sec:coords}.
+This is the use of the covariance bound described in
+Subsection~\ref{appx-an:sec:coords}.
 
-The additional moment assumptions improve this bound at the same
-step. If \(s=1\) and every shift is zero, then
-\(d_j(v_i)=0\), so only \(\ell=0\) remains. Its coefficient
-matrix is precisely the signed sum in
-\eqref{appx-an:signed-cubic-budget}, and its norm is at most
-\(M_1\). Thus the cancellation in that assumption is retained.
+The additional moment assumptions sharpen the coefficient
+estimate at this same step. For $s=1$, the derivative formula
+has $k=1$, $\alpha=(j)$, and
+$c_{i,(j)}=u_j\cdot Z_{i,1}$. If every shift is zero, then the
+exponential multiplier is $1$ and $d_j(v_i)=0$. All terms with
+$\ell\ge1$ vanish. For $\ell=0$, write $\beta=\varnothing$ for
+the empty tuple. The remaining matrix is
+\[
+ \Xi_{(j),\varnothing}
+ =\sum_i\E[Z_iZ_i^\top(u_j\cdot Z_{i,1})\mid\mathcal H],
+ \qquad
+ \|\Xi_{(j),\varnothing}\|_{\op}\le M_1,
+\]
+where the inequality is exactly
+\eqref{appx-an:signed-cubic-budget}. Because the norm is taken
+after summing over $i$, the cancellation permitted by that
+assumption is retained.
 
-If \(s=2\), write the two factors in \(c_{i,\alpha}\) as
-\(x_i=u_j\cdot Z_{i,1}\) and \(y_i=u_l\cdot Z_{i,2}\).
-For a unit vector \(z\), remove the translation multipliers by
-their absolute bound and use \(|x_iy_i|\le(x_i^2+y_i^2)/2\).
-It follows that
+For $s=2$, each coefficient is a product of two face components.
+Write
+\[
+ x_i:=u_{j_1}\cdot Z_{i,1},\qquad
+ y_i:=u_{j_2}\cdot Z_{i,2},\qquad c_{i,\alpha}=x_iy_i,
+\]
+where $j_1=j_2$ in the single-face sum and
+$\alpha=(j_1,j_2)$ in the two-face sum. The moment
+bound~\eqref{appx-an:weighted-fourth-budget}, applied to the
+first slot and tested against $z\in\R^r$, gives
+\[
+ \begin{aligned}
+ \sum_i\E[(z\cdot Z_i)^2x_i^2\mid\mathcal H]
+ &=z^\top\left\{\sum_i\E[
+       Z_iZ_i^\top(u_{j_1}\cdot Z_{i,1})^2
+                         \mid\mathcal H]\right\}z\\
+ &\le M_2\|z\|^2.
+ \end{aligned}
+\]
+Applying the same assumption to the second slot gives the
+identical bound with $y_i^2$ in place of $x_i^2$.
+We can therefore control the mixed product by the pointwise
+inequality $|x_iy_i|\le(x_i^2+y_i^2)/2$. Using also the
+absolute bounds on the translation multipliers yields
 \[
  \begin{aligned}
  |z^\top\Xi_{\alpha,\beta}z|
+ &\le e^{kb\delta/h}\eta_b^\ell
+       \sum_i\E[(z\cdot Z_i)^2|x_iy_i|\mid\mathcal H]\\
  &\le\frac12e^{kb\delta/h}\eta_b^\ell
        \sum_i\E[(z\cdot Z_i)^2(x_i^2+y_i^2)
                          \mid\mathcal H]\\
- &\le M_2e^{kb\delta/h}\eta_b^\ell.
+ &\le M_2e^{kb\delta/h}\eta_b^\ell\|z\|^2.
  \end{aligned}
 \]
-The last inequality applies
-\eqref{appx-an:weighted-fourth-budget} to the two slots separately.
-It does not require independence between a shift and a derivative
-direction. We have therefore obtained the same coefficient bound
-with \(\delta^s\) replaced by \(M_s\) in the stated cases.
-
-To finish, define the Gaussian matrix at the common base by
+Taking the supremum over unit $z$ gives
 \[
- M_{\alpha,\beta}(V_0):=
- \E_G\left[(GG^\top-I_r)F(U)
-       \prod_{a=1}^k\pi_{\alpha_a}(U)
-       \prod_{q=1}^\ell\pi_{\beta_q}(U)\right].
+ \|\Xi_{\alpha,\beta}\|_{\op}
+ \le M_2e^{kb\delta/h}\eta_b^\ell.
 \]
-After the conditional averaging, expression
-\eqref{appx-an:weighted-pair-form} equals
+The bounds on the translation factors and the mixed product are
+pointwise, so they remain valid when the shifts and derivative
+directions are dependent. Thus the coefficient bounds hold with
+$\delta^s$ replaced by $M_s$ in the stated cases. Although
+$\Xi_{\alpha,\beta}$ can depend on $\mathcal H$, all the
+operator-norm bounds just obtained are deterministic.
+
+It remains to pair these coefficient matrices with the Gaussian
+averages and sum over the translation series. For a deterministic
+base point $x\in\R^r$, define
+\[
+ M_{\alpha,\beta}(x):=
+ \E_G\left[(GG^\top-I_r)F(x+\sigma G)
+       \prod_{a=1}^k\pi_{\alpha_a}(x+\sigma G)
+       \prod_{q=1}^\ell\pi_{\beta_q}(x+\sigma G)\right].
+\]
+Conditional on $\mathcal H$, the matrix $\Xi_{\alpha,\beta}$
+and the base $V_0$ are fixed, while $G$ remains standard Gaussian.
+We can therefore take $\Xi_{\alpha,\beta}$ outside the Gaussian
+expectation and evaluate the remaining average as
+$M_{\alpha,\beta}(V_0)$. Averaging over $\mathcal H$ then shows
+that expression~\eqref{appx-an:weighted-pair-form} equals
 \[
  \sum_{\ell\ge0}(-1)^\ell\binom{k+\ell}{\ell}
        \E\sum_{\alpha,\beta}
        \tr\{\Xi_{\alpha,\beta}M_{\alpha,\beta}(V_0)\}.
 \]
-Apply the operator--nuclear norm inequality
+Both matrices in the trace are symmetric. We use the
+operator--nuclear norm inequality~\cite[Chapter~IV]{Bhatia1997},
+which can be seen directly by writing
+$M=\sum_{q=1}^r\lambda_q e_qe_q^\top$ in an orthonormal
+eigenbasis:
 \[
- |\tr(\Xi M)|\le\|\Xi\|_{\op}\|M\|_*,
+ |\tr(\Xi M)|
+ \le\sum_{q=1}^r|\lambda_q|\,|e_q^\top\Xi e_q|
+ \le\|\Xi\|_{\op}\sum_{q=1}^r|\lambda_q|
+ =\|\Xi\|_{\op}\|M\|_*.
 \]
-as in~\cite[Chapter~IV]{Bhatia1997}, before averaging over
-\(\mathcal H\). Although \(\Xi_{\alpha,\beta}\) may depend on
-\(V_0\), its operator-norm bound is deterministic. The remaining
-expectation thus involves only the unconditional law of \(V_0\).
-Lemma~\ref{appx-an:lem:matrix}, with \(k+\ell\) factors, gives
+Apply this inequality for each realization of $\mathcal H$
+and use the deterministic bound on $\|\Xi_{\alpha,\beta}\|_{\op}$.
+For each fixed $\ell$, we obtain
 \[
- \E\sum_{\alpha,\beta}\|M_{\alpha,\beta}(V_0)\|_*
+ \begin{aligned}
+ \left|\E\sum_{\alpha,\beta}
+       \tr\{\Xi_{\alpha,\beta}M_{\alpha,\beta}(V_0)\}\right|
+ &\le\E\sum_{\alpha,\beta}
+       \|\Xi_{\alpha,\beta}\|_{\op}
+       \|M_{\alpha,\beta}(V_0)\|_*\\
+ &\le\delta^s e^{kb\delta/h}\eta_b^\ell
+       \E_{V_0}\sum_{\alpha,\beta}
+       \|M_{\alpha,\beta}(V_0)\|_*.
+ \end{aligned}
+\]
+The last expectation depends only on the unconditional law of
+$V_0$. Thus dependence between $\Xi_{\alpha,\beta}$ and $V_0$
+causes no difficulty, and we can use the concentrated-base
+assumption~\eqref{appx-an:concentration} in its stated,
+unconditional form.
+
+Concatenating $\alpha$ and $\beta$ gives an ordered tuple of
+$k+\ell$ face labels, including repetitions. Hence the sum of
+nuclear norms is exactly of the form covered by
+Lemma~\ref{appx-an:lem:matrix}. Its hypotheses hold because
+$G$ is independent of $V_0$, the Gaussian scale satisfies
+$\delta\sqrt L\le\sigma\le1$, and
+$h\ge\mathsf A_b\delta\ge\delta$. The lemma gives
+\[
+ \E_{V_0}\sum_{\alpha,\beta}\|M_{\alpha,\beta}(V_0)\|_*
  \le C_1^{k+\ell+1}h\kappa L.
 \]
-In particular, no concentration assertion conditional on
-\(\mathcal H\) is needed.
 
-Restoring \(\sigma^{-2}h^{-s}\), each of the three derivative
-contributions is bounded by
-\(\sigma^{-2}\delta^s h^{1-s}\kappa L\) times
+The factor $C_1^{k+\ell+1}$ grows with the number of logistic
+factors. We therefore enlarge $\mathsf A_b$, if necessary, so that
 \[
- e^{kb\delta/h}C_1^{k+1}
- \sum_{\ell\ge0}\binom{k+\ell}{\ell}(C_1\eta_b)^\ell
- =e^{kb\delta/h}C_1^{k+1}(1-C_1\eta_b)^{-k-1}.
+ C_1\bigl(e^{b/\mathsf A_b}-1\bigr)\le\tfrac12.
 \]
-Increase \(\mathsf A_b\), if necessary, so that
-\(h\ge\mathsf A_b\delta\) implies \(C_1\eta_b\le1/2\).
-Since \(k\le2\), the last expression is bounded by \(C_b\).
-Adding the three possible contributions proves
-\eqref{appx-an:restoration-bound}. The coefficient bounds with
-\(M_s\) give its two refinements by the same calculation.
+For $h\ge\mathsf A_b\delta$, this ensures
+$C_1\eta_b\le1/2$. Taking absolute values in the series
+representation above and applying the two bounds shows that the
+absolute value of~\eqref{appx-an:weighted-pair-form} is at most
+\[
+ \delta^s h\kappa L\,e^{kb\delta/h}C_1^{k+1}
+ \sum_{\ell\ge0}\binom{k+\ell}{\ell}(C_1\eta_b)^\ell
+ =\delta^s h\kappa L\,e^{kb\delta/h}C_1^{k+1}
+       (1-C_1\eta_b)^{-k-1}.
+\]
+Here the same binomial-series identity used for the translation
+now sums the bounds on its Gaussian averages. Since $k\le2$,
+we have $(1-C_1\eta_b)^{-k-1}\le2^{k+1}$ and
+$e^{kb\delta/h}\le e^{2b/\mathsf A_b}$. The remaining factors
+are therefore bounded by a constant depending only on $b$.
+
+Finally, restore the factor $\sigma^{-2}h^{-s}$ extracted before
+\eqref{appx-an:weighted-pair-form}. Each derivative contribution,
+before its numerical coefficient, is bounded by
+\[
+ \sigma^{-2}h^{-s}\,C_b\delta^s h\kappa L
+ =\frac{C_b}{\sigma^2}\delta^s h^{1-s}\kappa L.
+\]
+For $s=1$ there is a single contribution with coefficient $-1$.
+For $s=2$ there are two contributions with coefficients $2$ and
+$-1$. Absorbing their absolute coefficients into $C_b$ proves
+\eqref{appx-an:restoration-bound}.
+
+For the cubic refinement, the zero shifts leave only $\ell=0$,
+and the bound on $\Xi_{(j),\varnothing}$ replaces $\delta$ by
+$M_1$ in the same trace estimate. For the fourth-order
+refinement, the coefficient bound with $M_2$ replaces $\delta^2$
+throughout the series calculation. These are the two asserted
+improvements. Uniformity over the threshold vector follows from
+the coefficient estimates and the uniform matrix bound in
+Lemma~\ref{appx-an:lem:matrix}.
 \end{proof}
 
-We now apply the lemma to the calibrated path. We split its
-Gaussian component into two independent parts: one remains in the
-base to provide concentration, while the other is used for
-integration by parts. We then verify the conditional moment
-bounds separately for the cubic term and for the three
-fourth-order tensor terms.
+We now apply the lemma to the calibrated path. The retained
+summands lose variance as $t$ approaches $1$, so they cannot by
+themselves provide a uniform concentration bound for the base.
+We reserve half of the Gaussian variance for the base and use
+the other half for integration by parts. We first verify the
+base and independence assumptions, then check the sharper moment
+bounds for the cubic term and the three fourth-order tensor terms.
 
 \begin{proof}[Proof of the seeded estimates~\eqref{eq:seeded-derivatives}]
-Fix \(0<t<1\), take \(\varepsilon=Lh^2<1/4\), and use the
-rescaled test function \(f=F_{\widetilde a,\widetilde h}\) from
-\eqref{eq:seeded-test}. Let \(G_0,G_1\) be independent standard
-Gaussian vectors, independent of the summands, masks, and copies.
-We may realize the unnormalized path as
+Fix $0<t<1$ and take $\varepsilon=Lh^2<1/4$. As
+in~\eqref{eq:seeded-test}, work with the unnormalized path
+$Y_t=\sqrt{1+\varepsilon}\,U_t$ and the rescaled test function
+$f=F_{\widetilde a,\widetilde h}$, where
+$\widetilde a=\sqrt{1+\varepsilon}\,a$ and
+$\widetilde h=\sqrt{1+\varepsilon}\,h$. Thus
+$f(Y_t)=F_{a,h}(U_t)$.
+Let $G_0,G_1\sim N(0,I_r)$ be independent of each other and of
+the original summands, masks, and copies. We realize the path as
 \begin{equation}
  \begin{aligned}
  Y_t&=V_{0,t}+\sigma_tG_1,\\
@@ -4298,84 +4544,179 @@ We may realize the unnormalized path as
  \end{aligned}
  \label{eq:seeded-gaussian-split}
 \end{equation}
-The sum \(\sigma_t(G_0+G_1)\) has the same law as
-\(\sqrt{t+\varepsilon}\,G\). This replacement preserves the joint
-law of \(Y_t\), its versions with a summand removed, and the copies
-used in the interpolation identity.
+Indeed, $\sigma_t(G_0+G_1)$ is centered Gaussian with covariance
+$2\sigma_t^2I_r=(t+\varepsilon)I_r$, and it is independent of
+all summands, masks, and copies. It therefore has the same joint
+law with these variables as $\sqrt{t+\varepsilon}\,G$ does.
+Using this same Gaussian sum in $Y_t$ and every removed-summand
+base $H_{i,t}$ preserves all the joint laws in the interpolation
+identity~\eqref{appx-an:fourth-identity}.
 
-We first check concentration of \(V_{0,t}\).
-Its two independent components have common face variances \(1-t\)
-and \((t+\varepsilon)/2\), respectively. At least one of these is
-at least \(1/3\): the first is at least \(1/3\) when \(t\le2/3\),
-and the second is at least \(1/3\) when \(t\ge2/3\).
-The retained summands are independent and centered and have face
-norms at most \(2\delta\).
-By~\eqref{appx-an:retained-maximum}, their sum has expected face
-norm at most \(2\E\|W\|_\infty\); the Gaussian component has
-expected face norm \(\sigma_tg_\Sigma\le g_\Sigma\).
-Apply Lemma~\ref{lem:concentration} to the component with the
-larger variance, conditioning on the other component as an
-independent shift. Its intrinsic and dimension-based bounds give
-\eqref{appx-an:concentration} with the coefficient \(\kappa\) in
-\eqref{eq:intrinsic-boundary-coefficient}, after absorbing the
-factor \(2\) in the summand bound into the absolute constant.
-Thus \(V_{0,t}\) is a concentrated base uniformly in \(t\).
-
-The Gaussian scale satisfies the required inequalities. If the
-constant \(\mathsf A\) in Proposition~\ref{an:prop:derivative} is
-at least \(\sqrt2\), then \(h\ge\mathsf A\delta\) gives
+The Gaussian scale already satisfies the lemma's upper bound.
+Its lower bound follows from the seed: if the constant
+$\mathsf A$ in Proposition~\ref{an:prop:derivative} is at least
+$\sqrt2$, then $h\ge\mathsf A\delta$ gives
 \[
  \sigma_t^2\ge\varepsilon/2=Lh^2/2\ge\delta^2L,
  \qquad
  \sigma_t^2<(1+1/4)/2<1.
 \]
-Let \(\mathcal H\) be generated by the original summands, masks,
-and \(G_0\). The base \(V_{0,t}\) is \(\mathcal H\)-measurable,
-and \(G_1\) is independent of \(\mathcal H\).
-Each copy array is independent of \(\mathcal H\) and has conditional
-aggregate second-moment matrix \(I_r\).
-The copies and the shifts in~\eqref{appx-an:translates} are also
-jointly independent of \(G_1\) conditional on \(\mathcal H\).
-Their face bounds are \(\delta\) for each copy and \(4\delta\)
-for each shift. Consequently the lemma applies at width
-\(\widetilde h\ge h\), with \(b=4\), once we take
-\(\mathsf A\ge\mathsf A_4\).
-Concentration here is a property of the unconditional law of
-\(V_{0,t}\), already verified above.
+Thus $\delta\sqrt L\le\sigma_t\le1$ uniformly in $t$.
 
-To check the sharper moment bounds, recall the support-coordinate
-map
+We next verify concentration of $V_{0,t}$. The masks are
+independent of the centered summands and have retention
+probability $\varpi(t)=(1-t)/(1+t)^2$. Consequently,
+\[
+ \Cov\left((1+t)\sum_i\mathbb B_{i,t}\zeta_i^0\right)
+ =(1+t)^2\varpi(t)\sum_i\E[\zeta_i^0(\zeta_i^0)^\top]
+ =(1-t)I_r.
+\]
+The other component, $\sigma_tG_0$, has covariance
+$\sigma_t^2I_r=(t+\varepsilon)I_r/2$ and is independent of this
+sum. Since every face normal has unit length, the two components
+have common face variances $1-t$ and $(t+\varepsilon)/2$,
+respectively.
+
+The retained summands remain independent and centered, and each
+has face norm at most $(1+t)\delta\le2\delta$. Conditioning on
+the masks and using~\eqref{appx-an:retained-maximum} gives
+\[
+ \E\left\|(1+t)\sum_i\mathbb B_{i,t}\zeta_i^0\right\|_U
+ \le(1+t)\E\|W\|_\infty\le2\E\|W\|_\infty.
+\]
+Also, $\Gamma G_0$ has the law of the Gaussian target, so
+$\E\|\sigma_tG_0\|_U=\sigma_tg_\Sigma\le g_\Sigma$.
+If $t\le2/3$, apply the bounded-summand part of
+Lemma~\ref{lem:concentration} to the retained sum, whose common
+face variance is at least $1/3$. If $t>2/3$, apply its Gaussian
+part to $\sigma_tG_0$, whose common face variance is greater
+than $1/3$. In each case, the other component is an independent
+shift, as allowed by the lemma. Its intrinsic and
+dimension-based estimates therefore give, for every threshold
+vector $a$ and layer width $w>0$,
+\[
+ \begin{aligned}
+ \Pp\{V_{0,t}\in A_a^w\setminus A_a^{-w}\}
+ &\le C(w+\delta)
+       \min\{\sqrt L,\,1+\max\{\E\|W\|_\infty,g_\Sigma\}\}\\
+ &=C(w+\delta)\kappa.
+ \end{aligned}
+\]
+Here the factors $2$ in the summand envelope and $1/3$ in the
+variance lower bound are absorbed into the absolute constant,
+and $\kappa$ is defined in~\eqref{eq:intrinsic-boundary-coefficient}.
+Thus $V_{0,t}$ is a concentrated base uniformly in $t$.
+
+To apply the paired-derivative lemma, let $\mathcal H$ be
+generated by the original summands, the masks at time $t$, and
+$G_0$. The base $V_{0,t}$ is then $\mathcal H$-measurable, and
+$G_1$ is independent of $\mathcal H$. Both copy arrays
+$\zeta_i$ and $\widetilde\zeta_i$ are independent of
+$\mathcal H$ and have the same marginal laws as the original
+summands. Hence
+\[
+ \sum_i\E[\zeta_i\zeta_i^\top\mid\mathcal H]
+ =\sum_i\E[\widetilde\zeta_i\widetilde\zeta_i^\top
+                     \mid\mathcal H]
+ =\sum_i\E[\zeta_i^0(\zeta_i^0)^\top]=I_r.
+\]
+This verifies the conditional second-moment requirement for
+either choice of the repeated direction in the lemma.
+
+The cubic derivative is evaluated at $Y_t$ and has zero shift.
+At a fourth-order remainder point, 
+\eqref{appx-an:translates} gives, for $0\le u\le1$,
+\[
+ H_{i,t}+u(1+t)\zeta_i=Y_t+v_i,\qquad
+ v_i=(1+t)\{u\zeta_i-\mathbb B_{i,t}\zeta_i^0\}.
+\]
+These shifts are functions of the copies and variables in
+$\mathcal H$. Thus the copies and shifts are jointly independent
+of $G_1$ conditional on $\mathcal H$, even though a shift may
+depend on a derivative direction. Each copy has face norm at
+most $\delta$, and
+\[
+ \|v_i\|_U
+ \le(1+t)\{u\|\zeta_i\|_U
+                  +\mathbb B_{i,t}\|\zeta_i^0\|_U\}
+ \le4\delta.
+\]
+The lemma therefore applies to $f$ at width
+$\widetilde h\ge h$, with $b=4$, once we take
+$\mathsf A\ge\max\{\sqrt2,\mathsf A_4\}$. Its concentration
+assumption concerns the unconditional law of $V_{0,t}$ verified
+above; the conditioning on $\mathcal H$ is used for the moment
+bounds and the Gaussian integration.
+
+It remains to verify the sharper moment assumptions with
+$M_1=s_3$ and $M_2=s_4$. We first express the original moment
+matrices in support coordinates. Recall the $r\times p$ map
 \[
  P:=(\Gamma^\top\Gamma)^{-1}\Gamma^\top,
- \qquad \zeta_i^0=P\xi_i,\qquad P\Sigma P^\top=I_r.
+ \qquad \zeta_i^0=P\xi_i.
 \]
-For any \(z\in\R^r\), apply~\eqref{eq:relative-moments} to
-\(P^\top z\). This gives
+Since $\Gamma$ has full column rank, $P\Gamma=I_r$, and hence
+\[
+ P\Sigma P^\top=P\Gamma\Gamma^\top P^\top=I_r.
+\]
+For $z\in\R^r$, applying the relative moment
+bounds~\eqref{eq:relative-moments} to $P^\top z\in\R^p$ gives
+\[
+ \begin{aligned}
+ |z^\top PT_jP^\top z|
+ &\le s_3z^\top P\Sigma P^\top z=s_3\|z\|^2,\\
+ z^\top PQP^\top z
+ &\le s_4z^\top P\Sigma P^\top z=s_4\|z\|^2,
+       \qquad Q\in\{Q_j,\widetilde Q_j\}.
+ \end{aligned}
+\]
+The first matrix is symmetric, and the other two are positive
+semidefinite. Taking the supremum over unit $z$ in the first
+inequality and using the definition of positive-semidefinite
+order in the other two yields
 \[
  \|PT_jP^\top\|_{\op}\le s_3,\qquad
  PQ_jP^\top\preceq s_4I_r,\qquad
  P\widetilde Q_jP^\top\preceq s_4I_r.
 \]
-For example,
-\(\left|z^\top PT_jP^\top z\right|
- \le s_3z^\top P\Sigma P^\top z=s_3\|z\|^2\);
-the other two inequalities follow in the same way.
-These conclusions do not require \(\Sigma\) to be invertible.
+Only $\Gamma^\top\Gamma$ is inverted, so these comparisons
+remain valid when $\Sigma$ is singular.
 
-For the cubic term, take \(Z_i=Z_{i,1}=\zeta_i\) and zero shift.
-Each face projection is, up to sign, an original coordinate.
-Independence of the copies from \(\mathcal H\) therefore makes the
-conditional matrix in~\eqref{appx-an:signed-cubic-budget} equal
-to \(\pm PT_jP^\top\) for the corresponding coordinate \(j\).
-Thus \(M_1=s_3\), and the lemma gives
+For the cubic term, take $Z_i=Z_{i,1}=\zeta_i$ and zero shift.
+Each face normal has the form $u_\alpha=\pm\Gamma^\top e_j$
+for some $j\le p$. Since $\Gamma\zeta_i^0=\xi_i$,
+\[
+ u_\alpha\cdot\zeta_i^0=\pm\xi_{ij}.
+\]
+The copies are independent of $\mathcal H$ and have the same
+laws as the original support-coordinate summands. Thus the
+conditional matrix in~\eqref{appx-an:signed-cubic-budget} is
+\[
+ \begin{aligned}
+ \sum_i\E[\zeta_i\zeta_i^\top
+                    (u_\alpha\cdot\zeta_i)\mid\mathcal H]
+ &=\pm P\left\{\sum_i\E[\xi_i\xi_i^\top\xi_{ij}]\right\}P^\top\\
+ &=\pm PT_jP^\top.
+ \end{aligned}
+\]
+Its operator norm is at most $s_3$, so we may take $M_1=s_3$.
+Moreover, the copies are independent of $Y_t$. Averaging their
+cubic tensors therefore recovers
+$K_3=\sum_i\E\zeta_i^{\otimes3}$. Applying
+Lemma~\ref{appx-an:lem:restoration} gives
 \[
  |\E D^3f(Y_t):K_3|
  =\left|\sum_i\E D^3f(Y_t)[\zeta_i,\zeta_i,\zeta_i]\right|
  \le\frac{Cs_3\kappa L}{\sigma_t^2}.
 \]
-Using~\eqref{eq:seeded-test} and
-\(\sigma_t^2=(t+\varepsilon)/2\), we obtain exactly the cubic
-bound in~\eqref{eq:seeded-derivatives}:
+To return to the normalized path, the chain rule for
+$f(x)=F_{a,h}(x/\sqrt{1+\varepsilon})$ gives
+\[
+ D^3f(Y_t)=(1+\varepsilon)^{-3/2}D^3F_{a,h}(U_t).
+\]
+Multiplying the preceding bound by $t/3$ and using
+$\sigma_t^2=(t+\varepsilon)/2$ now yields the cubic estimate
+in~\eqref{eq:seeded-derivatives}:
 \[
  \left|\frac{t}{3(1+\varepsilon)^{3/2}}
         \E D^3F_{a,h}(U_t):K_3\right|
@@ -4383,41 +4724,86 @@ bound in~\eqref{eq:seeded-derivatives}:
  \le Cs_3\kappa L\,\frac{t}{t+\varepsilon}.
 \]
 
-For the fourth-order terms, the three tensors in
-\eqref{appx-an:fourth-identity} correspond to the choices
+For the fourth-order remainder, the three tensors in
+\eqref{appx-an:fourth-identity} correspond, respectively, to
 \[
  (Z_i,Z_{i,1},Z_{i,2})
  =(\zeta_i,\zeta_i,\zeta_i),\quad
   (\widetilde\zeta_i,\zeta_i,\zeta_i),\quad
   (\widetilde\zeta_i,\widetilde\zeta_i,\zeta_i),
 \]
-where the first entry supplies the repeated pair.
-Consider either remaining slot in each choice. If it uses the
-repeated copy, the conditional matrix in
-\eqref{appx-an:weighted-fourth-budget} is \(PQ_jP^\top\).
-If it uses the independent copy, that matrix is
-\(P\widetilde Q_jP^\top\). Both are bounded by \(s_4I_r\),
-so \(M_2=s_4\) for all three patterns.
-The shifts may contain the same copies as the directions; this
-dependence is permitted by the lemma.
+where the first entry supplies the repeated pair in
+$D^4f[Z_i,Z_i,Z_{i,1},Z_{i,2}]$. To verify
+\eqref{appx-an:weighted-fourth-budget}, consider either remaining
+slot and fix a face $u_\alpha=\pm\Gamma^\top e_j$.
+When that slot uses the repeated copy, the projection is squared
+and the sign disappears. For example,
+\[
+ \begin{aligned}
+ \sum_i\E[\zeta_i\zeta_i^\top
+                  (u_\alpha\cdot\zeta_i)^2\mid\mathcal H]
+ &=P\left\{\sum_i\E[\xi_i\xi_i^\top\xi_{ij}^2]\right\}P^\top\\
+ &=PQ_jP^\top\preceq s_4I_r.
+ \end{aligned}
+\]
+The same calculation applies with $\widetilde\zeta_i$ in place
+of $\zeta_i$. When the slot uses the independent copy, its
+squared projection factors from the repeated pair:
+\[
+ \begin{aligned}
+ \sum_i\E[\widetilde\zeta_i\widetilde\zeta_i^\top
+                  (u_\alpha\cdot\zeta_i)^2\mid\mathcal H]
+ &=\sum_i\E[\widetilde\zeta_i\widetilde\zeta_i^\top]
+                   \E[(u_\alpha\cdot\zeta_i)^2]\\
+ &=P\left\{\sum_i\E[\xi_i\xi_i^\top]\E[\xi_{ij}^2]\right\}P^\top\\
+ &=P\widetilde Q_jP^\top\preceq s_4I_r.
+ \end{aligned}
+\]
+Here conditioning on $\mathcal H$ leaves the copy laws and
+their mutual independence unchanged. Thus the two slots give
+$PQ_jP^\top$ in the first pattern,
+$P\widetilde Q_jP^\top$ in the second pattern, and one of each
+in the third. We may take $M_2=s_4$ in all three cases. The
+shift can depend on these same copies, as allowed by the lemma.
 
-At every remainder point, the lemma now bounds the absolute
-value of the summed expected fourth derivative for each pattern
-by \(Cs_4\kappa L/(\widetilde h\,\sigma_t^2)\).
-The interpolation kernels are scalar and common to all summand
-indices. Their absolute integrals are uniformly bounded, as
-shown in Subsection~\ref{appx-an:sec:path}. Hence
+Fix the remainder parameter $u\in[0,1]$. At the corresponding
+points $Y_t+v_i$, the lemma with $s=2$ and width
+$\widetilde h$ gives, for each of the three patterns,
+\[
+ \left|\sum_i\E D^4f(Y_t+v_i)
+                [Z_i,Z_i,Z_{i,1},Z_{i,2}]\right|
+ \le\frac{Cs_4\kappa L}{\widetilde h\,\sigma_t^2}.
+\]
+This estimate controls the sum over $i$ before taking its
+absolute value. The scalar kernels $a_t(u),b_t(u),c_t(u)$ in
+\eqref{appx-an:fourth-identity} are common to all indices, so
+each can be factored out of its corresponding sum. Applying
+the triangle inequality to these three sums and then integrating
+over $u$ gives
 \[
  \begin{aligned}
  |R_f(t)|
  &\le\frac{Cs_4\kappa L}{\widetilde h\,\sigma_t^2}
        \int_0^1\bigl(|a_t(u)|+|b_t(u)|+|c_t(u)|\bigr)\dd u\\
- &\le\frac{Cs_4\kappa L}{h(t+\varepsilon)}.
+ &\le\frac{Cs_4\kappa L}{\widetilde h\,\sigma_t^2}.
  \end{aligned}
 \]
-Since \(R_{4,a,h}(t)=R_f(t)\) by
-\eqref{eq:seeded-test} and the interpolation identity, this is
-the fourth-order bound in~\eqref{eq:seeded-derivatives}.
+The last step uses the uniform bounds on the absolute kernel
+integrals established in Subsection~\ref{appx-an:sec:path}.
+Finally,
+\[
+ \frac1{\widetilde h\,\sigma_t^2}
+ =\frac{2}{\sqrt{1+\varepsilon}\,h(t+\varepsilon)}
+ \le\frac{2}{h(t+\varepsilon)}.
+\]
+Since $f(Y_t)=F_{a,h}(U_t)$, the interpolation identity and
+\eqref{eq:seeded-test} identify $R_f(t)$ with
+$R_{4,a,h}(t)$. Consequently,
+\[
+ |R_{4,a,h}(t)|\le\frac{Cs_4\kappa L}{h(t+\varepsilon)},
+\]
+which is the fourth-order bound in~\eqref{eq:seeded-derivatives}
+and completes the proof of the seeded estimates.
 \end{proof}
 
 
@@ -6660,13 +7046,15 @@ Increasing the constant covers this case by $\rh\le1$ and proves
 Theorem~\ref{thm:polynomial}\textup{(i)}.
 
 \begin{remark}\label{rmk:E1}
-Conjecture~\ref{conj:sharp-unrestricted} concerns the dimension-based
-bounded-observation rate. If it holds, the same conditional transfer,
-using $\sqrt L$ for the boundary coefficient, gives
-$C_q\min\{1,V_q\}$: choose $T:=2B(n/L)^{1/q}$ when $n\ge L$,
-and use $V_q\ge1$ otherwise. An intrinsic bounded-observation bound
-$C\min\{1,\delta g_\Sigma L\}$ would instead give
-$C_q\min\{1,(g_\Sigma/\sqrt L)V_q\}$.
+If Conjecture~\ref{conj:sharp-unrestricted} holds, the same
+conditional transfer retains Gaussian width and gives
+$C_q\min\{1,(g_\Sigma/\sqrt L)V_q\}$. Choose
+$T:=2B(n/L)^{1/q}$ when $n\ge L$. If $n<L$, then
+$(g_\Sigma/\sqrt L)V_q
+=g_\Sigma B\sqrt L(L/n)^{\alpha_q}\ge\sqrt{2/\pi}$,
+so an enlarged constant covers this case by $\rh\le1$.
+The inequality $g_\Sigma\le C\sqrt L$ then gives
+$C_q\min\{1,V_q\}$ in the worst case over covariance matrices.
 \end{remark}
 
 \subsection{\texorpdfstring{{Part (ii): Bennett refinement}}{Part (ii): Bennett refinement}}\label{app:bennett}
