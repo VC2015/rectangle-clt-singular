@@ -3146,7 +3146,7 @@ Subsection~\ref{sec:outline-smoothing}. Thus the vectors
  \label{appx-eq:projected-bound}
 \end{equation}
 In particular, the total second moment in every unit direction is
-one. To use this fact when some of the randomness has already been
+$1$. To use this fact when some of the randomness has already been
 fixed, let \(\mathcal H\) be a \(\sigma\)-field and let \((Z_i)_i\)
 satisfy
 \[
@@ -3174,19 +3174,51 @@ centering nor conditional independence of the \(Z_i\).
 Taking \(Z_i=\zeta_i^0\) and the trivial \(\sigma\)-field recovers
 the unconditional bound used in Section~\ref{sec:smoothing}.
 
-Once two face projections have been summed in this way, each
-remaining projection bounded by \(\delta\) contributes that factor.
-This gives the factors \(\delta\) and \(\delta^2\) in the elementary
-third- and fourth-order estimates. The same second-moment assumption
-also bounds matrices with signed coefficients: if \(|c_i|\le b\)
-almost surely, then
+We now explain how the pair estimate gives the factors $\delta$ and
+$\delta^2$ in the third- and fourth-order bounds. For an array that
+also satisfies the face-envelope bound $\norm{Z_i}_U\le\delta$
+almost surely, each additional face component can be bounded by
+$\delta$. Thus, for any face indices $\alpha_1,\ldots,\alpha_4$,
+\[
+ \begin{aligned}
+ \sum_i\E\!\left[
+   \left|\prod_{k=1}^3(u_{\alpha_k}\cdot Z_i)\right|
+   \,\middle|\,\mathcal H\right]
+ &\le\delta\sum_i\E[
+   |(u_{\alpha_1}\cdot Z_i)(u_{\alpha_2}\cdot Z_i)|
+   \mid\mathcal H]\le\delta,\\
+ \sum_i\E\!\left[
+   \left|\prod_{k=1}^4(u_{\alpha_k}\cdot Z_i)\right|
+   \,\middle|\,\mathcal H\right]
+ &\le\delta^2\sum_i\E[
+   |(u_{\alpha_1}\cdot Z_i)(u_{\alpha_2}\cdot Z_i)|
+   \mid\mathcal H]\le\delta^2.
+ \end{aligned}
+\]
+The first inequality in each line bounds the remaining components
+by $\delta$, and the second is~\eqref{appx-an:pair-contraction}.
+The face indices need not be distinct.
+
+The same second-moment assumption also bounds matrices with signed
+coefficients. Let $c_i$ be real random variables with $|c_i|\le b$
+almost surely, where $b\ge0$, and define
+\[
+ M:=\sum_i\E[c_iZ_iZ_i^\top\mid\mathcal H].
+\]
+For every unit vector $u$, we have
+\[
+ \begin{aligned}
+ |u^\top Mu|
+ &=\left|\sum_i\E[c_i(u\cdot Z_i)^2\mid\mathcal H]\right|\\
+ &\le b\sum_i\E[(u\cdot Z_i)^2\mid\mathcal H]\le b.
+ \end{aligned}
+\]
+The matrix $M$ is real and symmetric, so its operator norm equals
+the supremum of $|u^\top Mu|$ over unit vectors. Consequently,
 \[
  \left\|\sum_i\E[c_iZ_iZ_i^\top\mid\mathcal H]\right\|_{\mathrm{op}}
  \le b.
 \]
-Indeed, the absolute value of the quadratic form in any unit
-direction \(u\) is at most
-\(b\sum_i\E[(u\cdot Z_i)^2\mid\mathcal H]\le b\).
 This is the matrix form used when a repeated pair of derivatives
 is moved onto the Gaussian density.
 
@@ -3244,16 +3276,24 @@ Here \(q_j\) is the normalized violation of face \(j\), and
 For \(F_s:=F_{a+s\mathbf1,h}\),
 \eqref{appx-eq:F(1-F)} gives
 \(F\theta\le(e/2)(F_h-F_{-h})\).
-Fix \(z\in\R^r\), and take the exponential variables in
-\eqref{eq:mixture} independent of \(V_0\). Conditional on those
-variables, the difference \(F_h-F_{-h}\) is represented by a layer
-indicator with thresholds
+Fix $z\in\R^r$, and take the exponential variables in
+\eqref{eq:mixture} independent of $V_0$. Using the same variables
+for both smoothers, define the shifted thresholds
 \[
  \widetilde a_j
  :=a_j-u_j\cdot z+h\log(\omega_j/\omega_0).
 \]
-More precisely, the mixture representation and
-\eqref{appx-an:concentration} imply
+The corresponding random sets are nested, so the mixture
+representation gives, for every fixed $x\in\R^r$,
+\[
+ F_h(x+z)-F_{-h}(x+z)
+ =\E_\omega\ind_{A_{\widetilde a}^{h}
+                    \setminus A_{\widetilde a}^{-h}}(x).
+\]
+Evaluate this identity at $x=V_0$ and interchange the expectations.
+Conditional on $\omega$, the thresholds $\widetilde a$ are fixed
+and the law of $V_0$ is unchanged by independence. Hence
+\eqref{appx-an:concentration} gives
 \[
  \E\{F_h(V_0+z)-F_{-h}(V_0+z)\}
  =\E_\omega\Pp\{V_0\in
@@ -3266,6 +3306,9 @@ Consequently, for \(h\ge\delta\),
  \sup_{z\in\R^r}\E F(V_0+z)\theta(V_0+z)\le Ch\kappa.
  \label{appx-an:weight-concentration}
 \end{equation}
+Each pair of corresponding random thresholds differs by exactly
+$2h$. Thus the layer width is fixed, and this estimate incurs no
+factor $L$ from the largest random threshold displacement.
 Retaining a single face in the same argument gives
 \[
  \sup_{z\in\R^r}\E
@@ -3387,6 +3430,12 @@ The colon contracts all corresponding indices. The symmetry of
 \(D^4f\) makes explicit symmetrization of the tensors unnecessary.
 \end{lemma}
 
+The three kernels record different fourth-order contributions.
+The kernel $a_t$ comes from expanding the segment Hessian at the
+deleted-summand base, $b_t$ from restoring the removed summand in
+the Hessian, and $c_t$ from moving the cubic derivative to the full
+interpolation point. We derive them in this order.
+
 \begin{proof}
 We first differentiate the expectation while keeping track of the
 three sources of change: the Gaussian variance, the retention
@@ -3411,17 +3460,33 @@ For a fixed vector \(x\), Gaussian integration by parts gives
 \]
 This is the heat identity obtained from
 Stein's identity~\cite{Stein1981}.
-To compute the contribution of mask \(i\), condition on
-\(H_{i,t}\). Averaging over that mask and its summand gives
+To compute the retention-probability contribution of mask $i$,
+vary only its success probability, keeping the other mask
+probabilities, the amplitude, and the Gaussian variance fixed.
+The law of $H_{i,t}$ then stays fixed, since this base excludes
+mask $i$ and its summand. Conditional on $H_{i,t}$, averaging
+over that mask and its summand gives
 \[
  (1-\varpi)f(H_{i,t})
        +\varpi\,\E_{\zeta_i}f(H_{i,t}+\gamma\zeta_i),
 \]
 where \(\E_{\zeta_i}\) averages over the independent copy alone.
-Differentiating its two explicit parameters gives the
-retention-probability and amplitude contributions. The dependence
-of \(H_{i,t}\) on time is accounted for by the other summands and
-the Gaussian term. Thus the product rule yields
+Differentiating this affine expression with respect to the mask
+probability gives the difference
+$\E_{\zeta_i}f(H_{i,t}+\gamma\zeta_i)-f(H_{i,t})$.
+Multiplying by $\varpi'$ and summing over $i$ gives the second
+term below.
+
+For the amplitude contribution, keep the masks and Gaussian
+variance fixed and differentiate the common multiplier $\gamma$.
+The directional derivative is
+$Df(Y_t)[\sum_i\mathbb B_{i,t}\zeta_i^0]$.
+In its $i$th term, conditioning on $H_{i,t}$ and averaging over
+the removed mask gives
+$\varpi\,\E_{\zeta_i}Df(H_{i,t}+\gamma\zeta_i)[\zeta_i]$.
+After multiplication by $\gamma'$, this gives the third term.
+Together with the Gaussian contribution, the product rule
+therefore yields
 \begin{equation}
  \begin{aligned}
  \frac{d}{dt}\E f(Y_t)
@@ -3441,7 +3506,15 @@ directional Hessians that appear in the other two terms:
 \]
 Here the copies are independent of \(Y_t\) and
 \(\sum_i\E\zeta_i\zeta_i^\top=I_r\).
-For any fixed \(x\), centering and integral Taylor expansion give
+For fixed $x$, the linear term vanishes after averaging, because
+\[
+ \E Df(x)[\zeta_i]=Df(x)[\E\zeta_i]=0.
+\]
+Second-order integral Taylor expansion of $f(x+\gamma\zeta_i)$
+therefore gives the first formula below. Applying the fundamental
+theorem of calculus to
+$s\mapsto Df(x+s\gamma\zeta_i)[\zeta_i]$, and using the same
+centering identity, gives the second:
 \begin{align*}
  \E\{f(x+\gamma\zeta_i)-f(x)\}
  &=\gamma^2\int_0^1(1-s)
@@ -3474,14 +3547,15 @@ Substitution into~\eqref{appx-an:three-contributions} yields
                        [\zeta_i,\zeta_i]\dd s\right].
  \label{appx-an:signed-hessian}
 \end{equation}
-The two moments needed to expand this expression are
+The constant and linear terms in a Taylor expansion of the
+segment Hessian will involve the mass and first moment of
+$\nu_t$, respectively. Direct integration gives
 \begin{equation}
  \int_0^1\nu_t(s)\dd s=1,\qquad
  \int_0^1s\nu_t(s)\dd s=(1-\eta_t)/3.
  \label{appx-an:signed-moments}
 \end{equation}
-They follow by integrating the affine function. The density may
-take negative values, so we use these as algebraic identities,
+The density may take negative values, so we use these as algebraic identities,
 not as moments of a probability distribution.
 
 We next expand the segment Hessian at \(H_{i,t}\), where the
@@ -3504,22 +3578,47 @@ The first-moment identity gives the cubic coefficient
  =\frac{(1-t)\gamma'-\gamma}{6}
  =\frac{q_3'(t)}6.
 \]
-Changing the order of the two segment integrals gives the
-fourth-order coefficient
+To identify the fourth-order coefficient, we change the order of
+integration over the triangle $0\le v\le s\le1$. For fixed $x,z$,
+\[
+ \begin{aligned}
+ &\int_0^1\nu_t(s)\int_0^s(s-v)
+       D^4f(x+v\gamma z)[z,z,z,z]\,\dd v\,\dd s\\
+ &\quad=\int_0^1
+       \left\{\int_v^1(s-v)\nu_t(s)\,\dd s\right\}
+       D^4f(x+v\gamma z)[z,z,z,z]\,\dd v.
+ \end{aligned}
+\]
+The bounded fourth derivatives and bounded summands justify this
+interchange also after averaging at $x=H_{i,t}$ and $z=\zeta_i$.
+Relabel the outer variable $v$ as $s$. Substituting
+$v=s+(1-s)w$ in the inner integral then gives
+\[
+ \begin{aligned}
+ \int_s^1(v-s)\nu_t(v)\,\dd v
+ &=2(1-s)^2\int_0^1
+       w\{1+\eta_t-(1+2\eta_t)[s+(1-s)w]\}\,\dd w\\
+ &=\frac{(1-s)^2}{3}
+       \{1-\eta_t-(1+2\eta_t)s\}.
+ \end{aligned}
+\]
+Here we used $\int_0^1w\,\dd w=1/2$ and
+$\int_0^1w^2\,\dd w=1/3$.
+Multiplication by the factor $-\gamma^2/2$ in
+\eqref{appx-an:signed-hessian} yields
 \[
  -\frac{\gamma^2}{2}\int_s^1(v-s)\nu_t(v)\dd v
  =\frac{\gamma^2}{6}(1-s)^2
        \{\eta_t-1+(1+2\eta_t)s\}
  =a_t(s).
 \]
-The integrands are integrable because the summands and fourth
-derivatives are bounded.
-
 For the terms evaluated at \(Y_t\) or \(H_{i,t}\), we may replace
 \(\zeta_i\) by \(\widetilde\zeta_i\): the copies have the same law
 and are independent of both evaluation points. This leaves
 \(\zeta_i\) available to insert the removed summand in the next
-expansions. We have obtained
+expansions. In the segment remainder, $\zeta_i$ determines both
+the evaluation point and the derivative directions, and we retain
+the same copy in both roles. We have obtained
 \begin{equation}
  \begin{aligned}
  \frac{d}{dt}\E f(Y_t)
@@ -3544,9 +3643,11 @@ For the Hessian difference, condition on
 \(H_{i,t},\widetilde\zeta_i\). The removed mask is zero with
 probability \(1-\varpi\), in which case the difference vanishes.
 When it is \(1\), its summand can be replaced in law by \(\zeta_i\).
-The linear Taylor term has conditional expectation zero, since
-\(\zeta_i\) is centered and independent of the conditioned
-variables. The quadratic remainder therefore gives
+The linear Taylor term is
+$\gamma D^3f(H_{i,t})[\widetilde\zeta_i,\widetilde\zeta_i,\zeta_i]$.
+Its conditional expectation is zero, since $\zeta_i$ is centered
+and independent of the conditioned variables. The quadratic
+remainder therefore gives
 \[
  \begin{aligned}
  &\frac12\E
@@ -3560,8 +3661,10 @@ variables. The quadratic remainder therefore gives
 \]
 Since \(\varpi\gamma^2=1-t\), its coefficient is \(b_t(s)\).
 
-For the cubic term, the same conditioning and a first-order
-integral expansion give
+For the cubic term, we write the derivative at $H_{i,t}$ as its
+value at $Y_t$ minus the increment caused by restoring the removed
+summand. This accounts for the negative sign in the following
+first-order integral expansion, obtained under the same conditioning:
 \[
  \begin{aligned}
  &\E D^3f(H_{i,t})
@@ -3580,7 +3683,15 @@ Multiplication by \(q_3'(t)/6\) makes the remainder coefficient
  =\frac{(1-t)(1-\eta_t)}6=c_t(s).
 \]
 All cubic derivatives now share the full evaluation point, which
-is independent of the copies. Consequently,
+is independent of the copies. More explicitly, conditioning on
+$Y_t$ gives
+\[
+ \E\!\left[
+ D^3f(Y_t)[\widetilde\zeta_i,\widetilde\zeta_i,\widetilde\zeta_i]
+ \,\middle|\,Y_t\right]
+ =D^3f(Y_t):\E(\zeta_i^0)^{\otimes3}.
+\]
+Taking expectations and summing over $i$ therefore yields
 \[
  \sum_i\E D^3f(Y_t)
        [\widetilde\zeta_i,\widetilde\zeta_i,\widetilde\zeta_i]
@@ -3723,9 +3834,11 @@ Lemma~\ref{appx-lem:envelope} consequently gives, for
 \end{equation}
 
 To bound the cubic term, expand \(D^3F(x):K_3\) by the partition
-formula~\eqref{appx-eq:partition-derivative}. Each coefficient is an
-aggregate product of three face projections of the summands.
-Since each face projection is an original coordinate or its
+formula~\eqref{appx-eq:partition-derivative}. For fixed $x$, each
+logistic weight is the same for every summand index $i$. We can
+therefore sum the signed third-moment coefficients over $i$ before
+taking absolute values. Since each face projection is an original
+coordinate or its
 negative, a coefficient with original coordinate indices \(j,k,l\)
 equals, up to sign,
 \[
@@ -3768,8 +3881,6 @@ Averaging at \(x=T_v\) and using~\eqref{eq:slepian-weight} proves
 \[
  |\E D^3F(T_v):K_3|\le Cs_3\kappa/h^2.
 \]
-The summation over \(i\) preceded the absolute value, so this
-estimate retains the cancellation measured by \(s_3\).
 
 We next bound the fourth-order remainder supplied by
 Lemma~\ref{appx-an:lem:identity} with seed zero and the Slepian
@@ -3780,19 +3891,21 @@ amplitude. Its derivatives are evaluated at
 and~\eqref{appx-an:translates} gives
 \(\|x_{i,v,s}-T_v\|_U\le4\delta\).
 We use the termwise weight comparison underlying
-\eqref{appx-eq:local-envelope}. For each fixed list of face labels
-and each \(1\le k\le4\), it gives
+\eqref{appx-eq:local-envelope}, retaining each face label until
+the corresponding directional moments have been bounded.
+For each fixed list of face labels and each $1\le k\le4$, it gives
 \[
  F(x_{i,v,s})\prod_{b=1}^k\pi_{\alpha_b}(x_{i,v,s})
  \le C F(T_v)\prod_{b=1}^k\pi_{\alpha_b}(T_v).
 \]
-Indeed, each face score changes by at most \(4\delta/h\), and
-\(h\ge\mathsf A\delta\) bounds the resulting ratios by absolute
-constants. The weight on the right depends only on \(T_v\) and is
+Indeed, each face score changes by at most $4\delta/h$. The
+multiplier from Appendix~\ref{appx-sec:smoothing} is at most
+$e^{(2k+1)4\delta/h}\le e^9$, since $k\le4$ and
+$h\ge\mathsf A\delta\ge4\delta$.
+The weight on the right depends only on \(T_v\) and is
 independent of all the copy variables in the derivative directions.
 
-We can therefore average the weights and the directional products
-separately. To bound the latter, first observe from
+We first bound the directional products. Observe from
 \eqref{eq:relative-moments} that
 \[
  \sum_i\E\xi_{ij}^4=e_j^\top Q_j e_j
@@ -3802,24 +3915,52 @@ Let \(Z_{i,1},\ldots,Z_{i,4}\) denote the four directions in any
 one of the three tensor terms of
 \eqref{appx-an:fourth-identity}. Each is either \(\zeta_i\) or
 \(\widetilde\zeta_i\), so each has the law of \(\zeta_i^0\).
-For any fixed face labels \(\beta_1,\ldots,\beta_4\), H\"older's
-inequality, with summation over \(i\) included in the integration
-measure, gives
+For any fixed face labels $\beta_1,\ldots,\beta_4$, apply
+H\"older's inequality first to the expectation for each $i$,
+and then to the sum over $i$. These two steps give
 \[
+ \begin{aligned}
  \sum_i\E\prod_{\ell=1}^4
        |u_{\beta_\ell}\cdot Z_{i,\ell}|
- \le\prod_{\ell=1}^4
+ &\le\sum_i\prod_{\ell=1}^4
+       \left\{\E
+         |u_{\beta_\ell}\cdot Z_{i,\ell}|^4\right\}^{1/4}\\
+ &\le\prod_{\ell=1}^4
        \left\{\sum_i\E
          |u_{\beta_\ell}\cdot Z_{i,\ell}|^4\right\}^{1/4}
  \le s_4.
+ \end{aligned}
 \]
+Each fourth-moment sum is bounded by $s_4$, because the face
+component has the law of an original coordinate or its negative.
 This inequality does not require independence among the four
 directions, and hence covers both repeated directions and products
 involving the two copies.
 
-Apply this bound to each term of the fourth-derivative partition
-formula after moving its positive weight to \(T_v\).
-Summing over the face labels and the finitely many partitions gives,
+To apply this bound to the fourth-derivative partition formula,
+fix a partition with blocks $J_1,\ldots,J_k$ and face labels
+$\alpha_1,\ldots,\alpha_k$. Each direction in block $J_b$ is paired
+with the normal $u_{\alpha_b}$, so define
+$\beta_\ell:=\alpha_b$ for $\ell\in J_b$.
+The comparison above has moved the positive logistic weight to
+$T_v$, which depends only on the original summands and the Gaussian
+vector. Independence of the copies therefore gives the factorization
+\[
+ \begin{aligned}
+ &\sum_i\E\!\left[
+   F(T_v)\prod_{b=1}^k\pi_{\alpha_b}(T_v)
+   \prod_{\ell=1}^4|u_{\beta_\ell}\cdot Z_{i,\ell}|\right]\\
+ &\quad=\E\!\left[F(T_v)\prod_{b=1}^k\pi_{\alpha_b}(T_v)\right]
+       \sum_i\E\prod_{\ell=1}^4|u_{\beta_\ell}\cdot Z_{i,\ell}|\\
+ &\quad\le s_4\,\E\!\left[
+       F(T_v)\prod_{b=1}^k\pi_{\alpha_b}(T_v)\right].
+ \end{aligned}
+\]
+Sum over the face labels using the same identity as in the cubic
+bound: the positive weights sum to $F(T_v)(1-F(T_v))^k$,
+which is at most $F(T_v)(1-F(T_v))$. The finitely many partitions
+contribute only an absolute constant, and the four derivatives
+contribute $h^{-4}$. Applying~\eqref{eq:slepian-weight} then gives,
 for each of the three direction patterns,
 \[
  \begin{aligned}
@@ -10293,3 +10434,4 @@ Gaussian support.
 \end{proof}
 
 \end{document}
+
