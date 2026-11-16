@@ -1,6 +1,6 @@
 % High-dimensional Gaussian approximation over rectangles.
 % Submission copy prepared 16 November 2026 from the split-V7 manuscript.
-% Appendices G, H, and I retain Gaussian width; Appendix I proves the correlation-budget extension.
+% Appendices G--I are provided separately as the Supplemental Material.
 \documentclass[11pt,letterpaper,twoside,leqno]{article}
 \usepackage[margin=1.05in]{geometry}
 \usepackage[T1]{fontenc}
@@ -75,7 +75,7 @@
 over Rectangles without Covariance Restrictions}
 \author{\normalsize Victor Chernozhukov, Denis Chetverikov, Kengo Kato, Yuta
 Koike\thanks{This paper
-was developed in collaboration with the AI system GPT-Astra.
+was developed in genuine collaboration with the AI system GPT-Astra.
 Lean formalization and verification of the archived version were performed
 with GPT-6 Sol
 (see Section~\ref{sec:lean-introduction}). The human authors take full
@@ -272,7 +272,7 @@ coordinates of \(R\) may be dependent. For deterministic weights
 \(a_1,\ldots,a_n\) satisfying \(\sum_i a_i^2=1\), set
 \(\xi_i:=a_iR_i\).} Since $R_{ij}^2=1$, both fourth-moment matrices equal $(\sum_i a_i^4)\Sigma$. {Give one summand a weight proportional to $\sqrt{\log n}$ and each of the other $n-1$ summands a weight proportional to $1$.} After normalization, $\delta\asymp\sqrt{(\log n)/n}$ and $s_4\asymp1/n$. For $p\asymp n^a$ with fixed $a>0$, \eqref{eq:intrinsic-unrestricted} gains a factor of order $\sqrt{\log n}$ over \eqref{eq:intrinsic-envelope}, for every covariance of the sign vector.
 
-Proposition~\ref{prop:dimension-cap} in Appendix~\ref{app:dimension-cap}
+Proposition~G.1 of the Supplemental Material~\cite{Supplement2026}
 replaces the factor \(\sqrt{D_L}\) in the envelope bound
 \eqref{eq:intrinsic-envelope} by \(\sqrt{\min\{D_L,L\}}\),
 while retaining the Gaussian-width factor \(g_\Sigma\).
@@ -589,66 +589,7 @@ The proof is given in Appendix~\ref{app:polyhedral-transfer}.
 }
 
 
-\subsection{Relationship to the Prior Literature}\label{sec:literature}
-
-On 16 November 2026, while finalizing this manuscript, we became aware
-of the independent and contemporaneous work of Lopes and
-Masini~\cite{LopesMasini2026}. Their manuscript was submitted to arXiv
-on 13 November 2026 and appeared in the new-paper listing dated
-16 November 2026. They establish Gaussian approximation rates of order
-\(n^{-1/2}\), up to logarithmic factors, for independent and identically
-distributed random vectors with sub-Gaussian coordinates and unrestricted
-covariance. They also obtain Gaussian comparison and bootstrap
-approximation results. For the main Gaussian approximation bound, both
-proofs use interpolation, but their argument combines Gaussian smoothing
-with recursive anti-concentration, whereas ours uses logistic smoothing
-and calibrated dropout.
-The present paper treats independent summands
-that need not be identically distributed and develops Gaussian-width
-refinements, bounds under polynomial moment envelopes, lower bounds,
-and refinements under pairwise correlation-gap conditions.
-
-The dependence on dimension differs substantially when \(p\) grows
-exponentially with a power of \(n\). To compare the bounds under the same
-assumptions, suppose that the observations are i.i.d. and centered,
-with unit coordinate variances and \(\|X_i\|_\infty\le B\) for a fixed
-\(B\). No restriction is imposed on the covariance matrix. When
-\(\log p\asymp n^a\) with fixed \(0<a<1\), Table~\ref{tab:dimension-growth}
-compares Corollary~\ref{cor:observations}, using \(g_n\le C\sqrt L\),
-with the bounded-observation result in
-\cite[Theorem~3.1]{LopesMasini2026}. The latter extends from orthants
-to rectangles by applying it to \((X_i,-X_i)\in\R^{2p}\).
-Before truncation at one, our bound improves on theirs by a factor
-of order \(n^a\sqrt{\log n}\). Thus their dimension dependence is
-suboptimal even within the bounded i.i.d. class. For example, when
-\(a=1/4\), our bound tends to zero at rate
-\(n^{-1/8}\sqrt{\log n}\), whereas their displayed bound does not
-tend to zero. The additional square-root logarithm in our bound
-is not known to be necessary.
-
-\begin{table}[!htb]
-\centering\small
-\renewcommand{\arraystretch}{1.15}
-\caption{Dimension growth for bounded i.i.d. observations with fixed
-envelope and unrestricted covariance, when \(\log p\asymp n^a\),
-\(0<a<1\).}
-\label{tab:dimension-growth}
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}Xcc@{}}
-\toprule
-Result & Bound before truncation at one & Bound tends to zero \\
-\midrule
-This paper, Corollary~\ref{cor:observations}
-  & \(n^{-1/2+3a/2}\sqrt{\log n}\) & \(0<a<1/3\) \\[3pt]
-Lopes--Masini~\cite[Theorem~3.1]{LopesMasini2026}
-  & \(n^{-1/2+5a/2}\log n\) & \(0<a<1/5\) \\
-\bottomrule
-\end{tabularx}
-\smallskip
-{\footnotesize\raggedright
-Multiplicative constants are suppressed. The last column describes
-when each displayed bound guarantees convergence; it is not a
-necessary condition for Gaussian approximation.\par}
-\end{table}
+\subsection{Relationship to the Literature}\label{sec:literature}
 
 Gaussian approximation for high-dimensional maxima and rectangles was
 developed in~\cite{CCK2013,CCK2017}. Under coordinatewise sub-exponential
@@ -672,7 +613,7 @@ by combining exchangeable pairs with Slepian--Stein interpolation
 and mixed smoothing. The bound in~\cite{AL} removes the final
 \(\log n\) under the same type of nondegeneracy condition.
 Corollary~\ref{cor:positive-correlation-gap}, proved in
-Appendix~\ref{app:correlation-gap-proof}, attains the same rate under a
+the Supplemental Material~\cite[Appendix~H]{Supplement2026}, attains the same rate under a
 pairwise correlation gap bounded away from zero, a condition that allows
 singular covariance matrices. Its bound also retains $g_\Sigma$, giving
 an improvement when the Gaussian width is smaller than its worst-case
@@ -706,7 +647,8 @@ This construction retains the geometry underlying Nazarov's
 inequality~\cite{Nazarov2003,CCK17N}, while avoiding surface integrals
 over faces and their intersections. Appendices~\ref{appx-an:sec:matrix}
 and~\ref{appx-an:sec:threshold} give these estimates.
-The positive-gap refinement in Appendix~\ref{app:correlation-gap-proof}
+The positive-gap refinement proved in the Supplemental
+Material~\cite[Appendix~H]{Supplement2026}
 additionally uses angle-weighted surface estimates on facets and ridges.
 
 Boundary concentration improves the averaged derivative estimates
@@ -824,7 +766,7 @@ polynomial moment envelopes.
 Work & Covariance assumption & Gaussian seeding & Subsequent comparison & Non-Gaussian boundary estimates & Key derivative bounds \\
 \midrule
 This paper & Unrestricted & Slepian regularization & Calibrated dropout & Direct & Lemma~\ref{appx-an:lem:restoration} \\[2pt]
-This paper, Cor.~\ref{cor:positive-correlation-gap} & Pairwise correlation gap & Slepian regularization & Calibrated dropout & Direct & Lemma~\ref{hgap:thm:fourth} \\[2pt]
+This paper, Cor.~\ref{cor:positive-correlation-gap} & Pairwise correlation gap & Slepian regularization & Calibrated dropout & Direct & Lemma~H.3 in~\cite{Supplement2026} \\[2pt]
 LM~\cite{LopesMasini2026} & Unrestricted & Gaussian smoothing & Slepian interpolation & Recursive & Prop.~3.4; Lemma~3.6 \\[2pt]
 AL~\cite{AL} & Positive definite & Gaussian smoothing & Calibrated dropout & Direct & Corollary~3.2 \\[2pt]
 CCK~\cite{CCK} & Positive definite & Gaussian smoothing & Slepian--Stein & Recursive & Lemmas~6.1--6.3 \\[2pt]
@@ -862,6 +804,96 @@ The envelope and coordinate fourth-moment conditions are
 \eqref{poly:envelope} and~\eqref{poly:fourth}, respectively.\par}
 \end{table}
 
+On 16 November 2026, while finalizing this manuscript, we became aware
+of the independent and contemporaneous work of Lopes and
+Masini~\cite{LopesMasini2026}. Their manuscript was submitted to arXiv
+on 13 November 2026 and appeared in the new-paper listing dated
+16 November 2026. They obtain Gaussian approximation bounds for i.i.d.
+random vectors with sub-Gaussian coordinates and unrestricted covariance,
+as well as Gaussian comparison and bootstrap results. Their approximation
+bounds have an \(n^{-1/2}\) factor but a suboptimal dependence on
+\(L=\log(ep)\). This distinction is consequential when \(\log p\)
+grows polynomially in \(n\), because the additional powers of \(L\)
+then change the polynomial rate in \(n\).
+
+To make the comparison precise under common assumptions, first consider
+centered i.i.d. observations with unit coordinate variances and a fixed
+bound on their coordinate sub-Gaussian norms. These assumptions also
+give a fixed bound on their sub-exponential norms, so
+Corollary~\ref{cor:subexponential} applies. When
+\(\log p\asymp n^a\) for fixed \(0<a<1\), using
+\(g_n\le C\sqrt L\), our bound and theirs in
+\cite[Theorem~2.1]{LopesMasini2026} have respective orders
+\[
+ n^{-1/2}L^{3/2}(\log n)^{3/2}
+ \qquad\text{and}\qquad
+ n^{-1/2}L^3\log n,
+\]
+before truncation at \(1\). Thus their bound contains an extra
+factor \(L^{3/2}\) in its dimension dependence, while our stated
+sub-exponential bound has an additional factor \(\sqrt{\log n}\).
+The ratio of the displayed bounds is therefore of order
+\(L^{3/2}/\sqrt{\log n}\asymp n^{3a/2}/\sqrt{\log n}\).
+
+For bounded observations, a sharper comparison is available.
+If \(\|X_i\|_\infty\le B\) for fixed \(B\),
+Corollary~\ref{cor:observations} and their
+Theorem~3.1 give respective orders
+\[
+ n^{-1/2}L^{3/2}\sqrt{\log n}
+ \qquad\text{and}\qquad
+ n^{-1/2}L^{5/2}\log n.
+\]
+Their orthant bound applies to rectangles by replacing \(X_i\) with
+\((X_i,-X_i)\in\R^{2p}\). In this bounded setting, the ratio is of
+order \(L\sqrt{\log n}\asymp n^a\sqrt{\log n}\).
+Table~\ref{tab:dimension-growth} records both comparisons.
+For example, when \(a=1/4\), both of our bounds tend to zero,
+whereas neither of their displayed bounds does. Their dependence
+on \(\log(ep)\) is therefore suboptimal even within the bounded
+i.i.d. class. The additional square-root logarithm in our
+bounded-observation bound is not known to be necessary.
+
+\begin{table}[!htb]
+\centering\small
+\renewcommand{\arraystretch}{1.15}
+\caption{Dimension growth under common i.i.d. assumptions with unit
+coordinate variances, fixed envelope or tail scale, and unrestricted
+covariance, when \(\log p\asymp n^a\), \(0<a<1\).}
+\label{tab:dimension-growth}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}Xcc@{}}
+\toprule
+Result & Bound before truncation at \(1\) & Bound tends to zero \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Sub-Gaussian coordinates}} \\[2pt]
+This paper, Corollary~\ref{cor:subexponential}
+  & \(n^{-1/2+3a/2}(\log n)^{3/2}\) & \(0<a<1/3\) \\[3pt]
+Lopes--Masini~\cite[Theorem~2.1]{LopesMasini2026}
+  & \(n^{-1/2+3a}\log n\) & \(0<a<1/6\) \\[5pt]
+\multicolumn{3}{@{}l}{\textit{Bounded coordinates}} \\[2pt]
+This paper, Corollary~\ref{cor:observations}
+  & \(n^{-1/2+3a/2}\sqrt{\log n}\) & \(0<a<1/3\) \\[3pt]
+Lopes--Masini~\cite[Theorem~3.1]{LopesMasini2026}
+  & \(n^{-1/2+5a/2}\log n\) & \(0<a<1/5\) \\
+\bottomrule
+\end{tabularx}
+\smallskip
+{\footnotesize\raggedright
+Multiplicative constants are suppressed. The first row uses our
+sub-exponential result, which applies under the stated sub-Gaussian
+assumption. The last column describes when each displayed bound
+guarantees convergence; it is not a necessary condition for Gaussian
+approximation.\par}
+\end{table}
+
+For the main Gaussian approximation bound, both proofs use interpolation,
+but their argument combines Gaussian smoothing with recursive
+anti-concentration, whereas ours uses logistic smoothing and calibrated
+dropout. The present paper also treats independent summands that need
+not be identically distributed and develops Gaussian-width refinements,
+polynomial-moment bounds, lower bounds, and refinements under pairwise
+correlation-gap conditions.
+
 \subsection{Lean verification}\label{sec:lean-introduction}
 Lean 4 verification covers the 31 proved statements of the archived
 7 November 2026 version and formal counterparts of its substantive
@@ -872,8 +904,8 @@ identifies the exact manuscript and proof versions, the correspondence
 between the printed and formal arguments, the treatment of external
 inputs, and the successful independent checks. This certification
 applies to that archived version. Subsequent revisions, including
-the Gaussian-width refinements and the additional results in
-Appendices~\ref{app:dimension-cap}--\ref{app:correlation-budget},
+the Gaussian-width refinements and the additional results in the
+Supplemental Material~\cite{Supplement2026},
 are not yet covered by this certification.
 Conjecture~\ref{conj:sharp-unrestricted} is excluded.
 
@@ -889,12 +921,12 @@ give the proofs of the auxiliary estimates and the lower bounds.
 {Appendix~\ref{app:polynomial-proof} proves
 Theorem~\ref{thm:polynomial}, followed by the lower-bound proofs in
 Appendix~\ref{app:sharpness-proofs}.}
-Appendix~\ref{app:dimension-cap} caps the additional logarithm in the
+The Supplemental Material~\cite{Supplement2026} contains three further
+appendices. Appendix~G caps the additional logarithm in the
 bounded-envelope bound by \(L=\log(ep)\), retaining Gaussian width.
-Appendix~\ref{app:correlation-gap-proof} proves the positive-correlation-gap
-corollary, retaining Gaussian width through its surface and matrix estimates.
-Appendix~\ref{app:correlation-budget} extends that bound to an additive
-budget for exceptional correlation gaps.
+Appendix~H proves the positive-correlation-gap corollary, retaining
+Gaussian width through its surface and matrix estimates. Appendix~I
+extends that bound to an additive budget for exceptional correlation gaps.
 
 \section{{Proof of Theorem~\ref*{thm:unrestricted}}}\label{sec:smoothing}
 Throughout this section we use the bounded-summand setup~\eqref{eq:setup},
@@ -2536,7 +2568,8 @@ The conjectured rate holds when distinct coordinates are uniformly
 separated from perfect positive or negative correlation. This condition
 permits singular covariance matrices. The following corollary makes the
 dependence on the correlation gap explicit while retaining the Gaussian
-width $g_\Sigma$. Appendix~\ref{app:correlation-gap-proof} gives a proof using the smoothing
+width $g_\Sigma$. The Supplemental Material~\cite[Appendix~H]{Supplement2026}
+gives a proof using the smoothing
 and interpolation estimates of Section~\ref{sec:smoothing}.
 
 \begin{samepage}
@@ -2601,10 +2634,10 @@ We call $B_c$ the \emph{exceptional correlation budget}. Each gap
 below $c$ contributes its square root, and perfectly correlated pairs
 contribute zero. The first term in~\eqref{budget:eq:result} controls
 the remaining pairs. The second term measures the cost of the
-exceptional pairs after choosing the smoothing width. Appendix~\ref{app:correlation-budget}
-proves the corollary using the pair estimate from
-Appendix~\ref{app:dimension-cap} and the intrinsic matrix estimates
-from Appendix~\ref{app:correlation-gap-proof}.
+exceptional pairs after choosing the smoothing width. Appendix~I of the
+Supplemental Material~\cite{Supplement2026} proves the corollary using
+the pair estimate from its Appendix~G and the intrinsic matrix estimates
+from its Appendix~H.
 
 For fixed $c>0$, the bound has order $\delta g_\Sigma L$ whenever
 $B_c\le C_0\delta g_\Sigma L$, with the constant allowed to depend
@@ -2623,9 +2656,15 @@ A bound on the cumulative comparison error without the extra logarithm for all b
 and sharpen the polynomial transfer in Subsection~\ref{poly:transfer-sec}.
 
 \begin{thebibliography}{99}
-\setlength{\itemsep}{1pt}
+\setlength{\itemsep}{0pt}
 \phantomsection
 \addcontentsline{toc}{section}{References}
+\bibitem{AdlerTaylorWorsley2015}
+{R. J. Adler, J. E. Taylor, and K. J. Worsley (2015).
+\emph{Applications of Random Fields and Geometry: Foundations and Case Studies}.
+Companion volume, draft dated May 20, 2015.
+\url{https://web.stanford.edu/class/stats317/hrf.pdf}.}
+
 \bibitem{AL}
 P.~M. Aronow and P. Lopatto (2026).
 Optimal central limit theorem for bounded random variables in high dimensions.
@@ -2723,6 +2762,13 @@ a pairwise correlation gap. Companion working manuscript, V3,
 4 November 2026.
 }
 
+\bibitem{Supplement2026}
+V. Chernozhukov, D. Chetverikov, K. Kato, and Y. Koike (2026).
+Supplemental Material for Sharp High-Dimensional Gaussian
+Approximations over Rectangles without Covariance Restrictions.
+16 November 2026.
+\url{https://github.com/VC2015/HDCLTs/blob/main/research-rectangle-clt-singular/Rectangle_CLT_Supplement_2026-11-16.pdf}.
+
 \bibitem{CCK}
 V. Chernozhukov, D. Chetverikov, and Y. Koike (2023).
 Nearly optimal central limit theorem and bootstrap approximations
@@ -2742,6 +2788,12 @@ Reidel, Dordrecht.
 T. M. Cover and J. A. Thomas (2006).
 \emph{Elements of Information Theory}, 2nd edition.
 Wiley, Hoboken, NJ.
+
+\bibitem{Dirksen2015}
+S. Dirksen (2015).
+Tail bounds via generic chaining.
+\emph{Electronic Journal of Probability} \textbf{20}, no.~53, 1--29.
+\href{https://doi.org/10.1214/EJP.v20-3760}{doi:10.1214/EJP.v20-3760}.
 
 \bibitem{FKLZ}
 X. Fang, Y. Koike, S.-H. Liu, and Y.-K. Zhao (2026).
@@ -2774,6 +2826,13 @@ G. Last and M. Penrose (2017).
 \emph{Lectures on the Poisson Process}.
 Cambridge University Press, Cambridge.
 \href{https://doi.org/10.1017/9781316104477}{doi:10.1017/9781316104477}.
+
+\bibitem{LopesMasini2026}
+M. E. Lopes and R. Masini (2026).
+High-Dimensional Gaussian and Bootstrap Approximation:
+Near \(1/\sqrt{n}\) Rates with General Covariance.
+arXiv:2611.17923, version~1, submitted 13 November 2026.
+\url{https://arxiv.org/abs/2611.17923v1}.
 
 \bibitem{McFadden1989}
 D. McFadden (1989).
@@ -2842,25 +2901,6 @@ The relationship between Luce's Choice Axiom, Thurstone's Theory
 of Comparative Judgment, and the double exponential distribution.
 \emph{Journal of Mathematical Psychology} \textbf{15}(2), 109--144.
 \href{https://doi.org/10.1016/0022-2496(77)90026-8}{doi:10.1016/0022-2496(77)90026-8}.
-
-\bibitem{Dirksen2015}
-S. Dirksen (2015).
-Tail bounds via generic chaining.
-\emph{Electronic Journal of Probability} \textbf{20}, no.~53, 1--29.
-\href{https://doi.org/10.1214/EJP.v20-3760}{doi:10.1214/EJP.v20-3760}.
-
-\bibitem{AdlerTaylorWorsley2015}
-{R. J. Adler, J. E. Taylor, and K. J. Worsley (2015).
-\emph{Applications of Random Fields and Geometry: Foundations and Case Studies}.
-Companion volume, draft dated May 20, 2015.
-\url{https://web.stanford.edu/class/stats317/hrf.pdf}.}
-
-\bibitem{LopesMasini2026}
-M. E. Lopes and R. Masini (2026).
-High-Dimensional Gaussian and Bootstrap Approximation:
-Near \(1/\sqrt{n}\) Rates with General Covariance.
-arXiv:2611.17923, version~1, submitted 13 November 2026.
-\url{https://arxiv.org/abs/2611.17923v1}.
 
 \end{thebibliography}
 
@@ -8807,2105 +8847,4 @@ correlation gap is
  v=\frac14\left(\frac{\ell}{4n\Lambda}\right)^{2/q}\to0.
 \]
 
-% Dimension cap: adapted from Yuta Koike's 10 November 2026 note, Section 6.
-% The coarse single-face bound below avoids importing Source input 3.2.
-\section{A dimension-logarithm cap for the bounded-envelope bound}
-\label{app:dimension-cap}
-
-The additional logarithm in Theorem~\ref{thm:unrestricted} comes
-from integrating a remainder bound proportional to
-$(t+\varepsilon)^{-1}$. We can cap this logarithm by
-$L=\log(ep)$ by comparing that estimate with two further bounds:
-one for terms associated with a single face and another for terms
-associated with a pair of faces. These bounds have polynomial
-factors in the number of faces and the support rank, but those
-factors enter only through logarithms after we integrate the
-smaller bound at each time. We use the same interpolation and
-cubic estimate as in Section~\ref{sec:smoothing}, retaining the
-boundary coefficient from~\eqref{eq:intrinsic-boundary-coefficient}:
-\[
- \kappa=\min\{\sqrt L,\,1+\max\{\E\|W\|_\infty,g_\Sigma\}\},
- \qquad 1\le\kappa\le\sqrt L.
-\]
-This preserves the Gaussian-width improvement when we cap the logarithm.
-
-\begin{proposition}[Dimension-logarithm cap]
-\label{prop:dimension-cap}
-Under~\eqref{eq:setup}, define $J_L:=\min\{D_L,L\}$. There is an
-absolute constant $C$ such that
-\begin{equation}
- \rh(W,Z)\le C\min\{1,\delta g_\Sigma L\sqrt{J_L}\}.
- \label{cap:result}
-\end{equation}
-Here $g_\Sigma=\E\|Z\|_\infty$. More precisely, for
-$h\ge\mathsf A\delta$ and $\varepsilon=Lh^2<1/4$, the remainder in
-\eqref{eq:path-summary} satisfies
-\begin{equation}
- \sup_a\int_0^1|R_{4,a,h}(t)|\,dt
- \le\frac{C\delta^2\kappa L}h
-       \min\{1+\log(1/\varepsilon),L\}.
- \label{cap:integrated}
-\end{equation}
-\end{proposition}
-
-The proposition improves the bound obtained from the envelope
-alone. Combining it with~\eqref{eq:intrinsic-unrestricted} gives
-\[
- \rh(W,Z)\le C\min\left\{1,
- g_\Sigma L\bigl(\delta+\sqrt{s_4D_L}\bigr),
- \delta g_\Sigma L\sqrt{J_L}\right\}.
-\]
-Thus the relative fourth-moment bound and the capped envelope
-bound can be used together, with the same Gaussian-width factor.
-The argument below does not replace $D_L$ by $J_L$ in the expression
-involving $s_4$. Using $g_\Sigma\le C\sqrt L$ in~\eqref{cap:result}
-gives the dimension-based bound $C\delta L^{3/2}\sqrt{J_L}$.
-When $p$ is fixed, both $g_\Sigma$ and $J_L\le L$ are bounded, so
-\eqref{cap:result} is of order $\delta$.
-
-We work in the support coordinates of
-Subsection~\ref{appx-an:sec:coords}. The rank is $r\le p$,
-the unit face normals are $u_1,\ldots,u_m$ with $m=2p$, and
-\[
- \sum_i\E\zeta_i^0(\zeta_i^0)^\top=I_r,
- \qquad \|\zeta_i^0\|_U\le\delta,
- \qquad \|x\|_U=\max_{j\le m}|u_j\cdot x|.
-\]
-We first bound the probabilities of short intervals in one face
-projection and small rectangles in two face projections. The
-two-dimensional estimate displays explicitly the loss when the
-normals are nearly parallel. A later algebraic identity will
-compensate for that loss.
-
-\begin{lemma}[Concentration for one or two face projections]
-\label{lem:cap-concentration}
-Let $V=\sum_iX_i+G_A$, where the $X_i\in\R^r$ are independent
-and centered, $\|X_i\|_U\le b\delta$, and $G_A$ is an
-independent centered Gaussian vector. Suppose
-$\Cov(V)=\tau^2I_r$, with $c_0\le\tau^2\le C_0$.
-There are constants $A,C$, depending only on $b,c_0,C_0$,
-such that, for $h\ge A\delta$,
-\begin{align}
- \sup_x\Pp\{|u_j\cdot V-x|\le h\}&\le Ch,
- \label{cap:one-concentration}\\
- \sup_{x,y}\Pp\{|u_j\cdot V-x|\le h,
-                 |u_k\cdot V-y|\le h\}
- &\le Ch^2/\nu_{jk},\qquad
- \nu_{jk}:=\sqrt{1-(u_j\cdot u_k)^2}>0.
- \label{cap:two-concentration}
-\end{align}
-For the logistic weights $W_j=F\pi_j$ and $W_{jk}=F\pi_j\pi_k$
-at width $h$ and arbitrary thresholds, these estimates imply
-\begin{equation}
- \sup_z\E W_j(V+z)\le Ch,\qquad
- \sup_z\E W_{jk}(V+z)\le Ch^2/\nu_{jk},
- \label{cap:weight-concentration}
-\end{equation}
-with the second bound for $\nu_{jk}>0$.
-The bounds also hold after an independent random shift.
-\end{lemma}
-
-\begin{proof}
-We prove the two-dimensional concentration bound first. Fix
-$j,k$ with $\nu_{jk}>0$ and write
-\[
- \rho:=u_j\cdot u_k,\qquad \nu:=\sqrt{1-\rho^2},\qquad
- q:=\frac{u_k-\rho u_j}{\nu}.
-\]
-Then $u_j\cdot q=0$ and $\|q\|=1$, so $(u_j,q)$ is an
-orthonormal pair. The projected vector
-$\widehat V:=(u_j\cdot V,q\cdot V)$ has covariance
-$\tau^2I_2$. Its bounded summands
-$\widehat X_i:=(u_j\cdot X_i,q\cdot X_i)$ satisfy
-\[
- |\widehat X_{i,1}|\le b\delta,
- \qquad
- |\widehat X_{i,2}|
- \le\frac{|u_k\cdot X_i|+|\rho|\,|u_j\cdot X_i|}{\nu}
- \le\frac{2b\delta}{\nu}.
-\]
-Consequently, on a frequency rectangle
-\[
- |t_1|\le c/h,\qquad |t_2|\le c\nu/h,
-\]
-the scalar phase $t\cdot\widehat X_i$ is bounded in absolute
-value by $3cb\delta/h$. Choose the absolute $c$ and then $A$
-so that the phase difference for two independent copies is at
-most $1$ whenever $h\ge A\delta$.
-
-Let $\widehat X_i'$ be an independent copy. Independence gives
-\[
- \left|\E e^{it\cdot\widehat X_i}\right|^2
- =\E\cos\{t\cdot(\widehat X_i-\widehat X_i')\}.
-\]
-On the chosen frequency rectangle, $1-\cos y\ge c_*y^2$
-for these phase differences. Since their variance is
-$2\Var(t\cdot\widehat X_i)$, we obtain
-\[
- \left|\E e^{it\cdot\widehat X_i}\right|^2
- \le1-2c_*\Var(t\cdot\widehat X_i)
- \le e^{-2c_*\Var(t\cdot\widehat X_i)}.
-\]
-Multiply over $i$ and include the Gaussian characteristic
-function, whose absolute value is the exponential of minus half
-its projected variance. The total projected covariance is
-$\tau^2I_2$, so the characteristic function of $\widehat V$
-satisfies
-\[
- |\varphi_{\widehat V}(t_1,t_2)|
- \le e^{-c_*\tau^2(t_1^2+t_2^2)}
-\]
-throughout that frequency rectangle, after reducing $c_*$ if needed.
-
-We now convert this characteristic-function bound into a
-probability bound. The event in~\eqref{cap:two-concentration}
-implies
-\[
- |\widehat V_1-x|\le h,\qquad
- \left|\widehat V_2-\frac{y-\rho x}{\nu}\right|
- \le\frac{2h}{\nu},
-\]
-because $u_k\cdot V=\rho\widehat V_1+\nu\widehat V_2$.
-Use the nonnegative kernel
-$k(z):=(\sin(az)/(az))^2$, with $k(0):=1$ and a fixed
-sufficiently small $a>0$. It is bounded below by a positive
-constant on $[-1,1]$. Also
-$\sin(az)/(az)=(2a)^{-1}\int_{-a}^a e^{itz}\,dt$,
-so its square has a bounded triangular Fourier transform
-supported on $[-2a,2a]$.
-The indicator of the displayed rectangle is therefore bounded
-by a constant times
-\[
- k\left(\frac{\widehat V_1-x}{h}\right)
- k\left(\frac{\nu\widehat V_2-(y-\rho x)}{2h}\right).
-\]
-Choose $a$ so that the Fourier support of this product is
-inside the frequency rectangle already controlled. Fourier
-inversion and the rescaling of the two kernels give
-\[
- \begin{split}
- \Pp\{|u_j\cdot V-x|\le h,\ |u_k\cdot V-y|\le h\}
- &\le\frac{Ch^2}{\nu}
-   \int_{|t_1|\le c/h,\ |t_2|\le c\nu/h}
-       |\varphi_{\widehat V}(t_1,t_2)|\,dt_1dt_2\\
- &\le\frac{Ch^2}{\nu}.
- \end{split}
-\]
-The last step uses $\tau^2\ge c_0$ and the integral of a
-two-dimensional Gaussian exponential over $\R^2$.
-The compact Fourier support justifies interchanging the integral
-and expectation; no density of $V$ is required. The same argument
-with the single projection $u_j\cdot V$ and one rescaled kernel
-gives~\eqref{cap:one-concentration}.
-
-For the weight bounds, write
-$s=(u_j\cdot x-a_j)/h$ and $t=(u_k\cdot x-a_k)/h$.
-Dropping other positive terms from the logistic denominator gives
-\[
- W_j(x)\le g_1(s):=\frac{e^s}{(1+e^s)^2},\qquad
- W_{jk}(x)\le g_2(s,t):=
-                 \frac{e^{s+t}}{(1+e^s+e^t)^3}.
-\]
-The changes of variables $u=e^s$ and $w=e^t$ give
-\[
- \int_{\R}g_1(s)\,ds=\int_0^\infty\frac{du}{(1+u)^2}=1,
- \qquad
- \int_{\R^2}g_2(s,t)\,ds\,dt
- =\int_0^\infty\int_0^\infty\frac{du\,dw}{(1+u+w)^3}
- =\frac12.
-\]
-The logarithmic derivative of $g_1$ has absolute value at most
-$1$, and both logarithmic partial derivatives of $g_2$ have
-absolute value at most $2$. Thus the supremum of either
-majorant on a unit interval or square is bounded by an absolute
-constant times its integral over that cell. Summing the cell
-suprema is therefore finite.
-
-Partition the standardized projection line or plane into these
-unit cells. Their inverse images have projection side lengths
-$h$, so~\eqref{cap:one-concentration} or
-\eqref{cap:two-concentration} bounds the probability of each cell
-by $Ch$ or $Ch^2/\nu$. Multiply by the corresponding cell
-supremum and sum. This proves~\eqref{cap:weight-concentration}.
-A deterministic translation only changes the thresholds, so the
-bounds are uniform in that translation. Conditioning on an
-independent random shift proves the final assertion.
-\end{proof}
-
-We next decompose the Hessian so that the coefficient associated
-with two nearly parallel faces becomes visible. For this calculation,
-let $F$ have width $\ell$ and define $\mu:=\sum_j\pi_j u_j$.
-For fixed directions $z,w$, write $z_j:=u_j\cdot z$,
-$w_j:=u_j\cdot w$, and $\rho_{jk}:=u_j\cdot u_k$.
-The first derivative of $W_j=F\pi_j$ in direction $u_j$ is
-\[
- D_{u_j}W_j=\ell^{-1}W_j(1-2u_j\cdot\mu).
-\]
-Using this derivative, the Hessian can be written as
-\begin{align}
- D^2F(x)[z,w]
- &=-\ell^{-1}\sum_jz_jw_j D_{u_j}W_j(x)
-     +2\ell^{-2}\sum_{j<k}W_{jk}(x)B_{jk}(z,w),
- \label{cap:hessian}\\
- B_{jk}(z,w)
- &:=z_jw_k+z_kw_j-\rho_{jk}(z_jw_j+z_kw_k).
- \label{cap:pair-coefficient}
-\end{align}
-To verify the identity, expand the first term as
-$\ell^{-2}\{-\sum_jW_jz_jw_j
-          +2\sum_{j,k}\rho_{jk}W_{jk}z_jw_j\}$.
-For $j\ne k$, its terms containing $\rho_{jk}$ cancel
-the corresponding terms in the unordered-pair sum.
-The diagonal terms have $\rho_{jj}=1$, and the remaining terms
-are exactly
-\[
- \ell^{-2}\left\{2\sum_{j,k}W_{jk}z_jw_k
-                         -\sum_jW_jz_jw_j\right\},
-\]
-the Hessian formula used in Lemma~\ref{appx-an:lem:restoration}.
-
-The fourth-order tensors in~\eqref{appx-an:fourth-identity}
-each contain a repeated direction. Recall that $\zeta_i$ and
-$\widetilde\zeta_i$ are copies of $\zeta_i^0$, with all copies
-mutually independent and independent of the original summands,
-masks, and Gaussian vectors. Write the three patterns as
-\[
- (Z_i,z_i,w_i)
- =(\zeta_i,\zeta_i,\zeta_i),\qquad
-   (\widetilde\zeta_i,\zeta_i,\zeta_i),\qquad
-   (\widetilde\zeta_i,\widetilde\zeta_i,\zeta_i).
-\]
-For each pattern,
-$D^4F[Z_i,Z_i,z_i,w_i]=D_{Z_i}^2\{D^2F[z_i,w_i]\}$.
-Applying these two derivatives to~\eqref{cap:hessian} gives
-terms proportional to
-$z_{i,j}w_{i,j}D_{Z_i}^2D_{u_j}W_j$ and
-$B_{jk}(z_i,w_i)D_{Z_i}^2W_{jk}$, respectively.
-After summing over observations and integrating the scalar
-remainder kernels, denote their contributions by
-$R_{4,\mathrm{single},a,h}$ and $R_{4,jk,a,h}$.
-Thus the first contains the sum over single faces, while the
-second is the contribution of the unordered pair $\{j,k\}$.
-This specifies the slot order even though the full fourth
-derivative is symmetric.
-
-The single-face terms admit a bound with time singularity
-$v^{-3/2}$, where $v=t+\varepsilon$. For each pair, we will
-prove two bounds: one retains the cancellation as the angle
-shrinks, and the other uses the Gaussian part of the path.
-Taking their geometric mean removes the angle from the bound.
-
-\begin{lemma}[Complementary remainder bounds]
-\label{lem:cap-remainder}
-Let $h\ge A\delta$, $\varepsilon=Lh^2<1/4$, and
-$v:=t+\varepsilon$. Along the calibrated interpolation,
-\begin{align}
- |R_{4,\mathrm{single},a,h}(t)|
- &\le Cmr\delta^2v^{-3/2},
- \label{cap:single}\\
- |R_{4,jk,a,h}(t)|
- &\le C\min\left\{\frac{\delta^2\nu_{jk}}{h^2},
-                    \frac{r\delta^2}{\nu_{jk}v}\right\},
- \qquad \nu_{jk}>0.
- \label{cap:pair}
-\end{align}
-Parallel or antiparallel pairs contribute zero. Consequently,
-\begin{equation}
- |R_{4,a,h}(t)|
- \le \frac{Cmr\delta^2}{v^{3/2}}
-       +\frac{Cm^2\sqrt r\,\delta^2}{h\sqrt v}.
- \label{cap:complementary}
-\end{equation}
-\end{lemma}
-
-\begin{proof}
-Use the unnormalized path and the rescaled test function in
-\eqref{eq:seeded-test}. The logistic width is then
-$\ell=\widetilde h=\sqrt{1+\varepsilon}\,h$, comparable to $h$.
-As in~\eqref{eq:seeded-gaussian-split}, take independent standard
-Gaussian vectors $G_0,G_1$, independent of all summands, masks,
-and copies, and write
-\[
- \begin{aligned}
- Y_t&=V_{0,t}+\sigma_tG_1,\qquad \sigma_t^2=v/2,\\
- V_{0,t}&=(1+t)\sum_i\mathbb B_{i,t}\zeta_i^0+\sigma_tG_0.
- \end{aligned}
-\]
-The covariance and summand bounds needed below are
-\[
- \Cov(V_{0,t})=(1-t/2+\varepsilon/2)I_r,
- \qquad \|(1+t)\mathbb B_{i,t}\zeta_i^0\|_U\le2\delta.
-\]
-The covariance scalar lies in $[1/2,9/8]$, so
-Lemma~\ref{lem:cap-concentration} applies uniformly in time
-to $V_{0,t}$. It also applies to $Y_t$, whose covariance is
-$(1+\varepsilon)I_r$. Each remainder point has the form
-$Y_t+d_i$ with $\|d_i\|_U\le4\delta$, by
-\eqref{appx-an:translates}. We first fix the Taylor parameter
-and one of the three copy patterns. The scalar kernels in
-\eqref{appx-an:kernel} are common to all indices $i$ and have
-uniformly bounded absolute integrals, so we can integrate them
-after bounding each pattern.
-
-For the first pair estimate, we make the angular cancellation
-in $B_{jk}$ explicit. Fix a nonparallel pair and define
-\[
- c:=1-|\rho_{jk}|,\qquad
- s:=\begin{cases}\operatorname{sign}(\rho_{jk}),&\rho_{jk}\ne0,\\
-                 1,&\rho_{jk}=0,\end{cases}
- \qquad q:=\frac{u_j-su_k}{\sqrt{2c}}.
-\]
-The vector $q$ is unit because
-$\|u_j-su_k\|^2=2-2|\rho_{jk}|=2c$.
-Expanding $(q\cdot z)(q\cdot w)$ gives the identity
-\begin{equation}
- B_{jk}(z,w)=sc\{z_jw_j+z_kw_k-2(q\cdot z)(q\cdot w)\}.
- \label{cap:angle-cancellation}
-\end{equation}
-Every slot in the three patterns has aggregate second-moment
-matrix $I_r$. Thus, for any unit vector $e$, Cauchy--Schwarz
-over both the observation index and the probability space gives
-\[
- \sum_i\E|(e\cdot z_i)(e\cdot w_i)|
- \le\left\{\sum_i\E(e\cdot z_i)^2
-             \sum_i\E(e\cdot w_i)^2\right\}^{1/2}=1.
-\]
-This holds whether the two slots use the same copy or independent
-copies. Applying it with $e=u_j,u_k,q$ to
-\eqref{cap:angle-cancellation} gives
-$\sum_i\E|B_{jk}(z_i,w_i)|\le4c$.
-We will also need the pointwise bound
-$|B_{jk}(z_i,w_i)|\le4\delta^2$, which follows directly from
-\eqref{cap:pair-coefficient} and the face bounds on the copies.
-
-To bound derivatives of the positive weight, differentiate its
-logarithm. With $\mu=\sum_l\pi_lu_l$ and
-$Z_{i,l}:=u_l\cdot Z_i$, we have
-\[
- \begin{aligned}
- D_{Z_i}\log W_{jk}
-   &=\ell^{-1}(Z_{i,j}+Z_{i,k}-3\mu\cdot Z_i),\\
- D_{Z_i}^2\log W_{jk}
-   &=-3\ell^{-2}\left\{\sum_l\pi_l Z_{i,l}^2
-                                 -(\mu\cdot Z_i)^2\right\}.
- \end{aligned}
-\]
-The braces are a variance for the probabilities $\pi_l$, with
-the remaining probability assigned to the value $0$.
-Since $\|Z_i\|_U\le\delta$, the two displayed expressions
-have absolute values at most $5\delta/\ell$ and
-$3\delta^2/\ell^2$. The identity
-$D^2W=W\{(D\log W)^2+D^2\log W\}$ therefore yields
-\[
- |D_{Z_i}^2W_{jk}(x)|\le C\delta^2\ell^{-2}W_{jk}(x).
-\]
-The same bound on the first logarithmic derivative shows that
-$W_{jk}(Y_t+d_i)\le e^{C\delta/\ell}W_{jk}(Y_t)$.
-This factor is bounded because $h\ge A\delta$.
-The restored weight at $Y_t$ is independent of all copies.
-Combining the preceding bounds, the factor $2\ell^{-2}$ in
-\eqref{cap:hessian}, and~\eqref{cap:weight-concentration}, we obtain
-\[
- |R_{4,jk,a,h}(t)|
- \le C\delta^2\ell^{-4}c\,\frac{\ell^2}{\nu_{jk}}
- \le\frac{C\delta^2\nu_{jk}}{h^2}.
-\]
-Here $\nu_{jk}^2=c(1+|\rho_{jk}|)\ge c$, which explains
-why the angular cancellation compensates for the concentration
-loss in this estimate.
-
-For the other pair estimate and the single-face estimate, we
-transfer derivatives to $G_1$ before averaging the copies.
-Let $\mathcal H$ be generated by the original summands, masks,
-and $G_0$. Then $V_{0,t}$ is $\mathcal H$-measurable, while
-$G_1$ is independent of $\mathcal H$. Each repeated direction
-is an independent copy of the corresponding original summand,
-so
-\[
- \sum_i\E[Z_iZ_i^\top\mid\mathcal H]=I_r.
-\]
-The directions and shifts are jointly independent of $G_1$
-conditional on $\mathcal H$; the shifts may still depend on
-the copies. This is why simply replacing a shifted weight by
-an upper bound inside a signed Gaussian contraction would not
-justify the needed averaging.
-
-Define the symmetric Gaussian matrices
-\[
- H_2(G):=GG^\top-I_r,
- \qquad
- H_{3,u}(G):=(u\cdot G)(GG^\top-I_r)-uG^\top-Gu^\top
-\]
-for a unit vector $u$. Conditional on $\mathcal H$ and the
-copies, the base, directions, and shift are fixed. Gaussian
-integration by parts then gives
-\begin{align*}
- \E_G D_Z^2W(V_0+\sigma G+d)
- &=\sigma^{-2}\E_G\!\left[
-       \tr\{H_2(G)ZZ^\top\}W(V_0+\sigma G+d)\right],\\
- \E_G D_Z^2D_uW(V_0+\sigma G+d)
- &=\sigma^{-3}\E_G\!\left[
-       \tr\{H_{3,u}(G)ZZ^\top\}W(V_0+\sigma G+d)\right].
-\end{align*}
-In the second identity, the contraction equals
-$(u\cdot G)\{(Z\cdot G)^2-\|Z\|^2\}
- -2(u\cdot Z)(Z\cdot G)$: the last two terms arise when the
-third integration by parts differentiates the quadratic factor.
-The logistic derivatives are bounded for fixed directions, and
-the Gaussian polynomial factors are integrable, so these
-identities apply to the weights under consideration.
-
-We next remove the copy-dependent shifts by the exact series
-\eqref{eq:weight-translation}. This preserves the signed
-contraction until the copies have been averaged.
-For $k_0=1$ or $2$, write
-$W_\alpha:=F\prod_{a=1}^{k_0}\pi_{\alpha_a}$ and define
-\[
- b_l(d):=e^{u_l\cdot d/\ell}-1,\qquad
- \eta:=e^{4\delta/\ell}-1.
-\]
-For our shifts, $|b_l(d_i)|\le\eta$.
-Writing the shifted logistic denominator as the unshifted
-denominator times $1+\sum_l\pi_l(U)b_l(d)$ gives
-\[
- \begin{split}
- W_\alpha(U+d)
- ={}&W_\alpha(U)e^{\sum_{a=1}^{k_0}u_{\alpha_a}\cdot d/\ell}
- \sum_{N=0}^\infty(-1)^N\binom{k_0+N}{N}\\
- &\hspace{7mm}\times
- \sum_{\beta_1,\ldots,\beta_N}
-       \prod_{a=1}^N\pi_{\beta_a}(U)b_{\beta_a}(d).
- \end{split}
-\]
-For $N=0$, the inner sum and product are both $1$.
-Choose $A$ large enough that $\eta\le1/2$, so the series
-converges absolutely, uniformly over the permitted shifts.
-
-Let $C_i=z_{i,j}w_{i,j}$ for a single-face term and
-$C_i=B_{jk}(z_i,w_i)$ for a pair term. In either case
-$|C_i|\le4\delta^2$. For a fixed level $N$ and sequence
-$\beta=(\beta_1,\ldots,\beta_N)$, the coefficient matrix
-after averaging the copies is
-\[
- \Xi_{\alpha,\beta}:=
- \sum_i\E\!\left[
- Z_iZ_i^\top C_i
- e^{\sum_{a=1}^{k_0}u_{\alpha_a}\cdot d_i/\ell}
- \prod_{a=1}^N b_{\beta_a}(d_i)
- \,\middle|\,\mathcal H\right].
-\]
-For any unit vector $x$, the conditional covariance identity gives
-\[
- |x^\top\Xi_{\alpha,\beta}x|
- \le4\delta^2e^{4k_0\delta/\ell}\eta^N
-       \sum_i\E[(x\cdot Z_i)^2\mid\mathcal H]
- =4\delta^2e^{4k_0\delta/\ell}\eta^N.
-\]
-Since the matrix is symmetric, this is also a bound on
-$\|\Xi_{\alpha,\beta}\|_{\op}$. In particular, the bound
-is deterministic even though the matrix may depend on the base.
-
-We can now take absolute values using
-$|\tr(H\Xi)|\le\|H\|_*\|\Xi\|_{\op}$, where
-$\|\cdot\|_*$ is the nuclear norm. The remaining factors
-$\pi_{\beta_a}(U)$ are nonnegative, and their sum over
-$\beta$ is $(\sum_l\pi_l(U))^N\le1$.
-The further sum over $N$ is bounded because
-\[
- \sum_{N=0}^\infty\binom{k_0+N}{N}\eta^N
- =(1-\eta)^{-k_0-1}\le2^{k_0+1}.
-\]
-Thus the contraction is bounded by a constant times
-$\delta^2\|H(G_1)\|_*W_\alpha(V_{0,t}+\sigma_tG_1)$,
-apart from the displayed powers of $\sigma_t^{-1}$.
-The absolute convergence just used, together with
-$\sum_i\E\|Z_i\|^2=r$ and finite Gaussian polynomial
-moments, justifies interchanging the series, copy expectations,
-and Gaussian expectations.
-
-At this point the coefficient matrices have been removed by
-their deterministic bounds. We may therefore average over
-the unconditional law of $V_{0,t}$ with $G_1$ fixed.
-Independence makes $\sigma_tG_1$ a fixed translation for this
-expectation, and~\eqref{cap:weight-concentration} gives bounds
-$C\ell$ and $C\ell^2/\nu_{jk}$ for the single and pair
-weights. We are using concentration of $V_{0,t}$ itself,
-not concentration conditional on $\mathcal H$.
-
-It remains to bound the Gaussian matrix factors. The identities
-$\|GG^\top\|_*=\|G\|^2$ and $\|I_r\|_*=r$ give
-\[
- \begin{aligned}
- \E\|H_2(G_1)\|_*&\le\E(\|G_1\|^2+r)=2r,\\
- \E\|H_{3,u}(G_1)\|_*
- &\le\E\bigl[|u\cdot G_1|(\|G_1\|^2+r)
-                                      +2\|G_1\|\bigr]\le Cr.
- \end{aligned}
-\]
-For the last inequality, Cauchy--Schwarz bounds
-$\E[|u\cdot G_1|\|G_1\|^2]$ by
-$\{r(r+2)\}^{1/2}$, while
-$\E|u\cdot G_1|\le1$ and $\E\|G_1\|\le\sqrt r$.
-Restoring the Hessian coefficients and the Gaussian scales now
-yields
-\[
- |R_{4,jk,a,h}(t)|
- \le C\ell^{-2}\sigma_t^{-2}\delta^2r
-                    \frac{\ell^2}{\nu_{jk}}
- \le\frac{Cr\delta^2}{\nu_{jk}v}.
-\]
-For each single face the corresponding bound is
-$C\ell^{-1}\sigma_t^{-3}\delta^2r\ell
- \le Cr\delta^2v^{-3/2}$.
-Summing over the $m$ faces proves~\eqref{cap:single}.
-As explained at the start, integration of the scalar kernels
-preserves these estimates for the full remainder contributions.
-
-If $|\rho_{jk}|=1$, then $u_k=u_j$ or $u_k=-u_j$,
-and substitution in~\eqref{cap:pair-coefficient} gives
-$B_{jk}=0$. For every other pair, the smaller of the two
-bounds in~\eqref{cap:pair} is at most their geometric mean,
-\[
- \left\{\frac{\delta^2\nu_{jk}}{h^2}
-         \frac{r\delta^2}{\nu_{jk}v}\right\}^{1/2}
- =\frac{\sqrt r\,\delta^2}{h\sqrt v}.
-\]
-Summing over at most $m^2/2$ pairs and adding the single-face
-bound proves~\eqref{cap:complementary}.
-\end{proof}
-
-We finish by integrating the smaller bound at each time.
-The two estimates in~\eqref{cap:complementary} have polynomial
-factors in $m$ and $r$. Comparing each with the original
-$v^{-1}$ estimate confines those factors to logarithms of
-the times at which the bounds cross.
-
-\begin{proof}[Proof of Proposition~\ref{prop:dimension-cap}]
-Define
-\[
- A_h:=\frac{\delta^2\kappa L}h,\qquad
- S_h:=mr\delta^2,\qquad
- B_h:=\frac{m^2\sqrt r\,\delta^2}h.
-\]
-The envelope allows us to take $s_4=\delta^2$ in
-\eqref{eq:seeded-derivatives}. Retaining $\kappa$, that estimate
-bounds the full remainder by $CA_h/v$. Lemma~\ref{lem:cap-remainder} bounds the same
-remainder by $C(S_h/v^{3/2}+B_h/\sqrt v)$.
-Using $\min\{x,y+z\}\le\min\{x,y\}+\min\{x,z\}$ for
-nonnegative $x,y,z$, we obtain
-\[
- |R_{4,a,h}(t)|\le C\left[
- \min\left\{\frac{A_h}v,\frac{S_h}{v^{3/2}}\right\}
- +\min\left\{\frac{A_h}v,\frac{B_h}{\sqrt v}\right\}\right].
-\]
-
-For the first minimum, the two expressions agree at
-$v_s:=(S_h/A_h)^2$. Below $v_s$ we use $A_h/v$, and above
-$v_s$ we use $S_h/v^{3/2}$. The integral of the latter
-over $[v_s,\infty)$ is $2A_h$, while the logarithmic part
-is bounded by
-$A_h\log_+(v_s/\varepsilon)
- =2A_h\log_+\{S_h/(A_h\sqrt\varepsilon)\}$.
-Consequently,
-\[
- \int_\varepsilon^{1+\varepsilon}
-       \min\{A_h/v,S_h/v^{3/2}\}\,dv
- \le CA_h\left\{1+\log_+
-                    \frac{S_h}{A_h\sqrt\varepsilon}\right\}.
-\]
-If $v_s$ lies outside the integration interval, the same bound
-follows by integrating the smaller expression throughout.
-
-For the second minimum the crossing time is
-$v_p:=(A_h/B_h)^2$. Below $v_p$ we use $B_h/\sqrt v$,
-whose integral over $[0,v_p]$ is $2A_h$; above $v_p$ we use
-$A_h/v$. Since $1+\varepsilon<5/4$, this gives
-\[
- \int_\varepsilon^{1+\varepsilon}
-       \min\{A_h/v,B_h/\sqrt v\}\,dv
- \le CA_h\{1+\log_+(B_h/A_h)\}.
-\]
-This bound also covers crossing times outside the interval.
-
-The choice $\varepsilon=Lh^2$ removes $h$ from both ratios:
-\[
- \frac{S_h}{A_h\sqrt\varepsilon}=\frac{mr}{\kappa L^{3/2}},
- \qquad \frac{B_h}{A_h}=\frac{m^2\sqrt r}{\kappa L}.
-\]
-Because $\kappa\ge1$, $m=2p$, $r\le p$, and $L=\log(ep)\ge1$,
-both positive logarithms are at most $CL$. Thus retaining $\kappa$
-does not change the logarithmic cap.
-We have proved
-$\sup_a\int_0^1|R_{4,a,h}(t)|\,dt\le CA_hL$.
-Direct integration of $CA_h/(t+\varepsilon)$ gives the
-alternative bound $CA_h\{1+\log(1/\varepsilon)\}$.
-Taking their minimum proves~\eqref{cap:integrated}.
-
-We now return to the rectangle discrepancy. The smoothing,
-initialization, and cubic estimates in the proof of
-Theorem~\ref{thm:unrestricted}, together with the remainder
-bound just proved, yield
-\[
- \rh(W,Z)\le C\kappa L\left[
- h+\delta+\frac{\delta^2}h
-       \min\{1+\log(1/(Lh^2)),L\}\right]
-\]
-whenever $h\ge\mathsf A\delta$ and $Lh^2<1/4$.
-The initialization term $\delta^2/h$ is absorbed here because
-the minimum in braces is at least $1$.
-Choose $h:=\mathsf A\delta\sqrt{J_L}$, taking the absolute
-constant $\mathsf A\ge1$ large enough for the preceding lemmas.
-Since $J_L\ge1$, this choice satisfies $h\ge\mathsf A\delta$.
-If $Lh^2<1/4$, then $\delta\sqrt L<1$ and
-\[
- 1+\log\frac1{Lh^2}
- =1+2\log\frac1{\delta\sqrt L}
-       -2\log\mathsf A-\log J_L
- \le2D_L.
-\]
-It follows that the minimum in the discrepancy bound is at
-most $2\min\{D_L,L\}=2J_L$.
-The three terms in brackets are therefore bounded by
-$C\delta\sqrt{J_L}$, giving
-$\rh(W,Z)\le C\delta\kappa L\sqrt{J_L}$.
-
-If instead $Lh^2\ge1/4$, then
-\[
- \delta\kappa L\sqrt{J_L}
- =\kappa Lh/\mathsf A
- \ge\kappa\sqrt L/(2\mathsf A)\ge1/(2\mathsf A),
-\]
-so the trivial probability bound gives the same estimate after
-increasing the absolute constant. Hence
-$\rh(W,Z)\le C\min\{1,\delta\kappa L\sqrt{J_L}\}$ in both cases.
-
-It remains to express the boundary coefficient in terms of Gaussian
-width. Lemma~\ref{intrinsic:lem:maximum} gives
-$\E\|W\|_\infty\le C(g_\Sigma+\delta L)$ without invoking
-the Gaussian approximation being proved. If $\delta L\le g_\Sigma$,
-this bound and $g_\Sigma\ge\sqrt{2/\pi}$ imply
-$\kappa\le Cg_\Sigma$. If instead $\delta L>g_\Sigma$, then
-\[
- \delta g_\Sigma L\sqrt{J_L}\ge g_\Sigma^2\ge2/\pi,
-\]
-so the trivial probability bound suffices.
-This proves~\eqref{cap:result} in all cases.
-\end{proof}
-
-\clearpage
-\section{Proof of Corollary~\ref*{cor:positive-correlation-gap} (positive correlation gap)}
-\label{app:correlation-gap-proof}
-
-We prove the positive-correlation-gap bound using the smoothing and
-interpolation estimates established in Section~\ref{sec:smoothing}.
-The additional estimate controls the fourth-order remainder after the
-Gaussian variance has grown. We retain the intrinsic boundary coefficient
-throughout these estimates and express it in terms of $g_\Sigma$ at the end.
-The proof uses a cubic Gaussian Hermite
-matrix for the single-face terms and retains the angle between the
-normals in the two-face terms. Pairing the corresponding surface
-contributions gives a bound that remains valid when a three-coordinate
-covariance matrix is singular.
-
-\subsection{Reduction to a fourth-order estimate}\label{hgap:sec:reduction}
-
-Throughout this appendix, assume~\eqref{eq:setup} and the positive gap
-$c$ in Corollary~\ref{cor:positive-correlation-gap}. Recall the support
-coordinates from Section~\ref{sec:smoothing}: $\Sigma=\Gamma\Gamma^\top$
-with $\Gamma$ of full column rank $r$, the $m=2p$ unit vectors $u_j$
-are its rows and their negatives, and
-$\zeta_i^0=\Gamma^\dagger\xi_i$. Thus
-\[
- \sum_i\Cov(\zeta_i^0)=I_r,\qquad
- \|\zeta_i^0\|_U\le\delta,
- \qquad \|z\|_U=\max_j|u_j\cdot z|.
-\]
-For the geometric calculations below, write
-$P(a):=\{x\in\R^r:u_j\cdot x\le a_j,\ j\le m\}$, the polyhedron
-previously denoted by $A_a$. For real $s$, let $P(a)^s=P(a+s\mathbf1)$.
-We allow arbitrary threshold lists, including those defining empty sets.
-The logistic function $F_{a,h}$ is the same as in
-Section~\ref{sec:smoothing}. We retain the boundary coefficient
-from~\eqref{eq:intrinsic-boundary-coefficient},
-\[
- \kappa=\min\{\sqrt L,\,1+\max\{\E\|W\|_\infty,g_\Sigma\}\}.
-\]
-Thus $1\le\kappa\le\sqrt L$. Boundary probabilities contribute the
-factor $\kappa$, while Gaussian projection moments supply the remaining
-powers of $L$.
-
-Fix $h\ge\mathsf A\delta$ and $\varepsilon:=Lh^2<1/4$, where the
-absolute constant $\mathsf A$ will be chosen large enough for the
-estimates below. We use the calibrated path~\eqref{eq:path}, namely
-\begin{equation}\label{hgap:eq:path}
- U_t=\frac{(1+t)\sum_i\mathbb B_{i,t}\zeta_i^0
-                       +\sqrt{t+\varepsilon}\,G}{\sqrt{1+\varepsilon}},
- \qquad \Pp(\mathbb B_{i,t}=1)=\frac{1-t}{(1+t)^2},
- \qquad 0\le t\le1.
-\end{equation}
-At each time, the masks are independent of one another and of the
-summands and standard Gaussian $G$. No joint construction across times
-is needed. The normalization makes $\Cov(U_t)=I_r$.
-
-The smoothing error, the short Slepian initialization, and the cubic
-term have already been bounded. More precisely, let $I_h$ be the
-initialization error, and let $C_{3,a,h}(t)$ and $R_{4,a,h}(t)$ be the
-cubic term and fourth-order remainder in the derivative of
-$\E F_{a,h}(U_t)$. Lemma~\ref{lem:endpoint} and
-Proposition~\ref{an:prop:derivative}, using
-$s_3\le\delta$ and $s_4\le\delta^2$, give
-\begin{align}
- \rh(W,Z)&\le Ch\kappa L+I_h+
-       \sup_a\int_0^1\{|C_{3,a,h}(t)|+|R_{4,a,h}(t)|\}\dd t,
-                                             \label{hgap:eq:reduction}\\
- I_h+\sup_a\int_0^1|C_{3,a,h}(t)|\dd t
-     &\le C\kappa L(\delta+\delta^2/h),        \label{hgap:eq:old-cubic}\\
- |R_{4,a,h}(t)|&\le\frac{C\delta^2\kappa L}{h(t+\varepsilon)}.
-                                             \label{hgap:eq:early}
-\end{align}
-All three estimates are uniform over the thresholds. The substitutions
-for $s_3,s_4$ follow directly by bounding each remaining face coordinate
-by $\delta$ after the repeated pair has been summed using its covariance.
-
-The only additional interpolation estimate needed is
-\begin{equation}\label{hgap:eq:late}
- |R_{4,a,h}(t)|\le
- \frac{C\delta^2\kappa L^{3/2}}{d_c(t+\varepsilon)^{3/2}},
- \qquad d_c:=c(2-c).
-\end{equation}
-We prove it in Subsection~\ref{hgap:sec:completion}, using the Gaussian
-estimates developed next. Taking the smaller of
-\eqref{hgap:eq:early} and~\eqref{hgap:eq:late} before integration will
-replace the endpoint logarithm by $1+\log(1/c)$. This is the only
-place where the proof of the present corollary requires more than
-the estimates used for Theorem~\ref{thm:unrestricted}.
-
-\subsection{Gaussian surface estimates}\label{hgap:sec:surfaces}
-
-The additional derivative estimate will be applied at a sum of two
-independent vectors: a base $V$ that supplies boundary concentration,
-and a Gaussian vector that supplies integration by parts. We first
-state the property of the base that is needed throughout the argument.
-As in~\eqref{appx-an:concentration}, we call $V$ a
-\emph{concentrated base} if, for a fixed absolute $C_0$,
-\begin{equation}\label{hgap:eq:ac}
- \Pp\{V\in P(a)^s\setminus P(a)^{-s}\}
-       \le C_0\kappa(s+\delta),
-       \qquad a\in\R^m,\ s>0.
-\end{equation}
-The coefficient $\kappa$ is fixed throughout, and all constants in
-the following estimates are independent of it. The same inequality holds
-for a subsystem of the faces by sending
-unused thresholds to infinity. It also survives an independent random
-translation, by conditioning on that translation. Throughout the
-additional estimates, $G\sim N(0,I_r)$ is independent of $V$ and
-$U:=V+\sigma G$. We use
-\(\delta\sqrt L\le\sigma\le1\) and a smoothing width \(h\ge\delta\),
-except that the surface estimates below also apply when
-\(0<\sigma<\delta\sqrt L\). Write \([m]=\{1,\ldots,m\}\) for the
-indices of the \(m=2p\) signed face normals.
-
-Fix a threshold list $a$. We use the logistic weights already introduced
-in~\eqref{appx-an:basic-notation}, which we recall here to specify their
-dependence on the evaluation point:
-\[
- q_j(x):=\frac{u_j\cdot x-a_j}{h},\qquad
- F(x):=\frac1{1+\sum_j e^{q_j(x)}},\qquad
- \pi_j(x):=e^{q_j(x)}F(x),\qquad \theta(x):=1-F(x).
-\]
-For an ordered tuple $\alpha=(\alpha_1,\ldots,\alpha_k)\in[m]^k$, define
-\[
- W_\alpha(x):=F(x)\prod_{b=1}^k\pi_{\alpha_b}(x).
-\]
-Repeated indices are allowed. These products arise when a translated
-logistic weight is expanded at a common point. Their sums are simple:
-$\sum_{\alpha\in[m]^k}W_\alpha=F\theta^k\le F\theta$ for $k\ge1$.
-The notation $\norm{\cdot}_*$ denotes the nuclear norm of a matrix.
-Each weight $W_\alpha$ is log-concave: its logarithm is an affine
-function minus $(k+1)\log(1+\sum_j e^{q_j})$.
-The correlation gap $c>0$ means
-$|u_j\cdot u_k|\le1-c$ for normals from distinct original coordinates.
-The antipodal normals of a single coordinate are excepted. For
-linearly independent normals, write
-\[
- \vartheta_{jk}:=\arccos(u_j\cdot u_k),\qquad
- \lambda_{jk}:=\vartheta_{jk}\sin\vartheta_{jk},\qquad
- d_c=c(2-c),
-\]
-and let $\cD$ be the set of their ordered index pairs. Then
-\begin{equation}
- \lambda_{jk}\ge\sin^2\vartheta_{jk}\ge d_c
- \qquad((j,k)\in\cD).
- \label{hgap:eq:gap}
-\end{equation}
-
-We next prove the geometric estimates that will control the signed
-traces of the Gaussian matrices. A \emph{facet} is a face of codimension
-$1$, and a \emph{ridge} is a face of codimension $2$. The estimates use
-two cancellations among their boundary contributions.
-Pairing the boundary contributions from neighboring facets preserves
-cancellation even after the facet thresholds are weighted by their
-absolute values. At the next codimension, weighting
-each ridge by its exterior angle produces a spherical divergence identity.
-Both estimates can therefore be localized to short outward tubes.
-
-Let $\varphi_r$ be the standard Gaussian density on $\R^r$, and let
-$\mathcal H^q$ denote $q$-dimensional Hausdorff measure.
-For a proper full-dimensional polyhedron $P$ with the specified normals,
-write $F_j$ for its actual facets, with supporting equation
-$u_j\cdot g=b_j$. Let $E$ run over its faces of codimension $2$.
-Such a face is shared by exactly two facets, and $\vartheta_E$ denotes
-the angle between their outward normals. Define
-\begin{align}
- J_{\mathrm f}(P)&:=\sum_j |b_j|
-   \int_{F_j}(\norm g^2-r)\varphi_r(g)\dd\mathcal H^{r-1}(g),
- \label{hgap:eq:Jf}\\
- J_{\mathrm e}(P)&:=\sum_E \vartheta_E
-   \int_E(\norm g^2-r)\varphi_r(g)\dd\mathcal H^{r-2}(g).
- \label{hgap:eq:Je}
-\end{align}
-Empty sets and the whole space have both quantities equal to $0$.
-There are no codimension-$2$ faces when $r=1$.
-
-\begin{lemma}[Two localized surface estimates]\label{hgap:lem:surfaces}
-Let $V$ satisfy~\eqref{hgap:eq:ac}, and let $Q=P(a)$ be empty or full
-dimensional. For every $0<\sigma\le1$, define
-$(Q-V)/\sigma:=\{g:V+\sigma g\in Q\}$. Then
-\begin{equation}
- \E\bigl|J_{\mathrm f}((Q-V)/\sigma)\bigr|
- +\E\bigl|J_{\mathrm e}((Q-V)/\sigma)\bigr|
- \le C\kappa\bigl(\sigma L^{3/2}+\delta L^2\bigr).
- \label{hgap:eq:surface-bounds}
-\end{equation}
-The constant depends only on $C_0$, and no angle separation is needed.
-\end{lemma}
-
-\begin{proof}
-Let $R(g)$ be $1$ plus the largest length of the projection of $g$
-onto a span of at most three linearly independent face normals.
-Each projection norm is $1$-Lipschitz, and so is their maximum.
-There are at most $m+m^2+m^3$ relevant subspaces. For a subspace $S$
-of dimension at most $3$, the projected Gaussian has the law of a
-standard Gaussian in that dimension, and
-$\E\exp(\|\Pi_SG\|^2/4)\le2^{3/2}$.
-Markov's inequality and a union bound give
-\[
- \Pp\{R(G)>1+x\}\le
-       \min\{1,2^{3/2}(m+m^2+m^3)e^{-x^2/4}\}.
-\]
-Integrating this tail and using $\log m\le CL$ proves
-\begin{equation}
- \E R(G)^q\le C_qL^{q/2},\qquad q=1,2,3,4.
- \label{hgap:eq:R-moments}
-\end{equation}
-The reason for using spans of up to three normals is that the
-integration-by-parts formulas below involve faces of codimension at
-most $3$. The projection of a point onto any such normal space has
-norm at most $R$ at that point. We will bound each absolute surface
-quantity by
-\begin{equation}
- C\E_G\left[R(G)^4
-       \ind\{G\in P^{1/R(G)}\setminus P\}\right].
- \label{hgap:eq:localized}
-\end{equation}
-
-For the facet quantity, define $s_j:=\int_{F_j}\varphi_r$ and
-$\rho_{jk}:=\int_{E_{jk}}\varphi_r$.
-We give the Gauss--Green calculation explicitly. On $F_j$, write
-$g=b_ju_j+y$ with $y\perp u_j$. The tangential divergence is
-\[
- \operatorname{div}_{F_j}(y\varphi_r(g))
-       =(r-1-\|y\|^2)\varphi_r(g).
-\]
-Since $\|g\|^2-r=(b_j^2-1)+(\|y\|^2-(r-1))$, integration over
-$F_j$ and summation of the boundary terms give
-\[
- J_{\mathrm f}(P)
- =\sum_j |b_j|(b_j^2-1)s_j
- -\sum_{\{j,k\}}
-   \bigl(|b_j|d_{k\mid j}+|b_k|d_{j\mid k}\bigr)\rho_{jk},
-\]
-where, for $\rho:=u_j\cdot u_k$,
-\[
- n_{k\mid j}:=\frac{u_k-\rho u_j}{\sin\vartheta_{jk}},\qquad
- d_{k\mid j}:=\frac{b_k-\rho b_j}{\sin\vartheta_{jk}}
-             =g\cdot n_{k\mid j}\quad(g\in E_{jk}).
-\]
-Here $n_{k\mid j}$ is the outward conormal within $F_j$.
-On the ridge, let $z$ be the projection onto
-$\operatorname{span}(u_j,u_k)$. Then
-\[
- |d_{k\mid j}|\le\norm z,\quad
- |d_{k\mid j}+d_{j\mid k}|\le\vartheta_{jk}\norm z,\quad
- \bigl||b_j|-|b_k|\bigr|\le\vartheta_{jk}\norm z.
-\]
-Indeed, the sum of the two conormals has norm
-$2\sin(\vartheta_{jk}/2)\le\vartheta_{jk}$, and
-$|b_j-b_k|=|(u_j-u_k)\cdot z|\le\vartheta_{jk}\|z\|$.
-These estimates control the paired term without dividing by a small
-angle.
-To use this cancellation, write the paired coefficient as
-\[
- |b_j|(d_{k\mid j}+d_{j\mid k})
-                  +( |b_k|-|b_j| )d_{j\mid k}.
-\]
-Since $|b_j|\le\|z\|$, the three preceding inequalities give
-\begin{equation}
- \bigl||b_j|d_{k\mid j}+|b_k|d_{j\mid k}\bigr|
- \le 2\vartheta_{jk}\norm z^2.
- \label{hgap:eq:weighted-pair}
-\end{equation}
-On a facet the coefficient $|b_j|(b_j^2-1)$ in the
-Gauss--Green formula has absolute value at most $CR(x)^3$.
-
-For the ridge quantity, let $z_E$ be the projection onto the
-two-dimensional normal space of $E$, and write $\rho_E:=\int_E\varphi_r$.
-The same divergence calculation in its $(r-2)$-dimensional tangent
-space now has $\|g\|^2-r=(\|z_E\|^2-2)
- +(\|g-z_E\|^2-(r-2))$. Thus Gauss--Green within each ridge gives
-\begin{equation}
- J_{\mathrm e}(P)
- =\sum_E\vartheta_E(\norm{z_E}^2-2)\rho_E
- -\sum_H\left\langle z_H,
-        \sum_{E\supset H}\vartheta_E n_{E,H}\right\rangle\rho_H.
- \label{hgap:eq:edge-identity}
-\end{equation}
-Here $H$ runs over codimension-$3$ faces,
-$\rho_H:=\int_H\varphi_r\dd\mathcal H^{r-3}$, and $z_H$ is the
-projection of a point of $H$ onto its three-dimensional normal space.
-This projection is constant on $H$. The vector $n_{E,H}$ is the
-outward unit conormal to $H$ within $E$: it is tangent to the affine
-hull of $E$, orthogonal to $H$, and points out of $E$ at $H$.
-The second sum is absent when $r\le2$.
-
-It remains to control the conormals in this second sum. Fix $H$ and
-work in its three-dimensional normal space. The normal cone
-$C_H$ consists of nonnegative combinations of normals to the facets
-containing $H$. Its intersection $\Omega_H:=C_H\cap S^2$ is a spherical
-polygon. A ridge $E$ containing $H$ corresponds to an edge of this
-polygon, joining the two normals of the facets meeting at $E$.
-The edge has length $\vartheta_E$, and its outward spherical conormal
-is $-n_{E,H}$. Indeed, the remaining normals generating $C_H$ have
-nonnegative inner product with $n_{E,H}$, so the outward direction
-from that edge is the negative one.
-
-For a constant vector $v$ in this normal space, define the tangent
-field $X_v(\omega):=v-(v\cdot\omega)\omega$ on $S^2$.
-The function $v\cdot\omega$ has spherical Laplacian
-$-2v\cdot\omega$, and hence
-$\operatorname{div}_{S^2}X_v=-2v\cdot\omega$.
-On the edge corresponding to $E$, its flux is
-$X_v\cdot(-n_{E,H})=-v\cdot n_{E,H}$, because
-$\omega\cdot n_{E,H}=0$. The spherical divergence theorem gives
-\[
- -\sum_{E\supset H}\vartheta_E v\cdot n_{E,H}
- =-2\int_{\Omega_H}v\cdot\omega\dd\mathcal H^2(\omega).
-\]
-This holds for every $v$, and therefore
-\begin{equation}
- \sum_{E\supset H}\vartheta_E n_{E,H}
- =2\int_{\Omega_H}\omega\dd\mathcal H^2(\omega).
- \label{hgap:eq:spherical-balance}
-\end{equation}
-In particular, its norm is at most $2|\Omega_H|$. This identity holds
-for a spherical polygon with any number of edges, so no simplicity
-assumption on the codimension-$3$ face is required.
-
-We now convert these surface bounds into a Gaussian probability of
-an outer layer. For a face $F$ of codimension $q\in\{1,2,3\}$, let
-$N_F$ be its outward normal cone. For $x\in\operatorname{relint}F$,
-use the points
-\[
- g=x+y,\qquad y\in N_F,\qquad 0<\|y\|<\frac1{4R(x)}.
-\]
-We verify disjointness before adding the integrals over these regions.
-Every $y\in N_F$ is a nonnegative combination of normals active at
-$x$. Thus $y\cdot(w-x)\le0$ for every $w\in P$, and
-\[
- \|g-w\|^2=\|y\|^2+\|x-w\|^2+2y\cdot(x-w)
-              \ge\|y\|^2+\|x-w\|^2.
-\]
-It follows that $x$ is the unique nearest point to $g$ in $P$.
-The relative interiors of distinct faces are disjoint. Hence a point
-cannot belong to regions based on two different faces, since its
-nearest point would have to belong to both relative interiors.
-
-The tangent space of $F$ is orthogonal to the span of $N_F$, so the
-volume element in these coordinates is
-$\dd\mathcal H^{r-q}(x)\dd\mathcal H^q(y)$.
-The normal space is spanned by $q$ linearly independent active
-normals, which are among those used to define $R$. Consequently,
-$|x\cdot y|\le R(x)\|y\|\le1/4$, and
-\[
- \frac{\varphi_r(x+y)}{\varphi_r(x)}
-       =\exp\{-x\cdot y-\|y\|^2/2\}
-\]
-is bounded above and below by absolute positive constants. The
-$1$-Lipschitz property and $R(x)\ge1$ give the same comparability for
-$R(x+y)$ and $R(x)$.
-
-The volume of the truncated normal cone is
-$1/(4R(x))$ for a facet,
-$\vartheta_E/(32R(x)^2)$ for a ridge, and
-$|\Omega_H|/(192R(x)^3)$ for a codimension-$3$ face.
-An integral of $R(g)^4\varphi_r(g)$ over the corresponding region
-therefore bounds, up to an absolute factor, the surface integrals with
-integrands
-\[
- R(x)^3\varphi_r(x),\qquad
- \vartheta_E R(x)^2\varphi_r(x),\qquad
- |\Omega_H|R(x)\varphi_r(x),
-\]
-respectively. These are exactly the bounds needed for the facet term,
-the paired ridge terms in~\eqref{hgap:eq:weighted-pair}, and the
-codimension-$3$ terms in~\eqref{hgap:eq:edge-identity}, using
-\eqref{hgap:eq:spherical-balance}.
-
-Every such point $g=x+y$ lies outside $P$. Also,
-$u_j\cdot g\le b_j+\|y\|$ for every $j$, while
-$R(g)\le R(x)+\|y\|$ implies $\|y\|R(g)<1$.
-Thus all the regions lie in $P^{1/R(g)}\setminus P$.
-Their disjointness proves~\eqref{hgap:eq:localized} for both surface
-quantities. For unbounded faces, one may first multiply the tangent
-fields by smooth cutoffs equal to $1$ on a ball of radius $M$.
-The cutoff derivatives are supported where $\|g\|\ge M$, and their
-integrals tend to zero by Gaussian integrability of polynomials.
-Letting $M$ increase proves the same Gauss--Green identities without
-a boundedness assumption on the faces.
-
-Finally, for $P=(Q-V)/\sigma$, the layer event implies
-$V+\sigma G\in Q^{\sigma/R(G)}\setminus Q$.
-Conditioning on $G$ and applying~\eqref{hgap:eq:ac} bounds
-the average in~\eqref{hgap:eq:localized} by
-\[
- C\kappa\{\sigma\E R(G)^3+\delta\E R(G)^4\}
- \le C\kappa(\sigma L^{3/2}+\delta L^2).
-\]
-The projection-moment estimates retain their powers of $L$; only the
-boundary probability supplies $\kappa$. This proves both assertions.
-\end{proof}
-
-We will also use the positive versions of the same tube estimates.
-They follow by applying the tube construction directly to the indicated
-nonnegative integrands, without integration by parts. With $P=(Q-V)/\sigma$
-and $\sigma\ge\delta\sqrt L$, they give
-\begin{align}
- \E\sum_E\vartheta_E\rho_E&\le C\sigma\kappa\sqrt L,
- &\E\sum_E\vartheta_E\norm{z_E}^2\rho_E&\le C\sigma\kappa L^{3/2}.
- \label{hgap:eq:positive-edge}
-\end{align}
-The first uses $R^2$ on the tubes, giving
-$C\kappa(\sigma\E R(G)+\delta\E R(G)^2)\le C\sigma\kappa\sqrt L$.
-The second uses $R^4$ and $\|z_E\|^2\le R^2$, giving the second
-bound in exactly the same way.
-
-\subsection{Gaussian matrices and logistic weights}\label{hgap:sec:matrices}
-
-To use the surface estimates for smooth derivatives, we first express
-powers of the logistic function as averages of polyhedron indicators.
-This also explains the scale factors when a threshold is differentiated.
-For an integer
-$q\ge1$, let $T_q$ be Gamma with shape $q$ and rate $1$, and let
-$\omega_1,\ldots,\omega_m$ be independent exponentials of mean $1$,
-independent of $T_q,V,G$. Conditional on $T_q$, the probability that all exponentials exceed
-$T_qe^{q_j(x)}$ is $\exp\{-T_q\sum_j e^{q_j(x)}\}$. Integrating the
-Gamma density therefore gives the identity
-\begin{equation}
- F(x)^q=\Pp\{u_j\cdot x\le a_j+h\log(\omega_j/T_q),\ j\le m\}.
- \label{hgap:eq:mixture}
-\end{equation}
-Here the probability is over the auxiliary Gamma and exponential
-variables with $x$ fixed. When $x=V+\sigma G$, we first condition on
-$V,G$ and then use their independence from these auxiliary variables.
-For a realization of the latter, denote the resulting polyhedron in
-$x$-coordinates by $Q$ and set $P:=(Q-V)/\sigma$.
-Its $j$th threshold in $g$-coordinates is
-$(a_j+h\log(\omega_j/T_q)-u_j\cdot V)/\sigma$.
-
-For a polynomially bounded weight $\psi$ independent of $a$, define
-$\mathcal I_\psi(P):=\int_P\psi(g)\varphi_r(g)\dd g$.
-Integration first in the normal coordinate of a facet gives
-\begin{equation}\label{hgap:eq:coarea-one}
- \partial_{a_j}\mathcal I_\psi(P)
-     =\frac1\sigma\int_{F_j(P)}\psi(g)\varphi_r(g)
-                                  \dd\mathcal H^{r-1}(g).
-\end{equation}
-For independent $u_j,u_k$, the Gram determinant of the map
-$g\mapsto(u_j\cdot g,u_k\cdot g)$ is $\sin^2\vartheta_{jk}$.
-Integration in these two normal coordinates therefore gives
-\begin{equation}\label{hgap:eq:coarea-two}
- \partial_{a_j}\partial_{a_k}\mathcal I_\psi(P)
-     =\frac1{\sigma^2\sin\vartheta_{jk}}
-       \int_{E_{jk}(P)}\psi(g)\varphi_r(g)
-                                  \dd\mathcal H^{r-2}(g).
-\end{equation}
-A nonexistent facet or ridge contributes zero. The formulas hold at
-almost every threshold list. To justify averaging them, first use a
-threshold difference quotient, or a rectangular difference quotient
-for two thresholds. Its absolute value is bounded
-by the supremum of the corresponding Gaussian slice integral with the
-absolute weight. At fixed rank this supremum is finite for every weight
-used below because the Gaussian density in the normal coordinates dominates
-its polynomial growth, and the remaining Gaussian coordinates have
-finite moments. The factors from the linear change of variables are
-$1/\sigma$ and $1/(\sigma^2\sin\vartheta_{jk})$, respectively.
-Conditional on $T_q$, the independent threshold shifts have densities,
-so the quotients converge at almost every shifted threshold. The
-exceptional lists at which a nonempty polyhedron has empty interior,
-or a redundant hyperplane contains an entire facet or ridge, have
-Lebesgue measure zero. Every such degeneracy forces a linear relation
-among some thresholds whose normals are linearly dependent; there
-are only finitely many subsets of normals. Consequently the surface
-estimates apply almost surely to the mixture polyhedra. Dominated
-convergence permits averaging the slice formulas. Only linearly
-independent pairs enter the mixed identity.
-
-We also record the elementary consequence of~\eqref{hgap:eq:ac} that
-will control the logistic masses. Write $F_s:=F_{a+s\mathbf1,h}$.
-The one-variable logistic calculation in
-Appendix~\ref{appx-sec:smoothing} gives
-$F\theta\le (e/2)(F_h-F_{-h})$. Apply~\eqref{hgap:eq:mixture} with
-$q=1$ to the difference and then use~\eqref{hgap:eq:ac} at the randomly
-shifted thresholds. Since $h\ge\delta$, this gives
-\begin{equation}\label{hgap:eq:logistic-mass}
- \sup_z\E_V F(V+z)\theta(V+z)\le Ch\kappa.
-\end{equation}
-Using just face $j$ gives the same bound for
-$e^{q_j(V+z)}/(1+e^{q_j(V+z)})^2$. The shifts $z$ here are arbitrary
-deterministic vectors, so these inequalities may be used after fixing
-$G$. All concentration statements concern the unconditional law of $V$.
-
-The matrix estimates have a common reduction to tilted means and
-signed traces. We record it separately so that the two uses below
-have the same normalization. The reference weight in the mean bound
-is chosen to depend only on the face coordinates already present in
-the logistic weight; this prevents a logarithm of the smoothing width.
-
-\begin{lemma}[Gaussian matrices and projected reference weights]
-\label{hgap:lem:gaussian}
-Let $G\sim N(0,I_r)$, and let $w\ge0$ have positive Gaussian mass
-$p_w:=\E w(G)$ and finite Gaussian second moments. Define the weighted
-probability law and its mean and covariance by
-\[
- \dd P_w(g):=\frac{w(g)\varphi_r(g)}{p_w}\dd g,
- \qquad \mu_w:=\E_{P_w}g,\qquad K_w:=\Cov_{P_w}(g).
-\]
-If $w$ is log-concave and $w(g)\le C_w(1+\|g\|)$, then
-$K_w\preceq I_r$ and
-\begin{equation}\label{hgap:eq:matrix-reduction}
- \left\|\E[(GG^\top-I_r)w(G)]\right\|_*
- \le 2p_w\|\mu_w\|^2-\E[(\|G\|^2-r)w(G)].
-\end{equation}
-If instead, or in addition, $w\le b$, where $b$ depends only on an
-orthogonal projection $\Pi g$ and $p_b:=\E b(G)<\infty$, then
-\begin{equation}\label{hgap:eq:relative-mean}
- p_w\|\mu_w\|^2
- \le\E[w(G)\|\Pi G\|^2]+2p_w\log(p_b/p_w).
-\end{equation}
-Zero-mass weights may be omitted from either inequality.
-\end{lemma}
-
-\begin{proof}
-We first establish covariance contraction, following the argument in
-Appendix~\ref{appx-an:sec:matrix}. Define
-$f(x):=\int w(g)\varphi_r(g-x)\dd g$.
-Pr\'ekopa's theorem~\cite{Prekopa1973} makes $f$ log-concave.
-The growth bound on $w$ and Gaussian exponential integrability justify
-differentiation locally in $x$. At zero the derivatives are
-\[
- f(0)=p_w,\qquad \nabla f(0)=\E[Gw(G)],\qquad
- \nabla^2 f(0)=\E[(GG^\top-I_r)w(G)].
-\]
-It follows that $\nabla^2\log f(0)=K_w-I_r\preceq0$.
-Both matrices $p_w\mu_w\mu_w^\top$ and $p_w(I_r-K_w)$ are positive
-semidefinite, and the nuclear norm of such a matrix equals its trace.
-Writing
-\[
- M:=\E[(GG^\top-I_r)w(G)]
-       =p_w\mu_w\mu_w^\top-p_w(I_r-K_w),
-\]
-we obtain
-$\|M\|_*\le p_w\|\mu_w\|^2+p_w\tr(I_r-K_w)
-=2p_w\|\mu_w\|^2-\tr M$.
-Since $\tr M=\E[(\|G\|^2-r)w(G)]$, this proves the first inequality.
-
-For the second inequality, separate the components of $\mu_w$ in
-and orthogonal to the range of $\Pi$. For $v$ orthogonal to that range,
-Jensen's inequality under $P_w$ and $w\le b$ give
-\[
- p_we^{v\cdot\mu_w}
- \le p_w\E_{P_w}e^{v\cdot g}
- =\E[w(G)e^{v\cdot G}]
- \le\E[b(G)e^{v\cdot G}]
- =p_be^{\|v\|^2/2}.
-\]
-The last equality uses independence of $\Pi G$ and $v\cdot G$.
-Choose $v=(I_r-\Pi)\mu_w$, so that $v\cdot\mu_w=\|v\|^2$.
-Taking logarithms yields
-$\|(I_r-\Pi)\mu_w\|^2\le2\log(p_b/p_w)$.
-For the other component, Cauchy--Schwarz gives
-\[
- p_w\|\Pi\mu_w\|^2
- =\frac{\|\E[w(G)\Pi G]\|^2}{p_w}
- \le\E[w(G)\|\Pi G\|^2].
-\]
-Adding these bounds proves~\eqref{hgap:eq:relative-mean}.
-\end{proof}
-
-For later use, write $H_2(g):=\norm g^2-r$ and introduce the
-\emph{cubic Hermite matrix in direction $u$}
-\begin{equation}
- \mathcal H_{3,u}(g):=(u\cdot g)(gg^\top-I_r)-ug^\top-gu^\top.
- \label{hgap:eq:H3}
-\end{equation}
-The next result includes arbitrary additional face factors. This
-uniformity is needed to restore derivatives evaluated at translated bases.
-
-\begin{proposition}[Single-face cubic matrix estimate]\label{hgap:prop:cubic}
-Suppose $V$ satisfies~\eqref{hgap:eq:ac}, $G\sim N(0,I_r)$ is
-independent of $V$, and $U=V+\sigma G$, with
-$h\ge\delta$ and $\delta\sqrt L\le\sigma\le1$.
-For every integer $k\ge1$,
-\begin{equation}
- \E_V\sum_{\alpha\in[m]^k}
- \left\|\E_G\bigl[\mathcal H_{3,u_{\alpha_1}}(G)
-                    W_\alpha(U)\bigr]\right\|_*
- \le C^{k+1}h\kappa L^{3/2}.
- \label{hgap:eq:cubic-matrix}
-\end{equation}
-No correlation gap is needed for this estimate.
-\end{proposition}
-
-\begin{proof}
-Fix $V$ while taking Gaussian expectations. For a tuple whose first
-index is $j$, we first bound the part
-$\E_G[(u_j\cdot G)(GG^\top-I_r)W_\alpha(U)]$.
-Split $(u_j\cdot g)W_\alpha(V+\sigma g)$ into the difference of the weights
-\[
- w_{\alpha,+}(g):=(u_j\cdot g)_+W_\alpha(V+\sigma g),\qquad
- w_{\alpha,-}(g):=(-u_j\cdot g)_+W_\alpha(V+\sigma g).
-\]
-Each weight is log-concave: its linear factor is positive on a
-halfspace, its logarithm is concave there, and $W_\alpha$ is log-concave.
-It is bounded by $\|g\|$, so Lemma~\ref{hgap:lem:gaussian} applies.
-Apply~\eqref{hgap:eq:matrix-reduction} to the two weights and use the
-triangle inequality. Their trace terms add to
-$-\E[H_2(G)|u_j\cdot G|W_\alpha(U)]$.
-
-We first bound the mean terms in this application. With $V$ fixed,
-define
-\[
- b_j(g):=\frac{e^{q_j(V+\sigma g)}}{(1+e^{q_j(V+\sigma g)})^2},
- \qquad b_{\alpha,\pm}(g):=(\pm u_j\cdot g)_+b_j(g).
-\]
-The inequality $W_\alpha\le W_j\le b_j$ shows that these reference
-weights dominate $w_{\alpha,\pm}$. They depend only on $u_j\cdot g$.
-The reference bounds the tilted mean through
-\eqref{hgap:eq:relative-mean}, with $\Pi$ the projection onto the line
-spanned by $u_j$. We write $p_{\alpha,\pm},\mu_{\alpha,\pm}$ for the
-mass and mean associated with $w_{\alpha,\pm}$, and
-$p_\alpha,\mu_\alpha$ for those associated with $W_\alpha$.
-All of these quantities may depend on $V$.
-
-Use~\eqref{hgap:eq:logistic-mass} to average the weights over $V$.
-Define $M_G:=\max_j|u_j\cdot G|$. A union bound for scalar Gaussian
-tails gives $\E M_G^q\le C_qL^{q/2}$ for $q=1,2,3$.
-After summing the tuples and the two signs, the projection term in
-\eqref{hgap:eq:relative-mean} is bounded by
-\[
- \E\sum_\alpha |u_{\alpha_1}\cdot G|^3W_\alpha(U)
- \le\E[M_G^3 F(U)\theta(U)]
- \le Ch\kappa\,\E M_G^3\le Ch\kappa L^{3/2}.
-\]
-In the penultimate step we condition on $G$ and apply
-\eqref{hgap:eq:logistic-mass} to the deterministic shift $\sigma G$.
-The same argument with $M_G$ instead of $M_G^3$ bounds the total
-averaged mass of $w_{\alpha,\pm}$ by $Ch\kappa\sqrt L$.
-For each first index $j$, the sum of the two reference weights is
-$|u_j\cdot G|b_j(G)$. The single-face version of
-\eqref{hgap:eq:logistic-mass} gives
-$\E[|u_j\cdot G|b_j(G)]\le Ch\kappa\,\E|u_j\cdot G|
-\le Ch\kappa$. There are $m^{k-1}$ tuples with first index $j$,
-so their total reference mass is at most $Cm^kh\kappa$.
-To see the entropy bound without introducing $\log(1/h)$, let $M$
-and $B$ be these total averaged masses. If $M>0$, the weights
-$p_{\alpha,\pm}/M$, together with the law of $V$, define a probability
-measure on the joint space of $V$, tuples, and signs. Jensen's inequality
-for the concave logarithm gives
-\[
- \frac1M\E_V\sum_{\alpha,\pm}p_{\alpha,\pm}
-       \log\frac{p_{b_{\alpha,\pm}}}{p_{\alpha,\pm}}
- \le\log\left\{\frac1M\E_V\sum_{\alpha,\pm}
-                                      p_{b_{\alpha,\pm}}\right\}
- =\log(B/M).
-\]
-This is the log-sum inequality with the outer average included.
-If $M=0$, all terms vanish. Write $M=h\kappa\sqrt L\,x$, where
-$0\le x\le C$. Since $B\le Cm^kh\kappa$ and $\log m\le CL$, the
-inequalities $x\log(1/x)\le1/e$ and $L\ge1$ give
-$M\log(B/M)\le C(k+1)h\kappa L^{3/2}$. The common factor
-$h\kappa$ cancels inside the logarithm, so this step introduces no
-additional dependence on the concentration coefficient. The zero-mass case is interpreted
-by continuity. This proves
-\begin{equation}
- \E_V\sum_{\alpha,\pm}p_{\alpha,\pm}
-                   \norm{\mu_{\alpha,\pm}}^2\le C(k+1)h\kappa L^{3/2}.
- \label{hgap:eq:cubic-means}
-\end{equation}
-
-For the trace, summing tuples leaves
-$\sum_j|u_j\cdot G|F\pi_j\theta^{k-1}$.
-Use
-$F\pi_j\theta^{k-1}=-(h/k)\partial_{a_j}\theta^k$ and expand
-$\theta^k=\sum_{q=0}^k(-1)^q\binom{k}{q}F^q$.
-For each $q\ge1$, formula~\eqref{hgap:eq:coarea-one}, with
-$\psi(g)=(\|g\|^2-r)|u_j\cdot g|$, places $g$ on the $j$th facet.
-There $|u_j\cdot g|$ equals the absolute value of its threshold in
-$g$-coordinates. Hence the sum over $j$ is precisely
-$\sigma^{-1}J_{\mathrm f}((Q-V)/\sigma)$, averaged over the mixing
-variables for $F^q$. The $q=0$ term has zero derivative, and the sum
-of the remaining absolute coefficients is at most $2^kh/(k\sigma)$.
-By Lemma~\ref{hgap:lem:surfaces} and
-$\delta\sqrt L\le\sigma$, the averaged absolute surface integral is
-at most $C\sigma\kappa L^{3/2}$. We conclude that
-\begin{equation}
- \left|\E H_2(G)\sum_j|u_j\cdot G|F(U)\pi_j(U)\theta(U)^{k-1}\right|
- \le C2^kh\kappa L^{3/2}.
- \label{hgap:eq:cubic-trace}
-\end{equation}
-Finally, the two remaining terms of~\eqref{hgap:eq:H3} have nuclear norm
-at most $2\norm{\E_G[G W_\alpha(U)]}$.
-For these terms apply~\eqref{hgap:eq:relative-mean} to $W_\alpha$
-with the reference $b_j$. The total mass is at most $Ch\kappa$.
-The summed projection term is bounded by
-$Ch\kappa\,\E M_G^2\le Ch\kappa L$, and the reference mass is at
-most $Cm^kh\kappa$. The same log-sum argument, now writing the
-total mass as $h\kappa$ times a bounded scalar, gives
-\[
- \E_V\sum_\alpha p_\alpha\le Ch\kappa,\qquad
- \E_V\sum_\alpha p_\alpha\norm{\mu_\alpha}^2
- \le C(k+1)h\kappa L.
-\]
-Since $\E_G[GW_\alpha]=p_\alpha\mu_\alpha$, Cauchy--Schwarz on the
-joint space of $V$ and tuples gives
-\[
- \E_V\sum_\alpha p_\alpha\|\mu_\alpha\|
- \le\left(\E_V\sum_\alpha p_\alpha\right)^{1/2}
-      \left(\E_V\sum_\alpha p_\alpha\|\mu_\alpha\|^2\right)^{1/2}
- \le C\sqrt{k+1}\,h\kappa\sqrt L.
-\]
-Together with~\eqref{hgap:eq:cubic-means}--\eqref{hgap:eq:cubic-trace}, this
-proves~\eqref{hgap:eq:cubic-matrix}.
-\end{proof}
-
-For the two-face term, the angle must be retained until after the
-matrix inequality is applied. Its role is to make the trace become
-$J_{\mathrm e}$, whose codimension-$3$ contributions cancel by
-\eqref{hgap:eq:spherical-balance}.
-
-\begin{proposition}[Angle-weighted two-face matrix estimate]\label{hgap:prop:pair}
-Suppose $V$ satisfies~\eqref{hgap:eq:ac}, $G\sim N(0,I_r)$ is
-independent of $V$, and $U=V+\sigma G$, with
-$h\ge\delta$ and $\delta\sqrt L\le\sigma\le1$.
-For every integer $K\ge2$,
-\begin{equation}
- \E_V\sum_{\substack{\alpha\in[m]^K\\(\alpha_1,\alpha_2)\in\cD}}
- \lambda_{\alpha_1\alpha_2}
- \left\|\E_G[(GG^\top-I_r)W_\alpha(U)]\right\|_*
- \le C^{K+1}\frac{h^2\kappa L^{3/2}}{\sigma}.
- \label{hgap:eq:weighted-pair-matrix}
-\end{equation}
-In particular, under the correlation gap the same sum without the
-weights $\lambda$ is at most $C^{K+1}h^2\kappa L^{3/2}/(d_c\sigma)$.
-\end{proposition}
-
-\begin{proof}
-Apply~\eqref{hgap:eq:matrix-reduction} to each $W_\alpha$, and multiply
-by $\lambda_{jk}$ for $j=\alpha_1,k=\alpha_2$.
-To bound its mean, take $\Pi$ to be the projection onto
-$\operatorname{span}(u_j,u_k)$, denoted by $\Pi_{jk}$,
-in~\eqref{hgap:eq:relative-mean}, with the reference weight
-\[
- b_{jk}(g):=\frac{e^{q_j(V+\sigma g)+q_k(V+\sigma g)}}
-                  {(1+e^{q_j(V+\sigma g)}+e^{q_k(V+\sigma g)})^3}
-                  \ge W_\alpha(V+\sigma g).
-\]
-Writing the two scores as $s,t$ and substituting $x=e^s,y=e^t$
-gives their integral explicitly:
-\[
- \int_{\R^2}\frac{e^{s+t}}{(1+e^s+e^t)^3}\dd s\dd t
- =\int_0^\infty\int_0^\infty\frac{\dd x\dd y}{(1+x+y)^3}
- =\frac12.
-\]
-We next bound the mass of this reference weight. Write
-$\rho:=u_j\cdot u_k$ and
-$e:=(u_k-\rho u_j)/\sin\vartheta_{jk}$.
-The variables $G_j:=u_j\cdot G$ and $G_e:=e\cdot G$ are independent
-standard Gaussians, independent of $V$, and
-\[
- u_j\cdot U=u_j\cdot V+\sigma G_j,\qquad
- u_k\cdot U=u_k\cdot V+\sigma\rho G_j
-                           +\sigma\sin\vartheta_{jk}G_e.
-\]
-Conditional on $V,G_j$, the second coordinate has density at most
-$C/(\sigma\sin\vartheta_{jk})$. The density of the first coordinate
-is at most $C\kappa$. To verify this last assertion, partition the
-possible values of $u_j\cdot V$ into intervals of length $\sigma$
-around a proposed density argument. The marginal form of
-\eqref{hgap:eq:ac} bounds each interval probability by
-$C\kappa(\sigma+\delta)$. On the interval at distance comparable
-to $|\ell|\sigma$, the Gaussian kernel is at most
-$C\sigma^{-1}e^{-c_1\ell^2}$. Summing gives
-$C\kappa(1+\delta/\sigma)\le C\kappa$.
-
-More explicitly, the joint density at $(x,y)$ is the expectation over
-$V$ of the product of the first Gaussian density at $x$ and the
-conditional second Gaussian density at $y$. Bounding the latter and
-averaging the former therefore gives
-\[
- f_{j,k}(x,y)\le\frac{C\kappa}{\sigma\sin\vartheta_{jk}}.
-\]
-Changing from the two coordinates to their scores contributes $h^2$.
-The score integral above and
-$\lambda_{jk}=\vartheta_{jk}\sin\vartheta_{jk}$ thus give
-$\lambda_{jk}\E b_{jk}(G)\le Ch^2\kappa/\sigma$.
-Counting the at most $m^K$ tuples yields total weighted reference
-mass at most $Cm^Kh^2\kappa/\sigma$.
-
-For the actual logistic mass we can sum the faces before estimating.
-The identity $\partial_{a_j}\partial_{a_k}F=2h^{-2}W_{jk}$,
-the mixture~\eqref{hgap:eq:mixture}, and
-\eqref{hgap:eq:coarea-two} show that
-\[
- \E\sum_{(j,k)\in\cD}\lambda_{jk}W_{jk}(U)
- =\frac{h^2}{\sigma^2}
-       \E_{V,\omega,T_1}\sum_E\vartheta_E\rho_E.
-\]
-The factor $2$ from the ordered pairs cancels the $1/2$ in the
-threshold derivative. With the additional weight
-$\|\Pi_{jk}G\|^2$, its restriction to the ridge equals
-$\|z_E\|^2$. The two positive surface estimates
-\eqref{hgap:eq:positive-edge} therefore give
-\begin{align}
- \E\sum_{(j,k)\in\cD}\lambda_{jk}W_{jk}(U)
-   &\le C h^2\kappa\sqrt L/\sigma,\label{hgap:eq:pair-mass}\\
- \E\sum_{(j,k)\in\cD}\lambda_{jk}W_{jk}(U)\norm{\Pi_{jk}G}^2
-   &\le C h^2\kappa L^{3/2}/\sigma.\label{hgap:eq:pair-projection}
-\end{align}
-Counting the two orders of each pair changes only the absolute constant.
-The factor $1/\sin\vartheta_{jk}$ in coarea leaves exactly
-$\vartheta_{jk}$. Additional face factors sum to $\theta^{K-2}\le1$,
-so the same upper bounds apply after summing all tuples.
-For clarity, multiply both masses by the same angle weight before
-applying the log-sum inequality. If
-$M:=\E_V\sum_\alpha\lambda_{\alpha_1\alpha_2}p_\alpha$ and
-$B:=\E_V\sum_\alpha\lambda_{\alpha_1\alpha_2}p_{b_{\alpha_1\alpha_2}}$,
-where the sums are over tuples with independent first two normals, then
-\[
- \E_V\sum_\alpha\lambda_{\alpha_1\alpha_2}p_\alpha
-       \log\frac{p_{b_{\alpha_1\alpha_2}}}{p_\alpha}
- \le M\log(B/M).
-\]
-Here $M\le Ch^2\kappa\sqrt L/\sigma$ and
-$B\le Cm^Kh^2\kappa/\sigma$. Writing
-$M=(h^2\kappa\sqrt L/\sigma)x$ shows that the right side is at most
-$C(K+1)h^2\kappa L^{3/2}/\sigma$, including the zero-mass case by
-continuity. The common factor $h^2\kappa/\sigma$ cancels inside the
-logarithm. Thus no logarithm of an angle, of $h$, or of $\kappa$ enters
-this step.
-Together with~\eqref{hgap:eq:pair-projection}, this gives
-\begin{equation}
- \E_V\sum_{\alpha:\,(\alpha_1,\alpha_2)\in\cD}
- \lambda_{\alpha_1\alpha_2}p_\alpha\norm{\mu_\alpha}^2
- \le C(K+1)h^2\kappa L^{3/2}/\sigma.
- \label{hgap:eq:pair-means}
-\end{equation}
-
-It remains to control the summed trace. Summing the extra indices
-leaves the weight
-\[
- \sum_{(j,k)\in\cD}\lambda_{jk}F\pi_j\pi_k\theta^{K-2}.
-\]
-Expand
-$\theta^{K-2}=\sum_{q=0}^{K-2}(-1)^q\binom{K-2}{q}F^q$ and use
-\[
- F^{q+1}\pi_j\pi_k
- =\frac{h^2}{(q+1)(q+2)}
-       \partial_{a_j}\partial_{a_k}F^{q+1}.
-\]
-Apply~\eqref{hgap:eq:coarea-two} to each power $F^{q+1}$ with
-$\psi(g)=\|g\|^2-r$. Its factor
-$(\sigma^2\sin\vartheta_{jk})^{-1}$, multiplied by
-$\lambda_{jk}$, leaves $\vartheta_{jk}/\sigma^2$.
-After summing the two orders of every ridge, the trace is a signed
-sum of mixtures of $J_{\mathrm e}((Q-V)/\sigma)$.
-The absolute coefficients sum to at most $C2^Kh^2/\sigma^2$.
-By Lemma~\ref{hgap:lem:surfaces}, its magnitude is at most
-$C2^K h^2\kappa L^{3/2}/\sigma$. Combining this with~\eqref{hgap:eq:pair-means}
-and~\eqref{hgap:eq:matrix-reduction} proves~\eqref{hgap:eq:weighted-pair-matrix}.
-The unweighted conclusion follows from~\eqref{hgap:eq:gap}.
-\end{proof}
-
-\subsection{Fourth derivatives at translated bases}\label{hgap:sec:translated}
-
-The matrix bounds above were proved at a common point $V+\sigma G$.
-The interpolation remainder instead evaluates different summands at
-different nearby points. We first decompose the remaining Hessian
-into the single-face and two-face terms just bounded, and then expand
-the translated weights so that all summands can be contracted at the
-common point.
-The algebraic decomposition retains cancellation within the Hessian.
-For $z_j:=u_j\cdot z$, $w_j:=u_j\cdot w$, and
-$\rho_{jk}:=u_j\cdot u_k$,
-\begin{equation}
- D^2F(x)[z,w]
- =-\frac1h\sum_j z_jw_jD_{u_j}W_j(x)
- +\frac2{h^2}\sum_{j\ne k}W_{jk}(x)z_j(w_k-\rho_{jk}w_j).
- \label{hgap:eq:hessian}
-\end{equation}
-To verify the identity, differentiate $D F[w]=-h^{-1}\sum_jw_jW_j$
-to obtain
-\[
- D^2F[z,w]=-h^{-2}\sum_jz_jw_jW_j
-                    +2h^{-2}\sum_{j,k}z_jw_kW_{jk}.
-\]
-Also,
-$D_{u_j}W_j=h^{-1}W_j(1-2\sum_k\rho_{jk}\pi_k)$.
-Substitution of this formula into the first term of
-\eqref{hgap:eq:hessian} leaves exactly the second displayed sum,
-since the terms containing $\rho_{jk}z_jw_jW_{jk}$ cancel.
-The summand with $j=k$ in the two-face correction is zero.
-If $u_k=\pm u_j$, the corresponding coefficient in the second sum is
-$0$. Thus only pairs in $\cD$ contribute.
-
-\begin{lemma}[Fourth derivatives at translated concentrated bases]
-\label{hgap:thm:fourth}
-Let $\mathcal H$ be a sigma-field, let $V$ be an $\mathcal H$-measurable
-concentrated base satisfying~\eqref{hgap:eq:ac}, and let
-$G\sim N(0,I_r)$ be independent of $\mathcal H$.
-Suppose the finite array $(Z_i,z_i,w_i,v_i)_{i=1}^n$, with all entries
-in $\R^r$, is jointly independent of $G$ conditional on $\mathcal H$.
-For a fixed $b\ge0$, suppose almost surely that
-\[
- \sum_i\E[Z_iZ_i^\top\mid\mathcal H]\preceq I_r,\qquad
- \norm{z_i}_U,\norm{w_i}_U\le\delta,\qquad
- \norm{v_i}_U\le b\delta.
-\]
-If $\delta\sqrt L\le\sigma\le1$, there are constants $A_b\ge1,C_b$
-such that $h\ge A_b\delta$ implies
-\begin{equation}
- \left|\sum_i\E D^4F(V+\sigma G+v_i)[Z_i,Z_i,z_i,w_i]\right|
- \le \frac{C_b}{d_c}\frac{\delta^2\kappa L^{3/2}}{\sigma^3}.
- \label{hgap:eq:fourth-bound}
-\end{equation}
-The constants depend only on $b,C_0$, and not on the rank. No mutual independence of the
-entries of an array is required, and $v_i$ may depend on the other
-entries. Concentration~\eqref{hgap:eq:ac} is required only unconditionally,
-not after conditioning on $\mathcal H$.
-\end{lemma}
-
-\begin{proof}
-First condition on $\mathcal H$ and on all entries of the arrays.
-By the independence assumption, $G$ remains standard Gaussian under
-this conditioning, and the vectors used as derivative directions are
-fixed. Two integrations by parts in the direction $Z_i$ give
-\[
- \E_G D^4F(U+v_i)[Z_i,Z_i,z_i,w_i]
- =\frac1{\sigma^2}\E_G\left[
-       \tr\{(GG^\top-I_r)Z_iZ_i^\top\}
-                       D^2F(U+v_i)[z_i,w_i]\right].
-\]
-We insert~\eqref{hgap:eq:hessian} into this expression. For its first term, integrate once more
-in the unit direction $u_j$ to obtain
-\[
- \E_G[(GG^\top-I_r)D_{u_j}W_j(U+v_i)]
- =\sigma^{-1}\E_G[\mathcal H_{3,u_j}(G)W_j(U+v_i)].
-\]
-The scalar face coefficients satisfy
-$|z_{i,j}w_{i,j}|\le\delta^2$ and
-$|z_{i,j}(w_{i,k}-\rho_{jk}w_{i,j})|\le2\delta^2$.
-We must nevertheless retain the translation $v_i$ until we can
-separate the Gaussian matrix from the summand-dependent coefficient.
-Bounding each summand individually at this point would lose the
-aggregate second-moment bound.
-
-For this separation, expand the translated weights in the small
-changes of their exponential scores. Define
-$d_j(v):=e^{u_j\cdot v/h}-1$ and
-$\eta_b:=e^{b\delta/h}-1$. For a weight with $K=1$ or $2$ face factors,
-\begin{align*}
- W_\alpha(x+v)
- &=W_\alpha(x)e^{\sum_{a=1}^K u_{\alpha_a}\cdot v/h}
-     \bigl(1+\sum_j\pi_j(x)d_j(v)\bigr)^{-K-1}\\
- &=e^{\sum_{a=1}^K u_{\alpha_a}\cdot v/h}
-   \sum_{\ell\ge0}(-1)^\ell\binom{K+\ell}{\ell}
-   \sum_{\beta\in[m]^\ell}W_{\alpha,\beta}(x)
-                       \prod_{a=1}^\ell d_{\beta_a}(v).
-\end{align*}
-We now average the arrays conditional on $\mathcal H$ while keeping
-$G$ fixed. Each unshifted weight depends only on $V,G$, so it can be
-separated from the summand-dependent coefficient. More explicitly,
-for $\alpha=(j)$ or $\alpha=(j,k)$, define
-\[
- a_{i,\alpha}:=
- \begin{cases}
- z_{i,j}w_{i,j},&K=1,\\
- z_{i,j}(w_{i,k}-\rho_{jk}w_{i,j}),&K=2.
- \end{cases}
-\]
-Apart from the deterministic binomial coefficient and its sign, the
-matrix multiplying $W_{\alpha,\beta}(U)$ is
-\[
- M_{\alpha,\beta}:=\sum_i\E\left[
- a_{i,\alpha}\exp\!\left\{\sum_{a=1}^K u_{\alpha_a}\cdot v_i/h\right\}
- \prod_{a=1}^\ell d_{\beta_a}(v_i)\,Z_iZ_i^\top
- \,\middle|\,\mathcal H\right].
-\]
-The absolute value of its scalar coefficient is at most
-$2\delta^2e^{Kb\delta/h}\eta_b^\ell$.
-For any scalar coefficients bounded by $M_0$, the aggregate
-second-moment assumption gives, in every unit direction $e$,
-\[
- \left|\sum_i\E[\text{coefficient}_i(e\cdot Z_i)^2
-                       \mid\mathcal H]\right|
- \le M_0\sum_i\E[(e\cdot Z_i)^2\mid\mathcal H]\le M_0.
-\]
-Thus $\|M_{\alpha,\beta}\|_{\op}\le
-2\delta^2e^{Kb\delta/h}\eta_b^\ell$.
-Their dependence on $\mathcal H$ causes no difficulty: operator--nuclear
-norm duality bounds their contraction pointwise, after which the matrix
-estimates are averaged over the unconditional law of $V$.
-Apply Proposition~\ref{hgap:prop:cubic} when $K=1$, and
-Proposition~\ref{hgap:prop:pair} when $K=2$.
-Choose $A_b$ so that $C\eta_b\le1/2$.
-For $K=1,2$, the resulting series is bounded because
-\[
- \sum_{\ell\ge0}\binom{K+\ell}{\ell}(C\eta_b)^\ell
-       =(1-C\eta_b)^{-K-1}\le2^{K+1}.
-\]
-The single-face contribution has the factor $h^{-1}\sigma^{-3}$
-from the Hessian decomposition and the three integrations by parts.
-Proposition~\ref{hgap:prop:cubic} supplies $h\kappa L^{3/2}$ for its matrix sum.
-The two-face contribution has factor $h^{-2}\sigma^{-2}$, and
-Proposition~\ref{hgap:prop:pair} supplies $h^2\kappa L^{3/2}/(d_c\sigma)$.
-Consequently their sum is bounded by
-\[
- C_b\delta^2\left\{\frac{h\kappa L^{3/2}}{h\sigma^3}
-             +\frac{h^2\kappa L^{3/2}}{h^2\sigma^2d_c\sigma}\right\}
- \le\frac{C_b\delta^2\kappa L^{3/2}}{d_c\sigma^3},
-\]
-where we used $d_c\le1$. This is~\eqref{hgap:eq:fourth-bound}.
-For $\eta_b<1$ the weight expansion converges absolutely since
-$\sum_j\pi_j\le1$. At fixed rank, $\sum_i\E\|Z_i\|^2\le r$ and
-Gaussian moments through degree three justify the initial interchanges.
-The estimates above then remove rank from the final bound.
-\end{proof}
-
-
-\subsection{Application to the interpolation and completion of the proof}
-\label{hgap:sec:completion}
-
-We now verify that this translated-derivative bound applies to the
-remainder in~\eqref{hgap:eq:path}. This step is essential because the
-remainder points depend on the same summands that appear as derivative
-directions. The conditional formulation above was chosen to allow
-exactly that dependence.
-
-\begin{proof}[Proof of the late bound~\eqref{hgap:eq:late}]
-Fix $0<t<1$ and set $Y_t:=\sqrt{1+\varepsilon}\,U_t$. With
-$\widetilde a:=\sqrt{1+\varepsilon}\,a$ and
-$\widetilde h:=\sqrt{1+\varepsilon}\,h$, we have
-$F_{a,h}(U_t)=f(Y_t)$ for $f:=F_{\widetilde a,\widetilde h}$.
-Take independent standard Gaussians $G_0,G_1$, independent also of
-the summands and masks, and write
-\begin{equation}\label{hgap:eq:split}
- Y_t=V_{0,t}+\sigma_tG_1,\qquad
- V_{0,t}:=(1+t)\sum_i\mathbb B_{i,t}\zeta_i^0+\sigma_tG_0,
- \qquad \sigma_t^2:=\frac{t+\varepsilon}{2}.
-\end{equation}
-The retained sum and $\sigma_tG_0$ are independent and have common
-face variances $1-t$ and $(t+\varepsilon)/2$, respectively. At least one
-variance is at least $1/3$. The retained summands are centered and
-have face norm at most $2\delta$. By~\eqref{appx-an:retained-maximum},
-the retained sum has expected face norm at most $2\E\|W\|_\infty$.
-The Gaussian component has expected face norm $\sigma_tg_\Sigma\le g_\Sigma$.
-Apply both the intrinsic and dimension-based parts of
-Lemma~\ref{lem:concentration} to the component with variance at least
-$1/3$, treating the other component as an independent shift. The two
-bounds give~\eqref{hgap:eq:ac} with the coefficient $\kappa$ recalled
-above, with an absolute $C_0$ uniformly in $t$. Also, if $h\ge\sqrt2\delta$, then
-\[
- \sigma_t^2\ge Lh^2/2\ge\delta^2L,
- \qquad \sigma_t^2<(1+1/4)/2<1.
-\]
-Thus all scale conditions are satisfied.
-
-Let $\mathcal H$ be generated by the original summands, masks, and
-$G_0$. Let $(\zeta_i)_i$ and $(\widetilde\zeta_i)_i$ be independent
-copies of the original array, independent also of $\mathcal H,G_1$.
-For clarity, Lemma~\ref{appx-an:lem:identity} writes
-its fourth-order remainder as
-\begin{equation}\label{hgap:eq:explicit-remainder}
-\begin{split}
- R_{4,a,h}(t)=\int_0^1\sum_i\E\bigl[\,
- &a_t(s)D^4f(Y_t+v_{i,t,s})[\zeta_i,\zeta_i,\zeta_i,\zeta_i]\\
- {}+{}&b_t(s)D^4f(Y_t+v_{i,t,s})
-                    [\widetilde\zeta_i,\widetilde\zeta_i,\zeta_i,\zeta_i]\\
- {}+{}&c_t(s)D^4f(Y_t+v_{i,t,s})
-           [\widetilde\zeta_i,\widetilde\zeta_i,\widetilde\zeta_i,\zeta_i]
-                              \,\bigr]\dd s,
-\end{split}
-\end{equation}
-where
-\[
- v_{i,t,s}:=(1+t)(s\zeta_i-\mathbb B_{i,t}\zeta_i^0),
- \qquad \|v_{i,t,s}\|_U\le4\delta.
-\]
-For $\eta_t:=(1-t)/(1+t)$, its scalar kernels are
-\begin{align*}
- a_t(s)&:=\frac{(1+t)^2}{6}(1-s)^2
-                  \{\eta_t-1+(1+2\eta_t)s\},\\
- b_t(s)&:=\frac{1-t}{2}(1-s),\qquad
- c_t(s):=\frac{1-t}{6}(1-\eta_t).
-\end{align*}
-They are common to all $i$ and satisfy
-$\int_0^1(|a_t|+|b_t|+|c_t|)\dd s\le C$ uniformly in $t$.
-
-In each of the three terms in~\eqref{hgap:eq:explicit-remainder}, the first
-two slots form a repeated copy $Z_i$ with
-$\sum_i\E[Z_iZ_i^\top\mid\mathcal H]=I_r$.
-Each remaining slot has face norm at most $\delta$. The copies and
-shifts are jointly independent of $G_1$ conditional on $\mathcal H$.
-Lemma~\ref{hgap:thm:fourth}, with $b=4$, therefore bounds each summed
-expectation by $C\delta^2\kappa L^{3/2}/(d_c\sigma_t^3)$ whenever
-$h\ge A_4\delta$. Since $\widetilde h\ge h$, the test function $f$
-has sufficient width. Integration against the scalar kernels gives
-\[
- |R_{4,a,h}(t)|\le\frac{C\delta^2\kappa L^{3/2}}{d_c\sigma_t^3}
-     \le\frac{C\delta^2\kappa L^{3/2}}{d_c(t+\varepsilon)^{3/2}},
-\]
-which is~\eqref{hgap:eq:late}.
-\end{proof}
-
-The remaining step is a one-dimensional integration. We include it
-because it explains why a power of the gap in a pointwise derivative
-bound produces only a logarithm in the final error.
-
-\begin{proof}[Proof of Corollary~\ref{cor:positive-correlation-gap}]
-Define $J_c:=1+\log(1/c)$. First suppose $h\ge\mathsf A\delta$ and
-$\varepsilon=Lh^2<1/4$, where $\mathsf A$ is large enough for all preceding estimates.
-Combining~\eqref{hgap:eq:early} and~\eqref{hgap:eq:late}, and then setting
-$y:=(t+\varepsilon)/\varepsilon$ and using
-$\sqrt\varepsilon=h\sqrt L$, gives
-\begin{align}
- \int_0^1|R_{4,a,h}(t)|\dd t
- &\le\frac{C\delta^2\kappa L}h
-    \int_1^\infty\min\{y^{-1},d_c^{-1}y^{-3/2}\}\dd y\notag\\
- &=\frac{C\delta^2\kappa L}h
-                      \{2\log(1/d_c)+2\}
- \le\frac{C\delta^2\kappa LJ_c}{h}.              \label{hgap:eq:time-integral}
-\end{align}
-Indeed, the two integrands agree at $y=d_c^{-2}$, the first integrates
-to $2\log(1/d_c)$ before that point, and the second integrates to $2$
-after it. The extension of the upper integration limit to infinity
-is an upper bound, so no assumption is needed about whether the
-crossover occurs before the end of the actual interpolation.
-Both remainder bounds have the same factor $\kappa$, so it does not
-affect the crossover. Finally, $c\le d_c\le1$ gives the last inequality.
-
-Substituting~\eqref{hgap:eq:old-cubic} and~\eqref{hgap:eq:time-integral} into
-\eqref{hgap:eq:reduction}, and using $J_c\ge1$, yields
-\begin{equation}\label{hgap:eq:balance}
- \rh(W,Z)\le C\kappa L\left(h+\delta+\frac{\delta^2J_c}{h}\right).
-\end{equation}
-Choose $h:=\mathsf A\delta\sqrt{J_c}$. If $Lh^2<1/4$, the right
-side of~\eqref{hgap:eq:balance} is at most $C\delta\kappa L\sqrt{J_c}$.
-If $Lh^2\ge1/4$, then
-\[
- \delta\kappa L\sqrt{J_c}
- =\frac{\kappa Lh}{\mathsf A}
- \ge\frac{\kappa\sqrt L}{2\mathsf A}\ge\frac1{2\mathsf A},
-\]
-because $\kappa,L\ge1$. The bound $\rh(W,Z)\le1$ therefore gives
-\[
- \rh(W,Z)\le C\min\{1,\delta\kappa L\sqrt{J_c}\}
-\]
-in both cases.
-
-It remains to express the boundary coefficient in terms of Gaussian
-width. Lemma~\ref{intrinsic:lem:maximum} gives
-$\E\|W\|_\infty\le C(g_\Sigma+\delta L)$ without using the rectangle
-approximation being proved. If $\delta L\le g_\Sigma$, this estimate
-and $g_\Sigma\ge\sqrt{2/\pi}$ imply $\kappa\le Cg_\Sigma$.
-If instead $\delta L>g_\Sigma$, then
-\[
- \delta g_\Sigma L\sqrt{J_c}\ge g_\Sigma^2\ge2/\pi,
-\]
-so the trivial bound suffices. Hence
-$\rh(W,Z)\le C\min\{1,\delta g_\Sigma L\sqrt{J_c}\}$ for all
-admissible parameters, as asserted.
-\end{proof}
-
-The proof also covers $p=1$: there are no independent face pairs, the
-two-face term vanishes, and $c=d_c=J_c=1$. More generally, singular
-covariances cause no loss because every estimate takes place on the
-Gaussian support. In particular, the normal-cone identity
-\eqref{hgap:eq:spherical-balance} imposes no three-coordinate
-nondegeneracy condition.
-
-
-\clearpage
-\section{Proof of Corollary~\ref*{cor:correlation-budget} (exceptional correlation gaps)}
-\label{app:correlation-budget}
-
-The correlation budget allows pairs to have arbitrarily small
-positive gaps by charging their aggregate contribution. We therefore use two estimates for the fourth-order
-remainder. Lemma~\ref{lem:cap-remainder} bounds each exceptional pair
-at a cost that vanishes with its gap. The matrix estimates in
-Appendix~\ref{app:correlation-gap-proof} control the remaining pairs
-together and retain the boundary coefficient $\kappa$. We separate
-the two contributions and explain why the matrix estimates apply to
-the separated pairs, before choosing a smoothing width that
-accommodates both contributions.
-
-\begin{proof}[Proof of Corollary~\ref{cor:correlation-budget}]
-Fix $c\in(0,1]$, and recall
-\[
- \eta_{jk}:=1-|\Sigma_{jk}|,\qquad
- B_c:=\sum_{\substack{j<k\\0<\eta_{jk}<c}}\sqrt{\eta_{jk}},
- \qquad J_c:=1+\log(1/c).
-\]
-Here $j,k$ index the original $p$ coordinates. For the derivative
-estimates we work in the Gaussian support, with the $m=2p$ signed
-unit face normals from Section~\ref{sec:smoothing}. Each coordinate
-provides a normal and its negative. We retain the coefficient
-\[
- \kappa:=\min\{\sqrt L,\,1+\max\{\E\|W\|_\infty,g_\Sigma\}\},
- \qquad 1\le\kappa\le\sqrt L,
-\]
-until the last step, where we replace it by the Gaussian width.
-Initially take $h\ge\mathsf A\delta$ and $\varepsilon:=Lh^2<1/4$,
-where $\mathsf A$ is an absolute constant large enough for the
-estimates in Appendices~\ref{app:dimension-cap}
-and~\ref{app:correlation-gap-proof}. Write $v:=t+\varepsilon$.
-
-We use the calibrated interpolation from those appendices. To check
-the hypotheses needed below, recall its Gaussian split
-\eqref{hgap:eq:split}:
-\[
- Y_t=V_{0,t}+\sigma_tG_1,\qquad
- V_{0,t}=(1+t)\sum_i\mathbb B_{i,t}\zeta_i^0+\sigma_tG_0,
- \qquad \sigma_t^2=v/2.
-\]
-The standard Gaussians $G_0,G_1$ are independent of one another and
-of the original summands and masks. The two independent components
-of $V_{0,t}$ have common face variances $1-t$ and $v/2$; at least one
-is at least $1/3$. The retained summands have face norm at most
-$2\delta$, and the expected face norms of the two components are
-bounded by $2\E\|W\|_\infty$ and $g_\Sigma$, respectively.
-Applying Lemma~\ref{lem:concentration} to the component with variance
-at least $1/3$, with the other as an independent shift, gives
-\eqref{hgap:eq:ac} with coefficient $\kappa$, uniformly in $t$.
-This argument requires no lower bound on the pairwise gaps.
-Also, $\delta\sqrt L\le\sigma_t<1$ once $\mathsf A\ge\sqrt2$.
-The normalization $Y_t=\sqrt{1+\varepsilon}\,U_t$ changes the
-smoothing width to $\widetilde h=\sqrt{1+\varepsilon}\,h$;
-since $\widetilde h\asymp h$, we express the estimates below in
-terms of $h$.
-
-For signed face indices $j,k$, define
-$\rho_{jk}:=u_j\cdot u_k$ and
-$\nu_{jk}:=\sqrt{1-\rho_{jk}^2}$.
-The Hessian decomposition~\eqref{cap:hessian} separates the
-fourth-order remainder into single-face and unordered-pair
-contributions. Group them as
-\[
- R_{4,a,h}(t)=R_{\mathrm{sep},a,h}(t)+R_{\mathrm{exc},a,h}(t),
-\]
-where $R_{\mathrm{exc},a,h}$ contains the pair terms with
-$0<1-|\rho_{jk}|<c$, and $R_{\mathrm{sep},a,h}$ contains all
-single-face terms and the pair terms with $1-|\rho_{jk}|\ge c$.
-There is no missing contribution at zero gap: if $u_k=\pm u_j$,
-then the directional coordinates satisfy $z_k=\pm z_j$ and
-$w_k=\pm w_j$, so the coefficient
-$B_{jk}(z,w)$ in~\eqref{cap:pair-coefficient} is zero.
-
-We first bound the exceptional contribution. For each such face
-pair, the direct estimate~\eqref{cap:pair} gives
-\[
- |R_{4,jk,a,h}(t)|\le\frac{C\delta^2\nu_{jk}}{h^2}.
-\]
-For two distinct original coordinates, all four choices of signs
-give the same absolute correlation. If their coordinate gap is
-$\eta$, then
-$\nu_{jk}=\sqrt{\eta(2-\eta)}\le\sqrt{2\eta}$.
-The two faces of a single coordinate have zero gap and contribute
-zero. Thus each term of $B_c$ accounts for at most four unordered
-signed-face pairs, and summation gives
-\begin{equation}
- |R_{\mathrm{exc},a,h}(t)|
- \le\frac{C\delta^2B_c}{h^2},
- \label{budget:eq:exceptional}
-\end{equation}
-uniformly in $a$ and $t$. In particular, this bound stays uniform
-as any positive exceptional gap tends to zero.
-
-We next bound the separated contribution without imposing a gap
-condition on the exceptional pairs. Set $d_c:=c(2-c)$, so that
-$c\le d_c\le1$. Proposition~\ref{hgap:prop:cubic} has no gap
-assumption. The angle-weighted bound in
-Proposition~\ref{hgap:prop:pair} also holds before a minimum gap
-is imposed, and its left side is a sum of nonnegative nuclear
-norms. We may therefore discard the exceptional terms from that
-sum. On each remaining pair,
-\[
- \lambda_{jk}=\vartheta_{jk}\sin\vartheta_{jk}
- \ge\sin^2\vartheta_{jk}
- =1-\rho_{jk}^2\ge d_c,
- \qquad \vartheta_{jk}:=\arccos\rho_{jk}.
-\]
-Removing the angle weights from the restricted sum costs at most
-$d_c^{-1}$. Only the indices in the pair sum have been restricted:
-the smoothing function and its logistic weights still involve
-all $m$ faces. Consequently the matrix estimates apply to the
-same concentrated base verified above. Combining the two orders
-of each pair in~\eqref{hgap:eq:hessian} gives the unordered
-coefficient in~\eqref{cap:pair-coefficient}, so this restriction
-selects exactly the pair terms in $R_{\mathrm{sep},a,h}$.
-
-To pass from these matrices to the remainder, we use the
-translated-weight expansion in the proof of
-Lemma~\ref{hgap:thm:fourth}. Here are the hypotheses that make this
-step valid. Let $\mathcal H$ be generated by the original summands,
-masks, and $G_0$. In each term of
-\eqref{hgap:eq:explicit-remainder}, the repeated direction $Z_i$
-is a copy of $\zeta_i^0$. The array of these copies is independent
-of $\mathcal H$ and satisfies
-\[
- \sum_i\E[Z_iZ_i^\top\mid\mathcal H]=I_r.
-\]
-The other two directions have face norm at most $\delta$, and
-the shift has face norm at most $4\delta$. The copies and shifts
-are jointly independent of $G_1$ conditional on $\mathcal H$,
-although a shift may depend on the copies. Expanding the translated
-weights before taking absolute values separates the unshifted
-Gaussian matrices from these copy-dependent coefficients. The
-displayed covariance identity bounds the coefficient matrices,
-and $h\ge\mathsf A\delta$ makes the translation series summable,
-exactly as in Lemma~\ref{hgap:thm:fourth}. The concentration estimate
-is used for the unconditional law of $V_{0,t}$; no concentration
-conditional on $\mathcal H$ is asserted or needed.
-
-The single-face matrix sum contributes $h\kappa L^{3/2}$, and
-the restricted pair matrix sum contributes
-$h^2\kappa L^{3/2}/(d_c\sigma_t)$. Their derivative factors are
-$h^{-1}\sigma_t^{-3}$ and $h^{-2}\sigma_t^{-2}$, respectively.
-The bounded integrals of the scalar kernels in
-\eqref{hgap:eq:explicit-remainder} change only the absolute
-constant. Hence
-\begin{align}
- |R_{\mathrm{sep},a,h}(t)|
- &\le C\delta^2\left\{
-    \frac{h\kappa L^{3/2}}{h\sigma_t^3}
-   +\frac{h^2\kappa L^{3/2}}{h^2\sigma_t^2d_c\sigma_t}
-                    \right\}\notag\\
- &\le\frac{C\delta^2\kappa L^{3/2}}{d_cv^{3/2}},
- \label{budget:eq:separated}
-\end{align}
-where the last inequality uses $d_c\le1$ and $\sigma_t^2=v/2$.
-
-Near the start of the interpolation, a different estimate is
-more useful. Proposition~\ref{an:prop:derivative} gives
-\[
- |R_{4,a,h}(t)|\le\frac{C\delta^2\kappa L}{hv}
-\]
-for the full remainder. We do not need this estimate separately
-for either part of the decomposition. Indeed, combining it with
-\eqref{budget:eq:exceptional}--\eqref{budget:eq:separated} and using
-$\min\{x,y+z\}\le\min\{x,y\}+z$ for nonnegative $x,y,z$ yields
-\[
- |R_{4,a,h}(t)|\le
- C\min\left\{\frac{\delta^2\kappa L}{hv},
-              \frac{\delta^2\kappa L^{3/2}}{d_cv^{3/2}}\right\}
- +\frac{C\delta^2B_c}{h^2}.
-\]
-Set $y:=v/\varepsilon$ and use $\sqrt\varepsilon=h\sqrt L$.
-Extending the upper integration limit for the nonnegative minimum
-to infinity gives
-\begin{align}
- \sup_a\int_0^1|R_{4,a,h}(t)|\,dt
- &\le\frac{C\delta^2\kappa L}{h}
-   \int_1^\infty\min\{y^{-1},d_c^{-1}y^{-3/2}\}\,dy
-   +\frac{C\delta^2B_c}{h^2}\notag\\
- &\le C\left\{\frac{\delta^2\kappa LJ_c}{h}
-                  +\frac{\delta^2B_c}{h^2}\right\}.
- \label{budget:eq:integrated}
-\end{align}
-For the last step, the two integrands agree at $y=d_c^{-2}$.
-The integral before that point is $2\log(1/d_c)$, and the integral
-after it is $2$. Their sum is at most $2J_c$ because $d_c\ge c$.
-Thus the pointwise factor $d_c^{-1}$ costs only a logarithm after
-time integration, while the exceptional-pair cost remains additive.
-
-The smoothing, initialization, and cubic estimates used in
-Appendix~\ref{app:correlation-gap-proof} contribute at most
-$C\kappa L(h+\delta+\delta^2/h)$. Since $h\ge\mathsf A\delta$
-and $J_c\ge1$, adding them to~\eqref{budget:eq:integrated} gives
-\begin{equation}
- \rh(W,Z)\le C\left\{
-       \kappa Lh+\frac{\delta^2\kappa LJ_c}{h}
-                    +\frac{\delta^2B_c}{h^2}\right\}.
- \label{budget:eq:balance}
-\end{equation}
-There are two balances with the smoothing cost $\kappa Lh$.
-The separated-pair term suggests width $\delta\sqrt{J_c}$;
-the exceptional-pair term suggests width
-$(\delta^2B_c/(\kappa L))^{1/3}$. Choose the larger width:
-\[
- h:=\mathsf A\max\left\{\delta\sqrt{J_c},
-                    \left(\frac{\delta^2B_c}{\kappa L}\right)^{1/3}
-              \right\}.
-\]
-This gives $h\ge\mathsf A\delta$ and
-\[
- \frac{\delta^2\kappa LJ_c}{h}
-       \le\frac{\kappa Lh}{\mathsf A^2},\qquad
- \frac{\delta^2B_c}{h^2}
-       \le\frac{\kappa Lh}{\mathsf A^3}.
-\]
-If $Lh^2<1/4$, substitution in~\eqref{budget:eq:balance}, followed by
-\[
- \kappa Lh\le\mathsf A\left\{
-       \delta\kappa L\sqrt{J_c}
-       +\delta^{2/3}(\kappa L)^{2/3}B_c^{1/3}\right\},
-\]
-proves the desired bound with $\kappa$ in place of $g_\Sigma$.
-If instead $Lh^2\ge1/4$, the expression in braces is at least
-\[
- \frac{\kappa Lh}{\mathsf A}
- \ge\frac{\kappa\sqrt L}{2\mathsf A}
- \ge\frac1{2\mathsf A}.
-\]
-The trivial bound $\rh(W,Z)\le1$ therefore gives the same conclusion,
-with the cap at $1$, even when this choice of width is outside the
-range used to derive~\eqref{budget:eq:balance}.
-
-It remains to replace $\kappa$ by $g_\Sigma$. Lemma~\ref{intrinsic:lem:maximum}
-gives $\E\|W\|_\infty\le C(g_\Sigma+\delta L)$ independently of
-the rectangle comparison being proved. If $\delta L\le g_\Sigma$,
-this estimate and $g_\Sigma\ge\sqrt{2/\pi}$ imply
-$\kappa\le Cg_\Sigma$. Substitution in both terms proves
-\eqref{budget:eq:result}. If $\delta L>g_\Sigma$, the first term
-in that bound already satisfies
-\[
- \delta g_\Sigma L\sqrt{J_c}\ge g_\Sigma^2\ge2/\pi,
-\]
-so the trivial probability bound suffices. The argument includes
-$B_c=0$ and singular covariance matrices, since zero-gap pairs
-contribute zero and all derivative estimates were taken on the
-Gaussian support.
-\end{proof}
-
 \end{document}
-
-
