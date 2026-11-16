@@ -1,0 +1,62 @@
+name: Import approved rectangle CLT archive
+on:
+  push:
+    paths: ['.github/workflows/import-approved-archive.yml']
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Import checked public archive and preserve selected dates
+        shell: python
+        run: |
+          import hashlib, json, os, pathlib, shutil, subprocess, urllib.request, zipfile
+          root = pathlib.Path.cwd()
+          tmp = pathlib.Path(os.environ['RUNNER_TEMP']) / 'approved-rectangle-clt-archive'
+          tmp.mkdir()
+          archive = tmp / 'export.zip'
+          urllib.request.urlretrieve("https://sdmntprcentralus.oaiusercontent.com/files/00000000-ddb4-81f5-b4ea-21493f1538b1/raw?se=2026-11-16T17%3A12%3A04Z&sp=r&sv=2026-06-06&sr=b&scid=01a1e54c-a743-7345-9e90-dc897bab9346&skoid=de71a0d5-fb02-4fce-be69-9296aced242b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-16T09%3A44%3A20Z&ske=2026-11-17T09%3A44%3A20Z&sks=b&skv=2026-06-06&sig=xCv4eAdx5ufxo7WXeNdmFWf4Cqx2lNinE9eLqJn/Gic%3D", archive)
+          assert hashlib.sha256(archive.read_bytes()).hexdigest() == 'b5040ae9ff7f1162bcffcad93a249fee39f0882f1c33e6970fac19c2225cc011'
+          with zipfile.ZipFile(archive) as z:
+              assert set(z.namelist()) == {'commit-map.txt','SHA256SUMS','rectangle-clt-public-history.tar.gz','allowed-paths.txt','commit-dates.json','export-validation.json','rectangle-clt-history.bundle'}
+              z.extractall(tmp)
+          bundle = tmp / 'rectangle-clt-history.bundle'
+          assert hashlib.sha256(bundle.read_bytes()).hexdigest() == '8a54c4c5936eeabcc1e2088e8dccdf2511b585a66e10967464ccb230b6398553'
+          def git(*args):
+              return subprocess.check_output(['git',*args],text=True).strip()
+          bootstrap = git('rev-parse','HEAD')
+          readme = (root/'README.md').read_bytes()
+          receipt=json.loads((tmp/'export-validation.json').read_text())
+          allowed=set((tmp/'allowed-paths.txt').read_text().splitlines())
+          refs=receipt['filtered_heads']
+          subprocess.check_call(['git','fetch',str(bundle),'+refs/heads/*:refs/remotes/selected/*'])
+          for ref,sha in refs.items():
+              assert git('rev-parse',ref.replace('refs/heads/','refs/remotes/selected/'))==sha
+          for sha in git('rev-list',*refs.values()).splitlines():
+              paths=set(git('ls-tree','-r','--name-only',sha).splitlines())
+              assert paths <= allowed
+          for item in json.loads((tmp/'commit-dates.json').read_text()):
+              actual=git('show','-s','--format=%at%x00%ai%x00%ct%x00%ci',item['public']).split('\0')
+              assert actual==[item[k] for k in ['author_unix','author_date','committer_unix','committer_date']]
+          subprocess.check_call(['git','checkout','--detach',refs['refs/heads/main']])
+          (root/'README.md').write_bytes(readme)
+          provenance=root/'provenance';provenance.mkdir()
+          for name in ['commit-map.txt','commit-dates.json','allowed-paths.txt','export-validation.json','SHA256SUMS']:
+              shutil.copy2(tmp/name,provenance/name)
+          subprocess.check_call(['git','config','user.name','github-actions[bot]'])
+          subprocess.check_call(['git','config','user.email','41898282+github-actions[bot]@users.noreply.github.com'])
+          subprocess.check_call(['git','add','README.md','provenance'])
+          tree=git('write-tree')
+          publication=git('commit-tree',tree,'-p',refs['refs/heads/main'],'-p',bootstrap,'-m','Publish selected rectangle CLT history and original verification records')
+          updates=[publication+':refs/heads/main']
+          for ref,sha in refs.items():
+              if ref!='refs/heads/main':
+                  updates.append(sha+':'+ref)
+          subprocess.check_call(['git','push','--atomic','origin',*updates])
+          print('Published validated selected history:',publication)
+          
