@@ -19,6 +19,8 @@ The supplement contains the dimension-logarithm cap, the correlation-gap proof, 
 
 The [Lean verification guide](LEAN_VERIFICATION.md) distinguishes the archived **7 November 2026** certificate from the current paper. That certificate covers the frozen manuscript's 31 proved statements and qualified formal counterparts of its substantive proof arguments. It does not cover the subsequent intrinsic refinements or the new supplement. Conjecture 1 is excluded. Publishing this archive does not constitute a new Lean certification.
 
+The [verification assignment for the 16 November paper and supplement](lean-rectangle-clt-arxiv-v1/README.md) starts a separate certification, with a [statement and proof inventory](lean-rectangle-clt-arxiv-v1/inventory.json). It uses the completed finite chaining dependency. The new paper's proof obligations are open.
+
 The [provenance guide](PROVENANCE.md) records the selected history, original dates, commit mapping, and checksums. Historical manuscripts and original verification records are retained without editing their contents. The wider HDCLTs research repository remains private. The first public release of this selected archive is 16 November 2026; retained earlier commit dates describe development history, not earlier public availability.
 
 The [submission checks](research-rectangle-clt-singular/Rectangle_CLT_arXiv_2026-11-16_checks.md) describe the PDF/source validation. The arXiv identifier will be added after submission and announcement.
