@@ -1,0 +1,502 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\usepackage{booktabs,array}
+\hypersetup{pdftitle={An all-threshold proof of Lemma H.1},
+  pdfsubject={Actual facets, continuity, and Fatou's lemma}}
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\ind}{\mathbf 1}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\Jf}{J_{\mathrm f}}
+\newcommand{\Je}{J_{\mathrm e}}
+\newcommand{\HH}{\mathcal H}
+\newtheorem{lemma}{Lemma}
+\newtheorem*{Hone}{Lemma H.1}
+\title{An all-threshold proof of Lemma H.1\\[4pt]
+  \large Actual facets, continuity, and Fatou's lemma}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\vspace{-1.5em}
+
+This note explains the proof used in the checked formalization of the
+two localized Gaussian surface estimates. The facet estimate is proved
+directly. For the ridge estimate, we first obtain a uniform bound at
+almost every threshold, then pass to an arbitrary permitted threshold
+by continuity and Fatou's lemma. The point of the last step is that
+several facets may meet at a codimension-three face. We do not need a
+pointwise Gauss--Green formula at such a nonsimple configuration.
+
+\section{The statement and its geometric quantities}
+
+Let $p\ge1$, set $L:=\log(ep)$, and let $u_1,\ldots,u_m\in\R^r$ be
+the prescribed unit face normals, where $m\le2p$. Write
+\[
+ P(a):=\{x\in\R^r:u_j\cdot x\le a_j\text{ for every }j\},
+ \qquad a\in\R^m.
+\]
+The notation $P(a)^s$ means $P(a+s\mathbf 1)$; in particular, these
+are layers obtained by moving all supporting thresholds by the same
+amount. Suppose that a random vector $V$ satisfies
+\begin{equation}\label{eq:concentration}
+ \PP\{V\in P(b)^s\setminus P(b)^{-s}\}
+ \le C_0\kappa(s+\delta),
+ \qquad b\in\R^m,\quad s>0,
+\end{equation}
+where $C_0>0$, $\kappa\ge0$, and $\delta\ge0$. No density of the law
+of $V$ is assumed. Below $G\sim N(0,I_r)$ is independent of $V$.
+
+For a proper full-dimensional polyhedron $P$, an \emph{actual facet}
+is a face of dimension $r-1$. If its supporting equation is
+$u_j\cdot g=b_j$, put
+\begin{align}
+ \Jf(P)&:=\sum_{\text{actual facets }F_j}|b_j|
+       \int_{F_j}(\norm g^2-r)\varphi_r(g)\dd\HH^{r-1}(g),
+       \label{eq:Jf}\\
+ \Je(P)&:=\sum_{\text{actual ridges }E}\vartheta_E
+       \int_E(\norm g^2-r)\varphi_r(g)\dd\HH^{r-2}(g).
+       \label{eq:Je}
+\end{align}
+Here $\varphi_r(g):=(2\pi)^{-r/2}e^{-\norm g^2/2}$, a ridge is a
+face of codimension two, and $\vartheta_E$ is the angle between the
+outward unit normals of its two incident facets. Surface measure is
+Euclidean surface measure, equivalently Lebesgue measure in an
+orthonormal affine chart. We set both quantities to zero for the empty
+set and the whole space. There are no ridge terms in dimension one.
+
+\begin{Hone}
+Suppose that \eqref{eq:concentration} holds and that $Q:=P(a)$ is empty
+or full-dimensional. Then, for $0<\sigma\le1$,
+\begin{equation}\label{eq:H1}
+ \E\bigl|\Jf((Q-V)/\sigma)\bigr|
+ +\E\bigl|\Je((Q-V)/\sigma)\bigr|
+ \le C\kappa\bigl(\sigma L^{3/2}+\delta L^2\bigr),
+\end{equation}
+and both random quantities are integrable. The constant $C$ depends
+only on $C_0$. No lower bound on the angles is required.
+\end{Hone}
+
+We prove the statement for each fixed target $a$. An important order
+of choices is that a facet description of $Q$ will be fixed using only
+$Q$ and the original inequalities. It will not depend on $V$, its
+law, or $\sigma$.
+
+\section{Fixing the actual facets}
+
+If $Q$ is empty or the whole space, translation and positive scaling
+preserve that property, so both terms on the left of \eqref{eq:H1}
+vanish. Assume henceforth that $Q$ is proper and has nonempty interior.
+Remove redundant inequalities, leaving
+an index set $I\subseteq\{1,\ldots,m\}$ such that
+\begin{equation}\label{eq:subsystem}
+ Q=\{x:u_i\cdot x\le a_i,\ i\in I\},
+\end{equation}
+and no inequality in this description can be removed. After
+reindexing, we use $i=1,\ldots,q$ for these retained inequalities.
+They define the actual facets of $Q$.
+
+There is a point $x_0$ with $u_i\cdot x_0<a_i$ for every retained $i$.
+For each $i$, irredundancy also gives a point $y_i$ satisfying all the
+other inequalities and violating the $i$th one. Along the segment
+$(1-t)x_0+ty_i$, the $i$th inequality becomes equality at some
+$0<t<1$. Every other inequality is still strict there, because it is
+strict at $x_0$ and satisfied at $y_i$. This gives a point $x_i$ with
+\begin{equation}\label{eq:facet-witness}
+ u_i\cdot x_i=a_i,
+ \qquad u_k\cdot x_i<a_k\quad(k\ne i).
+\end{equation}
+Thus each retained hyperplane supports a genuine facet. These strict
+witnesses also show that the same retained inequalities are actual
+facets at every sufficiently small perturbation of $a$: move $x_i$
+slightly in direction $u_i$ to match the perturbed supporting level;
+all the finitely many strict inequalities remain strict.
+
+The concentration estimate survives this selection with the same
+coefficient $C_0\kappa$ and the same $\delta$. To see this, assign
+arbitrary thresholds to the retained inequalities and assign the
+common threshold $M$ to the unused ones. As $M\to\infty$, the
+indicators of the resulting symmetric face layers converge pointwise
+to the indicator for the retained subsystem. Indeed, for each fixed
+point, every unused inequality and its inward shift are eventually
+satisfied. Bounded convergence applied to
+\eqref{eq:concentration} proves the assertion. We may therefore work
+with the fixed irredundant description \eqref{eq:subsystem}.
+
+We record the geometric fact that will later make continuity possible.
+For distinct retained indices $i,j,k$ with $u_i,u_j$ independent,
+\begin{equation}\label{eq:no-affine-triple}
+ u_k=\alpha u_i+\beta u_j
+ \quad\Longrightarrow\quad
+ a_k\ne\alpha a_i+\beta a_j.
+\end{equation}
+Suppose, to the contrary, that the supporting levels satisfy this
+equality. If both coefficients are nonpositive, the positive slacks
+at $x_0$ give
+\[
+ a_k-u_k\cdot x_0
+ =\alpha(a_i-u_i\cdot x_0)+\beta(a_j-u_j\cdot x_0)\le0,
+\]
+a contradiction. If at least one coefficient is positive, rearranging
+the relation, when necessary, expresses one of these three
+inequalities as a nonnegative linear combination of the other two.
+That inequality is redundant, again a contradiction. In particular,
+the affine intersection of two independent retained supporting
+hyperplanes is never contained in a third retained supporting
+hyperplane. This still allows four or more facets to meet at a
+codimension-three face.
+
+\section{The uniform estimate at generic thresholds}
+
+We explain the estimate that will be passed to the limit. For the
+fixed retained normal family, let
+\[
+ R(g):=1+\max_S\norm{\Pi_Sg},
+\]
+where $S$ ranges over spans of at most three independent retained
+normals, and $\Pi_S$ is orthogonal projection. If this family is empty,
+the maximum is zero. There are at most $q+q^2+q^3$ such spaces.
+Each projected norm is $1$-Lipschitz, so $R$ is $1$-Lipschitz and
+$R\ge1$. A standard Gaussian projected onto a space of dimension at
+most three satisfies
+\[
+ \E\exp\{\norm{\Pi_SG}^2/4\}\le2^{3/2}.
+\]
+The union bound therefore gives
+\[
+ \PP\{R(G)>1+t\}
+ \le\min\{1,2^{3/2}(q+q^2+q^3)e^{-t^2/4}\}.
+\]
+Integrating this tail, splitting at a constant multiple of
+$\sqrt L$, proves
+\begin{equation}\label{eq:moments}
+ \E R(G)^k\le C_kL^{k/2},\qquad k=1,2,3,4.
+\end{equation}
+The constants are independent of the ambient dimension.
+
+For every linearly dependent subcollection of distinct normals, fix
+one nonzero relation $\sum_i c_i u_i=0$. Call a threshold vector
+\emph{generic} if it avoids the corresponding equations
+$\sum_i c_i b_i=0$. There are only finitely many subcollections, and
+each excluded equation is a proper hyperplane in threshold space.
+Thus the generic set has full Lebesgue measure. At a generic
+threshold, every simultaneously active set of normals is independent.
+In particular a nonempty polyhedron is full-dimensional: at any one
+of its points, choose a direction whose inner product with each
+active normal is negative, and move a sufficiently small distance in
+that direction to obtain a strict interior point. An actual
+codimension-three face has exactly three incident facets. Only this
+three-facet case is needed in the ridge calculation below.
+
+For a deterministic polyhedron $P$ at such a threshold, the geometric
+estimate is
+\begin{equation}\label{eq:localization}
+ |\Jf(P)|+|\Je(P)|
+ \le C\int R(g)^4
+   \ind\{g\in P^{1/R(g)}\setminus P\}\varphi_r(g)\dd g.
+\end{equation}
+We give the reasons for this estimate, since they explain both the
+powers of $L$ and the absence of an angle-gap assumption.
+
+On a facet, write $g=b_iu_i+y$ with $y\perp u_i$. The tangential
+divergence of $y\varphi_r(g)$ is
+$(r-1-\norm y^2)\varphi_r(g)$. Integrating by parts on every facet and
+pairing the contributions of neighboring facets yields
+\begin{equation}\label{eq:facet-green}
+ \Jf(P)=\sum_i|b_i|(b_i^2-1)\int_{F_i}\varphi_r
+ -\sum_{E=F_i\cap F_j}
+   \bigl(|b_i|d_{j\mid i}+|b_j|d_{i\mid j}\bigr)
+       \int_E\varphi_r.
+\end{equation}
+Here $n_{j\mid i}$ is the outward conormal to $E$ within $F_i$ and
+$d_{j\mid i}=g\cdot n_{j\mid i}$ on $E$. If $z_E$ is the projection
+of a point of $E$ onto its two-dimensional normal space, elementary
+two-normal geometry gives
+\begin{equation}\label{eq:pair-cancellation}
+ \bigl||b_i|d_{j\mid i}+|b_j|d_{i\mid j}\bigr|
+ \le2\vartheta_E\norm{z_E}^2.
+\end{equation}
+For completeness, write the coefficient as
+$|b_i|(d_{j\mid i}+d_{i\mid j})+(|b_j|-|b_i|)d_{i\mid j}$.
+The bounds $|b_i|,|d_{i\mid j}|\le\norm{z_E}$,
+$|d_{j\mid i}+d_{i\mid j}|\le\vartheta_E\norm{z_E}$, and
+$\bigl||b_i|-|b_j|\bigr|\le\vartheta_E\norm{z_E}$ prove
+\eqref{eq:pair-cancellation}. Small angles occur as multiplicative
+weights; no inverse angle is introduced.
+
+For the ridge quantity, integrate the tangential divergence once more,
+now within each ridge. At a generic threshold this gives
+\begin{equation}\label{eq:generic-edge-green}
+ \Je(P)=\sum_E\vartheta_E(\norm{z_E}^2-2)\rho_E
+ -\sum_H\ip{z_H}{\sum_{E\supset H}\vartheta_E n_{E,H}}\rho_H,
+\end{equation}
+where $H$ runs over actual codimension-three faces,
+$\rho_F:=\int_F\varphi_r$, and $n_{E,H}$ is the outward conormal to
+$H$ within $E$. The second sum is absent if $r\le2$.
+The projection $z_H$ onto the normal space of $H$ is constant on $H$.
+Its normal cone $C_H$ cuts out a spherical triangle $\Omega_H$.
+In this three-dimensional normal space, the facet of $C_H$
+corresponding to $E$ is a planar wedge of angle $\vartheta_E$ and has
+outward normal $-n_{E,H}$. Gaussian integration by parts gives
+\[
+ \int_{C_H}x e^{-\norm x^2/2}\dd x
+ =\sum_{E\supset H}\vartheta_E n_{E,H},
+\]
+because the Gaussian integral over a planar wedge is its angle:
+its radial factor is $\int_0^\infty t e^{-t^2/2}\dd t=1$.
+Polar coordinates express the same vector integral as
+$2\int_{\Omega_H}\omega\dd\HH^2(\omega)$, since the radial factor is
+$\int_0^\infty t^3e^{-t^2/2}\dd t=2$. Consequently
+\[
+ \sum_{E\supset H}\vartheta_E n_{E,H}
+ =2\int_{\Omega_H}\omega\dd\HH^2(\omega),
+ \qquad
+ \left\|\sum_{E\supset H}\vartheta_E n_{E,H}\right\|
+ \le2|\Omega_H|.
+\]
+This use of \eqref{eq:generic-edge-green} is restricted to generic
+thresholds. The passage to a nonsimple target will use continuity of
+$\Je$, rather than the same boundary formula at that target.
+
+We next turn the surface expressions into a volume integral. For
+$x$ in the relative interior of a face $F$ of codimension
+$s\in\{1,2,3\}$, take
+\[
+ g=x+y,\qquad y\in N_F,\qquad
+          0<\norm y<\frac1{4R(x)},
+\]
+where $N_F$ is the outward normal cone. These regions are disjoint
+for distinct faces. Indeed, for $w\in P$ one has
+$y\cdot(w-x)\le0$, and hence
+\[
+ \norm{g-w}^2\ge\norm y^2+\norm{x-w}^2.
+\]
+Thus $x$ is the unique closest point of $P$ to $g$. Distinct relative
+face interiors cannot supply the same closest point.
+
+The tangent and normal coordinates are orthogonal. Since the normal
+space is spanned by at most three of the prescribed normals,
+$|x\cdot y|\le R(x)\norm y\le1/4$. Consequently
+\[
+ \frac{\varphi_r(x+y)}{\varphi_r(x)}
+ =e^{-x\cdot y-\norm y^2/2}
+\]
+is bounded above and below by numerical constants. The same is true
+of $R(x+y)/R(x)$, by the Lipschitz property of $R$. The volumes of
+the normal pieces are respectively
+\[
+ \frac1{4R(x)},\qquad
+ \frac{\vartheta_E}{32R(x)^2},\qquad
+ \frac{|\Omega_H|}{192R(x)^3}.
+\]
+Integrating $R(g)^4\varphi_r(g)$ over these regions therefore controls
+the facet integrands $R(x)^3\varphi_r(x)$, the ridge integrands
+$\vartheta_E R(x)^2\varphi_r(x)$, and the codimension-three
+integrands $|\Omega_H|R(x)\varphi_r(x)$. These are exactly the
+terms in \eqref{eq:facet-green}--\eqref{eq:generic-edge-green}.
+Moreover, $g\notin P$, and
+$u_i\cdot g\le b_i+\norm y$ for every $i$. The choice of radius gives
+$\norm y R(g)<1$, so the regions lie in
+$P^{1/R(g)}\setminus P$. Summing over the disjoint regions proves
+\eqref{eq:localization}. Unbounded faces cause no difficulty: insert
+smooth cutoffs at radius $M$ in the divergence calculations, then let
+$M\to\infty$; Gaussian polynomial integrability makes the cutoff
+terms tend to zero.
+
+The facet part of this argument only uses the two-facet cancellation
+\eqref{eq:pair-cancellation}. It therefore applies directly to the
+fixed actual-facet presentation of $Q$, including when its
+codimension-three faces are nonsimple. In particular it already gives
+the required bound for $\Jf$ after averaging as follows.
+
+For thresholds $b$ in the retained subsystem and $v\in\R^r$, put
+\[
+ P_{b,v}:=\{g:u_i\cdot g\le(b_i-u_i\cdot v)/\sigma,\ i\le q\}.
+\]
+The events and surface quantities here are measurable; the fixed-chart
+formula \eqref{eq:fixed-chart} below expresses them as parameter
+integrals of measurable Gaussian functions.
+For each fixed $v$, the map
+$b\mapsto(b_i-u_i\cdot v)_{i\le q}/\sigma$ is an invertible affine
+map of threshold space and preserves null sets. Fubini's theorem
+therefore shows that, for Lebesgue-almost every $b$, the generic
+ridge calculation applies to $P_{b,V}$ almost surely, even if the law
+of $V$ is singular.
+
+To average \eqref{eq:localization}, condition on $G=g$. Its layer event
+implies
+\[
+ V+\sigma g\in P(b)^{\sigma/R(g)}\setminus P(b).
+\]
+As an event in $V$, this is an outer face layer with thresholds
+$b_i-\sigma u_i\cdot g$ and width $\sigma/R(g)$. It is contained in
+the symmetric layer appearing in \eqref{eq:concentration}. Thus its
+conditional probability is at most
+$C_0\kappa(\sigma/R(g)+\delta)$. Tonelli's theorem and
+\eqref{eq:moments} now give
+\begin{equation}\label{eq:averaged-generic}
+ \E|\Je(P_{b,V})|
+ \le C\kappa\{\sigma\E R(G)^3+\delta\E R(G)^4\}
+ \le C\kappa(\sigma L^{3/2}+\delta L^2)
+ \quad\text{for almost every }b.
+\end{equation}
+The same averaging gives the facet bound at the fixed target $a$.
+The right side is uniform in $b$. Its finiteness establishes
+integrability at the good thresholds; integrability was not assumed
+when applying Tonelli.
+
+\section{Continuity at the fixed target}
+
+We now prove the precise continuity needed to remove the exceptional
+thresholds from \eqref{eq:averaged-generic}. Keep the selected actual
+facets fixed. For every fixed $v\in\R^r$, we claim that
+\begin{equation}\label{eq:continuity}
+ b\longmapsto\Je(P_{b,v})
+ \quad\text{is continuous at }b=a.
+\end{equation}
+The claim concerns the value of the surface integral. It does not
+require differentiability of a threshold probability at $a$.
+
+Consider two nonparallel retained normals $u_i,u_j$. Their normal
+space $S_{ij}$ and its orthogonal complement $T_{ij}$ are fixed.
+The simultaneous supporting equations have a unique normal-space
+solution $z_{ij}(b,v)\in S_{ij}$; it is linear in the two supporting
+levels, and hence continuous in $b$. Every point on the corresponding
+affine plane is uniquely $z_{ij}(b,v)+y$, with $y\in T_{ij}$.
+For $k\ne i,j$, let
+\[
+ w_k:=\Pi_{T_{ij}}u_k,\qquad
+ d_k(b,v):=\frac{b_k-u_k\cdot v}{\sigma}
+                         -u_k\cdot z_{ij}(b,v).
+\]
+The remaining inequalities on this plane are $w_k\cdot y\le d_k(b,v)$.
+
+Using the fixed orthonormal tangent chart, the contribution of this
+pair to $\Je$ is
+\begin{multline}\label{eq:fixed-chart}
+ \vartheta_{ij}\,(2\pi)^{-1}e^{-\norm{z_{ij}(b,v)}^2/2}
+ \int_{T_{ij}}
+   \bigl(\norm{z_{ij}(b,v)}^2+\norm y^2-r\bigr)\\[-3pt]
+ \times\prod_{k\ne i,j}\ind\{w_k\cdot y\le d_k(b,v)\}
+          \varphi_{T_{ij}}(y)\dd y.
+\end{multline}
+Here $\varphi_{T_{ij}}$ is the standard Gaussian density on the
+$(r-2)$-dimensional space $T_{ij}$. A pair that does not bound an
+actual ridge contributes zero: its section is empty or has smaller
+dimension and therefore has zero tangent Gaussian measure. Summing
+\eqref{eq:fixed-chart} over unordered nonparallel pairs gives the
+actual ridge quantity. Parallel opposite facets do not intersect in a
+full-dimensional polyhedron and supply no ridge term.
+
+Let $b_n\to a$. If $w_k\ne0$, the equality
+$w_k\cdot y=d_k(a,v)$ defines a Gaussian-null hyperplane in
+$T_{ij}$. Off this hyperplane the corresponding indicators converge.
+If $w_k=0$, then $u_k$ lies in the span of $u_i,u_j$. Relation
+\eqref{eq:no-affine-triple}, preserved by translation and positive
+scaling, says that $d_k(a,v)\ne0$. In this case the inequality is
+constant in $y$ and its truth value is unchanged for all sufficiently
+large $n$. There are only finitely many $k$, so the product of the
+indicators converges for almost every tangent Gaussian point.
+
+For fixed $v$, the vectors $z_{ij}(b_n,v)$ remain bounded. The absolute
+integrand in \eqref{eq:fixed-chart} is therefore bounded by
+$C_v(1+\norm y^2)\varphi_{T_{ij}}(y)$, an integrable function. Dominated
+convergence proves continuity of the pair contribution. A finite sum
+proves \eqref{eq:continuity}. The facet witnesses ensure that nearby
+thresholds retain the chosen actual facets, so the pair sums used here
+agree with the geometric quantities in a neighborhood of the target.
+
+This argument permits many facets at a codimension-three face. For a
+fixed pair chart, the additional supporting hyperplanes are genuine
+lower-dimensional boundaries, so their intersections remain Gaussian
+null. Most importantly, continuity holds for \emph{every fixed $v$}.
+The null sets used above belong to the tangent Gaussian integration;
+they do not require $V$ itself to avoid any set. This is why an atomic
+or otherwise singular law of $V$ is allowed. The bound $C_v$ need not
+be integrable in $v$: we will use Fatou, not dominated convergence,
+for the outer expectation.
+
+\section{Fatou's lemma and completion of the proof}
+
+Fix the law of $V$ and $\sigma>0$, and write
+\[
+ B:=C\kappa(\sigma L^{3/2}+\delta L^2).
+\]
+Let $\mathcal G\subseteq\R^q$ be the full-measure set of thresholds
+at which \eqref{eq:averaged-generic} and integrability hold. A
+full-measure subset of Euclidean space is dense: every nonempty open
+ball has positive Lebesgue measure and hence meets $\mathcal G$.
+Choose $b_n\in\mathcal G$ with $b_n\to a$, staying in the actual-facet
+neighborhood just described. The selected facet family stays fixed
+throughout this choice. The sequence is allowed to depend on the
+law of $V$ and on $\sigma$; the facet selection and $B$ are uniform in
+the required data.
+
+Set $Y_n:=|\Je(P_{b_n,V})|$ and $Y:=|\Je(P_{a,V})|$. These random
+variables are measurable, since their fixed-chart formulas are
+parameter integrals of measurable functions. By
+\eqref{eq:continuity}, $Y_n\to Y$ pointwise in $V$. Apply Fatou's
+lemma to these nonnegative functions:
+\begin{equation}\label{eq:fatou}
+ \E Y
+ =\E\bigl[\liminf_{n\to\infty}Y_n\bigr]
+ \le\liminf_{n\to\infty}\E Y_n
+ \le B.
+\end{equation}
+At this stage the first expectation is an extended nonnegative
+integral. Its finite upper bound proves $Y\in L^1$, and therefore
+proves integrability of the signed ridge quantity itself. There is
+no circular assumption of integrability at the target.
+
+Because $P_{a,V}=(Q-V)/\sigma$, \eqref{eq:fatou} is the required
+ridge estimate at the original, possibly nonsimple $Q$. Add the
+direct facet estimate to obtain \eqref{eq:H1}, enlarging the constant
+only by an absolute factor. The coefficient $C_0$ in the base
+concentration estimate is absorbed into $C$. Every preceding step
+uses only $\sigma>0$, so this proof in fact gives the stated estimate
+for all positive $\sigma$; the paper needs only $\sigma\le1$.
+
+\section*{Connection with the checked proof}
+
+The note describes the continuity/Fatou route already checked in the
+\href{https://github.com/VC2015/rectangle-clt-singular}{rectangle-CLT repository}
+at proof commit
+\begin{center}
+\texttt{443fbc667ed3c3ee47369e028c2c4280a5eed604}.
+\end{center}
+The relevant Lean files are in the directory
+\begin{center}
+\small\path{lean-rectangle-clt-arxiv-v1/RectangleCLTArxivV1/}
+\end{center}
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.38\textwidth}p{0.57\textwidth}@{}}
+\toprule
+Mathematical step & Lean source file\\
+\midrule
+Fixed actual facets & \texttt{SupplementalHActualFacetSelection.lean}\\
+Inherited concentration & \texttt{SupplementalHSubsystemConcentration.lean}\\
+Direct facet expectation & \texttt{SupplementalHActualFacetAveraged.lean}\\
+Almost-everywhere ridge bound & \texttt{SupplementalHRidgeMain.lean}\\
+Continuity of ridge values & \texttt{SupplementalHRidgeValueContinuity.lean}\\
+Nonnegative Fatou argument & \texttt{SupplementalHSurfaceFatou.lean}\\
+Fixed-threshold ridge bound & \texttt{SupplementalHActualRidgeEstimates.lean}\\
+Final empty/full-dimensional theorem & \texttt{SupplementalHSurfaceFinal.lean}\\
+\bottomrule
+\end{tabular}
+\end{center}
+The endpoint is
+\texttt{exists\_fixed\_surface\_bound\_of\_empty\_or\_fullDimensional}.
+The fixed numerical constant is chosen before the model data. The
+formal proof uses Euclidean orthonormal-chart surface measures.
+The generic ridge calculation and the limiting argument are separate
+checked components; this note does not claim a completed formalization
+of the printed nonsimple ridge Gauss--Green identity.
+
+\end{document}
