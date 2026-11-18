@@ -1,5 +1,6 @@
 (() => {
   document.documentElement.classList.add('js');
+  const overviewTitle = document.title;
   const pages = Array.from(document.querySelectorAll('section.page'));
   const contents = document.getElementById('contents');
   const menu = document.getElementById('menu');
@@ -44,7 +45,7 @@
     if (activePage !== current && current.classList.contains('result')) current.querySelector('details.proof')?.setAttribute('open','');
     activePage = current;
     closeMenu();
-    document.title = current.dataset.title + ' · Rectangle CLT blueprint';
+    document.title = current.id === 'overview' ? overviewTitle : current.dataset.title + ' · Rectangle CLT blueprint';
     if (moveFocus) {
       const focus = target.matches('.page') ? target.querySelector('h1') : target;
       if (focus) { focus.setAttribute('tabindex','-1');focus.focus({preventScroll:true}); }
