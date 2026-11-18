@@ -1,6 +1,6 @@
 # Frozen-source correspondence queue
 
-This directory starts the correspondence review for arXiv:2611.21474v1 and Supplemental Material G–I. It does **not** certify the new paper. Every in-scope statement and C.2 passage currently has status `open`; Conjecture 1 is excluded. An archived accepted passage is recorded as a historical candidate, never as a new accepted mapping.
+This directory records the correspondence review for arXiv:2611.21474v1 and Supplemental Material G–I. Lemma C.2 and C2.1–C2.7 are checked, with a clean-checkout build, transitive axiom audit, expanded types, kernel dependencies, and independent frozen-source/PDF review. The remaining 39 named results are open; Conjecture 1 is excluded. This does **not** certify the whole new paper. An archived accepted passage is recorded as a historical candidate until its new correspondence is checked.
 
 The paper snapshot is `1803366cc994d9facae8e128ee180f68e319486f`. The full frozen main source has SHA-256 `e96aaf12ca782c94d70587f128b58a20d3ace8b31a8c324a3272b2b1d71677a2`; the supplement has SHA-256 `5abda8831ac33ed91c2c8e3f628d8ef6ecb7437e7573a52efa7b112efb93a0bb`. Span hashes use the exact UTF-8 bytes of inclusive source lines, including their original line endings. Statement-environment comparisons instead compare exact `\begin{...}` through `\end{...}` bytes, without surrounding line endings.
 
@@ -8,9 +8,10 @@ The paper snapshot is `1803366cc994d9facae8e128ee180f68e319486f`. The full froze
 
 | File | Content |
 |---|---|
-| [statements.json](statements.json) | All 40 named results and the excluded conjecture, frozen statement spans and hashes, individual reuse obligations, archived declaration candidates and explicit empty slots for new declarations, expanded types and receipts. |
+| [statements.json](statements.json) | All 40 named results and the excluded conjecture, frozen statement spans and hashes, individual reuse obligations, declarations, expanded types and receipts. Only C.2 is currently accepted. |
 | [c1-gaussian-passages.json](c1-gaussian-passages.json) | Appendix C.1 Gaussian proof spans C1.G.1–C1.G.8, archived analytic candidates, and drafted new wrappers; pending elaboration and representation review. |
-| [c2-passages.json](c2-passages.json) | Stable IDs C2.1–C2.7, exact frozen spans, inference obligations, scope constraints and candidate dependencies. |
+| [c2-passages.json](c2-passages.json) | Seven accepted passages C2.1–C2.7, exact frozen spans, inference reviews, declarations, types, dependencies and receipts. |
+| [c2-acceptance.json](c2-acceptance.json) | Binds C.2 acceptance to the successful clean-checkout run and independent reading-order review. |
 | [proof-environments.json](proof-environments.json) | All 34 explicit proof environments. Only explicit caption references or the specified C.2 proof are linked to statements; the remaining subdivisions stay open. |
 | [archive-candidates.json](archive-candidates.json) | The archive's 253 accepted same-argument records and its one order-zero repair record, with historical source-span hashes. None is automatically transplanted. |
 | [build_source_ledger.py](build_source_ledger.py) | Reads frozen Git objects and validates source identity. It never invokes Lean or certifies an inference. |
@@ -43,7 +44,7 @@ No independence between coordinates of a summand, identical-distribution hypothe
 | C2.6 | 6463–6476 | Concrete Gaussian covariance factor/representation, canonical Euclidean geometry, one-sided signed maximum, audited majorizing measures and any zero-distance quotient. |
 | C2.7 | 6478–6484 | Combine and absorb `2` using the standard-normal marginal lower bound `g_Σ ≥ sqrt(2/π)`, with the universal constant quantified first. |
 
-The difficult open bridges are C2.2's derivation of the mixed-tail premise from the actual summands and C2.6's concrete matching of the Gaussian law, covariance factor, signed vectors and one-sided width. The standalone chaining declarations are audited dependencies to instantiate; they do not by themselves prove these bridges. Using a comparison inequality, MGF estimate or covariance identity as an additional theorem premise would leave the corresponding passage open.
+Both principal bridges are now proved: C2.2 derives the mixed-tail premise from the actual summands, and C2.6 matches the Gaussian law, covariance factor, signed vectors and one-sided width. Duplicate signed vectors are identified only for the canonical metric and Gaussian maximum. The final raw-data theorem assumes no comparison inequality, MGF estimate or mixed-tail hypothesis.
 
 ## Derivative-order qualification and later proofs
 
@@ -60,4 +61,4 @@ The archive already proves the intrinsic Gaussian bound, rather than merely its 
 
 The new `RectangleCLTArxivV1/IntrinsicGaussianBoundary.lean` deliberately uses the archive's `Printed.GaussianMollification` theorem for its unit-row boundary input, then carries that input through variance scaling and shift conditioning. This keeps the literal linear-ramp convolution route in the new dependency closure. The archive's alternative generic smooth-test-to-interval endpoint is not substituted for the printed mollification passage in this new chain.
 
-The side ledger records eight frozen proof spans. Two representation differences remain explicit: the archived normalization uses a possibly singular square factor in the ambient dimension instead of the paper's rank-dimensional factor, and repeated directions are handled directly in the gradient limit instead of first removing duplicates. Neither imposes an extra probabilistic premise, but the correspondence and any general Gaussian-law instantiation must still be reviewed before accepting the full statement. Drafted declarations are not marked accepted while their archived build prerequisites remain unavailable.
+The side ledger records eight frozen proof spans. Two representation differences remain explicit: the archived normalization uses a possibly singular square factor in the ambient dimension instead of the paper's rank-dimensional factor, and repeated directions are handled directly in the gradient limit instead of first removing duplicates. Neither imposes an extra probabilistic premise, but detailed correspondence still requires review before accepting the full statement. Compiled supporting wrappers alone do not mark those passages accepted.
