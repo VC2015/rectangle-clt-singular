@@ -1,0 +1,252 @@
+@RectangleCLTArxivV1.hardGaussianPairSignedSection_eq_fixed_residual : ∀ {m r : Nat} (s : Finset.{0} (Fin m))
+  (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m) (e f : RectangleCLT.Vector r),
+  @Eq.{1} Real (@RectangleCLT.vectorNormSq r e) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+    @Eq.{1} Real (@RectangleCLT.vectorNormSq r f) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+      @Eq.{1} Real (@RectangleCLT.faceDot r e f) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) →
+        ∀ (a c : Real),
+          @Eq.{1} Real (@RectangleCLTArxivV1.hardGaussianPairSignedSection m r s u b e f a c)
+            (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+              (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector r) Real Real.normedAddCommGroup
+                (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                  (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                  (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace)
+                (RectangleCLT.standardGaussian r) fun (g : RectangleCLT.Vector r) =>
+                @Set.indicator.{0, 0} (RectangleCLT.Vector r) Real Real.instZero
+                  (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s
+                    (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+                    (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c))
+                  (fun (g : RectangleCLT.Vector r) =>
+                    @HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                          (@RectangleCLT.vectorNormSq r g)
+                          (@HPow.hPow.{0, 0, 0} Real Nat Real
+                            (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+                            (@RectangleCLT.faceDot r e g) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))
+                        (@HPow.hPow.{0, 0, 0} Real Nat Real
+                          (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid))
+                          (@RectangleCLT.faceDot r f g) (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))
+                      (@Nat.cast.{0} Real Real.instNatCast r))
+                  g)
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+                  (@HPow.hPow.{0, 0, 0} Real Nat Real
+                    (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) a
+                    (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+                  (@HPow.hPow.{0, 0, 0} Real Nat Real
+                    (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) c
+                    (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))))
+                (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdCDF m r s
+                  (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+                  (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c))))
+@RectangleCLTArxivV1.continuousAt_hardGaussianPairSignedSection_of_slack : ∀ {m r : Nat} (s : Finset.{0} (Fin m))
+  (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m) (e f : RectangleCLT.Vector r),
+  @Eq.{1} Real (@RectangleCLT.vectorNormSq r e) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+    @Eq.{1} Real (@RectangleCLT.vectorNormSq r f) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+      @Eq.{1} Real (@RectangleCLT.faceDot r e f) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) →
+        ∀ (A C : RectangleCLT.Vector m → Real),
+          @ContinuousAt.{0, 0} (RectangleCLT.Vector m) Real
+              (@Pi.topologicalSpace.{0, 0} (Fin m) (fun (a : Fin m) => Real) fun (i : Fin m) =>
+                @UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              A b →
+            @ContinuousAt.{0, 0} (RectangleCLT.Vector m) Real
+                (@Pi.topologicalSpace.{0, 0} (Fin m) (fun (a : Fin m) => Real) fun (i : Fin m) =>
+                  @UniformSpace.toTopologicalSpace.{0} Real
+                    (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                C b →
+              (∀ (k : Fin m),
+                  @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+                    Or
+                      (@Ne.{1} (RectangleCLT.Vector r) (@RectangleCLTArxivV1.hardPairResidualNormal r e f (u k))
+                        (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                          (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                            (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+                      (@Ne.{1} Real
+                        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (b k)
+                            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (A b)
+                              (@RectangleCLT.faceDot r (u k) e)))
+                          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (C b)
+                            (@RectangleCLT.faceDot r (u k) f)))
+                        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) →
+                @ContinuousAt.{0, 0} (RectangleCLT.Vector m) Real
+                  (@Pi.topologicalSpace.{0, 0} (Fin m) (fun (a : Fin m) => Real) fun (i : Fin m) =>
+                    @UniformSpace.toTopologicalSpace.{0} Real
+                      (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                  (@UniformSpace.toTopologicalSpace.{0} Real
+                    (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                  (fun (d : RectangleCLT.Vector m) =>
+                    @RectangleCLTArxivV1.hardGaussianPairSignedSection m r s u d e f (A d) (C d))
+                  b
+@RectangleCLTArxivV1.residualThresholdRegularity_conditional_pair_value_slack : ∀ {m r : Nat}
+  (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m) (j l : Fin m),
+  @Ne.{1} (Fin m) j l →
+    @RectangleCLTArxivV1.ResidualThresholdRegularity m r u b j →
+      @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u j))
+          (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+        ∀ (k : Fin m),
+          @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m))
+              (@Finset.erase.{0} (Fin m) (instDecidableEqFin m)
+                (@Finset.erase.{0} (Fin m) (instDecidableEqFin m) (@Finset.univ.{0} (Fin m) (Fin.fintype m)) j) l)
+              k →
+            Or
+              (@Ne.{1} (RectangleCLT.Vector r)
+                (@RectangleCLTArxivV1.hardPairResidualNormal r (u j)
+                  (@RectangleCLT.Companion.SplitV4.gaussianPairConditionalDirection m r u j l) (u k))
+                (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                  (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                    (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+              (@Ne.{1} Real
+                (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                  (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (b k)
+                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (b j)
+                      (@RectangleCLT.faceDot r (u k) (u j))))
+                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                    (@RectangleCLT.Companion.SplitV4.gaussianPairConditionalLevel m r u b j l)
+                    (@RectangleCLT.faceDot r (u k)
+                      (@RectangleCLT.Companion.SplitV4.gaussianPairConditionalDirection m r u j l))))
+                (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+@RectangleCLTArxivV1.continuousAt_hardGaussianConditionalPairSignedSection_of_residual_slack : ∀ {m r : Nat}
+  (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m) (j l : Fin m),
+  @Ne.{1} (Fin m) j l →
+    @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u j)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+      @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u l))
+          (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+        @Ne.{1} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@HAdd.hAdd.{0, 0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (EuclideanSpace.{0, 0} Real (Fin r))
+              (EuclideanSpace.{0, 0} Real (Fin r))
+              (@instHAdd.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@AddCommMagma.toAdd.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@AddCommSemigroup.toAddCommMagma.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@AddCommMonoid.toAddCommSemigroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@ENormedAddCommMonoid.toAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@UniformSpace.toTopologicalSpace.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                          (@PiLp.uniformSpace.{0, 0}
+                            (@OfNat.ofNat.{0} ENNReal 2
+                              (@instOfNatAtLeastTwo.{0} ENNReal 2
+                                (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                  (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal
+                                    instENNRealAddCommMonoidWithOne))
+                                PiLp.innerProductSpace._proof_2))
+                            (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                            @PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                        (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                          (@PiLp.normedAddCommGroup.{0, 0}
+                            (@OfNat.ofNat.{0} ENNReal 2
+                              (@instOfNatAtLeastTwo.{0} ENNReal 2
+                                (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                  (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal
+                                    instENNRealAddCommMonoidWithOne))
+                                PiLp.innerProductSpace._proof_2))
+                            (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+                            Real.normedAddCommGroup)))))))
+              (@RectangleCLT.projectionEuclideanVector r (u j)) (@RectangleCLT.projectionEuclideanVector r (u l)))
+            (@OfNat.ofNat.{0} (EuclideanSpace.{0, 0} Real (Fin r)) 0
+              (@Zero.toOfNat0.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@NegZeroClass.toZero.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@SubNegZeroMonoid.toNegZeroClass.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@SubtractionMonoid.toSubNegZeroMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@SubtractionCommMonoid.toSubtractionMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@AddCommGroup.toDivisionAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                          (@WithLp.instAddCommGroup.{0}
+                            (@OfNat.ofNat.{0} ENNReal 2
+                              (@instOfNatAtLeastTwo.{0} ENNReal 2
+                                (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                  (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal
+                                    instENNRealAddCommMonoidWithOne))
+                                PiLp.innerProductSpace._proof_2))
+                            ((i : Fin r) → (fun (x : Fin r) => Real) i)
+                            (@Pi.addCommGroup.{0, 0} (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                              Real.instAddCommGroup))))))))) →
+          @Ne.{1} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@HSub.hSub.{0, 0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (EuclideanSpace.{0, 0} Real (Fin r))
+                (EuclideanSpace.{0, 0} Real (Fin r))
+                (@instHSub.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@SubNegMonoid.toSub.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@AddGroup.toSubNegMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@NormedAddGroup.toAddGroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@NormedAddCommGroup.toNormedAddGroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                          (@PiLp.normedAddCommGroup.{0, 0}
+                            (@OfNat.ofNat.{0} ENNReal 2
+                              (@instOfNatAtLeastTwo.{0} ENNReal 2
+                                (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                  (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal
+                                    instENNRealAddCommMonoidWithOne))
+                                PiLp.innerProductSpace._proof_2))
+                            (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+                            Real.normedAddCommGroup))))))
+                (@RectangleCLT.projectionEuclideanVector r (u j)) (@RectangleCLT.projectionEuclideanVector r (u l)))
+              (@OfNat.ofNat.{0} (EuclideanSpace.{0, 0} Real (Fin r)) 0
+                (@Zero.toOfNat0.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@NegZeroClass.toZero.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@SubNegZeroMonoid.toNegZeroClass.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@SubtractionMonoid.toSubNegZeroMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@SubtractionCommMonoid.toSubtractionMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                          (@AddCommGroup.toDivisionAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                            (@WithLp.instAddCommGroup.{0}
+                              (@OfNat.ofNat.{0} ENNReal 2
+                                (@instOfNatAtLeastTwo.{0} ENNReal 2
+                                  (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                    (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal
+                                      instENNRealAddCommMonoidWithOne))
+                                  PiLp.innerProductSpace._proof_2))
+                              ((i : Fin r) → (fun (x : Fin r) => Real) i)
+                              (@Pi.addCommGroup.{0, 0} (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                                Real.instAddCommGroup))))))))) →
+            @RectangleCLTArxivV1.ResidualThresholdRegularity m r u b j →
+              @ContinuousAt.{0, 0} (RectangleCLT.Vector m) Real
+                (@Pi.topologicalSpace.{0, 0} (Fin m) (fun (a : Fin m) => Real) fun (i : Fin m) =>
+                  @UniformSpace.toTopologicalSpace.{0} Real
+                    (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                (fun (d : RectangleCLT.Vector m) =>
+                  @RectangleCLTArxivV1.hardGaussianPairSignedSection m r
+                    (@Finset.erase.{0} (Fin m) (instDecidableEqFin m)
+                      (@Finset.erase.{0} (Fin m) (instDecidableEqFin m) (@Finset.univ.{0} (Fin m) (Fin.fintype m)) j) l)
+                    u d (u j) (@RectangleCLT.Companion.SplitV4.gaussianPairConditionalDirection m r u j l) (d j)
+                    (@RectangleCLT.Companion.SplitV4.gaussianPairConditionalLevel m r u d j l))
+                b
+@RectangleCLTArxivV1.continuousAt_hardGaussianSignedRidgeTerm_of_residual_slack : ∀ {m r : Nat}
+  (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m) (j l : Fin m),
+  @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u j)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+    @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u l)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+      @RectangleCLTArxivV1.ResidualThresholdRegularity m r u b j →
+        @ContinuousAt.{0, 0} (RectangleCLT.Vector m) Real
+          (@Pi.topologicalSpace.{0, 0} (Fin m) (fun (a : Fin m) => Real) fun (i : Fin m) =>
+            @UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+          (fun (d : RectangleCLT.Vector m) => @RectangleCLTArxivV1.hardGaussianSignedRidgeTerm m r u d j l) b
+@RectangleCLTArxivV1.continuousAt_hardGaussianWeightedRidgeIntegral_of_residual_slack : ∀ {m r : Nat}
+  (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m),
+  (∀ (j : Fin m),
+      @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u j))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) →
+    (∀ (j : Fin m), @RectangleCLTArxivV1.ResidualThresholdRegularity m r u b j) →
+      @ContinuousAt.{0, 0} (RectangleCLT.Vector m) Real
+        (@Pi.topologicalSpace.{0, 0} (Fin m) (fun (a : Fin m) => Real) fun (i : Fin m) =>
+          @UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@RectangleCLTArxivV1.hardGaussianWeightedRidgeIntegral m r u) b
+RectangleCLTArxivV1.hardGaussianPairSignedSection_eq_fixed_residual uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.continuousAt_hardGaussianPairSignedSection_of_slack uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.residualThresholdRegularity_conditional_pair_value_slack uses [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLTArxivV1.continuousAt_hardGaussianConditionalPairSignedSection_of_residual_slack uses [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLTArxivV1.continuousAt_hardGaussianSignedRidgeTerm_of_residual_slack uses [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLTArxivV1.continuousAt_hardGaussianWeightedRidgeIntegral_of_residual_slack uses [propext,
+ Quot.sound,
+ Classical.choice]

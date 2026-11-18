@@ -1,0 +1,396 @@
+@RectangleCLTArxivV1.gaussianFiniteThresholdEvent_update_zero_of_same_sign : ∀ {m r : Nat} (s : Finset.{0} (Fin m))
+  (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m) (l : Fin m),
+  @Eq.{1} (RectangleCLT.Vector r) (u l)
+      (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+        (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+          (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))) →
+    ∀ (c : Real),
+      Iff (@LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) c)
+          (@LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) (b l)) →
+        @Eq.{1} (Set.{0} (RectangleCLT.Vector r))
+          (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u
+            (@Function.update.{1, 1} (Fin m) (fun (a : Fin m) => Real) (instDecidableEqFin m) b l c))
+          (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b)
+@RectangleCLTArxivV1.eventuallyEq_gaussianFiniteWeightedThreshold_update_zero_of_slack : ∀ {m r : Nat}
+  (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m) (l : Fin m),
+  @Eq.{1} (RectangleCLT.Vector r) (u l)
+      (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+        (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+          (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))) →
+    @Ne.{1} Real (b l) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) →
+      ∀ (F : RectangleCLT.Vector r → Real),
+        @Filter.EventuallyEq.{0, 0} Real Real
+          (@nhds.{0} Real
+            (@UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+            (b l))
+          (fun (c : Real) =>
+            @RectangleCLTArxivV1.gaussianFiniteWeightedThreshold m r s u
+              (@Function.update.{1, 1} (Fin m) (fun (a : Fin m) => Real) (instDecidableEqFin m) b l c) F)
+          fun (x : Real) => @RectangleCLTArxivV1.gaussianFiniteWeightedThreshold m r s u b F
+@RectangleCLTArxivV1.hasDerivAt_gaussianFiniteWeightedThreshold_update_zero_of_slack : ∀ {m r : Nat}
+  (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m) (l : Fin m),
+  @Eq.{1} (RectangleCLT.Vector r) (u l)
+      (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+        (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+          (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))) →
+    @Ne.{1} Real (b l) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) →
+      ∀ (F : RectangleCLT.Vector r → Real),
+        @HasDerivAt.{0, 0} Real (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField) Real
+          Real.instAddCommGroup
+          (@NormedSpace.toModule.{0, 0} Real Real Real.normedField
+            (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+              (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                  (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+          (@ContinuousMul.to_continuousSMul.{0} Real
+            (@UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real
+                (@SeminormedRing.toPseudoMetricSpace.{0} Real
+                  (@SeminormedCommRing.toSeminormedRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real
+                      (@NormedField.toNormedCommRing.{0} Real
+                        (@NontriviallyNormedField.toNormedField.{0} Real
+                          (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
+            (@MulZeroClass.toMul.{0} Real
+              (@MulZeroOneClass.toMulZeroClass.{0} Real
+                (@MonoidWithZero.toMulZeroOneClass.{0} Real
+                  (@Semiring.toMonoidWithZero.{0} Real
+                    (@DivisionSemiring.toSemiring.{0} Real
+                      (@Semifield.toDivisionSemiring.{0} Real
+                        (@Field.toSemifield.{0} Real (@NormedField.toField.{0} Real Real.normedField))))))))
+            (@IsTopologicalSemiring.toContinuousMul.{0} Real
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real
+                  (@SeminormedRing.toPseudoMetricSpace.{0} Real
+                    (@SeminormedCommRing.toSeminormedRing.{0} Real
+                      (@NormedCommRing.toSeminormedCommRing.{0} Real
+                        (@NormedField.toNormedCommRing.{0} Real
+                          (@NontriviallyNormedField.toNormedField.{0} Real
+                            (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
+              (@NonUnitalSemiring.toNonUnitalNonAssocSemiring.{0} Real
+                (@Semiring.toNonUnitalSemiring.{0} Real
+                  (@DivisionSemiring.toSemiring.{0} Real
+                    (@Semifield.toDivisionSemiring.{0} Real
+                      (@Field.toSemifield.{0} Real (@NormedField.toField.{0} Real Real.normedField))))))
+              (@IsTopologicalRing.toIsTopologicalSemiring.{0} Real
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real
+                    (@SeminormedRing.toPseudoMetricSpace.{0} Real
+                      (@SeminormedCommRing.toSeminormedRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real
+                          (@NormedField.toNormedCommRing.{0} Real
+                            (@NontriviallyNormedField.toNormedField.{0} Real
+                              (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
+                (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Real
+                  (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                    (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                      (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing))))
+                instIsTopologicalRingReal)))
+          (fun (c : Real) =>
+            @RectangleCLTArxivV1.gaussianFiniteWeightedThreshold m r s u
+              (@Function.update.{1, 1} (Fin m) (fun (a : Fin m) => Real) (instDecidableEqFin m) b l c) F)
+          (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) (b l)
+@RectangleCLTArxivV1.eventuallyEq_thresholdSignedSection_update_parallel_of_slack : ∀ {m r : Nat}
+  (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m) (j l : Fin m),
+  @Eq.{1} (RectangleCLT.Vector r) (@RectangleCLT.Companion.SplitV4.gaussianNormalProjection r (u j) (u l))
+      (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+        (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+          (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))) →
+    @Ne.{1} Real
+        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (b l)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (b j)
+            (@RectangleCLT.faceDot r (u l) (u j))))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) →
+      @Filter.EventuallyEq.{0, 0} Real Real
+        (@nhds.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+          (b l))
+        (fun (c : Real) =>
+          @RectangleCLT.Companion.SplitV4.Printed.thresholdSignedSection m r u
+            (@Function.update.{1, 1} (Fin m) (fun (a : Fin m) => Real) (instDecidableEqFin m) b l c) j (b j))
+        fun (x : Real) => @RectangleCLT.Companion.SplitV4.Printed.thresholdSignedSection m r u b j (b j)
+@RectangleCLTArxivV1.hasDerivAt_thresholdSignedSection_update_parallel_of_slack : ∀ {m r : Nat}
+  (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m) (j l : Fin m),
+  @Eq.{1} (RectangleCLT.Vector r) (@RectangleCLT.Companion.SplitV4.gaussianNormalProjection r (u j) (u l))
+      (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+        (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+          (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))) →
+    @Ne.{1} Real
+        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (b l)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (b j)
+            (@RectangleCLT.faceDot r (u l) (u j))))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) →
+      @HasDerivAt.{0, 0} Real (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField) Real
+        Real.instAddCommGroup
+        (@NormedSpace.toModule.{0, 0} Real Real Real.normedField
+          (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+            (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+              (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+              (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                  (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@ContinuousMul.to_continuousSMul.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real
+              (@SeminormedRing.toPseudoMetricSpace.{0} Real
+                (@SeminormedCommRing.toSeminormedRing.{0} Real
+                  (@NormedCommRing.toSeminormedCommRing.{0} Real
+                    (@NormedField.toNormedCommRing.{0} Real
+                      (@NontriviallyNormedField.toNormedField.{0} Real
+                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
+          (@MulZeroClass.toMul.{0} Real
+            (@MulZeroOneClass.toMulZeroClass.{0} Real
+              (@MonoidWithZero.toMulZeroOneClass.{0} Real
+                (@Semiring.toMonoidWithZero.{0} Real
+                  (@DivisionSemiring.toSemiring.{0} Real
+                    (@Semifield.toDivisionSemiring.{0} Real
+                      (@Field.toSemifield.{0} Real (@NormedField.toField.{0} Real Real.normedField))))))))
+          (@IsTopologicalSemiring.toContinuousMul.{0} Real
+            (@UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real
+                (@SeminormedRing.toPseudoMetricSpace.{0} Real
+                  (@SeminormedCommRing.toSeminormedRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real
+                      (@NormedField.toNormedCommRing.{0} Real
+                        (@NontriviallyNormedField.toNormedField.{0} Real
+                          (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
+            (@NonUnitalSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@Semiring.toNonUnitalSemiring.{0} Real
+                (@DivisionSemiring.toSemiring.{0} Real
+                  (@Semifield.toDivisionSemiring.{0} Real
+                    (@Field.toSemifield.{0} Real (@NormedField.toField.{0} Real Real.normedField))))))
+            (@IsTopologicalRing.toIsTopologicalSemiring.{0} Real
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real
+                  (@SeminormedRing.toPseudoMetricSpace.{0} Real
+                    (@SeminormedCommRing.toSeminormedRing.{0} Real
+                      (@NormedCommRing.toSeminormedCommRing.{0} Real
+                        (@NormedField.toNormedCommRing.{0} Real
+                          (@NontriviallyNormedField.toNormedField.{0} Real
+                            (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
+              (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Real
+                (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                  (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                    (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing))))
+              instIsTopologicalRingReal)))
+        (fun (c : Real) =>
+          @RectangleCLT.Companion.SplitV4.Printed.thresholdSignedSection m r u
+            (@Function.update.{1, 1} (Fin m) (fun (a : Fin m) => Real) (instDecidableEqFin m) b l c) j (b j))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) (b l)
+@RectangleCLTArxivV1.hasDerivAt_gaussianSignedFacetDensity_update_parallel_of_slack : ∀ {m r : Nat}
+  (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m) (j l : Fin m),
+  @Eq.{1} (RectangleCLT.Vector r) (@RectangleCLT.Companion.SplitV4.gaussianNormalProjection r (u j) (u l))
+      (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+        (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+          (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))) →
+    @Ne.{1} Real
+        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (b l)
+          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (b j)
+            (@RectangleCLT.faceDot r (u l) (u j))))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) →
+      @HasDerivAt.{0, 0} Real (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField) Real
+        Real.instAddCommGroup
+        (@NormedSpace.toModule.{0, 0} Real Real Real.normedField
+          (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+            (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+              (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+          (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+            (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+              (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                  (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+            (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (@ContinuousMul.to_continuousSMul.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real
+              (@SeminormedRing.toPseudoMetricSpace.{0} Real
+                (@SeminormedCommRing.toSeminormedRing.{0} Real
+                  (@NormedCommRing.toSeminormedCommRing.{0} Real
+                    (@NormedField.toNormedCommRing.{0} Real
+                      (@NontriviallyNormedField.toNormedField.{0} Real
+                        (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
+          (@MulZeroClass.toMul.{0} Real
+            (@MulZeroOneClass.toMulZeroClass.{0} Real
+              (@MonoidWithZero.toMulZeroOneClass.{0} Real
+                (@Semiring.toMonoidWithZero.{0} Real
+                  (@DivisionSemiring.toSemiring.{0} Real
+                    (@Semifield.toDivisionSemiring.{0} Real
+                      (@Field.toSemifield.{0} Real (@NormedField.toField.{0} Real Real.normedField))))))))
+          (@IsTopologicalSemiring.toContinuousMul.{0} Real
+            (@UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real
+                (@SeminormedRing.toPseudoMetricSpace.{0} Real
+                  (@SeminormedCommRing.toSeminormedRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real
+                      (@NormedField.toNormedCommRing.{0} Real
+                        (@NontriviallyNormedField.toNormedField.{0} Real
+                          (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
+            (@NonUnitalSemiring.toNonUnitalNonAssocSemiring.{0} Real
+              (@Semiring.toNonUnitalSemiring.{0} Real
+                (@DivisionSemiring.toSemiring.{0} Real
+                  (@Semifield.toDivisionSemiring.{0} Real
+                    (@Field.toSemifield.{0} Real (@NormedField.toField.{0} Real Real.normedField))))))
+            (@IsTopologicalRing.toIsTopologicalSemiring.{0} Real
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real
+                  (@SeminormedRing.toPseudoMetricSpace.{0} Real
+                    (@SeminormedCommRing.toSeminormedRing.{0} Real
+                      (@NormedCommRing.toSeminormedCommRing.{0} Real
+                        (@NormedField.toNormedCommRing.{0} Real
+                          (@NontriviallyNormedField.toNormedField.{0} Real
+                            (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
+              (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Real
+                (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                  (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                    (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing))))
+              instIsTopologicalRingReal)))
+        (fun (c : Real) =>
+          @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (ProbabilityTheory.gaussianPDFReal (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+              (@OfNat.ofNat.{0} NNReal 1 (@One.toOfNat1.{0} NNReal instNNRealOne)) (b j))
+            (@RectangleCLT.Companion.SplitV4.Printed.thresholdSignedSection m r u
+              (@Function.update.{1, 1} (Fin m) (fun (a : Fin m) => Real) (instDecidableEqFin m) b l c) j (b j)))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) (b l)
+@RectangleCLTArxivV1.ResidualThresholdRegularity.parallel_shifted_slack : ∀ {m r : Nat}
+  {u : Fin m → RectangleCLT.Vector r} {b : RectangleCLT.Vector m} {j l : Fin m},
+  @RectangleCLTArxivV1.ResidualThresholdRegularity m r u b j →
+    @Ne.{1} (Fin m) l j →
+      @Eq.{1} (RectangleCLT.Vector r) (@RectangleCLT.Companion.SplitV4.gaussianNormalProjection r (u j) (u l))
+          (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+            (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+              (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))) →
+        @Ne.{1} Real
+          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (b l)
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (b j)
+              (@RectangleCLT.faceDot r (u l) (u j))))
+          (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+@RectangleCLTArxivV1.ae_hasDerivAt_gaussianSignedFacetDensity_update_parallel : ∀ {m r : Nat}
+  (u : Fin m → RectangleCLT.Vector r),
+  @Filter.Eventually.{0} (RectangleCLT.Vector m)
+    (fun (b : RectangleCLT.Vector m) =>
+      ∀ (j l : Fin m),
+        @Ne.{1} (Fin m) j l →
+          @Eq.{1} (RectangleCLT.Vector r) (@RectangleCLT.Companion.SplitV4.gaussianNormalProjection r (u j) (u l))
+              (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                  (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))) →
+            @HasDerivAt.{0, 0} Real (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField)
+              Real Real.instAddCommGroup
+              (@NormedSpace.toModule.{0, 0} Real Real Real.normedField
+                (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                  (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                    (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                      (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))
+                  (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike)))
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              (@ContinuousMul.to_continuousSMul.{0} Real
+                (@UniformSpace.toTopologicalSpace.{0} Real
+                  (@PseudoMetricSpace.toUniformSpace.{0} Real
+                    (@SeminormedRing.toPseudoMetricSpace.{0} Real
+                      (@SeminormedCommRing.toSeminormedRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real
+                          (@NormedField.toNormedCommRing.{0} Real
+                            (@NontriviallyNormedField.toNormedField.{0} Real
+                              (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
+                (@MulZeroClass.toMul.{0} Real
+                  (@MulZeroOneClass.toMulZeroClass.{0} Real
+                    (@MonoidWithZero.toMulZeroOneClass.{0} Real
+                      (@Semiring.toMonoidWithZero.{0} Real
+                        (@DivisionSemiring.toSemiring.{0} Real
+                          (@Semifield.toDivisionSemiring.{0} Real
+                            (@Field.toSemifield.{0} Real (@NormedField.toField.{0} Real Real.normedField))))))))
+                (@IsTopologicalSemiring.toContinuousMul.{0} Real
+                  (@UniformSpace.toTopologicalSpace.{0} Real
+                    (@PseudoMetricSpace.toUniformSpace.{0} Real
+                      (@SeminormedRing.toPseudoMetricSpace.{0} Real
+                        (@SeminormedCommRing.toSeminormedRing.{0} Real
+                          (@NormedCommRing.toSeminormedCommRing.{0} Real
+                            (@NormedField.toNormedCommRing.{0} Real
+                              (@NontriviallyNormedField.toNormedField.{0} Real
+                                (@DenselyNormedField.toNontriviallyNormedField.{0} Real Real.denselyNormedField))))))))
+                  (@NonUnitalSemiring.toNonUnitalNonAssocSemiring.{0} Real
+                    (@Semiring.toNonUnitalSemiring.{0} Real
+                      (@DivisionSemiring.toSemiring.{0} Real
+                        (@Semifield.toDivisionSemiring.{0} Real
+                          (@Field.toSemifield.{0} Real (@NormedField.toField.{0} Real Real.normedField))))))
+                  (@IsTopologicalRing.toIsTopologicalSemiring.{0} Real
+                    (@UniformSpace.toTopologicalSpace.{0} Real
+                      (@PseudoMetricSpace.toUniformSpace.{0} Real
+                        (@SeminormedRing.toPseudoMetricSpace.{0} Real
+                          (@SeminormedCommRing.toSeminormedRing.{0} Real
+                            (@NormedCommRing.toSeminormedCommRing.{0} Real
+                              (@NormedField.toNormedCommRing.{0} Real
+                                (@NontriviallyNormedField.toNormedField.{0} Real
+                                  (@DenselyNormedField.toNontriviallyNormedField.{0} Real
+                                    Real.denselyNormedField))))))))
+                    (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Real
+                      (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                        (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                          (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing))))
+                    instIsTopologicalRingReal)))
+              (fun (c : Real) =>
+                @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (ProbabilityTheory.gaussianPDFReal (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+                    (@OfNat.ofNat.{0} NNReal 1 (@One.toOfNat1.{0} NNReal instNNRealOne)) (b j))
+                  (@RectangleCLT.Companion.SplitV4.Printed.thresholdSignedSection m r u
+                    (@Function.update.{1, 1} (Fin m) (fun (a : Fin m) => Real) (instDecidableEqFin m) b l c) j (b j)))
+              (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) (b l))
+    (@MeasureTheory.ae.{0, 0} (RectangleCLT.Vector m)
+      (@MeasureTheory.Measure.{0} (RectangleCLT.Vector m)
+        (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} (RectangleCLT.Vector m)
+          (@MeasureTheory.MeasureSpace.pi.{0, 0} (Fin m) (Fin.fintype m) (fun (a : Fin m) => Real) fun (i : Fin m) =>
+            Real.measureSpace)))
+      (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector m)
+        (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} (RectangleCLT.Vector m)
+          (@MeasureTheory.MeasureSpace.pi.{0, 0} (Fin m) (Fin.fintype m) (fun (a : Fin m) => Real) fun (i : Fin m) =>
+            Real.measureSpace)))
+      (@MeasureTheory.Measure.instOuterMeasureClass.{0} (RectangleCLT.Vector m)
+        (@MeasureTheory.MeasureSpace.toMeasurableSpace.{0} (RectangleCLT.Vector m)
+          (@MeasureTheory.MeasureSpace.pi.{0, 0} (Fin m) (Fin.fintype m) (fun (a : Fin m) => Real) fun (i : Fin m) =>
+            Real.measureSpace)))
+      (@MeasureTheory.MeasureSpace.volume.{0} (RectangleCLT.Vector m)
+        (@MeasureTheory.MeasureSpace.pi.{0, 0} (Fin m) (Fin.fintype m) (fun (a : Fin m) => Real) fun (i : Fin m) =>
+          Real.measureSpace)))
+RectangleCLTArxivV1.gaussianFiniteThresholdEvent_update_zero_of_same_sign uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.eventuallyEq_gaussianFiniteWeightedThreshold_update_zero_of_slack uses [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLTArxivV1.hasDerivAt_gaussianFiniteWeightedThreshold_update_zero_of_slack uses [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLTArxivV1.eventuallyEq_thresholdSignedSection_update_parallel_of_slack uses [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLTArxivV1.hasDerivAt_thresholdSignedSection_update_parallel_of_slack uses [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLTArxivV1.hasDerivAt_gaussianSignedFacetDensity_update_parallel_of_slack uses [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLTArxivV1.ResidualThresholdRegularity.parallel_shifted_slack uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.ae_hasDerivAt_gaussianSignedFacetDensity_update_parallel uses [propext,
+ Quot.sound,
+ Classical.choice]
