@@ -7,3 +7,6 @@ import RectangleCLTArxivV1.SmoothingGaussianMean
 import RectangleCLTArxivV1.RademacherBoundary
 import RectangleCLTArxivV1.PairedGaussianEndpointSmoothing
 import RectangleCLTArxivV1.DerivativesIntrinsic
+import RectangleCLTArxivV1.TransfersMain
+import RectangleCLTArxivV1.PublishedPairedEndpoints
+import RectangleCLTArxivV1.AveragedThresholdIntrinsic

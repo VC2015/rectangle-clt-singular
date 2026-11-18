@@ -84,7 +84,19 @@ run_cmd do
     ``RectangleCLTArxivV1.gaussian_probability_le_contractedBox_intrinsic,
     ``RectangleCLTArxivV1.intrinsicGaussianSmoothingConstant_ge_two,
     ``RectangleCLTArxivV1.gaussianEndpointSmoothing_intrinsic,
-    ``RectangleCLTArxivV1.rectangleError_le_gaussianEndpointSmoothing_intrinsic]
+    ``RectangleCLTArxivV1.rectangleError_le_gaussianEndpointSmoothing_intrinsic,
+    ``RectangleCLTArxivV1.theorem_2_i_intrinsic,
+    ``RectangleCLTArxivV1.theorem_2_ii_intrinsic,
+    ``RectangleCLTArxivV1.theorem_2_intrinsic,
+    ``RectangleCLTArxivV1.theorem_2_intrinsic_with_min,
+    ``RectangleCLTArxivV1.PolynomialEnvelopeHypotheses.gaussian_factor_exists,
+    ``RectangleCLTArxivV1.lemma_E2_intrinsic_comparison,
+    ``RectangleCLTArxivV1.lemma_E3_intrinsic_smoothing,
+    ``RectangleCLTArxivV1.lemma_E4_paired_slepian,
+    ``RectangleCLTArxivV1.lemma_E5_truncated_bennett_maximum,
+    ``RectangleCLTArxivV1.lemma_E5_truncated_bennett_maximum_zero_variance,
+    ``RectangleCLTArxivV1.intrinsic_concentratedThresholdBase_rescale,
+    ``RectangleCLTArxivV1.lemma_B5_intrinsic_threshold]
   for target in targets do
     let axioms ← Lean.collectAxioms target
     for axiomName in axioms do
