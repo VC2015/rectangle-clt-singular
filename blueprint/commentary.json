@@ -1,0 +1,1168 @@
+{
+  "Theorem 1": {
+    "lead": "When the covariance is singular, the Gaussian still has unit variance in every coordinate direction, and its expected maximum measures how much probability can collect near the boundary of a rectangle.",
+    "steps": [
+      "Factor the covariance and work on its range. Each rectangle becomes an intersection of half-spaces with unit normals. Lemma 2 replaces its indicator by a logistic function of width \\(h\\), at a cost of order \\(h\\kappa L\\), where \\(\\kappa\\) controls boundary probabilities.",
+      "Run the Slepian interpolation just long enough to add Gaussian noise of seed size \\(\\varepsilon=Lh^2\\). Starting from that same law, retain each summand with a time-dependent probability and adjust its amplitude while increasing Gaussian variance. The covariance stays fixed. Proposition 1 controls the change in the smoothed probability along both stages.",
+      "On the second stage the cubic term has time factor \\(t/(t+\\varepsilon)\\), whose integral is at most \\(1\\). The fourth-order remainder has factor \\(1/(t+\\varepsilon)\\), whose integral is \\(\\log(1+1/\\varepsilon)\\). Using \\(s_3\\le\\delta\\), balance smoothing against the remainder by taking \\(h=\\mathsf A\\max\\{\\delta,\\sqrt{s_4D_L}\\}\\). If this width is too large for the seeded estimate, the probability bound by \\(1\\) suffices.",
+      "Lemma C.2 bounds the sum’s expected maximum by \\(C(g_\\Sigma+\\delta L)\\), so \\(\\kappa\\le Cg_\\Sigma\\) when \\(\\delta L\\le g_\\Sigma\\). In the other case the proposed bound already dominates an absolute constant. Finally, \\(s_4=\\delta^2\\) gives the envelope-only conclusion."
+    ],
+    "uses": [
+      "Lemma 2",
+      "Proposition 1",
+      "Lemma C.2"
+    ],
+    "stepLines": [
+      [
+        962,
+        1012
+      ],
+      [
+        1302,
+        1358
+      ],
+      [
+        1763,
+        1816
+      ],
+      [
+        1818,
+        1826
+      ]
+    ]
+  },
+  "Proposition 1": {
+    "lead": "The comparison starts with very little Gaussian noise, so the proof estimates the derivatives directly near the starting point and uses Gaussian integration by parts once the seed is available.",
+    "steps": [
+      "Apply Lemma B.1 on the Slepian path. Sum the signed third moments at a common point and move the positive logistic weights in the fourth-order terms back to that point. The relative moment bounds supply \\(s_3\\) and \\(s_4\\).",
+      "At every Slepian time, one independent component carries at least half the face variance. Lemmas 1 and A.1 therefore bound the mean logistic weight \\(F(1-F)\\) by \\(Ch\\kappa\\). Integrating the resulting direct estimates over the initial interval of length at most \\(Lh^2\\) gives the initialization bound.",
+      "On the calibrated path, split the Gaussian into two independent equal-variance parts. Keep one in the base to establish its boundary bound by Lemma 1, and use the other in Lemma B.2. The signed cubic matrix and the same-copy and independent-copy fourth-moment matrices give the respective moment factors.",
+      "The paired Gaussian derivatives contribute \\((t+\\varepsilon)^{-1}\\). The calibrated third moment has multiplier \\(1-t^2\\), whose derivative supplies the extra factor \\(t\\) in the cubic bound. The fourth-order remainder retains the full reciprocal."
+    ],
+    "uses": [
+      "Lemma 1",
+      "Lemma A.1",
+      "Lemma B.1",
+      "Lemma B.2"
+    ],
+    "stepLines": [
+      [
+        1507,
+        1537
+      ],
+      [
+        1539,
+        1549
+      ],
+      [
+        4660,
+        4733
+      ],
+      [
+        1648,
+        1670
+      ]
+    ]
+  },
+  "Lemma 1": {
+    "lead": "A rectangle changes membership when the largest face violation crosses a short interval, so we seek a bound that retains the expected maximum of the face projections.",
+    "steps": [
+      "First normalize the common face variance to \\(1\\). Pair every bounded summand with an independent copy and select a member of each pair with an independent sign. Given the pairs, the sum is a fixed shift plus a Rademacher sum.",
+      "If all conditional face variances are at least \\(1/4\\), Lemma C.1 bounds the shell probability. Symmetrization and contraction of the squared coefficients bound the exceptional probability by a constant times the envelope times the same expected maximum. Exponential moments give the logarithmic alternative.",
+      "For the Gaussian assertion, smooth the maximum of the affine face violations. Gaussian integration by parts and convexity control the expectation of the derivative of a ramp by the expected face maximum. The active normal has unit length almost surely after duplicate directions are merged, so the limit recovers the shell probability.",
+      "Rescale to variance \\(v\\). Conditioning on the independent shift only translates the thresholds, and the bounds just proved hold for every threshold vector."
+    ],
+    "uses": [
+      "Lemma C.1"
+    ],
+    "stepLines": [
+      [
+        6061,
+        6087
+      ],
+      [
+        6175,
+        6240
+      ],
+      [
+        6284,
+        6335
+      ],
+      [
+        6346,
+        6362
+      ]
+    ]
+  },
+  "Lemma 2": {
+    "lead": "The logistic smoother has an exact interpretation as a rectangle with randomly displaced faces, so anti-concentration can bound the error at each endpoint.",
+    "steps": [
+      "Generate the threshold shifts with independent mean-one exponential variables and let \\(R_h\\) be the largest absolute shift. The original and perturbed indicators can differ only in the shell obtained by moving every threshold out and in by \\(R_h\\).",
+      "Conditional on the shifts, Lemma 1 bounds the shell probability for both the sum and its Gaussian target. Each log-ratio of exponentials has tails bounded by \\(2e^{-s}\\), so a union bound over \\(2p\\) faces and tail integration give \\(\\mathbb E R_h\\le ChL\\).",
+      "Average over the shifts, apply the triangle inequality at both endpoints and take the supremum over thresholds. Since \\(h\\ge\\delta\\), the two endpoint errors together cost at most \\(Ch\\kappa L\\)."
+    ],
+    "uses": [
+      "Lemma 1"
+    ],
+    "stepLines": [
+      [
+        2922,
+        2939
+      ],
+      [
+        2940,
+        2981
+      ],
+      [
+        2982,
+        2993
+      ]
+    ]
+  },
+  "Corollary 1": {
+    "lead": "Normalizing each observation by the square root of the sample size turns the uniform observation bound into the summand envelope required by Theorem 1.",
+    "steps": [
+      "Set \\(\\xi_i=X_i/\\sqrt n\\). The new summands are centered and independent, their sum has unit marginal variances, and their coordinate envelope is \\(\\delta=B/\\sqrt n\\).",
+      "Apply the envelope conclusion of Theorem 1 and substitute this value of \\(\\delta\\) into \\(D_L\\). The Gaussian target is the one matching the normalized sum, so its width is \\(g_n\\)."
+    ],
+    "uses": [
+      "Theorem 1"
+    ],
+    "stepLines": [
+      [
+        302,
+        304
+      ],
+      [
+        289,
+        304
+      ]
+    ]
+  },
+  "Corollary 2": {
+    "lead": "A common cap makes every observation bounded while preserving the signed-coordinate geometry that controls the Gaussian width.",
+    "steps": [
+      "Cap each coordinate at \\(4K\\log(en)\\), recenter, and decompose the normalized sum into its capped and discarded parts. Exponential tails bound the discarded marginal variances and the probability of a large maximum displacement.",
+      "The cap is odd and 1-Lipschitz, so it contracts the second moments of all signed coordinate differences. Sudakov–Fernique comparison bounds the capped Gaussian width by \\(g_n\\). In the nontrivial regime, standardization costs at most a factor of \\(2\\) in width.",
+      "Use Theorem 1 on the standardized capped sum. Couple its unstandardized Gaussian target to the original target by matching the full block covariance of the capped and discarded parts.",
+      "Enlarge and shrink each rectangle by the two displacement bounds. Lemma 1 controls the resulting shell for the original Gaussian by its thickness times \\(g_n\\), giving a transfer cost of order \\(b_ng_nL\\)."
+    ],
+    "uses": [
+      "Theorem 1",
+      "Lemma 1"
+    ],
+    "stepLines": [
+      [
+        6513,
+        6540
+      ],
+      [
+        6590,
+        6614
+      ],
+      [
+        6616,
+        6640
+      ],
+      [
+        6650,
+        6696
+      ]
+    ]
+  },
+  "Lemma A.1": {
+    "lead": "Although a logistic derivative may be large near a face, averaging recovers one power of the smoothing width because only a thin shell contributes.",
+    "steps": [
+      "Shift every threshold by the same amount \\(s\\), and denote the new smoother by \\(F_s\\). Its derivative is \\(F_s(1-F_s)/h\\). On \\([-h,h]\\) this product stays within a fixed factor of its value at zero, so \\(F(1-F)\\le(e/2)(F_h-F_{-h})\\).",
+      "Use the same exponential variables to represent both smoothers. Their difference is the probability of a shell whose paired thresholds always differ by \\(2h\\). Conditioning on the variables and using the assumed shell estimate gives \\(\\mathbb E[F(1-F)]\\le Ch\\kappa\\).",
+      "Insert this estimate in the pointwise bound for translated directional derivatives. With the translations measured in the face norm and bounded by \\(h\\), the averaged derivative of order \\(q\\) costs \\(h^{1-q}\\kappa\\) times the product of the directional face norms."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        3180,
+        3208
+      ],
+      [
+        3209,
+        3233
+      ],
+      [
+        3234,
+        3239
+      ]
+    ]
+  },
+  "Lemma B.1": {
+    "lead": "Evaluating the third derivatives at one common random point makes cancellation across the summands visible before the error is bounded.",
+    "steps": [
+      "Differentiate the expectation over the Gaussian variance, the Bernoulli retention probabilities and the retained amplitudes. The Gaussian heat identity gives a Hessian. For each mask, remove that summand and average the change conditional on the remaining base.",
+      "Taylor-expand along the segment that reinserts an independent copy. Centering removes the linear terms, and the relation \\(\\varpi(t)\\gamma(t)^2=1-t\\) cancels the second-order contribution against the Gaussian Hessian.",
+      "Restore the removed summand in the Hessian and move the cubic derivative to the full point. Its signed coefficient is \\(q_3'(t)/6\\) with \\(q_3(t)=(1-t)\\gamma(t)\\). The fourth derivatives on the insertion segments give the three displayed kernels, with one or two independent copies as specified."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        3570,
+        3631
+      ],
+      [
+        3632,
+        3691
+      ],
+      [
+        3773,
+        3835
+      ]
+    ]
+  },
+  "Lemma B.2": {
+    "lead": "The fourth-order remainder evaluates derivatives at different translated points, but the moment assumptions control sums of matrices at a common Gaussian base.",
+    "steps": [
+      "Condition on the base, translations and directions. Two integrations by parts in the repeated direction replace two derivatives by a centered Gaussian quadratic form divided by \\(\\sigma^2\\). Expand the one or two remaining derivatives into products of face probabilities.",
+      "Expand each translated logistic weight around the common base, using the small ratio between the translation and \\(h\\) to obtain a convergent series. Now collect the directional coefficients across observations before estimating the Gaussian averages.",
+      "The conditional covariance bound controls those coefficient matrices in operator norm. With zero shifts the signed cubic moment gives the sharper first-order factor, and the two weighted fourth-moment bounds give the sharper second-order factor.",
+      "Pair the coefficient matrices with the Gaussian matrices by operator–nuclear norm duality. Lemma B.4 bounds the sum of the latter norms after averaging the base. Summing the series restores the powers of \\(h\\) and \\(\\sigma\\) in the result."
+    ],
+    "uses": [
+      "Lemma B.4"
+    ],
+    "stepLines": [
+      [
+        4221,
+        4310
+      ],
+      [
+        4311,
+        4377
+      ],
+      [
+        4424,
+        4537
+      ],
+      [
+        4582,
+        4643
+      ]
+    ]
+  },
+  "Lemma B.3": {
+    "lead": "A reference weight depending on a single face lets us control the displacement of a tilted Gaussian mean by the mass lost relative to that face.",
+    "steps": [
+      "Normalize the weight \\(w\\) to a probability law. For a vector \\(t\\) perpendicular to the face normal, Jensen’s inequality and \\(w\\le b\\) bound the exponential moment by that of the reference weight. Under the Gaussian law its normal coordinate is independent of \\(t\\cdot G\\).",
+      "Choose \\(t\\) to be the orthogonal component of the tilted mean. This bounds its squared length by \\(2\\log(p_b/p_w)\\). Cauchy–Schwarz bounds the remaining normal component by its weighted second moment, and the orthogonal decomposition gives the result."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        4978,
+        5011
+      ],
+      [
+        5012,
+        5046
+      ]
+    ]
+  },
+  "Lemma B.4": {
+    "lead": "Products of logistic face weights couple the Gaussian second derivative to the event of being near the boundary, so their summed matrix norms require an estimate independent of rank.",
+    "steps": [
+      "Each logistic product defines a log-concave tilt of Gaussian measure. Prékopa’s theorem bounds its covariance by the identity. This reduces the nuclear norm estimate to tilted mean terms and a signed trace summed over face tuples.",
+      "Compare each tilted mean to a reference depending on its first face. Lemma B.3, Gaussian projection moments and the log-sum inequality bound the total mean contribution using the concentration of the base.",
+      "Sum the signed trace over the face tuples before taking its absolute value. A common threshold derivative and a Gamma mixture express the result through Gaussian integrals over rectangles with random thresholds. Lemma B.5 controls these derivatives for independent normals.",
+      "Adjoin a separate, small orthogonal component to each normal so that the enlarged normals are independent. Let the perturbation tend to zero and compress the matrix to its original coordinates. The scale condition \\(\\sigma\\ge\\delta\\sqrt L\\) reduces the resulting bound to the stated order."
+    ],
+    "uses": [
+      "Lemma B.3",
+      "Lemma B.5"
+    ],
+    "stepLines": [
+      [
+        5135,
+        5206
+      ],
+      [
+        5208,
+        5267
+      ],
+      [
+        5269,
+        5345
+      ],
+      [
+        5366,
+        5404
+      ]
+    ]
+  },
+  "Lemma B.5": {
+    "lead": "A common movement of all thresholds differentiates a Gaussian integral over a polyhedron, and the faces and their pairwise intersections determine the derivative.",
+    "steps": [
+      "Differentiate the Gaussian variance and, independently, rescale the thresholds. Equating the two expressions for the derivative gives the radial trace identity. Differentiate it in all thresholds together and condition on one Gaussian projection to express the result using first and mixed second derivatives of the Gaussian distribution function.",
+      "Interpret these nonnegative derivatives as Gaussian masses on faces and intersections of two faces. Extend each stratum a short distance outwards along its normal directions. A point in any such region has a unique nearest point on the polyhedron, so the regions are disjoint.",
+      "Let \\(R(G)\\) be one plus the largest norm of a projection onto a subspace spanned by one or two face normals. The regions lie in an outer shell of width \\(1/R(G)\\) in Gaussian coordinates. Conditional on \\(G\\), concentration of the independent base bounds this shell by \\(C\\kappa(\\sigma/R(G)+\\delta)\\).",
+      "The geometric estimate weights that shell by \\(R(G)^3\\). Gaussian projection moments bound the expected square and cube by \\(CL\\) and \\(CL^{3/2}\\), respectively, giving the claimed derivative estimate."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        5471,
+        5547
+      ],
+      [
+        5746,
+        5790
+      ],
+      [
+        5792,
+        5826
+      ],
+      [
+        5857,
+        5874
+      ]
+    ]
+  },
+  "Lemma C.1": {
+    "lead": "On the discrete cube, changes along edges reveal how often the maximum of affine functions can fall in a short interval, even when an endpoint carries an atom.",
+    "steps": [
+      "First perturb the thresholds so the maximizing affine function is unique at each vertex. Compose the maximum with the integral of a ramp whose linear portion extends beyond the interval by an amount set by the largest coefficient.",
+      "Convexity along a cube edge makes the average signed derivative nonnegative. On edges meeting the interval, this average also bounds the squared active slope divided by the enlarged width. Sum over the coordinates and use the lower bound on the squared length of every active coefficient vector.",
+      "The same sum of signed derivatives is bounded above by the expected positive maximum of the original linear forms. Compare the two bounds and send the perturbation to zero through enlarged closed intervals. Under the unit-length upper bound, the Rademacher exponential moment and Jensen’s inequality give the logarithmic estimate."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        5934,
+        5955
+      ],
+      [
+        5957,
+        6009
+      ],
+      [
+        6011,
+        6056
+      ]
+    ]
+  },
+  "Lemma C.2": {
+    "lead": "To express boundary probabilities through the width of the Gaussian target, we first compare its expected maximum with that of the bounded sum using only increment tails.",
+    "steps": [
+      "Index the signed coordinates and zero by \\(T=\\{0,\\pm e_1,\\ldots,\\pm e_p\\}\\). For a contrast of two indices, the two scales in Bernstein’s inequality are its standard deviation \\(d_2(s,t)\\), which is also its Gaussian standard deviation, and the envelope distance \\(d_1(s,t)=\\delta\\mathbf 1_{s\\ne t}\\).",
+      "Dirksen’s mixed-tail chaining bound at the zero index controls the expected maximum by \\(\\gamma_2(T,d_2)+\\gamma_1(T,d_1)\\) up to absolute factors and an additive constant. Unit marginal variances bound the extra single-coordinate term.",
+      "For the discrete distance, use only the zero index at coarse levels and include all \\(2p+1\\) labels as soon as the admissible net size permits it. The sum of the earlier level costs is at most \\(C\\delta L\\).",
+      "For the variance distance, the Gaussian majorizing-measure theorem bounds \\(\\gamma_2(T,d_2)\\) by \\(Cg_\\Sigma\\). Here coincident Gaussian coordinates may be identified even if the covariance is singular. Finally \\(g_\\Sigma\\ge\\sqrt{2/\\pi}\\) absorbs the additive constant."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        6384,
+        6417
+      ],
+      [
+        6419,
+        6448
+      ],
+      [
+        6450,
+        6461
+      ],
+      [
+        6463,
+        6484
+      ]
+    ]
+  },
+  "Theorem 2": {
+    "lead": "A moment bound on the largest coordinate permits rare, large observations, and a separate fourth-moment bound measures how much of their size can fall on any particular coordinate.",
+    "steps": [
+      "Condition on the locations and values of the large observations, then apply Theorem 1 to the remaining centered, bounded sum at a translated rectangle.",
+      "Lemma E.1 controls the translation, and independent Gaussian additions correct the conditional covariance before the truncation level is chosen.",
+      "With coordinate fourth moments available, Lemma E.2 separates the tail variance from the expected maximum of the large-increment sum, for which Lemma E.5 gives the logarithmic improvement."
+    ],
+    "uses": [
+      "Theorem 1",
+      "Lemma 1",
+      "Lemma E.1",
+      "Lemma E.2",
+      "Lemma E.5"
+    ],
+    "stepLines": [
+      [
+        6926,
+        6973
+      ],
+      [
+        6990,
+        7171
+      ],
+      [
+        7672,
+        7792
+      ]
+    ],
+    "ledgers": [
+      "theorem-2-envelope-passages",
+      "paired-intrinsic-passages"
+    ]
+  },
+  "Corollary 3": {
+    "lead": "To test whether a vector lies in a polyhedron, we need only its components along the normals to the defining half-spaces.",
+    "steps": [
+      "Handle zero-variance projections by the sign of their threshold, then standardize each remaining projection to obtain a lower orthant with Gaussian width \\(g_P\\).",
+      "The standardized rows have \\(\\ell_1\\) norm at most \\(J\\), so the envelope grows by at most \\(J\\) and both relative fourth-moment bounds by at most \\(J^2\\).",
+      "The same row bound gives parameters \\(JB\\) and \\(JK\\) for the polynomial envelope and sub-exponential cases, while weighted Hölder gives the common parameter \\(J^2B\\) for Theorem 2(ii)."
+    ],
+    "uses": [
+      "Theorem 1",
+      "Theorem 2",
+      "Corollary 2"
+    ],
+    "stepLines": [
+      [
+        6703,
+        6738
+      ],
+      [
+        6740,
+        6789
+      ],
+      [
+        6792,
+        6833
+      ]
+    ],
+    "ledgers": [
+      "polyhedral-intrinsic-passages"
+    ]
+  },
+  "Theorem 3": {
+    "lead": "With independent coordinates, a small relative error in each tail can produce a visible error at the typical maximum.",
+    "steps": [
+      "Choose the centered, unit-variance two-point law on \\(B_n\\) and \\(-1/B_n\\), whose third moment is \\(B_n-1/B_n\\).",
+      "At the threshold \\(\\Phi(x_n)^{p_n}=e^{-1}\\), Lemma F.1 gives the leading relative tail error \\((B_n-1/B_n)x_n^3/(6\\sqrt n)\\).",
+      "Taking \\(p_n\\)th powers of the coordinate distribution functions contributes the factor \\(e^{-1}\\), yielding the lower constant \\(1/(4e)\\) after normalization."
+    ],
+    "uses": [
+      "Lemma F.1"
+    ],
+    "stepLines": [
+      [
+        8015,
+        8027
+      ],
+      [
+        8027,
+        8066
+      ],
+      [
+        8067,
+        8082
+      ]
+    ],
+    "ledgers": [
+      "skew-lower-intrinsic-passages"
+    ]
+  },
+  "Theorem 4": {
+    "lead": "Central symmetry cancels every third moment, yet a maximum over many rare coordinates can still give a rectangle error of order \\(B_n g_{\\Sigma_n}L_n/\\sqrt n\\).",
+    "steps": [
+      "In Lemma F.3, activate the rare signs together with probability \\(\\log(m_n)/(2n)\\) and choose amplitude \\(a=B_n-1\\) to respect the envelope.",
+      "With high probability one coordinate receives a positive sign at every activation, giving a mean rare shift asymptotic to \\(a\\log(m_n)/(2\\sqrt n)\\), half its Gaussian counterpart.",
+      "Lemma F.2 multiplies this mean gap by a leading density of order \\(w_n\\), while the Rademacher approximation from Lemma F.1 and the quadratic shift error are smaller."
+    ],
+    "uses": [
+      "Lemma F.1",
+      "Lemma F.2",
+      "Lemma F.3"
+    ],
+    "stepLines": [
+      [
+        8507,
+        8554
+      ],
+      [
+        8573,
+        8605
+      ],
+      [
+        8458,
+        8481
+      ]
+    ],
+    "ledgers": [
+      "lower-leading-common-internal-passages",
+      "lower-lemmas-f1-f3-passages"
+    ]
+  },
+  "Theorem 5": {
+    "lead": "At fourth moment order, rare activations allow the amplitude to grow while the coordinate and envelope moment budgets stay fixed.",
+    "steps": [
+      "With activation probability \\(\\theta=\\log(m_n)/(2n)\\) and amplitude \\(a=\\theta^{-1/4}\\), Lemma F.3 bounds coordinate fourth moments by \\(4\\) and the envelope fourth moment by \\(16\\).",
+      "The Gaussian rare maximum exceeds the original rare maximum in mean by order \\(a\\log(m_n)/\\sqrt n\\), which Lemma F.2 multiplies by a leading density of order \\(w_n\\).",
+      "The Gaussian width is asymptotic to \\(w_n\\), so substituting the amplitude yields the rate \\(g_{\\Sigma_n}n^{-1/4}L_n^{3/4}\\), matched above by Theorem 2(ii)."
+    ],
+    "uses": [
+      "Lemma F.1",
+      "Lemma F.2",
+      "Lemma F.3",
+      "Theorem 2"
+    ],
+    "stepLines": [
+      [
+        8511,
+        8563
+      ],
+      [
+        8573,
+        8621
+      ],
+      [
+        8620,
+        8652
+      ]
+    ],
+    "ledgers": [
+      "lower-fourth-dense-passages",
+      "lower-leading-common-internal-passages"
+    ]
+  },
+  "Theorem 6": {
+    "lead": "As the fourth-moment envelope grows, selecting a random subset of the rare coordinates lets the maximum grow without exhausting the fourth-moment budget of any fixed coordinate.",
+    "steps": [
+      "At \\(q=4\\), Theorem 8’s mask probability becomes \\(B_n^{-2}\\), and its amplitude \\(a=(B_n/2)\\theta^{-1/4}\\) uses the envelope budget at activation probability \\(\\theta\\).",
+      "With mean activation count \\(\\log(m_n)/(4\\log(2B_n^2))\\), some coordinate receives every active positive increment with high probability, while the mean Gaussian shift is negligible on that scale.",
+      "Substituting \\(\\mathcal K_{n,4}=B_n\\) into Theorem 8 gives the factor \\(B_n/\\{\\log(e+B_n)\\}^{3/4}\\)."
+    ],
+    "uses": [
+      "Theorem 8"
+    ],
+    "stepLines": [
+      [
+        8675,
+        8700
+      ],
+      [
+        8745,
+        8783
+      ],
+      [
+        8840,
+        8848
+      ]
+    ],
+    "ledgers": [
+      "lower-sparse-f6-passages"
+    ]
+  },
+  "Theorem 7": {
+    "lead": "A rare activation shared across the coordinate array tests how much error a \\(q\\)th-moment envelope alone can permit.",
+    "steps": [
+      "Set \\(\\theta=\\log(m_n)/(2n)\\) and choose the unmasked amplitude \\(a=(B_n/2)\\theta^{-1/q}\\), so Lemma F.3 bounds the \\(L^q\\) envelope by \\(1+B_n/2\\).",
+      "The Gaussian rare maximum has asymptotically twice the mean of the original rare maximum, producing the factor \\(B_n g_{\\Sigma_n}n^{-1/2+1/q}L_n^{1-1/q}\\) through Lemma F.2.",
+      "For fixed \\(B\\) and \\(q>4\\), the rare fourth-moment contribution \\((B^4/16)\\theta^{1-4/q}\\) vanishes, so each coordinate fourth moment tends to \\(1\\)."
+    ],
+    "uses": [
+      "Lemma F.1",
+      "Lemma F.2",
+      "Lemma F.3"
+    ],
+    "stepLines": [
+      [
+        8511,
+        8524
+      ],
+      [
+        8585,
+        8648
+      ],
+      [
+        8561,
+        8571
+      ]
+    ],
+    "ledgers": [
+      "lower-fourth-dense-passages",
+      "lower-leading-common-internal-passages"
+    ]
+  },
+  "Theorem 8": {
+    "lead": "When the envelope term dominates the Bennett upper bound, the cost of finding a coordinate that receives every rare increment accounts for its logarithmic denominator.",
+    "steps": [
+      "Choose the amplitude \\(a\\), activation probability \\(\\theta\\), and mask probability \\(\\pi\\) so that \\(a\\theta^{1/q}=B_n/2\\) and \\(\\theta\\pi a^4=B_n^2/16\\), meeting both moment budgets.",
+      "With an expected activation count of order \\(\\log(m_n)/\\log(e+\\mathcal K_{n,q})\\), one rare coordinate realizes all active positive increments with high probability, whereas the mean Gaussian shift is negligible.",
+      "Lemma F.2 multiplies the mean gap by the leading density of order \\(w_n\\), comparable to the Gaussian width, and Theorem 2(ii) gives the matching upper bound."
+    ],
+    "uses": [
+      "Lemma F.1",
+      "Lemma F.2",
+      "Lemma F.3",
+      "Theorem 2"
+    ],
+    "stepLines": [
+      [
+        8680,
+        8703
+      ],
+      [
+        8745,
+        8783
+      ],
+      [
+        8784,
+        8839
+      ]
+    ],
+    "ledgers": [
+      "lower-sparse-f6-passages",
+      "lower-leading-common-internal-passages"
+    ]
+  },
+  "Conjecture 1": {
+    "lead": "The bounded-summand upper and lower bounds leave open whether the extra square-root logarithm can be removed for every covariance matrix.",
+    "steps": [
+      "Theorem 4 attains the proposed scale \\(\\delta g_\\Sigma L\\) on symmetric examples whose Gaussian widths range from constant order to order \\(\\sqrt L\\).",
+      "Theorem 1 gives this rate when \\(s_4D_L\\) is at most a constant times \\(\\delta^2\\), while the unrestricted assertion remains open and is excluded from the Lean certificate."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        2555,
+        2560
+      ],
+      [
+        2563,
+        2571
+      ]
+    ],
+    "ledgers": []
+  },
+  "Lemma E.1": {
+    "lead": "To estimate the shift left by conditioning on large observations, we need a bound on the expected maximum that uses both a coordinate variance budget and a moment bound on the envelope.",
+    "steps": [
+      "The envelope scale \\(A\\) must be nonnegative, as the checked statement makes explicit. If \\(A=0\\), the moment bound forces every vector to vanish almost surely.",
+      "For \\(A>0\\), truncate at \\(u=AL^{-1/q}\\) and center each retained vector. The coordinate variance sums are at most \\(v\\), and the summand envelope is at most \\(2u\\).",
+      "Apply Bernstein’s inequality to the \\(2p\\) signed coordinates and integrate the tail to get a bound of order \\(\\sqrt{vL}+uL\\). The omitted centered sum costs at most \\(2A^q u^{1-q}\\), and the cutoff makes both envelope contributions of order \\(AL^{1-1/q}\\)."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        6882,
+        6904
+      ],
+      [
+        6896,
+        6906
+      ],
+      [
+        6906,
+        6924
+      ]
+    ],
+    "ledgers": [
+      "expected-maximum-passages"
+    ]
+  },
+  "Lemma E.2": {
+    "lead": "The Bennett refinement needs to keep the expected maximum of the sum of large copy differences intact until both moment assumptions can be brought to bear.",
+    "steps": [
+      "Apply Lemma E.4 to the logistic rectangle approximation at cutoff \\(h=(\\phi L)^{-1}\\), bounding the large-increment drift by \\(M_h\\) in expected norm and the covariance bias by \\(v_h/2\\) entrywise.",
+      "To use coordinate fourth moments in the remainder, move the positive logistic weights to a common evaluation point before summing over observations.",
+      "Average the derivative bounds with the Gaussian boundary estimate from Lemmas A.1 and 1, then integrate in time and recover rectangle probabilities by Lemma E.3."
+    ],
+    "uses": [
+      "Lemma E.4",
+      "Lemma A.1",
+      "Lemma 1",
+      "Lemma E.3"
+    ],
+    "stepLines": [
+      [
+        7437,
+        7462
+      ],
+      [
+        7463,
+        7541
+      ],
+      [
+        7543,
+        7606
+      ]
+    ],
+    "ledgers": [
+      "paired-intrinsic-passages"
+    ]
+  },
+  "Lemma E.3": {
+    "lead": "Smoothing must recover rectangle probabilities even when only the Gaussian endpoint has a known boundary-concentration estimate.",
+    "steps": [
+      "The logistic mixture expresses the smooth discrepancy as an average over random threshold shifts, all of magnitude at most \\(d=KhL\\) with probability at least \\(3/4\\) for a suitable absolute \\(K\\).",
+      "Expand or contract the rectangle according to the discrepancy’s sign, using monotonicity for the arbitrary vector and Lemma 1 to bound the Gaussian boundary layer.",
+      "Absorb the exceptional shifts using their probability bound, which the paper obtains by Markov’s inequality and Lean derives directly from the exponential variables."
+    ],
+    "uses": [
+      "Lemma 1"
+    ],
+    "stepLines": [
+      [
+        7273,
+        7292
+      ],
+      [
+        7293,
+        7318
+      ],
+      [
+        7310,
+        7324
+      ]
+    ],
+    "ledgers": [
+      "e3-gaussian-endpoint-internal-passages"
+    ]
+  },
+  "Lemma E.4": {
+    "lead": "Pairing each summand with an independent copy turns its contribution to the interpolation derivative into a difference of gradients, even for skewed summands.",
+    "steps": [
+      "Differentiate along \\(W_s=\\sqrt{s}\\,W+\\sqrt{1-s}\\,Z\\) and integrate by parts in the Gaussian coordinates to obtain the covariance–Hessian term.",
+      "Swapping a summand with its copy reverses the increment, pairing gradients at the segment endpoints for retained increments and leaving a conditional drift from discarded increments.",
+      "Apply the trapezoidal identity to the directional Hessian along that segment, using equality of endpoint expectations to leave a fourth-derivative remainder with coefficient \\(-s/8\\)."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        7359,
+        7377
+      ],
+      [
+        7378,
+        7403
+      ],
+      [
+        7404,
+        7434
+      ]
+    ],
+    "ledgers": [
+      "paired-intrinsic-passages"
+    ]
+  },
+  "Lemma E.5": {
+    "lead": "A second truncation lets the variance of the retained increments determine the logarithmic improvement in the maximum bound.",
+    "steps": [
+      "Central symmetry keeps each vector centered after truncation at \\(u\\), so Bennett’s exponential bound applies to every signed coordinate sum.",
+      "Sum the exponential bounds over the \\(2p\\) signed coordinates and choose \\(\\lambda=u^{-1}\\log(1+u^2L/v)\\) to obtain the logarithmic denominator for \\(v>0\\).",
+      "The omitted sum costs at most \\(A^q/u^{q-1}\\) by the envelope moment, and when \\(v=0\\) every coordinate vanishes almost surely."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        7624,
+        7638
+      ],
+      [
+        7639,
+        7657
+      ],
+      [
+        7658,
+        7668
+      ]
+    ],
+    "ledgers": [
+      "paired-intrinsic-passages"
+    ]
+  },
+  "Lemma F.1": {
+    "lead": "To detect skewness at the threshold of a high-dimensional maximum, we need a relative error for the strict scalar tail that also applies to lattice laws.",
+    "steps": [
+      "Tilt the product law so the sum has mean \\(x\\), and use bounds on the tilted variance and fourth cumulant to expand its log moment-generating function.",
+      "Apply Berry–Esseen to the standardized tilted sum and integrate its strict upper tail against an exponential weight, preserving the endpoint convention at atoms.",
+      "Undoing the tilt and comparing with the weighted normal integral leaves \\(\\gamma x^3/6\\) as the leading log tail correction, where \\(\\gamma\\) sums the third moments."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        7848,
+        7940
+      ],
+      [
+        7941,
+        7980
+      ],
+      [
+        7981,
+        7999
+      ]
+    ],
+    "ledgers": [
+      "lower-lemmas-f1-f3-passages"
+    ]
+  },
+  "Lemma F.2": {
+    "lead": "The symmetric examples create an orthant discrepancy from a difference in the mean shifts of two approximately equal leading maxima.",
+    "steps": [
+      "Condition on each shift, using its independence from its own leading variable to replace the first distribution function by \\(F\\) at cost \\(\\epsilon\\).",
+      "Expand both shifted values of \\(F\\) about \\(t\\), obtaining the linear term \\(F'(t)(\\mathbb{E}V-\\mathbb{E}U)\\) and a quadratic remainder controlled by the two shift second moments."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        8116,
+        8121
+      ],
+      [
+        8122,
+        8133
+      ]
+    ],
+    "ledgers": [
+      "lower-lemmas-f1-f3-passages"
+    ]
+  },
+  "Lemma F.3": {
+    "lead": "Indexing coordinates by a pair lets the number of leading Gaussian coordinates control the width while a separate index controls the size of rare maxima.",
+    "steps": [
+      "Each coordinate combines a Rademacher sign shared across its row with a masked rare sign shared across its column, giving nonzero covariance only to pairs that share an index.",
+      "The covariance range consists of arrays \\(b_j+d_u\\) with one redundant constant, giving rank \\(r+m-1\\), and averaging over the signs eliminates the odd terms in the fourth moment.",
+      "For the matching Gaussian \\(sG_j+\\sqrt v\\,H_u\\), conditioning on \\(G\\) gives the lower width bound \\(s g_r\\), and the triangle inequality adds at most \\(\\sqrt v\\, g_m\\)."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        8355,
+        8375
+      ],
+      [
+        8376,
+        8395
+      ],
+      [
+        8396,
+        8409
+      ]
+    ],
+    "ledgers": [
+      "lower-lemmas-f1-f3-passages"
+    ]
+  },
+  "Corollary 4": {
+    "lead": "A positive gap between the absolute correlations of distinct coordinates and 1 gives a second estimate of the interpolation error, even when the covariance matrix is singular.",
+    "steps": [
+      "Split the Gaussian part of the path into two independent pieces. One piece joins the retained summands to form a base satisfying rectangle anti-concentration, and the other leaves a Gaussian variance of \\((t+\\varepsilon)/2\\) for integration by parts.",
+      "Each of the three fourth-derivative terms in Lemma B.1 has a repeated copy direction and a shift of face norm at most \\(4\\delta\\). Lemma H.3 therefore gives a bound proportional to \\(d_c^{-1}(t+\\varepsilon)^{-3/2}\\), where \\(d_c=c(2-c)\\).",
+      "Take the smaller of this estimate and the early estimate from Proposition 1. After setting \\(y=(t+\\varepsilon)/\\varepsilon\\), the two integrands cross at \\(y=d_c^{-2}\\), and their minimum integrates on \\([1,\\infty)\\) to \\(2+2\\log(1/d_c)\\).",
+      "Choose the smoothing width proportional to \\(\\delta\\sqrt{1+\\log(1/c)}\\) and use Lemma C.2 to express the boundary coefficient in terms of Gaussian width. When the proposed width exceeds the range of the interpolation estimate, the probability bound of 1 suffices."
+    ],
+    "uses": [
+      "Lemma 1",
+      "Lemma 2",
+      "Proposition 1",
+      "Lemma B.1",
+      "Lemma C.2",
+      "Lemma H.3"
+    ],
+    "stepLines": [
+      [
+        "supplement",
+        1834,
+        1861
+      ],
+      [
+        "supplement",
+        1863,
+        1907
+      ],
+      [
+        "supplement",
+        1915,
+        1934
+      ],
+      [
+        "supplement",
+        1936,
+        1967
+      ]
+    ]
+  },
+  "Corollary 5": {
+    "lead": "The exceptional correlation budget measures how much we pay for pairs below a chosen gap, taking advantage of the exact cancellation at perfect correlation.",
+    "steps": [
+      "Separate the single-face and well-separated pair terms from the pairs with \\(0<\\eta_{jk}<c\\). Lemma G.2 bounds each exceptional signed pair by \\(C\\delta^2\\sqrt{\\eta_{jk}}/h^2\\), and each original coordinate pair accounts for at most four choices of signs. A zero-gap pair contributes zero.",
+      "Keep all faces in the logistic weights. In the sum of nonnegative matrix norms in Proposition H.2, retain only the separated pairs and use \\(\\vartheta_{jk}\\sin\\vartheta_{jk}\\ge c(2-c)\\) there. Combine this estimate with Proposition H.1 and the translated-weight expansion from the proof of Lemma H.3.",
+      "Compare the early bound for the whole remainder with this separated-pair estimate and add the exceptional cost. Time integration gives terms of order \\(\\delta^2\\kappa L J_c/h\\) and \\(\\delta^2 B_c/h^2\\).",
+      "Balance each term against the smoothing cost \\(\\kappa Lh\\) and take the larger of the two resulting widths. Lemma C.2 converts the boundary coefficient to the Gaussian width in the resulting bound."
+    ],
+    "uses": [
+      "Lemma 1",
+      "Lemma 2",
+      "Proposition 1",
+      "Lemma B.1",
+      "Lemma C.2",
+      "Lemma G.2",
+      "Proposition H.1",
+      "Proposition H.2"
+    ],
+    "stepLines": [
+      [
+        "supplement",
+        2036,
+        2071
+      ],
+      [
+        "supplement",
+        2073,
+        2135
+      ],
+      [
+        "supplement",
+        2137,
+        2168
+      ],
+      [
+        "supplement",
+        2170,
+        2227
+      ]
+    ]
+  },
+  "Proposition G.1": {
+    "lead": "The logarithm in the envelope bound comes from integrating near the start of the path, where the single-face and two-face estimates offer different ways to cut the integral short.",
+    "steps": [
+      "With \\(v=t+\\varepsilon\\), compare the \\(v^{-1}\\) estimate from Proposition 1 separately with the \\(v^{-3/2}\\) single-face bound and the \\(v^{-1/2}\\) pair bound in Lemma G.2. Integrate each minimum on the two sides of its crossing point.",
+      "Because \\(\\varepsilon=Lh^2\\), the width cancels from both logarithmic ratios. The remaining ratios grow at most polynomially in \\(p\\), since there are \\(2p\\) faces and the support rank is at most \\(p\\). Direct integration also gives \\(1+\\log(1/\\varepsilon)\\), so we can keep the smaller logarithm.",
+      "Use this estimate for the normalized fourth-order remainder in the smoothing comparison and choose \\(h\\) proportional to \\(\\delta\\sqrt{\\min(D_L,L)}\\). Lemma C.2 supplies the Gaussian width, and the elementary probability bound covers the large-width case. The cap applies to the envelope estimate with \\(s_4=\\delta^2\\)."
+    ],
+    "uses": [
+      "Proposition 1",
+      "Lemma 2",
+      "Lemma C.2",
+      "Lemma G.2"
+    ],
+    "stepLines": [
+      [
+        "supplement",
+        704,
+        748
+      ],
+      [
+        "supplement",
+        750,
+        762
+      ],
+      [
+        "supplement",
+        764,
+        813
+      ]
+    ]
+  },
+  "Lemma G.1": {
+    "lead": "Concentration in two face projections depends on their angle because nearly parallel normals impose nearly the same restriction.",
+    "steps": [
+      "Use the first normal and the normalized orthogonal component of the second as coordinates. A box of width \\(h\\) in each original face coordinate has widths of order \\(h\\) and \\(h/\\nu_{jk}\\) in these coordinates.",
+      "On the corresponding frequency rectangle, the projected summands have small phases. Symmetrizing with independent copies bounds the characteristic function by a Gaussian exponential. A product of squared sinc kernels then bounds the box probability by \\(Ch^2/\\nu_{jk}\\). A single kernel gives the one-face bound.",
+      "Bound each logistic weight by an integrable function of its one or two scores and sum the concentration bounds on unit score cells. The estimates are uniform in the thresholds, so conditioning permits any independent random shift.",
+      "Lean carries out the Fourier estimate in the original correlated coordinates, completing a square to recover the same angle factor. It bounds the logistic weights with exponential majorants and averages over overlapping unit boxes."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        "supplement",
+        229,
+        255
+      ],
+      [
+        "supplement",
+        256,
+        319
+      ],
+      [
+        "supplement",
+        321,
+        353
+      ],
+      [
+        "supplement",
+        247,
+        352
+      ]
+    ]
+  },
+  "Lemma G.2": {
+    "lead": "As two normals approach parallelism, the two-face concentration bound worsens, but the coefficient multiplying that pair in the Hessian approaches zero.",
+    "steps": [
+      "Expand the Hessian into single-face terms and pair terms. For a nonparallel pair, resolving the coefficient along the normalized difference of the signed normals extracts \\(1-|u_j\\cdot u_k|\\). Lemma G.1 then gives a pair bound proportional to \\(\\delta^2\\nu_{jk}/h^2\\).",
+      "For a second estimate, transfer the repeated derivatives to the independent Gaussian component. Expand each translated weight at a common base before taking absolute values, so that the covariance sum still controls the signed coefficient matrix.",
+      "The Gaussian matrix moments and Lemma G.1 give bounds proportional to \\(mr\\delta^2 v^{-3/2}\\) for the single-face sum and \\(r\\delta^2/(\\nu_{jk}v)\\) for a nonparallel pair. The geometric mean of the two pair bounds removes \\(\\nu_{jk}\\). Sum over pairs, observing that the coefficient vanishes for parallel or antiparallel normals."
+    ],
+    "uses": [
+      "Lemma B.1",
+      "Lemma G.1"
+    ],
+    "stepLines": [
+      [
+        "supplement",
+        470,
+        535
+      ],
+      [
+        "supplement",
+        537,
+        644
+      ],
+      [
+        "supplement",
+        646,
+        695
+      ]
+    ]
+  },
+  "Lemma H.1": {
+    "lead": "The geometric estimate controls two signed Gaussian surface integrals, one over actual facets and one over ridges, without a lower bound on the angles between normals.",
+    "steps": [
+      "For every threshold list whose polyhedron is empty or has nonempty interior in the ambient support space, the lemma bounds the sum of the two expected absolute values. It allows \\(0<\\sigma\\le1\\), any number of facets at a codimension-three face, and bases satisfying the stated boundary concentration inequality.",
+      "In the printed proof, Gauss–Green on neighboring facets pairs their ridge contributions. Gauss–Green on the ridges gives (H.14), and spherical divergence gives (H.15), which bounds the sum of the angle-weighted conormals by twice the spherical polygon’s area. Short disjoint outward tubes turn these integrals into a boundary probability. Gaussian projection moments and concentration of the base then give the stated bound.",
+      "Lean proves the all-threshold bound by fixing the actual facets of the target and proving the ridge estimate at almost every nearby threshold. The ridge integral is continuous at the target for each fixed base value. Fatou’s lemma passes the expected absolute value to the limit, even for a singular base law.",
+      "The addendum separately proves the pointwise nonsimple ridge identity (H.14) and the conormal identity (H.15) for a complete spherical polygon with arbitrarily many edges. Its proof of (H.15) uses a Gaussian first moment and polar coordinates. The printed tangent-field calculation is a distinct derivation. The formal surface measures use Euclidean orthonormal charts and polar angular measure."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        "supplement",
+        970,
+        1001
+      ],
+      [
+        "supplement",
+        1032,
+        1206
+      ],
+      [
+        "supplement",
+        1081,
+        1132
+      ],
+      [
+        "supplement",
+        1081,
+        1132
+      ]
+    ]
+  },
+  "Lemma H.2": {
+    "lead": "To estimate the Gaussian matrix left by integration by parts, we reduce its nuclear norm to a signed trace and the mean under a weighted Gaussian law.",
+    "steps": [
+      "For a log-concave weight, the Gaussian convolution is log-concave by Prékopa’s theorem. At zero the Hessian of its logarithm equals the tilted covariance minus the identity, so the tilted covariance is bounded above by the identity.",
+      "Write the matrix as the difference of the positive mean outer product and the positive covariance deficit, each multiplied by the mass of the weight. The traces of those positive matrices bound the nuclear norm while keeping the original signed trace.",
+      "For the separate mean estimate, dominate the weight by a reference depending only on the projected Gaussian. Jensen’s inequality and independence of the orthogonal component give the logarithm of the ratio of the two masses. Cauchy–Schwarz controls the mean within the projected subspace."
+    ],
+    "uses": [],
+    "stepLines": [
+      [
+        "supplement",
+        1329,
+        1339
+      ],
+      [
+        "supplement",
+        1340,
+        1350
+      ],
+      [
+        "supplement",
+        1352,
+        1373
+      ]
+    ]
+  },
+  "Proposition H.1": {
+    "lead": "The single-face term requires a cubic Gaussian matrix estimate that survives the extra logistic factors produced by translating a weight.",
+    "steps": [
+      "At a fixed base value, split the first normal coordinate of the Gaussian into its positive and negative parts. Multiplying each part by the tuple weight gives two log-concave weights to which Lemma H.2 applies.",
+      "Use a reference weight depending only on that normal coordinate to bound each tilted mean. After summing over tuples and signs, the reference and actual masses share the factor \\(h\\kappa\\), which cancels inside the logarithm.",
+      "Sum the signed traces before taking absolute values. Differentiating powers of the logistic function in the first threshold and using the Gamma–exponential mixture turns the sum into facet integrals. Lemma H.1 bounds them, and the mean estimate controls the two remaining rank-one terms of the cubic matrix."
+    ],
+    "uses": [
+      "Lemma H.1",
+      "Lemma H.2"
+    ],
+    "stepLines": [
+      [
+        "supplement",
+        1400,
+        1413
+      ],
+      [
+        "supplement",
+        1415,
+        1474
+      ],
+      [
+        "supplement",
+        1476,
+        1519
+      ]
+    ]
+  },
+  "Proposition H.2": {
+    "lead": "The two-face matrix estimate keeps an angle weight until the signed trace has been expressed as an integral over ridges.",
+    "steps": [
+      "Apply Lemma H.2 with a reference weight depending only on the plane spanned by the first two normals. The joint density of the two projections costs \\(1/\\sin\\vartheta_{jk}\\), which is canceled by the sine in the angle weight.",
+      "Differentiate the Gamma–exponential mixture in both thresholds. The positive ridge integrals following Lemma H.1 bound the total weighted mass and its projected second moment. Summing both the actual and reference masses with the same angle weights bounds the tilted means.",
+      "For the signed trace, the two-threshold coarea formula leaves precisely the exterior angle multiplying each ridge integral. Lemma H.1 bounds the resulting sum. A gap is required only to remove the angle weights, at a cost of \\(1/[c(2-c)]\\)."
+    ],
+    "uses": [
+      "Lemma H.1",
+      "Lemma H.2"
+    ],
+    "stepLines": [
+      [
+        "supplement",
+        1543,
+        1593
+      ],
+      [
+        "supplement",
+        1595,
+        1642
+      ],
+      [
+        "supplement",
+        1644,
+        1667
+      ]
+    ]
+  },
+  "Lemma H.3": {
+    "lead": "The fourth-order remainder evaluates derivatives at summand-dependent shifts, while the matrix estimates apply at a common Gaussian base.",
+    "steps": [
+      "Condition on the base information and on the array, so the remaining Gaussian is independent and the directions are fixed. Two integrations by parts remove the repeated derivative. The single-face part of the Hessian requires one more integration and produces the cubic Hermite matrix.",
+      "Expand the shifted logistic weights in powers of the changes in their exponential scores. At each order the unshifted weights factor out of the conditional average over the array. The aggregate conditional second-moment bound controls the operator norm of the resulting coefficient matrix, even when a shift depends on the directions.",
+      "Use operator–nuclear norm duality, then apply Proposition H.1 to the single-face terms and Proposition H.2 to the independent pairs. For \\(h\\ge A_b\\delta\\) the series is summable. The base concentration used by the two propositions is unconditional."
+    ],
+    "uses": [
+      "Proposition H.1",
+      "Proposition H.2"
+    ],
+    "stepLines": [
+      [
+        "supplement",
+        1727,
+        1749
+      ],
+      [
+        "supplement",
+        1751,
+        1795
+      ],
+      [
+        "supplement",
+        1795,
+        1822
+      ]
+    ]
+  }
+}
