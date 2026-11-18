@@ -1,0 +1,102 @@
+'RectangleCLTArxivV1.integral_logisticEnvelope_intrinsic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLTArxivV1.averaged_translated_derivative_intrinsic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLTArxivV1.intrinsicDerivative_inverse_power_eq_rpow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLTArxivV1.intrinsicRectangleConcentration_rescale' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLTArxivV1.selector_nuclear_bound_intrinsic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLTArxivV1.intrinsicMatrixConstant_ge_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLTArxivV1.selector_nuclear_bound_intrinsic_paper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RectangleCLTArxivV1.averagedSelectorMatrixEstimate_intrinsic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLTArxivV1.gaussian_mean_relative_to_single_face' depends on axioms: [propext, Classical.choice, Quot.sound]
+RectangleCLTArxivV1.integral_logisticEnvelope_intrinsic.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω] {m r : Nat}
+  [NeZero.{0} m] (μ : MeasureTheory.Measure.{u_1} Ω) [MeasureTheory.IsProbabilityMeasure.{u_1} μ]
+  (X : Ω → RectangleCLT.Vector r) (hX : Measurable.{u_1, 0} X) (U : Matrix.{0, 0, 0} (Fin m) (Fin r) Real)
+  (a : RectangleCLT.Vector m) {δ κ C₀ h : Real} (hC₀ : LE.le.{0} 0 C₀) (hκ : LE.le.{0} 0 κ) (hh : LT.lt.{0} 0 h)
+  (hδh : LE.le.{0} (HMul.hMul.{0, 0, 0} 4 δ) h)
+  (hboundary : RectangleCLTArxivV1.IntrinsicBoundaryBound.{u_1} μ X U δ κ C₀) :
+  And
+    (MeasureTheory.Integrable.{0, u_1}
+      (fun ω =>
+        HMul.hMul.{0, 0, 0} (RectangleCLT.Companion.SplitV4.logisticNullWeight U a h (X ω))
+          (HSub.hSub.{0, 0, 0} 1 (RectangleCLT.Companion.SplitV4.logisticNullWeight U a h (X ω))))
+      μ)
+    (LE.le.{0}
+      (∫ (ω : Ω),
+        HMul.hMul.{0, 0, 0} (RectangleCLT.Companion.SplitV4.logisticNullWeight U a h (X ω))
+          (HSub.hSub.{0, 0, 0} 1 (RectangleCLT.Companion.SplitV4.logisticNullWeight U a h (X ω))) ∂μ)
+      (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} 4 C₀) h) κ))
+RectangleCLTArxivV1.averaged_translated_derivative_intrinsic.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω]
+  {m r q : Nat} [NeZero.{0} m] (μ : MeasureTheory.Measure.{u_1} Ω) [MeasureTheory.IsProbabilityMeasure.{u_1} μ]
+  (X : Ω → RectangleCLT.Vector r) (hX : Measurable.{u_1, 0} X) (U : Matrix.{0, 0, 0} (Fin m) (Fin r) Real)
+  (a : RectangleCLT.Vector m) {δ κ C₀ h ρ : Real} (hC₀ : LE.le.{0} 0 C₀) (hκ : LE.le.{0} 0 κ) (hh : LT.lt.{0} 0 h)
+  (hδh : LE.le.{0} (HMul.hMul.{0, 0, 0} 4 δ) h) (hρ : LE.le.{0} 0 ρ) (hρh : LE.le.{0} ρ h) (hq : LE.le.{0} 1 q)
+  (hboundary : RectangleCLTArxivV1.IntrinsicBoundaryBound.{u_1} μ X U δ κ C₀) (z : Fin q → RectangleCLT.Vector r) :
+  And
+    (MeasureTheory.Integrable.{0, u_1}
+      (fun ω =>
+        RectangleCLT.Companion.SplitV4.translatedFaceDerivativeSupremum
+          (RectangleCLT.Companion.SplitV4.logisticNullWeight U a h) U ρ z (X ω))
+      μ)
+    (LE.le.{0}
+      (∫ (ω : Ω),
+        RectangleCLT.Companion.SplitV4.translatedFaceDerivativeSupremum
+          (RectangleCLT.Companion.SplitV4.logisticNullWeight U a h) U ρ z (X ω) ∂μ)
+      (HMul.hMul.{0, 0, 0}
+        (HMul.hMul.{0, 0, 0}
+          (HDiv.hDiv.{0, 0, 0} (RectangleCLTArxivV1.intrinsicDerivativeConstant C₀ q)
+            (HPow.hPow.{0, 0, 0} h (HSub.hSub.{0, 0, 0} q 1)))
+          κ)
+        (∏ i, RectangleCLT.Companion.SplitV4.faceProjectionNorm U (z i))))
+RectangleCLTArxivV1.selector_nuclear_bound_intrinsic_paper {p r : Nat} (hp : LE.le.{0} 1 p)
+  (μ : MeasureTheory.Measure.{0} (RectangleCLT.Vector p)) [MeasureTheory.IsProbabilityMeasure.{0} μ]
+  (s : RectangleCLT.FaceSmoother p) (A : Matrix.{0, 0, 0} (Fin p) (Fin r) Real)
+  (hA : ∀ (j : Fin p), Eq.{1} (RectangleCLT.vectorNormSq (A j)) 1) {C₀ δ κ σ : Real} (hC₀ : LT.lt.{0} 0 C₀)
+  (hκ : LT.lt.{0} 0 κ) (hδ : LE.le.{0} 0 δ) (hδh : LE.le.{0} δ (RectangleCLT.FaceSmoother.bandwidth s))
+  (hσ : LE.le.{0} 0 σ) (hscale : LE.le.{0} (HMul.hMul.{0, 0, 0} δ (Real.sqrt (RectangleCLT.dimensionLog p))) σ)
+  (hc : RectangleCLTArxivV1.IntrinsicRectangleConcentration μ C₀ δ κ) (k : Nat) (hk : LE.le.{0} 1 k) :
+  LE.le.{0}
+    (∫ (v : RectangleCLT.Vector p),
+      ∑ α,
+        RectangleCLT.Companion.SplitV4.symmetricNuclearNorm
+          (RectangleCLT.Companion.selectorGaussianScore.{0} s (HSMul.hSMul.{0, 0, 0} σ A) id.{1} α v) ∂μ)
+    (HMul.hMul.{0, 0, 0}
+      (HPow.hPow.{0, 0, 0} (RectangleCLTArxivV1.intrinsicMatrixConstant C₀) (HAdd.hAdd.{0, 0, 0} k 1))
+      (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (RectangleCLT.FaceSmoother.bandwidth s) (RectangleCLT.dimensionLog p))
+        κ))
+RectangleCLTArxivV1.averagedSelectorMatrixEstimate_intrinsic.{u_1} {Ω : Type u_1} [MeasurableSpace.{u_1} Ω] {p r : Nat}
+  (hp : LE.le.{0} 1 p) (ν : MeasureTheory.Measure.{u_1} Ω) [MeasureTheory.IsProbabilityMeasure.{u_1} ν]
+  (V : Ω → RectangleCLT.Vector p) (hV : Measurable.{u_1, 0} V) (s : RectangleCLT.FaceSmoother p)
+  (A : Matrix.{0, 0, 0} (Fin p) (Fin r) Real) (hA : ∀ (j : Fin p), Eq.{1} (RectangleCLT.vectorNormSq (A j)) 1)
+  {C₀ δ κ σ : Real} (hC₀ : LT.lt.{0} 0 C₀) (hκ : LT.lt.{0} 0 κ) (hδ : LE.le.{0} 0 δ)
+  (hδh : LE.le.{0} δ (RectangleCLT.FaceSmoother.bandwidth s)) (hσ : LE.le.{0} 0 σ)
+  (hscale : LE.le.{0} (HMul.hMul.{0, 0, 0} δ (Real.sqrt (RectangleCLT.dimensionLog p))) σ)
+  (hc : RectangleCLTArxivV1.IntrinsicRectangleConcentration (MeasureTheory.Measure.map.{u_1, 0} V ν) C₀ δ κ) :
+  RectangleCLT.Companion.AveragedSelectorMatrixEstimate.{u_1} s ν (HSMul.hSMul.{0, 0, 0} σ A) V
+    RectangleCLT.Companion.SplitV4.logisticMatrixConstant
+    (HMul.hMul.{0, 0, 0} C₀
+      (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (RectangleCLT.FaceSmoother.bandwidth s) (RectangleCLT.dimensionLog p))
+        κ))
+RectangleCLTArxivV1.gaussian_mean_relative_to_single_face {r : Nat} (u : RectangleCLT.Vector r)
+  (hu : Eq.{1} (RectangleCLT.vectorNormSq u) 1) (β : Real → Real) (hβ : Measurable.{0, 0} β)
+  (hβb : ∀ (a : Real), And (LE.le.{0} 0 (β a)) (LE.le.{0} (β a) 1)) (w : RectangleCLT.Vector r → Real)
+  (hw : Measurable.{0, 0} w)
+  (hwb : ∀ (z : RectangleCLT.Vector r), And (LE.le.{0} 0 (w z)) (LE.le.{0} (w z) (β (RectangleCLT.faceDot u z))))
+  (_hpb : LT.lt.{0} 0 (∫ (z : RectangleCLT.Vector r), β (RectangleCLT.faceDot u z) ∂RectangleCLT.standardGaussian r))
+  (hpw : LT.lt.{0} 0 (RectangleCLT.Companion.weightMass.{0} (RectangleCLT.standardGaussian r) w)) :
+  LE.le.{0}
+    (HMul.hMul.{0, 0, 0} (RectangleCLT.Companion.weightMass.{0} (RectangleCLT.standardGaussian r) w)
+      (RectangleCLT.vectorNormSq (RectangleCLT.Companion.weightMean.{0} (RectangleCLT.standardGaussian r) id.{1} w)))
+    (HAdd.hAdd.{0, 0, 0}
+      (∫ (z : RectangleCLT.Vector r),
+        HMul.hMul.{0, 0, 0} (w z) (HPow.hPow.{0, 0, 0} (RectangleCLT.faceDot u z) 2) ∂RectangleCLT.standardGaussian r)
+      (HMul.hMul.{0, 0, 0}
+        (HMul.hMul.{0, 0, 0} 2 (RectangleCLT.Companion.weightMass.{0} (RectangleCLT.standardGaussian r) w))
+        (Real.log
+          (HDiv.hDiv.{0, 0, 0}
+            (∫ (z : RectangleCLT.Vector r), β (RectangleCLT.faceDot u z) ∂RectangleCLT.standardGaussian r)
+            (RectangleCLT.Companion.weightMass.{0} (RectangleCLT.standardGaussian r) w)))))

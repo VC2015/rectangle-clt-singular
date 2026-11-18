@@ -1,0 +1,20 @@
+'RectangleCLTArxivV1.smallerEnvelope_scaled_bounded_intrinsic_maximum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLTArxivV1.smallerEnvelope_scaled_gaussian_intrinsic_maximum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RectangleCLTArxivV1.integral_smallerEnvelope_directSlepian_intrinsic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+RectangleCLTArxivV1.integral_smallerEnvelope_directSlepian_intrinsic.{u_1} {Ω : Type u_1} [MeasurableSpace Ω] {p n : ℕ}
+  [NeZero p] (μ : MeasureTheory.Measure Ω) [MeasureTheory.IsProbabilityMeasure μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ : ℝ} (h : RectangleCLT.BoundedIndependentHypotheses μ ξ δ)
+  (hunit : ∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) (A : Matrix (Fin p) (Fin p) ℝ)
+  (hA : A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ)) (s : RectangleCLT.FaceSmoother p)
+  (hfaces : s.faces = Finset.univ) (hband : 4 * δ ≤ s.bandwidth) {v : ℝ} (hv0 : 0 ≤ v) (hv1 : v ≤ 1) :
+  ∫ (z : Ω × RectangleCLT.Vector p),
+      s.F (RectangleCLT.Companion.SplitV4.directSlepianPoint ξ v z) *
+        (1 - s.F (RectangleCLT.Companion.SplitV4.directSlepianPoint ξ v z)) ∂μ.prod (RectangleCLT.gaussianLaw A) ≤
+    RectangleCLT.Companion.SplitV4.derivativeEnvelopeSignedAverageConstant * s.bandwidth *
+      RectangleCLTArxivV1.intrinsicBoundaryCoefficient μ ξ A

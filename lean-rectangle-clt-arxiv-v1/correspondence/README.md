@@ -1,6 +1,6 @@
 # Frozen-source correspondence queue
 
-This directory records the correspondence review for arXiv:2611.21474v1 and Supplemental Material G–I. Lemma C.2 and C2.1–C2.7 are checked, with a clean-checkout build, transitive axiom audit, expanded types, kernel dependencies, and independent frozen-source/PDF review. The remaining 39 named results are open; Conjecture 1 is excluded. This does **not** certify the whole new paper. An archived accepted passage is recorded as a historical candidate until its new correspondence is checked.
+This directory records the correspondence review for arXiv:2611.21474v1 and Supplemental Material G–I. Ten named statements are proved and freshly checked; 33 printed passages are accepted. Clean-checkout builds, transitive axiom audits, expanded types, kernel dependencies, and independent frozen-source/PDF reviews are bound in the ledgers. The remaining 30 named results are open; Conjecture 1 is excluded. Statement correctness and detailed passage coverage have separate fields. This does **not** certify the whole new paper. An archived accepted passage is a historical candidate until its new correspondence is checked.
 
 The paper snapshot is `1803366cc994d9facae8e128ee180f68e319486f`. The full frozen main source has SHA-256 `e96aaf12ca782c94d70587f128b58a20d3ace8b31a8c324a3272b2b1d71677a2`; the supplement has SHA-256 `5abda8831ac33ed91c2c8e3f628d8ef6ecb7437e7573a52efa7b112efb93a0bb`. Span hashes use the exact UTF-8 bytes of inclusive source lines, including their original line endings. Statement-environment comparisons instead compare exact `\begin{...}` through `\end{...}` bytes, without surrounding line endings.
 
@@ -8,11 +8,12 @@ The paper snapshot is `1803366cc994d9facae8e128ee180f68e319486f`. The full froze
 
 | File | Content |
 |---|---|
-| [statements.json](statements.json) | All 40 named results and the excluded conjecture, frozen statement spans and hashes, individual reuse obligations, declarations, expanded types and receipts. Only C.2 is currently accepted. |
-| [c1-gaussian-passages.json](c1-gaussian-passages.json) | Appendix C.1 Gaussian proof spans C1.G.1–C1.G.8, archived analytic candidates, and drafted new wrappers; pending elaboration and representation review. |
+| [statements.json](statements.json) | All 40 named results and the excluded conjecture, frozen statement spans and hashes, individual reuse obligations, declarations, expanded types and receipts. Ten statement rows are currently accepted. |
+| [c1-gaussian-passages.json](c1-gaussian-passages.json) | Gaussian proof spans C1.G.1–C1.G.8, checked concrete-model wrappers and the explicit ambient-factor/duplicate representation differences. |
 | [c2-passages.json](c2-passages.json) | Seven accepted passages C2.1–C2.7, exact frozen spans, inference reviews, declarations, types, dependencies and receipts. |
 | [c2-acceptance.json](c2-acceptance.json) | Binds C.2 acceptance to the successful clean-checkout run and independent reading-order review. |
-| [proof-environments.json](proof-environments.json) | All 34 explicit proof environments. Only explicit caption references or the specified C.2 proof are linked to statements; the remaining subdivisions stay open. |
+| [intrinsic-acceptance.json](intrinsic-acceptance.json) | Binds the intrinsic statement checkpoint and its 18 main/Proposition 1, four A.1 and four B.3 passages to the combined clean build. |
+| [proof-environments.json](proof-environments.json) | All 34 explicit proof environments. Four are currently bound to checked passage groups; the remaining subdivisions stay open. |
 | [archive-candidates.json](archive-candidates.json) | The archive's 253 accepted same-argument records and its one order-zero repair record, with historical source-span hashes. None is automatically transplanted. |
 | [build_source_ledger.py](build_source_ledger.py) | Reads frozen Git objects and validates source identity. It never invokes Lean or certifies an inference. |
 

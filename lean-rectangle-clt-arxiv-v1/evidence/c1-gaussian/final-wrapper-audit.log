@@ -1,0 +1,136 @@
+@RectangleCLTArxivV1.gaussianUnitRowsBoundary_printed : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ),
+  (∀ (α : Fin m), RectangleCLT.vectorNormSq (w α) = 1) →
+    ∀ {s : ℝ},
+      0 < s →
+        (RectangleCLT.standardGaussian r).real
+            {x |
+              -s ≤ RectangleCLT.Companion.SplitV4.gaussianAffineMaximum w a x ∧
+                RectangleCLT.Companion.SplitV4.gaussianAffineMaximum w a x ≤ s} ≤
+          2 * s *
+            ∫ (x : RectangleCLT.Vector r),
+              RectangleCLT.Companion.SplitV4.positiveGaussianFaceMaximum w x ∂RectangleCLT.standardGaussian r
+@RectangleCLTArxivV1.gaussianUnitRowsMaximum_logarithmic : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r),
+  (∀ (α : Fin m), RectangleCLT.vectorNormSq (w α) = 1) →
+    ∫ (x : RectangleCLT.Vector r),
+        RectangleCLT.Companion.SplitV4.positiveGaussianFaceMaximum w x ∂RectangleCLT.standardGaussian r ≤
+      √(2 * Real.log (↑m + 1))
+@RectangleCLTArxivV1.gaussianIntrinsicBoundary_fixed_shift : ∀ {p m : ℕ} [inst : NeZero m]
+  (ν : Matrix (Fin m) (Fin p) ℝ) (A : Matrix (Fin p) (Fin p) ℝ) (a : RectangleCLT.Vector m) (b : RectangleCLT.Vector p)
+  {v s : ℝ},
+  0 < v →
+    0 < s →
+      (∀ (α : Fin m), ν α ⬝ᵥ (A * A.transpose).mulVec (ν α) = v) →
+        (RectangleCLT.gaussianLaw A).real {x | x + b ∈ RectangleCLT.Companion.SplitV4.gaussianPolyhedronLayer ν a s} ≤
+          min 1 (2 * s / v * ∫ (x : RectangleCLT.Vector p), ‖ν.mulVec x‖ ∂RectangleCLT.gaussianLaw A)
+@RectangleCLTArxivV1.gaussianIntrinsicBoundary_product : ∀ {p m : ℕ} [inst : NeZero m] (ν : Matrix (Fin m) (Fin p) ℝ)
+  (A : Matrix (Fin p) (Fin p) ℝ) (τ : MeasureTheory.Measure (RectangleCLT.Vector p))
+  [inst : MeasureTheory.IsProbabilityMeasure τ] (a : RectangleCLT.Vector m) {v s : ℝ},
+  0 < v →
+    0 < s →
+      (∀ (α : Fin m), ν α ⬝ᵥ (A * A.transpose).mulVec (ν α) = v) →
+        ((RectangleCLT.gaussianLaw A).prod τ).real
+            {z | z.1 + z.2 ∈ RectangleCLT.Companion.SplitV4.gaussianPolyhedronLayer ν a s} ≤
+          min 1 (2 * s / v * ∫ (x : RectangleCLT.Vector p), ‖ν.mulVec x‖ ∂RectangleCLT.gaussianLaw A)
+@RectangleCLTArxivV1.gaussianIntrinsicBoundary_independent_shift : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω]
+  (μ : MeasureTheory.Measure Ω) [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {p m : ℕ} [inst_2 : NeZero m]
+  (V R : Ω → RectangleCLT.Vector p),
+  Measurable V →
+    Measurable R →
+      ProbabilityTheory.IndepFun V R μ →
+        ∀ (ν : Matrix (Fin m) (Fin p) ℝ) (A : Matrix (Fin p) (Fin p) ℝ),
+          MeasureTheory.Measure.map V μ = RectangleCLT.gaussianLaw A →
+            ∀ (a : RectangleCLT.Vector m) {v s : ℝ},
+              0 < v →
+                0 < s →
+                  (∀ (α : Fin m), ν α ⬝ᵥ (A * A.transpose).mulVec (ν α) = v) →
+                    μ.real {ω | V ω + R ω ∈ RectangleCLT.Companion.SplitV4.gaussianPolyhedronLayer ν a s} ≤
+                      min 1 (2 * s / v * ∫ (ω : Ω), ‖ν.mulVec (V ω)‖ ∂μ)
+@RectangleCLTArxivV1.gaussianFaceLayer_bound : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+  [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {p m : ℕ} [inst_2 : NeZero m] (V R : Ω → RectangleCLT.Vector p),
+  Measurable V →
+    Measurable R →
+      ProbabilityTheory.IndepFun V R μ →
+        ∀ (U : Fin m → RectangleCLT.Vector p) (A : Matrix (Fin p) (Fin p) ℝ),
+          MeasureTheory.Measure.map V μ = RectangleCLT.gaussianLaw A →
+            ∀ (a : RectangleCLT.Vector m) {v s : ℝ},
+              0 < v →
+                0 < s →
+                  (∀ (α : Fin m), U α ⬝ᵥ (A * A.transpose).mulVec (U α) = v) →
+                    μ.real {ω | V ω + R ω ∈ RectangleCLTArxivV1.faceLayer U a s} ≤
+                      min 1 (2 * s / v * ∫ (ω : Ω), RectangleCLTArxivV1.faceNorm U (V ω) ∂μ)
+@RectangleCLTArxivV1.gaussianIntrinsicBoundary_fixed_shift_log_sharp : ∀ {p m : ℕ} [inst : NeZero m]
+  (ν : Matrix (Fin m) (Fin p) ℝ) (A : Matrix (Fin p) (Fin p) ℝ) (a : RectangleCLT.Vector m) (b : RectangleCLT.Vector p)
+  {v s : ℝ},
+  0 < v →
+    0 < s →
+      (∀ (α : Fin m), ν α ⬝ᵥ (A * A.transpose).mulVec (ν α) = v) →
+        (RectangleCLT.gaussianLaw A).real {x | x + b ∈ RectangleCLT.Companion.SplitV4.gaussianPolyhedronLayer ν a s} ≤
+          min 1 (2 * (s / √v) * √(2 * Real.log (↑m + 1)))
+@RectangleCLTArxivV1.gaussianIntrinsicBoundary_fixed_shift_logarithmic : ∀ {p m : ℕ} [inst : NeZero m]
+  (ν : Matrix (Fin m) (Fin p) ℝ) (A : Matrix (Fin p) (Fin p) ℝ) (a : RectangleCLT.Vector m) (b : RectangleCLT.Vector p)
+  {v s : ℝ},
+  0 < v →
+    0 < s →
+      (∀ (α : Fin m), ν α ⬝ᵥ (A * A.transpose).mulVec (ν α) = v) →
+        (RectangleCLT.gaussianLaw A).real {x | x + b ∈ RectangleCLT.Companion.SplitV4.gaussianPolyhedronLayer ν a s} ≤
+          4 * min 1 (s * √(RectangleCLT.dimensionLog m / v))
+@RectangleCLTArxivV1.gaussianIntrinsicBoundary_product_logarithmic : ∀ {p m : ℕ} [inst : NeZero m]
+  (ν : Matrix (Fin m) (Fin p) ℝ) (A : Matrix (Fin p) (Fin p) ℝ) (τ : MeasureTheory.Measure (RectangleCLT.Vector p))
+  [inst : MeasureTheory.IsProbabilityMeasure τ] (a : RectangleCLT.Vector m) {v s : ℝ},
+  0 < v →
+    0 < s →
+      (∀ (α : Fin m), ν α ⬝ᵥ (A * A.transpose).mulVec (ν α) = v) →
+        ((RectangleCLT.gaussianLaw A).prod τ).real
+            {z | z.1 + z.2 ∈ RectangleCLT.Companion.SplitV4.gaussianPolyhedronLayer ν a s} ≤
+          4 * min 1 (s * √(RectangleCLT.dimensionLog m / v))
+@RectangleCLTArxivV1.gaussianIntrinsicBoundary_independent_shift_logarithmic : ∀ {Ω : Type u_1}
+  [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω) [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {p m : ℕ}
+  [inst_2 : NeZero m] (V R : Ω → RectangleCLT.Vector p),
+  Measurable V →
+    Measurable R →
+      ProbabilityTheory.IndepFun V R μ →
+        ∀ (ν : Matrix (Fin m) (Fin p) ℝ) (A : Matrix (Fin p) (Fin p) ℝ),
+          MeasureTheory.Measure.map V μ = RectangleCLT.gaussianLaw A →
+            ∀ (a : RectangleCLT.Vector m) {v s : ℝ},
+              0 < v →
+                0 < s →
+                  (∀ (α : Fin m), ν α ⬝ᵥ (A * A.transpose).mulVec (ν α) = v) →
+                    μ.real {ω | V ω + R ω ∈ RectangleCLT.Companion.SplitV4.gaussianPolyhedronLayer ν a s} ≤
+                      4 * min 1 (s * √(RectangleCLT.dimensionLog m / v))
+@RectangleCLTArxivV1.activeCoordinateNormals_covariance_diagonal : ∀ {p : ℕ} (s : RectangleCLT.FaceSmoother p)
+  (Q : Matrix (Fin p) (Fin p) ℝ) (v : ℝ),
+  (∀ (j : Fin p), Q j j = v) →
+    ∀ (j : Fin s.faces.card),
+      RectangleCLTArxivV1.activeCoordinateNormals s j ⬝ᵥ Q.mulVec (RectangleCLTArxivV1.activeCoordinateNormals s j) = v
+@RectangleCLTArxivV1.gaussianRectangleBoundary_intrinsic_fixed_shift : ∀ {p : ℕ} (s : RectangleCLT.FaceSmoother p)
+  (G : Matrix (Fin p) (Fin p) ℝ) (b : RectangleCLT.Vector p) {v d : ℝ},
+  0 < v →
+    0 < d →
+      (∀ (j : Fin p), (G * G.transpose) j j = v) →
+        (RectangleCLT.gaussianLaw G).real {x | x + b ∈ s.boundaryLayer d} ≤
+          2 * d / v * RectangleCLTArxivV1.gaussianMaximumMean G
+@RectangleCLTArxivV1.gaussianRectangleBoundary_intrinsic_product : ∀ {E : Type u_1} [inst : MeasurableSpace E] {p : ℕ}
+  (s : RectangleCLT.FaceSmoother p) (G : Matrix (Fin p) (Fin p) ℝ) (τ : MeasureTheory.Measure E)
+  [inst_1 : MeasureTheory.IsProbabilityMeasure τ] (R : E → RectangleCLT.Vector p),
+  Measurable R →
+    ∀ (b : RectangleCLT.Vector p) {v d : ℝ},
+      0 < v →
+        0 < d →
+          (∀ (j : Fin p), (G * G.transpose) j j = v) →
+            ((RectangleCLT.gaussianLaw G).prod τ).real {z | z.1 + R z.2 + b ∈ s.boundaryLayer d} ≤
+              2 * d / v * RectangleCLTArxivV1.gaussianMaximumMean G
+RectangleCLTArxivV1.gaussianUnitRowsBoundary_printed uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianUnitRowsMaximum_logarithmic uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianIntrinsicBoundary_fixed_shift uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianIntrinsicBoundary_product uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianIntrinsicBoundary_independent_shift uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianFaceLayer_bound uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianIntrinsicBoundary_fixed_shift_log_sharp uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianIntrinsicBoundary_fixed_shift_logarithmic uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianIntrinsicBoundary_product_logarithmic uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianIntrinsicBoundary_independent_shift_logarithmic uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.activeCoordinateNormals_covariance_diagonal uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianRectangleBoundary_intrinsic_fixed_shift uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianRectangleBoundary_intrinsic_product uses [propext, Quot.sound, Classical.choice]
