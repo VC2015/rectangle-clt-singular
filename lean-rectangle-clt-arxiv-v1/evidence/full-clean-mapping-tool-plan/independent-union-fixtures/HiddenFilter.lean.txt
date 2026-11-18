@@ -1,0 +1,54 @@
+import Lean.Util.CollectAxioms
+import Lean.Elab.Command
+
+namespace SharedUnionAuditSmoke
+
+def CleanStatement : Prop :=
+  (True = True) ∧ (∃ _ : Unit, True) ∧
+    (Quot.mk (fun _ _ : Unit => True) () = Quot.mk (fun _ _ : Unit => True) ())
+
+private theorem cleanShared : CleanStatement :=
+  ⟨propext Iff.rfl,
+    ⟨Classical.choice (show Nonempty Unit from ⟨()⟩), True.intro⟩,
+    @Quot.sound Unit (fun _ _ => True) () () True.intro⟩
+
+opaque cleanOpaque : CleanStatement := cleanShared
+
+theorem cleanA : CleanStatement := cleanOpaque
+theorem cleanB : CleanStatement := cleanOpaque
+
+axiom forbiddenProof : True
+private theorem hiddenShared : CleanStatement ∧ True := ⟨cleanOpaque, forbiddenProof⟩
+opaque hiddenOpaque : CleanStatement ∧ True := hiddenShared
+
+theorem hiddenA : CleanStatement ∧ True := hiddenOpaque
+theorem hiddenB : CleanStatement ∧ True := hiddenOpaque
+
+axiom forbiddenType : Prop
+-- The axiom appears in the declared type while the proof body is just cleanOpaque.
+theorem typeA : (fun _ : Prop => CleanStatement) forbiddenType := cleanOpaque
+theorem typeB : (fun _ : Prop => CleanStatement) forbiddenType := cleanOpaque
+
+open Lean Elab Command in
+run_cmd do
+  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
+  let targets := #[``hiddenA, ``hiddenB]
+  let env ← getEnv
+  let (_, axiomState) := ((targets.forM Lean.CollectAxioms.collect).run env).run {}
+  for n in allowed do
+    unless axiomState.axioms.contains n do
+      throwError "Fixture failed to exercise allowed axiom {n}"
+  unless axiomState.visited.contains ``cleanOpaque && axiomState.visited.contains ``cleanShared do
+    throwError "Shared private/opaque clean dependencies were not traversed"
+  unless axiomState.visited.contains ``hiddenOpaque && axiomState.visited.contains ``hiddenShared do
+    throwError "Hidden private/opaque dependencies were not traversed"
+  unless axiomState.axioms.contains ``forbiddenProof do
+    throwError "Fixture test axiom was not collected"
+  unless axiomState.axioms.size == 4 do
+    throwError "Unexpected fixture axiom count {axiomState.axioms}"
+  logInfo m!"SHARED_UNION_SMOKE: targets={targets}; collected={axiomState.axioms}"
+  let forbidden := axiomState.axioms.filter fun n => !(#[``propext, ``Classical.choice, ``Quot.sound]).contains n
+  unless forbidden.isEmpty do
+    throwError "Unexpected axiom in endpoint union: {forbidden}"
+
+end SharedUnionAuditSmoke

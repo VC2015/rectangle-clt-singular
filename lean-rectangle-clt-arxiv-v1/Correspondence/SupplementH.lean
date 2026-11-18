@@ -1,0 +1,20 @@
+import RectangleCLTArxivV1
+
+set_option pp.all true
+
+/-! Exact public types for the geometric surface and matrix estimates,
+translated fourth derivatives, and two correlation corollaries. Detailed
+source/passages and proof routes are bound in correspondence JSON ledgers. -/
+
+#check RectangleCLTArxivV1.exists_fixed_surface_bound_of_empty_or_fullDimensional
+#check RectangleCLTArxivV1.proposition_H1_cubic_matrix_shifted
+#check RectangleCLTArxivV1.proposition_H2_pair_matrix_shifted
+#check RectangleCLTArxivV1.theorem_H3_fourth_derivative
+#check RectangleCLTArxivV1.corollary4_positive_correlation_gap
+#check RectangleCLTArxivV1.corollary5_exceptional_correlation_budget
+#check RectangleCLTArxivV1.corollary5_normalized_remainder_abs_intervalIntegrable
+#check RectangleCLTArxivV1.corollary5_normalized_remainder_integral
+#check RectangleCLTArxivV1.corollary4_canonical_correlation_gap
+#check RectangleCLTArxivV1.lemma_H3_fourth_derivative
+#check RectangleCLTArxivV1.theoremH3BandwidthConstant_ge_one
+#check RectangleCLTArxivV1.theoremH3BandwidthConstant_pos

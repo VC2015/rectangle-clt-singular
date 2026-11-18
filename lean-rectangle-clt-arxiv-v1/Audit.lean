@@ -2,12 +2,50 @@ import RectangleCLTArxivV1
 import Lean.Util.CollectAxioms
 import Lean.Elab.Command
 
-/- Checked C.2 and intrinsic comparison endpoints. This axiom audit makes
-no release-wide printed-proof claim for open statements or passages. -/
+set_option maxHeartbeats 0
+set_option maxRecDepth 100000
+
+/- Checked exported comparison, Gaussian, surface and matrix endpoints.
+A complete shared transitive axiom union checks every target against the
+three-axiom allowlist. Printed-proof coverage is recorded separately. -/
 open Lean Elab Command in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let targets := #[
+    ``RectangleCLTArxivV1.corollary4_canonical_correlation_gap,
+    ``RectangleCLTArxivV1.lemma_H3_fourth_derivative,
+    ``RectangleCLTArxivV1.theoremH3BandwidthConstant_ge_one,
+    ``RectangleCLTArxivV1.theoremH3BandwidthConstant_pos,
+    ``RectangleCLTArxivV1.exists_coordinatePadding_zero_gap_comparison,
+    ``RectangleCLTArxivV1.gaussianMaximumMean_duplicateCoordinates,
+    ``RectangleCLTArxivV1.lowerDuplication_dimensionLog_sequence_ratio_tendsto_one,
+    ``RectangleCLTArxivV1.corollary5RemainderConstant_pos,
+    ``RectangleCLTArxivV1.corollary5_normalized_remainder_abs_intervalIntegrable,
+    ``RectangleCLTArxivV1.corollary5_normalized_remainder_integral,
+    ``GenericChaining.gaussianWidth_le_gamma2,
+    ``GenericChaining.finite_gaussian_majorizing_measure,
+    ``RectangleCLTArxivV1.exists_fixed_surface_bound_of_empty_or_fullDimensional,
+    ``RectangleCLTArxivV1.proposition_H1_cubic_matrix,
+    ``RectangleCLTArxivV1.proposition_H1_cubic_matrix_rectangular,
+    ``RectangleCLTArxivV1.proposition_H1_cubic_matrix_shifted,
+    ``RectangleCLTArxivV1.proposition_H2_pair_matrix,
+    ``RectangleCLTArxivV1.proposition_H2_pair_matrix_rectangular,
+    ``RectangleCLTArxivV1.proposition_H2_pair_matrix_shifted,
+    ``RectangleCLTArxivV1.positiveGammaSoftOrderedPairMass_concentrated_base,
+    ``RectangleCLTArxivV1.positiveGammaSoftOrderedPairProjection_concentrated_base,
+    ``RectangleCLTArxivV1.supplementalH_signedRidge_soft_sum_coarea,
+    ``RectangleCLTArxivV1.actual_normalized_matrix_estimates,
+    ``RectangleCLTArxivV1.actual_normalized_gap_matrix_estimates,
+    ``RectangleCLTArxivV1.theoremH3Constant_pos,
+    ``RectangleCLTArxivV1.theorem_H3_fourth_derivative,
+    ``RectangleCLTArxivV1.corollary4Constant_ge_one,
+    ``RectangleCLTArxivV1.corollary4Constant_pos,
+    ``RectangleCLTArxivV1.corollary4_positive_correlation_gap,
+    ``RectangleCLTArxivV1.corollary5Constant_ge_one,
+    ``RectangleCLTArxivV1.corollary5Constant_pos,
+    ``RectangleCLTArxivV1.corollary5_exceptional_correlation_budget,
+    ``RectangleCLTArxivV1.exists_leadingDensity_width_comparable,
+    ``RectangleCLTArxivV1.familyMaskedSignMaximum_all_active_bound_real,
     ``RectangleCLTArxivV1.cap_one_projection_small_interval_nonneg,
     ``RectangleCLTArxivV1.cap_two_projection_small_box_nonneg,
     ``RectangleCLTArxivV1.lemma_F_1_weighted_normal_derivative,
@@ -142,9 +180,12 @@ run_cmd do
     ``RectangleCLTArxivV1.lemma_E5_truncated_bennett_maximum_zero_variance,
     ``RectangleCLTArxivV1.intrinsic_concentratedThresholdBase_rescale,
     ``RectangleCLTArxivV1.lemma_B5_intrinsic_threshold]
+  let env ← getEnv
+  let (_, axiomState) := ((targets.forM Lean.CollectAxioms.collect).run env).run {}
+  for axiomName in axiomState.axioms do
+    unless allowed.contains axiomName do
+      throwError "Audited endpoint union depends on {axiomName}"
+  -- The transitive axiom set of every target is a subset of this complete
+  -- union. Sharing the visited state changes no allowed-axiom obligation.
   for target in targets do
-    let axioms ← Lean.collectAxioms target
-    for axiomName in axioms do
-      unless allowed.contains axiomName do
-        throwError "{target} depends on {axiomName}"
-    logInfo m!"{target} uses {axioms.toList}"
+    logInfo m!"{target} checked against {allowed.toList} (shared transitive axiom audit)"

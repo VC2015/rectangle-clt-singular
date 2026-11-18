@@ -2,12 +2,51 @@ import RectangleCLTArxivV1
 import Lean.Util.CollectAxioms
 import Lean.Elab.Command
 
+set_option maxHeartbeats 0
+set_option maxRecDepth 100000
+
+set_option pp.all true
+
 /- Kernel-derived direct project dependencies and the expanded endpoint types.
 Mathlib has no dependencies on the later project namespaces, so omitting its
 internal nodes cannot hide a project-to-project proof dependency. -/
 open Lean Elab Command in
 run_cmd do
   let targets := #[
+    ``RectangleCLTArxivV1.corollary4_canonical_correlation_gap,
+    ``RectangleCLTArxivV1.lemma_H3_fourth_derivative,
+    ``RectangleCLTArxivV1.theoremH3BandwidthConstant_ge_one,
+    ``RectangleCLTArxivV1.theoremH3BandwidthConstant_pos,
+    ``RectangleCLTArxivV1.exists_coordinatePadding_zero_gap_comparison,
+    ``RectangleCLTArxivV1.gaussianMaximumMean_duplicateCoordinates,
+    ``RectangleCLTArxivV1.lowerDuplication_dimensionLog_sequence_ratio_tendsto_one,
+    ``RectangleCLTArxivV1.corollary5RemainderConstant_pos,
+    ``RectangleCLTArxivV1.corollary5_normalized_remainder_abs_intervalIntegrable,
+    ``RectangleCLTArxivV1.corollary5_normalized_remainder_integral,
+    ``GenericChaining.gaussianWidth_le_gamma2,
+    ``GenericChaining.finite_gaussian_majorizing_measure,
+    ``RectangleCLTArxivV1.exists_fixed_surface_bound_of_empty_or_fullDimensional,
+    ``RectangleCLTArxivV1.proposition_H1_cubic_matrix,
+    ``RectangleCLTArxivV1.proposition_H1_cubic_matrix_rectangular,
+    ``RectangleCLTArxivV1.proposition_H1_cubic_matrix_shifted,
+    ``RectangleCLTArxivV1.proposition_H2_pair_matrix,
+    ``RectangleCLTArxivV1.proposition_H2_pair_matrix_rectangular,
+    ``RectangleCLTArxivV1.proposition_H2_pair_matrix_shifted,
+    ``RectangleCLTArxivV1.positiveGammaSoftOrderedPairMass_concentrated_base,
+    ``RectangleCLTArxivV1.positiveGammaSoftOrderedPairProjection_concentrated_base,
+    ``RectangleCLTArxivV1.supplementalH_signedRidge_soft_sum_coarea,
+    ``RectangleCLTArxivV1.actual_normalized_matrix_estimates,
+    ``RectangleCLTArxivV1.actual_normalized_gap_matrix_estimates,
+    ``RectangleCLTArxivV1.theoremH3Constant_pos,
+    ``RectangleCLTArxivV1.theorem_H3_fourth_derivative,
+    ``RectangleCLTArxivV1.corollary4Constant_ge_one,
+    ``RectangleCLTArxivV1.corollary4Constant_pos,
+    ``RectangleCLTArxivV1.corollary4_positive_correlation_gap,
+    ``RectangleCLTArxivV1.corollary5Constant_ge_one,
+    ``RectangleCLTArxivV1.corollary5Constant_pos,
+    ``RectangleCLTArxivV1.corollary5_exceptional_correlation_budget,
+    ``RectangleCLTArxivV1.exists_leadingDensity_width_comparable,
+    ``RectangleCLTArxivV1.familyMaskedSignMaximum_all_active_bound_real,
     ``RectangleCLTArxivV1.cap_one_projection_small_interval_nonneg,
     ``RectangleCLTArxivV1.cap_two_projection_small_box_nonneg,
     ``RectangleCLTArxivV1.lemma_F_1_weighted_normal_derivative,
@@ -21,7 +60,6 @@ run_cmd do
     ``RectangleCLTArxivV1.cap_normalizedSeededFourthRemainder_bounded_integral_bound,
     ``RectangleCLTArxivV1.cap_seededFourthRemainder_bounded_integral_bound,
     ``RectangleCLTArxivV1.dimensionCapCLT,
-
     ``RectangleCLTArxivV1.theorem_3_intrinsic,
     ``RectangleCLTArxivV1.theorem_3_intrinsic_positive_dimensions,
     ``RectangleCLTArxivV1.theorem_8_sparse_polynomial_moment_lower,
@@ -41,7 +79,6 @@ run_cmd do
     ``RectangleCLTArxivV1.bounded_width_example_one_eighth_from_main_regime,
     ``RectangleCLTArxivV1.cap_integrated_remainder_min_bound,
     ``RectangleCLTArxivV1.dimensionCap_rate_of_small_bandwidth_estimate,
-
     ``RectangleCLTArxivV1.corollary_2_intrinsic,
     ``RectangleCLTArxivV1.corollary_3_intrinsic,
     ``RectangleCLTArxivV1.theorem4_bounded_symmetric_lower,
@@ -52,7 +89,7 @@ run_cmd do
     ``RectangleCLTArxivV1.theorem_7_fixed_envelope_fourth_lower,
     ``RectangleCLTArxivV1.exists_lowerDense_upper_constant,
     ``RectangleCLTArxivV1.lemma_lower_family_properties,
-``GenericChaining.dirksen_expectation,
+    ``GenericChaining.dirksen_expectation,
     ``GenericChaining.gamma2_le_gaussianWidth,
     ``RectangleCLTArxivV1.signedIndex_card,
     ``RectangleCLTArxivV1.signedMaximum_eq_norm,
@@ -144,6 +181,10 @@ run_cmd do
     ``RectangleCLTArxivV1.lemma_B5_intrinsic_threshold,
     ``RectangleCLT.Companion.gaussian_factor_exists_of_boundedIndependent,
     ``RectangleCLT.Companion.SplitV4.Printed.independent_sum_bernstein_mgf]
+  let env ← getEnv
+  let (_, axiomState) := ((targets.forM Lean.CollectAxioms.collect).run env).run {}
+  let forbidden := axiomState.axioms.filter fun n => !(#[``propext, ``Classical.choice, ``Quot.sound]).contains n
+  unless forbidden.isEmpty do throwError "Unexpected axiom in endpoint union: {forbidden}"
   let mut queue := targets.toList
   let mut seen : Std.HashSet Name := {}
   let mut graph : Array Json := #[]
@@ -160,8 +201,9 @@ run_cmd do
     let deps := deps.toList.eraseDups.toArray
     let projectDeps := deps.filter fun n =>
       let s := n.toString
-      s.startsWith "RectangleCLT" || s.startsWith "GenericChaining" ||
-        s.startsWith "_private.RectangleCLT" || s.startsWith "_private.GenericChaining"
+      s.startsWith "RectangleCLT" || s.startsWith "GenericChaining" || s.startsWith "Kane" ||
+        s.startsWith "_private.RectangleCLT" || s.startsWith "_private.GenericChaining" ||
+        s.startsWith "_private.Kane"
     graph := graph.push <| Json.mkObj [
       ("name", toJson target.toString),
       ("direct_project_dependencies", toJson (projectDeps.map Name.toString))]
@@ -174,5 +216,5 @@ run_cmd do
         ("name", toJson target.toString), ("expanded_type", toJson ty),
         ("direct_dependencies", toJson (deps.map Name.toString))]
   IO.println <| (Json.mkObj [
-    ("scope", toJson "Checked C.2 and intrinsic comparison endpoints and project proof dependencies"),
+    ("scope", toJson "Checked exported main/supplement endpoints, shared transitive axiom audit and actual project proof dependencies"),
     ("endpoints", Json.arr endpoints), ("project_dependency_graph", Json.arr graph)]).compress
