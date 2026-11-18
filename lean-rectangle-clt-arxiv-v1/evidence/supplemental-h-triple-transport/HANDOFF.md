@@ -1,0 +1,17 @@
+# Rank-three transport handoff
+
+Eight `SupplementalHTripleTransport*.lean` modules are compiled and frozen. No archive/Root/Audit edit or commit was made. Strict checkpoint: `checkpoint-1/run.json` (72 public definitions/theorems/instances). Passage ledger: `correspondence/supplemental-h-triple-transport-passages.json`, nine exact frozen source spans with full source/PDF hashes. lower_resume was requested to independently review; g3_resume is implementing positive-edge averaging.
+
+The actual core endpoint is `tripleCone_spherical_coefficient_le_fourth_event`: for an actual normal-space linear isometry L, actual normal point Z, measurable positive-dilation cone C, ordinary continuous 1-Lipschitz radius R>=1 and actual Gaussian R4 moment, the real coefficient |<Z,2 integral_Omega omega>| times the exact Gaussian normal density times the actual retained strict triple-section probability is <=6144 exp(3/2) times the true ambient fourth-weight cone-event mass. The cone event excludes zero displacement; deletion from the fiber is proved by ordinary-volume nullity. No coefficient/surface/mass estimate is a premise.
+
+`tripleEuclideanDensity_eq_scalarProduct` identifies the normal density with phi(Z0)phi(Z1)phi(Z2). The Euclidean normal law is genuinely proved equal to the pushforward of standardGaussian3; coordinate/Euclidean volume maps are measure-preserving, and unbounded integrable normal-fiber transport is derived from the actual density.
+
+`tripleTransportSection_eq_affine_projection` gives the actual section point LZ+g minus the actual orthogonal projection onto the frame normal space. `tripleTransportCoordinate_section`, `tripleTransportSection_comp`, and `tripleTransportSection_add_normal` prove the actual section/coordinate/normal-translation identities used by the event transport.
+
+`tripleCone_spherical_coefficient_le_threeFace_event` discharges the radius normal-point and Gaussian R4 moment premises using the actual supplementalHRadius. Its remaining span premise is equality of the actual L-frame span with the actual selected three signed-normal span, an ordinary geometric identity the chosen LI3 frame must satisfy.
+
+Actual geometry: `tripleOutwardNormalCone u active L` is the pullback of actual nonnegative combinations of ALL active normals, not a generic assumed outward set. `tripleConeEvent_mem_adaptiveOutwardTube` proves its exact-active nearest-base outward-tube inclusion from actual selected-normal span membership and supporting levels. `tripleConeEvent_mem_outerLayer` proves the actual common reciprocal-radius outer-layer inclusion.
+
+Important corrected indexing: `tripleOrderedEvent_integral_sum_le` is generic in an arbitrary finite index type iota, an injective map tau:iota -> TripleFaceTuple m, and frames/points L,Z ONLY on iota. Thus the actual LI3 subtype can be used and no frames are needed for dependent tuples or empty low-rank families. It proves factor6 from actual exact-active-set uniqueness and all six Fin3 permutations; no incidence or finite-sum conclusion is a premise. The true event tests are integrable from the real R4 moment. It takes measurable actual pulled-back positive cones; the trihedral cone construction should discharge that geometric measurability input.
+
+Parent archive_h owns the source raw triple-density to selected-frame mass identity, actual LI3 frame construction, exact global signed 1/6 grouping, residual conormal/spherical balance identification, and final J_e/H1 assembly. Those are not claimed by this transport checkpoint.

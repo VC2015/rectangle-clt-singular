@@ -1,0 +1,68 @@
+{
+  "reviewer": "/root/archive_h_resume/h1_spherical_balance",
+  "reviewed_at_utc": "2026-11-18T03:05:39.266400+00:00",
+  "status": "PASS",
+  "scope": "Independent mathematical/source review of four hard-boundary support modules, limited to their stated endpoints; not full quantitative Supplemental H.1 certification.",
+  "source_author_is_reviewer": false,
+  "source_edits_by_reviewer": false,
+  "checkpoint_receipt": "evidence/supplemental-h-hard-boundary/checkpoint-1/run.json",
+  "checkpoint_receipt_sha256": "6099dd6c904ecdd0bb8cd97e6d71f42d491d2bc2f50d7010be13ecc9de8122c5",
+  "checkpoint_execution_status": "passed",
+  "source_checks": {
+    "RectangleCLTArxivV1/SupplementalHSurfaceMeasure.lean": {
+      "sha256": "5069a97120e90098dde727da75d8b6668906639f50c4d246dbc1e873a8223f63",
+      "checkpoint_sha256": "5069a97120e90098dde727da75d8b6668906639f50c4d246dbc1e873a8223f63",
+      "matches": true
+    },
+    "RectangleCLTArxivV1/SupplementalHThresholdRegularity.lean": {
+      "sha256": "13453bc2f46883c542729792f393e6386b247196dff80e32ef32a61268bccba5",
+      "checkpoint_sha256": "13453bc2f46883c542729792f393e6386b247196dff80e32ef32a61268bccba5",
+      "matches": true
+    },
+    "RectangleCLTArxivV1/SupplementalHGaussianBoundary.lean": {
+      "sha256": "2b0afa7cba1cf7997902872211923982fcc17612bc9fe9229a10ebabd46cb054",
+      "checkpoint_sha256": "2b0afa7cba1cf7997902872211923982fcc17612bc9fe9229a10ebabd46cb054",
+      "matches": true
+    },
+    "RectangleCLTArxivV1/SupplementalHHardFacetGreen.lean": {
+      "sha256": "32aae52d0edc29fb28bdf75d060647399a786b8f58077cfc6fe971573bcffc8a",
+      "checkpoint_sha256": "32aae52d0edc29fb28bdf75d060647399a786b8f58077cfc6fe971573bcffc8a",
+      "matches": true
+    }
+  },
+  "reviewed_dependency_definitions": [
+    "RectangleCLT.Companion.SplitV4.GaussianThresholdData.gaussianThresholdCDF is the actual Gaussian probability of the finite threshold event.",
+    "gaussianThresholdFirst and gaussianThresholdMixed are genuine coordinate derivatives; gaussianThresholdTrace is the actual hard-event radial-score integral.",
+    "Printed.GammaDifferentiation.hasDerivAt_gaussianThresholdTrace_update_printed differentiates the actual section integral using continuous/integrable conditional Gaussian sections."
+  ],
+  "findings": [
+    {
+      "file": "RectangleCLTArxivV1/SupplementalHSurfaceMeasure.lean",
+      "result": "PASS",
+      "details": "The surface measure is a pushforward of actual orthogonal Euclidean chart volume. Exact Gaussian density factorization and Gaussian normal-section integration identify the Gaussian-weighted measure with phi(b) times the actual affine Gaussian section law. Cancellation of the everywhere positive finite density proves chart independence. Support on the actual hyperplane is proved. Genuine score integrability is supplied before the hard restriction identities; the formulas do not rely on nonintegrable totalization."
+    },
+    {
+      "file": "RectangleCLTArxivV1/SupplementalHThresholdRegularity.lean",
+      "result": "PASS",
+      "details": "PairwiseNonparallelNormals discharges nonzero projected-normal hypotheses in the actual one-threshold derivative and conditional-CDF continuity lemmas. Joint continuity of every first partial is proved and the finite-coordinate continuous-partials theorem yields the full Frechet derivative. Translation uses b_j-t dot(u_j,v), with the negative derivative sign and all finite sums checked. No full-family linear independence or bound on face count enters these endpoints."
+    },
+    {
+      "file": "RectangleCLTArxivV1/SupplementalHGaussianBoundary.lean",
+      "result": "PASS",
+      "details": "Bounded measurable weight translation is differentiated through the actual restricted Gaussian MGF, whose exponential-integrability domain is all real numbers, and actual Cameron-Martin equality. Derivative uniqueness against the hard-threshold translation derivative gives the first-moment boundary law. The facet coefficient is then identified with the actual Gaussian-weighted chart surface mass by set/section equivalence. Ambient normalizers are exactly the same positive c=(sqrt(2pi)^-1)^(n+1) on both sides, so cancellation gives the stated unnormalized kernel law with no lost dimensional factor."
+    },
+    {
+      "file": "RectangleCLTArxivV1/SupplementalHHardFacetGreen.lean",
+      "result": "PASS",
+      "details": "The hard facet is the actual full finite-threshold event restricted to its supporting hyperplane. The set equivalence with projected other inequalities is proved in both directions, including the selected constraint. Its signed score equals the concrete printed signed section. The Green identity follows by uniqueness of two derivatives of the same actual radial trace, then mixed-partial symmetry and the checked diagonal identity. The coefficient is exactly (b_l-dot(u_j,u_l)b_j), without discarding signs."
+    }
+  ],
+  "qualifications": [
+    "The affine measure uses conventional Euclidean chart-volume normalization and is explicitly not identified with raw diameter-normalized Mathlib Hausdorff measure.",
+    "hardGaussianFacet_Green_independent assumes full normal-family LinearIndependent; the arbitrary-count first-moment law requires only pairwise nonparallel normals.",
+    "These four modules do not supply the full quantitative H.1 facet/ridge localization bounds, the normal-cone incidence application, or manuscript-wide certification."
+  ],
+  "axiom_audit_observation": "Checkpoint records a successful 25-target strict whitelist audit allowing only propext, Classical.choice, and Quot.sound, together with build and forced elaboration of all four sources.",
+  "mathematical_gap_found_within_stated_scope": false,
+  "remaining_application_bridge": "Identify the manuscript normal-cone facet angular section with each ridge incidence and signed conormal, and complete the quantitative hard-facet/hard-ridge localization estimates in their separate scopes."
+}
