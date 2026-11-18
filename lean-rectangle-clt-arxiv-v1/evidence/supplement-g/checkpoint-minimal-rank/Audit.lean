@@ -1,0 +1,9 @@
+import RectangleCLTArxivV1.SupplementalGMinimalFactor
+
+#print axioms RectangleCLTArxivV1.cap_posSemidef_minimal_factor
+#print axioms RectangleCLTArxivV1.cap_covariance_minimal_factor
+#print axioms RectangleCLTArxivV1.cap_covariance_rank_pos
+#print axioms RectangleCLTArxivV1.cap_covariance_rank_le_dimension
+#print axioms RectangleCLTArxivV1.cap_seededFourthRemainder_rank_complementary_bound
+#print axioms RectangleCLTArxivV1.cap_seededFourthRemainder_rank_intervalIntegrable
+#print axioms RectangleCLTArxivV1.cap_seededFourthRemainder_rank_abs_intervalIntegrable

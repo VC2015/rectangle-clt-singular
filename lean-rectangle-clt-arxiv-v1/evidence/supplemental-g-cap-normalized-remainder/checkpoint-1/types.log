@@ -1,0 +1,76 @@
+@RectangleCLTArxivV1.cap_normalizedSeededFourthRemainder_integral_bound : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω]
+  {p n : ℕ} (μ : MeasureTheory.Measure Ω) [inst_1 : MeasureTheory.IsProbabilityMeasure μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ : ℝ},
+  RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+    0 < δ →
+      ∀ (hp : 1 ≤ p),
+        (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+          ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+            A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+              ∀ (s : RectangleCLT.FaceSmoother p),
+                RectangleCLT.Companion.SplitV4.seededRestorationBandwidth * δ ≤ s.bandwidth →
+                  16 * δ ≤ s.bandwidth →
+                    ∀ {C₀ κ : ℝ},
+                      0 < C₀ →
+                        1 ≤ κ →
+                          RectangleCLT.dimensionLog p * s.bandwidth ^ 2 ≤ 1 / 4 →
+                            (∀ t ∈ Set.Ioo 0 1,
+                                RectangleCLTArxivV1.IntrinsicRectangleConcentration
+                                  (RectangleCLT.Companion.SplitV4.seededSplitBaseDistribution μ ξ A 0
+                                    (RectangleCLT.dimensionLog p * s.bandwidth ^ 2) t)
+                                  C₀ δ κ) →
+                              let L := RectangleCLT.dimensionLog p;
+                              let ε := L * s.bandwidth ^ 2;
+                              let hε := ⋯;
+                              ∫ (t : ℝ) in 0 ..1,
+                                  |RectangleCLT.Companion.SplitV4.normalizedSeededFourthRemainder s μ ξ A ε hε t| ≤
+                                38 * RectangleCLTArxivV1.capSeededComparisonConstant C₀ *
+                                    (δ ^ 2 * κ * L / s.bandwidth) *
+                                  min (1 + Real.log (1 / ε)) L
+@RectangleCLTArxivV1.cap_normalizedSeededFourthRemainder_bounded_integral_bound : ∀ {Ω : Type u_1}
+  [inst : MeasurableSpace Ω] {p n : ℕ} (μ : MeasureTheory.Measure Ω) [inst_1 : MeasureTheory.IsProbabilityMeasure μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ : ℝ},
+  RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+    0 < δ →
+      ∀ (hp : 1 ≤ p),
+        (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+          ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+            A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+              ∀ (s : RectangleCLT.FaceSmoother p),
+                RectangleCLT.Companion.SplitV4.seededRestorationBandwidth * δ ≤ s.bandwidth →
+                  16 * δ ≤ s.bandwidth →
+                    RectangleCLT.dimensionLog p * s.bandwidth ^ 2 ≤ 1 / 4 →
+                      let L := RectangleCLT.dimensionLog p;
+                      let ε := L * s.bandwidth ^ 2;
+                      let hε := ⋯;
+                      let κ := RectangleCLTArxivV1.intrinsicBoundaryCoefficient μ ξ A;
+                      ∫ (t : ℝ) in 0 ..1,
+                          |RectangleCLT.Companion.SplitV4.normalizedSeededFourthRemainder s μ ξ A ε hε t| ≤
+                        RectangleCLTArxivV1.capBoundedIntegratedRemainderConstant * (δ ^ 2 * κ * L / s.bandwidth) *
+                          min (1 + Real.log (1 / ε)) L
+RectangleCLTArxivV1.proposition_G1_dimension_log_cap_normalized : ∃ C,
+  0 < C ∧
+    ∀ (Ω : Type u_1) [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+      [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (p n : ℕ) (ξ : Fin n → Ω → RectangleCLT.Vector p) (δ : ℝ),
+      RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+        ∀ (hp : 1 ≤ p),
+          (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+            ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+              A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+                RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.sumVector ξ) A ≤
+                    C *
+                      min 1
+                        (δ * RectangleCLTArxivV1.gaussianMaximumMean A * RectangleCLT.dimensionLog p *
+                          √(RectangleCLTArxivV1.dimensionCapGain δ (RectangleCLT.dimensionLog p))) ∧
+                  ∀ (s : RectangleCLT.FaceSmoother p),
+                    RectangleCLTArxivV1.dimensionCapBandwidthConstant * δ ≤ s.bandwidth →
+                      RectangleCLT.dimensionLog p * s.bandwidth ^ 2 ≤ 1 / 4 →
+                        let ε := RectangleCLT.dimensionLog p * s.bandwidth ^ 2;
+                        let hε := ⋯;
+                        ∫ (t : ℝ) in 0 ..1,
+                            |RectangleCLT.Companion.SplitV4.normalizedSeededFourthRemainder s μ ξ A ε hε t| ≤
+                          C *
+                              (δ ^ 2 * RectangleCLTArxivV1.intrinsicBoundaryCoefficient μ ξ A *
+                                  RectangleCLT.dimensionLog p /
+                                s.bandwidth) *
+                            min (1 + Real.log (1 / ε)) (RectangleCLT.dimensionLog p)

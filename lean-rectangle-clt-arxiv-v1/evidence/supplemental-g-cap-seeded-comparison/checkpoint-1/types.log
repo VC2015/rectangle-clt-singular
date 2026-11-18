@@ -1,0 +1,57 @@
+@RectangleCLTArxivV1.capSeededComparisonConstant_pos : ∀ {C₀ : ℝ},
+  0 < C₀ → 0 < RectangleCLTArxivV1.capSeededComparisonConstant C₀
+@RectangleCLTArxivV1.capSeededTimeComparisonConstant_pos : ∀ {C₀ : ℝ},
+  0 < C₀ → 0 < RectangleCLTArxivV1.capSeededTimeComparisonConstant C₀
+@RectangleCLTArxivV1.cap_normalizedSeededFourthRemainder_majorant : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω]
+  {p n : ℕ} (μ : MeasureTheory.Measure Ω) [inst_1 : MeasureTheory.IsProbabilityMeasure μ]
+  (ξ : Fin n → Ω → RectangleCLT.Vector p) {δ : ℝ},
+  RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+    ∀ (hp : 1 ≤ p),
+      (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+        ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+          A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+            ∀ (s : RectangleCLT.FaceSmoother p),
+              RectangleCLT.Companion.SplitV4.seededRestorationBandwidth * δ ≤ s.bandwidth →
+                16 * δ ≤ s.bandwidth →
+                  ∀ {C₀ κ t : ℝ},
+                    0 < C₀ →
+                      0 < κ →
+                        t ∈ Set.Ioo 0 1 →
+                          RectangleCLTArxivV1.IntrinsicRectangleConcentration
+                              (RectangleCLT.Companion.SplitV4.seededSplitBaseDistribution μ ξ A 0
+                                (RectangleCLT.dimensionLog p * s.bandwidth ^ 2) t)
+                              C₀ δ κ →
+                            let L := RectangleCLT.dimensionLog p;
+                            let ε := L * s.bandwidth ^ 2;
+                            let hε := ⋯;
+                            |RectangleCLT.Companion.SplitV4.normalizedSeededFourthRemainder s μ ξ A ε hε t| ≤
+                              RectangleCLTArxivV1.capMinimumMajorant (δ ^ 2 * κ * L / s.bandwidth) (2 * ↑p * ↑p * δ ^ 2)
+                                ((2 * ↑p) ^ 2 * √↑p * δ ^ 2 / s.bandwidth)
+                                (RectangleCLTArxivV1.capSeededComparisonConstant C₀) (t + ε)
+@RectangleCLTArxivV1.cap_normalizedSeeded_time_comparison_bound : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] {p n : ℕ}
+  (μ : MeasureTheory.Measure Ω) [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  {δ : ℝ},
+  RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+    0 < δ →
+      1 ≤ p →
+        (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+          ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+            A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+              ∀ (s : RectangleCLT.FaceSmoother p),
+                RectangleCLT.Companion.SplitV4.seededRestorationBandwidth * δ ≤ s.bandwidth →
+                  16 * δ ≤ s.bandwidth →
+                    ∀ {C₀ κ : ℝ},
+                      0 < C₀ →
+                        1 ≤ κ →
+                          RectangleCLT.dimensionLog p * s.bandwidth ^ 2 ≤ 1 / 4 →
+                            (∀ t ∈ Set.Ioo 0 1,
+                                RectangleCLTArxivV1.IntrinsicRectangleConcentration
+                                  (RectangleCLT.Companion.SplitV4.seededSplitBaseDistribution μ ξ A 0
+                                    (RectangleCLT.dimensionLog p * s.bandwidth ^ 2) t)
+                                  C₀ δ κ) →
+                              let L := RectangleCLT.dimensionLog p;
+                              let ε := L * s.bandwidth ^ 2;
+                              |RectangleCLT.Companion.SplitV4.normalizedSeededExpectation s μ ξ A ε 1 -
+                                    RectangleCLT.Companion.SplitV4.normalizedSeededExpectation s μ ξ A ε 0| ≤
+                                RectangleCLTArxivV1.capSeededTimeComparisonConstant C₀ * (κ * L) *
+                                  (δ + δ ^ 2 / s.bandwidth * min (1 + Real.log (1 / ε)) L)

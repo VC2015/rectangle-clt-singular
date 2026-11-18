@@ -1,0 +1,6 @@
+import RectangleCLTArxivV1.SupplementalGRectangularTensor
+
+#print axioms RectangleCLTArxivV1.cap_restorationFourthDerivative_last_swap
+#print axioms RectangleCLTArxivV1.cap_convolutionFourthDerivative_rectangular
+#print axioms RectangleCLTArxivV1.cap_convolutionFourthTensor_rectangular
+#print axioms RectangleCLTArxivV1.cap_convolutionFourthTensor_intrinsic_single_pair
