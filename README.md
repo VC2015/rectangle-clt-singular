@@ -19,7 +19,7 @@ We study how well a sum of $n$ independent random vectors with $p$ coordinates c
 
 The supplement contains the dimension-logarithm cap, the correlation-gap proof, and the exceptional-correlation-budget proof. It preserves Appendix labels G, H, and I. Corollaries 4 and 5 remain stated in the main paper. Save the two PDFs in the same folder to follow cross-document links in readers that support them.
 
-Lean checks 39 of the 40 named results as stated. For Lemma E.1 it makes the envelope condition $A\ge 0$ explicit, as used in the proof. The correspondence records cover all 34 explicit proof environments, including the supplement, and identify where Lean takes a different route. Conjecture 1 remains open. [Theorem-to-Lean index](lean-rectangle-clt-arxiv-v1/STATUS.md) · [Proof correspondence](lean-rectangle-clt-arxiv-v1/correspondence/final-coverage.json) · [Reproducing the checks](lean-rectangle-clt-arxiv-v1/REPRODUCIBILITY.md)
+Lean checks 39 of the 40 named results as stated. For Lemma E.1 it makes the envelope condition $A\ge 0$ explicit, as used in the proof. The correspondence records cover all 34 explicit proof environments, including those in the supplement. Conjecture 1 remains open. [Theorem-to-Lean index](lean-rectangle-clt-arxiv-v1/STATUS.md) · [Proof correspondence](lean-rectangle-clt-arxiv-v1/correspondence/final-coverage.json) · [Reproducing the checks](lean-rectangle-clt-arxiv-v1/REPRODUCIBILITY.md)
 
 The [7 November V4 certificate](LEAN_VERIFICATION.md) covers the 31 proved statements of that earlier manuscript.
 
