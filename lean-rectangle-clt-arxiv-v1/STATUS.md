@@ -2,11 +2,11 @@
 
 All 40 named results have checked Lean statements: 39 unqualified statements and Lemma E.1 with the explicit envelope-budget hypothesis A ≥ 0. Conjecture 1 is excluded.
 
-The final clean proof commit is `443fbc667ed3c3ee47369e028c2c4280a5eed604`. Its Root build, forced source replay, all 1,949 exact mapped `pp.all` types, complete shared kernel axiom union and 10,585-node closed project graph passed. The allowed axioms are `propext`, `Classical.choice` and `Quot.sound`; actual Kane providers are included in source replay and the graph.
+The historical full clean proof commit is `443fbc667ed3c3ee47369e028c2c4280a5eed604`. Its Root build, forced source replay, all 1,949 exact mapped `pp.all` types, complete shared kernel axiom union and 10,585-node closed project graph passed. The allowed axioms are `propext`, `Classical.choice` and `Quot.sound`; actual Kane providers are included in source replay and the graph.
 
 All 34 explicit proof environments have frozen source-byte, declaration and independent-review bindings. The final sidecar records 345 distinct canonical units and 192 additional binding rows. These are enumerated correspondence units, not disjoint source intervals or an addition to historical passage totals. Frozen passage ledgers remain byte-identical, and all pre-acceptance registries are preserved.
 
-The all-threshold Lemma H.1 bound uses genuine value continuity and Fatou after generic-threshold geometry. The printed nonsimple ridge Green identity at supplement1081–1100 is bypassed and remains unproved as a separate all-threshold internal claim. The arbitrary-edge spherical generality and raw unnormalized Hausdorff normalization are not silently certified. The fixed-b H.3 endpoint and canonical covariance-gap Corollary4 endpoint match the published quantifiers. The completed F4 duplication paragraph replaces its earlier support-only binding once.
+The pointwise nonsimple ridge Gauss–Green identity at supplement 1081–1100 and the arbitrary-edge spherical conormal identity at 1101–1132 are separately proved for complete actual faces. The existing all-threshold H.1 bound retains its checked continuity/Fatou proof. The spherical identity uses Gaussian first-moment and polar integration, with the documented Euclidean chart and polar measure convention; no raw unnormalized Hausdorff identification is asserted.
 
 Statement correctness, checked printed steps and documented alternative routes remain separate in [final-coverage.json](correspondence/final-coverage.json). This record does not claim unqualified certification of every printed internal identity. Earlier failed attempts, historical receipts and source/PDF reviews remain available.
 
@@ -54,3 +54,5 @@ Statement correctness, checked printed steps and documented alternative routes r
 | Lemma H.3 | `lemma_H3_fourth_derivative` |
 
 See [final-acceptance.json](correspondence/final-acceptance.json) for the exact clean evidence and [REPRODUCIBILITY.md](REPRODUCIBILITY.md) for pinned dependencies and collaborator access requirements.
+
+The nonsimple printed extension at proof commit `63c975b7bd2176ddf559dbed1b2e087e191f7a45` passed the clean library build, 66 direct source forces, 537 full public types and their complete standard-three axiom union, with a 1,165-node closed project graph. The registered audit checked 182 targets; 184 registered full types have a 10,927-node closed graph. The separately completed identities are bound in [the completion addendum](correspondence/supplemental-h-nonsimple-printed-completion.json); these measured extension counts do not replace the historical 1,949-target replay.
