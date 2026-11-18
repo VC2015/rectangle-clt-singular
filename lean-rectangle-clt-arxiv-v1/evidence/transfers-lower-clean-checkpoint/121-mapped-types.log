@@ -1,0 +1,215 @@
+structure RectangleCLT.BoundedIndependentHypotheses.{u} {Ω : Type u} [MeasurableSpace Ω] {p n : ℕ}
+  (μ : MeasureTheory.Measure Ω) (ξ : Fin n → Ω → RectangleCLT.Vector p) (δ : ℝ) : Prop
+number of parameters: 7
+fields:
+  RectangleCLT.BoundedIndependentHypotheses.measurable : ∀ (i : Fin n), Measurable (ξ i)
+  RectangleCLT.BoundedIndependentHypotheses.independent : ProbabilityTheory.iIndepFun ξ μ
+  RectangleCLT.BoundedIndependentHypotheses.centered : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), ξ i ω j ∂μ = 0
+  RectangleCLT.BoundedIndependentHypotheses.bounded : ∀ (i : Fin n), ∀ᵐ (ω : Ω) ∂μ, ‖ξ i ω‖ ≤ δ
+  RectangleCLT.BoundedIndependentHypotheses.delta_nonneg : 0 ≤ δ
+constructor:
+  RectangleCLT.BoundedIndependentHypotheses.mk.{u} {Ω : Type u} [MeasurableSpace Ω] {p n : ℕ}
+    {μ : MeasureTheory.Measure Ω} {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : ℝ}
+    (measurable : ∀ (i : Fin n), Measurable (ξ i)) (independent : ProbabilityTheory.iIndepFun ξ μ)
+    (centered : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), ξ i ω j ∂μ = 0)
+    (bounded : ∀ (i : Fin n), ∀ᵐ (ω : Ω) ∂μ, ‖ξ i ω‖ ≤ δ) (delta_nonneg : 0 ≤ δ) :
+    RectangleCLT.BoundedIndependentHypotheses μ ξ δ
+@RectangleCLT.Companion.gaussian_factor_exists_of_boundedIndependent : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω]
+  {p n : ℕ} {μ : MeasureTheory.Measure Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure μ]
+  {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : ℝ},
+  RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+    ∃ A, A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ)
+@RectangleCLT.Companion.SplitV4.Printed.independent_sum_bernstein_mgf : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {n : ℕ} (X : Fin n → Ω → ℝ),
+  (∀ (i : Fin n), Measurable (X i)) →
+    ProbabilityTheory.iIndepFun X μ →
+      (∀ (i : Fin n), MeasureTheory.Integrable (X i) μ) →
+        (∀ (i : Fin n), MeasureTheory.Integrable (fun ω => X i ω ^ 2) μ) →
+          (∀ (i : Fin n), ∫ (ω : Ω), X i ω ∂μ = 0) →
+            ∀ {b t v : ℝ},
+              0 < b →
+                |t| * b < 3 →
+                  (∀ (i : Fin n), ∀ᵐ (ω : Ω) ∂μ, |X i ω| ≤ b) →
+                    ∑ i, ∫ (ω : Ω), X i ω ^ 2 ∂μ ≤ v →
+                      MeasureTheory.Integrable (fun ω => Real.exp (t * ∑ i, X i ω)) μ ∧
+                        ProbabilityTheory.mgf (fun ω => ∑ i, X i ω) μ t ≤ Real.exp (t ^ 2 * v / (2 * (1 - |t| * b / 3)))
+RectangleCLTArxivV1.signedIndex_card : ∀ (p : ℕ), Fintype.card (RectangleCLTArxivV1.SignedIndex p) = 2 * p + 1
+@RectangleCLTArxivV1.signedMaximum_eq_norm : ∀ {p : ℕ} (x : Fin p → ℝ),
+  ⨆ t, RectangleCLTArxivV1.signedCoordinate t x = ‖x‖
+@RectangleCLTArxivV1.signedAbsMaximum_eq_norm : ∀ {p : ℕ} (x : Fin p → ℝ),
+  ⨆ t, |RectangleCLTArxivV1.signedCoordinate t x| = ‖x‖
+@RectangleCLTArxivV1.signedGaussianLinear : ∀ {p r : ℕ} (a : Fin p → EuclideanSpace ℝ (Fin r))
+  (t : RectangleCLTArxivV1.SignedIndex p) (g : Fin r → ℝ),
+  GenericChaining.gaussianLinear (RectangleCLTArxivV1.signedVectors a t) g =
+    RectangleCLTArxivV1.signedCoordinate t fun j => GenericChaining.gaussianLinear (a j) g
+@RectangleCLTArxivV1.signedContrast_independent : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] {p n : ℕ}
+  {μ : MeasureTheory.Measure Ω} {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : ℝ},
+  RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+    ∀ (s t : RectangleCLTArxivV1.SignedIndex p),
+      ProbabilityTheory.iIndepFun (RectangleCLTArxivV1.signedContrast ξ s t) μ
+@RectangleCLTArxivV1.integral_signedContrast_zero : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] {p n : ℕ}
+  {μ : MeasureTheory.Measure Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {ξ : Fin n → Ω → RectangleCLT.Vector p}
+  {δ : ℝ},
+  RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+    ∀ (s t : RectangleCLTArxivV1.SignedIndex p) (i : Fin n),
+      ∫ (ω : Ω), RectangleCLTArxivV1.signedContrast ξ s t i ω ∂μ = 0
+@RectangleCLTArxivV1.signedContrast_discrete_bound : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] {p n : ℕ}
+  {μ : MeasureTheory.Measure Ω} {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : ℝ}
+  (h : RectangleCLT.BoundedIndependentHypotheses μ ξ δ) (s t : RectangleCLTArxivV1.SignedIndex p) (i : Fin n),
+  ∀ᵐ (ω : Ω) ∂μ,
+    |RectangleCLTArxivV1.signedContrast ξ s t i ω| ≤ 2 * ↑(RectangleCLTArxivV1.signedDiscreteMetric ⟨δ, ⋯⟩ s t)
+@RectangleCLTArxivV1.sum_variance_signedContrast : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] {p n : ℕ}
+  {μ : MeasureTheory.Measure Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {ξ : Fin n → Ω → RectangleCLT.Vector p}
+  {δ : ℝ},
+  RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+    ∀ (s t : RectangleCLTArxivV1.SignedIndex p),
+      ∑ i, ∫ (ω : Ω), RectangleCLTArxivV1.signedContrast ξ s t i ω ^ 2 ∂μ =
+        RectangleCLT.matrixQuadratic (RectangleCLT.covariance μ (RectangleCLT.sumVector ξ))
+          (RectangleCLTArxivV1.signedDirection t - RectangleCLTArxivV1.signedDirection s)
+@RectangleCLTArxivV1.signedProcess_hasMixedTail : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ}
+  {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : ℝ} (h : RectangleCLT.BoundedIndependentHypotheses μ ξ δ),
+  GenericChaining.HasMixedTail μ (RectangleCLTArxivV1.signedProcess (RectangleCLT.sumVector ξ))
+    (fun s t => 4 * RectangleCLTArxivV1.signedDiscreteMetric ⟨δ, ⋯⟩ s t) fun s t =>
+    2 * RectangleCLTArxivV1.signedVarianceMetric μ ξ s t
+@RectangleCLTArxivV1.gamma1_eq_admissible_subsets : ∀ {T : Type u_1} (d : T → T → ENNReal),
+  GenericChaining.gamma1 d = ⨅ A, ⨆ t, ∑' (k : ℕ), 2 ^ k * ⨅ s, d t ↑s
+@RectangleCLTArxivV1.gamma2_eq_admissible_subsets : ∀ {T : Type u_1} (d : T → T → ENNReal),
+  GenericChaining.gamma2 d = ⨅ A, ⨆ t, ∑' (k : ℕ), ENNReal.ofReal √2 ^ k * ⨅ s, d t ↑s
+RectangleCLTArxivV1.gaussian_level_weight : ∀ (k : ℕ), ENNReal.ofReal (2 ^ (↑k / 2)) = ENNReal.ofReal √2 ^ k
+@RectangleCLTArxivV1.gamma1_metric_homogeneity : ∀ {T : Type u_1} [inst : Nonempty T] (d : T → T → NNReal) (c : NNReal),
+  (GenericChaining.gamma1 fun s t => ↑(c * d s t)).toReal = ↑c * (GenericChaining.gamma1 fun s t => ↑(d s t)).toReal
+@RectangleCLTArxivV1.gamma2_metric_homogeneity : ∀ {T : Type u_1} [inst : Nonempty T] (d : T → T → NNReal) (c : NNReal),
+  (GenericChaining.gamma2 fun s t => ↑(c * d s t)).toReal = ↑c * (GenericChaining.gamma2 fun s t => ↑(d s t)).toReal
+@RectangleCLTArxivV1.integral_sum_coordinate_sq : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] {p n : ℕ}
+  {μ : MeasureTheory.Measure Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {ξ : Fin n → Ω → RectangleCLT.Vector p}
+  {δ : ℝ},
+  RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+    (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+      ∀ (j : Fin p), ∫ (ω : Ω), RectangleCLT.sumVector ξ ω j ^ 2 ∂μ = 1
+@RectangleCLTArxivV1.integral_abs_le_one_of_second_moment : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {X : Ω → ℝ},
+  MeasureTheory.Integrable X μ →
+    MeasureTheory.Integrable (fun ω => X ω ^ 2) μ → ∫ (ω : Ω), X ω ^ 2 ∂μ ≤ 1 → ∫ (ω : Ω), |X ω| ∂μ ≤ 1
+@RectangleCLTArxivV1.signed_dirksen_expectation : ∀ {p : ℕ} {Ω : Type u_1} [inst : MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (W : Ω → Fin p → ℝ) (δ : NNReal)
+  (d₂ : RectangleCLTArxivV1.SignedIndex p → RectangleCLTArxivV1.SignedIndex p → NNReal),
+  (∀ (t : RectangleCLTArxivV1.SignedIndex p), d₂ t t = 0) →
+    (∀ (s t : RectangleCLTArxivV1.SignedIndex p), d₂ s t = d₂ t s) →
+      (∀ (s t c : RectangleCLTArxivV1.SignedIndex p), d₂ s t ≤ d₂ s c + d₂ t c) →
+        (GenericChaining.HasMixedTail μ (RectangleCLTArxivV1.signedProcess W)
+            (fun s t => 4 * RectangleCLTArxivV1.signedDiscreteMetric δ s t) fun s t => 2 * d₂ s t) →
+          (∀ (j : Fin p), MeasureTheory.Integrable (fun ω => W ω j) μ) →
+            (∀ (j : Fin p), MeasureTheory.Integrable (fun ω => W ω j ^ 2) μ) →
+              (∀ (j : Fin p), ∫ (ω : Ω), W ω j ^ 2 ∂μ ≤ 1) →
+                ∫ (ω : Ω), ‖W ω‖ ∂μ ≤
+                  96 * (GenericChaining.gamma2 fun s t => ↑(d₂ s t)).toReal +
+                      192 *
+                        (GenericChaining.gamma1 fun s t => ↑(RectangleCLTArxivV1.signedDiscreteMetric δ s t)).toReal +
+                    2
+RectangleCLTArxivV1.discreteCutoff_le_iff : ∀ (m k : ℕ), RectangleCLTArxivV1.discreteCutoff m ≤ k ↔ m ≤ 2 ^ 2 ^ k
+@RectangleCLTArxivV1.discreteCutoff_weight_le_log : ∀ {m : ℕ},
+  3 ≤ m → ↑(2 ^ RectangleCLTArxivV1.discreteCutoff m - 1) ≤ 4 * Real.log ↑m
+@RectangleCLTArxivV1.signedDiscreteNets_initial : ∀ {p : ℕ} (hp : 1 ≤ p) {k : ℕ},
+  k < RectangleCLTArxivV1.discreteCutoff (2 * p + 1) → (RectangleCLTArxivV1.signedDiscreteNets hp).centers k = {none}
+@RectangleCLTArxivV1.signedDiscreteNets_terminal : ∀ {p : ℕ} (hp : 1 ≤ p) {k : ℕ},
+  RectangleCLTArxivV1.discreteCutoff (2 * p + 1) ≤ k →
+    (RectangleCLTArxivV1.signedDiscreteNets hp).centers k = Finset.univ
+@RectangleCLTArxivV1.signed_gamma1_discrete_le : ∀ {p : ℕ},
+  1 ≤ p →
+    ∀ (δ : NNReal),
+      (GenericChaining.gamma1 fun s t => ↑(RectangleCLTArxivV1.signedDiscreteMetric δ s t)).toReal ≤
+        8 * ↑δ * RectangleCLT.dimensionLog p
+@RectangleCLTArxivV1.gaussianLaw_ae_mem_factor_range : ∀ {p : ℕ} (A : Matrix (Fin p) (Fin p) ℝ),
+  ∀ᵐ (x : Fin p → ℝ) ∂RectangleCLT.gaussianLaw A, x ∈ Set.range A.mulVec
+@RectangleCLTArxivV1.signedVarianceMetric_eq_canonicalDist : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ}
+  {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : ℝ},
+  RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+    ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+      A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+        RectangleCLTArxivV1.signedVarianceMetric μ ξ =
+          GenericChaining.canonicalDist (RectangleCLTArxivV1.signedVectors (RectangleCLTArxivV1.factorRows A))
+@RectangleCLTArxivV1.gaussianLaw_integral_signedContrast_sq : ∀ {p : ℕ} (A : Matrix (Fin p) (Fin p) ℝ)
+  (s t : RectangleCLTArxivV1.SignedIndex p),
+  ∫ (x : RectangleCLT.Vector p),
+      (RectangleCLTArxivV1.signedCoordinate t x - RectangleCLTArxivV1.signedCoordinate s x) ^
+        2 ∂RectangleCLT.gaussianLaw A =
+    ‖RectangleCLTArxivV1.signedVectors (RectangleCLTArxivV1.factorRows A) t -
+          RectangleCLTArxivV1.signedVectors (RectangleCLTArxivV1.factorRows A) s‖ ^
+      2
+@RectangleCLTArxivV1.gaussianWidth_signedFactorRows : ∀ {p : ℕ} (A : Matrix (Fin p) (Fin p) ℝ),
+  GenericChaining.gaussianWidth (RectangleCLTArxivV1.signedVectors (RectangleCLTArxivV1.factorRows A)) =
+    RectangleCLTArxivV1.gaussianMaximumMean A
+@RectangleCLTArxivV1.gamma2_signedFactorRows_ne_top : ∀ {p : ℕ} (A : Matrix (Fin p) (Fin p) ℝ),
+  (GenericChaining.gamma2 fun s t =>
+      ↑(GenericChaining.canonicalDist (RectangleCLTArxivV1.signedVectors (RectangleCLTArxivV1.factorRows A)) s t)) ≠
+    ⊤
+@RectangleCLTArxivV1.gamma2_signedFactorRows_le : ∀ {p : ℕ} (A : Matrix (Fin p) (Fin p) ℝ),
+  (GenericChaining.gamma2 fun s t =>
+        ↑(GenericChaining.canonicalDist (RectangleCLTArxivV1.signedVectors (RectangleCLTArxivV1.factorRows A)) s
+            t)).toReal ≤
+    GenericChaining.gaussianMajorizingConstant * RectangleCLTArxivV1.gaussianMaximumMean A
+@RectangleCLTArxivV1.gaussianMaximumMean_eq_of_covariance : ∀ {p : ℕ} {A B : Matrix (Fin p) (Fin p) ℝ},
+  A * A.transpose = B * B.transpose →
+    RectangleCLTArxivV1.gaussianMaximumMean A = RectangleCLTArxivV1.gaussianMaximumMean B
+@RectangleCLTArxivV1.gaussianLaw_signedCoordinate_ae_eq_of_zero_dist : ∀ {p : ℕ} (A : Matrix (Fin p) (Fin p) ℝ)
+  (s t : RectangleCLTArxivV1.SignedIndex p),
+  GenericChaining.canonicalDist (RectangleCLTArxivV1.signedVectors (RectangleCLTArxivV1.factorRows A)) t s = 0 →
+    RectangleCLTArxivV1.signedCoordinate t =ᵐ[RectangleCLT.gaussianLaw A] RectangleCLTArxivV1.signedCoordinate s
+@RectangleCLTArxivV1.gamma2_signedFactorRows_eq_range : ∀ {p : ℕ} (A : Matrix (Fin p) (Fin p) ℝ),
+  (GenericChaining.gamma2 fun s t =>
+      ↑(GenericChaining.canonicalDist (RectangleCLTArxivV1.signedVectors (RectangleCLTArxivV1.factorRows A)) s t)) =
+    GenericChaining.gamma2 fun s t => ↑(GenericChaining.canonicalDist (fun v => ↑v) s t)
+@RectangleCLTArxivV1.gaussianMaximum_signedFactorRows_ae_eq_range : ∀ {p : ℕ} (A : Matrix (Fin p) (Fin p) ℝ),
+  GenericChaining.gaussianMaximum
+      (RectangleCLTArxivV1.signedVectors (RectangleCLTArxivV1.factorRows A)) =ᵐ[GenericChaining.standardGaussian p]
+    GenericChaining.gaussianMaximum fun v => ↑v
+@RectangleCLTArxivV1.gaussianWidth_signedFactorRows_eq_range : ∀ {p : ℕ} (A : Matrix (Fin p) (Fin p) ℝ),
+  GenericChaining.gaussianWidth (RectangleCLTArxivV1.signedVectors (RectangleCLTArxivV1.factorRows A)) =
+    GenericChaining.gaussianWidth fun v => ↑v
+@RectangleCLTArxivV1.gaussianWidth_signedFactorRows_range : ∀ {p : ℕ} (A : Matrix (Fin p) (Fin p) ℝ),
+  (GenericChaining.gaussianWidth fun v => ↑v) = RectangleCLTArxivV1.gaussianMaximumMean A
+RectangleCLTArxivV1.standardNormal_integral_abs : ∫ (x : ℝ), |x| ∂ProbabilityTheory.gaussianReal 0 1 = √(2 / Real.pi)
+@RectangleCLTArxivV1.sqrt_two_div_pi_le_gaussianMaximumMean : ∀ {p : ℕ},
+  1 ≤ p →
+    ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+      (∀ (j : Fin p), (A * A.transpose) j j = 1) → √(2 / Real.pi) ≤ RectangleCLTArxivV1.gaussianMaximumMean A
+@RectangleCLTArxivV1.bounded_sum_expected_maximum : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ}
+  {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : ℝ},
+  RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+    1 ≤ p →
+      (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+        ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+          A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+            ∫ (ω : Ω), ‖RectangleCLT.sumVector ξ ω‖ ∂μ ≤
+              RectangleCLTArxivV1.expectedMaximumConstant *
+                (RectangleCLTArxivV1.gaussianMaximumMean A + δ * RectangleCLT.dimensionLog p)
+@RectangleCLTArxivV1.bounded_sum_expected_maximum_factor_exists : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ}
+  {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : ℝ},
+  RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+    1 ≤ p →
+      (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+        ∃ A,
+          A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) ∧
+            ∫ (ω : Ω), ‖RectangleCLT.sumVector ξ ω‖ ∂μ ≤
+              RectangleCLTArxivV1.expectedMaximumConstant *
+                (RectangleCLTArxivV1.gaussianMaximumMean A + δ * RectangleCLT.dimensionLog p)
+RectangleCLTArxivV1.lemma_C2_expected_maximum : ∃ C,
+  0 < C ∧
+    ∀ (Ω : Type u_1) [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+      [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (p n : ℕ),
+      1 ≤ p →
+        1 ≤ n →
+          ∀ (ξ : Fin n → Ω → RectangleCLT.Vector p) (δ : ℝ),
+            (∀ (i : Fin n), Measurable (ξ i)) →
+              ProbabilityTheory.iIndepFun ξ μ →
+                (∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), ξ i ω j ∂μ = 0) →
+                  (∀ (i : Fin n), ∀ᵐ (ω : Ω) ∂μ, ‖ξ i ω‖ ≤ δ) →
+                    (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+                      ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+                        A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+                          ∫ (ω : Ω), ‖RectangleCLT.sumVector ξ ω‖ ∂μ ≤
+                            C * (RectangleCLTArxivV1.gaussianMaximumMean A + δ * RectangleCLT.dimensionLog p)

@@ -1,0 +1,14 @@
+import RectangleCLTArxivV1.LowerBoundedTheorem
+#print RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters
+#check @RectangleCLTArxivV1.lowerUnmasked_count_identity
+#check @RectangleCLTArxivV1.tendsto_lowerUnmasked_raw_variance
+#check @RectangleCLTArxivV1.eventually_lowerUnmaskedSequence_fields
+#check @RectangleCLTArxivV1.tendsto_lowerUnmaskedSequence_variance
+#check @RectangleCLTArxivV1.tendsto_lowerUnmaskedSequence_widthScale
+#check @RectangleCLTArxivV1.tendsto_lowerUnmaskedSequence_rare_width
+#check @RectangleCLTArxivV1.eventually_lowerUnmaskedSequence_count
+#check @RectangleCLTArxivV1.lowerUnmaskedSequence_width_profile
+#check @RectangleCLTArxivV1.lowerUnmaskedSequence_one_width_tendsto
+#check @RectangleCLTArxivV1.eventually_lowerUnmaskedSequence_properties
+#check @RectangleCLTArxivV1.exists_lowerUnmaskedSequence_detection_constant
+#check @RectangleCLTArxivV1.theorem4_bounded_symmetric_lower

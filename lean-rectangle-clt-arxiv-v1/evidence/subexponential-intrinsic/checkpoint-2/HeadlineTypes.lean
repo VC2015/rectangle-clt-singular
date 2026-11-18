@@ -1,0 +1,11 @@
+import RectangleCLTArxivV1.PolyhedralIntrinsicSubexponentialAllFaces
+set_option pp.all true
+#check @RectangleCLTArxivV1.corollary_2_intrinsic
+#print RectangleCLTArxivV1.SubexponentialWidthBound
+#print RectangleCLTArxivV1.subexponentialWidthRate
+#print RectangleCLT.Companion.Psi1IndependentHypotheses
+#check @RectangleCLTArxivV1.subexponentialCLT_psi1_intrinsic
+#check @RectangleCLTArxivV1.gaussian_factor_exists_of_psi1
+#check @RectangleCLTArxivV1.gaussianMaximumMean_clipped_le
+#check @RectangleCLTArxivV1.rectangleError_le_of_two_couplings_intrinsic
+#check @RectangleCLTArxivV1.orliczPolyhedralCLT_intrinsic_all_faces

@@ -1,0 +1,225 @@
+structure RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters : Type
+number of parameters: 0
+fields:
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta_pos : 0 < self.theta
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta_le_one : self.theta ≤ 1
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi_pos : 0 < self.pi
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi_le_one : self.pi ≤ 1
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude_pos : 0 < self.amplitude
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.variance_lt_half : self.theta * self.pi *
+        self.amplitude ^ 2 <
+      1 / 2
+constructor:
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.mk (theta pi amplitude : ℝ) (theta_pos : 0 < theta)
+    (theta_le_one : theta ≤ 1) (pi_pos : 0 < pi) (pi_le_one : pi ≤ 1) (amplitude_pos : 0 < amplitude)
+    (variance_lt_half : theta * pi * amplitude ^ 2 < 1 / 2) : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters
+@RectangleCLTArxivV1.lowerMaskedFourth_log_bounds : ∀ {B : ℝ},
+  2 ≤ B →
+    0 < Real.log (Real.exp 1 + B) ∧
+      Real.log (Real.exp 1 + B) ≤ RectangleCLT.Companion.SplitV4.maskedFourthLog B ∧
+        RectangleCLT.Companion.SplitV4.maskedFourthLog B ≤ 3 * Real.log (Real.exp 1 + B)
+RectangleCLTArxivV1.lowerMaskedFourthRawWidth_eq : ∀ (n : ℕ) {ell B g : ℝ},
+  0 < ell →
+    RectangleCLTArxivV1.lowerMaskedFourthRawWidth n ell B g =
+      RectangleCLT.Companion.SplitV4.maskedFourthScale n ell B * g / √ell
+@RectangleCLTArxivV1.lowerMaskedFourthRawWidth_fourth : ∀ {n : ℕ} {ell B g : ℝ},
+  0 < n →
+    0 < ell →
+      2 ≤ B →
+        RectangleCLTArxivV1.lowerMaskedFourthRawWidth n ell B g ^ 4 =
+          B ^ 4 * ell ^ 3 * g ^ 4 / (1024 * ↑n * RectangleCLT.Companion.SplitV4.maskedFourthLog B ^ 3)
+@RectangleCLTArxivV1.lowerMaskedFourthIntrinsicRate_fourth : ∀ {n : ℕ} {L B g : ℝ},
+  0 ≤ L →
+    2 ≤ B →
+      RectangleCLTArxivV1.lowerMaskedFourthIntrinsicRate n L B g ^ 4 =
+        B ^ 4 * g ^ 4 * L ^ 3 / (↑n * Real.log (Real.exp 1 + B) ^ 3)
+@RectangleCLTArxivV1.lowerMaskedFourthRawWidth_le_intrinsicRate : ∀ {n : ℕ} {ell L B g : ℝ},
+  0 < n →
+    0 < ell →
+      ell ≤ L →
+        2 ≤ B →
+          0 ≤ g →
+            RectangleCLTArxivV1.lowerMaskedFourthRawWidth n ell B g ≤
+              RectangleCLTArxivV1.lowerMaskedFourthIntrinsicRate n L B g
+@RectangleCLTArxivV1.lowerMaskedFourthRawWidth_fourth_count : ∀ {n : ℕ} {ell B g : ℝ},
+  0 < n →
+    0 < ell →
+      2 ≤ B →
+        RectangleCLTArxivV1.lowerMaskedFourthRawWidth n ell B g ^ 4 =
+          B ^ 4 / 16 * RectangleCLT.Companion.SplitV4.maskedFourthCount ell B ^ 2 * g ^ 4 *
+            RectangleCLT.Companion.SplitV4.maskedFourthTheta n ell B
+@RectangleCLTArxivV1.lowerMaskedFourthTheta_le_raw_fourth : ∀ {n : ℕ} {ell B g c : ℝ},
+  0 < n →
+    0 < ell →
+      2 ≤ B →
+        0 < c →
+          c ≤ g →
+            1 ≤ RectangleCLT.Companion.SplitV4.maskedFourthCount ell B →
+              RectangleCLT.Companion.SplitV4.maskedFourthTheta n ell B ≤
+                RectangleCLTArxivV1.lowerMaskedFourthRawWidth n ell B g ^ 4 / c ^ 4
+@RectangleCLTArxivV1.lowerMaskedFourthIntrinsicRate_le_raw : ∀ {n : ℕ} {ell L B G g : ℝ},
+  0 < n →
+    0 < ell →
+      0 ≤ L →
+        L ≤ 3 * ell →
+          2 ≤ B →
+            0 ≤ G →
+              0 ≤ g →
+                G ≤ 2 * g →
+                  RectangleCLTArxivV1.lowerMaskedFourthIntrinsicRate n L B G ≤
+                    128 * RectangleCLTArxivV1.lowerMaskedFourthRawWidth n ell B g
+@RectangleCLTArxivV1.tendsto_lowerMaskedFourthRawWidth : ∀ {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    (∀ (n : ℕ), 1 ≤ r n) →
+      (∀ (n : ℕ), 2 ≤ m n) →
+        Filter.Tendsto
+            (fun n =>
+              RectangleCLTArxivV1.lowerMaskedFourthIntrinsicRate n (RectangleCLT.dimensionLog (r n * m n)) (B n)
+                (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+            Filter.atTop (nhds 0) →
+          Filter.Tendsto
+            (fun n =>
+              RectangleCLTArxivV1.lowerMaskedFourthRawWidth n (Real.log ↑(m n)) (B n)
+                (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+            Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.tendsto_lowerMaskedFourthLog_div_rareLog : ∀ {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    (∀ (n : ℕ), 1 ≤ r n) →
+      (∀ (n : ℕ), r n ≤ m n) →
+        Filter.Tendsto m Filter.atTop Filter.atTop →
+          Filter.Tendsto (fun n => Real.log (B n) / RectangleCLT.dimensionLog (r n * m n)) Filter.atTop (nhds 0) →
+            Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.maskedFourthLog (B n) / Real.log ↑(m n))
+              Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.tendsto_lowerMaskedFourthTheta : ∀ {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    Filter.Tendsto B Filter.atTop Filter.atTop →
+      (∀ (n : ℕ), 1 ≤ r n) →
+        Filter.Tendsto m Filter.atTop Filter.atTop →
+          Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.maskedFourthLog (B n) / Real.log ↑(m n)) Filter.atTop
+              (nhds 0) →
+            Filter.Tendsto
+                (fun n =>
+                  RectangleCLTArxivV1.lowerMaskedFourthRawWidth n (Real.log ↑(m n)) (B n)
+                    (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+                Filter.atTop (nhds 0) →
+              Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.maskedFourthTheta n (Real.log ↑(m n)) (B n))
+                Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.tendsto_lowerMaskedFourthVariance : ∀ {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    Filter.Tendsto B Filter.atTop Filter.atTop →
+      (∀ (n : ℕ), 1 ≤ r n) →
+        Filter.Tendsto m Filter.atTop Filter.atTop →
+          Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.maskedFourthLog (B n) / Real.log ↑(m n)) Filter.atTop
+              (nhds 0) →
+            Filter.Tendsto
+                (fun n =>
+                  RectangleCLTArxivV1.lowerMaskedFourthRawWidth n (Real.log ↑(m n)) (B n)
+                    (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+                Filter.atTop (nhds 0) →
+              Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.maskedFourthVariance n (Real.log ↑(m n)) (B n))
+                Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.tendsto_lowerMaskedFourthEffectiveAmplitude : ∀ {B : ℕ → ℝ} {m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    Filter.Tendsto m Filter.atTop Filter.atTop →
+      Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.maskedFourthTheta n (Real.log ↑(m n)) (B n)) Filter.atTop
+          (nhds 0) →
+        Filter.Tendsto
+          (fun n =>
+            RectangleCLT.Companion.SplitV4.maskedFourthAmplitude n (Real.log ↑(m n)) (B n) *
+                RectangleCLT.Companion.SplitV4.maskedFourthCount (Real.log ↑(m n)) (B n) /
+              Real.log ↑(m n))
+          Filter.atTop Filter.atTop
+@RectangleCLTArxivV1.eventually_lowerMaskedFourthSequence_fields : ∀ {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    Filter.Tendsto B Filter.atTop Filter.atTop →
+      (∀ (n : ℕ), 1 ≤ r n) →
+        Filter.Tendsto m Filter.atTop Filter.atTop →
+          Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.maskedFourthLog (B n) / Real.log ↑(m n)) Filter.atTop
+              (nhds 0) →
+            Filter.Tendsto
+                (fun n =>
+                  RectangleCLTArxivV1.lowerMaskedFourthRawWidth n (Real.log ↑(m n)) (B n)
+                    (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+                Filter.atTop (nhds 0) →
+              ∀ᶠ (n : ℕ) in Filter.atTop,
+                (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n).theta =
+                    RectangleCLT.Companion.SplitV4.maskedFourthTheta n (Real.log ↑(m n)) (B n) ∧
+                  (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n).pi =
+                      RectangleCLT.Companion.SplitV4.maskedFourthPi (B n) ∧
+                    (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n).amplitude =
+                      RectangleCLT.Companion.SplitV4.maskedFourthAmplitude n (Real.log ↑(m n)) (B n)
+@RectangleCLTArxivV1.lowerMaskedFourthCalibration : ∀ {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    Filter.Tendsto B Filter.atTop Filter.atTop →
+      (∀ (n : ℕ), 1 ≤ r n) →
+        Filter.Tendsto m Filter.atTop Filter.atTop →
+          Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.maskedFourthLog (B n) / Real.log ↑(m n)) Filter.atTop
+              (nhds 0) →
+            Filter.Tendsto
+                (fun n =>
+                  RectangleCLTArxivV1.lowerMaskedFourthRawWidth n (Real.log ↑(m n)) (B n)
+                    (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+                Filter.atTop (nhds 0) →
+              RectangleCLTArxivV1.LowerMaskedFourthCalibration B r m
+@RectangleCLTArxivV1.eventually_lowerMaskedFourth_membership : ∀ {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    (∀ (n : ℕ), 2 ≤ m n) →
+      RectangleCLTArxivV1.LowerMaskedFourthCalibration B r m →
+        ∀ᶠ (n : ℕ) in Filter.atTop,
+          RectangleCLTArxivV1.PolynomialFourthHypotheses
+            (RectangleCLTArxivV1.lowerFamilyArrayLaw (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) n (r n)
+              (m n))
+            (RectangleCLTArxivV1.lowerFamilyRawObservations (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n)) 4
+            (B n)
+RectangleCLTArxivV1.theorem_6_growing_fourth_moment_lower : ∃ c,
+  0 < c ∧
+    ∀ (B : ℕ → ℝ) (r m : ℕ → ℕ) [inst : ∀ (n : ℕ), NeZero (r n)] [inst_1 : ∀ (n : ℕ), NeZero (m n)],
+      (∀ (n : ℕ), 2 ≤ B n) →
+        (∀ (n : ℕ), 1 ≤ r n) →
+          (∀ (n : ℕ), 2 ≤ m n) →
+            (∀ (n : ℕ), r n ≤ m n) →
+              Filter.Tendsto m Filter.atTop Filter.atTop →
+                Filter.Tendsto B Filter.atTop Filter.atTop →
+                  Filter.Tendsto (fun n => Real.log (B n) / RectangleCLT.dimensionLog (r n * m n)) Filter.atTop
+                      (nhds 0) →
+                    Filter.Tendsto
+                        (fun n =>
+                          RectangleCLTArxivV1.lowerMaskedFourthIntrinsicRate n (RectangleCLT.dimensionLog (r n * m n))
+                            (B n) (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+                        Filter.atTop (nhds 0) →
+                      Filter.Tendsto
+                          (fun n =>
+                            RectangleCLTArxivV1.gaussianMaximumMean
+                                (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                  (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) (r n) (m n)) /
+                              RectangleCLTArxivV1.independentAbsGaussianMean (r n))
+                          Filter.atTop (nhds 1) ∧
+                        ∀ᶠ (n : ℕ) in Filter.atTop,
+                          RectangleCLTArxivV1.LowerRectangularFamilyProperties
+                              (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) n (r n) (m n) ∧
+                            RectangleCLTArxivV1.PolynomialFourthHypotheses
+                                (RectangleCLTArxivV1.lowerFamilyArrayLaw
+                                  (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) n (r n) (m n))
+                                (RectangleCLTArxivV1.lowerFamilyRawObservations
+                                  (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n))
+                                4 (B n) ∧
+                              c *
+                                    RectangleCLTArxivV1.lowerMaskedFourthIntrinsicRate n
+                                      (RectangleCLT.dimensionLog (r n * m n)) (B n)
+                                      (RectangleCLTArxivV1.gaussianMaximumMean
+                                        (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                          (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) (r n) (m n))) ≤
+                                  -RectangleCLTArxivV1.lowerFamilyShiftedCDFDifference
+                                      (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) n (r n) (m n)
+                                      (RectangleCLTArxivV1.lowerLeadingThreshold (r n)) ∧
+                                c *
+                                    RectangleCLTArxivV1.lowerMaskedFourthIntrinsicRate n
+                                      (RectangleCLT.dimensionLog (r n * m n)) (B n)
+                                      (RectangleCLTArxivV1.gaussianMaximumMean
+                                        (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                          (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) (r n) (m n))) ≤
+                                  RectangleCLTArxivV1.lowerFamilyComparisonDistance
+                                    (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) n (r n) (m n)
