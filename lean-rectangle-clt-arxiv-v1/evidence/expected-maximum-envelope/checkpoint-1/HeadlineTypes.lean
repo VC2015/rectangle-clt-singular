@@ -1,0 +1,9 @@
+import RectangleCLTArxivV1.EnvelopeExpectedMaximum
+set_option pp.all true
+#check @RectangleCLTArxivV1.lemma_E1_expected_maximum
+#print RectangleCLTArxivV1.ExpectedMaximumEnvelopeBound
+#check @RectangleCLTArxivV1.expected_maximum_under_envelope_moment
+#check @RectangleCLTArxivV1.coordinate_sq_integrable_of_envelope_moment
+#check @RectangleCLTArxivV1.integrable_norm_sum_of_envelope_moment
+#check @RectangleCLTArxivV1.expectedMaximum_negative_budget_obstruction
+#check @RectangleCLT.Companion.SplitV4.Printed.expected_maximum_under_envelope_moment

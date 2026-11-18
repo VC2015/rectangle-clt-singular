@@ -1,6 +1,6 @@
 # Verification status
 
-Twenty-two of the 40 named results are proved and freshly checked in the concrete probability models recorded by their expanded Lean types:
+Thirty-one of the 40 named results are proved and freshly checked in the concrete probability models recorded by their expanded Lean types. Lemma E.1 is separately proved with an explicit nonnegative envelope-budget qualification.
 
 | Paper statement | Checked endpoint(s) in `RectangleCLTArxivV1` |
 |---|---|
@@ -26,6 +26,15 @@ Twenty-two of the 40 named results are proved and freshly checked in the concret
 | Theorem 5 | `theorem_5_fourth_moment_two_sided` |
 | Theorem 6 | `theorem_6_growing_fourth_moment_lower` |
 | Theorem 7 | `theorem_7_polynomial_envelope_lower`, `theorem_7_fixed_envelope_fourth_lower` |
+| Theorem 3 | `theorem_3_intrinsic`, `theorem_3_intrinsic_positive_dimensions` |
+| Theorem 8 | `theorem_8_sparse_polynomial_moment_lower`, `theorem_8_sparse_polynomial_moment_two_sided` |
+| Lemma B.1 | `lemma_B1_gaussian_seed_interpolation` |
+| Lemma B.2 | `lemma_B2_intrinsic_paired_restoration` |
+| Lemma F.1 | `lemma_F_1_uniform_scalar_moderate_tail` |
+| Lemma F.2 | `lemma_F_2_independently_shifted_variables` |
+| Lemma F.3 | `lemma_F_3_common_symmetric_construction` |
+| Supplemental one-/two-face concentration | `cap_one_projection_small_interval_nonneg`, `cap_two_projection_small_box_nonneg` |
+| Lemma H.2 | `lemma_H2_gaussian_matrix`, `lemma_H2_projected_reference` |
 
 The clean checkout at proof commit `6d28758` passed 51 commands: the project build, fresh elaboration of its entire exported import closure, 78 transitive axiom checks, the pinned 54-declaration chaining audit, and mapped type/dependency exports. Only `propext`, `Classical.choice`, and `Quot.sound` are allowed. The kernel graph has no dependency on the archived final bounded or polynomial CLT. See `evidence/intrinsic-clean-checkpoint-2/` and `correspondence/intrinsic-acceptance.json`. The earlier clean attempt was interrupted by a broken output pipe; its failed receipt is preserved.
 
@@ -37,6 +46,10 @@ Independent reading-order reviews bind the checked statements and 114 mapped pas
 
 Statement correctness and complete passage coverage have separate ledger fields. Detailed internal bindings for Lemmas 1, 2, B.4, B.5, C.1, E.3, the normalization paragraph and parts of the lower-family proof remain follow-up work. The literal A.1/common-threshold argument supersedes the earlier numerical variant, whose history is retained.
 
-Theorems 3 and 8 have passed targeted builds and axiom audits; their integrated clean checkpoint is pending. Supporting proofs cover actual two-face concentration and parts of Supplemental G–H. These checks do not certify the remaining 18 named results or unreviewed passages. The complete complementary-restoration chain, localized surface argument and Supplemental I remain open. Lemma E.1 has a separately proved nonnegative-budget qualification; its unrestricted-real-budget reading is not claimed. Conjecture 1 is excluded.
+The clean checkout at `ec635a0` passed all 161 commands: the build, 145 fresh source elaborations, 119 exported axiom checks, the chaining audit, and 121 endpoint exports. The clean extension at `bc848e5` preserved every base source byte and freshly built/forced two further support modules. Its 273-declaration passage audit passed with the same three-axiom allowlist. See `evidence/main-results-clean-checkpoint/`, `evidence/main-results-clean-mapping/`, and `correspondence/main-results-acceptance.json`.
+
+There are now 206 accepted passage correspondences, including 19 explicitly documented method variations. These include the actual C4 Taylor-operator form of two B.1 steps, two equivalent F.1 intermediates, the quantitative Fourier/kernel route for the projection lemma, and the finite-moment cap-limit argument for H.2. The pre-acceptance versions of the new ledgers are preserved. Lemma E.1 and its eight passages are counted separately: the envelope budget A must be nonnegative, and a checked obstruction refutes the unrestricted-real-budget reading.
+
+The complementary fourth-remainder theorem with the actual covariance rank and the dimension-cap comparison have passed targeted builds and axiom audits. Their final source correspondence and exact normalized-remainder packaging are being completed. The remaining eight unaccepted named statements concern the cap/complementary results, localized surfaces, the later matrix/fourth-derivative bounds, and Corollaries 4–5. Unbound internal passages also remain open. Conjecture 1 is excluded.
 
 The archived 31 statements and 253 accepted passages concern the earlier November 7 manuscript. Its files and historical receipts remain unchanged. Fresh archive replay is recorded separately. Positive-integer derivative orders are preserved. `REPRODUCIBILITY.md` explains collaborator access to the private chaining dependency and the scope of each checkpoint.

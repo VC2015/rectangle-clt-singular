@@ -1,0 +1,262 @@
+@RectangleCLTArxivV1.theorem_3_intrinsic : ∀ {B : Nat → Real} {p : Nat → Nat},
+  (∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n)) →
+    @Filter.Tendsto.{0, 0} Nat Nat p (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Nat Nat.instPreorder) →
+      @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLTArxivV1.skewIntrinsicRate (B n) (p n) n)
+          (@Filter.atTop.{0} Nat Nat.instPreorder)
+          (@nhds.{0} Real
+            (@UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+            (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))) →
+        @Exists.{1} ((n : Nat) → Fin n → (Fin n → RectangleCLT.Vector (p n)) → RectangleCLT.Vector (p n))
+          fun (X : (n : Nat) → Fin n → (Fin n → RectangleCLT.Vector (p n)) → RectangleCLT.Vector (p n)) =>
+          And
+            (∀ (n : Nat),
+              @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n →
+                @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) (p n) →
+                  RectangleCLTArxivV1.SkewIndependentRawData (B n) n (p n) (X n))
+            (@LE.le.{0} EReal (@Preorder.toLE.{0} EReal (@PartialOrder.toPreorder.{0} EReal instERealPartialOrder))
+              (Real.toEReal
+                (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                  (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                    (@OfNat.ofNat.{0} Real 4
+                      (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+                        (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+                    (Real.exp (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))))
+              (@Filter.liminf.{0, 0} EReal Nat
+                (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice.{0} EReal
+                  (@ConditionallyCompleteLinearOrderBot.toConditionallyCompleteLinearOrder.{0} EReal
+                    (@CompleteLinearOrder.toConditionallyCompleteLinearOrderBot.{0} EReal
+                      instCompleteLinearOrderEReal)))
+                (fun (n : Nat) =>
+                  Real.toEReal
+                    (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                      (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                      (@RectangleCLT.Companion.rectangleDistance.{0} (Fin n → RectangleCLT.Vector (p n))
+                        (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector (p n))
+                          fun (a : Fin n) =>
+                          @MeasurableSpace.pi.{0, 0} (Fin (p n)) (fun (a : Fin (p n)) => Real) fun (a : Fin (p n)) =>
+                            Real.measurableSpace)
+                        (p n) (RectangleCLT.Companion.lowerArrayLaw (B n) n (p n))
+                        (@RectangleCLT.Companion.normalizedObservationSum.{0} (Fin n → RectangleCLT.Vector (p n)) (p n)
+                          n (X n))
+                        (@OfNat.ofNat.{0} (Matrix.{0, 0, 0} (Fin (p n)) (Fin (p n)) Real) 1
+                          (@One.toOfNat1.{0} (Matrix.{0, 0, 0} (Fin (p n)) (Fin (p n)) Real)
+                            (@Matrix.one.{0, 0} (Fin (p n)) Real (instDecidableEqFin (p n)) Real.instZero
+                              Real.instOne))))
+                      (RectangleCLTArxivV1.skewIntrinsicRate (B n) (p n) n)))
+                (@Filter.atTop.{0} Nat Nat.instPreorder)))
+@RectangleCLTArxivV1.theorem_3_intrinsic_positive_dimensions : ∀ {B : Nat → Real} {p : Nat → Nat},
+  (∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n)) →
+    (∀ (n : Nat),
+        @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n →
+          @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) (p n)) →
+      @Filter.Tendsto.{0, 0} Nat Nat p (@Filter.atTop.{0} Nat Nat.instPreorder)
+          (@Filter.atTop.{0} Nat Nat.instPreorder) →
+        @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLTArxivV1.skewIntrinsicRate (B n) (p n) n)
+            (@Filter.atTop.{0} Nat Nat.instPreorder)
+            (@nhds.{0} Real
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+              (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))) →
+          @Exists.{1} ((n : Nat) → Fin n → (Fin n → RectangleCLT.Vector (p n)) → RectangleCLT.Vector (p n))
+            fun (X : (n : Nat) → Fin n → (Fin n → RectangleCLT.Vector (p n)) → RectangleCLT.Vector (p n)) =>
+            And
+              (∀ (n : Nat),
+                @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)) n →
+                  RectangleCLTArxivV1.SkewIndependentRawData (B n) n (p n) (X n))
+              (@LE.le.{0} EReal (@Preorder.toLE.{0} EReal (@PartialOrder.toPreorder.{0} EReal instERealPartialOrder))
+                (Real.toEReal
+                  (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                    (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                      (@OfNat.ofNat.{0} Real 4
+                        (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+                          (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+                      (Real.exp (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))))
+                (@Filter.liminf.{0, 0} EReal Nat
+                  (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice.{0} EReal
+                    (@ConditionallyCompleteLinearOrderBot.toConditionallyCompleteLinearOrder.{0} EReal
+                      (@CompleteLinearOrder.toConditionallyCompleteLinearOrderBot.{0} EReal
+                        instCompleteLinearOrderEReal)))
+                  (fun (n : Nat) =>
+                    Real.toEReal
+                      (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                        (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                        (@RectangleCLT.Companion.rectangleDistance.{0} (Fin n → RectangleCLT.Vector (p n))
+                          (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector (p n))
+                            fun (a : Fin n) =>
+                            @MeasurableSpace.pi.{0, 0} (Fin (p n)) (fun (a : Fin (p n)) => Real) fun (a : Fin (p n)) =>
+                              Real.measurableSpace)
+                          (p n) (RectangleCLT.Companion.lowerArrayLaw (B n) n (p n))
+                          (@RectangleCLT.Companion.normalizedObservationSum.{0} (Fin n → RectangleCLT.Vector (p n))
+                            (p n) n (X n))
+                          (@OfNat.ofNat.{0} (Matrix.{0, 0, 0} (Fin (p n)) (Fin (p n)) Real) 1
+                            (@One.toOfNat1.{0} (Matrix.{0, 0, 0} (Fin (p n)) (Fin (p n)) Real)
+                              (@Matrix.one.{0, 0} (Fin (p n)) Real (instDecidableEqFin (p n)) Real.instZero
+                                Real.instOne))))
+                        (RectangleCLTArxivV1.skewIntrinsicRate (B n) (p n) n)))
+                  (@Filter.atTop.{0} Nat Nat.instPreorder)))
+def RectangleCLTArxivV1.SkewIndependentRawData : Real →
+  (n p : Nat) → (Fin n → (Fin n → RectangleCLT.Vector p) → RectangleCLT.Vector p) → Prop :=
+fun (B : Real) (n p : Nat) (X : Fin n → (Fin n → RectangleCLT.Vector p) → RectangleCLT.Vector p) =>
+  And
+    (@RectangleCLT.BoundedIndependentHypotheses.{0} (Fin n → RectangleCLT.Vector p)
+      (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+        @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+      p n (RectangleCLT.Companion.lowerArrayLaw B n p) X B)
+    (And
+      (∀ (i : Fin n),
+        @Eq.{1}
+          (@MeasureTheory.Measure.{0} (RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace))
+          (@MeasureTheory.Measure.map.{0, 0} (Fin n → RectangleCLT.Vector p) (RectangleCLT.Vector p)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (@MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace) (X i)
+            (RectangleCLT.Companion.lowerArrayLaw B n p))
+          (@MeasureTheory.Measure.pi.{0, 0} (Fin p) (fun (x : Fin p) => Real) (Fin.fintype p)
+            (fun (i : Fin p) => Real.measurableSpace) fun (x : Fin p) => RectangleCLT.Companion.lowerTwoPointLaw B))
+      (And
+        (∀ (i : Fin n),
+          @ProbabilityTheory.iIndepFun.{0, 0, 0} (Fin n → RectangleCLT.Vector p) (Fin p)
+            (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+              @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+            (fun (j : Fin p) => Real) (fun (i : Fin p) => Real.measurableSpace)
+            (fun (j : Fin p) (z : Fin n → RectangleCLT.Vector p) => X i z j)
+            (RectangleCLT.Companion.lowerArrayLaw B n p))
+        (And
+          (∀ (i : Fin n),
+            @Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+              (@RectangleCLT.covariance.{0} (Fin n → RectangleCLT.Vector p)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                p (RectangleCLT.Companion.lowerArrayLaw B n p) (X i))
+              (@OfNat.ofNat.{0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) 1
+                (@One.toOfNat1.{0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+                  (@Matrix.one.{0, 0} (Fin p) Real (instDecidableEqFin p) Real.instZero Real.instOne))))
+          (And
+            (∀ (i : Fin n),
+              @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))
+                (@MeasureTheory.Measure.real.{0} (Fin n → RectangleCLT.Vector p)
+                  (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                    @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) =>
+                      Real.measurableSpace)
+                  (RectangleCLT.Companion.lowerArrayLaw B n p)
+                  (@setOf.{0} (Fin n → RectangleCLT.Vector p) fun (z : Fin n → RectangleCLT.Vector p) =>
+                    @Eq.{1} Real
+                      (@Norm.norm.{0} (RectangleCLT.Vector p)
+                        (@NormedRing.toNorm.{0} (RectangleCLT.Vector p)
+                          (@Pi.normedRing.{0, 0} (Fin p) (fun (a : Fin p) => Real) (Fin.fintype p) fun (i : Fin p) =>
+                            @NormedCommRing.toNormedRing.{0} Real Real.normedCommRing))
+                        (X i z))
+                      B)))
+            (@Eq.{1} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+              (@RectangleCLT.covariance.{0} (Fin n → RectangleCLT.Vector p)
+                (@MeasurableSpace.pi.{0, 0} (Fin n) (fun (a : Fin n) => RectangleCLT.Vector p) fun (a : Fin n) =>
+                  @MeasurableSpace.pi.{0, 0} (Fin p) (fun (a : Fin p) => Real) fun (a : Fin p) => Real.measurableSpace)
+                p (RectangleCLT.Companion.lowerArrayLaw B n p)
+                (@RectangleCLT.Companion.normalizedObservationSum.{0} (Fin n → RectangleCLT.Vector p) p n X))
+              (@OfNat.ofNat.{0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) 1
+                (@One.toOfNat1.{0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+                  (@Matrix.one.{0, 0} (Fin p) Real (instDecidableEqFin p) Real.instZero Real.instOne))))))))
+def RectangleCLTArxivV1.skewIntrinsicRate : Real → Nat → Nat → Real :=
+fun (B : Real) (p n : Nat) =>
+  @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) B
+        (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n)))
+      (RectangleCLTArxivV1.independentAbsGaussianMean p))
+    (RectangleCLT.dimensionLog p)
+RectangleCLTArxivV1.skewIntrinsicRate_eq_gaussianWidth : ∀ (B : Real) (p n : Nat),
+  @Eq.{1} Real (RectangleCLTArxivV1.skewIntrinsicRate B p n)
+    (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) B
+          (@RectangleCLTArxivV1.gaussianMaximumMean p
+            (@OfNat.ofNat.{0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real) 1
+              (@One.toOfNat1.{0} (Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+                (@Matrix.one.{0, 0} (Fin p) Real (instDecidableEqFin p) Real.instZero Real.instOne)))))
+        (RectangleCLT.dimensionLog p))
+      (Real.sqrt (@Nat.cast.{0} Real Real.instNatCast n)))
+RectangleCLTArxivV1.tendsto_independentAbsGaussianMean_div_sqrt_two_log : @Filter.Tendsto.{0, 0} Nat Real
+  (fun (p : Nat) =>
+    @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+      (RectangleCLTArxivV1.independentAbsGaussianMean p)
+      (Real.sqrt
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (@OfNat.ofNat.{0} Real 2
+            (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+              (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+          (Real.log (@Nat.cast.{0} Real Real.instNatCast p)))))
+  (@Filter.atTop.{0} Nat Nat.instPreorder)
+  (@nhds.{0} Real
+    (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+    (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)))
+@RectangleCLTArxivV1.old_skew_rate_tendsto_zero_of_intrinsic : ∀ {B : Nat → Real} {p : Nat → Nat},
+  (∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n)) →
+    @Filter.Tendsto.{0, 0} Nat Nat p (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Nat Nat.instPreorder) →
+      @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLTArxivV1.skewIntrinsicRate (B n) (p n) n)
+          (@Filter.atTop.{0} Nat Nat.instPreorder)
+          (@nhds.{0} Real
+            (@UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+            (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))) →
+        @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLT.Companion.lowerSkewRate (B n) (p n) n)
+          (@Filter.atTop.{0} Nat Nat.instPreorder)
+          (@nhds.{0} Real
+            (@UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+            (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+@RectangleCLTArxivV1.skew_intrinsic_distance_liminf : ∀ {B : Nat → Real} {p : Nat → Nat},
+  (∀ (n : Nat),
+      @LE.le.{0} Real Real.instLE
+        (@OfNat.ofNat.{0} Real 2
+          (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+            (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+        (B n)) →
+    @Filter.Tendsto.{0, 0} Nat Nat p (@Filter.atTop.{0} Nat Nat.instPreorder) (@Filter.atTop.{0} Nat Nat.instPreorder) →
+      @Filter.Tendsto.{0, 0} Nat Real (fun (n : Nat) => RectangleCLTArxivV1.skewIntrinsicRate (B n) (p n) n)
+          (@Filter.atTop.{0} Nat Nat.instPreorder)
+          (@nhds.{0} Real
+            (@UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+            (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))) →
+        @LE.le.{0} EReal (@Preorder.toLE.{0} EReal (@PartialOrder.toPreorder.{0} EReal instERealPartialOrder))
+          (Real.toEReal
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@OfNat.ofNat.{0} Real 4
+                  (@instOfNatAtLeastTwo.{0} Real 4 Real.instNatCast
+                    (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+                (Real.exp (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))))))
+          (@Filter.liminf.{0, 0} EReal Nat
+            (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice.{0} EReal
+              (@ConditionallyCompleteLinearOrderBot.toConditionallyCompleteLinearOrder.{0} EReal
+                (@CompleteLinearOrder.toConditionallyCompleteLinearOrderBot.{0} EReal instCompleteLinearOrderEReal)))
+            (fun (n : Nat) =>
+              Real.toEReal
+                (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                  (RectangleCLT.Companion.lowerConstructionDistance (B n) n (p n))
+                  (RectangleCLTArxivV1.skewIntrinsicRate (B n) (p n) n)))
+            (@Filter.atTop.{0} Nat Nat.instPreorder))

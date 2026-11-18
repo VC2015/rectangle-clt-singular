@@ -1,0 +1,16 @@
+import RectangleCLTArxivV1.LowerLemmaF1
+import RectangleCLTArxivV1.LowerLemmaF2
+import RectangleCLTArxivV1.LowerLemmaF3
+#print RectangleCLTArxivV1.LowerRectangularFamilyProperties
+#print RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters
+#check @RectangleCLTArxivV1.scalarModerateTailRadius_pos
+#check @RectangleCLTArxivV1.scalarModerateTailErrorConstant_pos
+#check @RectangleCLTArxivV1.lemma_F_1_bound
+#check @RectangleCLTArxivV1.lemma_F_1_uniform_scalar_moderate_tail
+#check @RectangleCLTArxivV1.lemma_F_2_independent_conditioning
+#check @RectangleCLTArxivV1.lemma_F_2_signed_taylor
+#check @RectangleCLTArxivV1.lemma_F_2_independently_shifted_variables
+#check @RectangleCLTArxivV1.lemma_F_3_raw_covariance
+#check @RectangleCLTArxivV1.lemma_F_3_gaussian_covariance
+#check @RectangleCLTArxivV1.lemma_F_3_properties_of_parameters
+#check @RectangleCLTArxivV1.lemma_F_3_common_symmetric_construction
