@@ -1,0 +1,12 @@
+import RectangleCLTArxivV1
+
+#check @RectangleCLTArxivV1.corollary_2_intrinsic
+#check @RectangleCLTArxivV1.corollary_3_intrinsic
+#check @RectangleCLTArxivV1.theorem4_bounded_symmetric_lower
+#check @RectangleCLTArxivV1.theorem_5_fourth_moment_lower
+#check @RectangleCLTArxivV1.theorem_5_fourth_moment_two_sided
+#check @RectangleCLTArxivV1.theorem_6_growing_fourth_moment_lower
+#check @RectangleCLTArxivV1.theorem_7_polynomial_envelope_lower
+#check @RectangleCLTArxivV1.theorem_7_fixed_envelope_fourth_lower
+#check @RectangleCLTArxivV1.exists_lowerDense_upper_constant
+#check @RectangleCLTArxivV1.lemma_lower_family_properties

@@ -8,6 +8,17 @@ open Lean Elab Command in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let targets := #[
+    ``RectangleCLTArxivV1.corollary_2_intrinsic,
+    ``RectangleCLTArxivV1.corollary_3_intrinsic,
+    ``RectangleCLTArxivV1.theorem4_bounded_symmetric_lower,
+    ``RectangleCLTArxivV1.theorem_5_fourth_moment_lower,
+    ``RectangleCLTArxivV1.theorem_5_fourth_moment_two_sided,
+    ``RectangleCLTArxivV1.theorem_6_growing_fourth_moment_lower,
+    ``RectangleCLTArxivV1.theorem_7_polynomial_envelope_lower,
+    ``RectangleCLTArxivV1.theorem_7_fixed_envelope_fourth_lower,
+    ``RectangleCLTArxivV1.exists_lowerDense_upper_constant,
+    ``RectangleCLTArxivV1.lemma_lower_family_properties,
+
     ``GenericChaining.dirksen_expectation, ``GenericChaining.gamma2_le_gaussianWidth,
     ``RectangleCLTArxivV1.signedIndex_card,
     ``RectangleCLTArxivV1.signedMaximum_eq_norm,

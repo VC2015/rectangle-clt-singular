@@ -76,8 +76,9 @@ def main():
             [f"RectangleCLTArxivV1/{name}.lean" for name in MODULES] + SOURCES))
         SOURCES += ["Correspondence/IntrinsicEndpoints.lean", "Correspondence/A1.lean",
                     "Correspondence/B3.lean", "Correspondence/C1Gaussian.lean"]
-        if (PROJECT / "Correspondence/Transfers.lean").exists():
-            SOURCES.append("Correspondence/Transfers.lean")
+        for extra in ("Transfers", "IntrinsicTransfersAndLower"):
+            if (PROJECT / ("Correspondence/" + extra + ".lean")).exists():
+                SOURCES.append("Correspondence/" + extra + ".lean")
     output = args.output.resolve()
     status = git("status", "--porcelain")
     if args.require_clean and status:
@@ -136,8 +137,9 @@ def main():
         if args.scope == "exported":
             for name in ("IntrinsicEndpoints", "A1", "B3", "C1Gaussian"):
                 run("mapped-" + name, ["lake", "env", "lean", "Correspondence/" + name + ".lean"])
-            if (PROJECT / "Correspondence/Transfers.lean").exists():
-                run("mapped-Transfers", ["lake", "env", "lean", "Correspondence/Transfers.lean"])
+            for extra in ("Transfers", "IntrinsicTransfersAndLower"):
+                if (PROJECT / ("Correspondence/" + extra + ".lean")).exists():
+                    run("mapped-" + extra, ["lake", "env", "lean", "Correspondence/" + extra + ".lean"])
         deps_log = run("dependencies", ["lake", "env", "lean", "Correspondence/Dependencies.lean"])
         deps = json.loads(deps_log.read_text())
         graph = {row["name"] for row in deps["project_dependency_graph"]}
