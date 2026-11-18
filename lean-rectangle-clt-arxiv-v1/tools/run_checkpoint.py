@@ -76,7 +76,7 @@ def main():
             [f"RectangleCLTArxivV1/{name}.lean" for name in MODULES] + SOURCES))
         SOURCES += ["Correspondence/IntrinsicEndpoints.lean", "Correspondence/A1.lean",
                     "Correspondence/B3.lean", "Correspondence/C1Gaussian.lean"]
-        for extra in ("Transfers", "IntrinsicTransfersAndLower"):
+        for extra in ("Transfers", "IntrinsicTransfersAndLower", "SupplementG"):
             if (PROJECT / ("Correspondence/" + extra + ".lean")).exists():
                 SOURCES.append("Correspondence/" + extra + ".lean")
     output = args.output.resolve()
@@ -137,7 +137,7 @@ def main():
         if args.scope == "exported":
             for name in ("IntrinsicEndpoints", "A1", "B3", "C1Gaussian"):
                 run("mapped-" + name, ["lake", "env", "lean", "Correspondence/" + name + ".lean"])
-            for extra in ("Transfers", "IntrinsicTransfersAndLower"):
+            for extra in ("Transfers", "IntrinsicTransfersAndLower", "SupplementG"):
                 if (PROJECT / ("Correspondence/" + extra + ".lean")).exists():
                     run("mapped-" + extra, ["lake", "env", "lean", "Correspondence/" + extra + ".lean"])
         deps_log = run("dependencies", ["lake", "env", "lean", "Correspondence/Dependencies.lean"])

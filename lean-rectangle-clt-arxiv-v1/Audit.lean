@@ -8,6 +8,20 @@ open Lean Elab Command in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let targets := #[
+    ``RectangleCLTArxivV1.cap_one_projection_small_interval_nonneg,
+    ``RectangleCLTArxivV1.cap_two_projection_small_box_nonneg,
+    ``RectangleCLTArxivV1.lemma_F_1_weighted_normal_derivative,
+    ``RectangleCLTArxivV1.lemma_F_1_weighted_normal_log_derivative,
+    ``RectangleCLTArxivV1.cap_covariance_minimal_factor,
+    ``RectangleCLTArxivV1.cap_covariance_rank_pos,
+    ``RectangleCLTArxivV1.cap_seededFourthRemainder_rank_complementary_bound,
+    ``RectangleCLTArxivV1.cap_seededFourthRemainder_rank_intervalIntegrable,
+    ``RectangleCLTArxivV1.cap_seededFourthRemainder_rank_abs_intervalIntegrable,
+    ``RectangleCLTArxivV1.proposition_G1_dimension_log_cap_normalized,
+    ``RectangleCLTArxivV1.cap_normalizedSeededFourthRemainder_bounded_integral_bound,
+    ``RectangleCLTArxivV1.cap_seededFourthRemainder_bounded_integral_bound,
+    ``RectangleCLTArxivV1.dimensionCapCLT,
+
     ``RectangleCLTArxivV1.theorem_3_intrinsic,
     ``RectangleCLTArxivV1.theorem_3_intrinsic_positive_dimensions,
     ``RectangleCLTArxivV1.theorem_8_sparse_polynomial_moment_lower,
