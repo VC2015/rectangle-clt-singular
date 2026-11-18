@@ -18,6 +18,8 @@ PAPER_COMMIT = '1803366cc994d9facae8e128ee180f68e319486f'
 GIT = 'https://github.com/VC2015/rectangle-clt-singular'
 HOME = 'https://vc2015.github.io/rectangle-clt-singular/'
 PROJECT = 'lean-rectangle-clt-arxiv-v1'
+BLUEPRINT_TITLE = ('Lean Verification of Sharp High-Dimensional Gaussian Approximations '
+                   'over Rectangles without Covariance Restrictions')
 ARXIV = 'https://arxiv.org/abs/2611.21474v1'
 CHAIN = 'https://github.com/VC2015/generic-chaining/blob/b0db8f333413b3d0fc9e1e20825dc7bd4d7019fc/GenericChaining/'
 MAIN = 'research-rectangle-clt-singular/Rectangle_CLT_arXiv_2026-11-16.tex'
@@ -154,11 +156,11 @@ def make_reader(statements):
     nav=''.join(ahref('#'+k,v,'primary') for k,v in secondary)
     nav+='<div class="groups">' + ''.join('<details><summary>'+g+'</summary>'+''.join(internal(k,k+' · '+titles[k]) for k in rows)+'</details>' for g,rows in groups.items())+'</div>'
     nav+='<div class="side-foot">'+ahref(HOME,'Paper homepage')+ahref(ARXIV,'Paper on arXiv')+ahref(GIT+'/tree/'+RELEASE,'Tagged sources')+'</div>'
-    intro=f'''<section class="page" id="overview" data-title="Overview"><div class="front"><p class="eyebrow">Mathematical blueprint · arXiv v1</p><h1>The rectangle CLT in Lean</h1>
+    intro=f'''<section class="page" id="overview" data-title="Overview"><div class="front"><p class="eyebrow">Mathematical blueprint · arXiv v1</p><h1>{escape(BLUEPRINT_TITLE)}</h1>
 <p class="sub">How accurately can a Gaussian vector approximate the probability that a sum of independent random vectors falls in a rectangle? The paper gives bounds even when the covariance is singular. This blueprint follows the proofs from the probability argument to the corresponding Lean declarations.</p>
 <p class="byline">Paper by Victor Chernozhukov, Denis Chetverikov, Kengo Kato and Yuta Koike.<br>Blueprint by GPT-Sol 6.2, prompted by Victor Chernozhukov.</p>
 <div class="tools">{ahref('#theorem-1','Read Theorem 1','action')}{ahref(HOME+'blueprint/rectangle-clt-blueprint.pdf','Download PDF')}<a download="rectangle-clt-blueprint.html" href="{HOME}blueprint/index.html">Download HTML</a>{ahref(ARXIV,'Paper on arXiv')}</div></div>
-<p class="start">To follow the role of Gaussian width, start with {internal('Lemma C.2')}. For the envelope condition, see {internal('Lemma E.1')}. For a formal proof that takes a different route, see {internal('Lemma H.1')}.</p>
+<p class="start">To follow the role of Gaussian width, start with {internal('Lemma C.2')}. For the envelope condition, see {internal('Lemma E.1')}.</p>
 <h2 id="theorem-index">Theorem-to-Lean index</h2>
 <p>Of the 40 named results, Lean checks 39 as stated. In Lemma E.1 it makes explicit that the envelope scale is nonnegative. Conjecture 1 remains open.</p>
 <div class="searchbar js-only"><label for="filter">Find a result</label><input type="search" id="filter" placeholder="Theorem, subject or Lean name"><output id="matches" aria-live="polite">41 of 41</output></div>'''
@@ -181,7 +183,7 @@ def make_reader(statements):
         if label=='Lemma E.1':
             content+='<aside class="note"><p><strong>Envelope condition.</strong> Lean assumes <i>A</i> ≥ 0. The proof handles zero separately and uses a positive truncation level in the other case. The application takes the nonnegative root of the moment bound.</p></aside>'
         if label=='Lemma H.1':
-            content+=f'<aside class="note route"><p><strong>Two proof routes.</strong> Lean obtains the all-threshold surface bound by continuity and Fatou’s lemma. The nonsimple-ridge Gauss–Green identity and the spherical conormal identity for any number of edges have separate Lean proofs. For the spherical identity Lean uses Gaussian first moments and polar coordinates. The printed tangent-field and divergence calculation at lines 1112–1123 remains outside that correspondence. {ahref(src("correspondence/supplemental-h-nonsimple-printed-completion.json"),"H.1 completion record")}</p></aside>'
+            content+=f'<aside class="note route"><p><strong>How the proofs differ.</strong> The printed proof estimates the ridge contribution directly at the given threshold. The Lean proof first obtains the estimate at almost every nearby threshold, then uses continuity and Fatou’s lemma to pass to the given threshold. The nonsimple-ridge Gauss–Green identity and the spherical conormal identity for any number of edges have separate Lean proofs. For the spherical identity Lean uses Gaussian first moments and polar coordinates. The printed tangent-field and divergence calculation at lines 1112–1123 remains outside that correspondence. {ahref(src("correspondence/supplemental-h-nonsimple-printed-completion.json"),"H.1 completion record")}</p></aside>'
         lines=note.get('stepLines',[])
         if lines: assert len(lines)==len(note['steps']),label
         parts=[]
@@ -230,7 +232,7 @@ def make_reader(statements):
 <ul><li>{ahref(src('evidence/final-clean-checkpoint/run.json'),'Baseline build and audit')}</li><li>{ahref(src('evidence/final-clean-mapping/run.json'),'Full manuscript mapping and dependency record')}</li><li>{ahref(src('evidence/supplemental-h-nonsimple-printed/clean-checkpoint/run.json'),'Clean H.1 extension')}</li><li>{ahref(src('REPRODUCIBILITY.md'),'Reproduction instructions')}</li></ul><h2>How to read the evidence</h2><p>The theorem index identifies the checked conclusion. The proof entries follow the reasoning in the paper and give links to corresponding Lean declarations or documented changes of argument. For example, {internal('Lemma E.1')} states its sign convention explicitly, and {internal('Lemma H.1')} distinguishes the proof of a bound from the separately proved identities. {ahref(src('correspondence/final-coverage.json'),'Full passage ledger')}.</p></section>''')
     css=(HERE/'reader.css').read_text();js=(HERE/'reader.js').read_text()
     return f'''<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>The rectangle CLT in Lean · Blue Blueprint</title><meta name="description" content="An interactive mathematical blueprint for arXiv:2611.21474v1, linking the rectangle CLT, its proofs and its supplement to Lean."><meta name="robots" content="index,follow"><link rel="canonical" href="{HOME}blueprint/"><style>{css}</style></head><body><a class="skip" href="#main">Skip to content</a><header class="mast"><button type="button" class="menu" id="menu" aria-expanded="false" aria-controls="contents">Contents</button><a class="brand" href="#overview">Blue Blueprint</a><span class="series">Rectangle CLT</span><a class="version" href="#release">arXiv v1 · Lean 4</a></header><nav class="sidebar" id="contents" aria-label="Table of contents">{nav}</nav><main id="main"><div class="shell">{''.join(sections)}</div></main><script>{js}</script></body></html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(BLUEPRINT_TITLE)} · Blue Blueprint</title><meta name="description" content="An interactive mathematical blueprint for arXiv:2611.21474v1, linking the rectangle CLT, its proofs and its supplement to Lean."><meta name="robots" content="index,follow"><link rel="canonical" href="{HOME}blueprint/"><style>{css}</style></head><body><a class="skip" href="#main">Skip to content</a><header class="mast"><button type="button" class="menu" id="menu" aria-expanded="false" aria-controls="contents">Contents</button><a class="brand" href="#overview">Blue Blueprint</a><span class="series">Rectangle CLT</span><a class="version" href="#release">arXiv v1 · Lean 4</a></header><nav class="sidebar" id="contents" aria-label="Table of contents">{nav}</nav><main id="main"><div class="shell">{''.join(sections)}</div></main><script>{js}</script></body></html>
 '''
 
 
