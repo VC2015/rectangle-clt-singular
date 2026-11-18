@@ -1,23 +1,10 @@
 # Reproducing the checked intrinsic library
 
-The proof library is frozen at commit
-`443fbc667ed3c3ee47369e028c2c4280a5eed604` and targets the manuscript sources
-in `source-pins.json`. Its scope is the paper’s 40 named results: 39 as stated,
-and Lemma E.1 with the explicit envelope-budget condition `A ≥ 0`.
-Conjecture 1 is excluded. Detailed reading-order correspondence covers the
-34 proof environments, including Supplemental Material G–I, with documented
-proof-route variations.
+Two clean proof commits cover the [16 November paper](https://arxiv.org/abs/2611.21474v1) and its supplement. Their manuscript hashes are in [source-pins.json](source-pins.json). Lean checks 39 named results as stated and Lemma E.1 with the explicit envelope condition `A ≥ 0`. Conjecture 1 remains open. The [proof ledger](correspondence/final-coverage.json) maps all 34 explicit proof environments, including Appendices G–I, and identifies alternative derivations.
 
-For the source’s empty or proper full-dimensional polyhedra, H.1’s surface
-bound holds at every threshold by actual facet selection and a Fatou
-argument. The printed intermediate Green identity for nonsimple polyhedra
-is bypassed and remains unproved; it is not claimed as a checked intermediate. The
-intrinsic bounds reuse the checked generic-chaining proofs of Dirksen’s
-mixed-tail theorem and the Gaussian γ₂/expected-supremum equivalence.
-Lower-family scalar Berry–Esseen estimates reuse a checked scalar
-specialization of a foundational CLT; this is an explicit method variation.
+The proof of the all-threshold surface bound in Lemma H.1 uses actual facets, continuity and Fatou’s lemma. At the second proof commit the nonsimple-ridge Gauss–Green identity and the spherical conormal identity for an arbitrary number of edges were also proved separately. The latter proof uses Gaussian first moments and polar coordinates. The intrinsic bounds use the public generic-chaining proofs of Dirksen’s mixed-tail theorem and the Gaussian γ₂/expected-supremum equivalence. The lower-bound construction uses a checked scalar specialization of a foundational CLT for its Berry–Esseen estimate. [H.1 completion record](correspondence/supplemental-h-nonsimple-printed-completion.json)
 
-Both final clean verification stages passed at the frozen proof commit.
+Both baseline stages passed in a clean checkout of `443fbc667ed3c3ee47369e028c2c4280a5eed604`.
 The [exported checkpoint](evidence/final-clean-checkpoint/run.json) completed
 436 commands, including 166 registered axiom targets, 54 chaining targets,
 and 168 explicit types with 10,401 project dependency nodes.
@@ -39,13 +26,11 @@ statement or passage registries.
 
 The locked dependencies require Lean 4.19.0 and mathlib
 `c44e0c8ee63ca166450922a373c7409c5d26b00b`. Generic chaining is pinned to
-`b0db8f333413b3d0fc9e1e20825dc7bd4d7019fc`. That repository is private:
-collaborators need GitHub access to fetch it. This is a collaborator
-reproduction procedure, not a publicly reproducible release. The archived
+`b0db8f333413b3d0fc9e1e20825dc7bd4d7019fc`. The [pinned repository](https://github.com/VC2015/generic-chaining/tree/b0db8f333413b3d0fc9e1e20825dc7bd4d7019fc) is public and supports anonymous HTTPS cloning. The archived
 `lean-kane`, `lean-rectangle-clt-local`, and `lean-rectangle-clt-singular`
 projects are sibling path dependencies in this checkout.
 
-## Proof checkout and receipt checkout
+## Reproduce the baseline
 
 Use two distinct checkout roles. The clean proof worktree must stay at
 `443fbc667ed3c3ee47369e028c2c4280a5eed604`. The final receipt checkout is at a
@@ -61,18 +46,19 @@ reviews; it does not change which proof commit was checked. In particular,
 acceptance counts in the frozen proof checkout can predate the final
 acceptance update.
 
-Start inside the final receipt checkout, with the pinned Lean toolchain on
+Start inside a full clone of the public repository, including its archive branches, with the pinned Lean toolchain on
 `PATH` and the proof commit available locally. Choose new worktree and output
 paths; neither verification runner overwrites an existing output directory.
-The example keeps all receipts and generated harnesses outside the clean
+The source-ledger check reads the old V4 manuscript by its original commit ID. Enable the repository’s local Git aliases once so that the ID resolves to its public counterpart in every worktree. The example keeps all receipts and generated harnesses outside the clean
 proof worktree:
 
 ```sh
 set -eu
 RECEIPT_REPO="$(git rev-parse --show-toplevel)"
+python3 "$RECEIPT_REPO/provenance/enable-original-commit-aliases.py"
 PROOF_COMMIT=443fbc667ed3c3ee47369e028c2c4280a5eed604
-PROOF_REPO=/tmp/rectangle-clt-proof-443fbc6
-RUN_BASE=/tmp/rectangle-clt-final-reproduction
+RUN_BASE=$(mktemp -d)
+PROOF_REPO="$RUN_BASE/baseline-proof"
 MAPPING_PLAN="$RECEIPT_REPO/lean-rectangle-clt-arxiv-v1/evidence/final-clean-mapping-plan/plan.json"
 test -f "$MAPPING_PLAN"
 git -C "$RECEIPT_REPO" worktree add --detach "$PROOF_REPO" "$PROOF_COMMIT"
@@ -152,3 +138,19 @@ checkpoint are separate evidence scopes. See `evidence/archive-replay/` for
 the historical November 7 checks. The source ledger’s
 `PASS_SOURCE_IDENTITY_ONLY` marker establishes byte identity and exclusion
 bookkeeping, not mathematical correctness.
+
+## Reproduce the supplemental H.1 extension
+
+After the baseline completes, keep its clean, built worktree and the shell variables above. Create a second worktree for the extension. The two cache-preparation commands check source and dependency identities before reusing artifacts from the baseline. The checkpoint then builds the whole library, directly checks 66 modules, and audits the new declarations and registered endpoints.
+
+```sh
+H1_COMMIT=63c975b7bd2176ddf559dbed1b2e087e191f7a45
+H1_REPO="$RUN_BASE/h1-proof"
+git -C "$RECEIPT_REPO" worktree add --detach "$H1_REPO" "$H1_COMMIT"
+cd "$H1_REPO/lean-rectangle-clt-arxiv-v1"
+python3 tools/prepare_verified_cache.py --from-checkout "$PROOF_REPO" --output "$RUN_BASE/h1-dependencies.json"
+python3 tools/prepare_h1_verified_native_cache.py --from-clean-checkout "$PROOF_REPO" --output "$RUN_BASE/h1-native.json"
+python3 tools/run_h1_printed_clean_checkpoint.py --dependency-cache-receipt "$RUN_BASE/h1-dependencies.json" --native-cache-receipt "$RUN_BASE/h1-native.json" --output "$RUN_BASE/h1-checkpoint"
+```
+
+The [saved H.1 run](evidence/supplemental-h-nonsimple-printed/clean-checkpoint/run.json) records 75 successful commands, 537 new public declaration types, and 182 registered axiom targets. Its receipt SHA-256 is `7c11133c4166d752dcf72ac2614410115601f3d5cb5170245415a08222cbb258`. Its axiom union is `propext`, `Classical.choice`, and `Quot.sound`. The full 1,949-type manuscript mapping belongs to the baseline run. The [completion record](correspondence/supplemental-h-nonsimple-printed-completion.json) links the H.1 evidence to the two printed identities.
