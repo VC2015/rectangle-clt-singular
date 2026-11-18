@@ -2,7 +2,7 @@
 
 Victor Chernozhukov, Denis Chetverikov, Kengo Kato, and Yuta Koike.
 
-This repository contains the paper, its Supplemental Material, and the archived Lean verification with the source dependencies needed to reproduce it. The current manuscript and supplement are dated **16 November 2026**.
+The [paper on arXiv](https://arxiv.org/abs/2611.21474v1) and its Supplemental Material are dated **16 November 2026**. The [paper homepage](https://vc2015.github.io/rectangle-clt-singular/) links to both PDFs. The [Lean verification guide for arXiv v1](LEAN_VERIFICATION_V1.md) links the mathematical results and their proofs to the code.
 
 ## Abstract
 
@@ -17,10 +17,10 @@ We study how well a sum of $n$ independent random vectors with $p$ coordinates c
 
 The supplement contains the dimension-logarithm cap, the correlation-gap proof, and the exceptional-correlation-budget proof. It preserves Appendix labels G, H, and I. Corollaries 4 and 5 remain stated in the main paper. Save the two PDFs in the same folder to follow cross-document links in readers that support them.
 
-The [Lean verification guide](LEAN_VERIFICATION.md) distinguishes the archived **7 November 2026** certificate from the current paper. That certificate covers the frozen manuscript's 31 proved statements and qualified formal counterparts of its substantive proof arguments. It does not cover the subsequent intrinsic refinements or the new supplement. Conjecture 1 is excluded. Publishing this archive does not constitute a new Lean certification.
+Lean checks 39 of the 40 named results as stated. For Lemma E.1 it makes the envelope condition $A\ge 0$ explicit, as used in the proof. The correspondence records cover all 34 explicit proof environments, including the supplement, and identify where Lean takes a different route. Conjecture 1 remains open. [Theorem-to-Lean index](lean-rectangle-clt-arxiv-v1/STATUS.md) · [Proof correspondence](lean-rectangle-clt-arxiv-v1/correspondence/final-coverage.json) · [Reproducing the checks](lean-rectangle-clt-arxiv-v1/REPRODUCIBILITY.md)
 
-The [verification assignment for the 16 November paper and supplement](lean-rectangle-clt-arxiv-v1/README.md) starts a separate certification, with a [statement and proof inventory](lean-rectangle-clt-arxiv-v1/inventory.json). It uses the completed finite chaining dependency. The new paper's proof obligations are open.
+The [7 November V4 certificate](LEAN_VERIFICATION.md) covers the 31 proved statements of that earlier manuscript.
 
 The [provenance guide](PROVENANCE.md) records the selected history, original dates, commit mapping, and checksums. Historical manuscripts and original verification records are retained without editing their contents. The wider HDCLTs research repository remains private. The first public release of this selected archive is 16 November 2026; retained earlier commit dates describe development history, not earlier public availability.
 
-The [submission checks](research-rectangle-clt-singular/Rectangle_CLT_arXiv_2026-11-16_checks.md) describe the PDF/source validation. The arXiv identifier will be added after submission and announcement.
+The [submission checks](research-rectangle-clt-singular/Rectangle_CLT_arXiv_2026-11-16_checks.md) describe the PDF/source validation.

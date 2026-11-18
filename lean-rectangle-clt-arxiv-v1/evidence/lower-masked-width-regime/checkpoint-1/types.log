@@ -1,0 +1,163 @@
+structure RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters : Type
+number of parameters: 0
+fields:
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta_pos : 0 < self.theta
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta_le_one : self.theta ≤ 1
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi_pos : 0 < self.pi
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi_le_one : self.pi ≤ 1
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude_pos : 0 < self.amplitude
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.variance_lt_half : self.theta * self.pi *
+        self.amplitude ^ 2 <
+      1 / 2
+constructor:
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.mk (theta pi amplitude : ℝ) (theta_pos : 0 < theta)
+    (theta_le_one : theta ≤ 1) (pi_pos : 0 < pi) (pi_le_one : pi ≤ 1) (amplitude_pos : 0 < amplitude)
+    (variance_lt_half : theta * pi * amplitude ^ 2 < 1 / 2) : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters
+RectangleCLTArxivV1.lowerFamilyEffectiveAmplitude_widthScale : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n r m : ℕ},
+  2 ≤ m →
+    RectangleCLTArxivV1.lowerWidthScale (RectangleCLTArxivV1.lowerFamilyEffectiveAmplitude P n m) (Real.log ↑m)
+        (RectangleCLTArxivV1.independentAbsGaussianMean r) ↑n =
+      RectangleCLTArxivV1.lowerFamilyRareWidthScale P n r
+RectangleCLTArxivV1.lowerFamilyEffectiveAmplitude_square : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n m : ℕ},
+  2 ≤ m →
+    P.amplitude ^ 2 * (↑n * P.theta) ^ 2 = RectangleCLTArxivV1.lowerFamilyEffectiveAmplitude P n m ^ 2 * Real.log ↑m ^ 2
+RectangleCLTArxivV1.lowerFamilyRareWidthScale_pos : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {n r : ℕ}, 1 ≤ n → 1 ≤ r → 0 < RectangleCLTArxivV1.lowerFamilyRareWidthScale P n r
+RectangleCLTArxivV1.lowerFamily_masked_shift_second_moment_budget : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n m : ℕ} [inst : NeZero m],
+  1 ≤ n →
+    1 ≤ Real.log ↑m →
+      1 ≤ ↑n * P.theta →
+        P.pi * Real.log ↑m ≤ ↑n * P.theta →
+          RectangleCLT.Companion.SplitV4.familyShiftSecondMoments P n m ≤
+            (12 + 8 * Real.exp (11 / 2)) * P.amplitude ^ 2 * (↑n * P.theta) ^ 2 / ↑n
+RectangleCLTArxivV1.lowerFamilyMaskedMasterRemainder_width_bound : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n r m : ℕ} [inst : NeZero m] {c : ℝ},
+  0 < c →
+    1 ≤ n →
+      1 ≤ r →
+        2 ≤ m →
+          r ≤ m →
+            1 ≤ Real.log ↑m →
+              1 ≤ RectangleCLTArxivV1.lowerFamilyEffectiveAmplitude P n m →
+                c * √(RectangleCLT.dimensionLog r) ≤ RectangleCLTArxivV1.independentAbsGaussianMean r →
+                  1 ≤ ↑n * P.theta →
+                    P.pi * Real.log ↑m ≤ ↑n * P.theta →
+                      RectangleCLTArxivV1.lowerFamilyMasterRemainder P n r m ≤
+                        (RectangleCLTArxivV1.lowerRademacherMaximumConstant / c / Real.log ↑m +
+                            (2 * RectangleCLTArxivV1.lowerRademacherMaximumConstant +
+                                RectangleCLTArxivV1.lowerGaussianCurvatureConstant * (12 + 8 * Real.exp (11 / 2)) / 2) *
+                              (RectangleCLTArxivV1.lowerFamilyRareWidthScale P n r / c ^ 2)) *
+                          RectangleCLTArxivV1.lowerFamilyRareWidthScale P n r
+@RectangleCLTArxivV1.tendsto_lowerFamilyMaskedMasterRemainder_div_width : ∀
+  {P : ℕ → RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters} {r m : ℕ → ℕ} [inst : ∀ (n : ℕ), NeZero (m n)],
+  (∀ (n : ℕ), 1 ≤ r n) →
+    (∀ (n : ℕ), 2 ≤ m n) →
+      (∀ (n : ℕ), r n ≤ m n) →
+        Filter.Tendsto m Filter.atTop Filter.atTop →
+          (∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ RectangleCLTArxivV1.lowerFamilyEffectiveAmplitude (P n) n (m n)) →
+            (∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ ↑n * (P n).theta) →
+              (∀ᶠ (n : ℕ) in Filter.atTop, (P n).pi * Real.log ↑(m n) ≤ ↑n * (P n).theta) →
+                Filter.Tendsto (fun n => RectangleCLTArxivV1.lowerFamilyRareWidthScale (P n) n (r n)) Filter.atTop
+                    (nhds 0) →
+                  Filter.Tendsto
+                    (fun n =>
+                      RectangleCLTArxivV1.lowerFamilyMasterRemainder (P n) n (r n) (m n) /
+                        RectangleCLTArxivV1.lowerFamilyRareWidthScale (P n) n (r n))
+                    Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.eventually_lowerFamily_masked_leading_range : ∀
+  {P : ℕ → RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 1 ≤ r n) →
+    (∀ (n : ℕ), 2 ≤ m n) →
+      (∀ (n : ℕ), r n ≤ m n) →
+        Filter.Tendsto m Filter.atTop Filter.atTop →
+          (∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ RectangleCLTArxivV1.lowerFamilyEffectiveAmplitude (P n) n (m n)) →
+            Filter.Tendsto (fun n => RectangleCLTArxivV1.lowerFamilyRareWidthScale (P n) n (r n)) Filter.atTop
+                (nhds 0) →
+              ∀ᶠ (n : ℕ) in Filter.atTop,
+                RectangleCLT.dimensionLog (r n) ≤
+                  RectangleCLT.Companion.SplitV4.Printed.rademacherGlobalSmallConstant * √↑n
+@RectangleCLTArxivV1.tendsto_lowerFamilyMasked_reverse_mean_ratio : ∀
+  {P : ℕ → RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters} {m : ℕ → ℕ} [inst : ∀ (n : ℕ), NeZero (m n)],
+  (∀ (n : ℕ), 2 ≤ m n) →
+    Filter.Tendsto m Filter.atTop Filter.atTop →
+      Filter.Tendsto (fun n => ↑n * (P n).theta) Filter.atTop Filter.atTop →
+        Filter.Tendsto (fun n => ↑(m n) * ((P n).pi / 2) ^ ⌈2 * (↑n * (P n).theta)⌉₊) Filter.atTop Filter.atTop →
+          Filter.Tendsto (fun n => (P n).variance) Filter.atTop (nhds 0) →
+            Filter.Tendsto
+                (fun n =>
+                  √(P n).variance * √(2 * Real.log ↑(m n)) /
+                    RectangleCLT.Companion.SplitV4.familyRareShiftScale (P n) n)
+                Filter.atTop (nhds 0) →
+              Filter.Tendsto
+                (fun n =>
+                  -RectangleCLT.Companion.SplitV4.familyShiftMeanDifference (P n) n (m n) /
+                    RectangleCLT.Companion.SplitV4.familyRareShiftScale (P n) n)
+                Filter.atTop (nhds 1)
+RectangleCLTArxivV1.exists_lowerFamily_masked_width_detection_constant : ∃ c,
+  0 < c ∧
+    ∀ (P : ℕ → RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (r m : ℕ → ℕ) [inst : ∀ (n : ℕ), NeZero (r n)]
+      [inst_1 : ∀ (n : ℕ), NeZero (m n)],
+      (∀ (n : ℕ), 1 ≤ r n) →
+        (∀ (n : ℕ), 2 ≤ m n) →
+          (∀ (n : ℕ), r n ≤ m n) →
+            Filter.Tendsto m Filter.atTop Filter.atTop →
+              (∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ RectangleCLTArxivV1.lowerFamilyEffectiveAmplitude (P n) n (m n)) →
+                Filter.Tendsto (fun n => ↑n * (P n).theta) Filter.atTop Filter.atTop →
+                  (∀ᶠ (n : ℕ) in Filter.atTop, (P n).pi * Real.log ↑(m n) ≤ ↑n * (P n).theta) →
+                    Filter.Tendsto (fun n => ↑(m n) * ((P n).pi / 2) ^ ⌈2 * (↑n * (P n).theta)⌉₊) Filter.atTop
+                        Filter.atTop →
+                      Filter.Tendsto (fun n => (P n).variance) Filter.atTop (nhds 0) →
+                        Filter.Tendsto
+                            (fun n =>
+                              √(P n).variance * √(2 * Real.log ↑(m n)) /
+                                RectangleCLT.Companion.SplitV4.familyRareShiftScale (P n) n)
+                            Filter.atTop (nhds 0) →
+                          Filter.Tendsto (fun n => RectangleCLTArxivV1.lowerFamilyRareWidthScale (P n) n (r n))
+                              Filter.atTop (nhds 0) →
+                            ∀ᶠ (n : ℕ) in Filter.atTop,
+                              c * RectangleCLTArxivV1.lowerFamilyRareWidthScale (P n) n (r n) ≤
+                                  -RectangleCLTArxivV1.lowerFamilyShiftedCDFDifference (P n) n (r n) (m n)
+                                      (RectangleCLTArxivV1.lowerLeadingThreshold (r n)) ∧
+                                c * RectangleCLTArxivV1.lowerFamilyRareWidthScale (P n) n (r n) ≤
+                                  RectangleCLTArxivV1.lowerFamilyComparisonDistance (P n) n (r n) (m n)
+@RectangleCLTArxivV1.tendsto_lowerFamilyRare_shiftScale : ∀
+  {P : ℕ → RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters} {r : ℕ → ℕ},
+  (∀ (n : ℕ), 1 ≤ r n) →
+    Filter.Tendsto (fun n => RectangleCLTArxivV1.lowerFamilyRareWidthScale (P n) n (r n)) Filter.atTop (nhds 0) →
+      Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.familyRareShiftScale (P n) n) Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.tendsto_lowerFamilyMasked_rare_width : ∀
+  {P : ℕ → RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 1 ≤ r n) →
+    (∀ (n : ℕ), 2 ≤ m n) →
+      Filter.Tendsto m Filter.atTop Filter.atTop →
+        Filter.Tendsto (fun n => RectangleCLTArxivV1.lowerFamilyRareWidthScale (P n) n (r n)) Filter.atTop (nhds 0) →
+          Filter.Tendsto
+              (fun n =>
+                √(P n).variance * √(2 * Real.log ↑(m n)) / RectangleCLT.Companion.SplitV4.familyRareShiftScale (P n) n)
+              Filter.atTop (nhds 0) →
+            Filter.Tendsto (fun n => √(P n).variance * RectangleCLTArxivV1.independentAbsGaussianMean (m n))
+              Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.lowerFamilyMasked_width_profile : ∀
+  {P : ℕ → RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 1 ≤ r n) →
+    (∀ (n : ℕ), 2 ≤ m n) →
+      Filter.Tendsto m Filter.atTop Filter.atTop →
+        Filter.Tendsto (fun n => (P n).variance) Filter.atTop (nhds 0) →
+          Filter.Tendsto (fun n => RectangleCLTArxivV1.lowerFamilyRareWidthScale (P n) n (r n)) Filter.atTop (nhds 0) →
+            Filter.Tendsto
+                (fun n =>
+                  √(P n).variance * √(2 * Real.log ↑(m n)) /
+                    RectangleCLT.Companion.SplitV4.familyRareShiftScale (P n) n)
+                Filter.atTop (nhds 0) →
+              Filter.Tendsto
+                (fun n =>
+                  RectangleCLTArxivV1.gaussianMaximumMean
+                      (RectangleCLTArxivV1.lowerFamilyGaussianFactor (P n) (r n) (m n)) /
+                    RectangleCLTArxivV1.independentAbsGaussianMean (r n))
+                Filter.atTop (nhds 1)

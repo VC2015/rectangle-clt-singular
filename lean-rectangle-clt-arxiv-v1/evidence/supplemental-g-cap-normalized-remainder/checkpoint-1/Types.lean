@@ -1,0 +1,4 @@
+import RectangleCLTArxivV1.SupplementalGCapNormalizedRemainder
+#check @RectangleCLTArxivV1.cap_normalizedSeededFourthRemainder_integral_bound
+#check @RectangleCLTArxivV1.cap_normalizedSeededFourthRemainder_bounded_integral_bound
+#check @RectangleCLTArxivV1.proposition_G1_dimension_log_cap_normalized

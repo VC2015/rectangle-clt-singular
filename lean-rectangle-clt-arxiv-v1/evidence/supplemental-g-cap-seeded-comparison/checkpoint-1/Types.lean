@@ -1,0 +1,5 @@
+import RectangleCLTArxivV1.SupplementalGCapSeededComparison
+#check @RectangleCLTArxivV1.capSeededComparisonConstant_pos
+#check @RectangleCLTArxivV1.capSeededTimeComparisonConstant_pos
+#check @RectangleCLTArxivV1.cap_normalizedSeededFourthRemainder_majorant
+#check @RectangleCLTArxivV1.cap_normalizedSeeded_time_comparison_bound

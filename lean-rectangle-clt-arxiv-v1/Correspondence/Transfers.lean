@@ -1,0 +1,27 @@
+import RectangleCLTArxivV1
+
+#print RectangleCLTArxivV1.PolynomialEnvelopeHypotheses
+#print RectangleCLTArxivV1.PolynomialFourthHypotheses
+#print RectangleCLTArxivV1.PolynomialEnvelopeBound
+#print RectangleCLTArxivV1.PolynomialFourthBound
+#print RectangleCLTArxivV1.PolynomialMomentTheorem
+#print RectangleCLTArxivV1.polynomialEnvelopeWidthRate
+#print RectangleCLTArxivV1.polynomialFourthWidthRate
+
+#check @RectangleCLTArxivV1.theorem_2_i_intrinsic
+#check @RectangleCLTArxivV1.theorem_2_ii_intrinsic
+#check @RectangleCLTArxivV1.theorem_2_intrinsic
+#check @RectangleCLTArxivV1.theorem_2_intrinsic_with_min
+#check @RectangleCLTArxivV1.PolynomialEnvelopeHypotheses.gaussian_factor_exists
+#check @RectangleCLTArxivV1.lemma_E2_intrinsic_comparison
+#check @RectangleCLTArxivV1.lemma_E3_intrinsic_smoothing
+#check @RectangleCLTArxivV1.lemma_E4_paired_slepian
+#check @RectangleCLTArxivV1.lemma_E5_truncated_bennett_maximum
+#check @RectangleCLTArxivV1.lemma_B5_intrinsic_threshold
+
+example := @RectangleCLTArxivV1.theorem_2_intrinsic
+example := @RectangleCLTArxivV1.theorem_2_intrinsic_with_min
+example := @RectangleCLTArxivV1.lemma_E2_intrinsic_comparison
+example := @RectangleCLTArxivV1.lemma_E3_intrinsic_smoothing
+example := @RectangleCLTArxivV1.lemma_E4_paired_slepian
+example := @RectangleCLTArxivV1.lemma_B5_intrinsic_threshold

@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "source": "RectangleCLTArxivV1/LowerWidthBudget.lean",
+  "source_sha256": "93137975b36aeac786a448a54dc76c98ab839d0ea6ca7df723aa1778ff00a213",
+  "source_unchanged": true,
+  "targets": [
+    "RectangleCLTArxivV1.lowerWidthBudget_linear",
+    "RectangleCLTArxivV1.lowerWidthBudget_shift_square",
+    "RectangleCLTArxivV1.lowerWidthBudget_coordinate_square",
+    "RectangleCLTArxivV1.lowerWidthBudget_combined"
+  ],
+  "strict_allowed_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "commands": [
+    {
+      "command": [
+        "lake",
+        "build",
+        "RectangleCLTArxivV1.LowerWidthBudget"
+      ],
+      "returncode": 0,
+      "log": "build.log"
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "RectangleCLTArxivV1/LowerWidthBudget.lean"
+      ],
+      "returncode": 0,
+      "log": "force.log"
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "evidence/lower-width-budget/checkpoint-1/Audit.lean"
+      ],
+      "returncode": 0,
+      "log": "audit.log"
+    }
+  ],
+  "finished_at_utc": "2026-11-18T01:36:38.721600+00:00",
+  "scope": "Pure lower width error budgets; not the full lower construction"
+}

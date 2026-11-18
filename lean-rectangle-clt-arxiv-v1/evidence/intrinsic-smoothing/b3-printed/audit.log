@@ -1,0 +1,15 @@
+'RectangleCLTArxivV1.gaussian_mean_relative_to_single_face' depends on axioms: [propext, Classical.choice, Quot.sound]
+RectangleCLTArxivV1.gaussian_mean_relative_to_single_face {r : ℕ} (u : RectangleCLT.Vector r)
+  (hu : RectangleCLT.vectorNormSq u = 1) (β : ℝ → ℝ) (hβ : Measurable β) (hβb : ∀ (a : ℝ), 0 ≤ β a ∧ β a ≤ 1)
+  (w : RectangleCLT.Vector r → ℝ) (hw : Measurable w)
+  (hwb : ∀ (z : RectangleCLT.Vector r), 0 ≤ w z ∧ w z ≤ β (RectangleCLT.faceDot u z))
+  (_hpb : 0 < ∫ (z : RectangleCLT.Vector r), β (RectangleCLT.faceDot u z) ∂RectangleCLT.standardGaussian r)
+  (hpw : 0 < RectangleCLT.Companion.weightMass (RectangleCLT.standardGaussian r) w) :
+  RectangleCLT.Companion.weightMass (RectangleCLT.standardGaussian r) w *
+      RectangleCLT.vectorNormSq (RectangleCLT.Companion.weightMean (RectangleCLT.standardGaussian r) id w) ≤
+    ∫ (z : RectangleCLT.Vector r), w z * RectangleCLT.faceDot u z ^ 2 ∂RectangleCLT.standardGaussian r +
+      2 * RectangleCLT.Companion.weightMass (RectangleCLT.standardGaussian r) w *
+        Real.log
+          ((∫ (z : RectangleCLT.Vector r), β (RectangleCLT.faceDot u z) ∂RectangleCLT.standardGaussian r) /
+            RectangleCLT.Companion.weightMass (RectangleCLT.standardGaussian r) w)
+PASS: B.3 Jensen, orthogonal independence factorization, tangent decomposition and Cauchy--Schwarz are actual direct proof dependencies.

@@ -1,0 +1,128 @@
+{
+  "status": "passed",
+  "scope": "Independent static review of the two exact held H1 clean delta-checkpoint tools. This record is not a proof-run receipt, clean-checkpoint PASS, or replay of the historical 1949-target manuscript mapping.",
+  "reviewer": "archive_h_resume",
+  "reviewed_at_utc": "2026-11-18T14:03:33.872675+00:00",
+  "reviewed_tool_identity": {
+    "tools/prepare_h1_verified_native_cache.py": "d304a1b22a416464d530a8dc4cf243bb336592da3c07b14da6a6fc864336404f",
+    "tools/run_h1_printed_clean_checkpoint.py": "0c4fd42389f037c7941d223e71efd6d6cb4c7c779373fac9215b9cc62576e345"
+  },
+  "reviewed_support_tool_and_config_identity": {
+    "tools/prepare_full_clean_mapping.py": "344c9d4f79621b36f6e69c20c81e5a1b2e559c1a20bc67d6db33377c44927dca",
+    "tools/prepare_verified_cache.py": "ef20f28aa1f58d174b4caad6281f7e4ceebd1fb8acdd8ffb7383f14ccad7c39d",
+    "tools/check_pins.py": "9a1a7695db6374895530afe4308fa5e9af306fcd59f3c6ef1287aa386ea68238",
+    "correspondence/build_source_ledger.py": "d5bbf005f04f86af778511d07b1afcb237d3d1ff7157c0ea82c1910d70e000dc",
+    "lakefile.toml": "72ffa044275622a8e2c3a2c875c4865c0efba8fd2b6e33a5b8c3b82b1cd147d0",
+    "lean-toolchain": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea"
+  },
+  "sealed_baseline": {
+    "commit": "443fbc667ed3c3ee47369e028c2c4280a5eed604",
+    "receipt": "evidence/final-clean-checkpoint/run.json",
+    "receipt_sha256": "3500c2efdb929397434a7e2201f0b203b51b14bd362d53e78666be40afb62ba5"
+  },
+  "review_method": "Read-only source/control-flow review; independently checked the cache path allowlist, source inventories, import-order traversal, target/provider correspondence, state transitions and final identity guards. Neither reviewed Python tool nor Lean was executed. Only this review record was written.",
+  "supporting_independent_static_reader": {
+    "agent": "archive_h_resume/h1_spherical_balance",
+    "scope": "Current-tree changed-source enumeration, import-force ordering, explicit-public syntax harvesting and actual provider correspondence; same held tool hashes.",
+    "finding": "No current-tree completeness or provider defect found. No scripts/Lean executed or artifact written."
+  },
+  "static_checks": [
+    {
+      "id": "sealed_baseline",
+      "status": "passed",
+      "finding": "Both tools hard-pin the exact old proof commit 443fbc667ed3c3ee47369e028c2c4280a5eed604 and historical clean receipt SHA3500c2efdb929397434a7e2201f0b203b51b14bd362d53e78666be40afb62ba5; the baseline is not inferred from mutable status text alone."
+    },
+    {
+      "id": "old_clean_native_source_provenance",
+      "status": "passed",
+      "finding": "Native cache source checkout must be clean at that old commit; each eligible original source matches the sealed baseline digest, and destination source bytes and toolchain/config files must agree."
+    },
+    {
+      "id": "cache_excludes_new_changed_root",
+      "status": "passed",
+      "finding": "The cache helper iterates only baseline RectangleCLTArxivV1/ native source paths, so new paths cannot be copied and changed sources are skipped. The actual top-level Root and Audit paths are outside this prefix. No new/root proof artifact is copied by this helper."
+    },
+    {
+      "id": "cache_copy_inventory",
+      "status": "passed",
+      "finding": "Each copied artifact records its exact destination path, SHA256, originating source path and source SHA256. Existing native destination artifacts cause refusal. Cache preparation explicitly reports proof_check=false."
+    },
+    {
+      "id": "runtime_cache_receipt_binding",
+      "status": "passed",
+      "finding": "The runner requires dependency and native cache receipts, validates baseline/destination/scope flags, and checks the reusable source set equals all unchanged native sources. Each artifact must belong to a permitted path for one of those sources and match its recorded starting SHA256."
+    },
+    {
+      "id": "no_cache_count_inflation",
+      "status": "passed",
+      "finding": "Native artifact paths must be unique, and each reusable module must have an olean and its recorded olean.hash artifact entry. New/root artifact flags must be false; cache-seeding counts are not presented as fresh proof checks or actual Lake cache-hit counts."
+    },
+    {
+      "id": "clean_checkout_external_outputs",
+      "status": "passed",
+      "finding": "The runner refuses preexisting output, output inside the clean repository, and initial tracked/untracked worktree changes. Final commit, tree and porcelain status must match the initial clean state."
+    },
+    {
+      "id": "complete_changed_native_inventory",
+      "status": "passed",
+      "finding": "All native Lean files are enumerated recursively against the old baseline. Removed old native files are rejected; every new path and byte-changed old path is included, even if Root does not import it."
+    },
+    {
+      "id": "topological_fresh_source_forces",
+      "status": "passed",
+      "finding": "Changed modules are visited after their actual project import dependencies and each is directly re-elaborated to its olean exactly once. The top-level Root is directly re-elaborated afterward; registered Audit and both correspondence harnesses are separately compiled."
+    },
+    {
+      "id": "honest_library_build_scope",
+      "status": "passed",
+      "finding": "The build command names the actual lean_lib RectangleCLTArxivV1 plus all changed modules. It is a full library build with fresh changed-source replays, while the old unchanged proof-source evidence remains the sealed baseline."
+    },
+    {
+      "id": "explicit_public_target_coverage",
+      "status": "passed",
+      "finding": "The existing mapper harvester covers the current new-source syntax: namespaces/sections, explicit theorems/defs/abbreviations/structures and named instances. Private helpers are intentionally omitted as targets but their type/value dependencies are covered when used. Generated declarations are not claimed as separately enumerated explicit source declarations."
+    },
+    {
+      "id": "actual_provider_correspondence",
+      "status": "passed",
+      "finding": "Every new explicit public target must have a unique textual provider; exported kernel_import_module must match that provider. Exact exported-name equality prevents a missing requested endpoint from being silently omitted."
+    },
+    {
+      "id": "full_types_and_shared_axioms",
+      "status": "passed",
+      "finding": "The reviewed existing mapper renderer generates pp.all types and checks the complete shared transitive axiom union against propext/Classical.choice/Quot.sound. The runner checks nonempty types, exact names, allowed union and project-graph closure."
+    },
+    {
+      "id": "registered_audit_and_export",
+      "status": "passed",
+      "finding": "The registered Audit executes from current source and rejects any unexpected union axiom. Registered full-type/dependency export executes separately and its project graph must be closed. The reported registered count comes from actual Audit output, rather than an assumed historical target count."
+    },
+    {
+      "id": "toolchain_and_dependency_pins",
+      "status": "passed",
+      "finding": "The runner compares actual Lean version output with lean-toolchain, runs source/dependency pin and frozen-source-ledger checks, and verifies every manifest Git dependency revision/tracked status before and after the run."
+    },
+    {
+      "id": "source_and_harness_drift",
+      "status": "passed",
+      "finding": "All native source hashes, Root/Audit/config/source-ledger inputs, recursive project import closure, reviewed tool sources and generated type harness are bound. Final exact native file set, bound hashes, harness digest, cache receipt bytes and package identities must remain unchanged."
+    },
+    {
+      "id": "command_failure_reporting",
+      "status": "passed",
+      "finding": "Each command records argv/cwd/start time and a dedicated combined stdout/stderr log; a normal nonzero exit is recorded with log SHA256 before raising. Command-stage exceptions set status=failed and the finally block persists the receipt. Preflight failure aborts before any proof-run PASS; killed/running receipts are not accepted as passed."
+    },
+    {
+      "id": "historical_mapping_scope",
+      "status": "passed",
+      "finding": "The runner expressly sets historical_1949_target_mapping_replayed=false and release_wide_certification=false. It does not relabel the old manuscript mapping receipt as a fresh rerun or treat cache copying as proof evidence."
+    }
+  ],
+  "findings": [],
+  "limits": [
+    "The actual new clean checkpoint has not been certified by this tooling review. Its command exits/logs, final source/cache hashes and expanded exports require a separate runtime review.",
+    "The old native artifacts are cache seeds taken from the sealed clean baseline source checkout, not newly replayed old proofs. Their copied artifact digests and byte-identical sources are recorded; this review does not claim a fresh elaboration of every unchanged old native module.",
+    "Public target coverage is the current explicit source-declaration syntax supported by the reviewed harvester; it does not claim separately listed compiler-generated constructor/recursor names. Reachable private/generated declarations remain in the full kernel dependency and axiom closures.",
+    "The historical old 1949 mapping receipt remains unchanged and historical."
+  ]
+}

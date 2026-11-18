@@ -1,0 +1,21 @@
+import RectangleCLTCompanion.FactorExistence
+import RectangleCLT.GaussianComparisonLaw
+import RectangleCLT.GaussianMaximum
+
+set_option pp.universes true
+set_option pp.fullNames true
+
+#check @RectangleCLT.Companion.gaussian_factor_exists_of_boundedIndependent
+#print axioms RectangleCLT.Companion.gaussian_factor_exists_of_boundedIndependent
+#check @RectangleCLT.Companion.covariance_posSemidef_of_boundedIndependent
+#print axioms RectangleCLT.Companion.covariance_posSemidef_of_boundedIndependent
+#check @RectangleCLT.Companion.sum_integral_observation_projection_sq
+#print axioms RectangleCLT.Companion.sum_integral_observation_projection_sq
+#check @RectangleCLT.Companion.observation_projection_ae_zero_of_quadratic_zero
+#print axioms RectangleCLT.Companion.observation_projection_ae_zero_of_quadratic_zero
+#check @RectangleCLT.gaussianLaw_map_eval_eq_standard
+#print axioms RectangleCLT.gaussianLaw_map_eval_eq_standard
+#check @RectangleCLT.gaussianLaw_integral_coordinate
+#print axioms RectangleCLT.gaussianLaw_integral_coordinate
+#check @RectangleCLT.gaussianLaw_integral_coordinate_product
+#print axioms RectangleCLT.gaussianLaw_integral_coordinate_product

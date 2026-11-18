@@ -1,0 +1,8 @@
+import RectangleCLTArxivV1.LowerSparseReadingOrder
+#print RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters
+#check @RectangleCLTArxivV1.lowerSparseIntrinsicK_four
+#check @RectangleCLTArxivV1.lowerSparseIntrinsicRate_four
+#check @RectangleCLTArxivV1.lowerSparseSequence_four
+#check @RectangleCLTArxivV1.lowerSparse_cube_dimension_sq_le_coordinateWidth_fourth
+#check @RectangleCLTArxivV1.tendsto_lowerSparseEll_cube_dimensionLog_sq_div
+#check @RectangleCLTArxivV1.lowerSparseCalibration_from_headline

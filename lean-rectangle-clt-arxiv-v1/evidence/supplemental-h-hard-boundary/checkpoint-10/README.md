@@ -1,0 +1,9 @@
+# Actual signed ridge expectation checkpoint
+
+This checkpoint force-elaborates all three new ridge assembly sources, checks all ten public proof declarations against only `propext`, `Classical.choice`, and `Quot.sound`, and exports the full endpoint types and kernel-derived project dependency graph. It freezes the recursive new-project import sources and build/toolchain identities before the actual commands and checks that they are unchanged afterward.
+
+The final endpoint is `RectangleCLTArxivV1.ae_hardGaussianWeightedRidgeIntegral_concentrated_base`. It bounds the actual native angle-weighted signed Gaussian ridge integral, includes its base integrability, and uses only the displayed concentration hypothesis on an arbitrary probability base law, including singular laws. All normal-space, spherical-vector, true conical event, exact one-sixth grouping and six-order incidence inputs are proved from the selected original normals. The universal explicit coefficient is `(3072*pi+6144)*exp(3/2)*exp(128)`.
+
+The statement holds at volume-almost every threshold list. It is sufficient to average against an absolutely continuous auxiliary threshold law once that law and the relevant coarea passage are proved. It does **not** certify the source H.1 statement for every empty/full-dimensional polyhedron with its actual nonsimple facets. That all-threshold actual-facet extension, and identification with conventionally normalized Hausdorff measure, are separate scopes. The source surface convention used here is genuine orthogonal-chart Lebesgue Gaussian section measure.
+
+`run.json` is the actual final receipt. `audit.log` contains all ten transitive axiom sets; `types-dependencies.log` contains the expanded endpoint types and project graph. The supporting seven-source/35-target packet is checkpoint-9. Exact paper passages and scope differences are recorded in `correspondence/supplemental-h-ridge-assembly-passages.json`.

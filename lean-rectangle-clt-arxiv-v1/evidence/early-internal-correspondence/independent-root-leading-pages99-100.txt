@@ -1,0 +1,187 @@
+F. Lower-bound constructions and proofs
+
+99
+
+We prepare two estimates for applying the lemma. The first approximates the leading Rademacher maximum by a Gaussian maximum. For an integer n ≥ 1, let
+An := n−1/2
+
+n
+X
+
+ηi ,
+
+i=1
+
+where the ηi are independent Rademacher signs. For an integer m ≥ 1, let An,1 , . . . , An,m be
+independent copies of An and define Λm := log(em). There are absolute constants c3 , C > 0 such
+√
+that, for all sufficiently large n and Λm ≤ c3 n,
+!
+√
+2
+Λ
+Λ
+m
+m
+(F.10)
+ϵn,m := sup P{max An,j ≤ x} − Φ(x)m ≤ C √ +
+.
+j≤m
+n
+n
+x
+For m = 1, this is scalar Berry–Esseen. For m ≥ 2, applying an absolute scalar error directly to
+the product of distribution functions would introduce a factor m. We instead use the relative tail
+estimate in Lemma F.1.
+For An , the parameters of that lemma are δ = n−1/2 and γ = 0. Hence
+log
+
+P(An > x)
+≤ Cϵn (x),
+Φ̄(x)
+
+1 + x x4
+ϵn (x) := √ + ,
+n
+n
+
+0 ≤ x ≤ c2 n1/4 ,
+
+for a sufficiently small absolute c2 > 0 and all large n. The lemma’s hypothesis holds uniformly on
+this range. Choosing c2 small also bounds the displayed logarithm by a fixed constant, so the two
+tails are comparable and
+P(An > x)
+− 1 ≤ Cϵn (x).
+Φ̄(x)
+We check the maximum over three ranges of x. If x ≤ 1, Berry–Esseen bounds the scalar
+√
+distribution-function error by C/ n. Both scalar distribution functions are at most a fixed r0 < 1
+for large n, since Φ(1) < 1. The mean value theorem for their mth powers gives an error at most
+√
+√
+Cmr0m−1 / n ≤ C/ n. If 1 < x ≤ c2 n1/4 , define ux := P(An > x), vx := Φ̄(x), and w := mvx .
+The same mean value theorem, now using comparable tails, gives
+|(1 − ux )m − (1 − vx )m | ≤ Cm|ux − vx |e−c∗ mvx ≤ Cϵn (x)we−c∗ w .
+√
+√
+For x ≤ 2 Λm , the boundedness of we−c∗ w gives the right side of (F.10). For x > 2 Λm , the
+√
+2
+2
+2
+normal tail bound gives w ≤ me−x /2 ≤ e−x /4 . The error is then at most Cϵn (x)e−x /4 ≤ C/ n.
+Finally, choose c3 < c22 /4. For x > c2 n1/4 , both scalar sums are sub-Gaussian, so a union bound
+controls the difference of the maximum distribution functions by
+2
+
+2√
+
+2me−x /2 ≤ 2e−c2 n/4 = O(n−1/2 ).
+√
+Here log m ≤ c3 n was used. These ranges cover all real thresholds and prove (F.10).
+The second set of estimates concerns the density and moments of the Gaussian maximum. For
+m ≥ 2, let H1 , . . . , Hm be independent standard normal variables and define
+H∗ := max Hu ,
+u≤m
+
+Fm (x) := P(H∗ ≤ x) = Φ(x)m .
+
+Choose um by mΦ̄(um ) = 1. This places
+the threshold where the maximum has a nondegenerate
+√
+distribution and a density of order log m. As m → ∞,
+√
+p
+p
+2 log m
+′
+(F.11) um ∼ 2 log m,
+Fm (um ) ∼
+,
+EH∗ ∼ 2 log m,
+EH∗2 = O(log m).
+e
+
+100
+
+Gaussian approximation over rectangles
+
+We will also use the uniform bound
+(F.12)
+
+′′
+∥Fm
+∥∞ ≤ C log(em),
+
+m ≥ 2.
+
+To verify (F.11), use the normal tail estimates Φ̄(x) ≍ φ(x)/(1+x) for x ≥ 0 and φ(x)/Φ̄(x) ∼ x
+as x → ∞. The equation defining um gives its stated asymptotic, and
+′
+Fm
+(um ) = mφ(um )(1 − 1/m)m−1 ∼ um /e.
+√
+For any fixed ε ∈ (0, 1), those tail estimates give P{H∗ > (1 + ε) 2 log m} → 0 by a union bound,
+and
+p
+p
+P{H∗ ≤ (1 − ε) 2 log m} ≤ exp{−mΦ̄((1 − ε) 2 log m)} −→ 0.
+√
+2
+Thus H∗ / 2 log m → 1 in probability. Integrating P(maxu |Hu | > y) ≤ min{1, 2me−y /2 } yields
+EH∗2 = O(log m). This also gives uniform integrability of the normalized maxima, proving the
+mean asymptotic.
+For (F.12), differentiate twice:
+′′
+Fm
+(x) = m(m − 1)φ(x)2 Φ(x)m−2 − mxφ(x)Φ(x)m−1 .
+
+The cases m = 2, 3 are bounded directly, since φ and xφ(x) are bounded. For m ≥ 4 and x < 0,
+the inequality Φ(x) ≤ 1/2 makes the
+p powers dominate the polynomial factors in m, again giving
+an absolute bound. For 0 ≤ x ≤ 2 log(em), set w := mΦ̄(x). Then φ(x) ≤ C(1 + x)Φ̄(x) and
+Φ(x)m−2 ≤ e−w/2 show that the two terms are bounded together by
+C(1 + x)2 (w + w2 )e−c∗ w ≤ C log(em).
+2
+
+2
+
+For larger x, dropping the powers of Φ bounds them by C(m2 e−x + mxe−x /2 ) ≤ C log(em). This
+proves the required uniform second-derivative estimate.
+The leading maximum in our construction may have only a bounded number of coordinates,
+including a single coordinate. Set u1 := 0; for r ≥ 2, define ur by rΦ̄(ur ) = 1. Writing Fr := Φr
+and gr := E maxj≤r |Gj | for independent standard normal Gj , we have uniformly over r ≥ 1,
+(F.13)
+
+Fr′ (ur ) ≍ gr ≍
+
+q
+
+log(er),
+
+∥Fr′′ ∥∞ ≤ C log(er).
+
+√
+For growing r, this follows from the preceding estimates and gr ∼ 2 log r, obtained by the same
+tail argument for the absolute maximum. The finitely many smaller values of r have positive
+densities at ur . For r = 1, all assertions follow directly from F1 = Φ and u1 = 0.
+
+F.4
+
+The common symmetric construction
+
+Each symmetric summand has a Rademacher component and an independent component that is
+activated rarely. The activation follows the construction in [22, Proposition E.1]. We use separate
+indices j ≤ r and u ≤ m for the two components. This allows the number of leading coordinates,
+which determines the Gaussian width, to differ from the number of coordinates over which the
+rare shifts are maximized.
+Fix integers n ≥ 1, 1 ≤ r ≤ m, and m ≥ 2, probabilities 0 < θ, π ≤ 1, and an amplitude a > 0.
+Define
+√
+p := rm,
+R := log(er),
+ℓ := log m,
+v := θπa2 ,
+s := 1 − v,
+
+

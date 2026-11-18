@@ -1,0 +1,497 @@
+structure RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters : Type
+number of parameters: 0
+fields:
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta_pos : 0 < self.theta
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta_le_one : self.theta ≤ 1
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi_pos : 0 < self.pi
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi_le_one : self.pi ≤ 1
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude_pos : 0 < self.amplitude
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.variance_lt_half : self.theta * self.pi *
+        self.amplitude ^ 2 <
+      1 / 2
+constructor:
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.mk (theta pi amplitude : ℝ) (theta_pos : 0 < theta)
+    (theta_le_one : theta ≤ 1) (pi_pos : 0 < pi) (pi_le_one : pi ≤ 1) (amplitude_pos : 0 < amplitude)
+    (variance_lt_half : theta * pi * amplitude ^ 2 < 1 / 2) : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters
+@RectangleCLTArxivV1.lowerSparseKhat_factor : ∀ {n : ℕ} {ell L q B : ℝ},
+  0 < ell →
+    0 < L →
+      RectangleCLT.Companion.SplitV4.sparseLowerKhat n ell q B =
+        RectangleCLTArxivV1.lowerSparseIntrinsicK n L q B * (L / ell) ^ (2 / q - 1 / 2)
+@RectangleCLTArxivV1.lowerSparse_logKhat_sub_bound : ∀ {n : ℕ} {ell L q B : ℝ},
+  0 < n →
+    0 < ell →
+      0 < B →
+        ell ≤ L →
+          L ≤ 3 * ell →
+            |Real.log (RectangleCLT.Companion.SplitV4.sparseLowerKhat n ell q B) -
+                  Real.log (RectangleCLTArxivV1.lowerSparseIntrinsicK n L q B)| ≤
+              RectangleCLTArxivV1.lowerSparseLogSlack q
+RectangleCLTArxivV1.lowerSparseRawWidth_eq : ∀ (n : ℕ) {ell q B g : ℝ},
+  0 < ell →
+    RectangleCLTArxivV1.lowerSparseRawWidth n ell q B g =
+      RectangleCLT.Companion.SplitV4.sparseLowerScale n ell q B * g / √ell
+@RectangleCLTArxivV1.lowerSparseRawWidth_factor : ∀ {n : ℕ} {ell q B g : ℝ},
+  0 < n →
+    0 < ell →
+      2 ≤ RectangleCLT.Companion.SplitV4.sparseLowerKhat n ell q B →
+        RectangleCLTArxivV1.lowerSparseRawWidth n ell q B g =
+          B * g * ell ^ (1 - 1 / q) /
+            (2 * (4 * RectangleCLT.Companion.SplitV4.sparseLowerLog n ell q B) ^ (1 - 1 / q) * ↑n ^ (1 / 2 - 1 / q))
+@RectangleCLTArxivV1.lowerSparseCoordinateWidth_fourth : ∀ {n : ℕ} {ell B g : ℝ},
+  0 < ell → 0 ≤ B → RectangleCLTArxivV1.lowerSparseCoordinateWidth n ell B g ^ 4 = B ^ 2 * ell ^ 3 * g ^ 4 / ↑n
+@RectangleCLTArxivV1.lowerSparseRawWidth_pos : ∀ {n : ℕ} {ell q B g : ℝ},
+  0 < n →
+    0 < ell →
+      0 < B →
+        0 < g →
+          2 ≤ RectangleCLT.Companion.SplitV4.sparseLowerKhat n ell q B →
+            0 < RectangleCLTArxivV1.lowerSparseRawWidth n ell q B g
+@RectangleCLTArxivV1.lowerSparse_cube_div_le_coordinateWidth_fourth : ∀ {n : ℕ} {ell B g c : ℝ},
+  0 < ell →
+    2 ≤ B → 0 < c → c ≤ g → ell ^ 3 / ↑n ≤ RectangleCLTArxivV1.lowerSparseCoordinateWidth n ell B g ^ 4 / (4 * c ^ 4)
+@RectangleCLTArxivV1.lowerSparseRawWidth_le_intrinsicRate : ∀ {n : ℕ} {ell L q B g : ℝ},
+  2 < q →
+    0 < n →
+      0 < ell →
+        ell ≤ L →
+          0 < B →
+            0 ≤ g →
+              2 ≤ RectangleCLT.Companion.SplitV4.sparseLowerKhat n ell q B →
+                Real.log (Real.exp 1 + RectangleCLTArxivV1.lowerSparseIntrinsicK n L q B) ≤
+                    RectangleCLT.Companion.SplitV4.sparseLowerLog n ell q B →
+                  RectangleCLTArxivV1.lowerSparseRawWidth n ell q B g ≤
+                    RectangleCLTArxivV1.lowerSparseIntrinsicRate n L q B g
+@RectangleCLTArxivV1.lowerSparseIntrinsicRate_le_raw : ∀ {n : ℕ} {ell L q B G g : ℝ},
+  2 < q →
+    0 < n →
+      0 < ell →
+        0 < L →
+          L ≤ 3 * ell →
+            0 < B →
+              G ≤ 2 * g →
+                0 ≤ g →
+                  2 ≤ RectangleCLT.Companion.SplitV4.sparseLowerKhat n ell q B →
+                    RectangleCLT.Companion.SplitV4.sparseLowerLog n ell q B ≤
+                        3 * Real.log (Real.exp 1 + RectangleCLTArxivV1.lowerSparseIntrinsicK n L q B) →
+                      RectangleCLTArxivV1.lowerSparseIntrinsicRate n L q B G ≤
+                        256 * RectangleCLTArxivV1.lowerSparseRawWidth n ell q B g
+@RectangleCLTArxivV1.eventually_lowerSparse_logKhat_sub_bound : ∀ {q : ℝ} {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    (∀ (n : ℕ), 1 ≤ r n) →
+      (∀ (n : ℕ), r n ≤ m n) →
+        Filter.Tendsto m Filter.atTop Filter.atTop →
+          ∀ᶠ (n : ℕ) in Filter.atTop,
+            |Real.log (RectangleCLT.Companion.SplitV4.sparseLowerKhat n (Real.log ↑(m n)) q (B n)) -
+                  Real.log
+                    (RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q (B n))| ≤
+              RectangleCLTArxivV1.lowerSparseLogSlack q
+@RectangleCLTArxivV1.tendsto_lowerSparseKhat : ∀ {q : ℝ} {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    (∀ (n : ℕ), 1 ≤ r n) →
+      (∀ (n : ℕ), r n ≤ m n) →
+        Filter.Tendsto m Filter.atTop Filter.atTop →
+          Filter.Tendsto
+              (fun n => RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q (B n))
+              Filter.atTop Filter.atTop →
+            Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (Real.log ↑(m n)) q (B n))
+              Filter.atTop Filter.atTop
+@RectangleCLTArxivV1.eventually_lowerSparseLog_bounds : ∀ {q : ℝ} {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    (∀ (n : ℕ), 1 ≤ r n) →
+      (∀ (n : ℕ), r n ≤ m n) →
+        Filter.Tendsto m Filter.atTop Filter.atTop →
+          Filter.Tendsto
+              (fun n => RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q (B n))
+              Filter.atTop Filter.atTop →
+            ∀ᶠ (n : ℕ) in Filter.atTop,
+              Real.log
+                    (Real.exp 1 +
+                      RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q (B n)) ≤
+                  RectangleCLT.Companion.SplitV4.sparseLowerLog n (Real.log ↑(m n)) q (B n) ∧
+                RectangleCLT.Companion.SplitV4.sparseLowerLog n (Real.log ↑(m n)) q (B n) ≤
+                  3 *
+                    Real.log
+                      (Real.exp 1 +
+                        RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q (B n))
+@RectangleCLTArxivV1.tendsto_lowerSparseLog_div_rareLog : ∀ {q : ℝ} {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    (∀ (n : ℕ), 1 ≤ r n) →
+      (∀ (n : ℕ), r n ≤ m n) →
+        Filter.Tendsto m Filter.atTop Filter.atTop →
+          Filter.Tendsto
+              (fun n => RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q (B n))
+              Filter.atTop Filter.atTop →
+            Filter.Tendsto
+                (fun n =>
+                  Real.log
+                      (RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q (B n)) /
+                    RectangleCLT.dimensionLog (r n * m n))
+                Filter.atTop (nhds 0) →
+              Filter.Tendsto
+                (fun n => RectangleCLT.Companion.SplitV4.sparseLowerLog n (Real.log ↑(m n)) q (B n) / Real.log ↑(m n))
+                Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.tendsto_lowerSparseCoordinateWidth : ∀ {q : ℝ} {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    (∀ (n : ℕ), 1 ≤ r n) →
+      Filter.Tendsto m Filter.atTop Filter.atTop →
+        Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (Real.log ↑(m n)) q (B n))
+            Filter.atTop Filter.atTop →
+          Filter.Tendsto
+              (fun n =>
+                RectangleCLTArxivV1.lowerSparseRawWidth n (Real.log ↑(m n)) q (B n)
+                  (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+              Filter.atTop (nhds 0) →
+            Filter.Tendsto
+              (fun n =>
+                RectangleCLTArxivV1.lowerSparseCoordinateWidth n (Real.log ↑(m n)) (B n)
+                  (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+              Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.tendsto_lowerSparseEll_cube_div : ∀ {q : ℝ} {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    (∀ (n : ℕ), 1 ≤ r n) →
+      Filter.Tendsto m Filter.atTop Filter.atTop →
+        Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (Real.log ↑(m n)) q (B n))
+            Filter.atTop Filter.atTop →
+          Filter.Tendsto
+              (fun n =>
+                RectangleCLTArxivV1.lowerSparseRawWidth n (Real.log ↑(m n)) q (B n)
+                  (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+              Filter.atTop (nhds 0) →
+            Filter.Tendsto (fun n => Real.log ↑(m n) ^ 3 / ↑n) Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.tendsto_lowerSparseTheta : ∀ {q : ℝ} {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    (∀ (n : ℕ), 1 ≤ r n) →
+      Filter.Tendsto m Filter.atTop Filter.atTop →
+        Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (Real.log ↑(m n)) q (B n))
+            Filter.atTop Filter.atTop →
+          Filter.Tendsto
+              (fun n =>
+                RectangleCLTArxivV1.lowerSparseRawWidth n (Real.log ↑(m n)) q (B n)
+                  (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+              Filter.atTop (nhds 0) →
+            Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerTheta n (Real.log ↑(m n)) q (B n))
+              Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.tendsto_lowerSparseVariance : ∀ {q : ℝ} {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  2 < q →
+    (∀ (n : ℕ), 2 ≤ B n) →
+      (∀ (n : ℕ), 1 ≤ r n) →
+        Filter.Tendsto m Filter.atTop Filter.atTop →
+          Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (Real.log ↑(m n)) q (B n))
+              Filter.atTop Filter.atTop →
+            Filter.Tendsto
+                (fun n =>
+                  RectangleCLTArxivV1.lowerSparseRawWidth n (Real.log ↑(m n)) q (B n)
+                    (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+                Filter.atTop (nhds 0) →
+              Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerVariance n (Real.log ↑(m n)) q (B n))
+                Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.tendsto_lowerSparseEffectiveAmplitude : ∀ {q : ℝ} {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    (∀ (n : ℕ), 1 ≤ r n) →
+      Filter.Tendsto m Filter.atTop Filter.atTop →
+        Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (Real.log ↑(m n)) q (B n))
+            Filter.atTop Filter.atTop →
+          Filter.Tendsto
+              (fun n =>
+                RectangleCLTArxivV1.lowerSparseRawWidth n (Real.log ↑(m n)) q (B n)
+                  (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+              Filter.atTop (nhds 0) →
+            Filter.Tendsto
+              (fun n =>
+                RectangleCLT.Companion.SplitV4.sparseLowerAmplitude n (Real.log ↑(m n)) q (B n) *
+                    RectangleCLT.Companion.SplitV4.sparseLowerCount n (Real.log ↑(m n)) q (B n) /
+                  Real.log ↑(m n))
+              Filter.atTop Filter.atTop
+@RectangleCLTArxivV1.tendsto_lowerSparseRawWidth : ∀ {q : ℝ} {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  2 < q →
+    (∀ (n : ℕ), 2 ≤ B n) →
+      (∀ (n : ℕ), 1 ≤ r n) →
+        (∀ (n : ℕ), r n ≤ m n) →
+          Filter.Tendsto m Filter.atTop Filter.atTop →
+            Filter.Tendsto
+                (fun n => RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q (B n))
+                Filter.atTop Filter.atTop →
+              Filter.Tendsto
+                  (fun n =>
+                    RectangleCLTArxivV1.lowerSparseIntrinsicRate n (RectangleCLT.dimensionLog (r n * m n)) q (B n)
+                      (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+                  Filter.atTop (nhds 0) →
+                Filter.Tendsto
+                  (fun n =>
+                    RectangleCLTArxivV1.lowerSparseRawWidth n (Real.log ↑(m n)) q (B n)
+                      (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+                  Filter.atTop (nhds 0)
+RectangleCLTArxivV1.eventually_lowerSparseSequence_fields : ∀ (q : ℝ) {B : ℕ → ℝ} {m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    Filter.Tendsto m Filter.atTop Filter.atTop →
+      Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (Real.log ↑(m n)) q (B n)) Filter.atTop
+          Filter.atTop →
+        Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerTheta n (Real.log ↑(m n)) q (B n))
+            Filter.atTop (nhds 0) →
+          Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerVariance n (Real.log ↑(m n)) q (B n))
+              Filter.atTop (nhds 0) →
+            ∀ᶠ (n : ℕ) in Filter.atTop,
+              (RectangleCLTArxivV1.lowerSparseSequence q B m n).theta =
+                  RectangleCLT.Companion.SplitV4.sparseLowerTheta n (Real.log ↑(m n)) q (B n) ∧
+                (RectangleCLTArxivV1.lowerSparseSequence q B m n).pi =
+                    RectangleCLT.Companion.SplitV4.sparseLowerPi n (Real.log ↑(m n)) q (B n) ∧
+                  (RectangleCLTArxivV1.lowerSparseSequence q B m n).amplitude =
+                    RectangleCLT.Companion.SplitV4.sparseLowerAmplitude n (Real.log ↑(m n)) q (B n)
+RectangleCLTArxivV1.lowerSparseCalibration_of_scalar_limits : ∀ (q : ℝ) {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    Filter.Tendsto m Filter.atTop Filter.atTop →
+      Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (Real.log ↑(m n)) q (B n)) Filter.atTop
+          Filter.atTop →
+        Filter.Tendsto
+            (fun n => RectangleCLT.Companion.SplitV4.sparseLowerLog n (Real.log ↑(m n)) q (B n) / Real.log ↑(m n))
+            Filter.atTop (nhds 0) →
+          Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerTheta n (Real.log ↑(m n)) q (B n))
+              Filter.atTop (nhds 0) →
+            Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerVariance n (Real.log ↑(m n)) q (B n))
+                Filter.atTop (nhds 0) →
+              Filter.Tendsto
+                  (fun n =>
+                    RectangleCLT.Companion.SplitV4.sparseLowerAmplitude n (Real.log ↑(m n)) q (B n) *
+                        RectangleCLT.Companion.SplitV4.sparseLowerCount n (Real.log ↑(m n)) q (B n) /
+                      Real.log ↑(m n))
+                  Filter.atTop Filter.atTop →
+                Filter.Tendsto
+                    (fun n =>
+                      RectangleCLTArxivV1.lowerSparseRawWidth n (Real.log ↑(m n)) q (B n)
+                        (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+                    Filter.atTop (nhds 0) →
+                  RectangleCLTArxivV1.LowerSparseCalibration q B r m
+@RectangleCLTArxivV1.lowerSparse_width_rate_le_twice_of_coordinate : ∀ {n p : ℕ} {q B g : ℝ},
+  1 ≤ p →
+    0 ≤ g →
+      RectangleCLT.Companion.SplitV4.polynomialCoordinateRate n p B ≤
+          RectangleCLT.Companion.SplitV4.polynomialSparseRate n p B q →
+        RectangleCLTArxivV1.polynomialFourthWidthRate n p B q g ≤
+          2 * RectangleCLTArxivV1.lowerSparseIntrinsicRate n (RectangleCLT.dimensionLog p) q B g
+@RectangleCLTArxivV1.eventually_lowerSparse_width_rate_le_twice : ∀ {q : ℝ} {B g : ℕ → ℝ} {p : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    (∀ (n : ℕ), 1 ≤ p n) →
+      (∀ (n : ℕ), 0 ≤ g n) →
+        Filter.Tendsto (fun n => RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (p n)) q (B n))
+            Filter.atTop Filter.atTop →
+          ∀ᶠ (n : ℕ) in Filter.atTop,
+            RectangleCLTArxivV1.polynomialFourthWidthRate n (p n) (B n) q (g n) ≤
+              2 * RectangleCLTArxivV1.lowerSparseIntrinsicRate n (RectangleCLT.dimensionLog (p n)) q (B n) (g n)
+@RectangleCLTArxivV1.eventually_lowerSparse_membership : ∀ {q : ℝ},
+  2 < q →
+    ∀ {B : ℕ → ℝ} {r m : ℕ → ℕ},
+      (∀ (n : ℕ), 2 ≤ B n) →
+        (∀ (n : ℕ), 2 ≤ m n) →
+          Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (Real.log ↑(m n)) q (B n))
+              Filter.atTop Filter.atTop →
+            RectangleCLTArxivV1.LowerSparseCalibration q B r m →
+              ∀ᶠ (n : ℕ) in Filter.atTop,
+                RectangleCLTArxivV1.PolynomialFourthHypotheses
+                  (RectangleCLTArxivV1.lowerFamilyArrayLaw (RectangleCLTArxivV1.lowerSparseSequence q B m n) n (r n)
+                    (m n))
+                  (RectangleCLTArxivV1.lowerFamilyRawObservations (RectangleCLTArxivV1.lowerSparseSequence q B m n)) q
+                  (B n)
+RectangleCLTArxivV1.exists_lowerSparse_actual_detection_constant : ∀ (q : ℝ),
+  2 < q →
+    ∃ c,
+      0 < c ∧
+        ∀ (B : ℕ → ℝ) (r m : ℕ → ℕ) [inst : ∀ (n : ℕ), NeZero (r n)] [inst_1 : ∀ (n : ℕ), NeZero (m n)],
+          (∀ (n : ℕ), 2 ≤ B n) →
+            (∀ (n : ℕ), 1 ≤ r n) →
+              (∀ (n : ℕ), 2 ≤ m n) →
+                (∀ (n : ℕ), r n ≤ m n) →
+                  Filter.Tendsto m Filter.atTop Filter.atTop →
+                    Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (Real.log ↑(m n)) q (B n))
+                        Filter.atTop Filter.atTop →
+                      Filter.Tendsto
+                          (fun n =>
+                            RectangleCLT.Companion.SplitV4.sparseLowerLog n (Real.log ↑(m n)) q (B n) / Real.log ↑(m n))
+                          Filter.atTop (nhds 0) →
+                        Filter.Tendsto
+                            (fun n => RectangleCLT.Companion.SplitV4.sparseLowerTheta n (Real.log ↑(m n)) q (B n))
+                            Filter.atTop (nhds 0) →
+                          Filter.Tendsto
+                              (fun n => RectangleCLT.Companion.SplitV4.sparseLowerVariance n (Real.log ↑(m n)) q (B n))
+                              Filter.atTop (nhds 0) →
+                            Filter.Tendsto
+                                (fun n =>
+                                  RectangleCLT.Companion.SplitV4.sparseLowerAmplitude n (Real.log ↑(m n)) q (B n) *
+                                      RectangleCLT.Companion.SplitV4.sparseLowerCount n (Real.log ↑(m n)) q (B n) /
+                                    Real.log ↑(m n))
+                                Filter.atTop Filter.atTop →
+                              Filter.Tendsto
+                                  (fun n =>
+                                    RectangleCLTArxivV1.lowerSparseRawWidth n (Real.log ↑(m n)) q (B n)
+                                      (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+                                  Filter.atTop (nhds 0) →
+                                Filter.Tendsto
+                                    (fun n =>
+                                      RectangleCLTArxivV1.gaussianMaximumMean
+                                          (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                            (RectangleCLTArxivV1.lowerSparseSequence q B m n) (r n) (m n)) /
+                                        RectangleCLTArxivV1.independentAbsGaussianMean (r n))
+                                    Filter.atTop (nhds 1) ∧
+                                  ∀ᶠ (n : ℕ) in Filter.atTop,
+                                    RectangleCLTArxivV1.LowerRectangularFamilyProperties
+                                        (RectangleCLTArxivV1.lowerSparseSequence q B m n) n (r n) (m n) ∧
+                                      RectangleCLTArxivV1.PolynomialFourthHypotheses
+                                          (RectangleCLTArxivV1.lowerFamilyArrayLaw
+                                            (RectangleCLTArxivV1.lowerSparseSequence q B m n) n (r n) (m n))
+                                          (RectangleCLTArxivV1.lowerFamilyRawObservations
+                                            (RectangleCLTArxivV1.lowerSparseSequence q B m n))
+                                          q (B n) ∧
+                                        c *
+                                              RectangleCLTArxivV1.lowerSparseRawWidth n (Real.log ↑(m n)) q (B n)
+                                                (RectangleCLTArxivV1.independentAbsGaussianMean (r n)) ≤
+                                            -RectangleCLTArxivV1.lowerFamilyShiftedCDFDifference
+                                                (RectangleCLTArxivV1.lowerSparseSequence q B m n) n (r n) (m n)
+                                                (RectangleCLTArxivV1.lowerLeadingThreshold (r n)) ∧
+                                          c *
+                                              RectangleCLTArxivV1.lowerSparseRawWidth n (Real.log ↑(m n)) q (B n)
+                                                (RectangleCLTArxivV1.independentAbsGaussianMean (r n)) ≤
+                                            RectangleCLTArxivV1.lowerFamilyComparisonDistance
+                                              (RectangleCLTArxivV1.lowerSparseSequence q B m n) n (r n) (m n)
+RectangleCLTArxivV1.exists_lowerSparse_upper_constant : ∀ (q : ℝ),
+  2 < q →
+    ∃ C,
+      0 < C ∧
+        ∀ (B : ℕ → ℝ) (r m : ℕ → ℕ) (P : ℕ → RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters),
+          (∀ (n : ℕ), 2 ≤ B n) →
+            (∀ (n : ℕ), 1 ≤ r n) →
+              (∀ (n : ℕ), 1 ≤ m n) →
+                Filter.Tendsto
+                    (fun n =>
+                      RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q (B n))
+                    Filter.atTop Filter.atTop →
+                  (∀ᶠ (n : ℕ) in Filter.atTop,
+                      RectangleCLTArxivV1.PolynomialFourthHypotheses
+                        (RectangleCLTArxivV1.lowerFamilyArrayLaw (P n) n (r n) (m n))
+                        (RectangleCLTArxivV1.lowerFamilyRawObservations (P n)) q (B n)) →
+                    ∀ᶠ (n : ℕ) in Filter.atTop,
+                      RectangleCLTArxivV1.lowerFamilyComparisonDistance (P n) n (r n) (m n) ≤
+                        C *
+                          RectangleCLTArxivV1.lowerSparseIntrinsicRate n (RectangleCLT.dimensionLog (r n * m n)) q (B n)
+                            (RectangleCLTArxivV1.gaussianMaximumMean
+                              (RectangleCLTArxivV1.lowerFamilyGaussianFactor (P n) (r n) (m n)))
+RectangleCLTArxivV1.theorem_8_sparse_polynomial_moment_lower : ∀ (q : ℝ),
+  2 < q →
+    ∃ c,
+      0 < c ∧
+        ∀ (B : ℕ → ℝ) (r m : ℕ → ℕ) [inst : ∀ (n : ℕ), NeZero (r n)] [inst_1 : ∀ (n : ℕ), NeZero (m n)],
+          (∀ (n : ℕ), 2 ≤ B n) →
+            (∀ (n : ℕ), 1 ≤ r n) →
+              (∀ (n : ℕ), 2 ≤ m n) →
+                (∀ (n : ℕ), r n ≤ m n) →
+                  Filter.Tendsto m Filter.atTop Filter.atTop →
+                    Filter.Tendsto
+                        (fun n =>
+                          RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q (B n))
+                        Filter.atTop Filter.atTop →
+                      Filter.Tendsto
+                          (fun n =>
+                            Real.log
+                                (RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q
+                                  (B n)) /
+                              RectangleCLT.dimensionLog (r n * m n))
+                          Filter.atTop (nhds 0) →
+                        Filter.Tendsto
+                            (fun n =>
+                              RectangleCLTArxivV1.lowerSparseIntrinsicRate n (RectangleCLT.dimensionLog (r n * m n)) q
+                                (B n) (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+                            Filter.atTop (nhds 0) →
+                          Filter.Tendsto
+                              (fun n =>
+                                RectangleCLTArxivV1.gaussianMaximumMean
+                                    (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                      (RectangleCLTArxivV1.lowerSparseSequence q B m n) (r n) (m n)) /
+                                  RectangleCLTArxivV1.independentAbsGaussianMean (r n))
+                              Filter.atTop (nhds 1) ∧
+                            ∀ᶠ (n : ℕ) in Filter.atTop,
+                              RectangleCLTArxivV1.LowerRectangularFamilyProperties
+                                  (RectangleCLTArxivV1.lowerSparseSequence q B m n) n (r n) (m n) ∧
+                                RectangleCLTArxivV1.PolynomialFourthHypotheses
+                                    (RectangleCLTArxivV1.lowerFamilyArrayLaw
+                                      (RectangleCLTArxivV1.lowerSparseSequence q B m n) n (r n) (m n))
+                                    (RectangleCLTArxivV1.lowerFamilyRawObservations
+                                      (RectangleCLTArxivV1.lowerSparseSequence q B m n))
+                                    q (B n) ∧
+                                  c *
+                                        RectangleCLTArxivV1.lowerSparseIntrinsicRate n
+                                          (RectangleCLT.dimensionLog (r n * m n)) q (B n)
+                                          (RectangleCLTArxivV1.gaussianMaximumMean
+                                            (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                              (RectangleCLTArxivV1.lowerSparseSequence q B m n) (r n) (m n))) ≤
+                                      -RectangleCLTArxivV1.lowerFamilyShiftedCDFDifference
+                                          (RectangleCLTArxivV1.lowerSparseSequence q B m n) n (r n) (m n)
+                                          (RectangleCLTArxivV1.lowerLeadingThreshold (r n)) ∧
+                                    c *
+                                        RectangleCLTArxivV1.lowerSparseIntrinsicRate n
+                                          (RectangleCLT.dimensionLog (r n * m n)) q (B n)
+                                          (RectangleCLTArxivV1.gaussianMaximumMean
+                                            (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                              (RectangleCLTArxivV1.lowerSparseSequence q B m n) (r n) (m n))) ≤
+                                      RectangleCLTArxivV1.lowerFamilyComparisonDistance
+                                        (RectangleCLTArxivV1.lowerSparseSequence q B m n) n (r n) (m n)
+RectangleCLTArxivV1.theorem_8_sparse_polynomial_moment_two_sided : ∀ (q : ℝ),
+  2 < q →
+    ∃ c C,
+      0 < c ∧
+        0 < C ∧
+          ∀ (B : ℕ → ℝ) (r m : ℕ → ℕ) [inst : ∀ (n : ℕ), NeZero (r n)] [inst : ∀ (n : ℕ), NeZero (m n)],
+            (∀ (n : ℕ), 2 ≤ B n) →
+              (∀ (n : ℕ), 1 ≤ r n) →
+                (∀ (n : ℕ), 2 ≤ m n) →
+                  (∀ (n : ℕ), r n ≤ m n) →
+                    Filter.Tendsto m Filter.atTop Filter.atTop →
+                      Filter.Tendsto
+                          (fun n =>
+                            RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q (B n))
+                          Filter.atTop Filter.atTop →
+                        Filter.Tendsto
+                            (fun n =>
+                              Real.log
+                                  (RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q
+                                    (B n)) /
+                                RectangleCLT.dimensionLog (r n * m n))
+                            Filter.atTop (nhds 0) →
+                          Filter.Tendsto
+                              (fun n =>
+                                RectangleCLTArxivV1.lowerSparseIntrinsicRate n (RectangleCLT.dimensionLog (r n * m n)) q
+                                  (B n) (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+                              Filter.atTop (nhds 0) →
+                            Filter.Tendsto
+                                (fun n =>
+                                  RectangleCLTArxivV1.gaussianMaximumMean
+                                      (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                        (RectangleCLTArxivV1.lowerSparseSequence q B m n) (r n) (m n)) /
+                                    RectangleCLTArxivV1.independentAbsGaussianMean (r n))
+                                Filter.atTop (nhds 1) ∧
+                              ∀ᶠ (n : ℕ) in Filter.atTop,
+                                RectangleCLTArxivV1.LowerRectangularFamilyProperties
+                                    (RectangleCLTArxivV1.lowerSparseSequence q B m n) n (r n) (m n) ∧
+                                  RectangleCLTArxivV1.PolynomialFourthHypotheses
+                                      (RectangleCLTArxivV1.lowerFamilyArrayLaw
+                                        (RectangleCLTArxivV1.lowerSparseSequence q B m n) n (r n) (m n))
+                                      (RectangleCLTArxivV1.lowerFamilyRawObservations
+                                        (RectangleCLTArxivV1.lowerSparseSequence q B m n))
+                                      q (B n) ∧
+                                    c *
+                                          RectangleCLTArxivV1.lowerSparseIntrinsicRate n
+                                            (RectangleCLT.dimensionLog (r n * m n)) q (B n)
+                                            (RectangleCLTArxivV1.gaussianMaximumMean
+                                              (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                                (RectangleCLTArxivV1.lowerSparseSequence q B m n) (r n) (m n))) ≤
+                                        RectangleCLTArxivV1.lowerFamilyComparisonDistance
+                                          (RectangleCLTArxivV1.lowerSparseSequence q B m n) n (r n) (m n) ∧
+                                      RectangleCLTArxivV1.lowerFamilyComparisonDistance
+                                          (RectangleCLTArxivV1.lowerSparseSequence q B m n) n (r n) (m n) ≤
+                                        C *
+                                          RectangleCLTArxivV1.lowerSparseIntrinsicRate n
+                                            (RectangleCLT.dimensionLog (r n * m n)) q (B n)
+                                            (RectangleCLTArxivV1.gaussianMaximumMean
+                                              (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                                (RectangleCLTArxivV1.lowerSparseSequence q B m n) (r n) (m n)))

@@ -1,0 +1,63 @@
+import RectangleCLTArxivV1.SupplementalHNonsimpleFaceGeometry
+import RectangleCLTArxivV1.SupplementalHNonsimpleFaceIndependence
+import RectangleCLTArxivV1.SupplementalHNonsimpleFaceNormalCone
+import Lean.Util.CollectAxioms
+import Lean.Elab.Command
+set_option maxHeartbeats 0
+set_option maxRecDepth 100000
+open Lean Elab Command in
+run_cmd do
+  let targets := #[
+    ``RectangleCLTArxivV1.nonsimpleActiveSet,
+    ``RectangleCLTArxivV1.mem_nonsimpleActiveSet,
+    ``RectangleCLTArxivV1.mem_exactStratum_iff_activeSet,
+    ``RectangleCLTArxivV1.nonsimpleActiveSet_exactStratum,
+    ``RectangleCLTArxivV1.nonsimpleClosedFace,
+    ``RectangleCLTArxivV1.exactStratum_subset_nonsimpleClosedFace,
+    ``RectangleCLTArxivV1.nonsimpleClosedFace_antitone,
+    ``RectangleCLTArxivV1.nonsimpleClosedFace_subset_iff,
+    ``RectangleCLTArxivV1.nonsimpleClosedFace_eq_iff,
+    ``RectangleCLTArxivV1.nonsimpleFaceNormalSpace,
+    ``RectangleCLTArxivV1.nonsimpleFaceNormalSpace_mono,
+    ``RectangleCLTArxivV1.nonsimple_normal_mem,
+    ``RectangleCLTArxivV1.NonsimpleFaceIndex,
+    ``RectangleCLTArxivV1.nonsimpleFaceIndexFintype,
+    ``RectangleCLTArxivV1.nonsimpleFaceRepresentative,
+    ``RectangleCLTArxivV1.nonsimpleFaceRepresentative_mem,
+    ``RectangleCLTArxivV1.nonsimpleFaceRepresentative_levels,
+    ``RectangleCLTArxivV1.nonsimpleFaceRepresentative_strict,
+    ``RectangleCLTArxivV1.nonsimpleFaceRepresentative_activeSet,
+    ``RectangleCLTArxivV1.nonsimpleFaceIndex_closedFace_injective,
+    ``RectangleCLTArxivV1.nonsimpleFaceIncidences,
+    ``RectangleCLTArxivV1.nonsimpleFaceIncidencesFintype,
+    ``RectangleCLTArxivV1.nonsimpleFaceIncidence_closedFace_subset,
+    ``RectangleCLTArxivV1.nonsimpleFace_exists_strictPolar,
+    ``RectangleCLTArxivV1.nonsimpleFace_generated_isOutward,
+    ``RectangleCLTArxivV1.nonsimple_active_pair_linearIndependent,
+    ``RectangleCLTArxivV1.nonsimple_active_triple_linearIndependent,
+    ``RectangleCLTArxivV1.nonsimple_active_triple_euclidean_linearIndependent,
+    ``RectangleCLTArxivV1.nonsimple_active_rank_le_two_card_le_two,
+    ``RectangleCLTArxivV1.nonsimpleFaceNormalSpace_finrank_le_card,
+    ``RectangleCLTArxivV1.nonsimple_ridge_card_eq_two,
+    ``RectangleCLTArxivV1.nonsimple_ridge_exists_actual_pair_witness,
+    ``RectangleCLTArxivV1.nonsimple_codimThree_triple_spans,
+    ``RectangleCLTArxivV1.nonsimple_codimThree_exists_spanning_triple,
+    ``RectangleCLTArxivV1.nonsimple_codimThree_supporting_pair_strict,
+    ``RectangleCLTArxivV1.nonsimple_exactStratum_local_feasible_ray,
+    ``RectangleCLTArxivV1.nonsimple_isOutwardNormal_iff_activeGeneratedCone,
+    ``RectangleCLTArxivV1.nonsimpleFace_genuine_normalCone,
+    ``RectangleCLTArxivV1.nonsimple_generator_mem_activeCone,
+    ``RectangleCLTArxivV1.nonsimple_generated_mem_normalSpace,
+    ``RectangleCLTArxivV1.nonsimple_activeCone_eq_of_presentation,
+    ``RectangleCLTArxivV1.nonsimple_activeNormalSpace_eq_of_presentation,
+    ``RectangleCLTArxivV1.nonsimple_active_normal_ne_zero,
+    ``RectangleCLTArxivV1.nonsimple_singleton_presentation_active_multiple]
+  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
+  let mut rows : Array Json := #[]
+  for target in targets do
+    let axs ← Lean.collectAxioms target
+    for ax in axs do
+      unless allowed.contains ax do throwError "Unexpected axiom {ax} in {target}"
+    rows := rows.push (Json.mkObj [("name", toJson target.toString),
+      ("transitive_axioms", toJson (axs.toList.map Name.toString))])
+  IO.println (Json.mkObj [("targets", Json.arr rows), ("all_axioms_allowed", toJson true)]).compress

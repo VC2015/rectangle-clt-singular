@@ -1,0 +1,11 @@
+import RectangleCLTArxivV1.LowerBoundedOne
+#print RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters
+#check @RectangleCLTArxivV1.independentAbsGaussianMean_one_eq_density
+#check @RectangleCLTArxivV1.lowerBoundedOne_widthScale_eq
+#check @RectangleCLTArxivV1.tendsto_lowerBoundedOne_signed_div_widthScale
+#check @RectangleCLTArxivV1.lowerBoundedOneTarget_pos
+#check @RectangleCLTArxivV1.tendsto_lowerBoundedOne_target_div_widthScale
+#check @RectangleCLTArxivV1.tendsto_lowerBoundedOne_signed_div_target
+#check @RectangleCLTArxivV1.lowerBoundedOne_distance_ereal_liminf
+#check @RectangleCLTArxivV1.bounded_width_example_one_eighth
+#check @RectangleCLTArxivV1.bounded_width_example_one_eighth_from_main_regime

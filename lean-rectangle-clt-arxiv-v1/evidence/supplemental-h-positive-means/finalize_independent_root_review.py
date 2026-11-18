@@ -1,0 +1,29 @@
+from pathlib import Path
+import json,hashlib,datetime
+P=Path.cwd();E=P/'evidence/supplemental-h-positive-means';Q=E/'independent-root-checkpoint-1'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+run=json.load(open(Q/'run.json'));assert run['status']=='passed' and run['full_type_count']==23
+for f,h in run['source_identity'].items():assert sha(P/f)==h,f
+ledger=P/'correspondence/supplemental-h-positive-means-passages.json';d=json.load(open(ledger))
+pair=P/'evidence/supplemental-h-positive-gamma-pair-sum/checkpoint-1/receipt.json';assert json.load(open(pair))['passed'] is True
+own=E/'checkpoint-1/run.json';assert json.load(open(own))['status']=='passed'
+D=json.load(open(Q/'expanded-types.json'));names={r['name'] for r in D['endpoints']};assert len(names)==23
+checks=[
+('ACTUAL_KERNEL','The positive mixed mass kernel is exactly the actual native ridge density with every inactive hard inequality retained; the original angle cancels the exact Gram square root, producing the literal ordered positive edge coefficient.'),
+('ACTUAL_PLANE','The plane test is the actual orthogonal projection onto the two original normal directions. On the ridge its exact conditional coordinate length equals the true normal-point norm-square; both the hard coefficient and Gaussian soft integrand retain that weight.'),
+('ENDPOINT_DEGENERACIES','Diagonal and parallel pairs have exactly zero angle. Their contributions are zero without applying nonparallel mixed differentiation or assuming an ambient family rank.'),
+('UNIFORM_MIXED_L1','For a fixed nonparallel pair the genuine mass/plane mixed kernels have global threshold boundsN²/residualscale and4N²/residualscale. These prove actual Gamma L1, and the parallel branch is identicallyzero.'),
+('GAUSSIAN_L1','The bounded logistic pair kernel is genuinely integrable under the Gaussian law; its projection-weighted counterpart is dominated by the actual integrable quadratic test. Finite summation is justified before any coarea identity is rearranged.'),
+('EXACT_SECOND_DERIVATIVE','At natural indexq0, the actual positive Gamma shape is1 and F has positive exponent1. The mixed soft derivative has exact factor2/h², not a claim about the prohibited order-zero derivative envelope.'),
+('EXACT_ORDERED_COEFFICIENT','The actual ordered soft mass/projection sums equal h²/(2sigma²) times the Gamma expectation of the ordered native edge coefficient sum. The two orders per geometric ridge are therefore accounted for exactly.'),
+('SINGULAR_BASE','The concentrated-base step uses the already proved actual joint Gamma/base L1 and native surface budgets; no density or absolute continuity of the original base law is assumed.'),
+('GENUINE_BASE_L1','The private mean-transfer proof is inside PositiveGammaMeans and its dependency graph. It applies genuine product L1/Fubini, proves actual outer integrability, and transfers the pointwise coarea identity without assuming a target expectation bound.'),
+('SHARP_BARE_LOG','The bare native edge budget has the separate R² tube bound; after delta*sqrtL≤sigma absorption and exact h²/(2sigma²), the output is1024pi exp(3/2)exp128*h²KsqrtL/sigma.'),
+('SHARP_PLANE_LOG','The projected native edge budget has its own R4 tube bound; the same exact transfer yields4096pi exp(3/2)exp128*h²K LsqrtL/sigma. The bare mass is never charged this extra logarithm.'),
+('QUANTIFIER_ORDER','Both positive constants are closed definitions independent of dimensions, thresholds, base law and selected normals. Inputs are only unit selected normals, actual all-threshold concentration, nonnegativeK/delta, positiveh/sigma and the stated scale condition; no target matrix, remainder, mean or CLT premise is present.'),
+]
+checks=[dict(id=k,result='PASS',finding=v) for k,v in checks]
+main=P.parent/'research-rectangle-clt-singular/Rectangle_CLT_Supplement_2026-11-16.tex';pdf=main.with_suffix('.pdf')
+out=dict(status='PASS',reviewer='/root',authors=['/root/archive_h_resume','/root/archive_h_resume/h1_spherical_balance'],reviewed_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),scope='Independent review of the two actual positive ordered Gamma sum/mean sources,17+6 declarations, including the private mean-transfer proof',source_sha256={f'RectangleCLTArxivV1/{m}.lean':sha(P/'RectangleCLTArxivV1'/f'{m}.lean') for m in ['PositiveGammaPairSum','PositiveGammaMeans']},ledger=dict(path=str(ledger.relative_to(P)),sha256=sha(ledger)),author_receipts=[dict(path=str(p.relative_to(P)),sha256=sha(p)) for p in [pair,own]],independent_checkpoint=dict(path=str((Q/'run.json').relative_to(P)),sha256=sha(Q/'run.json'),strict_targets=23,full_types=23,project_dependency_nodes=len(D['project_dependency_graph']),expanded_types_sha256=sha(Q/'expanded-types.json')),paper_snapshot='1803366cc994d9facae8e128ee180f68e319486f',supplement_tex_sha256=sha(main),supplement_pdf_sha256=sha(pdf),reading_order_scope='Frozen supplement1595–1617: coarea, ordered-pair factor, positive bare/plane surface bounds, then exact actual-base averaging; both full new Lean sources and expanded types read',checks=checks,method_qualifications=['Euclidean orthonormal-section Gaussian surface convention is preserved. The ordinary threshold-volume a.e. regularity is removed under the actual Gamma law before arbitrary singular-base averaging.','Root authored some upstream signed/Gamma-operator helpers, whose independent g3/intrinsic reviews are separate; neither new positive source under the present review was authored by Root.'],mathematical_or_type_gaps=[],unmatched_headline_premises=[],release_wide_certification=False,headline_acceptance_change=False)
+(E/'independent-root-review.json').write_text(json.dumps(out,indent=2)+'\n')
+print('PASS independent actual positiveGammaPairSum17+Means6, strict23/full23,',len(checks),'semantic checks')

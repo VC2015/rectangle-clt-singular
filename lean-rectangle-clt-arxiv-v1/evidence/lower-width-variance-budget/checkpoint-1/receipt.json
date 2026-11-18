@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "source": "RectangleCLTArxivV1/LowerWidthVarianceBudget.lean",
+  "source_sha256": "8a8f07d7989556c547ece76d669e015afb1bec200ad5a01e1e9dd187d7c989e4",
+  "source_unchanged": true,
+  "targets": [
+    "RectangleCLTArxivV1.lowerWidthBudget_variance",
+    "RectangleCLTArxivV1.lowerWidthBudget_gaussian_profile"
+  ],
+  "strict_allowed_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "commands": [
+    {
+      "command": [
+        "lake",
+        "build",
+        "RectangleCLTArxivV1.LowerWidthVarianceBudget"
+      ],
+      "returncode": 0,
+      "log": "build.log"
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "RectangleCLTArxivV1/LowerWidthVarianceBudget.lean"
+      ],
+      "returncode": 0,
+      "log": "force.log"
+    },
+    {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "evidence/lower-width-variance-budget/checkpoint-1/Audit.lean"
+      ],
+      "returncode": 0,
+      "log": "audit.log"
+    }
+  ],
+  "finished_at_utc": "2026-11-18T01:44:29.682196+00:00",
+  "scope": "Pure count-derived variance and Gaussian profile budgets; not the full lower construction"
+}

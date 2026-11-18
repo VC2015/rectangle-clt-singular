@@ -1,0 +1,22 @@
+import RectangleCLTArxivV1
+
+#print RectangleCLTArxivV1.dimensionCapGain
+#print RectangleCLTArxivV1.dimensionCapRate
+#print RectangleCLT.Companion.SplitV4.normalizedSeededFourthRemainder
+
+#check @RectangleCLTArxivV1.cap_one_projection_small_interval_nonneg
+#check @RectangleCLTArxivV1.cap_two_projection_small_box_nonneg
+#check @RectangleCLTArxivV1.lemma_F_1_weighted_normal_derivative
+#check @RectangleCLTArxivV1.lemma_F_1_weighted_normal_log_derivative
+#check @RectangleCLTArxivV1.cap_covariance_minimal_factor
+#check @RectangleCLTArxivV1.cap_covariance_rank_pos
+#check @RectangleCLTArxivV1.cap_seededFourthRemainder_rank_complementary_bound
+#check @RectangleCLTArxivV1.cap_seededFourthRemainder_rank_intervalIntegrable
+#check @RectangleCLTArxivV1.cap_seededFourthRemainder_rank_abs_intervalIntegrable
+#check @RectangleCLTArxivV1.proposition_G1_dimension_log_cap_normalized
+#check @RectangleCLTArxivV1.cap_normalizedSeededFourthRemainder_bounded_integral_bound
+#check @RectangleCLTArxivV1.cap_seededFourthRemainder_bounded_integral_bound
+#check @RectangleCLTArxivV1.dimensionCapCLT
+
+example := @RectangleCLTArxivV1.proposition_G1_dimension_log_cap_normalized
+example := @RectangleCLTArxivV1.cap_seededFourthRemainder_rank_complementary_bound

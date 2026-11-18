@@ -1,0 +1,292 @@
+RectangleCLTArxivV1.corollary_2_intrinsic : ∃ C, 0 < C ∧ RectangleCLTArxivV1.SubexponentialWidthBound C
+RectangleCLTArxivV1.corollary_3_intrinsic : (∃ C,
+    0 < C ∧
+      RectangleCLTArxivV1.PolyhedralBoundedIntrinsicBound C ∧
+        RectangleCLTArxivV1.PolyhedralEnvelopeIntrinsicBound C ∧ RectangleCLTArxivV1.PolyhedralOrliczIntrinsicBound C) ∧
+  ∀ (q : ℝ),
+    2 < q →
+      ∃ C,
+        0 < C ∧
+          RectangleCLTArxivV1.PolyhedralAllFacesEnvelopeBound q C ∧
+            RectangleCLTArxivV1.PolyhedralAllFacesFourthBound q C ∧
+              RectangleCLTArxivV1.PolyhedralAllFacesCombinedBound q C
+RectangleCLTArxivV1.theorem4_bounded_symmetric_lower : ∃ c,
+  0 < c ∧
+    ∀ (B : ℕ → ℝ) (r m : ℕ → ℕ) [inst : ∀ (n : ℕ), NeZero (r n)] [inst : ∀ (n : ℕ), NeZero (m n)],
+      (∀ (n : ℕ), 2 ≤ B n) →
+        (∀ (n : ℕ), 1 ≤ r n) →
+          (∀ (n : ℕ), 2 ≤ m n) →
+            (∀ (n : ℕ), r n ≤ m n) →
+              Filter.Tendsto m Filter.atTop Filter.atTop →
+                Filter.Tendsto
+                    (fun n =>
+                      B n * RectangleCLTArxivV1.independentAbsGaussianMean (r n) *
+                          RectangleCLT.dimensionLog (r n * m n) /
+                        √↑n)
+                    Filter.atTop (nhds 0) →
+                  ∃ P,
+                    P = RectangleCLTArxivV1.lowerBoundedSequence B m ∧
+                      Filter.Tendsto
+                          (fun n =>
+                            RectangleCLTArxivV1.gaussianMaximumMean
+                                (RectangleCLTArxivV1.lowerFamilyGaussianFactor (P n) (r n) (m n)) /
+                              RectangleCLTArxivV1.independentAbsGaussianMean (r n))
+                          Filter.atTop (nhds 1) ∧
+                        ∀ᶠ (n : ℕ) in Filter.atTop,
+                          RectangleCLTArxivV1.LowerRectangularFamilyProperties (P n) n (r n) (m n) ∧
+                            (∀ (i : Fin n) (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed (r n) (m n)),
+                                ‖RectangleCLTArxivV1.lowerFamilyRawObservations (P n) i z‖ ≤ B n) ∧
+                              c *
+                                  (B n *
+                                        RectangleCLTArxivV1.gaussianMaximumMean
+                                          (RectangleCLTArxivV1.lowerFamilyGaussianFactor (P n) (r n) (m n)) *
+                                      RectangleCLT.dimensionLog (r n * m n) /
+                                    √↑n) ≤
+                                RectangleCLTArxivV1.lowerFamilyComparisonDistance (P n) n (r n) (m n)
+RectangleCLTArxivV1.theorem_5_fourth_moment_lower : ∃ c,
+  0 < c ∧
+    ∀ (r m : ℕ → ℕ) [inst : ∀ (n : ℕ), NeZero (r n)] [inst_1 : ∀ (n : ℕ), NeZero (m n)],
+      (∀ (n : ℕ), 1 ≤ r n) →
+        (∀ (n : ℕ), 2 ≤ m n) →
+          (∀ (n : ℕ), r n ≤ m n) →
+            Filter.Tendsto m Filter.atTop Filter.atTop →
+              Filter.Tendsto (fun n => RectangleCLTArxivV1.lowerFourthWidthRate n (r n) (m n)) Filter.atTop (nhds 0) →
+                Filter.Tendsto
+                    (fun n =>
+                      RectangleCLTArxivV1.gaussianMaximumMean
+                          (RectangleCLTArxivV1.lowerFamilyGaussianFactor (RectangleCLTArxivV1.lowerFourthParameters m n)
+                            (r n) (m n)) /
+                        RectangleCLTArxivV1.independentAbsGaussianMean (r n))
+                    Filter.atTop (nhds 1) ∧
+                  ∀ᶠ (n : ℕ) in Filter.atTop,
+                    RectangleCLTArxivV1.LowerRectangularFamilyProperties (RectangleCLTArxivV1.lowerFourthParameters m n)
+                        n (r n) (m n) ∧
+                      RectangleCLTArxivV1.PolynomialFourthHypotheses
+                          (RectangleCLTArxivV1.lowerFamilyArrayLaw (RectangleCLTArxivV1.lowerFourthParameters m n) n
+                            (r n) (m n))
+                          (RectangleCLTArxivV1.lowerFamilyRawObservations
+                            (RectangleCLTArxivV1.lowerFourthParameters m n))
+                          4 2 ∧
+                        c *
+                              (RectangleCLTArxivV1.gaussianMaximumMean
+                                    (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                      (RectangleCLTArxivV1.lowerFourthParameters m n) (r n) (m n)) *
+                                  RectangleCLT.dimensionLog (r n * m n) ^ (3 / 4) /
+                                ↑n ^ (1 / 4)) ≤
+                            RectangleCLTArxivV1.lowerFamilyShiftedCDFDifference
+                              (RectangleCLTArxivV1.lowerFourthParameters m n) n (r n) (m n)
+                              (RectangleCLTArxivV1.lowerLeadingThreshold (r n)) ∧
+                          c *
+                              (RectangleCLTArxivV1.gaussianMaximumMean
+                                    (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                      (RectangleCLTArxivV1.lowerFourthParameters m n) (r n) (m n)) *
+                                  RectangleCLT.dimensionLog (r n * m n) ^ (3 / 4) /
+                                ↑n ^ (1 / 4)) ≤
+                            RectangleCLTArxivV1.lowerFamilyComparisonDistance
+                              (RectangleCLTArxivV1.lowerFourthParameters m n) n (r n) (m n)
+RectangleCLTArxivV1.theorem_5_fourth_moment_two_sided : ∃ c C,
+  0 < c ∧
+    0 < C ∧
+      ∀ (r m : ℕ → ℕ) [inst : ∀ (n : ℕ), NeZero (r n)] [inst : ∀ (n : ℕ), NeZero (m n)],
+        (∀ (n : ℕ), 1 ≤ r n) →
+          (∀ (n : ℕ), 2 ≤ m n) →
+            (∀ (n : ℕ), r n ≤ m n) →
+              Filter.Tendsto m Filter.atTop Filter.atTop →
+                Filter.Tendsto (fun n => RectangleCLTArxivV1.lowerFourthWidthRate n (r n) (m n)) Filter.atTop (nhds 0) →
+                  Filter.Tendsto
+                      (fun n =>
+                        RectangleCLTArxivV1.gaussianMaximumMean
+                            (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                              (RectangleCLTArxivV1.lowerFourthParameters m n) (r n) (m n)) /
+                          RectangleCLTArxivV1.independentAbsGaussianMean (r n))
+                      Filter.atTop (nhds 1) ∧
+                    ∀ᶠ (n : ℕ) in Filter.atTop,
+                      RectangleCLTArxivV1.LowerRectangularFamilyProperties
+                          (RectangleCLTArxivV1.lowerFourthParameters m n) n (r n) (m n) ∧
+                        RectangleCLTArxivV1.PolynomialFourthHypotheses
+                            (RectangleCLTArxivV1.lowerFamilyArrayLaw (RectangleCLTArxivV1.lowerFourthParameters m n) n
+                              (r n) (m n))
+                            (RectangleCLTArxivV1.lowerFamilyRawObservations
+                              (RectangleCLTArxivV1.lowerFourthParameters m n))
+                            4 2 ∧
+                          c *
+                                (RectangleCLTArxivV1.gaussianMaximumMean
+                                      (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                        (RectangleCLTArxivV1.lowerFourthParameters m n) (r n) (m n)) *
+                                    RectangleCLT.dimensionLog (r n * m n) ^ (3 / 4) /
+                                  ↑n ^ (1 / 4)) ≤
+                              RectangleCLTArxivV1.lowerFamilyComparisonDistance
+                                (RectangleCLTArxivV1.lowerFourthParameters m n) n (r n) (m n) ∧
+                            RectangleCLTArxivV1.lowerFamilyComparisonDistance
+                                (RectangleCLTArxivV1.lowerFourthParameters m n) n (r n) (m n) ≤
+                              C *
+                                (RectangleCLTArxivV1.gaussianMaximumMean
+                                      (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                        (RectangleCLTArxivV1.lowerFourthParameters m n) (r n) (m n)) *
+                                    RectangleCLT.dimensionLog (r n * m n) ^ (3 / 4) /
+                                  ↑n ^ (1 / 4))
+RectangleCLTArxivV1.theorem_6_growing_fourth_moment_lower : ∃ c,
+  0 < c ∧
+    ∀ (B : ℕ → ℝ) (r m : ℕ → ℕ) [inst : ∀ (n : ℕ), NeZero (r n)] [inst_1 : ∀ (n : ℕ), NeZero (m n)],
+      (∀ (n : ℕ), 2 ≤ B n) →
+        (∀ (n : ℕ), 1 ≤ r n) →
+          (∀ (n : ℕ), 2 ≤ m n) →
+            (∀ (n : ℕ), r n ≤ m n) →
+              Filter.Tendsto m Filter.atTop Filter.atTop →
+                Filter.Tendsto B Filter.atTop Filter.atTop →
+                  Filter.Tendsto (fun n => Real.log (B n) / RectangleCLT.dimensionLog (r n * m n)) Filter.atTop
+                      (nhds 0) →
+                    Filter.Tendsto
+                        (fun n =>
+                          RectangleCLTArxivV1.lowerMaskedFourthIntrinsicRate n (RectangleCLT.dimensionLog (r n * m n))
+                            (B n) (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+                        Filter.atTop (nhds 0) →
+                      Filter.Tendsto
+                          (fun n =>
+                            RectangleCLTArxivV1.gaussianMaximumMean
+                                (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                  (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) (r n) (m n)) /
+                              RectangleCLTArxivV1.independentAbsGaussianMean (r n))
+                          Filter.atTop (nhds 1) ∧
+                        ∀ᶠ (n : ℕ) in Filter.atTop,
+                          RectangleCLTArxivV1.LowerRectangularFamilyProperties
+                              (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) n (r n) (m n) ∧
+                            RectangleCLTArxivV1.PolynomialFourthHypotheses
+                                (RectangleCLTArxivV1.lowerFamilyArrayLaw
+                                  (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) n (r n) (m n))
+                                (RectangleCLTArxivV1.lowerFamilyRawObservations
+                                  (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n))
+                                4 (B n) ∧
+                              c *
+                                    RectangleCLTArxivV1.lowerMaskedFourthIntrinsicRate n
+                                      (RectangleCLT.dimensionLog (r n * m n)) (B n)
+                                      (RectangleCLTArxivV1.gaussianMaximumMean
+                                        (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                          (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) (r n) (m n))) ≤
+                                  -RectangleCLTArxivV1.lowerFamilyShiftedCDFDifference
+                                      (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) n (r n) (m n)
+                                      (RectangleCLTArxivV1.lowerLeadingThreshold (r n)) ∧
+                                c *
+                                    RectangleCLTArxivV1.lowerMaskedFourthIntrinsicRate n
+                                      (RectangleCLT.dimensionLog (r n * m n)) (B n)
+                                      (RectangleCLTArxivV1.gaussianMaximumMean
+                                        (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                          (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) (r n) (m n))) ≤
+                                  RectangleCLTArxivV1.lowerFamilyComparisonDistance
+                                    (RectangleCLTArxivV1.lowerMaskedFourthSequence B m n) n (r n) (m n)
+RectangleCLTArxivV1.theorem_7_polynomial_envelope_lower : ∀ (q : ℝ),
+  2 < q →
+    ∃ c,
+      0 < c ∧
+        ∀ (B : ℕ → ℝ) (r m : ℕ → ℕ) [inst : ∀ (n : ℕ), NeZero (r n)] [inst_1 : ∀ (n : ℕ), NeZero (m n)],
+          (∀ (n : ℕ), 2 ≤ B n) →
+            (∀ (n : ℕ), 1 ≤ r n) →
+              (∀ (n : ℕ), 2 ≤ m n) →
+                (∀ (n : ℕ), r n ≤ m n) →
+                  Filter.Tendsto m Filter.atTop Filter.atTop →
+                    Filter.Tendsto (fun n => RectangleCLTArxivV1.lowerDenseWidthRate q (B n) n (r n) (m n)) Filter.atTop
+                        (nhds 0) →
+                      Filter.Tendsto
+                          (fun n =>
+                            RectangleCLTArxivV1.gaussianMaximumMean
+                                (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                  (RectangleCLTArxivV1.lowerDenseParameters q B m n) (r n) (m n)) /
+                              RectangleCLTArxivV1.independentAbsGaussianMean (r n))
+                          Filter.atTop (nhds 1) ∧
+                        ∀ᶠ (n : ℕ) in Filter.atTop,
+                          RectangleCLTArxivV1.LowerRectangularFamilyProperties
+                              (RectangleCLTArxivV1.lowerDenseParameters q B m n) n (r n) (m n) ∧
+                            RectangleCLTArxivV1.PolynomialEnvelopeHypotheses
+                                (RectangleCLTArxivV1.lowerFamilyArrayLaw
+                                  (RectangleCLTArxivV1.lowerDenseParameters q B m n) n (r n) (m n))
+                                (RectangleCLTArxivV1.lowerFamilyRawObservations
+                                  (RectangleCLTArxivV1.lowerDenseParameters q B m n))
+                                q (B n) ∧
+                              c *
+                                    (B n *
+                                          RectangleCLTArxivV1.gaussianMaximumMean
+                                            (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                              (RectangleCLTArxivV1.lowerDenseParameters q B m n) (r n) (m n)) *
+                                        RectangleCLT.dimensionLog (r n * m n) ^ (1 - 1 / q) /
+                                      ↑n ^ (1 / 2 - 1 / q)) ≤
+                                  RectangleCLTArxivV1.lowerFamilyShiftedCDFDifference
+                                    (RectangleCLTArxivV1.lowerDenseParameters q B m n) n (r n) (m n)
+                                    (RectangleCLTArxivV1.lowerLeadingThreshold (r n)) ∧
+                                c *
+                                    (B n *
+                                          RectangleCLTArxivV1.gaussianMaximumMean
+                                            (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                              (RectangleCLTArxivV1.lowerDenseParameters q B m n) (r n) (m n)) *
+                                        RectangleCLT.dimensionLog (r n * m n) ^ (1 - 1 / q) /
+                                      ↑n ^ (1 / 2 - 1 / q)) ≤
+                                  RectangleCLTArxivV1.lowerFamilyComparisonDistance
+                                    (RectangleCLTArxivV1.lowerDenseParameters q B m n) n (r n) (m n)
+RectangleCLTArxivV1.theorem_7_fixed_envelope_fourth_lower : ∀ (q : ℝ),
+  4 < q →
+    ∃ c,
+      0 < c ∧
+        ∀ (B : ℝ) (r m : ℕ → ℕ) [inst : ∀ (n : ℕ), NeZero (r n)] [inst_1 : ∀ (n : ℕ), NeZero (m n)],
+          2 ≤ B →
+            (∀ (n : ℕ), 1 ≤ r n) →
+              (∀ (n : ℕ), 2 ≤ m n) →
+                (∀ (n : ℕ), r n ≤ m n) →
+                  Filter.Tendsto m Filter.atTop Filter.atTop →
+                    Filter.Tendsto (fun n => RectangleCLTArxivV1.lowerDenseWidthRate q B n (r n) (m n)) Filter.atTop
+                        (nhds 0) →
+                      Filter.Tendsto
+                          (fun n =>
+                            RectangleCLTArxivV1.gaussianMaximumMean
+                                (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                  (RectangleCLTArxivV1.lowerDenseParameters q (fun x => B) m n) (r n) (m n)) /
+                              RectangleCLTArxivV1.independentAbsGaussianMean (r n))
+                          Filter.atTop (nhds 1) ∧
+                        ∀ᶠ (n : ℕ) in Filter.atTop,
+                          RectangleCLTArxivV1.LowerRectangularFamilyProperties
+                              (RectangleCLTArxivV1.lowerDenseParameters q (fun x => B) m n) n (r n) (m n) ∧
+                            RectangleCLTArxivV1.PolynomialFourthHypotheses
+                                (RectangleCLTArxivV1.lowerFamilyArrayLaw
+                                  (RectangleCLTArxivV1.lowerDenseParameters q (fun x => B) m n) n (r n) (m n))
+                                (RectangleCLTArxivV1.lowerFamilyRawObservations
+                                  (RectangleCLTArxivV1.lowerDenseParameters q (fun x => B) m n))
+                                q B ∧
+                              c *
+                                    (B *
+                                          RectangleCLTArxivV1.gaussianMaximumMean
+                                            (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                              (RectangleCLTArxivV1.lowerDenseParameters q (fun x => B) m n) (r n)
+                                              (m n)) *
+                                        RectangleCLT.dimensionLog (r n * m n) ^ (1 - 1 / q) /
+                                      ↑n ^ (1 / 2 - 1 / q)) ≤
+                                  RectangleCLTArxivV1.lowerFamilyShiftedCDFDifference
+                                    (RectangleCLTArxivV1.lowerDenseParameters q (fun x => B) m n) n (r n) (m n)
+                                    (RectangleCLTArxivV1.lowerLeadingThreshold (r n)) ∧
+                                c *
+                                    (B *
+                                          RectangleCLTArxivV1.gaussianMaximumMean
+                                            (RectangleCLTArxivV1.lowerFamilyGaussianFactor
+                                              (RectangleCLTArxivV1.lowerDenseParameters q (fun x => B) m n) (r n)
+                                              (m n)) *
+                                        RectangleCLT.dimensionLog (r n * m n) ^ (1 - 1 / q) /
+                                      ↑n ^ (1 / 2 - 1 / q)) ≤
+                                  RectangleCLTArxivV1.lowerFamilyComparisonDistance
+                                    (RectangleCLTArxivV1.lowerDenseParameters q (fun x => B) m n) n (r n) (m n)
+RectangleCLTArxivV1.exists_lowerDense_upper_constant : ∀ (q : ℝ),
+  2 < q →
+    ∃ C,
+      0 < C ∧
+        ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (n r m : ℕ) (B : ℝ),
+          1 ≤ n →
+            1 ≤ r →
+              1 ≤ m →
+                1 ≤ B →
+                  RectangleCLTArxivV1.PolynomialEnvelopeHypotheses (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+                      (RectangleCLTArxivV1.lowerFamilyRawObservations P) q B →
+                    RectangleCLTArxivV1.lowerFamilyComparisonDistance P n r m ≤
+                      C * RectangleCLT.dimensionLog n ^ (1 / 2 - 1 / q) *
+                        (B *
+                              RectangleCLTArxivV1.gaussianMaximumMean
+                                (RectangleCLTArxivV1.lowerFamilyGaussianFactor P r m) *
+                            RectangleCLT.dimensionLog (r * m) ^ (1 - 1 / q) /
+                          ↑n ^ (1 / 2 - 1 / q))
+RectangleCLTArxivV1.lemma_lower_family_properties : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {n r m : ℕ}, 1 ≤ n → 1 ≤ r → 2 ≤ m → RectangleCLTArxivV1.LowerRectangularFamilyProperties P n r m

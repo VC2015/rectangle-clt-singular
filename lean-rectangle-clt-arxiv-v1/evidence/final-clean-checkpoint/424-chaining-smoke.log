@@ -1,0 +1,32 @@
+GenericChaining.dirksen_expectation.{u_1, u_2} {T : Type u_1} {Ω : Type u_2} [Fintype T] [Nonempty T]
+  [MeasurableSpace Ω] {μ : MeasureTheory.Measure Ω} [MeasureTheory.IsProbabilityMeasure μ] (X : T → Ω → ℝ)
+  (d₁ d₂ : T → T → NNReal) (diag₁ : ∀ (t : T), d₁ t t = 0) (diag₂ : ∀ (t : T), d₂ t t = 0)
+  (symm₁ : ∀ (s t : T), d₁ s t = d₁ t s) (symm₂ : ∀ (s t : T), d₂ s t = d₂ t s)
+  (tri₁ : ∀ (s t c : T), d₁ s t ≤ d₁ s c + d₁ t c) (tri₂ : ∀ (s t c : T), d₂ s t ≤ d₂ s c + d₂ t c)
+  (htail : GenericChaining.HasMixedTail μ X d₁ d₂)
+  (hInt : ∀ (s t : T), MeasureTheory.Integrable (fun ω => X s ω - X t ω) μ) (t₀ : T) :
+  ∫ (ω : Ω), GenericChaining.incrementMaximum X t₀ ω ∂μ ≤
+    GenericChaining.dirksenConstant *
+        ((GenericChaining.gamma2 fun s t => ↑(d₂ s t)).toReal + (GenericChaining.gamma1 fun s t => ↑(d₁ s t)).toReal) +
+      2 * ⨆ t, ∫ (ω : Ω), |X t ω - X t₀ ω| ∂μ
+GenericChaining.gamma2_le_gaussianWidth.{u_1} {T : Type u_1} [Fintype T] [Nonempty T] {r : ℕ}
+  (a : T → EuclideanSpace ℝ (Fin r)) :
+  (GenericChaining.gamma2 fun s t => ↑(GenericChaining.canonicalDist a s t)).toReal ≤
+    GenericChaining.gaussianMajorizingConstant * GenericChaining.gaussianWidth a
+GenericChaining.gamma_eq_finset.{u_1} {T : Type u_1} (w : ℕ → ENNReal) (d : T → T → ENNReal) :
+  GenericChaining.gamma w d = ⨅ A, ⨆ t, ∑' (k : ℕ), w k * ⨅ s, d t ↑s
+GenericChaining.gamma1_discrete_le_cutoff.{u_1} {T : Type u_1} [Fintype T] [Nonempty T] [DecidableEq T] (δ : ENNReal)
+  (K : ℕ) (hK : ∀ (k : ℕ), K ≤ k → Fintype.card T ≤ GenericChaining.capacity k) :
+  GenericChaining.gamma1 (GenericChaining.discreteDist δ) ≤ ↑(2 ^ K - 1) * δ
+GenericChaining.gamma1_discrete_le_log2.{u_1} {T : Type u_1} [Fintype T] [Nonempty T] [DecidableEq T] (δ : ENNReal)
+  (hT : 2 ≤ Fintype.card T) : GenericChaining.gamma1 (GenericChaining.discreteDist δ) ≤ ↑(2 * (Fintype.card T).log2) * δ
+GenericChaining.gamma_pullback.{u_1, u_2} {S : Type u_1} {T : Type u_2} (w : ℕ → ENNReal) (d : T → T → ENNReal)
+  (f : S → T) (hf : Function.Surjective f) :
+  (GenericChaining.gamma w fun s t => d (f s) (f t)) = GenericChaining.gamma w d
+GenericChaining.maximum_ae_eq_of_zero_contrasts.{u_1, u_2, u_3} {Ω : Type u_1} [MeasurableSpace Ω]
+  {μ : MeasureTheory.Measure Ω} {S : Type u_2} {T : Type u_3} [Fintype S] [Nonempty S] [Fintype T] [Nonempty T]
+  (q : S → T) (hq : Function.Surjective q) (X : S → Ω → ℝ) (Y : T → Ω → ℝ)
+  (hint : ∀ (s : S), MeasureTheory.Integrable (fun ω => (X s ω - Y (q s) ω) ^ 2) μ)
+  (hzero : ∀ (s : S), ∫ (ω : Ω), (X s ω - Y (q s) ω) ^ 2 ∂μ = 0) : (fun ω => ⨆ s, X s ω) =ᵐ[μ] fun ω => ⨆ t, Y t ω
+'GenericChaining.dirksen_expectation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'GenericChaining.gamma2_le_gaussianWidth' depends on axioms: [propext, Classical.choice, Quot.sound]

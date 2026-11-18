@@ -1,0 +1,1262 @@
+@RectangleCLTArxivV1.positiveGammaSoftOrderedPairMass : {m r : Nat} →
+  (Fin m → RectangleCLT.Vector r) → RectangleCLT.Vector m → Real → Real → RectangleCLT.Vector r → Real
+@RectangleCLTArxivV1.positiveGammaSoftOrderedPairProjection : {m r : Nat} →
+  (Fin m → RectangleCLT.Vector r) → RectangleCLT.Vector m → Real → Real → RectangleCLT.Vector r → Real
+@RectangleCLTArxivV1.positiveGammaMixedMassKernel_eq_ridgeDensity : ∀ {m r : Nat} (u : Fin m → RectangleCLT.Vector r)
+  (b : RectangleCLT.Vector m) (j l : Fin m),
+  @Eq.{1} Real (@RectangleCLTArxivV1.positiveGammaMixedMassKernel m r u b j l)
+    (@RectangleCLTArxivV1.hardGaussianRidgeDensity m r u b j l)
+@RectangleCLTArxivV1.positiveGamma_angle_mul_massKernel : ∀ {m r : Nat} (u : Fin m → RectangleCLT.Vector r)
+  (b : RectangleCLT.Vector m) (j l : Fin m),
+  @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u j)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+    @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u l)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+      @Eq.{1} Real
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (RectangleCLTArxivV1.correlationAngleWeight (@RectangleCLT.faceDot r (u j) (u l)))
+          (@RectangleCLTArxivV1.positiveGammaMixedMassKernel m r u b j l))
+        (@RectangleCLTArxivV1.positiveEdgeTubeCoefficient m r u b (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0))
+          (@Prod.mk.{0, 0} (Fin m) (Fin m) j l))
+@RectangleCLTArxivV1.positiveGamma_angle_mul_planeKernel : ∀ {m r : Nat} (u : Fin m → RectangleCLT.Vector r)
+  (b : RectangleCLT.Vector m) (j l : Fin m),
+  @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u j)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+    @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u l)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+      @Eq.{1} Real
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+          (RectangleCLTArxivV1.correlationAngleWeight (@RectangleCLT.faceDot r (u j) (u l)))
+          (@RectangleCLTArxivV1.positiveGammaMixedPlaneKernel m r u b j l))
+        (@RectangleCLTArxivV1.positiveEdgeTubeCoefficient m r u b (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2))
+          (@Prod.mk.{0, 0} (Fin m) (Fin m) j l))
+@RectangleCLTArxivV1.positiveGammaMixedMassKernel_norm_le : ∀ {m r : Nat} (u : Fin m → RectangleCLT.Vector r)
+  (b : RectangleCLT.Vector m) (j l : Fin m),
+  @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u j)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+    @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u l)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+      @Ne.{1} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@HAdd.hAdd.{0, 0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (EuclideanSpace.{0, 0} Real (Fin r))
+            (EuclideanSpace.{0, 0} Real (Fin r))
+            (@instHAdd.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@AddCommMagma.toAdd.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@AddCommSemigroup.toAddCommMagma.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@AddCommMonoid.toAddCommSemigroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@ENormedAddCommMonoid.toAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@UniformSpace.toTopologicalSpace.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@PiLp.uniformSpace.{0, 0}
+                          (@OfNat.ofNat.{0} ENNReal 2
+                            (@instOfNatAtLeastTwo.{0} ENNReal 2
+                              (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                              PiLp.innerProductSpace._proof_2))
+                          (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                          @PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                      (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@PiLp.normedAddCommGroup.{0, 0}
+                          (@OfNat.ofNat.{0} ENNReal 2
+                            (@instOfNatAtLeastTwo.{0} ENNReal 2
+                              (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                              PiLp.innerProductSpace._proof_2))
+                          (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+                          Real.normedAddCommGroup)))))))
+            (@RectangleCLT.projectionEuclideanVector r (u j)) (@RectangleCLT.projectionEuclideanVector r (u l)))
+          (@OfNat.ofNat.{0} (EuclideanSpace.{0, 0} Real (Fin r)) 0
+            (@Zero.toOfNat0.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@NegZeroClass.toZero.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@SubNegZeroMonoid.toNegZeroClass.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@SubtractionMonoid.toSubNegZeroMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@SubtractionCommMonoid.toSubtractionMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@AddCommGroup.toDivisionAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@WithLp.instAddCommGroup.{0}
+                          (@OfNat.ofNat.{0} ENNReal 2
+                            (@instOfNatAtLeastTwo.{0} ENNReal 2
+                              (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                              PiLp.innerProductSpace._proof_2))
+                          ((i : Fin r) → (fun (x : Fin r) => Real) i)
+                          (@Pi.addCommGroup.{0, 0} (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                            Real.instAddCommGroup))))))))) →
+        @Ne.{1} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@HSub.hSub.{0, 0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (EuclideanSpace.{0, 0} Real (Fin r))
+              (EuclideanSpace.{0, 0} Real (Fin r))
+              (@instHSub.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@SubNegMonoid.toSub.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@AddGroup.toSubNegMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@NormedAddGroup.toAddGroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@NormedAddCommGroup.toNormedAddGroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@PiLp.normedAddCommGroup.{0, 0}
+                          (@OfNat.ofNat.{0} ENNReal 2
+                            (@instOfNatAtLeastTwo.{0} ENNReal 2
+                              (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                              PiLp.innerProductSpace._proof_2))
+                          (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+                          Real.normedAddCommGroup))))))
+              (@RectangleCLT.projectionEuclideanVector r (u j)) (@RectangleCLT.projectionEuclideanVector r (u l)))
+            (@OfNat.ofNat.{0} (EuclideanSpace.{0, 0} Real (Fin r)) 0
+              (@Zero.toOfNat0.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@NegZeroClass.toZero.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@SubNegZeroMonoid.toNegZeroClass.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@SubtractionMonoid.toSubNegZeroMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@SubtractionCommMonoid.toSubtractionMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@AddCommGroup.toDivisionAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                          (@WithLp.instAddCommGroup.{0}
+                            (@OfNat.ofNat.{0} ENNReal 2
+                              (@instOfNatAtLeastTwo.{0} ENNReal 2
+                                (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                  (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal
+                                    instENNRealAddCommMonoidWithOne))
+                                PiLp.innerProductSpace._proof_2))
+                            ((i : Fin r) → (fun (x : Fin r) => Real) i)
+                            (@Pi.addCommGroup.{0, 0} (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                              Real.instAddCommGroup))))))))) →
+          @LE.le.{0} Real Real.instLE
+            (@Norm.norm.{0} Real Real.norm (@RectangleCLTArxivV1.positiveGammaMixedMassKernel m r u b j l))
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              RectangleCLTArxivV1.positiveMixedMassBudget
+              (@RectangleCLT.Companion.SplitV4.gaussianThresholdResidualScale m r u j l))
+@RectangleCLTArxivV1.positiveGammaMixedPlaneKernel_norm_le : ∀ {m r : Nat} (u : Fin m → RectangleCLT.Vector r)
+  (b : RectangleCLT.Vector m) (j l : Fin m),
+  @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u j)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+    @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u l)) (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) →
+      @Ne.{1} (EuclideanSpace.{0, 0} Real (Fin r))
+          (@HAdd.hAdd.{0, 0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (EuclideanSpace.{0, 0} Real (Fin r))
+            (EuclideanSpace.{0, 0} Real (Fin r))
+            (@instHAdd.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@AddCommMagma.toAdd.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@AddCommSemigroup.toAddCommMagma.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@AddCommMonoid.toAddCommSemigroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@ENormedAddCommMonoid.toAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@UniformSpace.toTopologicalSpace.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@PiLp.uniformSpace.{0, 0}
+                          (@OfNat.ofNat.{0} ENNReal 2
+                            (@instOfNatAtLeastTwo.{0} ENNReal 2
+                              (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                              PiLp.innerProductSpace._proof_2))
+                          (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                          @PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+                      (@NormedAddCommGroup.toENormedAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@PiLp.normedAddCommGroup.{0, 0}
+                          (@OfNat.ofNat.{0} ENNReal 2
+                            (@instOfNatAtLeastTwo.{0} ENNReal 2
+                              (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                              PiLp.innerProductSpace._proof_2))
+                          (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+                          Real.normedAddCommGroup)))))))
+            (@RectangleCLT.projectionEuclideanVector r (u j)) (@RectangleCLT.projectionEuclideanVector r (u l)))
+          (@OfNat.ofNat.{0} (EuclideanSpace.{0, 0} Real (Fin r)) 0
+            (@Zero.toOfNat0.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+              (@NegZeroClass.toZero.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@SubNegZeroMonoid.toNegZeroClass.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@SubtractionMonoid.toSubNegZeroMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@SubtractionCommMonoid.toSubtractionMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@AddCommGroup.toDivisionAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@WithLp.instAddCommGroup.{0}
+                          (@OfNat.ofNat.{0} ENNReal 2
+                            (@instOfNatAtLeastTwo.{0} ENNReal 2
+                              (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                              PiLp.innerProductSpace._proof_2))
+                          ((i : Fin r) → (fun (x : Fin r) => Real) i)
+                          (@Pi.addCommGroup.{0, 0} (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                            Real.instAddCommGroup))))))))) →
+        @Ne.{1} (EuclideanSpace.{0, 0} Real (Fin r))
+            (@HSub.hSub.{0, 0, 0} (EuclideanSpace.{0, 0} Real (Fin r)) (EuclideanSpace.{0, 0} Real (Fin r))
+              (EuclideanSpace.{0, 0} Real (Fin r))
+              (@instHSub.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@SubNegMonoid.toSub.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@AddGroup.toSubNegMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@NormedAddGroup.toAddGroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@NormedAddCommGroup.toNormedAddGroup.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@PiLp.normedAddCommGroup.{0, 0}
+                          (@OfNat.ofNat.{0} ENNReal 2
+                            (@instOfNatAtLeastTwo.{0} ENNReal 2
+                              (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal instENNRealAddCommMonoidWithOne))
+                              PiLp.innerProductSpace._proof_2))
+                          (Fin r) (fun (x : Fin r) => Real) fact_one_le_two_ennreal (Fin.fintype r) fun (i : Fin r) =>
+                          Real.normedAddCommGroup))))))
+              (@RectangleCLT.projectionEuclideanVector r (u j)) (@RectangleCLT.projectionEuclideanVector r (u l)))
+            (@OfNat.ofNat.{0} (EuclideanSpace.{0, 0} Real (Fin r)) 0
+              (@Zero.toOfNat0.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                (@NegZeroClass.toZero.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                  (@SubNegZeroMonoid.toNegZeroClass.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                    (@SubtractionMonoid.toSubNegZeroMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                      (@SubtractionCommMonoid.toSubtractionMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                        (@AddCommGroup.toDivisionAddCommMonoid.{0} (EuclideanSpace.{0, 0} Real (Fin r))
+                          (@WithLp.instAddCommGroup.{0}
+                            (@OfNat.ofNat.{0} ENNReal 2
+                              (@instOfNatAtLeastTwo.{0} ENNReal 2
+                                (@AddMonoidWithOne.toNatCast.{0} ENNReal
+                                  (@AddCommMonoidWithOne.toAddMonoidWithOne.{0} ENNReal
+                                    instENNRealAddCommMonoidWithOne))
+                                PiLp.innerProductSpace._proof_2))
+                            ((i : Fin r) → (fun (x : Fin r) => Real) i)
+                            (@Pi.addCommGroup.{0, 0} (Fin r) (fun (x : Fin r) => Real) fun (i : Fin r) =>
+                              Real.instAddCommGroup))))))))) →
+          @LE.le.{0} Real Real.instLE
+            (@Norm.norm.{0} Real Real.norm (@RectangleCLTArxivV1.positiveGammaMixedPlaneKernel m r u b j l))
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              RectangleCLTArxivV1.positiveMixedPlaneBudget
+              (@RectangleCLT.Companion.SplitV4.gaussianThresholdResidualScale m r u j l))
+@RectangleCLTArxivV1.integrable_gamma_positiveEdge_mass : ∀ {m r : Nat} (u : Fin m → RectangleCLT.Vector r),
+  (∀ (k : Fin m),
+      @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u k))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) →
+    ∀ (a : RectangleCLT.Vector m) (h σ : Real) (x : RectangleCLT.Vector r) (j l : Fin m) (q : Nat),
+      @MeasureTheory.Integrable.{0, 0} Real
+        (@ContinuousENorm.toENorm.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real
+              (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+                (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+          (@SeminormedAddGroup.toContinuousENorm.{0} Real
+            (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (Prod.{0, 0} Real (RectangleCLT.Face m → Real))
+        (@Prod.instMeasurableSpace.{0, 0} Real (RectangleCLT.Face m → Real) Real.measurableSpace
+          (@MeasurableSpace.pi.{0, 0} (RectangleCLT.Face m) (fun (a : RectangleCLT.Face m) => Real)
+            fun (a : RectangleCLT.Face m) => Real.measurableSpace))
+        (fun (e : Prod.{0, 0} Real (RectangleCLT.Face m → Real)) =>
+          @RectangleCLTArxivV1.positiveEdgeTubeCoefficient m r u
+            (fun (k : Fin m) =>
+              @HDiv.hDiv.{0, 0, 0} Real Real Real
+                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                  (@RectangleCLT.Companion.SplitV4.gammaAdjustedThreshold m a h e k) (@RectangleCLT.faceDot r (u k) x))
+                σ)
+            (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) (@Prod.mk.{0, 0} (Fin m) (Fin m) j l))
+        (RectangleCLT.Companion.gammaRectangleLaw m q)
+@RectangleCLTArxivV1.integrable_gamma_positiveEdge_projection : ∀ {m r : Nat} (u : Fin m → RectangleCLT.Vector r),
+  (∀ (k : Fin m),
+      @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u k))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) →
+    ∀ (a : RectangleCLT.Vector m) (h σ : Real) (x : RectangleCLT.Vector r) (j l : Fin m) (q : Nat),
+      @MeasureTheory.Integrable.{0, 0} Real
+        (@ContinuousENorm.toENorm.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real
+              (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+                (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+          (@SeminormedAddGroup.toContinuousENorm.{0} Real
+            (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (Prod.{0, 0} Real (RectangleCLT.Face m → Real))
+        (@Prod.instMeasurableSpace.{0, 0} Real (RectangleCLT.Face m → Real) Real.measurableSpace
+          (@MeasurableSpace.pi.{0, 0} (RectangleCLT.Face m) (fun (a : RectangleCLT.Face m) => Real)
+            fun (a : RectangleCLT.Face m) => Real.measurableSpace))
+        (fun (e : Prod.{0, 0} Real (RectangleCLT.Face m → Real)) =>
+          @RectangleCLTArxivV1.positiveEdgeTubeCoefficient m r u
+            (fun (k : Fin m) =>
+              @HDiv.hDiv.{0, 0, 0} Real Real Real
+                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                  (@RectangleCLT.Companion.SplitV4.gammaAdjustedThreshold m a h e k) (@RectangleCLT.faceDot r (u k) x))
+                σ)
+            (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) (@Prod.mk.{0, 0} (Fin m) (Fin m) j l))
+        (RectangleCLT.Companion.gammaRectangleLaw m q)
+@RectangleCLTArxivV1.integrable_gaussian_positive_soft_pair_mass : ∀ {m r : Nat} (u : Fin m → RectangleCLT.Vector r)
+  (a : RectangleCLT.Vector m) {h : Real},
+  @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h →
+    ∀ (σ : Real) (x : RectangleCLT.Vector r) (j l : Fin m),
+      @MeasureTheory.Integrable.{0, 0} Real
+        (@ContinuousENorm.toENorm.{0} Real
+          (@UniformSpace.toTopologicalSpace.{0} Real
+            (@PseudoMetricSpace.toUniformSpace.{0} Real
+              (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+                (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+          (@SeminormedAddGroup.toContinuousENorm.{0} Real
+            (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+              (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                  (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                    (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+        (@UniformSpace.toTopologicalSpace.{0} Real (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+        (RectangleCLT.Vector r)
+        (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace)
+        (fun (g : RectangleCLT.Vector r) =>
+          @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+              (@RectangleCLT.Companion.SplitV4.logisticNullWeight m r u a h
+                (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector r) (RectangleCLT.Vector r) (RectangleCLT.Vector r)
+                  (@instHAdd.{0} (RectangleCLT.Vector r)
+                    (@Pi.instAdd.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instAdd))
+                  x
+                  (@HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector r) (RectangleCLT.Vector r)
+                    (@instHSMul.{0, 0} Real (RectangleCLT.Vector r)
+                      (@Function.hasSMul.{0, 0, 0} (Fin r) Real Real
+                        (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                          (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                          (@Algebra.id.{0} Real Real.instCommSemiring))))
+                    σ g)))
+              (@RectangleCLT.Companion.SplitV4.logisticFaceWeight m r u a h
+                (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector r) (RectangleCLT.Vector r) (RectangleCLT.Vector r)
+                  (@instHAdd.{0} (RectangleCLT.Vector r)
+                    (@Pi.instAdd.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instAdd))
+                  x
+                  (@HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector r) (RectangleCLT.Vector r)
+                    (@instHSMul.{0, 0} Real (RectangleCLT.Vector r)
+                      (@Function.hasSMul.{0, 0, 0} (Fin r) Real Real
+                        (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                          (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                          (@Algebra.id.{0} Real Real.instCommSemiring))))
+                    σ g))
+                j))
+            (@RectangleCLT.Companion.SplitV4.logisticFaceWeight m r u a h
+              (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector r) (RectangleCLT.Vector r) (RectangleCLT.Vector r)
+                (@instHAdd.{0} (RectangleCLT.Vector r)
+                  (@Pi.instAdd.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instAdd))
+                x
+                (@HSMul.hSMul.{0, 0, 0} Real (RectangleCLT.Vector r) (RectangleCLT.Vector r)
+                  (@instHSMul.{0, 0} Real (RectangleCLT.Vector r)
+                    (@Function.hasSMul.{0, 0, 0} (Fin r) Real Real
+                      (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                        (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                        (@Algebra.id.{0} Real Real.instCommSemiring))))
+                  σ g))
+              l))
+        (RectangleCLT.standardGaussian r)
+@RectangleCLTArxivV1.integrable_gaussian_positive_soft_pair_projection : ∀ {m r : Nat}
+  (u : Fin m → RectangleCLT.Vector r),
+  (∀ (k : Fin m),
+      @Eq.{1} Real (@RectangleCLT.vectorNormSq r (u k))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) →
+    ∀ (a : RectangleCLT.Vector m) {h : Real},
+      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h →
+        ∀ (σ : Real) (x : RectangleCLT.Vector r) (j l : Fin m),
+          @MeasureTheory.Integrable.{0, 0} Real
+            (@ContinuousENorm.toENorm.{0} Real
+              (@UniformSpace.toTopologicalSpace.{0} Real
+                (@PseudoMetricSpace.toUniformSpace.{0} Real
+                  (@SeminormedAddGroup.toPseudoMetricSpace.{0} Real
+                    (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                      (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                        (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                          (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                            (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing))))))))
+              (@SeminormedAddGroup.toContinuousENorm.{0} Real
+                (@SeminormedAddCommGroup.toSeminormedAddGroup.{0} Real
+                  (@NonUnitalSeminormedRing.toSeminormedAddCommGroup.{0} Real
+                    (@NonUnitalSeminormedCommRing.toNonUnitalSeminormedRing.{0} Real
+                      (@SeminormedCommRing.toNonUnitalSeminormedCommRing.{0} Real
+                        (@NormedCommRing.toSeminormedCommRing.{0} Real Real.normedCommRing)))))))
+            (@UniformSpace.toTopologicalSpace.{0} Real
+              (@PseudoMetricSpace.toUniformSpace.{0} Real Real.pseudoMetricSpace))
+            (Fin r → Real)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace)
+            (fun (g : Fin r → Real) =>
+              @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (RectangleCLTArxivV1.correlationAngleWeight (@RectangleCLT.faceDot r (u j) (u l)))
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@RectangleCLT.vectorNormSq r
+                    (@Matrix.mulVec.{0, 0, 0} (Fin r) (Fin r) Real
+                      (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+                        (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+                          (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                            (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                              (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing)))))
+                      (Fin.fintype r) (@RectangleCLTArxivV1.supplementalHPairPlane r (u j) (u l)) g))
+                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                      (@RectangleCLT.Companion.SplitV4.logisticNullWeight m r u a h
+                        (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector r) (Fin r → Real) (RectangleCLT.Vector r)
+                          (@instHAdd.{0} (RectangleCLT.Vector r)
+                            (@Pi.instAdd.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instAdd))
+                          x
+                          (@HSMul.hSMul.{0, 0, 0} Real (Fin r → Real) (Fin r → Real)
+                            (@instHSMul.{0, 0} Real (Fin r → Real)
+                              (@Function.hasSMul.{0, 0, 0} (Fin r) Real Real
+                                (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                                  (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                                  (@Algebra.id.{0} Real Real.instCommSemiring))))
+                            σ g)))
+                      (@RectangleCLT.Companion.SplitV4.logisticFaceWeight m r u a h
+                        (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector r) (Fin r → Real) (RectangleCLT.Vector r)
+                          (@instHAdd.{0} (RectangleCLT.Vector r)
+                            (@Pi.instAdd.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instAdd))
+                          x
+                          (@HSMul.hSMul.{0, 0, 0} Real (Fin r → Real) (Fin r → Real)
+                            (@instHSMul.{0, 0} Real (Fin r → Real)
+                              (@Function.hasSMul.{0, 0, 0} (Fin r) Real Real
+                                (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                                  (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                                  (@Algebra.id.{0} Real Real.instCommSemiring))))
+                            σ g))
+                        j))
+                    (@RectangleCLT.Companion.SplitV4.logisticFaceWeight m r u a h
+                      (@HAdd.hAdd.{0, 0, 0} (RectangleCLT.Vector r) (Fin r → Real) (RectangleCLT.Vector r)
+                        (@instHAdd.{0} (RectangleCLT.Vector r)
+                          (@Pi.instAdd.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instAdd))
+                        x
+                        (@HSMul.hSMul.{0, 0, 0} Real (Fin r → Real) (Fin r → Real)
+                          (@instHSMul.{0, 0} Real (Fin r → Real)
+                            (@Function.hasSMul.{0, 0, 0} (Fin r) Real Real
+                              (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                                (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                                (@Algebra.id.{0} Real Real.instCommSemiring))))
+                          σ g))
+                      l))))
+            (RectangleCLT.standardGaussian r)
+@RectangleCLTArxivV1.positiveGamma_mass_angle_soft_coarea : ∀ {m n : Nat}
+  (u :
+    Fin m →
+      RectangleCLT.Vector
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))),
+  (∀ (k : Fin m),
+      @Eq.{1} Real
+        (@RectangleCLT.vectorNormSq
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+          (u k))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) →
+    ∀ (a : RectangleCLT.Vector m) {h σ : Real},
+      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h →
+        @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) σ →
+          ∀
+            (x :
+              RectangleCLT.Vector
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+            (j l : Fin m),
+            @Eq.{1} Real
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                    (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) h)
+                  (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                    (@OfNat.ofNat.{0} Real 2
+                      (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                        (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+                    h))
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (RectangleCLTArxivV1.correlationAngleWeight
+                    (@RectangleCLT.faceDot
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                      (u j) (u l)))
+                  (@MeasureTheory.integral.{0, 0}
+                    (RectangleCLT.Vector
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                    Real Real.normedAddCommGroup
+                    (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                    (@MeasurableSpace.pi.{0, 0}
+                      (Fin
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                          (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                      (fun
+                          (a :
+                            Fin
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                        Real)
+                      fun
+                        (a :
+                          Fin
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                              (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                      Real.measurableSpace)
+                    (RectangleCLT.standardGaussian
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                    fun
+                      (g :
+                        RectangleCLT.Vector
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                            (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                    @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                        (@RectangleCLT.Companion.SplitV4.logisticNullWeight m
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                            (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                          u a h
+                          (@HAdd.hAdd.{0, 0, 0}
+                            (RectangleCLT.Vector
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                            (RectangleCLT.Vector
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                            (RectangleCLT.Vector
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                            (@instHAdd.{0}
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (@Pi.instAdd.{0, 0}
+                                (Fin
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                (fun
+                                    (a :
+                                      Fin
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                          (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                                  Real)
+                                fun
+                                  (i :
+                                    Fin
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                                Real.instAdd))
+                            x
+                            (@HSMul.hSMul.{0, 0, 0} Real
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (@instHSMul.{0, 0} Real
+                                (RectangleCLT.Vector
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                (@Function.hasSMul.{0, 0, 0}
+                                  (Fin
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                      (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                  Real Real
+                                  (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                                    (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                                    (@Algebra.id.{0} Real Real.instCommSemiring))))
+                              σ g)))
+                        (@RectangleCLT.Companion.SplitV4.logisticFaceWeight m
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                            (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                          u a h
+                          (@HAdd.hAdd.{0, 0, 0}
+                            (RectangleCLT.Vector
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                            (RectangleCLT.Vector
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                            (RectangleCLT.Vector
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                            (@instHAdd.{0}
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (@Pi.instAdd.{0, 0}
+                                (Fin
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                (fun
+                                    (a :
+                                      Fin
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                          (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                                  Real)
+                                fun
+                                  (i :
+                                    Fin
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                                Real.instAdd))
+                            x
+                            (@HSMul.hSMul.{0, 0, 0} Real
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (@instHSMul.{0, 0} Real
+                                (RectangleCLT.Vector
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                (@Function.hasSMul.{0, 0, 0}
+                                  (Fin
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                      (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                  Real Real
+                                  (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                                    (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                                    (@Algebra.id.{0} Real Real.instCommSemiring))))
+                              σ g))
+                          j))
+                      (@RectangleCLT.Companion.SplitV4.logisticFaceWeight m
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                          (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                        u a h
+                        (@HAdd.hAdd.{0, 0, 0}
+                          (RectangleCLT.Vector
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                              (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                          (RectangleCLT.Vector
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                              (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                          (RectangleCLT.Vector
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                              (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                          (@instHAdd.{0}
+                            (RectangleCLT.Vector
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                            (@Pi.instAdd.{0, 0}
+                              (Fin
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (fun
+                                  (a :
+                                    Fin
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                                Real)
+                              fun
+                                (i :
+                                  Fin
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                      (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                              Real.instAdd))
+                          x
+                          (@HSMul.hSMul.{0, 0, 0} Real
+                            (RectangleCLT.Vector
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                            (RectangleCLT.Vector
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                            (@instHSMul.{0, 0} Real
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (@Function.hasSMul.{0, 0, 0}
+                                (Fin
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                Real Real
+                                (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                                  (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                                  (@Algebra.id.{0} Real Real.instCommSemiring))))
+                            σ g))
+                        l))))
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@Inv.inv.{0} Real Real.instInv σ)
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@Inv.inv.{0} Real Real.instInv σ)
+                  (@MeasureTheory.integral.{0, 0} (Prod.{0, 0} Real (RectangleCLT.Face m → Real)) Real
+                    Real.normedAddCommGroup
+                    (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                    (@Prod.instMeasurableSpace.{0, 0} Real (RectangleCLT.Face m → Real) Real.measurableSpace
+                      (@MeasurableSpace.pi.{0, 0} (RectangleCLT.Face m) (fun (a : RectangleCLT.Face m) => Real)
+                        fun (a : RectangleCLT.Face m) => Real.measurableSpace))
+                    (RectangleCLT.Companion.gammaRectangleLaw m (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))
+                    fun (e : Prod.{0, 0} Real (RectangleCLT.Face m → Real)) =>
+                    @RectangleCLTArxivV1.positiveEdgeTubeCoefficient m
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                      u
+                      (fun (k : Fin m) =>
+                        @HDiv.hDiv.{0, 0, 0} Real Real Real
+                          (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                            (@RectangleCLT.Companion.SplitV4.gammaAdjustedThreshold m a h e k)
+                            (@RectangleCLT.faceDot
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                              (u k) x))
+                          σ)
+                      (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) (@Prod.mk.{0, 0} (Fin m) (Fin m) j l))))
+@RectangleCLTArxivV1.positiveGamma_projection_angle_soft_coarea : ∀ {m n : Nat}
+  (u :
+    Fin m →
+      RectangleCLT.Vector
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))),
+  (∀ (k : Fin m),
+      @Eq.{1} Real
+        (@RectangleCLT.vectorNormSq
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+          (u k))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) →
+    ∀ (a : RectangleCLT.Vector m) {h σ : Real},
+      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h →
+        @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) σ →
+          ∀
+            (x :
+              RectangleCLT.Vector
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+            (j l : Fin m),
+            @Eq.{1} Real
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                    (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) h)
+                  (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                    (@OfNat.ofNat.{0} Real 2
+                      (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                        (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+                    h))
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (RectangleCLTArxivV1.correlationAngleWeight
+                    (@RectangleCLT.faceDot
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                      (u j) (u l)))
+                  (@MeasureTheory.integral.{0, 0}
+                    (RectangleCLT.Vector
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                    Real Real.normedAddCommGroup
+                    (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                    (@MeasurableSpace.pi.{0, 0}
+                      (Fin
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                          (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                      (fun
+                          (a :
+                            Fin
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                        Real)
+                      fun
+                        (a :
+                          Fin
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                              (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                      Real.measurableSpace)
+                    (RectangleCLT.standardGaussian
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                    fun
+                      (g :
+                        RectangleCLT.Vector
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                            (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                    @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                      (@RectangleCLT.vectorNormSq
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                          (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                        (@Matrix.mulVec.{0, 0, 0}
+                          (Fin
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                              (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                          (Fin
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                              (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                          Real
+                          (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+                            (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+                              (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                                (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                                  (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing)))))
+                          (Fin.fintype
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                              (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                          (@RectangleCLTArxivV1.supplementalHPairPlane
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                              (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                            (u j) (u l))
+                          g))
+                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                          (@RectangleCLT.Companion.SplitV4.logisticNullWeight m
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                              (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                            u a h
+                            (@HAdd.hAdd.{0, 0, 0}
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (@instHAdd.{0}
+                                (RectangleCLT.Vector
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                (@Pi.instAdd.{0, 0}
+                                  (Fin
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                      (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                  (fun
+                                      (a :
+                                        Fin
+                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                            (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                                    Real)
+                                  fun
+                                    (i :
+                                      Fin
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                          (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                                  Real.instAdd))
+                              x
+                              (@HSMul.hSMul.{0, 0, 0} Real
+                                (RectangleCLT.Vector
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                (RectangleCLT.Vector
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                (@instHSMul.{0, 0} Real
+                                  (RectangleCLT.Vector
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                      (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                  (@Function.hasSMul.{0, 0, 0}
+                                    (Fin
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                    Real Real
+                                    (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                                      (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                                      (@Algebra.id.{0} Real Real.instCommSemiring))))
+                                σ g)))
+                          (@RectangleCLT.Companion.SplitV4.logisticFaceWeight m
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                              (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                            u a h
+                            (@HAdd.hAdd.{0, 0, 0}
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (@instHAdd.{0}
+                                (RectangleCLT.Vector
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                (@Pi.instAdd.{0, 0}
+                                  (Fin
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                      (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                  (fun
+                                      (a :
+                                        Fin
+                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                            (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                                    Real)
+                                  fun
+                                    (i :
+                                      Fin
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                          (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                                  Real.instAdd))
+                              x
+                              (@HSMul.hSMul.{0, 0, 0} Real
+                                (RectangleCLT.Vector
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                (RectangleCLT.Vector
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                (@instHSMul.{0, 0} Real
+                                  (RectangleCLT.Vector
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                      (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                  (@Function.hasSMul.{0, 0, 0}
+                                    (Fin
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                    Real Real
+                                    (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                                      (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                                      (@Algebra.id.{0} Real Real.instCommSemiring))))
+                                σ g))
+                            j))
+                        (@RectangleCLT.Companion.SplitV4.logisticFaceWeight m
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                            (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                          u a h
+                          (@HAdd.hAdd.{0, 0, 0}
+                            (RectangleCLT.Vector
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                            (RectangleCLT.Vector
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                            (RectangleCLT.Vector
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                            (@instHAdd.{0}
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (@Pi.instAdd.{0, 0}
+                                (Fin
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                (fun
+                                    (a :
+                                      Fin
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                          (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                                  Real)
+                                fun
+                                  (i :
+                                    Fin
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))) =>
+                                Real.instAdd))
+                            x
+                            (@HSMul.hSMul.{0, 0, 0} Real
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (RectangleCLT.Vector
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                              (@instHSMul.{0, 0} Real
+                                (RectangleCLT.Vector
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                (@Function.hasSMul.{0, 0, 0}
+                                  (Fin
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                      (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1))))
+                                  Real Real
+                                  (@Algebra.toSMul.{0, 0} Real Real Real.instCommSemiring
+                                    (@CommSemiring.toSemiring.{0} Real Real.instCommSemiring)
+                                    (@Algebra.id.{0} Real Real.instCommSemiring))))
+                              σ g))
+                          l)))))
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@Inv.inv.{0} Real Real.instInv σ)
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@Inv.inv.{0} Real Real.instInv σ)
+                  (@MeasureTheory.integral.{0, 0} (Prod.{0, 0} Real (RectangleCLT.Face m → Real)) Real
+                    Real.normedAddCommGroup
+                    (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                    (@Prod.instMeasurableSpace.{0, 0} Real (RectangleCLT.Face m → Real) Real.measurableSpace
+                      (@MeasurableSpace.pi.{0, 0} (RectangleCLT.Face m) (fun (a : RectangleCLT.Face m) => Real)
+                        fun (a : RectangleCLT.Face m) => Real.measurableSpace))
+                    (RectangleCLT.Companion.gammaRectangleLaw m (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))
+                    fun (e : Prod.{0, 0} Real (RectangleCLT.Face m → Real)) =>
+                    @RectangleCLTArxivV1.positiveEdgeTubeCoefficient m
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                      u
+                      (fun (k : Fin m) =>
+                        @HDiv.hDiv.{0, 0, 0} Real Real Real
+                          (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                            (@RectangleCLT.Companion.SplitV4.gammaAdjustedThreshold m a h e k)
+                            (@RectangleCLT.faceDot
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                              (u k) x))
+                          σ)
+                      (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) (@Prod.mk.{0, 0} (Fin m) (Fin m) j l))))
+@RectangleCLTArxivV1.positiveGammaSoftOrderedPairMass_coarea_scaled : ∀ {m n : Nat}
+  (u :
+    Fin m →
+      RectangleCLT.Vector
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))),
+  (∀ (k : Fin m),
+      @Eq.{1} Real
+        (@RectangleCLT.vectorNormSq
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+          (u k))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) →
+    ∀ (a : RectangleCLT.Vector m) {h σ : Real},
+      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h →
+        @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) σ →
+          ∀
+            (x :
+              RectangleCLT.Vector
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))),
+            @Eq.{1} Real
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                    (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) h)
+                  (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                    (@OfNat.ofNat.{0} Real 2
+                      (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                        (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+                    h))
+                (@RectangleCLTArxivV1.positiveGammaSoftOrderedPairMass m
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                  u a h σ x))
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@Inv.inv.{0} Real Real.instInv σ)
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@Inv.inv.{0} Real Real.instInv σ)
+                  (@MeasureTheory.integral.{0, 0} (Prod.{0, 0} Real (RectangleCLT.Face m → Real)) Real
+                    Real.normedAddCommGroup
+                    (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                    (@Prod.instMeasurableSpace.{0, 0} Real (RectangleCLT.Face m → Real) Real.measurableSpace
+                      (@MeasurableSpace.pi.{0, 0} (RectangleCLT.Face m) (fun (a : RectangleCLT.Face m) => Real)
+                        fun (a : RectangleCLT.Face m) => Real.measurableSpace))
+                    (RectangleCLT.Companion.gammaRectangleLaw m (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))
+                    fun (e : Prod.{0, 0} Real (RectangleCLT.Face m → Real)) =>
+                    @Finset.sum.{0, 0} (Prod.{0, 0} (Fin m) (Fin m)) Real Real.instAddCommMonoid
+                      (@Finset.univ.{0} (Prod.{0, 0} (Fin m) (Fin m))
+                        (@instFintypeProd.{0, 0} (Fin m) (Fin m) (Fin.fintype m) (Fin.fintype m)))
+                      fun (jl : Prod.{0, 0} (Fin m) (Fin m)) =>
+                      @RectangleCLTArxivV1.positiveEdgeTubeCoefficient m
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                          (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                        u
+                        (fun (k : Fin m) =>
+                          @HDiv.hDiv.{0, 0, 0} Real Real Real
+                            (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                            (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                              (@RectangleCLT.Companion.SplitV4.gammaAdjustedThreshold m a h e k)
+                              (@RectangleCLT.faceDot
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                                (u k) x))
+                            σ)
+                        (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) jl)))
+@RectangleCLTArxivV1.positiveGammaSoftOrderedPairProjection_coarea_scaled : ∀ {m n : Nat}
+  (u :
+    Fin m →
+      RectangleCLT.Vector
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))),
+  (∀ (k : Fin m),
+      @Eq.{1} Real
+        (@RectangleCLT.vectorNormSq
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+          (u k))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) →
+    ∀ (a : RectangleCLT.Vector m) {h σ : Real},
+      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h →
+        @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) σ →
+          ∀
+            (x :
+              RectangleCLT.Vector
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))),
+            @Eq.{1} Real
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                    (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne)) h)
+                  (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                    (@OfNat.ofNat.{0} Real 2
+                      (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                        (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+                    h))
+                (@RectangleCLTArxivV1.positiveGammaSoftOrderedPairProjection m
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                    (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                  u a h σ x))
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@Inv.inv.{0} Real Real.instInv σ)
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@Inv.inv.{0} Real Real.instInv σ)
+                  (@MeasureTheory.integral.{0, 0} (Prod.{0, 0} Real (RectangleCLT.Face m → Real)) Real
+                    Real.normedAddCommGroup
+                    (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                    (@Prod.instMeasurableSpace.{0, 0} Real (RectangleCLT.Face m → Real) Real.measurableSpace
+                      (@MeasurableSpace.pi.{0, 0} (RectangleCLT.Face m) (fun (a : RectangleCLT.Face m) => Real)
+                        fun (a : RectangleCLT.Face m) => Real.measurableSpace))
+                    (RectangleCLT.Companion.gammaRectangleLaw m (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))
+                    fun (e : Prod.{0, 0} Real (RectangleCLT.Face m → Real)) =>
+                    @Finset.sum.{0, 0} (Prod.{0, 0} (Fin m) (Fin m)) Real Real.instAddCommMonoid
+                      (@Finset.univ.{0} (Prod.{0, 0} (Fin m) (Fin m))
+                        (@instFintypeProd.{0, 0} (Fin m) (Fin m) (Fin.fintype m) (Fin.fintype m)))
+                      fun (jl : Prod.{0, 0} (Fin m) (Fin m)) =>
+                      @RectangleCLTArxivV1.positiveEdgeTubeCoefficient m
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                          (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                        u
+                        (fun (k : Fin m) =>
+                          @HDiv.hDiv.{0, 0, 0} Real Real Real
+                            (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                            (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                              (@RectangleCLT.Companion.SplitV4.gammaAdjustedThreshold m a h e k)
+                              (@RectangleCLT.faceDot
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                                (u k) x))
+                            σ)
+                        (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) jl)))
+@RectangleCLTArxivV1.positiveGammaSoftOrderedPairMass_eq_gamma : ∀ {m n : Nat}
+  (u :
+    Fin m →
+      RectangleCLT.Vector
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))),
+  (∀ (k : Fin m),
+      @Eq.{1} Real
+        (@RectangleCLT.vectorNormSq
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+          (u k))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) →
+    ∀ (a : RectangleCLT.Vector m) {h σ : Real},
+      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h →
+        @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) σ →
+          ∀
+            (x :
+              RectangleCLT.Vector
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))),
+            @Eq.{1} Real
+              (@RectangleCLTArxivV1.positiveGammaSoftOrderedPairMass m
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                u a h σ x)
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                  (@HPow.hPow.{0, 0, 0} Real Nat Real
+                    (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) h
+                    (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                    (@OfNat.ofNat.{0} Real 2
+                      (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                        (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+                    (@HPow.hPow.{0, 0, 0} Real Nat Real
+                      (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) σ
+                      (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+                (@MeasureTheory.integral.{0, 0} (Prod.{0, 0} Real (RectangleCLT.Face m → Real)) Real
+                  Real.normedAddCommGroup
+                  (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                  (@Prod.instMeasurableSpace.{0, 0} Real (RectangleCLT.Face m → Real) Real.measurableSpace
+                    (@MeasurableSpace.pi.{0, 0} (RectangleCLT.Face m) (fun (a : RectangleCLT.Face m) => Real)
+                      fun (a : RectangleCLT.Face m) => Real.measurableSpace))
+                  (RectangleCLT.Companion.gammaRectangleLaw m (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))
+                  fun (e : Prod.{0, 0} Real (RectangleCLT.Face m → Real)) =>
+                  @Finset.sum.{0, 0} (Prod.{0, 0} (Fin m) (Fin m)) Real Real.instAddCommMonoid
+                    (@Finset.univ.{0} (Prod.{0, 0} (Fin m) (Fin m))
+                      (@instFintypeProd.{0, 0} (Fin m) (Fin m) (Fin.fintype m) (Fin.fintype m)))
+                    fun (jl : Prod.{0, 0} (Fin m) (Fin m)) =>
+                    @RectangleCLTArxivV1.positiveEdgeTubeCoefficient m
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                      u
+                      (fun (k : Fin m) =>
+                        @HDiv.hDiv.{0, 0, 0} Real Real Real
+                          (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                            (@RectangleCLT.Companion.SplitV4.gammaAdjustedThreshold m a h e k)
+                            (@RectangleCLT.faceDot
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                              (u k) x))
+                          σ)
+                      (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)) jl))
+@RectangleCLTArxivV1.positiveGammaSoftOrderedPairProjection_eq_gamma : ∀ {m n : Nat}
+  (u :
+    Fin m →
+      RectangleCLT.Vector
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))),
+  (∀ (k : Fin m),
+      @Eq.{1} Real
+        (@RectangleCLT.vectorNormSq
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+          (u k))
+        (@OfNat.ofNat.{0} Real 1 (@One.toOfNat1.{0} Real Real.instOne))) →
+    ∀ (a : RectangleCLT.Vector m) {h σ : Real},
+      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) h →
+        @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) σ →
+          ∀
+            (x :
+              RectangleCLT.Vector
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))),
+            @Eq.{1} Real
+              (@RectangleCLTArxivV1.positiveGammaSoftOrderedPairProjection m
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                  (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                u a h σ x)
+              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                  (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                  (@HPow.hPow.{0, 0, 0} Real Nat Real
+                    (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) h
+                    (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))
+                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                    (@OfNat.ofNat.{0} Real 2
+                      (@instOfNatAtLeastTwo.{0} Real 2 Real.instNatCast
+                        (@instNatAtLeastTwo (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))))
+                    (@HPow.hPow.{0, 0, 0} Real Nat Real
+                      (@instHPow.{0, 0} Real Nat (@Monoid.toNatPow.{0} Real Real.instMonoid)) σ
+                      (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)))))
+                (@MeasureTheory.integral.{0, 0} (Prod.{0, 0} Real (RectangleCLT.Face m → Real)) Real
+                  Real.normedAddCommGroup
+                  (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+                    (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+                    (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+                  (@Prod.instMeasurableSpace.{0, 0} Real (RectangleCLT.Face m → Real) Real.measurableSpace
+                    (@MeasurableSpace.pi.{0, 0} (RectangleCLT.Face m) (fun (a : RectangleCLT.Face m) => Real)
+                      fun (a : RectangleCLT.Face m) => Real.measurableSpace))
+                  (RectangleCLT.Companion.gammaRectangleLaw m (@OfNat.ofNat.{0} Nat 0 (instOfNatNat 0)))
+                  fun (e : Prod.{0, 0} Real (RectangleCLT.Face m → Real)) =>
+                  @Finset.sum.{0, 0} (Prod.{0, 0} (Fin m) (Fin m)) Real Real.instAddCommMonoid
+                    (@Finset.univ.{0} (Prod.{0, 0} (Fin m) (Fin m))
+                      (@instFintypeProd.{0, 0} (Fin m) (Fin m) (Fin.fintype m) (Fin.fintype m)))
+                    fun (jl : Prod.{0, 0} (Fin m) (Fin m)) =>
+                    @RectangleCLTArxivV1.positiveEdgeTubeCoefficient m
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                        (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                      u
+                      (fun (k : Fin m) =>
+                        @HDiv.hDiv.{0, 0, 0} Real Real Real
+                          (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                            (@RectangleCLT.Companion.SplitV4.gammaAdjustedThreshold m a h e k)
+                            (@RectangleCLT.faceDot
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n
+                                (@OfNat.ofNat.{0} Nat 1 (instOfNatNat 1)))
+                              (u k) x))
+                          σ)
+                      (@OfNat.ofNat.{0} Nat 2 (instOfNatNat 2)) jl))
+RectangleCLTArxivV1.positiveGammaSoftOrderedPairMass uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.positiveGammaSoftOrderedPairProjection uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.positiveGammaMixedMassKernel_eq_ridgeDensity uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.positiveGamma_angle_mul_massKernel uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.positiveGamma_angle_mul_planeKernel uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.positiveGammaMixedMassKernel_norm_le uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.positiveGammaMixedPlaneKernel_norm_le uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.integrable_gamma_positiveEdge_mass uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.integrable_gamma_positiveEdge_projection uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.integrable_gaussian_positive_soft_pair_mass uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.integrable_gaussian_positive_soft_pair_projection uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.positiveGamma_mass_angle_soft_coarea uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.positiveGamma_projection_angle_soft_coarea uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.positiveGammaSoftOrderedPairMass_coarea_scaled uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.positiveGammaSoftOrderedPairProjection_coarea_scaled uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.positiveGammaSoftOrderedPairMass_eq_gamma uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.positiveGammaSoftOrderedPairProjection_eq_gamma uses [propext, Quot.sound, Classical.choice]

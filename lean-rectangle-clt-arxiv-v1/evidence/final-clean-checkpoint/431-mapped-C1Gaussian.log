@@ -1,0 +1,328 @@
+@RectangleCLT.Companion.SplitV4.normalizedGaussianFaceRows_unit : ∀ {p m : ℕ} [inst : NeZero m]
+  (ν : Matrix (Fin m) (Fin p) ℝ) (A : Matrix (Fin p) (Fin p) ℝ) {v : ℝ},
+  0 < v →
+    (∀ (α : Fin m), ν α ⬝ᵥ (A * A.transpose).mulVec (ν α) = v) →
+      ∀ (α : Fin m), RectangleCLT.vectorNormSq (RectangleCLT.Companion.SplitV4.normalizedGaussianFaceRows ν A v α) = 1
+@RectangleCLT.Companion.SplitV4.gaussianFaceRow_normSq : ∀ {p m : ℕ} [inst : NeZero m] (ν : Matrix (Fin m) (Fin p) ℝ)
+  (A : Matrix (Fin p) (Fin p) ℝ) (α : Fin m),
+  RectangleCLT.vectorNormSq ((ν * A) α) = ν α ⬝ᵥ (A * A.transpose).mulVec (ν α)
+@RectangleCLT.Companion.SplitV4.gaussianFaceWeight_nonneg : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ) (β : ℝ) (x : RectangleCLT.Vector r) (α : Fin m),
+  0 ≤ RectangleCLT.Companion.SplitV4.gaussianFaceWeight w a β x α
+@RectangleCLT.Companion.SplitV4.gaussianFaceWeight_sum : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ) (β : ℝ) (x : RectangleCLT.Vector r),
+  ∑ α, RectangleCLT.Companion.SplitV4.gaussianFaceWeight w a β x α = 1
+@RectangleCLT.Companion.SplitV4.smoothGaussianFaceMaximum_hasDerivAt : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ) (β : ℝ),
+  β ≠ 0 →
+    ∀ (x : RectangleCLT.Vector r) (j : Fin r),
+      HasDerivAt (fun t => RectangleCLT.Companion.SplitV4.smoothGaussianFaceMaximum w a β (Function.update x j t))
+        (RectangleCLT.Companion.SplitV4.smoothGaussianFaceGradient w a β x j) (x j)
+@RectangleCLT.Companion.SplitV4.smoothGaussianFaceGradient_hasDerivAt : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ) (β : ℝ) (x : RectangleCLT.Vector r) (j k : Fin r),
+  HasDerivAt (fun t => RectangleCLT.Companion.SplitV4.smoothGaussianFaceGradient w a β (Function.update x k t) j)
+    (RectangleCLT.Companion.SplitV4.smoothGaussianFaceHessian w a β x j k) (x k)
+@RectangleCLT.Companion.SplitV4.smoothGaussianFaceGradient_normSq_le_one : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ) (β : ℝ) (x : RectangleCLT.Vector r),
+  (∀ (α : Fin m), RectangleCLT.vectorNormSq (w α) = 1) →
+    RectangleCLT.vectorNormSq (RectangleCLT.Companion.SplitV4.smoothGaussianFaceGradient w a β x) ≤ 1
+@RectangleCLT.Companion.SplitV4.smoothGaussianFaceHessian_trace_nonneg : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ) (β : ℝ),
+  0 ≤ β →
+    ∀ (x : RectangleCLT.Vector r),
+      (∀ (α : Fin m), RectangleCLT.vectorNormSq (w α) = 1) →
+        0 ≤ ∑ j, RectangleCLT.Companion.SplitV4.smoothGaussianFaceHessian w a β x j j
+@RectangleCLT.Companion.SplitV4.smoothGaussianFaceMaximum_stein : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ) (β : ℝ),
+  β ≠ 0 →
+    (∀ (α : Fin m), RectangleCLT.vectorNormSq (w α) = 1) →
+      ∀ (ψ dψ : ℝ → ℝ),
+        (∀ (t : ℝ), HasDerivAt ψ (dψ t) t) →
+          Continuous dψ →
+            (∀ (t : ℝ), 0 ≤ ψ t ∧ ψ t ≤ 1) →
+              ∀ (D : ℝ),
+                (∀ (t : ℝ), |dψ t| ≤ D) →
+                  ∫ (x : RectangleCLT.Vector r),
+                      dψ (RectangleCLT.Companion.SplitV4.smoothGaussianFaceMaximum w a β x) *
+                          RectangleCLT.vectorNormSq
+                            (RectangleCLT.Companion.SplitV4.smoothGaussianFaceGradient w a β x) +
+                        ψ (RectangleCLT.Companion.SplitV4.smoothGaussianFaceMaximum w a β x) *
+                          ∑ j,
+                            RectangleCLT.Companion.SplitV4.smoothGaussianFaceHessian w a β x j
+                              j ∂RectangleCLT.standardGaussian r =
+                    ∫ (x : RectangleCLT.Vector r),
+                      ψ (RectangleCLT.Companion.SplitV4.smoothGaussianFaceMaximum w a β x) *
+                        RectangleCLT.faceDot (RectangleCLT.Companion.SplitV4.smoothGaussianFaceGradient w a β x)
+                          x ∂RectangleCLT.standardGaussian r
+@RectangleCLT.Companion.SplitV4.smoothGaussianFaceMaximum_test_bound : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ) (β : ℝ),
+  0 < β →
+    (∀ (α : Fin m), RectangleCLT.vectorNormSq (w α) = 1) →
+      ∀ (ψ dψ : ℝ → ℝ),
+        (∀ (t : ℝ), HasDerivAt ψ (dψ t) t) →
+          Continuous dψ →
+            (∀ (t : ℝ), 0 ≤ ψ t ∧ ψ t ≤ 1) →
+              ∀ (D : ℝ),
+                (∀ (t : ℝ), |dψ t| ≤ D) →
+                  ∫ (x : RectangleCLT.Vector r),
+                      dψ (RectangleCLT.Companion.SplitV4.smoothGaussianFaceMaximum w a β x) *
+                        RectangleCLT.vectorNormSq
+                          (RectangleCLT.Companion.SplitV4.smoothGaussianFaceGradient w a β
+                            x) ∂RectangleCLT.standardGaussian r ≤
+                    ∫ (x : RectangleCLT.Vector r),
+                      RectangleCLT.Companion.SplitV4.positiveGaussianFaceMaximum w x ∂RectangleCLT.standardGaussian r
+@RectangleCLT.Companion.SplitV4.gaussian_affine_branches_ae_distinct_rows_ne : ∀ {m r : ℕ}
+  (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ),
+  ∀ᵐ (x : Fin r → ℝ) ∂RectangleCLT.standardGaussian r,
+    ∀ (α β : Fin m), w α ≠ w β → RectangleCLT.faceDot (w α) x - a α ≠ RectangleCLT.faceDot (w β) x - a β
+@RectangleCLT.Companion.SplitV4.smoothGaussianFaceGradient_normSq_tendsto_one : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ) (x : RectangleCLT.Vector r),
+  (∀ (α : Fin m), RectangleCLT.vectorNormSq (w α) = 1) →
+    (∀ (α γ : Fin m), w α ≠ w γ → RectangleCLT.faceDot (w α) x - a α ≠ RectangleCLT.faceDot (w γ) x - a γ) →
+      Filter.Tendsto
+        (fun β => RectangleCLT.vectorNormSq (RectangleCLT.Companion.SplitV4.smoothGaussianFaceGradient w a β x))
+        Filter.atTop (nhds 1)
+@RectangleCLT.Companion.SplitV4.gaussianAffineMaximum_test_bound : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ),
+  (∀ (α : Fin m), RectangleCLT.vectorNormSq (w α) = 1) →
+    ∀ (ψ dψ : ℝ → ℝ),
+      (∀ (t : ℝ), HasDerivAt ψ (dψ t) t) →
+        Continuous dψ →
+          (∀ (t : ℝ), 0 ≤ ψ t ∧ ψ t ≤ 1) →
+            ∀ (D : ℝ),
+              (∀ (t : ℝ), |dψ t| ≤ D) →
+                ∫ (x : RectangleCLT.Vector r),
+                    dψ (RectangleCLT.Companion.SplitV4.gaussianAffineMaximum w a x) ∂RectangleCLT.standardGaussian r ≤
+                  ∫ (x : RectangleCLT.Vector r),
+                    RectangleCLT.Companion.SplitV4.positiveGaussianFaceMaximum w x ∂RectangleCLT.standardGaussian r
+RectangleCLT.Companion.SplitV4.Printed.gaussianLinearRamp : ℝ → ℝ → ℝ
+RectangleCLT.Companion.SplitV4.Printed.gaussianMollifiedRamp : ℝ → ContDiffBump 0 → ℝ → ℝ
+@RectangleCLT.Companion.SplitV4.Printed.gaussianMollifiedRamp_deriv_tendsto : ∀ {ι : Type u_1} {l : Filter ι} {s : ℝ},
+  0 < s →
+    ∀ (φ : ι → ContDiffBump 0),
+      Filter.Tendsto (fun i => (φ i).rOut) l (nhds 0) →
+        ∀ {x : ℝ},
+          x ≠ -s →
+            x ≠ s →
+              Filter.Tendsto (fun i => deriv (RectangleCLT.Companion.SplitV4.Printed.gaussianMollifiedRamp s (φ i)) x) l
+                (nhds ((Set.Ioo (-s) s).indicator (fun x => 1 / (2 * s)) x))
+@RectangleCLT.Companion.SplitV4.Printed.intrinsicGaussianBoundary_printed_mollification : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ),
+  (∀ (α : Fin m), RectangleCLT.vectorNormSq (w α) = 1) →
+    ∀ {s : ℝ},
+      0 < s →
+        (RectangleCLT.standardGaussian r).real
+            {x |
+              -s ≤ RectangleCLT.Companion.SplitV4.gaussianAffineMaximum w a x ∧
+                RectangleCLT.Companion.SplitV4.gaussianAffineMaximum w a x ≤ s} ≤
+          2 * s *
+            ∫ (x : RectangleCLT.Vector r),
+              RectangleCLT.Companion.SplitV4.positiveGaussianFaceMaximum w x ∂RectangleCLT.standardGaussian r
+@RectangleCLT.Companion.SplitV4.integral_exp_positiveGaussianFaceMaximum_le : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r),
+  (∀ (α : Fin m), RectangleCLT.vectorNormSq (w α) = 1) →
+    ∀ (t : ℝ),
+      ∫ (x : RectangleCLT.Vector r),
+          Real.exp
+            (t * RectangleCLT.Companion.SplitV4.positiveGaussianFaceMaximum w x) ∂RectangleCLT.standardGaussian r ≤
+        (↑m + 1) * Real.exp (t ^ 2 / 2)
+@RectangleCLT.Companion.SplitV4.integral_positiveGaussianFaceMaximum_le_sqrt_log : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r),
+  (∀ (α : Fin m), RectangleCLT.vectorNormSq (w α) = 1) →
+    ∫ (x : RectangleCLT.Vector r),
+        RectangleCLT.Companion.SplitV4.positiveGaussianFaceMaximum w x ∂RectangleCLT.standardGaussian r ≤
+      √(2 * Real.log (↑m + 1))
+@RectangleCLT.Companion.SplitV4.normalizedGaussianFaceRows_projection_norm : ∀ {p m : ℕ} [inst : NeZero m]
+  (ν : Matrix (Fin m) (Fin p) ℝ) (A : Matrix (Fin p) (Fin p) ℝ) {v : ℝ},
+  0 < v →
+    ∀ (g : RectangleCLT.Vector p),
+      ‖RectangleCLT.linearProjectionFamily (RectangleCLT.Companion.SplitV4.normalizedGaussianFaceRows ν A v) g‖ =
+        RectangleCLT.Companion.SplitV4.faceProjectionNorm ν (A.mulVec g) / √v
+@RectangleCLT.Companion.SplitV4.normalizedGaussianFaceRows_integral_projection_norm : ∀ {p m : ℕ} [inst : NeZero m]
+  (ν : Matrix (Fin m) (Fin p) ℝ) (A : Matrix (Fin p) (Fin p) ℝ) {v : ℝ},
+  0 < v →
+    ∫ (g : RectangleCLT.Vector p),
+        ‖RectangleCLT.linearProjectionFamily (RectangleCLT.Companion.SplitV4.normalizedGaussianFaceRows ν A v)
+            g‖ ∂RectangleCLT.standardGaussian p =
+      (∫ (x : RectangleCLT.Vector p),
+          RectangleCLT.Companion.SplitV4.faceProjectionNorm ν x ∂RectangleCLT.gaussianLaw A) /
+        √v
+@RectangleCLT.Companion.SplitV4.gaussianPolyhedronLayer_subset_standardized_shell : ∀ {p m : ℕ} [inst : NeZero m]
+  (ν : Matrix (Fin m) (Fin p) ℝ) (A : Matrix (Fin p) (Fin p) ℝ) (a : RectangleCLT.Vector m) (b : RectangleCLT.Vector p)
+  {v : ℝ},
+  0 < v →
+    ∀ (s : ℝ),
+      {g | A.mulVec g + b ∈ RectangleCLT.Companion.SplitV4.gaussianPolyhedronLayer ν a s} ⊆
+        {g |
+          -(s / √v) ≤
+              RectangleCLT.Companion.SplitV4.gaussianAffineMaximum
+                (RectangleCLT.Companion.SplitV4.normalizedGaussianFaceRows ν A v) (fun α => (a α - ν.mulVec b α) / √v)
+                g ∧
+            RectangleCLT.Companion.SplitV4.gaussianAffineMaximum
+                (RectangleCLT.Companion.SplitV4.normalizedGaussianFaceRows ν A v) (fun α => (a α - ν.mulVec b α) / √v)
+                g ≤
+              s / √v}
+@RectangleCLT.Companion.SplitV4.product_event_probability_le_of_sections : ∀ {E : Type u_1} {F : Type u_2}
+  [inst : MeasurableSpace E] [inst_1 : MeasurableSpace F] (μ : MeasureTheory.Measure E) (τ : MeasureTheory.Measure F)
+  [inst_2 : MeasureTheory.IsProbabilityMeasure μ] [inst_3 : MeasureTheory.IsProbabilityMeasure τ] (S : Set (E × F)),
+  MeasurableSet S → ∀ (K : ℝ), (∀ (b : F), μ.real {x | (x, b) ∈ S} ≤ K) → (μ.prod τ).real S ≤ K
+@RectangleCLTArxivV1.gaussianModel_covariance : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω]
+  (μ : MeasureTheory.Measure Ω) {r : ℕ} (V : Ω → RectangleCLT.Vector r),
+  Measurable V →
+    ∀ (A : Matrix (Fin r) (Fin r) ℝ),
+      MeasureTheory.Measure.map V μ = RectangleCLT.gaussianLaw A → RectangleCLT.covariance μ V = A * A.transpose
+@RectangleCLTArxivV1.gaussianModel_supported_on_factor_range : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω]
+  (μ : MeasureTheory.Measure Ω) {r : ℕ} (V : Ω → RectangleCLT.Vector r),
+  Measurable V →
+    ∀ (A : Matrix (Fin r) (Fin r) ℝ),
+      MeasureTheory.Measure.map V μ = RectangleCLT.gaussianLaw A → ∀ᵐ (ω : Ω) ∂μ, V ω ∈ Set.range A.mulVec
+@RectangleCLTArxivV1.mergedGaussianThreshold_le : ∀ {m r : ℕ} (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ)
+  (α : Fin m), RectangleCLTArxivV1.mergedGaussianThreshold w a α ≤ a α
+@RectangleCLTArxivV1.mergedGaussianThreshold_attains : ∀ {m r : ℕ} (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ)
+  (α : Fin m), ∃ β, w β = w α ∧ RectangleCLTArxivV1.mergedGaussianThreshold w a α = a β
+@RectangleCLTArxivV1.gaussianAffineMaximum_merge_thresholds : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r) (a : Fin m → ℝ) (x : RectangleCLT.Vector r),
+  RectangleCLT.Companion.SplitV4.gaussianAffineMaximum w (RectangleCLTArxivV1.mergedGaussianThreshold w a) x =
+    RectangleCLT.Companion.SplitV4.gaussianAffineMaximum w a x
+@RectangleCLTArxivV1.positiveGaussianFaceMaximum_eq_projection_norm : ∀ {m r : ℕ} [inst : NeZero m]
+  (w : Fin m → RectangleCLT.Vector r),
+  (∀ (α : Fin m), ∃ β, w β = -w α) →
+    ∀ (x : RectangleCLT.Vector r),
+      RectangleCLT.Companion.SplitV4.positiveGaussianFaceMaximum w x = ‖RectangleCLT.linearProjectionFamily w x‖
+@RectangleCLTArxivV1.normalizedGaussianFaceRows_opposite : ∀ {p m : ℕ} (ν : Matrix (Fin m) (Fin p) ℝ)
+  (A : Matrix (Fin p) (Fin p) ℝ) (v : ℝ),
+  (∀ (α : Fin m), ∃ β, ν β = -ν α) →
+    ∀ (α : Fin m),
+      ∃ β,
+        RectangleCLT.Companion.SplitV4.normalizedGaussianFaceRows ν A v β =
+          -RectangleCLT.Companion.SplitV4.normalizedGaussianFaceRows ν A v α
+@RectangleCLTArxivV1.gaussianFaceNorm_mean_le_sharp : ∀ {p m : ℕ} [inst : NeZero m] (ν : Matrix (Fin m) (Fin p) ℝ)
+  (A : Matrix (Fin p) (Fin p) ℝ) {v : ℝ},
+  0 < v →
+    (∀ (α : Fin m), ν α ⬝ᵥ (A * A.transpose).mulVec (ν α) = v) →
+      (∀ (α : Fin m), ∃ β, ν β = -ν α) →
+        ∫ (x : RectangleCLT.Vector p), ‖ν.mulVec x‖ ∂RectangleCLT.gaussianLaw A ≤ √v * √(2 * Real.log (↑m + 1))
+@RectangleCLTArxivV1.face_log_le_two_dimensionLog : ∀ {p m : ℕ},
+  1 ≤ p → m ≤ 2 * p → Real.log (↑m + 1) ≤ 2 * RectangleCLT.dimensionLog p
+@RectangleCLTArxivV1.gaussianFaceNorm_mean_le_dimension : ∀ {r m : ℕ} [inst : NeZero m] (ν : Matrix (Fin m) (Fin r) ℝ)
+  (A : Matrix (Fin r) (Fin r) ℝ) (p : ℕ),
+  1 ≤ p →
+    m ≤ 2 * p →
+      ∀ {v : ℝ},
+        0 < v →
+          (∀ (α : Fin m), ν α ⬝ᵥ (A * A.transpose).mulVec (ν α) = v) →
+            (∀ (α : Fin m), ∃ β, ν β = -ν α) →
+              ∫ (x : RectangleCLT.Vector r), ‖ν.mulVec x‖ ∂RectangleCLT.gaussianLaw A ≤
+                2 * √(v * RectangleCLT.dimensionLog p)
+@RectangleCLTArxivV1.gaussianFaceNorm_intrinsic_coefficient_le : ∀ {r m : ℕ} [inst : NeZero m]
+  (ν : Matrix (Fin m) (Fin r) ℝ) (A : Matrix (Fin r) (Fin r) ℝ) (p : ℕ),
+  1 ≤ p →
+    m ≤ 2 * p →
+      ∀ {v s : ℝ},
+        0 < v →
+          0 ≤ s →
+            (∀ (α : Fin m), ν α ⬝ᵥ (A * A.transpose).mulVec (ν α) = v) →
+              (∀ (α : Fin m), ∃ β, ν β = -ν α) →
+                min 1 (2 * s / v * ∫ (x : RectangleCLT.Vector r), ‖ν.mulVec x‖ ∂RectangleCLT.gaussianLaw A) ≤
+                  4 * min 1 (s * √(RectangleCLT.dimensionLog p / v))
+@RectangleCLTArxivV1.lemma_C1_gaussian_model : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+  [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {r m : ℕ} [inst_2 : NeZero m] (V R : Ω → RectangleCLT.Vector r),
+  Measurable V →
+    Measurable R →
+      ProbabilityTheory.IndepFun V R μ →
+        ∀ (ν : Matrix (Fin m) (Fin r) ℝ) (A : Matrix (Fin r) (Fin r) ℝ),
+          MeasureTheory.Measure.map V μ = RectangleCLT.gaussianLaw A →
+            ∀ (p : ℕ),
+              1 ≤ p →
+                m ≤ 2 * p →
+                  (∀ (α : Fin m), ∃ β, ν β = -ν α) →
+                    ∀ (a : RectangleCLT.Vector m) {v s : ℝ},
+                      0 < v →
+                        0 < s →
+                          (∀ (α : Fin m), ν α ⬝ᵥ (A * A.transpose).mulVec (ν α) = v) →
+                            μ.real {ω | V ω + R ω ∈ RectangleCLTArxivV1.faceLayer ν a s} ≤
+                                min 1 (2 * s / v * ∫ (ω : Ω), RectangleCLTArxivV1.faceNorm ν (V ω) ∂μ) ∧
+                              min 1 (2 * s / v * ∫ (ω : Ω), RectangleCLTArxivV1.faceNorm ν (V ω) ∂μ) ≤
+                                4 * min 1 (s * √(RectangleCLT.dimensionLog p / v))
+@RectangleCLTArxivV1.gaussianMaximumMean_le_common_variance : ∀ {p : ℕ},
+  1 ≤ p →
+    ∀ (G : Matrix (Fin p) (Fin p) ℝ) {v : ℝ},
+      0 < v →
+        (∀ (j : Fin p), (G * G.transpose) j j = v) →
+          RectangleCLTArxivV1.gaussianMaximumMean G ≤ 2 * √(v * RectangleCLT.dimensionLog p)
+@RectangleCLTArxivV1.gaussianMaximumMean_intrinsic_coefficient_le : ∀ {p : ℕ},
+  1 ≤ p →
+    ∀ (G : Matrix (Fin p) (Fin p) ℝ) {v d : ℝ},
+      0 < v →
+        0 ≤ d →
+          (∀ (j : Fin p), (G * G.transpose) j j = v) →
+            2 * d / v * RectangleCLTArxivV1.gaussianMaximumMean G ≤ 4 * d * √(RectangleCLT.dimensionLog p / v)
+@RectangleCLTArxivV1.gaussianRectangleBoundary_fixed_shift_logarithmic : ∀ {p : ℕ},
+  1 ≤ p →
+    ∀ (s : RectangleCLT.FaceSmoother p) (G : Matrix (Fin p) (Fin p) ℝ) (b : RectangleCLT.Vector p) {v d : ℝ},
+      0 < v →
+        0 < d →
+          (∀ (j : Fin p), (G * G.transpose) j j = v) →
+            (RectangleCLT.gaussianLaw G).real {x | x + b ∈ s.boundaryLayer d} ≤
+              4 * d * √(RectangleCLT.dimensionLog p / v)
+@RectangleCLTArxivV1.gaussianRectangleBoundary_product_logarithmic : ∀ {E : Type u_1} [inst : MeasurableSpace E]
+  {p : ℕ},
+  1 ≤ p →
+    ∀ (s : RectangleCLT.FaceSmoother p) (G : Matrix (Fin p) (Fin p) ℝ) (τ : MeasureTheory.Measure E)
+      [inst_1 : MeasureTheory.IsProbabilityMeasure τ] (R : E → RectangleCLT.Vector p),
+      Measurable R →
+        ∀ (b : RectangleCLT.Vector p) {v d : ℝ},
+          0 < v →
+            0 < d →
+              (∀ (j : Fin p), (G * G.transpose) j j = v) →
+                ((RectangleCLT.gaussianLaw G).prod τ).real {z | z.1 + R z.2 + b ∈ s.boundaryLayer d} ≤
+                  4 * d * √(RectangleCLT.dimensionLog p / v)
+RectangleCLT.Companion.SplitV4.normalizedGaussianFaceRows_unit uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.gaussianFaceRow_normSq uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.gaussianFaceWeight_nonneg uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.gaussianFaceWeight_sum uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.smoothGaussianFaceMaximum_hasDerivAt uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.smoothGaussianFaceGradient_hasDerivAt uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.smoothGaussianFaceGradient_normSq_le_one uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.smoothGaussianFaceHessian_trace_nonneg uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.smoothGaussianFaceMaximum_stein uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.smoothGaussianFaceMaximum_test_bound uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.gaussian_affine_branches_ae_distinct_rows_ne uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.smoothGaussianFaceGradient_normSq_tendsto_one uses [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.gaussianAffineMaximum_test_bound uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.Printed.gaussianLinearRamp uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.Printed.gaussianMollifiedRamp uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.Printed.gaussianMollifiedRamp_deriv_tendsto uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.Printed.intrinsicGaussianBoundary_printed_mollification uses [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.integral_exp_positiveGaussianFaceMaximum_le uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.integral_positiveGaussianFaceMaximum_le_sqrt_log uses [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.normalizedGaussianFaceRows_projection_norm uses [propext, Quot.sound, Classical.choice]
+RectangleCLT.Companion.SplitV4.normalizedGaussianFaceRows_integral_projection_norm uses [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.gaussianPolyhedronLayer_subset_standardized_shell uses [propext,
+ Quot.sound,
+ Classical.choice]
+RectangleCLT.Companion.SplitV4.product_event_probability_le_of_sections uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianModel_covariance uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianModel_supported_on_factor_range uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.mergedGaussianThreshold_le uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.mergedGaussianThreshold_attains uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianAffineMaximum_merge_thresholds uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.positiveGaussianFaceMaximum_eq_projection_norm uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.normalizedGaussianFaceRows_opposite uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianFaceNorm_mean_le_sharp uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.face_log_le_two_dimensionLog uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianFaceNorm_mean_le_dimension uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianFaceNorm_intrinsic_coefficient_le uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.lemma_C1_gaussian_model uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianMaximumMean_le_common_variance uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianMaximumMean_intrinsic_coefficient_le uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianRectangleBoundary_fixed_shift_logarithmic uses [propext, Quot.sound, Classical.choice]
+RectangleCLTArxivV1.gaussianRectangleBoundary_product_logarithmic uses [propext, Quot.sound, Classical.choice]

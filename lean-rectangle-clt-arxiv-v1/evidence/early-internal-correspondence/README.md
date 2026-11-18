@@ -1,0 +1,13 @@
+# Early internal passage correspondence
+
+Four new ledgers bind B.4, B.5, E.3, and the leading/common lower-family proof in reading order. The 40 B.4/B.5/E.3 rows have an independent source/PDF review by lower_resume, who did not author their proofs. The 15 lower rows await Root's independent review; lower_resume authored that family and the two new small supporting modules. Optional duplication remains explicitly supporting coverage only.
+
+The fresh formal evidence consists of checkpoint-2 (575 individually audited declarations), density-upper-checkpoint-1 (5), real-cutoff-checkpoint-1 (2), and projected-matrix-route-checkpoint-1 (10). Their union has 592 exact types and 4452 project dependency nodes. All endpoint closures allow only propext, Classical.choice and Quot.sound. Every used source is hash-bound; this is a selected working-checkout replay, not a clean whole-paper audit.
+
+Checkpoint-1 preserves a failed type-harness fixture: all builds/source forces passed, but literal quoting of private names containing a numeric component failed before its type audit. Checkpoint-2 resolves the private names from the actual environment and passes. Its individual axiom traversal completed immediately before an attempted interrupt; no process was interrupted. The subsequently started shared-state checkpoint-3 also passes the same 575 targets. Its original planning wording and the metadata correction are both retained. Checkpoint-3 is not added to the unique type count.
+
+The actual rectangle-selector B.4 endpoint uses constructed private face-value padding and active-face pullback; the support-coordinate endpoint separately uses the printed physical-base padding. B.5 uses inscribed rectangles inside the normal sectors and projection-basis exponential moments. E.3 uses direct clock tails and bounds both signs for every box before supremum absorption. These differences are recorded in the ledgers.
+
+The lower Rademacher/master route genuinely uses the checked scalar Berry--Esseen primitive, whose foundation proof specializes a checked bounded CLT. `dependency-check.json` exposes its exact kernel path and source identities. It supplies a scalar auxiliary, with no direct reuse of an archived lower headline or a new ArxivV1 target. No blanket absence of older CLT dependencies is asserted for that route.
+
+`supporting-passage-checkpoint.json` keeps this evidence separate from global statement, proof-environment and STATUS acceptance. No Root or Audit source was edited, and no historical reviewed ledger was rewritten. Only LowerLeadingDensityUpper.lean and LowerAllActiveRealCutoff.lean are new Lean support.

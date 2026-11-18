@@ -1,0 +1,380 @@
+structure RectangleCLT.BoundedIndependentHypotheses.{u} {Ω : Type u} [MeasurableSpace Ω] {p n : ℕ}
+  (μ : MeasureTheory.Measure Ω) (ξ : Fin n → Ω → RectangleCLT.Vector p) (δ : ℝ) : Prop
+number of parameters: 7
+fields:
+  RectangleCLT.BoundedIndependentHypotheses.measurable : ∀ (i : Fin n), Measurable (ξ i)
+  RectangleCLT.BoundedIndependentHypotheses.independent : ProbabilityTheory.iIndepFun ξ μ
+  RectangleCLT.BoundedIndependentHypotheses.centered : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), ξ i ω j ∂μ = 0
+  RectangleCLT.BoundedIndependentHypotheses.bounded : ∀ (i : Fin n), ∀ᵐ (ω : Ω) ∂μ, ‖ξ i ω‖ ≤ δ
+  RectangleCLT.BoundedIndependentHypotheses.delta_nonneg : 0 ≤ δ
+constructor:
+  RectangleCLT.BoundedIndependentHypotheses.mk.{u} {Ω : Type u} [MeasurableSpace Ω] {p n : ℕ}
+    {μ : MeasureTheory.Measure Ω} {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : ℝ}
+    (measurable : ∀ (i : Fin n), Measurable (ξ i)) (independent : ProbabilityTheory.iIndepFun ξ μ)
+    (centered : ∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), ξ i ω j ∂μ = 0)
+    (bounded : ∀ (i : Fin n), ∀ᵐ (ω : Ω) ∂μ, ‖ξ i ω‖ ≤ δ) (delta_nonneg : 0 ≤ δ) :
+    RectangleCLT.BoundedIndependentHypotheses μ ξ δ
+structure RectangleCLTArxivV1.IntrinsicFourthBounds.{u_1} {Ω : Type u_1} [MeasurableSpace Ω] {p n : ℕ}
+  (μ : MeasureTheory.Measure Ω) (ξ : Fin n → Ω → RectangleCLT.Vector p) (s₄ : ℝ) : Prop
+number of parameters: 7
+fields:
+  RectangleCLTArxivV1.IntrinsicFourthBounds.nonneg : 0 ≤ s₄
+  RectangleCLTArxivV1.IntrinsicFourthBounds.fourth_upper : ∀ (j : Fin p),
+      RectangleCLT.Companion.SplitV4.QuadraticLE (RectangleCLT.Companion.SplitV4.relativeFourthMatrix μ ξ j)
+        (s₄ • RectangleCLT.covariance μ (RectangleCLT.sumVector ξ))
+  RectangleCLTArxivV1.IntrinsicFourthBounds.fresh_fourth_upper : ∀ (j : Fin p),
+      RectangleCLT.Companion.SplitV4.QuadraticLE (RectangleCLT.Companion.SplitV4.relativeFreshFourthMatrix μ ξ j)
+        (s₄ • RectangleCLT.covariance μ (RectangleCLT.sumVector ξ))
+constructor:
+  RectangleCLTArxivV1.IntrinsicFourthBounds.mk.{u_1} {Ω : Type u_1} [MeasurableSpace Ω] {p n : ℕ}
+    {μ : MeasureTheory.Measure Ω} {ξ : Fin n → Ω → RectangleCLT.Vector p} {s₄ : ℝ} (nonneg : 0 ≤ s₄)
+    (fourth_upper :
+      ∀ (j : Fin p),
+        RectangleCLT.Companion.SplitV4.QuadraticLE (RectangleCLT.Companion.SplitV4.relativeFourthMatrix μ ξ j)
+          (s₄ • RectangleCLT.covariance μ (RectangleCLT.sumVector ξ)))
+    (fresh_fourth_upper :
+      ∀ (j : Fin p),
+        RectangleCLT.Companion.SplitV4.QuadraticLE (RectangleCLT.Companion.SplitV4.relativeFreshFourthMatrix μ ξ j)
+          (s₄ • RectangleCLT.covariance μ (RectangleCLT.sumVector ξ))) :
+    RectangleCLTArxivV1.IntrinsicFourthBounds μ ξ s₄
+def RectangleCLTArxivV1.IntrinsicTheoremOneContract.{u} : ℝ → Prop :=
+fun C =>
+  ∀ (Ω : Type u) [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+    [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (p n : ℕ) (ξ : Fin n → Ω → RectangleCLT.Vector p) (δ : ℝ),
+    RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+      1 ≤ p →
+        (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+          ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+            A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+              (∀ (s₄ : ℝ),
+                  RectangleCLTArxivV1.IntrinsicFourthBounds μ ξ s₄ →
+                    RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.sumVector ξ) A ≤
+                      C *
+                        min 1
+                          (RectangleCLTArxivV1.intrinsicRelativeRate (RectangleCLTArxivV1.gaussianMaximumMean A) δ s₄
+                            (RectangleCLT.dimensionLog p))) ∧
+                RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.sumVector ξ) A ≤
+                  C *
+                    min 1
+                      (δ * RectangleCLTArxivV1.gaussianMaximumMean A * RectangleCLT.dimensionLog p *
+                        √(RectangleCLT.Companion.D_L δ (RectangleCLT.dimensionLog p)))
+def RectangleCLTArxivV1.IntrinsicDerivativePropositionContract.{u} : ℝ → ℝ → Prop :=
+fun A₀ C =>
+  ∀ (Ω : Type u) [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+    [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (p n : ℕ) [inst_2 : NeZero p]
+    (ξ : Fin n → Ω → RectangleCLT.Vector p) (δ s₃ s₄ : ℝ),
+    RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+      RectangleCLT.Companion.SplitV4.RelativeMomentBounds μ ξ s₃ s₄ →
+        (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+          ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+            A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+              let κ := RectangleCLTArxivV1.intrinsicBoundaryCoefficient μ ξ A;
+              ∀ (s : RectangleCLT.FaceSmoother p),
+                s.faces = Finset.univ →
+                  A₀ * δ ≤ s.bandwidth →
+                    (∀ v ∈ Set.Ioo 0 1,
+                        |RectangleCLT.Companion.SplitV4.directSlepianCubicTerm s μ ξ A v| ≤
+                            C * s₃ * κ / s.bandwidth ^ 2 ∧
+                          |RectangleCLT.Companion.SplitV4.directSlepianFourthRemainder s μ ξ A v| ≤
+                            C * s₄ * κ / s.bandwidth ^ 3) ∧
+                      (RectangleCLT.dimensionLog p * s.bandwidth ^ 2 < 1 / 4 →
+                        RectangleCLT.Companion.SplitV4.initializationDiscrepancy μ ξ A s.bandwidth ⋯ ≤
+                            C * s₃ * (RectangleCLT.dimensionLog p * κ) +
+                              C * s₄ * (RectangleCLT.dimensionLog p * κ) / s.bandwidth ∧
+                          let ε := RectangleCLT.dimensionLog p * s.bandwidth ^ 2;
+                          let hp := ⋯;
+                          let hε := ⋯;
+                          ∀ t ∈ Set.Ioo 0 1,
+                            HasDerivAt (RectangleCLT.Companion.SplitV4.normalizedSeededExpectation s μ ξ A ε)
+                                (-(t / (3 * (1 + ε) ^ (3 / 2))) *
+                                    RectangleCLT.Companion.SplitV4.normalizedSeededCubicTerm s μ ξ A ε t +
+                                  RectangleCLT.Companion.SplitV4.normalizedSeededFourthRemainder s μ ξ A ε hε t)
+                                t ∧
+                              |t / (3 * (1 + ε) ^ (3 / 2)) *
+                                      RectangleCLT.Companion.SplitV4.normalizedSeededCubicTerm s μ ξ A ε t| ≤
+                                  C * s₃ * (RectangleCLT.dimensionLog p * κ) * t / (t + ε) ∧
+                                |RectangleCLT.Companion.SplitV4.normalizedSeededFourthRemainder s μ ξ A ε hε t| ≤
+                                  C * s₄ * (RectangleCLT.dimensionLog p * κ) / (s.bandwidth * (t + ε)))
+def RectangleCLTArxivV1.intrinsicBoundaryCoefficient.{u_1} : {Ω : Type u_1} →
+  [inst : MeasurableSpace Ω] →
+    {p n : ℕ} → MeasureTheory.Measure Ω → (Fin n → Ω → RectangleCLT.Vector p) → Matrix (Fin p) (Fin p) ℝ → ℝ :=
+fun {Ω} [MeasurableSpace Ω] {p n} μ ξ A =>
+  min (√(RectangleCLT.dimensionLog p))
+    (1 + max (∫ (ω : Ω), ‖RectangleCLT.sumVector ξ ω‖ ∂μ) (RectangleCLTArxivV1.gaussianMaximumMean A))
+def RectangleCLTArxivV1.intrinsicObservationRate : ℝ → ℝ → ℕ → ℝ → ℝ :=
+fun B g n L => B * g * L / √↑n * √(1 + RectangleCLT.Companion.logPlus (√↑n / (B * √L)))
+RectangleCLTArxivV1.theorem_1_intrinsic_clt : ∃ C,
+  0 < C ∧
+    ∀ (Ω : Type u_1) [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+      [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (p n : ℕ),
+      1 ≤ p →
+        1 ≤ n →
+          ∀ (ξ : Fin n → Ω → RectangleCLT.Vector p) (δ : ℝ),
+            (∀ (i : Fin n), Measurable (ξ i)) →
+              ProbabilityTheory.iIndepFun ξ μ →
+                (∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), ξ i ω j ∂μ = 0) →
+                  (∀ (i : Fin n), ∀ᵐ (ω : Ω) ∂μ, ‖ξ i ω‖ ≤ δ) →
+                    (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+                      ∀ (s₄ : ℝ),
+                        0 ≤ s₄ →
+                          (∀ (j : Fin p),
+                              RectangleCLT.Companion.SplitV4.QuadraticLE
+                                (RectangleCLT.Companion.SplitV4.relativeFourthMatrix μ ξ j)
+                                (s₄ • RectangleCLT.covariance μ (RectangleCLT.sumVector ξ))) →
+                            (∀ (j : Fin p),
+                                RectangleCLT.Companion.SplitV4.QuadraticLE
+                                  (RectangleCLT.Companion.SplitV4.relativeFreshFourthMatrix μ ξ j)
+                                  (s₄ • RectangleCLT.covariance μ (RectangleCLT.sumVector ξ))) →
+                              ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+                                A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+                                  RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.sumVector ξ) A ≤
+                                      C *
+                                        min 1
+                                          (RectangleCLTArxivV1.intrinsicRelativeRate
+                                            (RectangleCLTArxivV1.gaussianMaximumMean A) δ s₄
+                                            (RectangleCLT.dimensionLog p)) ∧
+                                    RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.sumVector ξ) A ≤
+                                      C *
+                                        min 1
+                                          (δ * RectangleCLTArxivV1.gaussianMaximumMean A * RectangleCLT.dimensionLog p *
+                                            √(RectangleCLT.Companion.D_L δ (RectangleCLT.dimensionLog p)))
+@RectangleCLTArxivV1.intrinsicFourthMomentCLT_factor_exists : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] {p n : ℕ}
+  (μ : MeasureTheory.Measure Ω) [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (ξ : Fin n → Ω → RectangleCLT.Vector p)
+  {δ s₄ : ℝ},
+  RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+    1 ≤ p →
+      (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+        RectangleCLTArxivV1.IntrinsicFourthBounds μ ξ s₄ →
+          ∃ A,
+            A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) ∧
+              RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.sumVector ξ) A ≤
+                  RectangleCLTArxivV1.intrinsicUniversalConstant *
+                    min 1
+                      (RectangleCLTArxivV1.intrinsicRelativeRate (RectangleCLTArxivV1.gaussianMaximumMean A) δ s₄
+                        (RectangleCLT.dimensionLog p)) ∧
+                RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.sumVector ξ) A ≤
+                  RectangleCLTArxivV1.intrinsicUniversalConstant *
+                    min 1
+                      (δ * RectangleCLTArxivV1.gaussianMaximumMean A * RectangleCLT.dimensionLog p *
+                        √(RectangleCLT.Companion.D_L δ (RectangleCLT.dimensionLog p)))
+RectangleCLTArxivV1.proposition_1_intrinsic_derivatives : ∃ A₀,
+  0 < A₀ ∧ ∃ C, 0 < C ∧ RectangleCLTArxivV1.IntrinsicDerivativePropositionContract A₀ C
+RectangleCLTArxivV1.corollary_1_normalized_observations : ∃ C,
+  0 < C ∧
+    ∀ (Ω : Type u_1) [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+      [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (p n : ℕ),
+      1 ≤ p →
+        1 ≤ n →
+          ∀ (X : Fin n → Ω → RectangleCLT.Vector p) (B : ℝ),
+            (∀ (i : Fin n), Measurable (X i)) →
+              ProbabilityTheory.iIndepFun X μ →
+                (∀ (i : Fin n) (j : Fin p), ∫ (ω : Ω), X i ω j ∂μ = 0) →
+                  (∀ (i : Fin n), ∀ᵐ (ω : Ω) ∂μ, ‖X i ω‖ ≤ B) →
+                    (∀ (j : Fin p), 1 / ↑n * ∑ i, ∫ (ω : Ω), X i ω j ^ 2 ∂μ = 1) →
+                      ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+                        A * A.transpose =
+                            RectangleCLT.covariance μ (RectangleCLT.Companion.normalizedObservationSum X) →
+                          RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.Companion.normalizedObservationSum X)
+                              A ≤
+                            C *
+                              min 1
+                                (RectangleCLTArxivV1.intrinsicObservationRate B
+                                  (RectangleCLTArxivV1.gaussianMaximumMean A) n (RectangleCLT.dimensionLog p))
+@RectangleCLTArxivV1.lemma_1_bounded_model : ∀ {r m p n : ℕ} [inst : NeZero m],
+  1 ≤ p →
+    m ≤ 2 * p →
+      ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+        [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (U : Fin m → Fin r → ℝ) (X : Fin n → Ω → Fin r → ℝ) {η v : ℝ},
+        (∀ (i : Fin n), Measurable (X i)) →
+          ProbabilityTheory.iIndepFun X μ →
+            (∀ (i : Fin n) (k : Fin r), MeasureTheory.Integrable (fun ω => X i ω k) μ) →
+              (∀ (i : Fin n) (k : Fin r), ∫ (ω : Ω), X i ω k ∂μ = 0) →
+                (∀ (i : Fin n), ∀ᵐ (ω : Ω) ∂μ, RectangleCLTArxivV1.faceNorm U (X i ω) ≤ η) →
+                  0 < v →
+                    (∀ (j : Fin m),
+                        RectangleCLT.covariance μ
+                            (fun ω => RectangleCLTArxivV1.faceProjection U (RectangleCLT.sumVector X ω)) j j =
+                          v) →
+                      ∀ (R : Ω → Fin r → ℝ),
+                        Measurable R →
+                          ProbabilityTheory.IndepFun (RectangleCLT.sumVector X) R μ →
+                            ∀ (a : Fin m → ℝ) {s : ℝ},
+                              0 < s →
+                                μ.real {ω | RectangleCLT.sumVector X ω + R ω ∈ RectangleCLTArxivV1.faceLayer U a s} ≤
+                                  512 *
+                                    min 1
+                                      (min
+                                        ((s + η) / v *
+                                          ∫ (ω : Ω), RectangleCLTArxivV1.faceNorm U (RectangleCLT.sumVector X ω) ∂μ)
+                                        ((s + η) * √(RectangleCLT.dimensionLog p / v)))
+@RectangleCLTArxivV1.lemma_C1_gaussian_model : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω)
+  [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {r m : ℕ} [inst_2 : NeZero m] (V R : Ω → RectangleCLT.Vector r),
+  Measurable V →
+    Measurable R →
+      ProbabilityTheory.IndepFun V R μ →
+        ∀ (ν : Matrix (Fin m) (Fin r) ℝ) (A : Matrix (Fin r) (Fin r) ℝ),
+          MeasureTheory.Measure.map V μ = RectangleCLT.gaussianLaw A →
+            ∀ (p : ℕ),
+              1 ≤ p →
+                m ≤ 2 * p →
+                  (∀ (α : Fin m), ∃ β, ν β = -ν α) →
+                    ∀ (a : RectangleCLT.Vector m) {v s : ℝ},
+                      0 < v →
+                        0 < s →
+                          (∀ (α : Fin m), ν α ⬝ᵥ (A * A.transpose).mulVec (ν α) = v) →
+                            μ.real {ω | V ω + R ω ∈ RectangleCLTArxivV1.faceLayer ν a s} ≤
+                                min 1 (2 * s / v * ∫ (ω : Ω), RectangleCLTArxivV1.faceNorm ν (V ω) ∂μ) ∧
+                              min 1 (2 * s / v * ∫ (ω : Ω), RectangleCLTArxivV1.faceNorm ν (V ω) ∂μ) ≤
+                                4 * min 1 (s * √(RectangleCLT.dimensionLog p / v))
+@RectangleCLTArxivV1.lemma_2_smoothing_error : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] {μ : MeasureTheory.Measure Ω}
+  [inst_1 : MeasureTheory.IsProbabilityMeasure μ] {p n : ℕ} {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ h : ℝ},
+  RectangleCLT.BoundedIndependentHypotheses μ ξ δ →
+    1 ≤ p →
+      (∀ (j : Fin p), RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) j j = 1) →
+        ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+          A * A.transpose = RectangleCLT.covariance μ (RectangleCLT.sumVector ξ) →
+            ∀ (hh : 0 < h),
+              δ ≤ h →
+                RectangleCLT.Companion.rectangleDistance μ (RectangleCLT.sumVector ξ) A ≤
+                  RectangleCLT.Companion.SplitV4.smoothingDiscrepancy μ (RectangleCLT.sumVector ξ) A h hh +
+                    9 * RectangleCLTArxivV1.intrinsicBoundaryConstant * h *
+                        RectangleCLTArxivV1.intrinsicBoundaryCoefficient μ ξ A *
+                      RectangleCLT.dimensionLog p
+@RectangleCLTArxivV1.integral_logisticEnvelope_intrinsic : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] {m r : ℕ}
+  [inst_1 : NeZero m] (μ : MeasureTheory.Measure Ω) [inst_2 : MeasureTheory.IsProbabilityMeasure μ]
+  (X : Ω → RectangleCLT.Vector r),
+  Measurable X →
+    ∀ (U : Matrix (Fin m) (Fin r) ℝ) (a : RectangleCLT.Vector m) {δ κ C₀ h : ℝ},
+      0 ≤ C₀ →
+        0 ≤ κ →
+          0 < h →
+            4 * δ ≤ h →
+              RectangleCLTArxivV1.IntrinsicBoundaryBound μ X U δ κ C₀ →
+                MeasureTheory.Integrable
+                    (fun ω =>
+                      RectangleCLT.Companion.SplitV4.logisticNullWeight U a h (X ω) *
+                        (1 - RectangleCLT.Companion.SplitV4.logisticNullWeight U a h (X ω)))
+                    μ ∧
+                  ∫ (ω : Ω),
+                      RectangleCLT.Companion.SplitV4.logisticNullWeight U a h (X ω) *
+                        (1 - RectangleCLT.Companion.SplitV4.logisticNullWeight U a h (X ω)) ∂μ ≤
+                    4 * C₀ * h * κ
+@RectangleCLTArxivV1.averaged_translated_derivative_intrinsic : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] {m r q : ℕ}
+  [inst_1 : NeZero m] (μ : MeasureTheory.Measure Ω) [inst_2 : MeasureTheory.IsProbabilityMeasure μ]
+  (X : Ω → RectangleCLT.Vector r),
+  Measurable X →
+    ∀ (U : Matrix (Fin m) (Fin r) ℝ) (a : RectangleCLT.Vector m) {δ κ C₀ h ρ : ℝ},
+      0 ≤ C₀ →
+        0 ≤ κ →
+          0 < h →
+            4 * δ ≤ h →
+              0 ≤ ρ →
+                ρ ≤ h →
+                  1 ≤ q →
+                    RectangleCLTArxivV1.IntrinsicBoundaryBound μ X U δ κ C₀ →
+                      ∀ (z : Fin q → RectangleCLT.Vector r),
+                        MeasureTheory.Integrable
+                            (fun ω =>
+                              RectangleCLT.Companion.SplitV4.translatedFaceDerivativeSupremum
+                                (RectangleCLT.Companion.SplitV4.logisticNullWeight U a h) U ρ z (X ω))
+                            μ ∧
+                          ∫ (ω : Ω),
+                              RectangleCLT.Companion.SplitV4.translatedFaceDerivativeSupremum
+                                (RectangleCLT.Companion.SplitV4.logisticNullWeight U a h) U ρ z (X ω) ∂μ ≤
+                            RectangleCLTArxivV1.intrinsicDerivativeConstant C₀ q / h ^ (q - 1) * κ *
+                              ∏ i, RectangleCLT.Companion.SplitV4.faceProjectionNorm U (z i)
+@RectangleCLTArxivV1.logistic_matrix_estimate_intrinsic : ∀ {m r : ℕ},
+  1 ≤ m →
+    ∀ (μ : MeasureTheory.Measure (RectangleCLT.Vector r)) [inst : MeasureTheory.IsProbabilityMeasure μ]
+      (u : Fin m → RectangleCLT.Vector r) (a : RectangleCLT.Vector m),
+      (∀ (j : Fin m), RectangleCLT.vectorNormSq (u j) = 1) →
+        ∀ (opposite : Fin m → Fin m),
+          (∀ (j : Fin m), u (opposite j) = -u j) →
+            ∀ {C₀ δ κ L h σ : ℝ},
+              0 < C₀ →
+                0 < κ →
+                  0 ≤ δ →
+                    0 < h →
+                      δ ≤ h →
+                        0 ≤ σ →
+                          RectangleCLT.dimensionLog m ≤ 2 * L →
+                            δ * √L ≤ σ →
+                              RectangleCLTArxivV1.IntrinsicPolyhedralConcentration μ u C₀ δ κ →
+                                ∀ (k : ℕ),
+                                  1 ≤ k →
+                                    ∫ (x : RectangleCLT.Vector r),
+                                        ∑ α,
+                                          RectangleCLT.Companion.SplitV4.symmetricNuclearNorm
+                                            (RectangleCLT.Companion.SplitV4.logisticGaussianScore u a h σ α x) ∂μ ≤
+                                      RectangleCLT.Companion.SplitV4.logisticMatrixConstant ^ (k + 1) * C₀ * (h * L * κ)
+@RectangleCLTArxivV1.selector_nuclear_bound_intrinsic_paper : ∀ {p r : ℕ},
+  1 ≤ p →
+    ∀ (μ : MeasureTheory.Measure (RectangleCLT.Vector p)) [inst : MeasureTheory.IsProbabilityMeasure μ]
+      (s : RectangleCLT.FaceSmoother p) (A : Matrix (Fin p) (Fin r) ℝ),
+      (∀ (j : Fin p), RectangleCLT.vectorNormSq (A j) = 1) →
+        ∀ {C₀ δ κ σ : ℝ},
+          0 < C₀ →
+            0 < κ →
+              0 ≤ δ →
+                δ ≤ s.bandwidth →
+                  0 ≤ σ →
+                    δ * √(RectangleCLT.dimensionLog p) ≤ σ →
+                      RectangleCLTArxivV1.IntrinsicRectangleConcentration μ C₀ δ κ →
+                        ∀ (k : ℕ),
+                          1 ≤ k →
+                            ∫ (v : RectangleCLT.Vector p),
+                                ∑ α,
+                                  RectangleCLT.Companion.SplitV4.symmetricNuclearNorm
+                                    (RectangleCLT.Companion.selectorGaussianScore s (σ • A) id α v) ∂μ ≤
+                              RectangleCLTArxivV1.intrinsicMatrixConstant C₀ ^ (k + 1) *
+                                (s.bandwidth * RectangleCLT.dimensionLog p * κ)
+@RectangleCLTArxivV1.gaussian_mean_relative_to_single_face : ∀ {r : ℕ} (u : RectangleCLT.Vector r),
+  RectangleCLT.vectorNormSq u = 1 →
+    ∀ (β : ℝ → ℝ),
+      Measurable β →
+        (∀ (a : ℝ), 0 ≤ β a ∧ β a ≤ 1) →
+          ∀ (w : RectangleCLT.Vector r → ℝ),
+            Measurable w →
+              (∀ (z : RectangleCLT.Vector r), 0 ≤ w z ∧ w z ≤ β (RectangleCLT.faceDot u z)) →
+                0 < ∫ (z : RectangleCLT.Vector r), β (RectangleCLT.faceDot u z) ∂RectangleCLT.standardGaussian r →
+                  0 < RectangleCLT.Companion.weightMass (RectangleCLT.standardGaussian r) w →
+                    RectangleCLT.Companion.weightMass (RectangleCLT.standardGaussian r) w *
+                        RectangleCLT.vectorNormSq
+                          (RectangleCLT.Companion.weightMean (RectangleCLT.standardGaussian r) id w) ≤
+                      ∫ (z : RectangleCLT.Vector r),
+                          w z * RectangleCLT.faceDot u z ^ 2 ∂RectangleCLT.standardGaussian r +
+                        2 * RectangleCLT.Companion.weightMass (RectangleCLT.standardGaussian r) w *
+                          Real.log
+                            ((∫ (z : RectangleCLT.Vector r),
+                                β (RectangleCLT.faceDot u z) ∂RectangleCLT.standardGaussian r) /
+                              RectangleCLT.Companion.weightMass (RectangleCLT.standardGaussian r) w)
+@RectangleCLTArxivV1.lemma_C1_rademacher_boundary : ∀ {m n : ℕ} [inst : NeZero m] (B : Fin m → Fin n → ℝ)
+  (a : Fin m → ℝ) (t h b σ : ℝ),
+  0 ≤ h →
+    0 < σ ^ 2 →
+      (∀ (α : Fin m) (i : Fin n), |B α i| ≤ b) →
+        (∀ (α : Fin m), σ ^ 2 ≤ ∑ i, B α i ^ 2) →
+          (RectangleCLT.Companion.SplitV4.cubeUniformLaw n).real
+              {x |
+                t ≤ RectangleCLT.Companion.SplitV4.affineCubeMaximum B a x ∧
+                  RectangleCLT.Companion.SplitV4.affineCubeMaximum B a x ≤ t + h} ≤
+            (h + 8 * b) / σ ^ 2 *
+              ∫ (x : Kane.Cube n),
+                RectangleCLT.Companion.SplitV4.positiveLinearMaximum B
+                  x ∂RectangleCLT.Companion.SplitV4.cubeUniformLaw n
+@RectangleCLTArxivV1.lemma_C1_rademacher_maximum : ∀ {m n : ℕ} (B : Fin m → Fin n → ℝ),
+  (∀ (α : Fin m), ∑ i, B α i ^ 2 ≤ 1) →
+    ∫ (x : Kane.Cube n),
+        RectangleCLT.Companion.SplitV4.positiveLinearMaximum B x ∂RectangleCLT.Companion.SplitV4.cubeUniformLaw n ≤
+      √(2 * Real.log (↑m + 1))
+@RectangleCLTArxivV1.gaussianEndpointSmoothing_intrinsic : ∀ {Ω : Type u_1} [inst : MeasurableSpace Ω] {p : ℕ},
+  1 ≤ p →
+    ∀ (μ : MeasureTheory.Measure Ω) [inst_1 : MeasureTheory.IsProbabilityMeasure μ] (V : Ω → RectangleCLT.Vector p),
+      Measurable V →
+        ∀ (A : Matrix (Fin p) (Fin p) ℝ),
+          (∀ (j : Fin p), (A * A.transpose) j j = 1) →
+            ∀ (h : ℝ) (hh : 0 < h),
+              RectangleCLT.Companion.rectangleDistance μ V A ≤
+                RectangleCLTArxivV1.intrinsicGaussianSmoothingConstant *
+                  (RectangleCLT.Companion.SplitV4.smoothingDiscrepancy μ V A h hh +
+                    h * RectangleCLTArxivV1.gaussianMaximumMean A * RectangleCLT.dimensionLog p)

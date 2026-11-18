@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "reviewer": "/root/archive_h_resume/h1_spherical_balance",
+  "reviewed_at_utc": "2026-11-18T06:00:26.249118+00:00",
+  "scope": "Independent small tooling smoke of the current shared CollectAxioms traversal and both production allowlist guards. This is not a paper-proof audit or a release-wide certification.",
+  "authorship_and_edits": {
+    "authored_production_audit_change": false,
+    "production_source_edits": false,
+    "shared_Lean_fixture_edits": false,
+    "fixtures_only_in_tmp": true,
+    "only_shared_artifact_written": "evidence/shared-union-audit-review/smoke-review.json"
+  },
+  "toolchain": {
+    "project_declaration_path": "lean-toolchain",
+    "project_declaration": "leanprover/lean4:v4.19.0",
+    "project_declaration_sha256": "55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea",
+    "binary": "/workspace/lean-toolchain-bin/bin/lean",
+    "version_command": [
+      "/workspace/lean-toolchain-bin/bin/lean",
+      "--version"
+    ],
+    "version_exit_code": 0,
+    "version_output": "Lean (version 4.19.0, x86_64-unknown-linux-gnu, commit 6caaee842e94, Release)"
+  },
+  "reviewed_sources": [
+    {
+      "path": "/workspace/lean-toolchain-bin/src/lean/Lean/Util/CollectAxioms.lean",
+      "sha256": "26e92bcf497bd81e3a236e648c2dc75b19d084f0e929c5dea43376437fe4355a",
+      "lines_read": "entire file",
+      "role": "Installed toolchain implementation"
+    },
+    {
+      "path": "Audit.lean",
+      "sha256": "b8810c127700f116eabc89011af34f369cda1d0d276cd38477e6afbbb67ed729",
+      "lines_read": "entire file; shared collection expression and per-axiom guard cloned into smoke"
+    },
+    {
+      "path": "Correspondence/Dependencies.lean",
+      "sha256": "e891d607d3e1cc73bdc2e9f3238a90d15417a7f4a5f88d01e2d9a97d4debbebc",
+      "lines_read": "entire file; shared collection expression and filtered allowlist guard cloned into smoke"
+    }
+  ],
+  "collector_semantic_read": [
+    "A single ReaderT Environment / StateM CollectAxioms.State is run over targets.forM collect; visited and axioms are shared across all targets.",
+    "collect inserts a declaration in visited before recursion, reads the kernel-checked environment, and records each reached axiom constant. Shared dependencies are therefore traversed once without clearing their previously collected axioms.",
+    "The implementation traverses both declared type and value for definitions, theorems, and opaque constants. Private theorem names are ordinary referenced constants and are traversed in the same way.",
+    "Constructors and recursors have their types traversed; inductive constants traverse their type and constructors. Quotient primitive handling and allowlisted standard axioms follow the installed Lean implementation.",
+    "The production Audit guard loops over the resulting union; Dependencies filters that same union against the identical three names. Neither guard limits the check to direct dependencies or public project names."
+  ],
+  "allowed_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "fixture_design": {
+    "clean": "Two theorem targets share a private theorem behind an opaque constant. That private proof deliberately exercises all three allowed axioms. Both deliberately introduced unrelated test axioms remain in the same environment but are outside this target closure; the collected array is exactly the standard three.",
+    "hidden": "Two targets share an opaque constant whose private proof combines the clean shared proof with forbiddenProof : True. The fixture asserts that both private and opaque nodes were visited and that the collected array contains exactly the standard three plus forbiddenProof.",
+    "type_only": "Two targets have declared type (fun _ : Prop => CleanStatement) forbiddenType, while each proof body is cleanOpaque. The fixture explicitly asserts that forbiddenType occurs in each actual declared type and does not occur directly in its stored proof body; the collected union must nevertheless contain it plus the standard three.",
+    "guards": "All three fixtures are run once with Audit.lean's per-axiom guard and once with Dependencies.lean's filtered guard. Expected negative tests deliberately finish with Lean exit1 from the production-style rejection; their preceding fixture assertions must all succeed."
+  },
+  "tests": [
+    {
+      "name": "Clean",
+      "implementation": "Audit.lean per-axiom guard",
+      "fixture_path": "/tmp/shared-union-audit-smoke/Clean.lean",
+      "command": "export PATH=/workspace/lean-toolchain-bin/bin:$PATH\nlake env lean /tmp/shared-union-audit-smoke/Clean.lean",
+      "cwd": "/workspace/rectangle-clt-singular/lean-rectangle-clt-arxiv-v1",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "wall_time_seconds": 0.857396412,
+      "stdout_and_stderr": "SHARED_UNION_SMOKE: targets=[SharedUnionAuditSmoke.cleanA,\n SharedUnionAuditSmoke.cleanB]; collected=[propext, Classical.choice, Quot.sound]\n",
+      "forbidden_axiom": null,
+      "result": "PASS",
+      "fixture_sha256": "a94a4a1b4976075ea6a44b0ac26b649e824a6548042726a6bd3962d1b65a2a9e"
+    },
+    {
+      "name": "Hidden",
+      "implementation": "Audit.lean per-axiom guard",
+      "fixture_path": "/tmp/shared-union-audit-smoke/Hidden.lean",
+      "command": "export PATH=/workspace/lean-toolchain-bin/bin:$PATH\nlake env lean /tmp/shared-union-audit-smoke/Hidden.lean",
+      "cwd": "/workspace/rectangle-clt-singular/lean-rectangle-clt-arxiv-v1",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "wall_time_seconds": 0.789501155,
+      "stdout_and_stderr": "SHARED_UNION_SMOKE: targets=[SharedUnionAuditSmoke.hiddenA,\n SharedUnionAuditSmoke.hiddenB]; collected=[propext, Classical.choice, Quot.sound, SharedUnionAuditSmoke.forbiddenProof]\n/tmp/shared-union-audit-smoke/Hidden.lean:33:0: error: Audited endpoint union depends on SharedUnionAuditSmoke.forbiddenProof\n",
+      "forbidden_axiom": "SharedUnionAuditSmoke.forbiddenProof",
+      "result": "PASS",
+      "fixture_sha256": "01252499ba0443d48694d98959e96088cb751f19b232e54b5b7283b886539683"
+    },
+    {
+      "name": "Type",
+      "implementation": "Audit.lean per-axiom guard",
+      "fixture_path": "/tmp/shared-union-audit-smoke/Type.lean",
+      "command": "export PATH=/workspace/lean-toolchain-bin/bin:$PATH\nlake env lean /tmp/shared-union-audit-smoke/Type.lean",
+      "cwd": "/workspace/rectangle-clt-singular/lean-rectangle-clt-arxiv-v1",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "wall_time_seconds": 0.987779414,
+      "stdout_and_stderr": "SHARED_UNION_SMOKE: targets=[SharedUnionAuditSmoke.typeA,\n SharedUnionAuditSmoke.typeB]; collected=[SharedUnionAuditSmoke.forbiddenType, propext, Classical.choice, Quot.sound]\n/tmp/shared-union-audit-smoke/Type.lean:33:0: error: Audited endpoint union depends on SharedUnionAuditSmoke.forbiddenType\n",
+      "forbidden_axiom": "SharedUnionAuditSmoke.forbiddenType",
+      "result": "PASS",
+      "fixture_sha256": "33564dc90c7488946295ceb257673aade7d203e02dd75496843de34944405890"
+    },
+    {
+      "name": "CleanFilter",
+      "implementation": "Correspondence/Dependencies.lean filter guard",
+      "fixture_path": "/tmp/shared-union-audit-smoke/CleanFilter.lean",
+      "command": "export PATH=/workspace/lean-toolchain-bin/bin:$PATH\nlake env lean /tmp/shared-union-audit-smoke/CleanFilter.lean",
+      "cwd": "/workspace/rectangle-clt-singular/lean-rectangle-clt-arxiv-v1",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "wall_time_seconds": 0.761622776,
+      "stdout_and_stderr": "SHARED_UNION_SMOKE: targets=[SharedUnionAuditSmoke.cleanA,\n SharedUnionAuditSmoke.cleanB]; collected=[propext, Classical.choice, Quot.sound]\n",
+      "forbidden_axiom": null,
+      "result": "PASS",
+      "fixture_sha256": "774df80673ca6788867655b0c5b98c4e72ea3f529318eb4c50b2e69fb45b1cbc"
+    },
+    {
+      "name": "HiddenFilter",
+      "implementation": "Correspondence/Dependencies.lean filter guard",
+      "fixture_path": "/tmp/shared-union-audit-smoke/HiddenFilter.lean",
+      "command": "export PATH=/workspace/lean-toolchain-bin/bin:$PATH\nlake env lean /tmp/shared-union-audit-smoke/HiddenFilter.lean",
+      "cwd": "/workspace/rectangle-clt-singular/lean-rectangle-clt-arxiv-v1",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "wall_time_seconds": 0.788537028,
+      "stdout_and_stderr": "SHARED_UNION_SMOKE: targets=[SharedUnionAuditSmoke.hiddenA,\n SharedUnionAuditSmoke.hiddenB]; collected=[propext, Classical.choice, Quot.sound, SharedUnionAuditSmoke.forbiddenProof]\n/tmp/shared-union-audit-smoke/HiddenFilter.lean:33:0: error: Unexpected axiom in endpoint union: [SharedUnionAuditSmoke.forbiddenProof]\n",
+      "forbidden_axiom": "SharedUnionAuditSmoke.forbiddenProof",
+      "result": "PASS",
+      "fixture_sha256": "96f0f2c30eae8aaf8698dddcb6c1c810cbd5f47b2235d68c738a2da62233ec86"
+    },
+    {
+      "name": "TypeFilter",
+      "implementation": "Correspondence/Dependencies.lean filter guard",
+      "fixture_path": "/tmp/shared-union-audit-smoke/TypeFilter.lean",
+      "command": "export PATH=/workspace/lean-toolchain-bin/bin:$PATH\nlake env lean /tmp/shared-union-audit-smoke/TypeFilter.lean",
+      "cwd": "/workspace/rectangle-clt-singular/lean-rectangle-clt-arxiv-v1",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "wall_time_seconds": 0.87547255,
+      "stdout_and_stderr": "SHARED_UNION_SMOKE: targets=[SharedUnionAuditSmoke.typeA,\n SharedUnionAuditSmoke.typeB]; collected=[SharedUnionAuditSmoke.forbiddenType, propext, Classical.choice, Quot.sound]\n/tmp/shared-union-audit-smoke/TypeFilter.lean:33:0: error: Unexpected axiom in endpoint union: [SharedUnionAuditSmoke.forbiddenType]\n",
+      "forbidden_axiom": "SharedUnionAuditSmoke.forbiddenType",
+      "result": "PASS",
+      "fixture_sha256": "743c0bbb54aa34c4d6886f58ee20e3ad9be2e634cca8ffa4a82b825dfd5fe1dc"
+    }
+  ],
+  "results": {
+    "test_cases": 6,
+    "clean_cases_expected_and_actual_exit_zero": 2,
+    "forbidden_cases_expected_and_actual_exit_one": 4,
+    "all_fixture_assertions_passed": true,
+    "unexpected_Lean_diagnostics": false,
+    "whole_project_build_run": false
+  },
+  "reproducible_fixture_sources": {
+    "common_declarations_prefix": "import Lean.Util.CollectAxioms\nimport Lean.Elab.Command\n\nnamespace SharedUnionAuditSmoke\n\ndef CleanStatement : Prop :=\n  (True = True) \u2227 (\u2203 _ : Unit, True) \u2227\n    (Quot.mk (fun _ _ : Unit => True) () = Quot.mk (fun _ _ : Unit => True) ())\n\nprivate theorem cleanShared : CleanStatement :=\n  \u27e8propext Iff.rfl,\n    \u27e8Classical.choice (show Nonempty Unit from \u27e8()\u27e9), True.intro\u27e9,\n    @Quot.sound Unit (fun _ _ => True) () () True.intro\u27e9\n\nopaque cleanOpaque : CleanStatement := cleanShared\n\ntheorem cleanA : CleanStatement := cleanOpaque\ntheorem cleanB : CleanStatement := cleanOpaque\n\naxiom forbiddenProof : True\nprivate theorem hiddenShared : CleanStatement \u2227 True := \u27e8cleanOpaque, forbiddenProof\u27e9\nopaque hiddenOpaque : CleanStatement \u2227 True := hiddenShared\n\ntheorem hiddenA : CleanStatement \u2227 True := hiddenOpaque\ntheorem hiddenB : CleanStatement \u2227 True := hiddenOpaque\n\naxiom forbiddenType : Prop\n-- The axiom appears in the declared type while the proof body is just cleanOpaque.\ntheorem typeA : (fun _ : Prop => CleanStatement) forbiddenType := cleanOpaque\ntheorem typeB : (fun _ : Prop => CleanStatement) forbiddenType := cleanOpaque\n\n",
+    "files": [
+      {
+        "name": "Clean",
+        "sha256": "a94a4a1b4976075ea6a44b0ac26b649e824a6548042726a6bd3962d1b65a2a9e",
+        "suffix_after_common_declarations": "open Lean Elab Command in\nrun_cmd do\n  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]\n  let targets := #[``cleanA, ``cleanB]\n  let env \u2190 getEnv\n  let (_, axiomState) := ((targets.forM Lean.CollectAxioms.collect).run env).run {}\n  for n in allowed do\n    unless axiomState.axioms.contains n do\n      throwError \"Fixture failed to exercise allowed axiom {n}\"\n  unless axiomState.visited.contains ``cleanOpaque && axiomState.visited.contains ``cleanShared do\n    throwError \"Shared private/opaque clean dependencies were not traversed\"\n  unless axiomState.axioms.size == 3 do\n    throwError \"Unused test axioms contaminated clean targets: {axiomState.axioms}\"\n  logInfo m!\"SHARED_UNION_SMOKE: targets={targets}; collected={axiomState.axioms}\"\n  for axiomName in axiomState.axioms do\n    unless allowed.contains axiomName do\n      throwError \"Audited endpoint union depends on {axiomName}\"\n\nend SharedUnionAuditSmoke\n"
+      },
+      {
+        "name": "Hidden",
+        "sha256": "01252499ba0443d48694d98959e96088cb751f19b232e54b5b7283b886539683",
+        "suffix_after_common_declarations": "open Lean Elab Command in\nrun_cmd do\n  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]\n  let targets := #[``hiddenA, ``hiddenB]\n  let env \u2190 getEnv\n  let (_, axiomState) := ((targets.forM Lean.CollectAxioms.collect).run env).run {}\n  for n in allowed do\n    unless axiomState.axioms.contains n do\n      throwError \"Fixture failed to exercise allowed axiom {n}\"\n  unless axiomState.visited.contains ``cleanOpaque && axiomState.visited.contains ``cleanShared do\n    throwError \"Shared private/opaque clean dependencies were not traversed\"\n  unless axiomState.visited.contains ``hiddenOpaque && axiomState.visited.contains ``hiddenShared do\n    throwError \"Hidden private/opaque dependencies were not traversed\"\n  unless axiomState.axioms.contains ``forbiddenProof do\n    throwError \"Fixture test axiom was not collected\"\n  unless axiomState.axioms.size == 4 do\n    throwError \"Unexpected fixture axiom count {axiomState.axioms}\"\n  logInfo m!\"SHARED_UNION_SMOKE: targets={targets}; collected={axiomState.axioms}\"\n  for axiomName in axiomState.axioms do\n    unless allowed.contains axiomName do\n      throwError \"Audited endpoint union depends on {axiomName}\"\n\nend SharedUnionAuditSmoke\n"
+      },
+      {
+        "name": "Type",
+        "sha256": "33564dc90c7488946295ceb257673aade7d203e02dd75496843de34944405890",
+        "suffix_after_common_declarations": "open Lean Elab Command in\nrun_cmd do\n  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]\n  let targets := #[``typeA, ``typeB]\n  let env \u2190 getEnv\n  let (_, axiomState) := ((targets.forM Lean.CollectAxioms.collect).run env).run {}\n  for n in allowed do\n    unless axiomState.axioms.contains n do\n      throwError \"Fixture failed to exercise allowed axiom {n}\"\n  unless axiomState.visited.contains ``cleanOpaque && axiomState.visited.contains ``cleanShared do\n    throwError \"Shared private/opaque clean dependencies were not traversed\"\n  for target in targets do\n    let ci \u2190 getConstInfo target\n    unless ci.type.getUsedConstants.contains ``forbiddenType do\n      throwError \"Type-only fixture lost the axiom in the declared type\"\n    let some value := ci.value? true | throwError \"Missing fixture proof body\"\n    if value.getUsedConstants.contains ``forbiddenType then\n      throwError \"Type-only fixture unexpectedly uses its test axiom directly in its body\"\n  unless axiomState.axioms.contains ``forbiddenType do\n    throwError \"Fixture test axiom was not collected\"\n  unless axiomState.axioms.size == 4 do\n    throwError \"Unexpected fixture axiom count {axiomState.axioms}\"\n  logInfo m!\"SHARED_UNION_SMOKE: targets={targets}; collected={axiomState.axioms}\"\n  for axiomName in axiomState.axioms do\n    unless allowed.contains axiomName do\n      throwError \"Audited endpoint union depends on {axiomName}\"\n\nend SharedUnionAuditSmoke\n"
+      },
+      {
+        "name": "CleanFilter",
+        "sha256": "774df80673ca6788867655b0c5b98c4e72ea3f529318eb4c50b2e69fb45b1cbc",
+        "suffix_after_common_declarations": "open Lean Elab Command in\nrun_cmd do\n  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]\n  let targets := #[``cleanA, ``cleanB]\n  let env \u2190 getEnv\n  let (_, axiomState) := ((targets.forM Lean.CollectAxioms.collect).run env).run {}\n  for n in allowed do\n    unless axiomState.axioms.contains n do\n      throwError \"Fixture failed to exercise allowed axiom {n}\"\n  unless axiomState.visited.contains ``cleanOpaque && axiomState.visited.contains ``cleanShared do\n    throwError \"Shared private/opaque clean dependencies were not traversed\"\n  unless axiomState.axioms.size == 3 do\n    throwError \"Unused test axioms contaminated clean targets: {axiomState.axioms}\"\n  logInfo m!\"SHARED_UNION_SMOKE: targets={targets}; collected={axiomState.axioms}\"\n  let forbidden := axiomState.axioms.filter fun n => !(#[``propext, ``Classical.choice, ``Quot.sound]).contains n\n  unless forbidden.isEmpty do\n    throwError \"Unexpected axiom in endpoint union: {forbidden}\"\n\nend SharedUnionAuditSmoke\n"
+      },
+      {
+        "name": "HiddenFilter",
+        "sha256": "96f0f2c30eae8aaf8698dddcb6c1c810cbd5f47b2235d68c738a2da62233ec86",
+        "suffix_after_common_declarations": "open Lean Elab Command in\nrun_cmd do\n  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]\n  let targets := #[``hiddenA, ``hiddenB]\n  let env \u2190 getEnv\n  let (_, axiomState) := ((targets.forM Lean.CollectAxioms.collect).run env).run {}\n  for n in allowed do\n    unless axiomState.axioms.contains n do\n      throwError \"Fixture failed to exercise allowed axiom {n}\"\n  unless axiomState.visited.contains ``cleanOpaque && axiomState.visited.contains ``cleanShared do\n    throwError \"Shared private/opaque clean dependencies were not traversed\"\n  unless axiomState.visited.contains ``hiddenOpaque && axiomState.visited.contains ``hiddenShared do\n    throwError \"Hidden private/opaque dependencies were not traversed\"\n  unless axiomState.axioms.contains ``forbiddenProof do\n    throwError \"Fixture test axiom was not collected\"\n  unless axiomState.axioms.size == 4 do\n    throwError \"Unexpected fixture axiom count {axiomState.axioms}\"\n  logInfo m!\"SHARED_UNION_SMOKE: targets={targets}; collected={axiomState.axioms}\"\n  let forbidden := axiomState.axioms.filter fun n => !(#[``propext, ``Classical.choice, ``Quot.sound]).contains n\n  unless forbidden.isEmpty do\n    throwError \"Unexpected axiom in endpoint union: {forbidden}\"\n\nend SharedUnionAuditSmoke\n"
+      },
+      {
+        "name": "TypeFilter",
+        "sha256": "743c0bbb54aa34c4d6886f58ee20e3ad9be2e634cca8ffa4a82b825dfd5fe1dc",
+        "suffix_after_common_declarations": "open Lean Elab Command in\nrun_cmd do\n  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]\n  let targets := #[``typeA, ``typeB]\n  let env \u2190 getEnv\n  let (_, axiomState) := ((targets.forM Lean.CollectAxioms.collect).run env).run {}\n  for n in allowed do\n    unless axiomState.axioms.contains n do\n      throwError \"Fixture failed to exercise allowed axiom {n}\"\n  unless axiomState.visited.contains ``cleanOpaque && axiomState.visited.contains ``cleanShared do\n    throwError \"Shared private/opaque clean dependencies were not traversed\"\n  for target in targets do\n    let ci \u2190 getConstInfo target\n    unless ci.type.getUsedConstants.contains ``forbiddenType do\n      throwError \"Type-only fixture lost the axiom in the declared type\"\n    let some value := ci.value? true | throwError \"Missing fixture proof body\"\n    if value.getUsedConstants.contains ``forbiddenType then\n      throwError \"Type-only fixture unexpectedly uses its test axiom directly in its body\"\n  unless axiomState.axioms.contains ``forbiddenType do\n    throwError \"Fixture test axiom was not collected\"\n  unless axiomState.axioms.size == 4 do\n    throwError \"Unexpected fixture axiom count {axiomState.axioms}\"\n  logInfo m!\"SHARED_UNION_SMOKE: targets={targets}; collected={axiomState.axioms}\"\n  let forbidden := axiomState.axioms.filter fun n => !(#[``propext, ``Classical.choice, ``Quot.sound]).contains n\n  unless forbidden.isEmpty do\n    throwError \"Unexpected axiom in endpoint union: {forbidden}\"\n\nend SharedUnionAuditSmoke\n"
+      }
+    ]
+  },
+  "limitations": [
+    "This smoke validates the collector and guard semantics on controlled small fixtures. It does not replace running the project endpoint audit.",
+    "The production source hashes identify the files read during this review; no claim of a separate frozen release snapshot is made."
+  ]
+}

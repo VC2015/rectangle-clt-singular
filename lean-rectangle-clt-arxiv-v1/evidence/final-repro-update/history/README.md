@@ -1,0 +1,2 @@
+The initial draft and inventory are preserved byte-for-byte. The current candidate states H.1’s geometric hypotheses explicitly and distinguishes recorded checkpoint cwd from mapper execution in --clean-root. Historical drafts are not final verification claims.
+The reviewed-pending snapshot preserves the exact scope-corrected drafts before replacing pending verification fields with the completed443fbc6 clean receipts.

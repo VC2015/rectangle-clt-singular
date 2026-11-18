@@ -1,0 +1,5 @@
+import RectangleCLTArxivV1.SupplementalGCapIntegratedRemainder
+#check @RectangleCLTArxivV1.cap_seededFourthRemainder_majorant
+#check @RectangleCLTArxivV1.cap_seededFourthRemainder_integral_bound
+#check @RectangleCLTArxivV1.capBoundedIntegratedRemainderConstant_pos
+#check @RectangleCLTArxivV1.cap_seededFourthRemainder_bounded_integral_bound

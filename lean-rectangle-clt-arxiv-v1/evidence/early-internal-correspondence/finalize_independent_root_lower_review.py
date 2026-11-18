@@ -1,0 +1,39 @@
+from pathlib import Path
+import json,hashlib,datetime,shutil
+P=Path.cwd(); E=P/'evidence/early-internal-correspondence'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+ledger=P/'correspondence/lower-leading-common-internal-passages.json'; d=json.load(open(ledger))
+assert sha(ledger)=='b926fed94faaeef25aa455e9cc3346139b19bc6932329307bb1fc9782366d3a6'
+for f,h in d['reviewed_source_sha256'].items(): assert sha(P/f)==h,f
+main=P.parent/'research-rectangle-clt-singular/Rectangle_CLT_arXiv_2026-11-16.tex'
+lines=main.read_bytes().splitlines(keepends=True)
+for row in d['passages']:
+ lo,hi=row['location']['lines']; assert hashlib.sha256(b''.join(lines[lo-1:hi])).hexdigest()==row['location']['sha256']
+for record in d['formal_receipts']:
+ p=P/record['path']; assert sha(p)==record['sha256']; assert json.load(open(p))['status']=='passed'
+rootrun=E/'independent-root-new-support-checkpoint-1/run.json'; rr=json.load(open(rootrun)); assert rr['status']=='passed' and rr['full_type_count']==7
+prior=P/'evidence/lower-bounded-theorem/independent-intrinsic-review.json'; pr=json.load(open(prior))
+for f,h in pr['reviewed_source_hashes'].items(): assert sha(P/f)==h,f
+for src,dest in [('/tmp/root-lower-leading-pdf.txt','independent-root-leading-pages99-100.txt'),('/tmp/root-lower-master-pdf.txt','independent-root-master-pages102-103.txt')]:
+ target=E/dest; assert not target.exists(); shutil.copyfile(src,target)
+findings={
+'F.LEADING.SCALAR':'The actual one-column sign-array CDF is compared with Phi through checked scalar Berry--Esseen; max of constants and the extra nonnegative1/n term preserve the printed uniform rate. The full scalar-to-foundation boundedCLT path is explicitly disclosed, with no new ArxivV1 target dependency.',
+'F.LEADING.CENTRAL':'The genuine damped product-CDF estimate uses comparable moderate tails, the bounded w exp(-cw) term and the actual low-range scalar CDF cap. The all-threshold wrapper discharges its numeric hypotheses eventually, uniformly in the coordinate count.',
+'F.LEADING.FAR':'The moderate-far mass is bounded by exp(-x²/4); the cutoff branch uses genuine sub-Gaussian union bounds and log(em)≤c sqrt(n). The explicit cutoff amplitude makes the fourth-order error limit strictly below1 and all smallness conditions eventually true.',
+'F.LEADING.QUANTILE':'The actual quantile has exactly r*normalTail=1. Its scale follows from the actual log-tail asymptotic, and Mills calibration times the true CDF power gives density/sqrt(2logr)→exp(-1); no nearby CDF quantile replaces the printed threshold.',
+'F.LEADING.MEAN':'The changing-dimension Gaussian maxima converge in probability by actual above/below-quantile bounds. A genuine uniformL2 bound gives expectation-tail≤6/K; explicit truncation gives L1 convergence and the actual mean asymptotic.',
+'F.LEADING.CURVATURE':'The actual differentiated maximum density is controlled for m2/3, negative thresholds, positive central and far thresholds. The negative case uses an equivalent uniform tail-envelope estimate; the final actual second-CDF-derivative bound has the printed log(em) factor.',
+'F.LEADING.UNIFORM':'The new upper-density proof divides the actual density asymptotic by sqrt(log(er)), bounds every finite exceptional prefix by a finite supremum, and transfers the resulting positive constant through the proved absolute-width lower bound. The existing positive finite-infimum lower bound and direct r1 curvature establish the full actual all-r comparison.',
+'F4.MAXIMA':'The actual independent grid is identified with its separated product seed. Exact finite maxima over all pairs split additively, and the leading maxima and rare shifts are independent under genuine product laws; source bytes also match the earlier independent intrinsic review.',
+'F4.COVERAGE':'The true selected-column probability is(pi/2)^N and the product failure probability is(1-(pi/2)^N)^m. The new real wrapper uses the exact integer-count event floor(b)<N iff b<N, followed by decreasing real powers for basepi/2∈(0,1]. Thus every realb≥0 is covered, including b0.',
+'F4.MOMENTS':'The actual binomial second moment and absolute maximum≤count give EQ*²≤k²+k. Holder/Cauchy--Schwarz applied to the genuine failure indicator gives the mean deficit, and for k≥1 the actual mean-ratio error≤3sqrt(failure), which yields the stated asymptotic under the printed limits.',
+'F4.SHIFTS':'The actual positive leading scale yields the exact shifted leading-CDF events; the concrete product-map maximum identities prove the corresponding orthant events for both laws.',
+'F4.MASTER':'The proved second-derivative shift comparison is applied to the actual independent shifts, with genuine L2 bounds and the actual leading sign-array approximation. The explicit mean difference has the correct Gaussian-minus-observation sign and no target comparison premise.',
+'F4.DETECTION':'The checked density/width lower bound converts the actual signed mean gap to the stated scale. The remainder ratio tends to0 and the genuine shifted CDF error is realized by an actual orthant, hence bounded by the true rectangle distance.',
+'F4.PROFILE':'Actual conditional Jensen gives the lower absolute width and the triangle inequality gives the leading-plus-rare upper width. The resulting squeeze applies to positive bounded or growing leading counts, including the exact r1 Gaussian width.',
+'F4.DUPLICATION':'The ledger honestly claims finite support only: rectangle preimage/lift, norm, covariance, sum and zero-gap primitives. It does not claim that these primitives alone prove a new duplicated-dimension headline or its unchanged asymptotic logarithmic factors.'}
+assert set(findings)=={x['id'] for x in d['passages']}
+checks=[dict(id=x['id'],main_tex_lines=x['location']['lines'],result='PASS',claim_scope='finite_support_only' if x['id']=='F4.DUPLICATION' else 'mapped_actual_proof_passage',finding=findings[x['id']],exact_declarations=x['lean_declarations']) for x in d['passages']]
+out=dict(status='PASS',reviewer='/root',author='/root/lower_resume',reviewed_at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),scope='Independent exact source/PDF/type review of14 leading/common lower proof passages plus the explicitly supporting optional duplication row; no headline acceptance change',ledger=dict(path=str(ledger.relative_to(P)),sha256=sha(ledger)),new_support_independent_receipt=dict(path=str(rootrun.relative_to(P)),sha256=sha(rootrun),strict_targets=7,full_types=7),formal_receipts=d['formal_receipts'],verified_source_sha256=d['reviewed_source_sha256'],prior_independent_common_source_review=dict(path=str(prior.relative_to(P)),sha256=sha(prior),use='Reused only for byte-identical common actual-family/detection sources; the two new supporting files and expanded leading-internal correspondence received the present independent review.'),paper_snapshot=d['snapshot'],main_tex_sha256=sha(main),main_pdf_sha256=d['frozen_main_pdf_sha256'],pdf_reading_scope=dict(physical_pages=[99,100,102,103],method='Frozen PDF text compared in reading order with exact frozen TeX spans and actual Lean definitions/types/proofs'),pdf_text_sha256={str(p.relative_to(P)):sha(p) for p in [E/'independent-root-leading-pages99-100.txt',E/'independent-root-master-pages102-103.txt']},checks=checks,method_qualification=json.load(open(E/'dependency-check.json'))['scalar_BerryEsseen_method_variation'],remaining_scope='Optional duplicated-dimension final assertion remains support-only as stated in the frozen ledger. All other claimed mapped conclusions have no missing hypothesis supplier. E1 and remaining AppendixH headlines are unaffected.',headline_acceptance_change=False,release_wide_certification=False)
+path=E/'independent-root-lower-review.json'; assert not path.exists(); path.write_text(json.dumps(out,indent=2)+'\n')
+print('PASS independent Root lower review15 rows; fresh7 strict helperchecks; scalar reuse and optional duplication limitations explicit')

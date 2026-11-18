@@ -1,0 +1,1149 @@
+PASS: 8 actual-null-section declarations; axioms [propext, Quot.sound, Classical.choice]
+theorem RectangleCLTArxivV1.gaussianFiniteThresholdEvent_has_nonzero_active_of_no_strictInterior : ∀ {m r : Nat}
+  (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m),
+  (∀ (k : Fin m),
+      @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+        Or
+          (@Ne.{1} (RectangleCLT.Vector r) (u k)
+            (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+              (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+          (@Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) →
+    Not (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s u b) →
+      ∀ (x : RectangleCLT.Vector r),
+        @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+            (@Set.instMembership.{0} (RectangleCLT.Vector r))
+            (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) x →
+          @Exists.{1} (Fin m) fun (k : Fin m) =>
+            And (@Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k)
+              (And
+                (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                  (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                    (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                      (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+                (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) x) (b k))) :=
+fun {m r : Nat} (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m)
+    (hreg :
+      ∀ (k : Fin m),
+        @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+          Or
+            (@Ne.{1} (RectangleCLT.Vector r) (u k)
+              (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                  (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+            (@Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))))
+    (hnot : Not (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s u b)) (x : RectangleCLT.Vector r)
+    (hx :
+      @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+        (@Set.instMembership.{0} (RectangleCLT.Vector r))
+        (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) x) =>
+  @Classical.byContradiction
+    (@Exists.{1} (Fin m) fun (k : Fin m) =>
+      And (@Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k)
+        (And
+          (@Ne.{1} (RectangleCLT.Vector r) (u k)
+            (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+              (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+          (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) x) (b k))))
+    fun
+      (hactive :
+        Not
+          (@Exists.{1} (Fin m) fun (k : Fin m) =>
+            And (@Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k)
+              (And
+                (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                  (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                    (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                      (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+                (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) x) (b k))))) =>
+    hnot
+      (@Exists.intro.{1} (RectangleCLT.Vector r)
+        (fun (x : RectangleCLT.Vector r) =>
+          ∀ (k : Fin m),
+            @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+              @LT.lt.{0} Real Real.instLT (@RectangleCLT.faceDot r (u k) x) (b k))
+        x
+        fun (k : Fin m)
+          (hk : @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k) =>
+        @Classical.byContradiction (@LT.lt.{0} Real Real.instLT (@RectangleCLT.faceDot r (u k) x) (b k))
+          fun (hstrict : Not (@LT.lt.{0} Real Real.instLT (@RectangleCLT.faceDot r (u k) x) (b k))) =>
+          @letFun.{0, 0} (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) x) (b k))
+            (fun (heq : @Eq.{1} Real (@RectangleCLT.faceDot r (u k) x) (b k)) => False)
+            (@le_antisymm.{0} Real Real.partialOrder (@RectangleCLT.faceDot r (u k) x) (b k) (hx k hk)
+              (@le_of_not_gt.{0} Real Real.linearOrder (b k) (@RectangleCLT.faceDot r (u k) x) hstrict))
+            fun (heq : @Eq.{1} Real (@RectangleCLT.faceDot r (u k) x) (b k)) =>
+            @letFun.{0, 0}
+              (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                  (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                    (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+              (fun
+                  (hn :
+                    @Ne.{1} (RectangleCLT.Vector r) (u k)
+                      (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                        (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                          (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero)))) =>
+                False)
+              (@Or.casesOn
+                (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                  (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                    (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                      (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+                (@Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+                (fun
+                    (x :
+                      Or
+                        (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                          (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                            (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                              (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) =>
+                                Real.instZero))))
+                        (@Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) =>
+                  @Ne.{1} (RectangleCLT.Vector r) (u k)
+                    (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                      (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                        (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+                (hreg k hk)
+                (fun
+                    (hn :
+                      @Ne.{1} (RectangleCLT.Vector r) (u k)
+                        (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                          (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                            (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) =>
+                              Real.instZero)))) =>
+                  hn)
+                fun (hb : @Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+                  (hz :
+                    @Eq.{1} (RectangleCLT.Vector r) (u k)
+                      (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                        (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                          (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero)))) =>
+                hb
+                  (@Eq.mp.{0} (@Eq.{1} Real (b k) (@RectangleCLT.faceDot r (u k) x))
+                    (@Eq.{1} Real (b k)
+                      (@OfNat.ofNat.{0} Real 0
+                        (@Zero.toOfNat0.{0} Real
+                          (@AddZeroClass.toZero.{0} Real
+                            (@AddMonoid.toAddZeroClass.{0} Real
+                              (@AddCommMonoid.toAddMonoid.{0} Real Real.instAddCommMonoid))))))
+                    (@congrArg.{1, 1} Real Prop
+                      (@Finset.sum.{0, 0} (Fin r) Real Real.instAddCommMonoid (@Finset.univ.{0} (Fin r) (Fin.fintype r))
+                        fun (j : Fin r) =>
+                        @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (u k j) (x j))
+                      (@OfNat.ofNat.{0} Real 0
+                        (@Zero.toOfNat0.{0} Real
+                          (@AddZeroClass.toZero.{0} Real
+                            (@AddMonoid.toAddZeroClass.{0} Real
+                              (@AddCommMonoid.toAddMonoid.{0} Real Real.instAddCommMonoid)))))
+                      (@Eq.{1} Real (b k))
+                      (@Eq.trans.{1} Real
+                        (@Finset.sum.{0, 0} (Fin r) Real Real.instAddCommMonoid
+                          (@Finset.univ.{0} (Fin r) (Fin.fintype r)) fun (j : Fin r) =>
+                          @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (u k j) (x j))
+                        (@Finset.sum.{0, 0} (Fin r) Real Real.instAddCommMonoid
+                          (@Finset.univ.{0} (Fin r) (Fin.fintype r)) fun (x : Fin r) =>
+                          @OfNat.ofNat.{0} Real 0
+                            (@Zero.toOfNat0.{0} Real
+                              (@MulZeroClass.toZero.{0} Real
+                                (@NonUnitalNonAssocSemiring.toMulZeroClass.{0} Real
+                                  (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+                                    (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+                                      (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                                        (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                                          (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real
+                                            Real.normedCommRing)))))))))
+                        (@OfNat.ofNat.{0} Real 0
+                          (@Zero.toOfNat0.{0} Real
+                            (@AddZeroClass.toZero.{0} Real
+                              (@AddMonoid.toAddZeroClass.{0} Real
+                                (@AddCommMonoid.toAddMonoid.{0} Real Real.instAddCommMonoid)))))
+                        (@Finset.sum_congr.{0, 0} (Fin r) Real (@Finset.univ.{0} (Fin r) (Fin.fintype r))
+                          (@Finset.univ.{0} (Fin r) (Fin.fintype r)) Real.instAddCommMonoid
+                          (fun (j : Fin r) =>
+                            @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (u k j) (x j))
+                          (fun (x : Fin r) =>
+                            @OfNat.ofNat.{0} Real 0
+                              (@Zero.toOfNat0.{0} Real
+                                (@MulZeroClass.toZero.{0} Real
+                                  (@NonUnitalNonAssocSemiring.toMulZeroClass.{0} Real
+                                    (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+                                      (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+                                        (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                                          (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                                            (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real
+                                              Real.normedCommRing)))))))))
+                          (@Eq.refl.{1} (Finset.{0} (Fin r)) (@Finset.univ.{0} (Fin r) (Fin.fintype r)))
+                          fun (x_1 : Fin r)
+                            (a :
+                              @Membership.mem.{0, 0} (Fin r) (Finset.{0} (Fin r)) (@Finset.instMembership.{0} (Fin r))
+                                (@Finset.univ.{0} (Fin r) (Fin.fintype r)) x_1) =>
+                          @Eq.trans.{1} Real
+                            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (u k x_1) (x x_1))
+                            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                              (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                                  (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) =>
+                                    Real.instZero))
+                                x_1)
+                              (x x_1))
+                            (@OfNat.ofNat.{0} Real 0
+                              (@Zero.toOfNat0.{0} Real
+                                (@MulZeroClass.toZero.{0} Real
+                                  (@NonUnitalNonAssocSemiring.toMulZeroClass.{0} Real
+                                    (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+                                      (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+                                        (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                                          (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                                            (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real
+                                              Real.normedCommRing)))))))))
+                            (@congrArg.{1, 1} (Fin r → Real) Real (u k)
+                              (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                                  (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) =>
+                                    Real.instZero)))
+                              (fun (x_2 : Fin r → Real) =>
+                                @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (x_2 x_1) (x x_1))
+                              hz)
+                            (@MulZeroClass.zero_mul.{0} Real
+                              (@NonUnitalNonAssocSemiring.toMulZeroClass.{0} Real
+                                (@NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring.{0} Real
+                                  (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocCommSemiring.{0} Real
+                                    (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Real
+                                      (@NonUnitalNormedCommRing.toNonUnitalCommRing.{0} Real
+                                        (@NormedCommRing.toNonUnitalNormedCommRing.{0} Real Real.normedCommRing))))))
+                              (x x_1)))
+                        (@Finset.sum_const_zero.{0, 0} (Fin r) Real (@Finset.univ.{0} (Fin r) (Fin.fintype r))
+                          Real.instAddCommMonoid)))
+                    (@Eq.symm.{1} Real (@RectangleCLT.faceDot r (u k) x) (b k) heq)))
+              fun
+                (hn :
+                  @Ne.{1} (RectangleCLT.Vector r) (u k)
+                    (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                      (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                        (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero)))) =>
+              hactive
+                (@Exists.intro.{1} (Fin m)
+                  (fun (k : Fin m) =>
+                    And (@Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k)
+                      (And
+                        (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                          (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                            (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                              (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) =>
+                                Real.instZero))))
+                        (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) x) (b k))))
+                  k
+                  (@And.intro
+                    (@Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k)
+                    (And
+                      (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                        (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                          (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                            (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+                      (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) x) (b k)))
+                    hk
+                    (@And.intro
+                      (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                        (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                          (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                            (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+                      (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) x) (b k)) hn heq))))
+theorem RectangleCLTArxivV1.ae_not_mem_gaussianFiniteThresholdEvent_of_no_strictInterior : ∀ {m r : Nat}
+  (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m),
+  (∀ (k : Fin m),
+      @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+        Or
+          (@Ne.{1} (RectangleCLT.Vector r) (u k)
+            (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+              (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+          (@Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) →
+    Not (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s u b) →
+      @Filter.Eventually.{0} (RectangleCLT.Vector r)
+        (fun (g : RectangleCLT.Vector r) =>
+          Not
+            (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+              (@Set.instMembership.{0} (RectangleCLT.Vector r))
+              (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) g))
+        (@MeasureTheory.ae.{0, 0} (RectangleCLT.Vector r)
+          (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (@MeasureTheory.Measure.instOuterMeasureClass.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (RectangleCLT.standardGaussian r)) :=
+fun {m r : Nat} (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m)
+    (hreg :
+      ∀ (k : Fin m),
+        @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+          Or
+            (@Ne.{1} (RectangleCLT.Vector r) (u k)
+              (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                  (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+            (@Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))))
+    (hnot : Not (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s u b)) =>
+  @Filter.mp_mem.{0} (RectangleCLT.Vector r)
+    (@MeasureTheory.ae.{0, 0} (RectangleCLT.Vector r)
+      (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+        (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+      (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+        (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+      (@MeasureTheory.Measure.instOuterMeasureClass.{0} (RectangleCLT.Vector r)
+        (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+      (RectangleCLT.standardGaussian r))
+    (@setOf.{0} (Fin r → Real) fun (x : Fin r → Real) =>
+      (fun (g : Fin r → Real) =>
+          ∀ (j : Fin m),
+            @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s j →
+              @Ne.{1} Real (@RectangleCLT.faceDot r (u j) g) (b j))
+        x)
+    (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+      (fun (g : RectangleCLT.Vector r) =>
+          Not
+            (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+              (@Set.instMembership.{0} (RectangleCLT.Vector r))
+              (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) g))
+        x)
+    (@RectangleCLTArxivV1.gaussianFiniteThreshold_ae_no_boundary_of_slack m r s u b hreg)
+    (@Filter.univ_mem'.{0} (RectangleCLT.Vector r)
+      (@MeasureTheory.ae.{0, 0} (RectangleCLT.Vector r)
+        (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (@MeasureTheory.Measure.instOuterMeasureClass.{0} (RectangleCLT.Vector r)
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (RectangleCLT.standardGaussian r))
+      (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+        @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+            (@Set.instMembership.{0} (RectangleCLT.Vector r))
+            (@setOf.{0} (Fin r → Real) fun (x : Fin r → Real) =>
+              (fun (g : Fin r → Real) =>
+                  ∀ (j : Fin m),
+                    @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s j →
+                      @Ne.{1} Real (@RectangleCLT.faceDot r (u j) g) (b j))
+                x)
+            x →
+          @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+            (@Set.instMembership.{0} (RectangleCLT.Vector r))
+            (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+              (fun (g : RectangleCLT.Vector r) =>
+                  Not
+                    (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                      (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                      (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) g))
+                x)
+            x)
+      (@id.{0}
+        (∀ (a : RectangleCLT.Vector r),
+          @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+            (@Set.instMembership.{0} (RectangleCLT.Vector r))
+            (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+              @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                  (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                  (@setOf.{0} (Fin r → Real) fun (x : Fin r → Real) =>
+                    (fun (g : Fin r → Real) =>
+                        ∀ (j : Fin m),
+                          @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s j →
+                            @Ne.{1} Real (@RectangleCLT.faceDot r (u j) g) (b j))
+                      x)
+                  x →
+                @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                  (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                  (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+                    (fun (g : RectangleCLT.Vector r) =>
+                        Not
+                          (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                            (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                            (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) g))
+                      x)
+                  x)
+            a)
+        fun (g : RectangleCLT.Vector r)
+          (hg :
+            ∀ (j : Fin m),
+              @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s j →
+                @Ne.{1} Real (@RectangleCLT.faceDot r (u j) g) (b j))
+          (hgin :
+            @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+              (@Set.instMembership.{0} (RectangleCLT.Vector r))
+              (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) g) =>
+        @Exists.casesOn.{1} (Fin m)
+          (fun (k : Fin m) =>
+            And (@Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k)
+              (And
+                (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                  (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                    (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                      (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+                (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) g) (b k))))
+          (fun
+              (x :
+                @Exists.{1} (Fin m) fun (k : Fin m) =>
+                  And (@Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k)
+                    (And
+                      (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                        (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                          (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                            (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+                      (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) g) (b k)))) =>
+            False)
+          (@RectangleCLTArxivV1.gaussianFiniteThresholdEvent_has_nonzero_active_of_no_strictInterior m r s u b hreg hnot
+            g hgin)
+          fun (k : Fin m)
+            (h :
+              And (@Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k)
+                (And
+                  (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                    (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                      (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                        (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+                  (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) g) (b k)))) =>
+          @And.casesOn.{0}
+            (@Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k)
+            (And
+              (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                  (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                    (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+              (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) g) (b k)))
+            (fun
+                (x :
+                  And (@Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k)
+                    (And
+                      (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                        (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                          (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                            (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+                      (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) g) (b k)))) =>
+              False)
+            h
+            fun (hk : @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k)
+              (right :
+                And
+                  (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                    (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                      (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                        (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+                  (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) g) (b k))) =>
+            @And.casesOn.{0}
+              (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                  (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                    (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+              (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) g) (b k))
+              (fun
+                  (x :
+                    And
+                      (@Ne.{1} (RectangleCLT.Vector r) (u k)
+                        (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                          (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                            (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+                      (@Eq.{1} Real (@RectangleCLT.faceDot r (u k) g) (b k))) =>
+                False)
+              right
+              fun
+                (left :
+                  @Ne.{1} (RectangleCLT.Vector r) (u k)
+                    (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                      (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                        (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+                (heq : @Eq.{1} Real (@RectangleCLT.faceDot r (u k) g) (b k)) =>
+              hg k hk heq))
+theorem RectangleCLTArxivV1.gaussianFiniteThresholdEvent_measure_zero_of_no_strictInterior : ∀ {m r : Nat}
+  (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m),
+  (∀ (k : Fin m),
+      @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+        Or
+          (@Ne.{1} (RectangleCLT.Vector r) (u k)
+            (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+              (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+          (@Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) →
+    Not (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s u b) →
+      @Eq.{1} ENNReal
+        (@DFunLike.coe.{1, 1, 1}
+          (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (Set.{0} (RectangleCLT.Vector r)) (fun (x : Set.{0} (RectangleCLT.Vector r)) => ENNReal)
+          (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (RectangleCLT.standardGaussian r) (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b))
+        (@OfNat.ofNat.{0} ENNReal 0 (@Zero.toOfNat0.{0} ENNReal instENNRealZero)) :=
+fun {m r : Nat} (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m)
+    (hreg :
+      ∀ (k : Fin m),
+        @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+          Or
+            (@Ne.{1} (RectangleCLT.Vector r) (u k)
+              (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                  (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+            (@Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))))
+    (hnot : Not (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s u b)) =>
+  @Eq.mp.{0}
+    (@Filter.Eventually.{0} (RectangleCLT.Vector r)
+      (fun (g : RectangleCLT.Vector r) =>
+        Not
+          (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+            (@Set.instMembership.{0} (RectangleCLT.Vector r))
+            (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) g))
+      (@MeasureTheory.ae.{0, 0} (RectangleCLT.Vector r)
+        (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (@MeasureTheory.Measure.instOuterMeasureClass.{0} (RectangleCLT.Vector r)
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (RectangleCLT.standardGaussian r)))
+    (@Eq.{1} ENNReal
+      (@DFunLike.coe.{1, 1, 1}
+        (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (Set.{0} (RectangleCLT.Vector r)) (fun (x : Set.{0} (RectangleCLT.Vector r)) => ENNReal)
+        (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (RectangleCLT.standardGaussian r)
+        (@setOf.{0} (RectangleCLT.Vector r) fun (a : RectangleCLT.Vector r) =>
+          @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+            (@Set.instMembership.{0} (RectangleCLT.Vector r))
+            (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) a))
+      (@OfNat.ofNat.{0} ENNReal 0 (@Zero.toOfNat0.{0} ENNReal instENNRealZero)))
+    (@Eq.trans.{1} Prop
+      (@Filter.Eventually.{0} (RectangleCLT.Vector r)
+        (fun (a : RectangleCLT.Vector r) =>
+          Not
+            (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+              (@Set.instMembership.{0} (RectangleCLT.Vector r))
+              (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) a))
+        (@MeasureTheory.ae.{0, 0} (RectangleCLT.Vector r)
+          (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (@MeasureTheory.Measure.instOuterMeasureClass.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (RectangleCLT.standardGaussian r)))
+      (@Eq.{1} ENNReal
+        (@DFunLike.coe.{1, 1, 1}
+          (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (Set.{0} (RectangleCLT.Vector r)) (fun (x : Set.{0} (RectangleCLT.Vector r)) => ENNReal)
+          (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (RectangleCLT.standardGaussian r)
+          (@setOf.{0} (RectangleCLT.Vector r) fun (a : RectangleCLT.Vector r) =>
+            Not
+              (Not
+                (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                  (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                  (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) a))))
+        (@OfNat.ofNat.{0} ENNReal 0 (@Zero.toOfNat0.{0} ENNReal instENNRealZero)))
+      (@Eq.{1} ENNReal
+        (@DFunLike.coe.{1, 1, 1}
+          (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (Set.{0} (RectangleCLT.Vector r)) (fun (x : Set.{0} (RectangleCLT.Vector r)) => ENNReal)
+          (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (RectangleCLT.standardGaussian r)
+          (@setOf.{0} (RectangleCLT.Vector r)
+            (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+              (@Set.instMembership.{0} (RectangleCLT.Vector r))
+              (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b))))
+        (@OfNat.ofNat.{0} ENNReal 0 (@Zero.toOfNat0.{0} ENNReal instENNRealZero)))
+      (@RectangleCLTArxivV1.gaussianFiniteThresholdEvent_measure_zero_of_no_strictInterior._proof_1.{0, 0}
+        (RectangleCLT.Vector r)
+        (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (@MeasureTheory.Measure.instOuterMeasureClass.{0} (RectangleCLT.Vector r)
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (RectangleCLT.standardGaussian r) fun (a : RectangleCLT.Vector r) =>
+        Not
+          (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+            (@Set.instMembership.{0} (RectangleCLT.Vector r))
+            (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) a))
+      (@congrArg.{1, 1} (RectangleCLT.Vector r → Prop) Prop
+        (fun (x : RectangleCLT.Vector r) =>
+          Not
+            (Not
+              (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) x)))
+        (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+          (@Set.instMembership.{0} (RectangleCLT.Vector r))
+          (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b))
+        (fun (x : RectangleCLT.Vector r → Prop) =>
+          @Eq.{1} ENNReal
+            (@DFunLike.coe.{1, 1, 1}
+              (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+                (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+              (Set.{0} (RectangleCLT.Vector r)) (fun (x : Set.{0} (RectangleCLT.Vector r)) => ENNReal)
+              (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+                (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+              (RectangleCLT.standardGaussian r) (@setOf.{0} (RectangleCLT.Vector r) x))
+            (@OfNat.ofNat.{0} ENNReal 0 (@Zero.toOfNat0.{0} ENNReal instENNRealZero)))
+        (@funext.{1, 1} (RectangleCLT.Vector r) (fun (x : RectangleCLT.Vector r) => Prop)
+          (fun (x : RectangleCLT.Vector r) =>
+            Not
+              (Not
+                (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                  (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                  (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) x)))
+          (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+            (@Set.instMembership.{0} (RectangleCLT.Vector r))
+            (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b))
+          fun (a : RectangleCLT.Vector r) =>
+          @RectangleCLTArxivV1.gaussianFiniteThresholdEvent_measure_zero_of_no_strictInterior._proof_2
+            (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+              (@Set.instMembership.{0} (RectangleCLT.Vector r))
+              (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) a))))
+    (@RectangleCLTArxivV1.ae_not_mem_gaussianFiniteThresholdEvent_of_no_strictInterior m r s u b hreg hnot)
+theorem RectangleCLTArxivV1.gaussianFiniteThresholdCDF_zero_of_no_strictInterior : ∀ {m r : Nat}
+  (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m),
+  (∀ (k : Fin m),
+      @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+        Or
+          (@Ne.{1} (RectangleCLT.Vector r) (u k)
+            (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+              (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+          (@Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) →
+    Not (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s u b) →
+      @Eq.{1} Real (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdCDF m r s u b)
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) :=
+fun {m r : Nat} (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m)
+    (hreg :
+      ∀ (k : Fin m),
+        @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+          Or
+            (@Ne.{1} (RectangleCLT.Vector r) (u k)
+              (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                  (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+            (@Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))))
+    (hnot : Not (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s u b)) =>
+  @id.{0}
+    (@Eq.{1} Real (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdCDF m r s u b)
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+    (@Eq.mpr.{0}
+      (@Eq.{1} Real
+        (ENNReal.toReal
+          (@DFunLike.coe.{1, 1, 1}
+            (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+              (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+            (Set.{0} (RectangleCLT.Vector r)) (fun (x : Set.{0} (RectangleCLT.Vector r)) => ENNReal)
+            (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+              (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+            (RectangleCLT.standardGaussian r) (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b)))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+      (@Eq.{1} Real (ENNReal.toReal (@OfNat.ofNat.{0} ENNReal 0 (@Zero.toOfNat0.{0} ENNReal instENNRealZero)))
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+      (@id.{0}
+        (@Eq.{1} Prop
+          (@Eq.{1} Real
+            (ENNReal.toReal
+              (@DFunLike.coe.{1, 1, 1}
+                (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+                  (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) =>
+                    Real.measurableSpace))
+                (Set.{0} (RectangleCLT.Vector r)) (fun (x : Set.{0} (RectangleCLT.Vector r)) => ENNReal)
+                (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+                  (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) =>
+                    Real.measurableSpace))
+                (RectangleCLT.standardGaussian r)
+                (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b)))
+            (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+          (@Eq.{1} Real (ENNReal.toReal (@OfNat.ofNat.{0} ENNReal 0 (@Zero.toOfNat0.{0} ENNReal instENNRealZero)))
+            (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))))
+        (@congrArg.{1, 1} ENNReal Prop
+          (@DFunLike.coe.{1, 1, 1}
+            (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+              (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+            (Set.{0} (RectangleCLT.Vector r)) (fun (x : Set.{0} (RectangleCLT.Vector r)) => ENNReal)
+            (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+              (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+            (RectangleCLT.standardGaussian r) (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b))
+          (@OfNat.ofNat.{0} ENNReal 0 (@Zero.toOfNat0.{0} ENNReal instENNRealZero))
+          (fun (_a : ENNReal) =>
+            @Eq.{1} Real (ENNReal.toReal _a) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+          (@RectangleCLTArxivV1.gaussianFiniteThresholdEvent_measure_zero_of_no_strictInterior m r s u b hreg hnot)))
+      (@Eq.refl.{1} Real (ENNReal.toReal (@OfNat.ofNat.{0} ENNReal 0 (@Zero.toOfNat0.{0} ENNReal instENNRealZero)))))
+theorem RectangleCLTArxivV1.integral_gaussianFiniteThreshold_indicator_zero_of_no_strictInterior : ∀ {m r : Nat}
+  (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m),
+  (∀ (k : Fin m),
+      @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+        Or
+          (@Ne.{1} (RectangleCLT.Vector r) (u k)
+            (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+              (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+          (@Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) →
+    Not (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s u b) →
+      ∀ (f : RectangleCLT.Vector r → Real),
+        @Eq.{1} Real
+          (@MeasureTheory.integral.{0, 0} (RectangleCLT.Vector r) Real Real.normedAddCommGroup
+            (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+              (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+              (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace)
+            (RectangleCLT.standardGaussian r) fun (g : RectangleCLT.Vector r) =>
+            @Set.indicator.{0, 0} (RectangleCLT.Vector r) Real Real.instZero
+              (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) f g)
+          (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) :=
+fun {m r : Nat} (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m)
+    (hreg :
+      ∀ (k : Fin m),
+        @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+          Or
+            (@Ne.{1} (RectangleCLT.Vector r) (u k)
+              (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                  (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+            (@Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))))
+    (hnot : Not (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s u b)) (f : RectangleCLT.Vector r → Real) =>
+  @MeasureTheory.integral_eq_zero_of_ae.{0, 0} (RectangleCLT.Vector r) Real Real.normedAddCommGroup
+    (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+      (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+      (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+    (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace)
+    (RectangleCLT.standardGaussian r)
+    (@Set.indicator.{0, 0} (RectangleCLT.Vector r) Real Real.instZero
+      (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) f)
+    (@Filter.mp_mem.{0} (RectangleCLT.Vector r)
+      (@MeasureTheory.ae.{0, 0} (RectangleCLT.Vector r)
+        (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (@MeasureTheory.Measure.instOuterMeasureClass.{0} (RectangleCLT.Vector r)
+          (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+        (RectangleCLT.standardGaussian r))
+      (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+        (fun (g : RectangleCLT.Vector r) =>
+            Not
+              (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) g))
+          x)
+      (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+        (fun (x : RectangleCLT.Vector r) =>
+            @Eq.{1} Real
+              (@Set.indicator.{0, 0} (RectangleCLT.Vector r) Real Real.instZero
+                (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) f x)
+              (@OfNat.ofNat.{0} (RectangleCLT.Vector r → Real) 0
+                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r → Real)
+                  (@Pi.instZero.{0, 0} (RectangleCLT.Vector r) (fun (a : RectangleCLT.Vector r) => Real)
+                    fun (i : RectangleCLT.Vector r) =>
+                    @NegZeroClass.toZero.{0} Real
+                      (@SubNegZeroMonoid.toNegZeroClass.{0} Real
+                        (@SubtractionMonoid.toSubNegZeroMonoid.{0} Real
+                          (@SubtractionCommMonoid.toSubtractionMonoid.{0} Real
+                            (@AddCommGroup.toDivisionAddCommMonoid.{0} Real
+                              (@NormedAddCommGroup.toAddCommGroup.{0} Real Real.normedAddCommGroup)))))))
+                x))
+          x)
+      (@RectangleCLTArxivV1.ae_not_mem_gaussianFiniteThresholdEvent_of_no_strictInterior m r s u b hreg hnot)
+      (@Filter.univ_mem'.{0} (RectangleCLT.Vector r)
+        (@MeasureTheory.ae.{0, 0} (RectangleCLT.Vector r)
+          (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (@MeasureTheory.Measure.instOuterMeasureClass.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (RectangleCLT.standardGaussian r))
+        (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+          @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+              (@Set.instMembership.{0} (RectangleCLT.Vector r))
+              (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+                (fun (g : RectangleCLT.Vector r) =>
+                    Not
+                      (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                        (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                        (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) g))
+                  x)
+              x →
+            @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+              (@Set.instMembership.{0} (RectangleCLT.Vector r))
+              (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+                (fun (x : RectangleCLT.Vector r) =>
+                    @Eq.{1} Real
+                      (@Set.indicator.{0, 0} (RectangleCLT.Vector r) Real Real.instZero
+                        (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) f x)
+                      (@OfNat.ofNat.{0} (RectangleCLT.Vector r → Real) 0
+                        (@Zero.toOfNat0.{0} (RectangleCLT.Vector r → Real)
+                          (@Pi.instZero.{0, 0} (RectangleCLT.Vector r) (fun (a : RectangleCLT.Vector r) => Real)
+                            fun (i : RectangleCLT.Vector r) =>
+                            @NegZeroClass.toZero.{0} Real
+                              (@SubNegZeroMonoid.toNegZeroClass.{0} Real
+                                (@SubtractionMonoid.toSubNegZeroMonoid.{0} Real
+                                  (@SubtractionCommMonoid.toSubtractionMonoid.{0} Real
+                                    (@AddCommGroup.toDivisionAddCommMonoid.{0} Real
+                                      (@NormedAddCommGroup.toAddCommGroup.{0} Real Real.normedAddCommGroup)))))))
+                        x))
+                  x)
+              x)
+        (@id.{0}
+          (∀ (a : RectangleCLT.Vector r),
+            @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+              (@Set.instMembership.{0} (RectangleCLT.Vector r))
+              (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+                @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                    (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                    (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+                      (fun (g : RectangleCLT.Vector r) =>
+                          Not
+                            (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                              (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                              (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) g))
+                        x)
+                    x →
+                  @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                    (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                    (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+                      (fun (x : RectangleCLT.Vector r) =>
+                          @Eq.{1} Real
+                            (@Set.indicator.{0, 0} (RectangleCLT.Vector r) Real Real.instZero
+                              (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) f x)
+                            (@OfNat.ofNat.{0} (RectangleCLT.Vector r → Real) 0
+                              (@Zero.toOfNat0.{0} (RectangleCLT.Vector r → Real)
+                                (@Pi.instZero.{0, 0} (RectangleCLT.Vector r) (fun (a : RectangleCLT.Vector r) => Real)
+                                  fun (i : RectangleCLT.Vector r) =>
+                                  @NegZeroClass.toZero.{0} Real
+                                    (@SubNegZeroMonoid.toNegZeroClass.{0} Real
+                                      (@SubtractionMonoid.toSubNegZeroMonoid.{0} Real
+                                        (@SubtractionCommMonoid.toSubtractionMonoid.{0} Real
+                                          (@AddCommGroup.toDivisionAddCommMonoid.{0} Real
+                                            (@NormedAddCommGroup.toAddCommGroup.{0} Real Real.normedAddCommGroup)))))))
+                              x))
+                        x)
+                    x)
+              a)
+          fun (g : RectangleCLT.Vector r)
+            (hg :
+              Not
+                (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                  (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                  (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) g)) =>
+          @Set.indicator_of_not_mem.{0, 0} (RectangleCLT.Vector r) Real Real.instZero
+            (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b) g hg f)))
+theorem RectangleCLTArxivV1.gaussianFiniteThresholdRadialTrace_zero_of_no_strictInterior : ∀ {m r : Nat}
+  (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m),
+  (∀ (k : Fin m),
+      @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+        Or
+          (@Ne.{1} (RectangleCLT.Vector r) (u k)
+            (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+              (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+          (@Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) →
+    Not (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s u b) →
+      @Eq.{1} Real (@RectangleCLTArxivV1.gaussianFiniteThresholdRadialTrace m r s u b)
+        (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) :=
+fun {m r : Nat} (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m)
+    (hreg :
+      ∀ (k : Fin m),
+        @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+          Or
+            (@Ne.{1} (RectangleCLT.Vector r) (u k)
+              (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                  (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+            (@Ne.{1} Real (b k) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))))
+    (hnot : Not (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s u b)) =>
+  @RectangleCLTArxivV1.integral_gaussianFiniteThreshold_indicator_zero_of_no_strictInterior m r s u b hreg hnot
+    fun (g : RectangleCLT.Vector r) =>
+    @HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (@RectangleCLT.vectorNormSq r g)
+      (@Nat.cast.{0} Real Real.instNatCast r)
+theorem RectangleCLTArxivV1.hardGaussianPairSectionProbability_zero_of_no_strictResidualInterior : ∀ {m r : Nat}
+  (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m) (e f : RectangleCLT.Vector r)
+  (a c : Real),
+  @Eq.{1} Real (@RectangleCLT.faceDot r e f) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) →
+    (∀ (k : Fin m),
+        @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+          Or
+            (@Ne.{1} (RectangleCLT.Vector r) (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f k)
+              (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                  (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+            (@Ne.{1} Real (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c k)
+              (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) →
+      Not
+          (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+            (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c)) →
+        @Eq.{1} Real (@RectangleCLTArxivV1.hardGaussianPairSectionProbability m r s u b e f a c)
+          (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) :=
+fun {m r : Nat} (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m)
+    (e f : RectangleCLT.Vector r) (a c : Real)
+    (hef : @Eq.{1} Real (@RectangleCLT.faceDot r e f) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+    (hreg :
+      ∀ (k : Fin m),
+        @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+          Or
+            (@Ne.{1} (RectangleCLT.Vector r) (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f k)
+              (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                  (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+            (@Ne.{1} Real (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c k)
+              (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))))
+    (hnot :
+      Not
+        (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+          (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c))) =>
+  @Eq.mpr.{0}
+    (@Eq.{1} Real (@RectangleCLTArxivV1.hardGaussianPairSectionProbability m r s u b e f a c)
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+    (@Eq.{1} Real
+      (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdCDF m r s
+        (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+        (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c))
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+    (@id.{0}
+      (@Eq.{1} Prop
+        (@Eq.{1} Real (@RectangleCLTArxivV1.hardGaussianPairSectionProbability m r s u b e f a c)
+          (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+        (@Eq.{1} Real
+          (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdCDF m r s
+            (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+            (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c))
+          (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))))
+      (@congrArg.{1, 1} Real Prop (@RectangleCLTArxivV1.hardGaussianPairSectionProbability m r s u b e f a c)
+        (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdCDF m r s
+          (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+          (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c))
+        (fun (_a : Real) => @Eq.{1} Real _a (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+        (@RectangleCLTArxivV1.hardGaussianPairSectionProbability_eq_residual_CDF m r s u b e f a c hef)))
+    (@RectangleCLTArxivV1.gaussianFiniteThresholdCDF_zero_of_no_strictInterior m r s
+      (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+      (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c) hreg hnot)
+theorem RectangleCLTArxivV1.hardGaussianPairSignedSection_zero_of_no_strictResidualInterior : ∀ {m r : Nat}
+  (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m) (e f : RectangleCLT.Vector r)
+  (a c : Real),
+  @Eq.{1} Real (@RectangleCLT.faceDot r e f) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) →
+    (∀ (k : Fin m),
+        @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+          Or
+            (@Ne.{1} (RectangleCLT.Vector r) (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f k)
+              (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                  (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+            (@Ne.{1} Real (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c k)
+              (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))) →
+      Not
+          (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+            (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c)) →
+        @Eq.{1} Real (@RectangleCLTArxivV1.hardGaussianPairSignedSection m r s u b e f a c)
+          (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)) :=
+fun {m r : Nat} (s : Finset.{0} (Fin m)) (u : Fin m → RectangleCLT.Vector r) (b : RectangleCLT.Vector m)
+    (e f : RectangleCLT.Vector r) (a c : Real)
+    (hef : @Eq.{1} Real (@RectangleCLT.faceDot r e f) (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+    (hreg :
+      ∀ (k : Fin m),
+        @Membership.mem.{0, 0} (Fin m) (Finset.{0} (Fin m)) (@Finset.instMembership.{0} (Fin m)) s k →
+          Or
+            (@Ne.{1} (RectangleCLT.Vector r) (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f k)
+              (@OfNat.ofNat.{0} (RectangleCLT.Vector r) 0
+                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r)
+                  (@Pi.instZero.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (i : Fin r) => Real.instZero))))
+            (@Ne.{1} Real (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c k)
+              (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero))))
+    (hnot :
+      Not
+        (@RectangleCLTArxivV1.HasStrictRetainedInterior m r s (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+          (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c))) =>
+  @id.{0}
+    (@Eq.{1} Real (@RectangleCLTArxivV1.hardGaussianPairSignedSection m r s u b e f a c)
+      (@OfNat.ofNat.{0} Real 0 (@Zero.toOfNat0.{0} Real Real.instZero)))
+    (@MeasureTheory.integral_eq_zero_of_ae.{0, 0} (RectangleCLT.Vector r) Real Real.normedAddCommGroup
+      (@InnerProductSpace.toNormedSpace.{0, 0} Real Real Real.instRCLike
+        (@NormedAddCommGroup.toSeminormedAddCommGroup.{0} Real Real.normedAddCommGroup)
+        (@RCLike.toInnerProductSpaceReal.{0} Real Real.instRCLike))
+      (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace)
+      (RectangleCLT.standardGaussian r)
+      (fun (a_1 : RectangleCLT.Vector r) =>
+        @Set.indicator.{0, 0} (RectangleCLT.Vector r) Real Real.instZero
+          (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b)
+          (fun (x : RectangleCLT.Vector r) =>
+            @HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (@RectangleCLT.vectorNormSq r x)
+              (@Nat.cast.{0} Real Real.instNatCast r))
+          (@RectangleCLT.Companion.SplitV4.gaussianPairSectionPoint r e f a c a_1))
+      (@Filter.mp_mem.{0} (RectangleCLT.Vector r)
+        (@MeasureTheory.ae.{0, 0} (RectangleCLT.Vector r)
+          (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (@MeasureTheory.Measure.instOuterMeasureClass.{0} (RectangleCLT.Vector r)
+            (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+          (RectangleCLT.standardGaussian r))
+        (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+          (fun (g : RectangleCLT.Vector r) =>
+              Not
+                (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                  (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                  (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s
+                    (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+                    (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c))
+                  g))
+            x)
+        (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+          (fun (x : RectangleCLT.Vector r) =>
+              @Eq.{1} Real
+                ((fun (a_1 : RectangleCLT.Vector r) =>
+                    @Set.indicator.{0, 0} (RectangleCLT.Vector r) Real Real.instZero
+                      (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b)
+                      (fun (x : RectangleCLT.Vector r) =>
+                        @HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                          (@RectangleCLT.vectorNormSq r x) (@Nat.cast.{0} Real Real.instNatCast r))
+                      (@RectangleCLT.Companion.SplitV4.gaussianPairSectionPoint r e f a c a_1))
+                  x)
+                (@OfNat.ofNat.{0} (RectangleCLT.Vector r → Real) 0
+                  (@Zero.toOfNat0.{0} (RectangleCLT.Vector r → Real)
+                    (@Pi.instZero.{0, 0} (RectangleCLT.Vector r) (fun (a : RectangleCLT.Vector r) => Real)
+                      fun (i : RectangleCLT.Vector r) =>
+                      @NegZeroClass.toZero.{0} Real
+                        (@SubNegZeroMonoid.toNegZeroClass.{0} Real
+                          (@SubtractionMonoid.toSubNegZeroMonoid.{0} Real
+                            (@SubtractionCommMonoid.toSubtractionMonoid.{0} Real
+                              (@AddCommGroup.toDivisionAddCommMonoid.{0} Real
+                                (@NormedAddCommGroup.toAddCommGroup.{0} Real Real.normedAddCommGroup)))))))
+                  x))
+            x)
+        (@RectangleCLTArxivV1.ae_not_mem_gaussianFiniteThresholdEvent_of_no_strictInterior m r s
+          (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+          (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c) hreg hnot)
+        (@Filter.univ_mem'.{0} (RectangleCLT.Vector r)
+          (@MeasureTheory.ae.{0, 0} (RectangleCLT.Vector r)
+            (@MeasureTheory.Measure.{0} (RectangleCLT.Vector r)
+              (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+            (@MeasureTheory.Measure.instFunLike.{0} (RectangleCLT.Vector r)
+              (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+            (@MeasureTheory.Measure.instOuterMeasureClass.{0} (RectangleCLT.Vector r)
+              (@MeasurableSpace.pi.{0, 0} (Fin r) (fun (a : Fin r) => Real) fun (a : Fin r) => Real.measurableSpace))
+            (RectangleCLT.standardGaussian r))
+          (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+            @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+                  (fun (g : RectangleCLT.Vector r) =>
+                      Not
+                        (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                          (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                          (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s
+                            (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+                            (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c))
+                          g))
+                    x)
+                x →
+              @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+                  (fun (x : RectangleCLT.Vector r) =>
+                      @Eq.{1} Real
+                        ((fun (a_2 : RectangleCLT.Vector r) =>
+                            @Set.indicator.{0, 0} (RectangleCLT.Vector r) Real Real.instZero
+                              (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b)
+                              (fun (x : RectangleCLT.Vector r) =>
+                                @HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                                  (@RectangleCLT.vectorNormSq r x) (@Nat.cast.{0} Real Real.instNatCast r))
+                              (@RectangleCLT.Companion.SplitV4.gaussianPairSectionPoint r e f a c a_2))
+                          x)
+                        (@OfNat.ofNat.{0} (RectangleCLT.Vector r → Real) 0
+                          (@Zero.toOfNat0.{0} (RectangleCLT.Vector r → Real)
+                            (@Pi.instZero.{0, 0} (RectangleCLT.Vector r) (fun (a : RectangleCLT.Vector r) => Real)
+                              fun (i : RectangleCLT.Vector r) =>
+                              @NegZeroClass.toZero.{0} Real
+                                (@SubNegZeroMonoid.toNegZeroClass.{0} Real
+                                  (@SubtractionMonoid.toSubNegZeroMonoid.{0} Real
+                                    (@SubtractionCommMonoid.toSubtractionMonoid.{0} Real
+                                      (@AddCommGroup.toDivisionAddCommMonoid.{0} Real
+                                        (@NormedAddCommGroup.toAddCommGroup.{0} Real Real.normedAddCommGroup)))))))
+                          x))
+                    x)
+                x)
+          (@id.{0}
+            (∀ (a_1 : RectangleCLT.Vector r),
+              @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+                  @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                      (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                      (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+                        (fun (g : RectangleCLT.Vector r) =>
+                            Not
+                              (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                                (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                                (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s
+                                  (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+                                  (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c))
+                                g))
+                          x)
+                      x →
+                    @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                      (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                      (@setOf.{0} (RectangleCLT.Vector r) fun (x : RectangleCLT.Vector r) =>
+                        (fun (x : RectangleCLT.Vector r) =>
+                            @Eq.{1} Real
+                              ((fun (a_3 : RectangleCLT.Vector r) =>
+                                  @Set.indicator.{0, 0} (RectangleCLT.Vector r) Real Real.instZero
+                                    (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b)
+                                    (fun (x : RectangleCLT.Vector r) =>
+                                      @HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+                                        (@RectangleCLT.vectorNormSq r x) (@Nat.cast.{0} Real Real.instNatCast r))
+                                    (@RectangleCLT.Companion.SplitV4.gaussianPairSectionPoint r e f a c a_3))
+                                x)
+                              (@OfNat.ofNat.{0} (RectangleCLT.Vector r → Real) 0
+                                (@Zero.toOfNat0.{0} (RectangleCLT.Vector r → Real)
+                                  (@Pi.instZero.{0, 0} (RectangleCLT.Vector r) (fun (a : RectangleCLT.Vector r) => Real)
+                                    fun (i : RectangleCLT.Vector r) =>
+                                    @NegZeroClass.toZero.{0} Real
+                                      (@SubNegZeroMonoid.toNegZeroClass.{0} Real
+                                        (@SubtractionMonoid.toSubNegZeroMonoid.{0} Real
+                                          (@SubtractionCommMonoid.toSubtractionMonoid.{0} Real
+                                            (@AddCommGroup.toDivisionAddCommMonoid.{0} Real
+                                              (@NormedAddCommGroup.toAddCommGroup.{0} Real
+                                                Real.normedAddCommGroup)))))))
+                                x))
+                          x)
+                      x)
+                a_1)
+            fun (g : RectangleCLT.Vector r)
+              (hg :
+                Not
+                  (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                    (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                    (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s
+                      (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+                      (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c))
+                    g)) =>
+            @Set.indicator_of_not_mem.{0, 0} (RectangleCLT.Vector r) Real Real.instZero
+              (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b)
+              (@RectangleCLT.Companion.SplitV4.gaussianPairSectionPoint r e f a c g)
+              (fun
+                  (h :
+                    @Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                      (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                      (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b)
+                      (@RectangleCLT.Companion.SplitV4.gaussianPairSectionPoint r e f a c g)) =>
+                hg
+                  (@Iff.mp
+                    (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                      (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                      (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s u b)
+                      (@RectangleCLT.Companion.SplitV4.gaussianPairSectionPoint r e f a c g))
+                    (@Membership.mem.{0, 0} (RectangleCLT.Vector r) (Set.{0} (RectangleCLT.Vector r))
+                      (@Set.instMembership.{0} (RectangleCLT.Vector r))
+                      (@RectangleCLT.Companion.SplitV4.gaussianFiniteThresholdEvent m r s
+                        (@RectangleCLTArxivV1.hardPairResidualNormals m r u e f)
+                        (@RectangleCLTArxivV1.hardPairResidualLevels m r u b e f a c))
+                      g)
+                    (@RectangleCLTArxivV1.gaussianPairSectionPoint_mem_event_iff m r s u b e f a c g hef) h))
+              fun (x : RectangleCLT.Vector r) =>
+              @HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) (@RectangleCLT.vectorNormSq r x)
+                (@Nat.cast.{0} Real Real.instNatCast r)))))

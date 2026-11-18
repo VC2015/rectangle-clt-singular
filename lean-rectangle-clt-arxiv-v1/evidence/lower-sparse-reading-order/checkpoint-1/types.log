@@ -1,0 +1,66 @@
+structure RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters : Type
+number of parameters: 0
+fields:
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta_pos : 0 < self.theta
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta_le_one : self.theta ≤ 1
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi_pos : 0 < self.pi
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi_le_one : self.pi ≤ 1
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude_pos : 0 < self.amplitude
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.variance_lt_half : self.theta * self.pi *
+        self.amplitude ^ 2 <
+      1 / 2
+constructor:
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.mk (theta pi amplitude : ℝ) (theta_pos : 0 < theta)
+    (theta_le_one : theta ≤ 1) (pi_pos : 0 < pi) (pi_le_one : pi ≤ 1) (amplitude_pos : 0 < amplitude)
+    (variance_lt_half : theta * pi * amplitude ^ 2 < 1 / 2) : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters
+RectangleCLTArxivV1.lowerSparseIntrinsicK_four : ∀ (n : ℕ) (L B : ℝ),
+  RectangleCLTArxivV1.lowerSparseIntrinsicK n L 4 B = B
+RectangleCLTArxivV1.lowerSparseIntrinsicRate_four : ∀ (n : ℕ) (L B g : ℝ),
+  RectangleCLTArxivV1.lowerSparseIntrinsicRate n L 4 B g = RectangleCLTArxivV1.lowerMaskedFourthIntrinsicRate n L B g
+RectangleCLTArxivV1.lowerSparseSequence_four : ∀ (B : ℕ → ℝ) (m : ℕ → ℕ) (n : ℕ),
+  RectangleCLTArxivV1.lowerSparseSequence 4 B m n = RectangleCLTArxivV1.lowerMaskedFourthSequence B m n
+@RectangleCLTArxivV1.lowerSparse_cube_dimension_sq_le_coordinateWidth_fourth : ∀ {n : ℕ} {ell B g c R : ℝ},
+  0 < ell →
+    2 ≤ B →
+      0 < c →
+        0 ≤ R →
+          c * √R ≤ g → ell ^ 3 * R ^ 2 / ↑n ≤ RectangleCLTArxivV1.lowerSparseCoordinateWidth n ell B g ^ 4 / (4 * c ^ 4)
+@RectangleCLTArxivV1.tendsto_lowerSparseEll_cube_dimensionLog_sq_div : ∀ {q : ℝ} {B : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ B n) →
+    (∀ (n : ℕ), 1 ≤ r n) →
+      Filter.Tendsto m Filter.atTop Filter.atTop →
+        Filter.Tendsto (fun n => RectangleCLT.Companion.SplitV4.sparseLowerKhat n (Real.log ↑(m n)) q (B n))
+            Filter.atTop Filter.atTop →
+          Filter.Tendsto
+              (fun n =>
+                RectangleCLTArxivV1.lowerSparseRawWidth n (Real.log ↑(m n)) q (B n)
+                  (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+              Filter.atTop (nhds 0) →
+            Filter.Tendsto (fun n => Real.log ↑(m n) ^ 3 * RectangleCLT.dimensionLog (r n) ^ 2 / ↑n) Filter.atTop
+              (nhds 0)
+@RectangleCLTArxivV1.lowerSparseCalibration_from_headline : ∀ {q : ℝ},
+  2 < q →
+    ∀ {B : ℕ → ℝ} {r m : ℕ → ℕ},
+      (∀ (n : ℕ), 2 ≤ B n) →
+        (∀ (n : ℕ), 1 ≤ r n) →
+          (∀ (n : ℕ), r n ≤ m n) →
+            Filter.Tendsto m Filter.atTop Filter.atTop →
+              Filter.Tendsto
+                  (fun n => RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q (B n))
+                  Filter.atTop Filter.atTop →
+                Filter.Tendsto
+                    (fun n =>
+                      Real.log
+                          (RectangleCLTArxivV1.lowerSparseIntrinsicK n (RectangleCLT.dimensionLog (r n * m n)) q
+                            (B n)) /
+                        RectangleCLT.dimensionLog (r n * m n))
+                    Filter.atTop (nhds 0) →
+                  Filter.Tendsto
+                      (fun n =>
+                        RectangleCLTArxivV1.lowerSparseIntrinsicRate n (RectangleCLT.dimensionLog (r n * m n)) q (B n)
+                          (RectangleCLTArxivV1.independentAbsGaussianMean (r n)))
+                      Filter.atTop (nhds 0) →
+                    RectangleCLTArxivV1.LowerSparseCalibration q B r m

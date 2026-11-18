@@ -1,0 +1,9 @@
+# Facet/ridge R4 transport handoff
+
+Ten `SupplementalHFourthTransport*.lean` modules are frozen. The core checkpoint has42 audited public declarations; the actual surface/regularity/averaging checkpoint has14. Independent lower_resume review PASS is `independent-lower-review.json`, with fresh independent67-target force/strict/type/dependency checkpoint at `independent-lower-checkpoint-1/run.json`. Source and exact passage hashes are in `correspondence/supplemental-h-fourth-transport-passages.json`; preserve its reviewed bytes.
+
+Actual surface endpoint: `ae_hardGaussianWeightedFacetIntegral_concentrated_base` in Averaged proves for arbitrary probability base (possibly singular), volume-AE threshold lists a, integrability and actual expectation E|J_f((a-Ux)/sigma)| <=16384 exp(3/2) exp128 K (sigma L sqrtL+delta L^2). The only probability premise is the displayed base concentration hypothesis, and sigma>0. All true surface measurability, affine AE regularity, normal-span bounds, Gaussian moments, Fubini, coefficient cancellation, disjoint tube sums and actual R4 transports are discharged.
+
+`abs_hardGaussianWeightedFacetIntegral_le_coefficient_sum` uses the true signed weighted facet surface functional and pairs two orientations before absolute values. `fourthRidgeNormalPoint_coefficient_identity` cancels the genuine Gram Jacobian; actual parallel terms vanish from local nonzero slack. The actual-radius generic tube bound is `abs_hardGaussianWeightedFacetIntegral_le_threeFace_tube`.
+
+The scope is the facet component and volume-AE thresholds, which is sufficient for the later independent continuous threshold mixture. This checkpoint does not claim J_e, full two-term H1, or the labelled-facet functional at every nongeneric empty/full polyhedron. Parent archive_h owns that remaining source assembly. No archive/Root/Audit edit or commit was made by bounded_intrinsic.

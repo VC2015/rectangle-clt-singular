@@ -1,0 +1,10 @@
+import RectangleCLTArxivV1.SkewLowerIntrinsic
+set_option pp.all true
+#check @RectangleCLTArxivV1.theorem_3_intrinsic
+#check @RectangleCLTArxivV1.theorem_3_intrinsic_positive_dimensions
+#print RectangleCLTArxivV1.SkewIndependentRawData
+#print RectangleCLTArxivV1.skewIntrinsicRate
+#check @RectangleCLTArxivV1.skewIntrinsicRate_eq_gaussianWidth
+#check @RectangleCLTArxivV1.tendsto_independentAbsGaussianMean_div_sqrt_two_log
+#check @RectangleCLTArxivV1.old_skew_rate_tendsto_zero_of_intrinsic
+#check @RectangleCLTArxivV1.skew_intrinsic_distance_liminf

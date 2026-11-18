@@ -1,0 +1,543 @@
+structure RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters : Type
+number of parameters: 0
+fields:
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta_pos : 0 < self.theta
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta_le_one : self.theta ≤ 1
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi_pos : 0 < self.pi
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi_le_one : self.pi ≤ 1
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude_pos : 0 < self.amplitude
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.variance_lt_half : self.theta * self.pi *
+        self.amplitude ^ 2 <
+      1 / 2
+constructor:
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.mk (theta pi amplitude : ℝ) (theta_pos : 0 < theta)
+    (theta_le_one : theta ≤ 1) (pi_pos : 0 < pi) (pi_le_one : pi ≤ 1) (amplitude_pos : 0 < amplitude)
+    (variance_lt_half : theta * pi * amplitude ^ 2 < 1 / 2) : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters
+structure RectangleCLTArxivV1.LowerRectangularFamilyProperties
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (n r m : ℕ) : Prop
+number of parameters: 4
+fields:
+  RectangleCLTArxivV1.LowerRectangularFamilyProperties.independent : ProbabilityTheory.iIndepFun
+      (RectangleCLTArxivV1.lowerFamilyRawObservations P) (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+  RectangleCLTArxivV1.LowerRectangularFamilyProperties.iid : ∀ (i j : Fin n),
+      ProbabilityTheory.IdentDistrib (RectangleCLTArxivV1.lowerFamilyRawObservations P i)
+        (RectangleCLTArxivV1.lowerFamilyRawObservations P j) (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+        (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+  RectangleCLTArxivV1.LowerRectangularFamilyProperties.symmetric : ∀ (i : Fin n),
+      ProbabilityTheory.IdentDistrib (RectangleCLTArxivV1.lowerFamilyRawObservations P i)
+        (fun z => -RectangleCLTArxivV1.lowerFamilyRawObservations P i z)
+        (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m) (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+  RectangleCLTArxivV1.LowerRectangularFamilyProperties.centered : ∀ (i : Fin n) (j : Fin (r * m)),
+      ∫ (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+          RectangleCLTArxivV1.lowerFamilyRawObservations P i z j ∂RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m =
+        0
+  RectangleCLTArxivV1.LowerRectangularFamilyProperties.second : ∀ (i : Fin n) (j k : Fin (r * m)),
+      ∫ (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+          RectangleCLTArxivV1.lowerFamilyRawObservations P i z j *
+            RectangleCLTArxivV1.lowerFamilyRawObservations P i z k ∂RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m =
+        RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance j k
+  RectangleCLTArxivV1.LowerRectangularFamilyProperties.unit_second : ∀ (i : Fin n) (j : Fin (r * m)),
+      ∫ (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+          RectangleCLTArxivV1.lowerFamilyRawObservations P i z j ^ 2 ∂RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m =
+        1
+  RectangleCLTArxivV1.LowerRectangularFamilyProperties.covariance : RectangleCLT.covariance
+        (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+        (RectangleCLT.sumVector (RectangleCLTArxivV1.lowerFamilyNormalizedObservations P)) =
+      RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance
+  RectangleCLTArxivV1.LowerRectangularFamilyProperties.rank : (RectangleCLTArxivV1.lowerFamilyCovariance r m
+          P.variance).rank =
+      r + m - 1
+  RectangleCLTArxivV1.LowerRectangularFamilyProperties.gap : RectangleCLT.pairGap
+        (RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance) =
+      P.variance
+  RectangleCLTArxivV1.LowerRectangularFamilyProperties.fourth : ∀ (i : Fin n) (j : Fin (r * m)),
+      ∫ (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+          RectangleCLTArxivV1.lowerFamilyRawObservations P i z j ^ 4 ∂RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m =
+        1 + 4 * P.variance - 5 * P.variance ^ 2 + P.theta * P.pi * P.amplitude ^ 4
+  RectangleCLTArxivV1.LowerRectangularFamilyProperties.envelope : ∀ (i : Fin n)
+      (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+      ‖RectangleCLTArxivV1.lowerFamilyRawObservations P i z‖ ≤
+        P.scale + P.amplitude * RectangleCLT.Companion.SplitV4.familyIndicator (z i).2.2.1
+  RectangleCLTArxivV1.LowerRectangularFamilyProperties.envelope_moment : ∀ (q : ℝ),
+      1 ≤ q →
+        ∀ (i : Fin n),
+          (∫ (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+                ‖RectangleCLTArxivV1.lowerFamilyRawObservations P i z‖ ^
+                  q ∂RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m) ^
+              (1 / q) ≤
+            P.scale + P.amplitude * P.theta ^ (1 / q)
+  RectangleCLTArxivV1.LowerRectangularFamilyProperties.gaussian : ∃ A,
+      A * A.transpose = RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance ∧
+        RectangleCLTArxivV1.lowerGridGaussianLaw r m P.scale √P.variance = RectangleCLT.gaussianLaw A ∧
+          P.scale * RectangleCLTArxivV1.independentAbsGaussianMean r ≤ RectangleCLTArxivV1.gaussianMaximumMean A ∧
+            RectangleCLTArxivV1.gaussianMaximumMean A ≤
+              P.scale * RectangleCLTArxivV1.independentAbsGaussianMean r +
+                √P.variance * RectangleCLTArxivV1.independentAbsGaussianMean m
+constructor:
+  RectangleCLTArxivV1.LowerRectangularFamilyProperties.mk {P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters}
+    {n r m : ℕ}
+    (independent :
+      ProbabilityTheory.iIndepFun (RectangleCLTArxivV1.lowerFamilyRawObservations P)
+        (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m))
+    (iid :
+      ∀ (i j : Fin n),
+        ProbabilityTheory.IdentDistrib (RectangleCLTArxivV1.lowerFamilyRawObservations P i)
+          (RectangleCLTArxivV1.lowerFamilyRawObservations P j) (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+          (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m))
+    (symmetric :
+      ∀ (i : Fin n),
+        ProbabilityTheory.IdentDistrib (RectangleCLTArxivV1.lowerFamilyRawObservations P i)
+          (fun z => -RectangleCLTArxivV1.lowerFamilyRawObservations P i z)
+          (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m) (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m))
+    (centered :
+      ∀ (i : Fin n) (j : Fin (r * m)),
+        ∫ (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+            RectangleCLTArxivV1.lowerFamilyRawObservations P i z j ∂RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m =
+          0)
+    (second :
+      ∀ (i : Fin n) (j k : Fin (r * m)),
+        ∫ (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+            RectangleCLTArxivV1.lowerFamilyRawObservations P i z j *
+              RectangleCLTArxivV1.lowerFamilyRawObservations P i z k ∂RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m =
+          RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance j k)
+    (unit_second :
+      ∀ (i : Fin n) (j : Fin (r * m)),
+        ∫ (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+            RectangleCLTArxivV1.lowerFamilyRawObservations P i z j ^
+              2 ∂RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m =
+          1)
+    (covariance :
+      RectangleCLT.covariance (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+          (RectangleCLT.sumVector (RectangleCLTArxivV1.lowerFamilyNormalizedObservations P)) =
+        RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance)
+    (rank : (RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance).rank = r + m - 1)
+    (gap : RectangleCLT.pairGap (RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance) = P.variance)
+    (fourth :
+      ∀ (i : Fin n) (j : Fin (r * m)),
+        ∫ (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+            RectangleCLTArxivV1.lowerFamilyRawObservations P i z j ^
+              4 ∂RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m =
+          1 + 4 * P.variance - 5 * P.variance ^ 2 + P.theta * P.pi * P.amplitude ^ 4)
+    (envelope :
+      ∀ (i : Fin n) (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+        ‖RectangleCLTArxivV1.lowerFamilyRawObservations P i z‖ ≤
+          P.scale + P.amplitude * RectangleCLT.Companion.SplitV4.familyIndicator (z i).2.2.1)
+    (envelope_moment :
+      ∀ (q : ℝ),
+        1 ≤ q →
+          ∀ (i : Fin n),
+            (∫ (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+                  ‖RectangleCLTArxivV1.lowerFamilyRawObservations P i z‖ ^
+                    q ∂RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m) ^
+                (1 / q) ≤
+              P.scale + P.amplitude * P.theta ^ (1 / q))
+    (gaussian :
+      ∃ A,
+        A * A.transpose = RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance ∧
+          RectangleCLTArxivV1.lowerGridGaussianLaw r m P.scale √P.variance = RectangleCLT.gaussianLaw A ∧
+            P.scale * RectangleCLTArxivV1.independentAbsGaussianMean r ≤ RectangleCLTArxivV1.gaussianMaximumMean A ∧
+              RectangleCLTArxivV1.gaussianMaximumMean A ≤
+                P.scale * RectangleCLTArxivV1.independentAbsGaussianMean r +
+                  √P.variance * RectangleCLTArxivV1.independentAbsGaussianMean m) :
+    RectangleCLTArxivV1.LowerRectangularFamilyProperties P n r m
+RectangleCLTArxivV1.lowerFamilyArray_map_seed : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {n r m : ℕ} (i : Fin n),
+  MeasureTheory.Measure.map (fun z => z i) (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m) =
+    RectangleCLTArxivV1.lowerFamilySeedLaw P r m
+RectangleCLTArxivV1.lowerFamilyRawObservations_independent : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (n r m : ℕ),
+  ProbabilityTheory.iIndepFun (RectangleCLTArxivV1.lowerFamilyRawObservations P)
+    (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+RectangleCLTArxivV1.lowerFamilyRawObservations_identDistrib : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n r m : ℕ} (i : Fin n),
+  ProbabilityTheory.IdentDistrib (RectangleCLTArxivV1.lowerFamilyRawObservations P i)
+    (RectangleCLTArxivV1.lowerFamilyObservation P) (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+    (RectangleCLTArxivV1.lowerFamilySeedLaw P r m)
+RectangleCLTArxivV1.lowerFamilyRawObservations_iid : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {n r m : ℕ} (i j : Fin n),
+  ProbabilityTheory.IdentDistrib (RectangleCLTArxivV1.lowerFamilyRawObservations P i)
+    (RectangleCLTArxivV1.lowerFamilyRawObservations P j) (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+    (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+RectangleCLTArxivV1.lowerFamilySeedFlip_preserving : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  (r m : ℕ),
+  MeasureTheory.MeasurePreserving RectangleCLTArxivV1.lowerFamilySeedFlip (RectangleCLTArxivV1.lowerFamilySeedLaw P r m)
+    (RectangleCLTArxivV1.lowerFamilySeedLaw P r m)
+RectangleCLTArxivV1.lowerFamilyObservation_seedFlip : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {r m : ℕ} (z : RectangleCLTArxivV1.LowerFamilySeed r m),
+  RectangleCLTArxivV1.lowerFamilyObservation P (RectangleCLTArxivV1.lowerFamilySeedFlip z) =
+    -RectangleCLTArxivV1.lowerFamilyObservation P z
+RectangleCLTArxivV1.lowerFamilyObservation_centrally_symmetric : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (r m : ℕ),
+  ProbabilityTheory.IdentDistrib (RectangleCLTArxivV1.lowerFamilyObservation P)
+    (fun z => -RectangleCLTArxivV1.lowerFamilyObservation P z) (RectangleCLTArxivV1.lowerFamilySeedLaw P r m)
+    (RectangleCLTArxivV1.lowerFamilySeedLaw P r m)
+RectangleCLTArxivV1.lowerFamilyRawObservations_centrally_symmetric : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n r m : ℕ} (i : Fin n),
+  ProbabilityTheory.IdentDistrib (RectangleCLTArxivV1.lowerFamilyRawObservations P i)
+    (fun z => -RectangleCLTArxivV1.lowerFamilyRawObservations P i z) (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+    (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+RectangleCLTArxivV1.lowerFamilyObservation_norm_le : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {r m : ℕ} (z : RectangleCLTArxivV1.LowerFamilySeed r m),
+  ‖RectangleCLTArxivV1.lowerFamilyObservation P z‖ ≤
+    P.scale + P.amplitude * RectangleCLT.Companion.SplitV4.familyIndicator z.2.2.1
+RectangleCLTArxivV1.lowerFamilyObservation_envelope : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {r m : ℕ} (z : RectangleCLTArxivV1.LowerFamilySeed r m),
+  ‖RectangleCLTArxivV1.lowerFamilyObservation P z‖ ≤ P.scale + P.amplitude
+RectangleCLTArxivV1.integral_lowerFamilyObservation : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {r m : ℕ} (k : Fin (r * m)),
+  ∫ (z : RectangleCLTArxivV1.LowerFamilySeed r m),
+      RectangleCLTArxivV1.lowerFamilyObservation P z k ∂RectangleCLTArxivV1.lowerFamilySeedLaw P r m =
+    0
+RectangleCLTArxivV1.integral_lowerFamilyObservation_product : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {r m : ℕ} (k l : Fin (r * m)),
+  ∫ (z : RectangleCLTArxivV1.LowerFamilySeed r m),
+      RectangleCLTArxivV1.lowerFamilyObservation P z k *
+        RectangleCLTArxivV1.lowerFamilyObservation P z l ∂RectangleCLTArxivV1.lowerFamilySeedLaw P r m =
+    RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance k l
+RectangleCLTArxivV1.integral_lowerFamilyObservation_fourth : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {r m : ℕ} (k : Fin (r * m)),
+  ∫ (z : RectangleCLTArxivV1.LowerFamilySeed r m),
+      RectangleCLTArxivV1.lowerFamilyObservation P z k ^ 4 ∂RectangleCLTArxivV1.lowerFamilySeedLaw P r m =
+    1 + 4 * P.variance - 5 * P.variance ^ 2 + P.theta * P.pi * P.amplitude ^ 4
+RectangleCLTArxivV1.lowerFamilyRawObservations_centered : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n r m : ℕ} (i : Fin n) (k : Fin (r * m)),
+  ∫ (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+      RectangleCLTArxivV1.lowerFamilyRawObservations P i z k ∂RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m =
+    0
+RectangleCLTArxivV1.lowerFamilyRawObservations_second : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {n r m : ℕ} (i : Fin n) (k l : Fin (r * m)),
+  ∫ (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+      RectangleCLTArxivV1.lowerFamilyRawObservations P i z k *
+        RectangleCLTArxivV1.lowerFamilyRawObservations P i z l ∂RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m =
+    RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance k l
+RectangleCLTArxivV1.lowerFamilyRawObservations_fourth : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {n r m : ℕ} (i : Fin n) (k : Fin (r * m)),
+  ∫ (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+      RectangleCLTArxivV1.lowerFamilyRawObservations P i z k ^ 4 ∂RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m =
+    1 + 4 * P.variance - 5 * P.variance ^ 2 + P.theta * P.pi * P.amplitude ^ 4
+RectangleCLTArxivV1.lowerFamilyRawObservations_boundedIndependent : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (n r m : ℕ),
+  RectangleCLT.BoundedIndependentHypotheses (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+    (RectangleCLTArxivV1.lowerFamilyRawObservations P) (P.scale + P.amplitude)
+RectangleCLTArxivV1.lowerFamilyNormalizedObservations_covariance : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n r m : ℕ},
+  1 ≤ n →
+    RectangleCLT.covariance (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+        (RectangleCLT.sumVector (RectangleCLTArxivV1.lowerFamilyNormalizedObservations P)) =
+      RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance
+RectangleCLTArxivV1.lowerFamilyCovariance_unit_diagonal : ∀ (r m : ℕ) (v : ℝ) (k : Fin (r * m)),
+  RectangleCLTArxivV1.lowerFamilyCovariance r m v k k = 1
+RectangleCLTArxivV1.lowerFamilyNormalizedObservations_unit_covariance : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n r m : ℕ},
+  1 ≤ n →
+    ∀ (k : Fin (r * m)),
+      RectangleCLT.covariance (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+          (RectangleCLT.sumVector (RectangleCLTArxivV1.lowerFamilyNormalizedObservations P)) k k =
+        1
+@RectangleCLTArxivV1.lowerAdditiveGridFactor_mulVec : ∀ {r m : ℕ} (a b : ℝ) (x : Fin r ⊕ Fin m → ℝ)
+  (ju : Fin r × Fin m),
+  (RectangleCLTArxivV1.lowerAdditiveGridFactor r m a b).mulVec x ju = a * x (Sum.inl ju.1) + b * x (Sum.inr ju.2)
+@RectangleCLTArxivV1.lowerAdditiveGridFactor_gram : ∀ {r m : ℕ} (a b : ℝ),
+  RectangleCLTArxivV1.lowerAdditiveGridFactor r m a b *
+      (RectangleCLTArxivV1.lowerAdditiveGridFactor r m a b).transpose =
+    fun ju ju' => (a ^ 2 * if ju.1 = ju'.1 then 1 else 0) + b ^ 2 * if ju.2 = ju'.2 then 1 else 0
+@RectangleCLTArxivV1.lowerAdditiveGridFactor_ker : ∀ {r m : ℕ},
+  1 ≤ r →
+    1 ≤ m →
+      ∀ {a b : ℝ},
+        a ≠ 0 →
+          b ≠ 0 →
+            LinearMap.ker (RectangleCLTArxivV1.lowerAdditiveGridFactor r m a b).mulVecLin =
+              Submodule.span ℝ {RectangleCLTArxivV1.lowerAdditiveGridKernelVector r m a b}
+@RectangleCLTArxivV1.lowerAdditiveGridFactor_rank : ∀ {r m : ℕ},
+  1 ≤ r → 1 ≤ m → ∀ {a b : ℝ}, a ≠ 0 → b ≠ 0 → (RectangleCLTArxivV1.lowerAdditiveGridFactor r m a b).rank = r + m - 1
+@RectangleCLTArxivV1.lowerFamilyPairCovariance_gram : ∀ {r m : ℕ} {v : ℝ},
+  0 < v →
+    v < 1 →
+      RectangleCLTArxivV1.lowerFamilyPairCovariance r m v =
+        RectangleCLTArxivV1.lowerAdditiveGridFactor r m √(1 - v) √v *
+          (RectangleCLTArxivV1.lowerAdditiveGridFactor r m √(1 - v) √v).transpose
+@RectangleCLTArxivV1.lowerFamilyPairCovariance_rank : ∀ {r m : ℕ},
+  1 ≤ r → 1 ≤ m → ∀ {v : ℝ}, 0 < v → v < 1 → (RectangleCLTArxivV1.lowerFamilyPairCovariance r m v).rank = r + m - 1
+RectangleCLTArxivV1.lowerFamilyCovariance_eq_pair_submatrix : ∀ (r m : ℕ) (v : ℝ),
+  RectangleCLTArxivV1.lowerFamilyCovariance r m v =
+    (RectangleCLTArxivV1.lowerFamilyPairCovariance r m v).submatrix ⇑finProdFinEquiv.symm ⇑finProdFinEquiv.symm
+@RectangleCLTArxivV1.lowerFamilyCovariance_rank : ∀ {r m : ℕ},
+  1 ≤ r → 1 ≤ m → ∀ {v : ℝ}, 0 < v → v < 1 → (RectangleCLTArxivV1.lowerFamilyCovariance r m v).rank = r + m - 1
+@RectangleCLTArxivV1.lowerFamilyCovariance_abs_offDiagonal_le : ∀ {r m : ℕ} {v : ℝ},
+  0 < v → v < 1 / 2 → ∀ (j k : Fin (r * m)), j ≠ k → |RectangleCLTArxivV1.lowerFamilyCovariance r m v j k| ≤ 1 - v
+@RectangleCLTArxivV1.lowerFamilyCovariance_offDiagonal_attains : ∀ {r m : ℕ},
+  1 ≤ r → 2 ≤ m → ∀ (v : ℝ), ∃ j k, j ≠ k ∧ RectangleCLTArxivV1.lowerFamilyCovariance r m v j k = 1 - v
+@RectangleCLTArxivV1.lowerFamilyCovariance_maxOffDiagonal : ∀ {r m : ℕ},
+  1 ≤ r →
+    2 ≤ m →
+      ∀ {v : ℝ},
+        0 < v → v < 1 / 2 → RectangleCLT.maxOffDiagonal (RectangleCLTArxivV1.lowerFamilyCovariance r m v) = 1 - v
+@RectangleCLTArxivV1.lowerFamilyCovariance_pairGap : ∀ {r m : ℕ},
+  1 ≤ r →
+    2 ≤ m → ∀ {v : ℝ}, 0 < v → v < 1 / 2 → RectangleCLT.pairGap (RectangleCLTArxivV1.lowerFamilyCovariance r m v) = v
+RectangleCLTArxivV1.lowerFamilyNormalizedObservations_rank : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n r m : ℕ},
+  1 ≤ n →
+    1 ≤ r →
+      1 ≤ m →
+        (RectangleCLT.covariance (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+              (RectangleCLT.sumVector (RectangleCLTArxivV1.lowerFamilyNormalizedObservations P))).rank =
+          r + m - 1
+RectangleCLTArxivV1.lowerFamilyNormalizedObservations_pairGap : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n r m : ℕ},
+  1 ≤ n →
+    1 ≤ r →
+      2 ≤ m →
+        RectangleCLT.pairGap
+            (RectangleCLT.covariance (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+              (RectangleCLT.sumVector (RectangleCLTArxivV1.lowerFamilyNormalizedObservations P))) =
+          P.variance
+RectangleCLTArxivV1.lowerFamilyCovariance_eq_gaussianGram : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (r m : ℕ),
+  RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance =
+    RectangleCLTArxivV1.lowerGridGaussianFactor r m P.scale √P.variance *
+      (RectangleCLTArxivV1.lowerGridGaussianFactor r m P.scale √P.variance).transpose
+RectangleCLTArxivV1.lowerFamilyCovariance_factor_exists : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (r m : ℕ),
+  ∃ A, A * A.transpose = RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance
+RectangleCLTArxivV1.lowerFamilyGaussianFactor_gram : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  (r m : ℕ),
+  RectangleCLTArxivV1.lowerFamilyGaussianFactor P r m *
+      (RectangleCLTArxivV1.lowerFamilyGaussianFactor P r m).transpose =
+    RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance
+RectangleCLTArxivV1.lowerFamilyGaussianFactor_matches_covariance : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n r m : ℕ},
+  1 ≤ n →
+    RectangleCLTArxivV1.lowerFamilyGaussianFactor P r m *
+        (RectangleCLTArxivV1.lowerFamilyGaussianFactor P r m).transpose =
+      RectangleCLT.covariance (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+        (RectangleCLT.sumVector (RectangleCLTArxivV1.lowerFamilyNormalizedObservations P))
+RectangleCLTArxivV1.lowerFamilyGaussianLaw_eq : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {r m : ℕ} (A : Matrix (Fin (r * m)) (Fin (r * m)) ℝ),
+  A * A.transpose = RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance →
+    RectangleCLTArxivV1.lowerGridGaussianLaw r m P.scale √P.variance = RectangleCLT.gaussianLaw A
+RectangleCLTArxivV1.lowerFamilyGaussianMaximumMean_eq : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {r m : ℕ} (A : Matrix (Fin (r * m)) (Fin (r * m)) ℝ),
+  A * A.transpose = RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance →
+    RectangleCLTArxivV1.gaussianMaximumMean A = RectangleCLTArxivV1.lowerGridGaussianMean r m P.scale √P.variance
+RectangleCLTArxivV1.lowerFamilyGaussian_width_bounds : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {r m : ℕ},
+  1 ≤ r →
+    1 ≤ m →
+      ∀ (A : Matrix (Fin (r * m)) (Fin (r * m)) ℝ),
+        A * A.transpose = RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance →
+          P.scale * RectangleCLTArxivV1.independentAbsGaussianMean r ≤ RectangleCLTArxivV1.gaussianMaximumMean A ∧
+            RectangleCLTArxivV1.gaussianMaximumMean A ≤
+              P.scale * RectangleCLTArxivV1.independentAbsGaussianMean r +
+                √P.variance * RectangleCLTArxivV1.independentAbsGaussianMean m
+RectangleCLTArxivV1.integral_lowerFamilySeed_indicator_function : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (r m : ℕ) (f : Bool → ℝ),
+  ∫ (z : RectangleCLTArxivV1.LowerFamilySeed r m), f z.2.2.1 ∂RectangleCLTArxivV1.lowerFamilySeedLaw P r m =
+    ∫ (b : Bool), f b ∂RectangleCLT.Companion.SplitV4.familyBernoulli (RectangleCLT.Companion.SplitV4.familyTheta P)
+RectangleCLTArxivV1.integral_lowerFamilyActivation_rpow : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (r m : ℕ) {q : ℝ},
+  0 < q →
+    ∫ (z : RectangleCLTArxivV1.LowerFamilySeed r m),
+        ‖P.amplitude * RectangleCLT.Companion.SplitV4.familyIndicator z.2.2.1‖ ^
+          q ∂RectangleCLTArxivV1.lowerFamilySeedLaw P r m =
+      P.theta * P.amplitude ^ q
+@RectangleCLTArxivV1.family_rpow_q_root : ∀ {a q : ℝ}, 0 ≤ a → 0 < q → (a ^ q) ^ (1 / q) = a
+RectangleCLTArxivV1.lowerFamilyObservation_Lq_envelope : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (r m : ℕ) {q : ℝ},
+  1 ≤ q →
+    (∫ (z : RectangleCLTArxivV1.LowerFamilySeed r m),
+          ‖RectangleCLTArxivV1.lowerFamilyObservation P z‖ ^ q ∂RectangleCLTArxivV1.lowerFamilySeedLaw P r m) ^
+        (1 / q) ≤
+      P.scale + P.amplitude * P.theta ^ (1 / q)
+RectangleCLTArxivV1.lowerFamilyRawObservations_Lq_envelope : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n r m : ℕ} (i : Fin n) {q : ℝ},
+  1 ≤ q →
+    (∫ (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed r m),
+          ‖RectangleCLTArxivV1.lowerFamilyRawObservations P i z‖ ^ q ∂RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m) ^
+        (1 / q) ≤
+      P.scale + P.amplitude * P.theta ^ (1 / q)
+RectangleCLTArxivV1.lowerFamilySeparatedJoin_preserving : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (n r m : ℕ),
+  MeasureTheory.MeasurePreserving RectangleCLTArxivV1.lowerFamilySeparatedJoin
+    (RectangleCLTArxivV1.lowerFamilySeparatedLaw P n r m) (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+RectangleCLTArxivV1.lowerFamilySeparatedSum_coordinate : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n r m : ℕ}
+  (z : RectangleCLTArxivV1.LowerFamilySeparatedSeed n r m) (ju : Fin r × Fin m),
+  RectangleCLTArxivV1.lowerFamilySeparatedSum P z (finProdFinEquiv ju) =
+    P.scale * RectangleCLT.Companion.SplitV4.familyRademacherCoordinate z.1 ju.1 +
+      P.amplitude / √↑n * RectangleCLT.Companion.SplitV4.familyMaskedSignCount z.2 ju.2
+RectangleCLTArxivV1.lowerFamilySeparatedSum_maximum : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {n r m : ℕ} [inst : NeZero r] [inst_1 : NeZero m] (z : RectangleCLTArxivV1.LowerFamilySeparatedSeed n r m),
+  (RectangleCLT.Companion.SplitV4.finiteMaximum fun ju =>
+      RectangleCLTArxivV1.lowerFamilySeparatedSum P z (finProdFinEquiv ju)) =
+    P.scale * RectangleCLT.Companion.SplitV4.familyRademacherMaximum z.1 +
+      P.amplitude / √↑n * RectangleCLT.Companion.SplitV4.familyMaskedSignMaximum z.2
+RectangleCLTArxivV1.lowerFamilySeparatedSum_identDistrib : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (n r m : ℕ),
+  ProbabilityTheory.IdentDistrib (RectangleCLTArxivV1.lowerFamilySeparatedSum P)
+    (RectangleCLT.sumVector (RectangleCLTArxivV1.lowerFamilyNormalizedObservations P))
+    (RectangleCLTArxivV1.lowerFamilySeparatedLaw P n r m) (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+RectangleCLTArxivV1.lowerFamilySeparated_maxima_independent : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (n r m : ℕ) [inst : NeZero r] [inst_1 : NeZero m],
+  ProbabilityTheory.IndepFun (fun z => RectangleCLT.Companion.SplitV4.familyRademacherMaximum z.1)
+    (fun z => RectangleCLT.Companion.SplitV4.familyMaskedSignMaximum z.2)
+    (RectangleCLTArxivV1.lowerFamilySeparatedLaw P n r m)
+RectangleCLTArxivV1.lowerRademacherMaximumConstant_pos : 0 < RectangleCLTArxivV1.lowerRademacherMaximumConstant
+RectangleCLTArxivV1.dimensionLog_one_lower : RectangleCLT.dimensionLog 1 = 1
+@RectangleCLTArxivV1.familyRademacherMaximum_one_error : ∀ {n : ℕ},
+  1 ≤ n →
+    ∀ (x : ℝ),
+      |(RectangleCLT.Companion.SplitV4.familySignArrayLaw n 1).real
+              {z | RectangleCLT.Companion.SplitV4.familyRademacherMaximum z ≤ x} -
+            RectangleCLT.Companion.SplitV4.normalMaximumCDF 1 x| ≤
+        RectangleCLTArxivV1.lowerRademacherMaximumConstant *
+          RectangleCLT.Companion.SplitV4.Printed.rademacherGlobalError n 1
+RectangleCLTArxivV1.eventually_lowerRademacherMaximum_global_error : ∀ᶠ (n : ℕ) in Filter.atTop,
+  ∀ (r : ℕ) (hr : 1 ≤ r),
+    RectangleCLT.dimensionLog r ≤ RectangleCLT.Companion.SplitV4.Printed.rademacherGlobalSmallConstant * √↑n →
+      ∀ (x : ℝ),
+        |(RectangleCLT.Companion.SplitV4.familySignArrayLaw n r).real
+                {z | RectangleCLT.Companion.SplitV4.familyRademacherMaximum z ≤ x} -
+              RectangleCLT.Companion.SplitV4.normalMaximumCDF r x| ≤
+          RectangleCLTArxivV1.lowerRademacherMaximumConstant *
+            RectangleCLT.Companion.SplitV4.Printed.rademacherGlobalError n r
+RectangleCLTArxivV1.lowerGaussianCurvatureConstant_pos : 0 < RectangleCLTArxivV1.lowerGaussianCurvatureConstant
+@RectangleCLTArxivV1.normalMaximumCDF_second_derivative_bound_positive_count : ∀ {r : ℕ},
+  1 ≤ r →
+    ∀ (x : ℝ),
+      |deriv (deriv (RectangleCLT.Companion.SplitV4.normalMaximumCDF r)) x| ≤
+        RectangleCLTArxivV1.lowerGaussianCurvatureConstant * RectangleCLT.dimensionLog r
+RectangleCLTArxivV1.lowerFamilyGaussianPairMap_maximum : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {r m : ℕ} [inst : NeZero r] [inst_1 : NeZero m]
+  (z : RectangleCLT.Vector r × RectangleCLT.Vector m),
+  (RectangleCLT.Companion.SplitV4.finiteMaximum fun ju =>
+      RectangleCLTArxivV1.lowerGridGaussianMap P.scale (√P.variance) z (finProdFinEquiv ju)) =
+    P.scale * RectangleCLT.Companion.SplitV4.finiteMaximum z.1 +
+      √P.variance * RectangleCLT.Companion.SplitV4.finiteMaximum z.2
+RectangleCLTArxivV1.lowerFamilySeparatedSum_scaled_maximum : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n r m : ℕ} [inst : NeZero r] [inst_1 : NeZero m]
+  (z : RectangleCLTArxivV1.LowerFamilySeparatedSeed n r m),
+  (RectangleCLT.Companion.SplitV4.finiteMaximum fun ju =>
+      RectangleCLTArxivV1.lowerFamilySeparatedSum P z (finProdFinEquiv ju)) =
+    P.scale *
+      (RectangleCLT.Companion.SplitV4.familyRademacherMaximum z.1 +
+        RectangleCLT.Companion.SplitV4.familyObservationShift P z.2)
+RectangleCLTArxivV1.lowerFamilyGaussianPairMap_scaled_maximum : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {r m : ℕ} [inst : NeZero r] [inst_1 : NeZero m]
+  (z : RectangleCLT.Vector r × RectangleCLT.Vector m),
+  (RectangleCLT.Companion.SplitV4.finiteMaximum fun ju =>
+      RectangleCLTArxivV1.lowerGridGaussianMap P.scale (√P.variance) z (finProdFinEquiv ju)) =
+    P.scale *
+      (RectangleCLT.Companion.SplitV4.finiteMaximum z.1 + RectangleCLT.Companion.SplitV4.familyGaussianShift P z.2)
+RectangleCLTArxivV1.lowerFamilyObservationShift_independent : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (n r m : ℕ) [inst : NeZero r] [inst_1 : NeZero m],
+  ProbabilityTheory.IndepFun (fun z => RectangleCLT.Companion.SplitV4.familyRademacherMaximum z.1)
+    (fun z => RectangleCLT.Companion.SplitV4.familyObservationShift P z.2)
+    (RectangleCLTArxivV1.lowerFamilySeparatedLaw P n r m)
+RectangleCLTArxivV1.lowerFamilyGaussianShift_independent : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (r m : ℕ) [inst : NeZero r] [inst_1 : NeZero m],
+  ProbabilityTheory.IndepFun (fun z => RectangleCLT.Companion.SplitV4.finiteMaximum z.1)
+    (fun z => RectangleCLT.Companion.SplitV4.familyGaussianShift P z.2)
+    (RectangleCLTArxivV1.lowerFamilyGaussianPairLaw r m)
+RectangleCLTArxivV1.lowerFamilyRademacher_realCDF : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  (n r m : ℕ) [inst : NeZero r] (t : ℝ),
+  RectangleCLT.Companion.SplitV4.realCDF (RectangleCLTArxivV1.lowerFamilySeparatedLaw P n r m)
+      (fun z => RectangleCLT.Companion.SplitV4.familyRademacherMaximum z.1) t =
+    (RectangleCLT.Companion.SplitV4.familySignArrayLaw n r).real
+      {z | RectangleCLT.Companion.SplitV4.familyRademacherMaximum z ≤ t}
+RectangleCLTArxivV1.lowerFamilyGaussian_realCDF : ∀ (r m : ℕ) [inst : NeZero r] (t : ℝ),
+  RectangleCLT.Companion.SplitV4.realCDF (RectangleCLTArxivV1.lowerFamilyGaussianPairLaw r m)
+      (fun z => RectangleCLT.Companion.SplitV4.finiteMaximum z.1) t =
+    RectangleCLT.Companion.SplitV4.normalMaximumCDF r t
+RectangleCLTArxivV1.lowerFamily_master_comparison : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {n r m : ℕ} [inst : NeZero r] [inst_1 : NeZero m],
+  1 ≤ r →
+    ∀ {ε : ℝ},
+      0 ≤ ε →
+        (∀ (x : ℝ),
+            |(RectangleCLT.Companion.SplitV4.familySignArrayLaw n r).real
+                    {z | RectangleCLT.Companion.SplitV4.familyRademacherMaximum z ≤ x} -
+                  RectangleCLT.Companion.SplitV4.normalMaximumCDF r x| ≤
+              ε) →
+          ∀ (t : ℝ),
+            |RectangleCLTArxivV1.lowerFamilyShiftedCDFDifference P n r m t -
+                  RectangleCLT.Companion.SplitV4.normalMaximumDensity r t *
+                    RectangleCLT.Companion.SplitV4.familyShiftMeanDifference P n m| ≤
+              ε +
+                RectangleCLTArxivV1.lowerGaussianCurvatureConstant * RectangleCLT.dimensionLog r / 2 *
+                  RectangleCLT.Companion.SplitV4.familyShiftSecondMoments P n m
+RectangleCLTArxivV1.eventually_lowerFamily_master_comparison : ∀ᶠ (n : ℕ) in Filter.atTop,
+  ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (r m : ℕ) (hr : 1 ≤ r) (hm : 1 ≤ m),
+    RectangleCLT.dimensionLog r ≤ RectangleCLT.Companion.SplitV4.Printed.rademacherGlobalSmallConstant * √↑n →
+      ∀ (t : ℝ),
+        |RectangleCLTArxivV1.lowerFamilyShiftedCDFDifference P n r m t -
+              RectangleCLT.Companion.SplitV4.normalMaximumDensity r t *
+                RectangleCLT.Companion.SplitV4.familyShiftMeanDifference P n m| ≤
+          RectangleCLTArxivV1.lowerRademacherMaximumConstant *
+              RectangleCLT.Companion.SplitV4.Printed.rademacherGlobalError n r +
+            RectangleCLTArxivV1.lowerGaussianCurvatureConstant * RectangleCLT.dimensionLog r / 2 *
+              RectangleCLT.Companion.SplitV4.familyShiftSecondMoments P n m
+@RectangleCLTArxivV1.finiteMaximum_rectangular_pair_le_iff : ∀ {r m : ℕ} [inst : NeZero r] [inst_1 : NeZero m]
+  (w : RectangleCLT.Vector (r * m)) (b : ℝ),
+  (RectangleCLT.Companion.SplitV4.finiteMaximum fun ju => w (finProdFinEquiv ju)) ≤ b ↔ ∀ (j : Fin (r * m)), w j ≤ b
+RectangleCLTArxivV1.lowerFamilySeparatedShift_orthant_event : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {n r m : ℕ} [inst : NeZero r] [inst_1 : NeZero m]
+  (t : ℝ),
+  {z |
+      RectangleCLT.Companion.SplitV4.familyRademacherMaximum z.1 +
+          RectangleCLT.Companion.SplitV4.familyObservationShift P z.2 ≤
+        t} =
+    RectangleCLTArxivV1.lowerFamilySeparatedSum P ⁻¹'
+      (RectangleCLT.Companion.SplitV4.familyOrthant (r * m) (P.scale * t)).carrier
+RectangleCLTArxivV1.lowerFamilyGaussianShift_orthant_event : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) {r m : ℕ} [inst : NeZero r] [inst_1 : NeZero m]
+  (t : ℝ),
+  {z |
+      RectangleCLT.Companion.SplitV4.finiteMaximum z.1 + RectangleCLT.Companion.SplitV4.familyGaussianShift P z.2 ≤ t} =
+    RectangleCLTArxivV1.lowerGridGaussianMap P.scale √P.variance ⁻¹'
+      (RectangleCLT.Companion.SplitV4.familyOrthant (r * m) (P.scale * t)).carrier
+RectangleCLTArxivV1.lowerFamilyShiftedCDFDifference_rectangleError : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (n r m : ℕ) [inst : NeZero r] [inst_1 : NeZero m]
+  (A : Matrix (Fin (r * m)) (Fin (r * m)) ℝ),
+  A * A.transpose = RectangleCLTArxivV1.lowerFamilyCovariance r m P.variance →
+    ∀ (t : ℝ),
+      RectangleCLT.rectangleError (RectangleCLTArxivV1.lowerFamilyArrayLaw P n r m)
+          (RectangleCLT.sumVector (RectangleCLTArxivV1.lowerFamilyNormalizedObservations P)) A
+          (RectangleCLT.Companion.SplitV4.familyOrthant (r * m) (P.scale * t)) =
+        |RectangleCLTArxivV1.lowerFamilyShiftedCDFDifference P n r m t|
+RectangleCLTArxivV1.abs_lowerFamilyShiftedCDFDifference_le_distance : ∀
+  (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters) (n r m : ℕ) [inst : NeZero r] [inst_1 : NeZero m]
+  (t : ℝ),
+  |RectangleCLTArxivV1.lowerFamilyShiftedCDFDifference P n r m t| ≤
+    RectangleCLTArxivV1.lowerFamilyComparisonDistance P n r m
+@RectangleCLTArxivV1.positive_global_lower_of_eventual : ∀ {f : ℕ → ℝ} {c : ℝ},
+  0 < c → (∀ (n : ℕ), 1 ≤ n → 0 < f n) → (∀ᶠ (n : ℕ) in Filter.atTop, c ≤ f n) → ∃ a, 0 < a ∧ ∀ (n : ℕ), 1 ≤ n → a ≤ f n
+@RectangleCLTArxivV1.gaussianMaximumMean_le_absolute : ∀ {r : ℕ},
+  1 ≤ r → RectangleCLT.Companion.SplitV4.gaussianMaximumMean r ≤ RectangleCLTArxivV1.independentAbsGaussianMean r
+RectangleCLTArxivV1.eventually_absoluteGaussianMean_sqrt_lower : ∀ᶠ (r : ℕ) in Filter.atTop,
+  1 / 2 * √(RectangleCLT.dimensionLog r) ≤ RectangleCLTArxivV1.independentAbsGaussianMean r
+RectangleCLTArxivV1.exists_absoluteGaussianMean_sqrt_lower : ∃ c,
+  0 < c ∧ ∀ (r : ℕ), 1 ≤ r → c * √(RectangleCLT.dimensionLog r) ≤ RectangleCLTArxivV1.independentAbsGaussianMean r
+@RectangleCLTArxivV1.normalMaximumDensity_pos_positive_count : ∀ {r : ℕ},
+  1 ≤ r → ∀ (t : ℝ), 0 < RectangleCLT.Companion.SplitV4.normalMaximumDensity r t
+RectangleCLTArxivV1.eventually_leadingDensity_sqrt_lower : ∀ᶠ (r : ℕ) in Filter.atTop,
+  Real.exp (-1) / 2 * √(RectangleCLT.dimensionLog r) ≤
+    RectangleCLT.Companion.SplitV4.normalMaximumDensity r (RectangleCLTArxivV1.lowerLeadingThreshold r)
+RectangleCLTArxivV1.exists_leadingDensity_sqrt_lower : ∃ c,
+  0 < c ∧
+    ∀ (r : ℕ),
+      1 ≤ r →
+        c * √(RectangleCLT.dimensionLog r) ≤
+          RectangleCLT.Companion.SplitV4.normalMaximumDensity r (RectangleCLTArxivV1.lowerLeadingThreshold r)
+RectangleCLTArxivV1.exists_leadingDensity_width_lower : ∃ c,
+  0 < c ∧
+    ∀ (r : ℕ),
+      1 ≤ r →
+        c * RectangleCLTArxivV1.independentAbsGaussianMean r ≤
+          RectangleCLT.Companion.SplitV4.normalMaximumDensity r (RectangleCLTArxivV1.lowerLeadingThreshold r)
+RectangleCLTArxivV1.lemma_lower_family_properties : ∀ (P : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters)
+  {n r m : ℕ}, 1 ≤ n → 1 ≤ r → 2 ≤ m → RectangleCLTArxivV1.LowerRectangularFamilyProperties P n r m

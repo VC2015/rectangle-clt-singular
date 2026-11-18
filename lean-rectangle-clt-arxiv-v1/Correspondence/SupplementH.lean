@@ -1,0 +1,31 @@
+import RectangleCLTArxivV1
+
+set_option pp.all true
+
+/-! Exact public types for the geometric surface and matrix estimates,
+translated fourth derivatives, and two correlation corollaries. Detailed
+source/passages and proof routes are bound in correspondence JSON ledgers. -/
+
+#check RectangleCLTArxivV1.exists_fixed_surface_bound_of_empty_or_fullDimensional
+#check RectangleCLTArxivV1.proposition_H1_cubic_matrix_shifted
+#check RectangleCLTArxivV1.proposition_H2_pair_matrix_shifted
+#check RectangleCLTArxivV1.theorem_H3_fourth_derivative
+#check RectangleCLTArxivV1.corollary4_positive_correlation_gap
+#check RectangleCLTArxivV1.corollary5_exceptional_correlation_budget
+#check RectangleCLTArxivV1.corollary5_normalized_remainder_abs_intervalIntegrable
+#check RectangleCLTArxivV1.corollary5_normalized_remainder_integral
+#check RectangleCLTArxivV1.corollary4_canonical_correlation_gap
+#check RectangleCLTArxivV1.lemma_H3_fourth_derivative
+#check RectangleCLTArxivV1.theoremH3BandwidthConstant_ge_one
+#check RectangleCLTArxivV1.theoremH3BandwidthConstant_pos
+
+-- Printed pointwise H.1 geometry, including nonsimple complete faces.
+#check RectangleCLTArxivV1.hardGaussianWeightedRidgeIntegral_Green_actualFaces
+#check RectangleCLTArxivV1.exists_actual_facet_ridge_Green
+#check RectangleCLTArxivV1.nonsimpleActualConormalSum_eq_spherical_vector
+#check RectangleCLTArxivV1.nonsimpleActualConormalSum_norm_le_spherical_area
+#check RectangleCLTArxivV1.nonsimpleActualGaussianMass_eq_surface_integral
+#check RectangleCLTArxivV1.nonsimpleActualGaussianMass_eq_finite_surface_integral
+#check RectangleCLTArxivV1.nonsimpleActualGaussianMass_ridge_surface_integral
+#check RectangleCLTArxivV1.nonsimpleSquare_printed_ridge_Green
+#check RectangleCLTArxivV1.nonsimpleSquare_actualVertex_printed_spherical_balance

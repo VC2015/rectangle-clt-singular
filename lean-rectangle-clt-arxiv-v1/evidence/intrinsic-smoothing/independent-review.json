@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "kind": "independent_smoothing_statement_and_route_review",
+  "reviewer": "/root/c1_gaussian",
+  "reviewed_at_utc": "2026-11-18T00:18:51.577107+00:00",
+  "frozen_snapshot": "1803366cc994d9facae8e128ee180f68e319486f",
+  "source_sha256": {
+    "RectangleCLTArxivV1/SmoothingGaussianMean.lean": "bfc9a1cd96666b55eacab3589b95c6a374faa6c22e1eb3df214c2a9828e53b9a",
+    "RectangleCLTArxivV1/DerivativesIntrinsic.lean": "7a5f3643e2783be46f0693e036201cdcac5baaae06cbe84b2b70d5546672afad",
+    "RectangleCLTArxivV1/SmoothingMatrixIntrinsic.lean": "8537cba88b06aa7b0998dbe9d75fcc62b47fe00fca8e55836626d6f97f6ba383",
+    "RectangleCLTArxivV1/SmoothingIntrinsic.lean": "9cc7c8e7ba89e4f2e09ea60b20825ff73e41cd1e8848258ef3de482abadadb95"
+  },
+  "scope": "Statement hypotheses and assembled inference routes of the four new intrinsic smoothing modules; no full B4 internal-passage certification is implied. Build/audit receipts remain separate checks.",
+  "modules": [
+    {
+      "module": "RectangleCLTArxivV1/SmoothingGaussianMean.lean",
+      "frozen_statement_lines": [
+        4959,
+        4975
+      ],
+      "frozen_proof_lines": [
+        4978,
+        5046
+      ],
+      "statement_result": "PASS",
+      "route_result": "PASS_SAME_ARGUMENT",
+      "review": [
+        "The public theorem has actual measurable \u03b2\u2208[0,1], measurable w with0\u2264w\u2264\u03b2(u\u00b7g), positive reference and tilted masses, unit Euclidean u, and the exact weighted-mean conclusion. vectorNormSq is the Euclidean sum of squares.",
+        "Weighted Jensen is proved by its supporting tangent-line inequality after integrating actual weights; using weighted integrals instead of introducing a named tilted random vector is an exact formulation of the same Jensen step.",
+        "The proof explicitly invokes Printed.gaussian_one_face_exponential_via_independence: actual orthogonal Gaussian linear forms are independent, including t=0, and their actual Gaussian MGF supplies the exponential factor. No Cameron--Martin translation or old final B3 theorem is used.",
+        "The choice t=\u03bc\u2212(u\u00b7\u03bc)u is orthogonal and t\u00b7\u03bc=||t||\u00b2. The logarithm step uses the proved positive masses. Weighted Cauchy--Schwarz follows from the nonnegative centered square, and the orthogonal/parallel components assemble the exact printed bound.",
+        "The explicit pb>0 premise is retained, although the proof also derives it frompw>0 andw\u2264b. This valid redundancy introduces no hidden analytic premise."
+      ],
+      "issues": [],
+      "frozen_statement_span_sha256": "7374b61e65f89ba8f572391249356043a1ee8341d7af32ae33cce4c9e528b636"
+    },
+    {
+      "module": "RectangleCLTArxivV1/DerivativesIntrinsic.lean",
+      "frozen_statement_lines": [
+        3158,
+        3178
+      ],
+      "frozen_proof_lines": [
+        3180,
+        3239
+      ],
+      "statement_result": "PASS",
+      "route_result": "PASS_SAME_PRINTED_ARGUMENT",
+      "review": [
+        "The actual thresholdLogistic is exactly(1+exp(\u2212s/h)T)\u207b\u00b9. Its derivative and the logarithmic derivative of the actual positive envelope are proved by differentiating these functions.",
+        "The log-derivative bound is integrated by the fundamental theorem from0 to eachs, giving envelope\u2265exp(\u22121)*envelope0 for|s|\u2264h. The zero-partition caseT=0 is separately discharged.",
+        "A second actual FTC over[-h,h] proves the exact displayed coefficient(e/2)(Fh\u2212F\u2212h), rather than using the earlier hlog2 rational comparison.",
+        "The same exponential clocks are used forFh andF\u2212h. Exact nesting and measure difference identify the corresponding fixed-widthh layer, and its actual uniform threshold bound is averaged. No maximum random radius or logdimension factor is inserted in this envelope step.",
+        "Upper-face transport gives the claimed actual general-face envelope expectation. The4C0h\u03ba numerical bound follows frome\u22644 andh+\u03b4\u22642h. The positive-order derivative/supremum consequence retains the prior checked local envelope estimate.",
+        "The direct Slepian intrinsic component proofs now consume this same literal threshold-integration route. The logarithmic component retains the separate proved archived estimate; no desired intrinsic envelope bound is assumed."
+      ],
+      "issues": [],
+      "frozen_statement_span_sha256": "9f8f958d915e2b62f514413da86e911f4e115a6b5251c2f81f0cf48114bf6b9e",
+      "previous_review": {
+        "source_sha256": "438ea45257fe3b82cf90c8372fc9bd5a14c3d0b9e2134d2dbec776546854e15d",
+        "route_result": "ALTERNATIVE_ROUTE_PENDING_LITERAL_PASSAGE_MAPPING",
+        "issues": [
+          "Literal frozen A1 proof route is not yet followed by the reviewed source hash."
+        ]
+      },
+      "recheck": "evidence/intrinsic-smoothing/independent-review-a1-recheck.json"
+    },
+    {
+      "module": "RectangleCLTArxivV1/SmoothingMatrixIntrinsic.lean",
+      "frozen_statement_lines": [
+        5051,
+        5070
+      ],
+      "frozen_proof_lines": [
+        5072,
+        5417
+      ],
+      "statement_result": "PASS_ANALYTIC_MATRIX_STATEMENT",
+      "route_result": "PASS_COEFFICIENT_RESCALING_WITH_ARCHIVED_INTERNAL_PROOF",
+      "review": [
+        "The target is the actual nuclear norm of the Gaussian score matrices. The layer-probability concentration is the only additional analytic input and is exactly the concentrated-base premise of B4; no matrix, trace, derivative, or target CLT conclusion is assumed.",
+        "The old concentration constant is rescaled toC0\u03ba/sqrtL, which is positive. The archived theorem needs positivity rather than a lower bound1, so this substitution is valid even when\u03ba/sqrtL is small.",
+        "The dimension parameterL remains unchanged in the seed-scale condition\u03b4sqrtL\u2264\u03c3 and dimensionLogm\u22642L. Only the concentration coefficient is changed, and cancellation yields exactlyh\u03baL.",
+        "Absorbing fixedC0 into intrinsicMatrixConstant C0 preserves independence from\u03ba, dimension andorder. Positive orderk\u22651 is explicit. The absence of the printed\u03c3\u22641 upper bound is a valid strengthening of the reused analytic estimate.",
+        "This validates the new intrinsic statement and coefficient conversion. It does not independently accept all internal B4 signed-trace/Gamma-mixture/nuclear-norm printed passages; those still require their detailed correspondence ledger."
+      ],
+      "issues": [],
+      "frozen_statement_span_sha256": "6b88949da19a54e3750e131f7d2f44c96024dd49673d620cab5467bd063730c3"
+    },
+    {
+      "module": "RectangleCLTArxivV1/SmoothingIntrinsic.lean",
+      "frozen_statement_lines": [
+        1228,
+        1234
+      ],
+      "frozen_proof_lines": [
+        2920,
+        2991
+      ],
+      "statement_result": "PASS_ANALYTIC_SMOOTHING_REDUCTION",
+      "route_result": "PASS_SAME_RADIUS_AVERAGING_ARGUMENT",
+      "review": [
+        "The actual exponential-clock threshold radius is kept random until its deterministic-radius boundary inequality is integrated. Only then is its expectation bounded byChL. This follows the frozen proof and avoids substituting the mean radius into a probability event.",
+        "The zero-radius shell is proved empty, so extending positive-width concentration introduces no continuity or atom premise.",
+        "The two endpoint-law errors and actual smoothed difference are combined for closed boxes and then transported to all rectangles by the archived all-rectangle reduction. The result isMh+9C0h\u03baL under\u03b4\u2264h.",
+        "The two endpoint concentration hypotheses are legitimate intermediate analytic inputs. The raw-data Lemma2 is closed only after actual C1 suppliers are instantiated; this module does not claim such an instantiation by itself."
+      ],
+      "issues": [],
+      "frozen_statement_span_sha256": "72122c68f956cfc302ff4124d02f41c26f63ad3bfb5d401f26d51baf9e4ea4e8"
+    }
+  ]
+}

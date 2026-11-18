@@ -1,0 +1,192 @@
+structure RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters : Type
+number of parameters: 0
+fields:
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude : ℝ
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta_pos : 0 < self.theta
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.theta_le_one : self.theta ≤ 1
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi_pos : 0 < self.pi
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.pi_le_one : self.pi ≤ 1
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.amplitude_pos : 0 < self.amplitude
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.variance_lt_half : self.theta * self.pi *
+        self.amplitude ^ 2 <
+      1 / 2
+constructor:
+  RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters.mk (theta pi amplitude : ℝ) (theta_pos : 0 < theta)
+    (theta_le_one : theta ≤ 1) (pi_pos : 0 < pi) (pi_le_one : pi ≤ 1) (amplitude_pos : 0 < amplitude)
+    (variance_lt_half : theta * pi * amplitude ^ 2 < 1 / 2) : RectangleCLT.Companion.SplitV4.SymmetricFamilyParameters
+@RectangleCLTArxivV1.lowerUnmasked_count_identity : ∀ {n : ℕ} {ell : ℝ}, 1 ≤ n → ↑n * (ell / (2 * ↑n)) = ell / 2
+@RectangleCLTArxivV1.tendsto_lowerUnmasked_raw_variance : ∀ {a : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 1 ≤ r n) →
+    (∀ (n : ℕ), 2 ≤ m n) →
+      Filter.Tendsto m Filter.atTop Filter.atTop →
+        Filter.Tendsto
+            (fun n =>
+              RectangleCLTArxivV1.lowerWidthScale (a n) (Real.log ↑(m n))
+                (RectangleCLTArxivV1.independentAbsGaussianMean (r n)) ↑n)
+            Filter.atTop (nhds 0) →
+          Filter.Tendsto (fun n => Real.log ↑(m n) / (2 * ↑n) * a n ^ 2) Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.eventually_lowerUnmaskedSequence_fields : ∀ {a : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 1 ≤ r n) →
+    (∀ (n : ℕ), 2 ≤ m n) →
+      Filter.Tendsto m Filter.atTop Filter.atTop →
+        (∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ a n) →
+          Filter.Tendsto
+              (fun n =>
+                RectangleCLTArxivV1.lowerWidthScale (a n) (Real.log ↑(m n))
+                  (RectangleCLTArxivV1.independentAbsGaussianMean (r n)) ↑n)
+              Filter.atTop (nhds 0) →
+            ∀ᶠ (n : ℕ) in Filter.atTop,
+              (RectangleCLTArxivV1.lowerUnmaskedSequence a m n).theta = Real.log ↑(m n) / (2 * ↑n) ∧
+                (RectangleCLTArxivV1.lowerUnmaskedSequence a m n).amplitude = a n ∧
+                  (RectangleCLTArxivV1.lowerUnmaskedSequence a m n).variance = Real.log ↑(m n) / (2 * ↑n) * a n ^ 2
+@RectangleCLTArxivV1.tendsto_lowerUnmaskedSequence_variance : ∀ {a : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 1 ≤ r n) →
+    (∀ (n : ℕ), 2 ≤ m n) →
+      Filter.Tendsto m Filter.atTop Filter.atTop →
+        (∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ a n) →
+          Filter.Tendsto
+              (fun n =>
+                RectangleCLTArxivV1.lowerWidthScale (a n) (Real.log ↑(m n))
+                  (RectangleCLTArxivV1.independentAbsGaussianMean (r n)) ↑n)
+              Filter.atTop (nhds 0) →
+            Filter.Tendsto (fun n => (RectangleCLTArxivV1.lowerUnmaskedSequence a m n).variance) Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.tendsto_lowerUnmaskedSequence_widthScale : ∀ {a : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 1 ≤ r n) →
+    (∀ (n : ℕ), 2 ≤ m n) →
+      Filter.Tendsto m Filter.atTop Filter.atTop →
+        (∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ a n) →
+          Filter.Tendsto
+              (fun n =>
+                RectangleCLTArxivV1.lowerWidthScale (a n) (Real.log ↑(m n))
+                  (RectangleCLTArxivV1.independentAbsGaussianMean (r n)) ↑n)
+              Filter.atTop (nhds 0) →
+            Filter.Tendsto
+              (fun n =>
+                RectangleCLTArxivV1.lowerFamilyWidthScale (RectangleCLTArxivV1.lowerUnmaskedSequence a m n) n (r n)
+                  (m n))
+              Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.tendsto_lowerUnmaskedSequence_rare_width : ∀ {a : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 1 ≤ r n) →
+    (∀ (n : ℕ), 2 ≤ m n) →
+      Filter.Tendsto m Filter.atTop Filter.atTop →
+        (∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ a n) →
+          Filter.Tendsto
+              (fun n =>
+                RectangleCLTArxivV1.lowerWidthScale (a n) (Real.log ↑(m n))
+                  (RectangleCLTArxivV1.independentAbsGaussianMean (r n)) ↑n)
+              Filter.atTop (nhds 0) →
+            Filter.Tendsto
+              (fun n =>
+                √(RectangleCLTArxivV1.lowerUnmaskedSequence a m n).variance *
+                  RectangleCLTArxivV1.independentAbsGaussianMean (m n))
+              Filter.atTop (nhds 0)
+@RectangleCLTArxivV1.eventually_lowerUnmaskedSequence_count : ∀ {a : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 1 ≤ r n) →
+    (∀ (n : ℕ), 2 ≤ m n) →
+      Filter.Tendsto m Filter.atTop Filter.atTop →
+        (∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ a n) →
+          Filter.Tendsto
+              (fun n =>
+                RectangleCLTArxivV1.lowerWidthScale (a n) (Real.log ↑(m n))
+                  (RectangleCLTArxivV1.independentAbsGaussianMean (r n)) ↑n)
+              Filter.atTop (nhds 0) →
+            ∀ᶠ (n : ℕ) in Filter.atTop,
+              ↑n * (RectangleCLTArxivV1.lowerUnmaskedSequence a m n).theta = Real.log ↑(m n) / 2
+@RectangleCLTArxivV1.lowerUnmaskedSequence_width_profile : ∀ {a : ℕ → ℝ} {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 1 ≤ r n) →
+    (∀ (n : ℕ), 2 ≤ m n) →
+      Filter.Tendsto m Filter.atTop Filter.atTop →
+        (∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ a n) →
+          Filter.Tendsto
+              (fun n =>
+                RectangleCLTArxivV1.lowerWidthScale (a n) (Real.log ↑(m n))
+                  (RectangleCLTArxivV1.independentAbsGaussianMean (r n)) ↑n)
+              Filter.atTop (nhds 0) →
+            Filter.Tendsto
+              (fun n =>
+                RectangleCLTArxivV1.gaussianMaximumMean
+                    (RectangleCLTArxivV1.lowerFamilyGaussianFactor (RectangleCLTArxivV1.lowerUnmaskedSequence a m n)
+                      (r n) (m n)) /
+                  RectangleCLTArxivV1.independentAbsGaussianMean (r n))
+              Filter.atTop (nhds 1)
+@RectangleCLTArxivV1.lowerUnmaskedSequence_one_width_tendsto : ∀ {a : ℕ → ℝ} {m : ℕ → ℕ},
+  (∀ (n : ℕ), 2 ≤ m n) →
+    Filter.Tendsto m Filter.atTop Filter.atTop →
+      (∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ a n) →
+        Filter.Tendsto
+            (fun n =>
+              RectangleCLTArxivV1.lowerWidthScale (a n) (Real.log ↑(m n))
+                (RectangleCLTArxivV1.independentAbsGaussianMean 1) ↑n)
+            Filter.atTop (nhds 0) →
+          Filter.Tendsto
+            (fun n =>
+              RectangleCLTArxivV1.gaussianMaximumMean
+                (RectangleCLTArxivV1.lowerFamilyGaussianFactor (RectangleCLTArxivV1.lowerUnmaskedSequence a m n) 1
+                  (m n)))
+            Filter.atTop (nhds √(2 / Real.pi))
+RectangleCLTArxivV1.eventually_lowerUnmaskedSequence_properties : ∀ (a : ℕ → ℝ) {r m : ℕ → ℕ},
+  (∀ (n : ℕ), 1 ≤ r n) →
+    (∀ (n : ℕ), 2 ≤ m n) →
+      ∀ᶠ (n : ℕ) in Filter.atTop,
+        RectangleCLTArxivV1.LowerRectangularFamilyProperties (RectangleCLTArxivV1.lowerUnmaskedSequence a m n) n (r n)
+          (m n)
+RectangleCLTArxivV1.exists_lowerUnmaskedSequence_detection_constant : ∃ c,
+  0 < c ∧
+    ∀ (a : ℕ → ℝ) (r m : ℕ → ℕ) [inst : ∀ (n : ℕ), NeZero (r n)] [inst_1 : ∀ (n : ℕ), NeZero (m n)],
+      (∀ (n : ℕ), 1 ≤ r n) →
+        (∀ (n : ℕ), 2 ≤ m n) →
+          (∀ (n : ℕ), r n ≤ m n) →
+            Filter.Tendsto m Filter.atTop Filter.atTop →
+              (∀ᶠ (n : ℕ) in Filter.atTop, 1 ≤ a n) →
+                Filter.Tendsto
+                    (fun n =>
+                      RectangleCLTArxivV1.lowerWidthScale (a n) (Real.log ↑(m n))
+                        (RectangleCLTArxivV1.independentAbsGaussianMean (r n)) ↑n)
+                    Filter.atTop (nhds 0) →
+                  ∀ᶠ (n : ℕ) in Filter.atTop,
+                    c *
+                          RectangleCLTArxivV1.lowerWidthScale (a n) (Real.log ↑(m n))
+                            (RectangleCLTArxivV1.independentAbsGaussianMean (r n)) ↑n ≤
+                        RectangleCLTArxivV1.lowerFamilyShiftedCDFDifference
+                          (RectangleCLTArxivV1.lowerUnmaskedSequence a m n) n (r n) (m n)
+                          (RectangleCLTArxivV1.lowerLeadingThreshold (r n)) ∧
+                      c *
+                          RectangleCLTArxivV1.lowerWidthScale (a n) (Real.log ↑(m n))
+                            (RectangleCLTArxivV1.independentAbsGaussianMean (r n)) ↑n ≤
+                        RectangleCLTArxivV1.lowerFamilyComparisonDistance
+                          (RectangleCLTArxivV1.lowerUnmaskedSequence a m n) n (r n) (m n)
+RectangleCLTArxivV1.theorem4_bounded_symmetric_lower : ∃ c,
+  0 < c ∧
+    ∀ (B : ℕ → ℝ) (r m : ℕ → ℕ) [inst : ∀ (n : ℕ), NeZero (r n)] [inst : ∀ (n : ℕ), NeZero (m n)],
+      (∀ (n : ℕ), 2 ≤ B n) →
+        (∀ (n : ℕ), 1 ≤ r n) →
+          (∀ (n : ℕ), 2 ≤ m n) →
+            (∀ (n : ℕ), r n ≤ m n) →
+              Filter.Tendsto m Filter.atTop Filter.atTop →
+                Filter.Tendsto
+                    (fun n =>
+                      B n * RectangleCLTArxivV1.independentAbsGaussianMean (r n) *
+                          RectangleCLT.dimensionLog (r n * m n) /
+                        √↑n)
+                    Filter.atTop (nhds 0) →
+                  ∃ P,
+                    P = RectangleCLTArxivV1.lowerBoundedSequence B m ∧
+                      Filter.Tendsto
+                          (fun n =>
+                            RectangleCLTArxivV1.gaussianMaximumMean
+                                (RectangleCLTArxivV1.lowerFamilyGaussianFactor (P n) (r n) (m n)) /
+                              RectangleCLTArxivV1.independentAbsGaussianMean (r n))
+                          Filter.atTop (nhds 1) ∧
+                        ∀ᶠ (n : ℕ) in Filter.atTop,
+                          RectangleCLTArxivV1.LowerRectangularFamilyProperties (P n) n (r n) (m n) ∧
+                            (∀ (i : Fin n) (z : Fin n → RectangleCLTArxivV1.LowerFamilySeed (r n) (m n)),
+                                ‖RectangleCLTArxivV1.lowerFamilyRawObservations (P n) i z‖ ≤ B n) ∧
+                              c *
+                                  (B n *
+                                        RectangleCLTArxivV1.gaussianMaximumMean
+                                          (RectangleCLTArxivV1.lowerFamilyGaussianFactor (P n) (r n) (m n)) *
+                                      RectangleCLT.dimensionLog (r n * m n) /
+                                    √↑n) ≤
+                                RectangleCLTArxivV1.lowerFamilyComparisonDistance (P n) n (r n) (m n)

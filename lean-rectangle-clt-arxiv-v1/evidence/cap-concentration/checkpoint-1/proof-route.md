@@ -1,0 +1,13 @@
+# Actual concentration proof route
+
+The raw stochastic inputs are a probability measure, independent measurable centered bounded two-coordinate observations, a rectangular Gaussian factor, and the **actual** projected covariance. No concentration, Fourier-decay, selector-mass, density, or Gaussian-approximation conclusion is assumed.
+
+For bandwidth h>0 choose the uniform frequency interval [-1/(4h),1/(4h)] (and its square). Define the character average K by its genuine complex integral. On the target interval/box its real part is at least1/2, so the event probability is at most4 E||K||². Complex Fubini expands this square into two independent frequencies; the scalar phase at their difference is at most1/2 from h≥δ (single) or h≥2δ (pair). The actual independent-copy cosine estimate and exact Gaussian factor then bound the true characteristic function.
+
+In the original two projection coordinates the covariance is v[[1,ρ],[ρ,1]], so with v≥1/2 the Fourier majorant is exp(-(t₁²+2ρt₁t₂+t₂²)/π²). Completing its square gives integral π³/sqrt(1−ρ²). Frequency-volume normalization gives16π³h²/sqrt(1−ρ²). The single projection gives8h sqrt(π/a), a=1/π². Thus the inverse angle is computed from the actual covariance, rather than assumed as a bound.
+
+For arbitrary lower variance c>0, the deterministic scale α(c)=1/sqrt(2c) reduces to v≥1/2. Scaling the actual observations and Gaussian factor, and their actual covariance, is proved. The resulting constants are multiplied by α (single) or α² (pair), and the bandwidth condition is unchanged. Width-zero **probability** endpoints follow from positive widths, including zero bounded envelope. Logistic bandwidth is explicitly positive.
+
+The actual single logistic tuple weight is at most exp(-|s|/2), and the pair weight is at most exp(-(|s|+|t|)/2). Their integrals are4 and16. Averaging over a continuous unit interval/square and applying actual Fubini converts the uniform interval/box estimate into a weight-mass bound, giving16 exp(1/2) h sqrt(π/a) and64 exp(1) π³h²/sqrt(1−ρ²). Deterministic shifts change only thresholds; independent random shifts are averaged under the actual product law.
+
+This is the frozen Supplemental G.2 Fourier/positive-local-majorant strategy, with explicit quantitative auxiliary adaptations: original projection coordinates instead of q coordinates; the sinc-squared kernel represented by its defining averaged character and expanded directly by Fubini, rather than a separately stated sine/Fourier-inversion identity; Laplace majorants with continuous overlapping-cell averaging instead of the exact g₁/g₂ integrals and a discrete cell partition. The unused scalar sine/g₁/g₂ identities are not claimed proved. Independent passage correspondence review is still required.
