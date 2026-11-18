@@ -8,6 +8,26 @@ internal nodes cannot hide a project-to-project proof dependency. -/
 open Lean Elab Command in
 run_cmd do
   let targets := #[
+    ``RectangleCLTArxivV1.theorem_3_intrinsic,
+    ``RectangleCLTArxivV1.theorem_3_intrinsic_positive_dimensions,
+    ``RectangleCLTArxivV1.theorem_8_sparse_polynomial_moment_lower,
+    ``RectangleCLTArxivV1.theorem_8_sparse_polynomial_moment_two_sided,
+    ``RectangleCLTArxivV1.lemma_F_1_uniform_scalar_moderate_tail,
+    ``RectangleCLTArxivV1.lemma_F_2_independently_shifted_variables,
+    ``RectangleCLTArxivV1.lemma_F_3_common_symmetric_construction,
+    ``RectangleCLTArxivV1.lemma_E1_expected_maximum,
+    ``RectangleCLTArxivV1.cap_one_projection_small_interval,
+    ``RectangleCLTArxivV1.cap_two_projection_small_box,
+    ``RectangleCLTArxivV1.cap_one_projection_small_interval_of_lower_variance,
+    ``RectangleCLTArxivV1.cap_two_projection_small_box_of_lower_variance,
+    ``RectangleCLTArxivV1.lemma_H2_gaussian_matrix,
+    ``RectangleCLTArxivV1.lemma_H2_projected_reference,
+    ``RectangleCLTArxivV1.lemma_B1_gaussian_seed_interpolation,
+    ``RectangleCLTArxivV1.lemma_B2_intrinsic_paired_restoration,
+    ``RectangleCLTArxivV1.bounded_width_example_one_eighth_from_main_regime,
+    ``RectangleCLTArxivV1.cap_integrated_remainder_min_bound,
+    ``RectangleCLTArxivV1.dimensionCap_rate_of_small_bandwidth_estimate,
+
     ``RectangleCLTArxivV1.corollary_2_intrinsic,
     ``RectangleCLTArxivV1.corollary_3_intrinsic,
     ``RectangleCLTArxivV1.theorem4_bounded_symmetric_lower,
