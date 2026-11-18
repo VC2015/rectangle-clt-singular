@@ -1,0 +1,67 @@
+import RectangleCLTArxivV1.TransfersMain
+import Lean.Util.CollectAxioms
+import Lean.Elab.Command
+open Lean Elab Command in
+run_cmd do
+  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
+  let targets := #[
+    ``RectangleCLTArxivV1.polynomialEnvelopeWidthRate_nonneg,
+    ``RectangleCLTArxivV1.polynomialFourthWidthRate_nonneg,
+    ``RectangleCLTArxivV1.le_common_capped_min_of_two,
+    ``RectangleCLTArxivV1.PolynomialEnvelopeHypotheses.coordinate_memLp_two,
+    ``RectangleCLTArxivV1.PolynomialEnvelopeHypotheses.gaussian_factor_exists,
+    ``RectangleCLTArxivV1.PolynomialEnvelopeHypotheses.unit_covariance,
+    ``RectangleCLTArxivV1.PolynomialEnvelopeHypotheses.conditional_marginal_inputs,
+    ``RectangleCLTArxivV1.PolynomialEnvelopeHypotheses.covariance_eq_originalAverageCovariance,
+    ``RectangleCLTArxivV1.integral_projection_sq,
+    ``RectangleCLTArxivV1.matrixQuadratic_covariance_eq_variance,
+    ``RectangleCLTArxivV1.goodConditional_covariance_quadratic_le,
+    ``RectangleCLTArxivV1.goodConditional_gaussianMaximumMean_le,
+    ``RectangleCLTArxivV1.matrixQuadratic_average,
+    ``RectangleCLTArxivV1.goodConditional_covariance_quadratic_nonneg,
+    ``RectangleCLTArxivV1.conditionalCovarianceForMask_quadratic_le,
+    ``RectangleCLTArxivV1.conditionalCovarianceForMask_gaussianMaximumMean_le,
+    ``RectangleCLTArxivV1.conditionalCovarianceForMask_quadratic_le_allRetained,
+    ``RectangleCLTArxivV1.gaussianMaximumMean_scaledFactor_le,
+    ``RectangleCLTArxivV1.gaussianMaximumMean_standardized_le,
+    ``RectangleCLTArxivV1.intrinsicEnvelopeCLT_after_standardization,
+    ``RectangleCLTArxivV1.intrinsicEnvelopeCLT_of_marginal_lower_bound,
+    ``RectangleCLTArxivV1.gaussianMaximumMean_le_of_diagonal_le,
+    ``RectangleCLTArxivV1.conditional_D_L_le,
+    ``RectangleCLTArxivV1.conditionalRetained_intrinsicRectangleDistanceCLT,
+    ``RectangleCLTArxivV1.covariance_conditionalExceptionalPart,
+    ``RectangleCLTArxivV1.conditional_covariance_restoration_single,
+    ``RectangleCLTArxivV1.conditionalResidualCovariance_eq_average,
+    ``RectangleCLTArxivV1.conditional_covariance_restoration,
+    ``RectangleCLTArxivV1.conditionalResidualCovariance_diagonal_le,
+    ``RectangleCLTArxivV1.conditionalOmittedCovariance_diagonal_le,
+    ``RectangleCLTArxivV1.factor_exists_of_symmetric_quadratic_nonneg,
+    ``RectangleCLTArxivV1.conditionalResidualCovariance_factor_exists,
+    ``RectangleCLTArxivV1.conditionalOmittedCovariance_quadratic_nonneg,
+    ``RectangleCLTArxivV1.conditionalOmittedCovariance_factor_exists,
+    ``RectangleCLTArxivV1.conditionalMaskDifference_factor_exists,
+    ``RectangleCLTArxivV1.conditionalAllCovariance_diagonal_lower,
+    ``RectangleCLTArxivV1.conditionalAllGaussian_rectangleDistance_intrinsic,
+    ``RectangleCLTArxivV1.gaussianRectangleDistance_symm,
+    ``RectangleCLTArxivV1.conditionalMaskGaussian_rectangleDistance_intrinsic,
+    ``RectangleCLTArxivV1.conditionalMaskGaussian_rectangleDistance_le_deviation,
+    ``RectangleCLTArxivV1.conditionalGoodKernel_rectangle_error_intrinsic,
+    ``RectangleCLTArxivV1.conditionalKernel_rectangle_error_intrinsic,
+    ``RectangleCLTArxivV1.conditionalPolynomial_intrinsic_raw,
+    ``RectangleCLTArxivV1.one_le_conditionalIntrinsicTransferConstant,
+    ``RectangleCLTArxivV1.conditionalPolynomial_intrinsic_threshold,
+    ``RectangleCLTArxivV1.polynomialEnvelopeWidthRate_eq_scaled_old,
+    ``RectangleCLTArxivV1.polynomialEnvelopeIntrinsicConstant_pos,
+    ``RectangleCLTArxivV1.polynomialEnvelope_intrinsic_CLT,
+    ``RectangleCLTArxivV1.theorem_2_i_intrinsic,
+    ``RectangleCLTArxivV1.PolynomialEnvelopeBound.mono,
+    ``RectangleCLTArxivV1.PolynomialFourthBound.mono,
+    ``RectangleCLTArxivV1.theorem_2_intrinsic,
+    ``RectangleCLTArxivV1.theorem_2_intrinsic_with_min]
+  for target in targets do
+    let axioms ← Lean.collectAxioms target
+    for axiomName in axioms do
+      unless allowed.contains axiomName do
+        throwError "{target} depends on {axiomName}"
+    logInfo m!"{target} uses {axioms.toList}"
+  logInfo m!"PASS: {targets.size} strict transitive audits."
