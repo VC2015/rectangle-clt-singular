@@ -13,6 +13,22 @@ internal nodes cannot hide a project-to-project proof dependency. -/
 open Lean Elab Command in
 run_cmd do
   let targets := #[
+    ``RectangleCLTArxivV1.hardGaussianWeightedRidgeIntegral_Green_actualFaces,
+    ``RectangleCLTArxivV1.hardGaussianWeightedRidgeIntegral_Green_actualFaces_compact,
+    ``RectangleCLTArxivV1.exists_actual_facet_ridge_Green,
+    ``RectangleCLTArxivV1.nonsimpleActualConormalSum_eq_spherical_vector,
+    ``RectangleCLTArxivV1.nonsimpleActualConormalSum_norm_le_spherical_area,
+    ``RectangleCLTArxivV1.nonsimpleSquare_printed_ridge_Green,
+    ``RectangleCLTArxivV1.nonsimpleSquare_actualVertex_printed_spherical_balance,
+    ``RectangleCLTArxivV1.nonsimpleSquare_actualVertex_printed_spherical_norm_bound,
+    ``RectangleCLTArxivV1.nonsimpleSquareActualVertex_is_nonsimple,
+    ``RectangleCLTArxivV1.nonsimpleActualGaussianMass_eq_surface_integral,
+    ``RectangleCLTArxivV1.nonsimpleActualFaceEuclideanChart_isometry,
+    ``RectangleCLTArxivV1.nonsimpleActualFaceEuclideanChart_covers_closedFace,
+    ``RectangleCLTArxivV1.nonsimpleActualGaussianMass_eq_finite_surface_integral,
+    ``RectangleCLTArxivV1.nonsimpleActualGaussianMass_ridge_surface_integral,
+    ``RectangleCLTArxivV1.nonsimpleActualFiniteFaceEuclideanChart_isometry,
+    ``RectangleCLTArxivV1.nonsimpleActualFiniteFaceEuclideanChart_covers_closedFace,
     ``RectangleCLTArxivV1.corollary4_canonical_correlation_gap,
     ``RectangleCLTArxivV1.lemma_H3_fourth_derivative,
     ``RectangleCLTArxivV1.theoremH3BandwidthConstant_ge_one,

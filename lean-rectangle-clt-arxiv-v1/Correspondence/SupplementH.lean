@@ -18,3 +18,14 @@ source/passages and proof routes are bound in correspondence JSON ledgers. -/
 #check RectangleCLTArxivV1.lemma_H3_fourth_derivative
 #check RectangleCLTArxivV1.theoremH3BandwidthConstant_ge_one
 #check RectangleCLTArxivV1.theoremH3BandwidthConstant_pos
+
+-- Printed pointwise H.1 geometry, including nonsimple complete faces.
+#check RectangleCLTArxivV1.hardGaussianWeightedRidgeIntegral_Green_actualFaces
+#check RectangleCLTArxivV1.exists_actual_facet_ridge_Green
+#check RectangleCLTArxivV1.nonsimpleActualConormalSum_eq_spherical_vector
+#check RectangleCLTArxivV1.nonsimpleActualConormalSum_norm_le_spherical_area
+#check RectangleCLTArxivV1.nonsimpleActualGaussianMass_eq_surface_integral
+#check RectangleCLTArxivV1.nonsimpleActualGaussianMass_eq_finite_surface_integral
+#check RectangleCLTArxivV1.nonsimpleActualGaussianMass_ridge_surface_integral
+#check RectangleCLTArxivV1.nonsimpleSquare_printed_ridge_Green
+#check RectangleCLTArxivV1.nonsimpleSquare_actualVertex_printed_spherical_balance
