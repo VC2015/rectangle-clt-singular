@@ -1,5 +1,7 @@
 # Lean verification of arXiv:2611.21474v1
 
+[Browse the interactive Blue Blueprint](https://vc2015.github.io/rectangle-clt-singular/blueprint/) or [download the PDF reader](https://vc2015.github.io/rectangle-clt-singular/blueprint/rectangle-clt-blueprint.pdf).
+
 The verification covers the 16 November 2026 paper and its separate supplement, Appendices G–I. The theorem index pairs each printed result with the Lean declaration that proves it. The proof records let the reader follow individual arguments and identify derivations that use a different route. [Paper](https://arxiv.org/abs/2611.21474v1) · [Theorem-to-Lean index](lean-rectangle-clt-arxiv-v1/STATUS.md) · [Proof correspondence](lean-rectangle-clt-arxiv-v1/correspondence/final-coverage.json)
 
 Of the 40 named results, 39 are checked as stated. In Lemma E.1, Lean makes explicit that the envelope scale satisfies $A\ge 0$. The printed proof treats $A=0$ separately and otherwise uses $AL^{-1/q}$ as a truncation level. Its application takes the nonnegative $q$th root of the moment bound. Conjecture 1 remains open. [Lemma E.1 and its proof](https://github.com/VC2015/rectangle-clt-singular/blob/1803366cc994d9facae8e128ee180f68e319486f/research-rectangle-clt-singular/Rectangle_CLT_arXiv_2026-11-16.tex#L6882-L6924) · [Lean correspondence for E.1](lean-rectangle-clt-arxiv-v1/correspondence/expected-maximum-passages.json)
