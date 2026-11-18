@@ -10,6 +10,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 
@@ -47,18 +48,42 @@ def source_identity():
 
 
 def main():
+    global MODULES, SOURCES
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--output", type=Path, required=True,
                     help="New output directory; an existing path is refused")
     ap.add_argument("--require-clean", action="store_true")
+    ap.add_argument("--scope", choices=("c2", "exported"), default="c2",
+                    help="Force C.2 modules or the entire current exported import closure")
     args = ap.parse_args()
+    if args.scope == "exported":
+        ordered, seen = [], set()
+
+        def visit(name):
+            if name in seen:
+                return
+            seen.add(name)
+            path = PROJECT / (name.replace(".", "/") + ".lean")
+            for dependency in re.findall(r"(?m)^import (RectangleCLTArxivV1(?:\.[A-Za-z0-9_]+)*)\s*$",
+                                         path.read_text()):
+                visit(dependency)
+            if name != "RectangleCLTArxivV1":
+                ordered.append(name.removeprefix("RectangleCLTArxivV1."))
+
+        visit("RectangleCLTArxivV1")
+        MODULES = ordered
+        SOURCES = list(dict.fromkeys(
+            [f"RectangleCLTArxivV1/{name}.lean" for name in MODULES] + SOURCES))
+        SOURCES += ["Correspondence/IntrinsicEndpoints.lean", "Correspondence/A1.lean",
+                    "Correspondence/B3.lean", "Correspondence/C1Gaussian.lean"]
     output = args.output.resolve()
     status = git("status", "--porcelain")
     if args.require_clean and status:
         raise SystemExit("A clean checkout is required (including untracked files).")
     output.mkdir(parents=True, exist_ok=False)
     identity = source_identity()
-    report = {"scope": "Lemma C.2 only", "release_wide_certification": False,
+    scope = "Lemma C.2 only" if args.scope == "c2" else "Entire exported checked import closure"
+    report = {"scope": scope, "release_wide_certification": False,
               "started_at": now(), "source_commit": git("rev-parse", "HEAD"),
               "source_tree": git("rev-parse", "HEAD^{tree}"),
               "initial_git_status": status, "source_identity": identity,
@@ -106,6 +131,9 @@ def main():
                                ".lake/packages/generic_chaining/Audit.lean"])
         run("c2-audit", ["lake", "env", "lean", "Audit.lean"])
         run("mapped-types", ["lake", "env", "lean", "Correspondence/C2.lean"])
+        if args.scope == "exported":
+            for name in ("IntrinsicEndpoints", "A1", "B3", "C1Gaussian"):
+                run("mapped-" + name, ["lake", "env", "lean", "Correspondence/" + name + ".lean"])
         deps_log = run("dependencies", ["lake", "env", "lean", "Correspondence/Dependencies.lean"])
         deps = json.loads(deps_log.read_text())
         graph = {row["name"] for row in deps["project_dependency_graph"]}
@@ -129,7 +157,7 @@ def main():
         save()
         raise
     save()
-    print("C.2 checkpoint PASS:", receipt, flush=True)
+    print("Checkpoint PASS:", receipt, flush=True)
 
 
 if __name__ == "__main__":

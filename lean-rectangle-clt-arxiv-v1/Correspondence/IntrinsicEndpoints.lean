@@ -1,0 +1,34 @@
+import RectangleCLTArxivV1
+
+-- Ordinary array data and the two distinct actual fourth-moment matrices.
+#print RectangleCLT.BoundedIndependentHypotheses
+#print RectangleCLTArxivV1.IntrinsicFourthBounds
+#print RectangleCLTArxivV1.IntrinsicTheoremOneContract
+#print RectangleCLTArxivV1.IntrinsicDerivativePropositionContract
+#print RectangleCLTArxivV1.intrinsicBoundaryCoefficient
+#print RectangleCLTArxivV1.intrinsicObservationRate
+
+#check @RectangleCLTArxivV1.theorem_1_intrinsic_clt
+#check @RectangleCLTArxivV1.intrinsicFourthMomentCLT_factor_exists
+#check @RectangleCLTArxivV1.proposition_1_intrinsic_derivatives
+#check @RectangleCLTArxivV1.corollary_1_normalized_observations
+#check @RectangleCLTArxivV1.lemma_1_bounded_model
+#check @RectangleCLTArxivV1.lemma_C1_gaussian_model
+#check @RectangleCLTArxivV1.lemma_2_smoothing_error
+#check @RectangleCLTArxivV1.integral_logisticEnvelope_intrinsic
+#check @RectangleCLTArxivV1.averaged_translated_derivative_intrinsic
+#check @RectangleCLTArxivV1.logistic_matrix_estimate_intrinsic
+#check @RectangleCLTArxivV1.selector_nuclear_bound_intrinsic_paper
+#check @RectangleCLTArxivV1.gaussian_mean_relative_to_single_face
+#check @RectangleCLTArxivV1.lemma_C1_rademacher_boundary
+#check @RectangleCLTArxivV1.lemma_C1_rademacher_maximum
+#check @RectangleCLTArxivV1.gaussianEndpointSmoothing_intrinsic
+
+example := @RectangleCLTArxivV1.theorem_1_intrinsic_clt
+example := @RectangleCLTArxivV1.proposition_1_intrinsic_derivatives
+example := @RectangleCLTArxivV1.corollary_1_normalized_observations
+example := @RectangleCLTArxivV1.lemma_1_bounded_model
+example := @RectangleCLTArxivV1.lemma_C1_gaussian_model
+example := @RectangleCLTArxivV1.lemma_2_smoothing_error
+example := @RectangleCLTArxivV1.gaussian_mean_relative_to_single_face
+example := @RectangleCLTArxivV1.lemma_C1_rademacher_boundary

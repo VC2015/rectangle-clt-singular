@@ -15,16 +15,16 @@ noncomputable section
 set_option autoImplicit false
 universe u
 
-def intrinsicDerivativeConstant : ℝ := intrinsicComparisonConstant intrinsicBoundaryConstant
+def intrinsicPropositionDerivativeConstant : ℝ := intrinsicComparisonConstant intrinsicBoundaryConstant
 
-theorem intrinsicDerivativeConstant_pos : 0 < intrinsicDerivativeConstant :=
+theorem intrinsicPropositionDerivativeConstant_pos : 0 < intrinsicPropositionDerivativeConstant :=
   intrinsicComparisonConstant_pos intrinsicBoundaryConstant_pos
 
-theorem intrinsicDerivativeConstant_ge_direct : directInitializationConstant ≤ intrinsicDerivativeConstant :=
+theorem intrinsicPropositionDerivativeConstant_ge_direct : directInitializationConstant ≤ intrinsicPropositionDerivativeConstant :=
   le_add_of_nonneg_right (intrinsicSeededDerivativeConstant_pos intrinsicBoundaryConstant_pos).le
 
-theorem intrinsicDerivativeConstant_ge_seeded :
-    intrinsicSeededDerivativeConstant intrinsicBoundaryConstant ≤ intrinsicDerivativeConstant :=
+theorem intrinsicPropositionDerivativeConstant_ge_seeded :
+    intrinsicSeededDerivativeConstant intrinsicBoundaryConstant ≤ intrinsicPropositionDerivativeConstant :=
   le_add_of_nonneg_left directInitializationConstant_pos.le
 
 /-- The genuine supremum over finite rectangle thresholds in the direct
@@ -80,7 +80,7 @@ def IntrinsicDerivativePropositionContract (A₀ C : ℝ) : Prop :=
           C*s₄*(dimensionLog p * κ)/(s.bandwidth*(t+ε)))
 
 theorem intrinsic_derivative_proposition :
-    IntrinsicDerivativePropositionContract relativeDerivativeBandwidth intrinsicDerivativeConstant := by
+    IntrinsicDerivativePropositionContract relativeDerivativeBandwidth intrinsicPropositionDerivativeConstant := by
   intro Ω _ μ _ p n _ ξ δ s₃ s₄ h hrel hunit A hA
   dsimp only
   intro s hfaces hband
@@ -93,11 +93,11 @@ theorem intrinsic_derivative_proposition :
   let κ := intrinsicBoundaryCoefficient μ ξ A
   have hsqrt : 0 ≤ κ := zero_le_one.trans (one_le_intrinsicBoundaryCoefficient μ ξ A hp)
   have hb := relative_derivative_bandwidth_conditions h.delta_nonneg hband
-  have hCinit := intrinsicDerivativeConstant_ge_direct
-  have hCseed := intrinsicDerivativeConstant_ge_seeded
-  have hC₃ : directInitializationCubicConstant ≤ intrinsicDerivativeConstant :=
+  have hCinit := intrinsicPropositionDerivativeConstant_ge_direct
+  have hCseed := intrinsicPropositionDerivativeConstant_ge_seeded
+  have hC₃ : directInitializationCubicConstant ≤ intrinsicPropositionDerivativeConstant :=
     (le_add_of_nonneg_right directInitializationRemainderConstant_pos.le).trans hCinit
-  have hC₄ : directInitializationRemainderConstant ≤ intrinsicDerivativeConstant :=
+  have hC₄ : directInitializationRemainderConstant ≤ intrinsicPropositionDerivativeConstant :=
     (le_add_of_nonneg_left directInitializationCubicConstant_pos.le).trans hCinit
   constructor
   · intro v hv
@@ -142,7 +142,7 @@ theorem intrinsic_derivative_proposition :
 theorem proposition_1_intrinsic_derivatives :
     ∃ A₀ : ℝ, 0 < A₀ ∧ ∃ C : ℝ, 0 < C ∧ IntrinsicDerivativePropositionContract A₀ C :=
   ⟨relativeDerivativeBandwidth, relativeDerivativeBandwidth_pos,
-    intrinsicDerivativeConstant, intrinsicDerivativeConstant_pos, intrinsic_derivative_proposition⟩
+    intrinsicPropositionDerivativeConstant, intrinsicPropositionDerivativeConstant_pos, intrinsic_derivative_proposition⟩
 
 end
 end RectangleCLTArxivV1

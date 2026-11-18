@@ -2,6 +2,7 @@ import RectangleCLTArxivV1.BoundedRectangleIntrinsic
 import RectangleCLTArxivV1.GaussianRectangleIntrinsic
 import RectangleCLTArxivV1.GaussianWidthOrder
 import RectangleCLTArxivV1.IntrinsicInputs
+import RectangleCLTArxivV1.EnvelopeThresholdIntegration
 import RectangleCLTCompanion.SplitV4.SlepianEnvelope
 
 /-! Intrinsic envelope averaging on the actual direct Slepian path.
@@ -37,8 +38,8 @@ theorem smallerEnvelope_scaled_bounded_intrinsic_maximum
   have hW : Measurable W := hη.measurable_sum.add_const r
   let ν := μ.map W
   letI : IsProbabilityMeasure ν := isProbabilityMeasure_map hW.aemeasurable
-  let d := s.bandwidth*Real.log 2
-  have hd : 0 < d := mul_pos s.bandwidth_pos (Real.log_pos (by norm_num))
+  let d := s.bandwidth
+  have hd : 0 < d := s.bandwidth_pos
   have hbound (t : FaceSmoother p) :
       ν.real {x | (∀ f ∈ t.faces, t.faceScore f x ≤ d) ∧
         ¬(∀ f ∈ t.faces, t.faceScore f x ≤ -d)} ≤
@@ -55,7 +56,7 @@ theorem smallerEnvelope_scaled_bounded_intrinsic_maximum
       (t.measurableSet_boundaryLayer d).preimage (measurable_id.add_const r)
     rw [map_measureReal_apply hη.measurable_sum hE] at hh
     exact hh
-  have hb := s.integral_smallerEnvelope_le_of_boundary ν hbound
+  have hb := integral_smallerEnvelope_le_of_matching_boundary_printed s ν (fun t _ => hbound t)
   rw [integral_map hW.aemeasurable
     (s.continuous_F.mul (continuous_const.sub s.continuous_F)).aestronglyMeasurable] at hb
   have heq : sumVector η = fun ω => a • sumVector ξ ω := by
@@ -65,12 +66,7 @@ theorem smallerEnvelope_scaled_bounded_intrinsic_maximum
     simp_rw [heq, norm_smul, Real.norm_eq_abs, abs_of_nonneg ha]
     exact integral_const_mul _ _
   rw [hmean] at hb
-  have hlog : Real.log 2 ≤ 1 := by
-    have hh := Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ)<2)
-    norm_num at hh ⊢
-    exact hh
-  have hdle : d ≤ s.bandwidth := by
-    simpa only [d, mul_one] using mul_le_mul_of_nonneg_left hlog s.bandwidth_pos.le
+  have hdle : d ≤ s.bandwidth := le_refl _
   have haδ : a*δ ≤ δ := by simpa using mul_le_mul_of_nonneg_right ha1 h.delta_nonneg
   have hδh : δ ≤ s.bandwidth := by linarith only [hband, h.delta_nonneg]
   have hnum : d+a*δ ≤ 2*s.bandwidth := by linarith only [hdle,haδ,hδh]
@@ -84,7 +80,10 @@ theorem smallerEnvelope_scaled_bounded_intrinsic_maximum
     (mul_nonneg (by norm_num : (0:ℝ)≤4) s.bandwidth_pos.le)
   change (∫ ω, s.F (sumVector η ω+r)*(1-s.F (sumVector η ω+r)) ∂μ) ≤ _ at hb
   rw [heq] at hb
-  exact hb.trans (by nlinarith only [hprod])
+  have hm := mul_le_mul_of_nonneg_left hprod
+    (show 0≤(Real.exp 1/2)*64 by positivity)
+  have he := mul_le_mul_of_nonneg_right exp_one_le_four (mul_nonneg s.bandwidth_pos.le hE)
+  exact hb.trans (by nlinarith only [hm,he])
 
 theorem smallerEnvelope_scaled_gaussian_intrinsic_maximum
     {p : ℕ} (A : Matrix (Fin p) (Fin p) ℝ)
@@ -108,8 +107,8 @@ theorem smallerEnvelope_scaled_gaussian_intrinsic_maximum
   have hW : Measurable W := measurable_id.add_const r
   let ν := (gaussianLaw B).map W
   letI : IsProbabilityMeasure ν := isProbabilityMeasure_map hW.aemeasurable
-  let d := s.bandwidth*Real.log 2
-  have hd : 0 < d := mul_pos s.bandwidth_pos (Real.log_pos (by norm_num))
+  let d := s.bandwidth
+  have hd : 0 < d := s.bandwidth_pos
   have hbound (t : FaceSmoother p) :
       ν.real {x | (∀ f ∈ t.faces, t.faceScore f x ≤ d) ∧
         ¬(∀ f ∈ t.faces, t.faceScore f x ≤ -d)} ≤
@@ -122,19 +121,14 @@ theorem smallerEnvelope_scaled_gaussian_intrinsic_maximum
     change ((gaussianLaw B).map W).real (t.boundaryLayer d) ≤ _
     rw [Measure.real, Measure.map_apply hW (t.measurableSet_boundaryLayer d)]
     exact gaussianRectangleBoundary_intrinsic_fixed_shift t B r hv hd hdiag
-  have hb := s.integral_smallerEnvelope_le_of_boundary ν hbound
+  have hb := integral_smallerEnvelope_le_of_matching_boundary_printed s ν (fun t _ => hbound t)
   rw [integral_map hW.aemeasurable
     (s.continuous_F.mul (continuous_const.sub s.continuous_F)).aestronglyMeasurable] at hb
   have hm : Measurable (fun y => s.F (y+r)*(1-s.F (y+r))) :=
     (s.continuous_F.measurable.comp (measurable_id.add_const r)).mul
       (measurable_const.sub (s.continuous_F.measurable.comp (measurable_id.add_const r)))
   rw [FaceSmoother.integral_gaussianLaw_smul A a _ hm]
-  have hlog : Real.log 2 ≤ 1 := by
-    have hh := Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ)<2)
-    norm_num at hh ⊢
-    exact hh
-  have hdle : d ≤ s.bandwidth := by
-    simpa only [d,mul_one] using mul_le_mul_of_nonneg_left hlog s.bandwidth_pos.le
+  have hdle : d ≤ s.bandwidth := le_refl _
   have hquot : 2*d/(a^2) ≤ 4*s.bandwidth := by
     apply (div_le_iff₀ hv).mpr
     nlinarith only [hdle, mul_le_mul_of_nonneg_left hav s.bandwidth_pos.le]
@@ -144,7 +138,10 @@ theorem smallerEnvelope_scaled_gaussian_intrinsic_maximum
     simpa using mul_le_mul_of_nonneg_right ha1 (gaussianMaximumMean_nonneg A)
   have hp := mul_le_mul hquot hmean (gaussianMaximumMean_nonneg B)
     (mul_nonneg (by norm_num : (0:ℝ)≤4) s.bandwidth_pos.le)
-  exact hb.trans (by nlinarith only [hp])
+  have hm := mul_le_mul_of_nonneg_left hp (show 0≤Real.exp 1/2 by positivity)
+  have he := mul_le_mul_of_nonneg_right exp_one_le_four
+    (mul_nonneg s.bandwidth_pos.le (gaussianMaximumMean_nonneg A))
+  exact hb.trans (by nlinarith only [hm,he])
 
 /-- Actual envelope supplier used by direct initialization. All analytic
 premises have been discharged from the original bounded independent array

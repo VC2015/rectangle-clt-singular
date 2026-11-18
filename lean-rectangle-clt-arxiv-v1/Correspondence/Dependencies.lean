@@ -63,6 +63,28 @@ run_cmd do
     ``RectangleCLTArxivV1.bounded_sum_expected_maximum_factor_exists,
     ``RectangleCLTArxivV1.boundedIndependent_of_raw,
     ``RectangleCLTArxivV1.lemma_C2_expected_maximum,
+    ``RectangleCLTArxivV1.intrinsicFourthMomentCLT,
+    ``RectangleCLTArxivV1.intrinsicEnvelopeCLT,
+    ``RectangleCLTArxivV1.intrinsicFourthMomentCLT_factor_exists,
+    ``RectangleCLTArxivV1.theorem_1_intrinsic_clt,
+    ``RectangleCLTArxivV1.proposition_1_intrinsic_derivatives,
+    ``RectangleCLTArxivV1.normalizedObservationsIntrinsicCLT,
+    ``RectangleCLTArxivV1.corollary_1_normalized_observations,
+    ``RectangleCLTArxivV1.lemma_1_bounded_model,
+    ``RectangleCLTArxivV1.lemma_C1_gaussian_model,
+    ``RectangleCLTArxivV1.lemma_2_smoothing_error,
+    ``RectangleCLTArxivV1.integral_logisticEnvelope_intrinsic,
+    ``RectangleCLTArxivV1.averaged_translated_derivative_intrinsic,
+    ``RectangleCLTArxivV1.logistic_matrix_estimate_intrinsic,
+    ``RectangleCLTArxivV1.selector_nuclear_bound_intrinsic_paper,
+    ``RectangleCLTArxivV1.gaussian_mean_relative_to_single_face,
+    ``RectangleCLTArxivV1.lemma_C1_rademacher_boundary,
+    ``RectangleCLTArxivV1.lemma_C1_rademacher_maximum,
+    ``RectangleCLTArxivV1.gaussian_probability_shiftedBox_intrinsic,
+    ``RectangleCLTArxivV1.gaussian_probability_le_contractedBox_intrinsic,
+    ``RectangleCLTArxivV1.intrinsicGaussianSmoothingConstant_ge_two,
+    ``RectangleCLTArxivV1.gaussianEndpointSmoothing_intrinsic,
+    ``RectangleCLTArxivV1.rectangleError_le_gaussianEndpointSmoothing_intrinsic,
     ``RectangleCLT.Companion.gaussian_factor_exists_of_boundedIndependent,
     ``RectangleCLT.Companion.SplitV4.Printed.independent_sum_bernstein_mgf]
   let mut queue := targets.toList
@@ -95,5 +117,5 @@ run_cmd do
         ("name", toJson target.toString), ("expanded_type", toJson ty),
         ("direct_dependencies", toJson (deps.map Name.toString))]
   IO.println <| (Json.mkObj [
-    ("scope", toJson "Lemma C.2 endpoints and project proof dependencies"),
+    ("scope", toJson "Checked C.2 and intrinsic comparison endpoints and project proof dependencies"),
     ("endpoints", Json.arr endpoints), ("project_dependency_graph", Json.arr graph)]).compress
