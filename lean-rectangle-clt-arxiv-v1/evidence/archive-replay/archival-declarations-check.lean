@@ -1,0 +1,39 @@
+import RectangleCLT.GaussianComparisonCovariance
+import RectangleCLT.GaussianComparisonLaw
+import RectangleCLT.GaussianMoments
+import RectangleCLT.IndependentCovariance
+import RectangleCLT.LocalMoments
+import RectangleCLT.Normalization
+import RectangleCLT.ProxyGaussianData
+import RectangleCLTCompanion.SplitV4.BennettMaximum
+import RectangleCLTCompanion.SplitV4.Printed.Bernstein
+
+set_option pp.universes true
+set_option pp.fullNames true
+
+#check @RectangleCLT.Companion.SplitV4.Printed.independent_sum_bernstein_mgf
+#print axioms RectangleCLT.Companion.SplitV4.Printed.independent_sum_bernstein_mgf
+#check @RectangleCLT.Companion.SplitV4.Printed.independent_sum_bernstein_mgf_nonneg
+#print axioms RectangleCLT.Companion.SplitV4.Printed.independent_sum_bernstein_mgf_nonneg
+#check @RectangleCLT.Companion.SplitV4.bounded_centered_bennett_mgf
+#print axioms RectangleCLT.Companion.SplitV4.bounded_centered_bennett_mgf
+#check @RectangleCLT.Companion.SplitV4.independent_sum_bennett_mgf
+#print axioms RectangleCLT.Companion.SplitV4.independent_sum_bennett_mgf
+#check @RectangleCLT.integrable_coordinate_pow_of_bounded
+#print axioms RectangleCLT.integrable_coordinate_pow_of_bounded
+#check @RectangleCLT.BoundedIndependentHypotheses.abs_coordinate_le
+#print axioms RectangleCLT.BoundedIndependentHypotheses.abs_coordinate_le
+#check @RectangleCLT.BoundedIndependentHypotheses.coordinate_second_moments
+#print axioms RectangleCLT.BoundedIndependentHypotheses.coordinate_second_moments
+#check @RectangleCLT.BoundedIndependentHypotheses.covariance_sum
+#print axioms RectangleCLT.BoundedIndependentHypotheses.covariance_sum
+#check @RectangleCLT.BoundedIndependentHypotheses.covariance_posSemidef
+#print axioms RectangleCLT.BoundedIndependentHypotheses.covariance_posSemidef
+#check @RectangleCLT.gaussianComparison_factor_exists
+#print axioms RectangleCLT.gaussianComparison_factor_exists
+#check @RectangleCLT.gaussianLaw_map_eval_eq_standard
+#print axioms RectangleCLT.gaussianLaw_map_eval_eq_standard
+#check @RectangleCLT.gaussianLaw_integral_coordinate
+#print axioms RectangleCLT.gaussianLaw_integral_coordinate
+#check @RectangleCLT.gaussianLaw_integral_coordinate_product
+#print axioms RectangleCLT.gaussianLaw_integral_coordinate_product

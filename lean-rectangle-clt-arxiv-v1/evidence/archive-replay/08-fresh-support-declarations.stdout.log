@@ -1,0 +1,52 @@
+@RectangleCLT.Companion.gaussian_factor_exists_of_boundedIndependent.{u_1} : ∀ {Ω : Type u_1}
+  [inst : MeasurableSpace.{u_1} Ω] {p n : Nat} {μ : MeasureTheory.Measure.{u_1} Ω}
+  [inst_1 : MeasureTheory.IsProbabilityMeasure.{u_1} μ] {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : Real},
+  RectangleCLT.BoundedIndependentHypotheses.{u_1} μ ξ δ →
+    ∃ A,
+      Eq.{1} (HMul.hMul.{0, 0, 0} A (Matrix.transpose.{0, 0, 0} A))
+        (RectangleCLT.covariance.{u_1} μ (RectangleCLT.sumVector.{u_1} ξ))
+'RectangleCLT.Companion.gaussian_factor_exists_of_boundedIndependent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@RectangleCLT.Companion.covariance_posSemidef_of_boundedIndependent.{u_1} : ∀ {Ω : Type u_1}
+  [inst : MeasurableSpace.{u_1} Ω] {p n : Nat} {μ : MeasureTheory.Measure.{u_1} Ω}
+  [inst_1 : MeasureTheory.IsProbabilityMeasure.{u_1} μ] {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : Real},
+  RectangleCLT.BoundedIndependentHypotheses.{u_1} μ ξ δ →
+    Matrix.PosSemidef.{0, 0} (RectangleCLT.covariance.{u_1} μ (RectangleCLT.sumVector.{u_1} ξ))
+'RectangleCLT.Companion.covariance_posSemidef_of_boundedIndependent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@RectangleCLT.Companion.sum_integral_observation_projection_sq.{u_1} : ∀ {Ω : Type u_1} [inst : MeasurableSpace.{u_1} Ω]
+  {p n : Nat} {μ : MeasureTheory.Measure.{u_1} Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure.{u_1} μ]
+  {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : Real},
+  RectangleCLT.BoundedIndependentHypotheses.{u_1} μ ξ δ →
+    ∀ (v : RectangleCLT.Vector p),
+      Eq.{1} (∑ i, ∫ (ω : Ω), HPow.hPow.{0, 0, 0} (dotProduct.{0, 0} v (ξ i ω)) 2 ∂μ)
+        (RectangleCLT.matrixQuadratic (RectangleCLT.covariance.{u_1} μ (RectangleCLT.sumVector.{u_1} ξ)) v)
+'RectangleCLT.Companion.sum_integral_observation_projection_sq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@RectangleCLT.Companion.observation_projection_ae_zero_of_quadratic_zero.{u_1} : ∀ {Ω : Type u_1}
+  [inst : MeasurableSpace.{u_1} Ω] {p n : Nat} {μ : MeasureTheory.Measure.{u_1} Ω}
+  [inst_1 : MeasureTheory.IsProbabilityMeasure.{u_1} μ] {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : Real},
+  RectangleCLT.BoundedIndependentHypotheses.{u_1} μ ξ δ →
+    ∀ (v : RectangleCLT.Vector p),
+      Eq.{1} (RectangleCLT.matrixQuadratic (RectangleCLT.covariance.{u_1} μ (RectangleCLT.sumVector.{u_1} ξ)) v) 0 →
+        ∀ (i : Fin n),
+          Filter.EventuallyEq.{u_1, 0} (MeasureTheory.ae.{u_1, u_1} μ) (fun ω => dotProduct.{0, 0} v (ξ i ω)) 0
+'RectangleCLT.Companion.observation_projection_ae_zero_of_quadratic_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@RectangleCLT.gaussianLaw_map_eval_eq_standard : ∀ {p : Nat} (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (j : Fin p),
+  Eq.{1} (HMul.hMul.{0, 0, 0} A (Matrix.transpose.{0, 0, 0} A) j j) 1 →
+    Eq.{1} (MeasureTheory.Measure.map.{0, 0} (fun x => x j) (RectangleCLT.gaussianLaw A))
+      (ProbabilityTheory.gaussianReal 0 1)
+'RectangleCLT.gaussianLaw_map_eval_eq_standard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@RectangleCLT.gaussianLaw_integral_coordinate : ∀ {p : Nat} (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (j : Fin p),
+  Eq.{1} (∫ (x : RectangleCLT.Vector p), x j ∂RectangleCLT.gaussianLaw A) 0
+'RectangleCLT.gaussianLaw_integral_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+@RectangleCLT.gaussianLaw_integral_coordinate_product : ∀ {p : Nat} (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (j k : Fin p),
+  Eq.{1} (∫ (x : RectangleCLT.Vector p), HMul.hMul.{0, 0, 0} (x j) (x k) ∂RectangleCLT.gaussianLaw A)
+    (HMul.hMul.{0, 0, 0} A (Matrix.transpose.{0, 0, 0} A) j k)
+'RectangleCLT.gaussianLaw_integral_coordinate_product' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,135 @@
+@RectangleCLT.Companion.SplitV4.Printed.independent_sum_bernstein_mgf.{u_1} : ∀ {Ω : Type u_1}
+  [inst : MeasurableSpace.{u_1} Ω] {μ : MeasureTheory.Measure.{u_1} Ω}
+  [inst_1 : MeasureTheory.IsProbabilityMeasure.{u_1} μ] {n : Nat} (X : Fin n → Ω → Real),
+  (∀ (i : Fin n), Measurable.{u_1, 0} (X i)) →
+    ProbabilityTheory.iIndepFun.{u_1, 0, 0} X μ →
+      (∀ (i : Fin n), MeasureTheory.Integrable.{0, u_1} (X i) μ) →
+        (∀ (i : Fin n), MeasureTheory.Integrable.{0, u_1} (fun ω => HPow.hPow.{0, 0, 0} (X i ω) 2) μ) →
+          (∀ (i : Fin n), Eq.{1} (∫ (ω : Ω), X i ω ∂μ) 0) →
+            ∀ {b t v : Real},
+              LT.lt.{0} 0 b →
+                LT.lt.{0} (HMul.hMul.{0, 0, 0} (abs.{0} t) b) 3 →
+                  (∀ (i : Fin n), ∀ᵐ (ω : Ω) ∂μ, LE.le.{0} (abs.{0} (X i ω)) b) →
+                    LE.le.{0} (∑ i, ∫ (ω : Ω), HPow.hPow.{0, 0, 0} (X i ω) 2 ∂μ) v →
+                      And (MeasureTheory.Integrable.{0, u_1} (fun ω => Real.exp (HMul.hMul.{0, 0, 0} t (∑ i, X i ω))) μ)
+                        (LE.le.{0} (ProbabilityTheory.mgf.{u_1} (fun ω => ∑ i, X i ω) μ t)
+                          (Real.exp
+                            (HDiv.hDiv.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} t 2) v)
+                              (HMul.hMul.{0, 0, 0} 2
+                                (HSub.hSub.{0, 0, 0} 1 (HDiv.hDiv.{0, 0, 0} (HMul.hMul.{0, 0, 0} (abs.{0} t) b) 3))))))
+'RectangleCLT.Companion.SplitV4.Printed.independent_sum_bernstein_mgf' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@RectangleCLT.Companion.SplitV4.Printed.independent_sum_bernstein_mgf_nonneg.{u_1} : ∀ {Ω : Type u_1}
+  [inst : MeasurableSpace.{u_1} Ω] {μ : MeasureTheory.Measure.{u_1} Ω}
+  [inst_1 : MeasureTheory.IsProbabilityMeasure.{u_1} μ] {n : Nat} (X : Fin n → Ω → Real),
+  (∀ (i : Fin n), Measurable.{u_1, 0} (X i)) →
+    ProbabilityTheory.iIndepFun.{u_1, 0, 0} X μ →
+      (∀ (i : Fin n), MeasureTheory.Integrable.{0, u_1} (X i) μ) →
+        (∀ (i : Fin n), MeasureTheory.Integrable.{0, u_1} (fun ω => HPow.hPow.{0, 0, 0} (X i ω) 2) μ) →
+          (∀ (i : Fin n), Eq.{1} (∫ (ω : Ω), X i ω ∂μ) 0) →
+            ∀ {b t v : Real},
+              LT.lt.{0} 0 b →
+                LE.le.{0} 0 t →
+                  LT.lt.{0} (HMul.hMul.{0, 0, 0} t b) 3 →
+                    (∀ (i : Fin n), ∀ᵐ (ω : Ω) ∂μ, LE.le.{0} (X i ω) b) →
+                      LE.le.{0} (∑ i, ∫ (ω : Ω), HPow.hPow.{0, 0, 0} (X i ω) 2 ∂μ) v →
+                        And
+                          (MeasureTheory.Integrable.{0, u_1} (fun ω => Real.exp (HMul.hMul.{0, 0, 0} t (∑ i, X i ω))) μ)
+                          (LE.le.{0} (ProbabilityTheory.mgf.{u_1} (fun ω => ∑ i, X i ω) μ t)
+                            (Real.exp
+                              (HDiv.hDiv.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} t 2) v)
+                                (HMul.hMul.{0, 0, 0} 2
+                                  (HSub.hSub.{0, 0, 0} 1 (HDiv.hDiv.{0, 0, 0} (HMul.hMul.{0, 0, 0} t b) 3))))))
+'RectangleCLT.Companion.SplitV4.Printed.independent_sum_bernstein_mgf_nonneg' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@RectangleCLT.Companion.SplitV4.bounded_centered_bennett_mgf.{u_1} : ∀ {Ω : Type u_1} [inst : MeasurableSpace.{u_1} Ω]
+  {μ : MeasureTheory.Measure.{u_1} Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure.{u_1} μ] {X : Ω → Real},
+  Measurable.{u_1, 0} X →
+    MeasureTheory.Integrable.{0, u_1} X μ →
+      MeasureTheory.Integrable.{0, u_1} (fun ω => HPow.hPow.{0, 0, 0} (X ω) 2) μ →
+        Eq.{1} (∫ (ω : Ω), X ω ∂μ) 0 →
+          ∀ {u t : Real},
+            LT.lt.{0} 0 u →
+              LE.le.{0} 0 t →
+                (∀ᵐ (ω : Ω) ∂μ, LE.le.{0} (X ω) u) →
+                  LE.le.{0} (ProbabilityTheory.mgf.{u_1} X μ t)
+                    (Real.exp
+                      (HMul.hMul.{0, 0, 0}
+                        (HDiv.hDiv.{0, 0, 0} (∫ (ω : Ω), HPow.hPow.{0, 0, 0} (X ω) 2 ∂μ) (HPow.hPow.{0, 0, 0} u 2))
+                        (RectangleCLT.Companion.SplitV4.bennettCorrection (HMul.hMul.{0, 0, 0} t u))))
+'RectangleCLT.Companion.SplitV4.bounded_centered_bennett_mgf' depends on axioms: [propext, Classical.choice, Quot.sound]
+@RectangleCLT.Companion.SplitV4.independent_sum_bennett_mgf.{u_1} : ∀ {Ω : Type u_1} [inst : MeasurableSpace.{u_1} Ω]
+  {μ : MeasureTheory.Measure.{u_1} Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure.{u_1} μ] {n : Nat}
+  (X : Fin n → Ω → Real),
+  (∀ (i : Fin n), Measurable.{u_1, 0} (X i)) →
+    ProbabilityTheory.iIndepFun.{u_1, 0, 0} X μ →
+      (∀ (i : Fin n), MeasureTheory.Integrable.{0, u_1} (X i) μ) →
+        (∀ (i : Fin n), MeasureTheory.Integrable.{0, u_1} (fun ω => HPow.hPow.{0, 0, 0} (X i ω) 2) μ) →
+          (∀ (i : Fin n), Eq.{1} (∫ (ω : Ω), X i ω ∂μ) 0) →
+            ∀ {u t v : Real},
+              LT.lt.{0} 0 u →
+                LE.le.{0} 0 t →
+                  (∀ (i : Fin n), ∀ᵐ (ω : Ω) ∂μ, LE.le.{0} (X i ω) u) →
+                    LE.le.{0} (∑ i, ∫ (ω : Ω), HPow.hPow.{0, 0, 0} (X i ω) 2 ∂μ) v →
+                      And (MeasureTheory.Integrable.{0, u_1} (fun ω => Real.exp (HMul.hMul.{0, 0, 0} t (∑ i, X i ω))) μ)
+                        (LE.le.{0} (ProbabilityTheory.mgf.{u_1} (fun ω => ∑ i, X i ω) μ t)
+                          (Real.exp
+                            (HMul.hMul.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} v (HPow.hPow.{0, 0, 0} u 2))
+                              (RectangleCLT.Companion.SplitV4.bennettCorrection (HMul.hMul.{0, 0, 0} t u)))))
+'RectangleCLT.Companion.SplitV4.independent_sum_bennett_mgf' depends on axioms: [propext, Classical.choice, Quot.sound]
+@RectangleCLT.integrable_coordinate_pow_of_bounded.{u_1} : ∀ {Ω : Type u_1} [inst : MeasurableSpace.{u_1} Ω] {p n : Nat}
+  {μ : MeasureTheory.Measure.{u_1} Ω} [inst_1 : MeasureTheory.IsFiniteMeasure.{u_1} μ] {ξ : Fin n → Ω → Fin p → Real}
+  {δ : Real},
+  (∀ (i : Fin n), Measurable.{u_1, 0} (ξ i)) →
+    (∀ (i : Fin n) (j : Fin p), ∀ᵐ (ω : Ω) ∂μ, LE.le.{0} (abs.{0} (ξ i ω j)) δ) →
+      ∀ (i : Fin n) (j : Fin p) (r : Nat),
+        MeasureTheory.Integrable.{0, u_1} (fun ω => HPow.hPow.{0, 0, 0} (ξ i ω j) r) μ
+'RectangleCLT.integrable_coordinate_pow_of_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+@RectangleCLT.BoundedIndependentHypotheses.abs_coordinate_le.{u_1} : ∀ {Ω : Type u_1} [inst : MeasurableSpace.{u_1} Ω]
+  {p n : Nat} {μ : MeasureTheory.Measure.{u_1} Ω} {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : Real},
+  RectangleCLT.BoundedIndependentHypotheses.{u_1} μ ξ δ →
+    ∀ (i : Fin n) (j : Fin p), ∀ᵐ (ω : Ω) ∂μ, LE.le.{0} (abs.{0} (ξ i ω j)) δ
+'RectangleCLT.BoundedIndependentHypotheses.abs_coordinate_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+@RectangleCLT.BoundedIndependentHypotheses.coordinate_second_moments.{u_1} : ∀ {Ω : Type u_1}
+  [inst : MeasurableSpace.{u_1} Ω] {p n : Nat} {μ : MeasureTheory.Measure.{u_1} Ω}
+  {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : Real} [inst_1 : MeasureTheory.IsProbabilityMeasure.{u_1} μ],
+  RectangleCLT.BoundedIndependentHypotheses.{u_1} μ ξ δ →
+    (∀ (j : Fin p), Eq.{1} (RectangleCLT.covariance.{u_1} μ (RectangleCLT.sumVector.{u_1} ξ) j j) 1) →
+      ∀ (j : Fin p), Eq.{1} (∑ i, ∫ (ω : Ω), HPow.hPow.{0, 0, 0} (ξ i ω j) 2 ∂μ) 1
+'RectangleCLT.BoundedIndependentHypotheses.coordinate_second_moments' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@RectangleCLT.BoundedIndependentHypotheses.covariance_sum.{u_1} : ∀ {Ω : Type u_1} [inst : MeasurableSpace.{u_1} Ω]
+  {p n : Nat} {μ : MeasureTheory.Measure.{u_1} Ω} [inst_1 : MeasureTheory.IsProbabilityMeasure.{u_1} μ]
+  {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : Real},
+  RectangleCLT.BoundedIndependentHypotheses.{u_1} μ ξ δ →
+    ∀ (j k : Fin p),
+      Eq.{1} (RectangleCLT.covariance.{u_1} μ (RectangleCLT.sumVector.{u_1} ξ) j k)
+        (∑ i, ∫ (ω : Ω), HMul.hMul.{0, 0, 0} (ξ i ω j) (ξ i ω k) ∂μ)
+'RectangleCLT.BoundedIndependentHypotheses.covariance_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+@RectangleCLT.BoundedIndependentHypotheses.covariance_posSemidef.{u_1} : ∀ {Ω : Type u_1}
+  [inst : MeasurableSpace.{u_1} Ω] {p n : Nat} {μ : MeasureTheory.Measure.{u_1} Ω}
+  [inst_1 : MeasureTheory.IsProbabilityMeasure.{u_1} μ] {ξ : Fin n → Ω → RectangleCLT.Vector p} {δ : Real},
+  RectangleCLT.BoundedIndependentHypotheses.{u_1} μ ξ δ →
+    Matrix.PosSemidef.{0, 0} (RectangleCLT.covariance.{u_1} μ (RectangleCLT.sumVector.{u_1} ξ))
+'RectangleCLT.BoundedIndependentHypotheses.covariance_posSemidef' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@RectangleCLT.gaussianComparison_factor_exists : ∀ {p : Nat} {Q : Matrix.{0, 0, 0} (Fin p) (Fin p) Real},
+  Matrix.PosSemidef.{0, 0} Q → ∃ A, Eq.{1} (HMul.hMul.{0, 0, 0} A (Matrix.transpose.{0, 0, 0} A)) Q
+'RectangleCLT.gaussianComparison_factor_exists' depends on axioms: [propext, Classical.choice, Quot.sound]
+@RectangleCLT.gaussianLaw_map_eval_eq_standard : ∀ {p : Nat} (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (j : Fin p),
+  Eq.{1} (HMul.hMul.{0, 0, 0} A (Matrix.transpose.{0, 0, 0} A) j j) 1 →
+    Eq.{1} (MeasureTheory.Measure.map.{0, 0} (fun x => x j) (RectangleCLT.gaussianLaw A))
+      (ProbabilityTheory.gaussianReal 0 1)
+'RectangleCLT.gaussianLaw_map_eval_eq_standard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@RectangleCLT.gaussianLaw_integral_coordinate : ∀ {p : Nat} (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real) (j : Fin p),
+  Eq.{1} (∫ (x : RectangleCLT.Vector p), x j ∂RectangleCLT.gaussianLaw A) 0
+'RectangleCLT.gaussianLaw_integral_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+@RectangleCLT.gaussianLaw_integral_coordinate_product : ∀ {p : Nat} (A : Matrix.{0, 0, 0} (Fin p) (Fin p) Real)
+  (j k : Fin p),
+  Eq.{1} (∫ (x : RectangleCLT.Vector p), HMul.hMul.{0, 0, 0} (x j) (x k) ∂RectangleCLT.gaussianLaw A)
+    (HMul.hMul.{0, 0, 0} A (Matrix.transpose.{0, 0, 0} A) j k)
+'RectangleCLT.gaussianLaw_integral_coordinate_product' depends on axioms: [propext, Classical.choice, Quot.sound]
